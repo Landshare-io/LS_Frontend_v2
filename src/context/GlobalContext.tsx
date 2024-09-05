@@ -7,7 +7,11 @@ interface GlobalContextType {
 }
 
 // Create the context with a default value of undefined
-const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
+const GlobalContext = createContext<GlobalContextType>({
+  theme: 'light',
+  setTheme: () => {},
+  toggleTheme: () => {}
+});
 
 // Define the props for the provider
 interface GlobalProviderProps {
