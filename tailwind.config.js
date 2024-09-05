@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{html,js,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
   theme: {
@@ -28,6 +28,7 @@ module.exports = {
         md: "768px",
         mlg: "1024px",
         lg: "1280px",
+        xl: "1440px"
       },
       fontFamily: {
         interTight: ['Inter Tight', 'sans-serif'],
