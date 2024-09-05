@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useAccount } from 'wagmi';
 import { PAGES } from "../../config/constants/pages";
-import { useGlobalContext } from "../../contexts/GlobalContext";
-import Logo from "./Logo";
-import ConnectWallet from "../ConnectWallet";
-import MobileNavbar from "../RealWorldAssets/Buy/MobileNavbar";
+import Logo from '../common/logo';
+import ConnectWallet from '../connect-wallet';
+// import MobileNavbar from "../RealWorldAssets/Buy/MobileNavbar";
 
 // Importing types
 import { PAGE } from "../../utils/type";
@@ -13,16 +13,16 @@ import { PAGE } from "../../utils/type";
 export default function Header() {
   const router = useRouter();
   const { pathname } = router;
+  const { address } = useAccount()
   
-  const { isDarkMode, account } = useGlobalContext();
   const [truncatedAddress, setTruncatedAddress] = React.useState("Not Connected");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (account) {
-      setTruncatedAddress(`${account.slice(0, 6)}...${account.slice(-4)}`);
+    if (address) {
+      setTruncatedAddress(`${address.slice(0, 6)}...${address.slice(-4)}`);
     }
-  }, [account]);
+  }, [address]);
 
   const overlayRouteChangeHandler = (path: string) => {
     router.push(path);
@@ -34,24 +34,24 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="w-full h-full fixed bg-[#80849890] z-10 top-0" />
       )}
-      <div className="header-container bg-tw-primary">
-        <div className="header-wrapper header-section-set-max-container pl-4 pr-4 mlg:pl-8 mlg:pr-8 bg-tw-secondary">
+      <div className="p-[32px] relative bg-tw-primary dark:bg-[#2e2e2e]">
+        <div className="flex justify-between items-center rounded-[90px] h-[80px] max-w-[1230px] m-auto xl:max-w-[1250px] pl-4 pr-4 mlg:pl-8 mlg:pr-8 md:h-[64px] bg-tw-secondary">
           <Logo />
-          <div className="header-links-container">
+          <div className="flex itmes-center gap-[40px]">
             {PAGES.map((page: PAGE) => {
               return (
-                <div className={`header-links-wrapper ${pathname === page.path ? "header-links-active" : ""} hidden mlg:block`} key={page.name}>
+                <div className={`hidden mlg:flex items-center font-bold text-[15px] leading-[20px] text-[#0f0a0a] border-0 outline-0 bg-transparent ${pathname === page.path ? "text-[#0a0a0a]" : ""}`} key={page.name}>
                   {page.url ? (
                     <Link
                       href= {page?.name == "Swap" ? "https://app.dsswap.io/info" : "https://app.transporter.io/?tab=token&token=LAND"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="header-link"
+                      className="flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 text-[#0f0a0a] after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left"
                     >
                       {page.name}
                     </Link>
                   ) : (
-                    <Link href={page?.path ?? ''} className="header-link">
+                    <Link href={page?.path ?? ''} className="text-[#0f0a0a] no-underline flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left">
                       {page.name}
                     </Link>
                   )}
@@ -64,24 +64,24 @@ export default function Header() {
           </div>
           {isMobileMenuOpen && (
             <>
-              <div className={`header-mobile-menu-container ${isMobileMenuOpen ? 'header-mobile-menu-container-open' : ''}`}>
-                <div className="header-mobile-menu bg-tw-secondary">
+              <div className={`absolute top-[80px] left-0 w-full transition ease-in-out delay-700 opacity-0 ${isMobileMenuOpen ? 'opacity-1' : ''}`}>
+                <div className="flex flex-col gap-[10px] p-[30px] rounded-[16px] h-full">
                   {PAGES.map((page: PAGE) => {
                     return (
-                      <div key={page.name}>
+                      <div key={page.name} className='flex items-center'>
                         {page.url ? (
                           <a
                             href={page.url}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <div className={`header-mobile-menu-item ${pathname === page?.path ? 'header-mobile-menu-item-active' : ''}`}>
+                            <div className={`flex w-full justify-center items-center px-[24px] py-[13px] border-1 border-[#61cd81] rounded-[100px] font-bold text-[14px] leading-[20px] text-[#0a0a0a] no-underline ${pathname === page?.path ? 'text-[#0f0a0a]' : ''}`}>
                               {page.name}
                             </div>
                           </a>
                         ) : (
                           <div
-                            className={`header-mobile-menu-item ${pathname === page?.path ? 'header-mobile-menu-item-active' : ''}`}
+                            className={`flex w-full justify-center items-center px-[24px] py-[13px] border-1 border-[#61cd81] rounded-[100px] font-bold text-[14px] leading-[20px] text-[#0a0a0a] no-underline ${pathname === page?.path ? 'text-[#0f0a0a]' : ''}`}
                             onClick={() => overlayRouteChangeHandler(page?.path ?? '')}
                           >
                             {page.name}
@@ -94,7 +94,7 @@ export default function Header() {
               </div>
             </>
           )}
-          <MobileNavbar />
+          {/* <MobileNavbar /> */}
         </div>
       </div>
     </div>
