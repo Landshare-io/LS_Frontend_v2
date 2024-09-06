@@ -44,7 +44,7 @@ export default function ConnectWallet({
                 if (!connected) {
                   return (
                     <Button
-                      className={`text-[#fff] ${connectButtonClassName}`}
+                      className={`text-[#fff] px-[24px] py-[13px] rounded-[100px] ${connectButtonClassName}`}
                       onClick={openConnectModal}
                     >
                       Connect Wallet
@@ -65,7 +65,7 @@ export default function ConnectWallet({
 
                 // if (!isAuthenticated && pathname.includes('/nft') && chain.id == 56) {
                 //   return (
-                //     <button onClick={() => checkIsAuthenticated()} type="button-container" className="nav-btn bg-[#61CD81] text-tw-button-text-secondary">
+                //     <button onClick={() => checkIsAuthenticated()} type="button-container" className="nav-btn bg-[#61CD81] text-button-text-secondary">
                 //       Login
                 //     </button>
                 //   );
