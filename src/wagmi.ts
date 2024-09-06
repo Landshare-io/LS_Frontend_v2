@@ -7,10 +7,20 @@ import {
   polygon,
   sepolia,
 } from 'wagmi/chains';
+import {
+  metaMaskWallet,
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets';
 
 export const config = getDefaultConfig({
-  appName: 'RainbowKit App',
+  appName: 'Landshare v2',
   projectId: 'YOUR_PROJECT_ID',
+  wallets: [
+    {
+      groupName: 'Recommended',
+      wallets: [metaMaskWallet, walletConnectWallet],
+    }
+  ],
   chains: [
     mainnet,
     polygon,
