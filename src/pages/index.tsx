@@ -1,11 +1,12 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Header from '../components/header';
 import styles from '../styles/Home.module.css';
+import DashboardFeautre from '../components/dashboard-features';
+import MoreInvestment from '../components/learn-more-future-investment';
 
 const Home: NextPage = () => {
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container}`}>
       <Head>
         <title>Landshare</title>
         <meta
@@ -14,6 +15,8 @@ const Home: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
+      <DashboardFeautre />
+      <MoreInvestment />
     </div>
   );
 };
