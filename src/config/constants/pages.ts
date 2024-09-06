@@ -30,3 +30,7 @@ export const PAGES: PAGE[] = [
     url: "https://app.transporter.io/?tab=token&token=LAND",
   },
 ];
+
+export const VISIBLE_FOOTER_PAGES = [
+  '/',
+];
