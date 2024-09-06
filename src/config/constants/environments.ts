@@ -1,0 +1,1 @@
+export const ADDRESS_BOOK_ID = process.env.NEXT_PUBLIC_ADDRESS_BOOK_ID // 18c3953f93f00ab7003571dbd4e0a915
