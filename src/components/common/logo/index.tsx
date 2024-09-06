@@ -13,7 +13,7 @@ export default function Logo() {
       href="/"
     >
       <Image 
-        className="w-[60px] h-[60px]" 
+        className="w-[42px] h-[42px] md:w-[60px] md:h-[60px]" 
         src={theme == 'dark' ? logoDark : logo} 
         alt="logo" 
       />
