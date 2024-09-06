@@ -12,6 +12,8 @@ export default function SwitchTheme() {
       onClick={() => { 
         const updatedTheme = theme == 'dark' ? 'light' : 'dark'
         setTheme(updatedTheme); 
+        if (updatedTheme == 'dark') document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
         localStorage.setItem("land-v2-theme", updatedTheme); 
       }}
     >
