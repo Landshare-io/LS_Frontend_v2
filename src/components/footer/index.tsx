@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { VISIBLE_FOOTER_PAGES } from '../../config/constants/pages';
 // import toast, { Toaster } from 'react-hot-toast';
 
 import Logo from "../common/logo";
@@ -16,6 +18,10 @@ import IconArrowRight from "../../../public/icons/arrow-right.svg";
 
 export default function Footer() {
   const [email, setEmail] = useState('');
+  const router = useRouter();
+  const { pathname } = router;
+  const isFooterVisible = VISIBLE_FOOTER_PAGES.includes(pathname);
+  if (!isFooterVisible) return null;
 
   function getSPKey(type: string, SPdata: any) {
   const accessData = {
@@ -88,12 +94,12 @@ export default function Footer() {
 
   return (
     <>
-      <div className="bg-third dark:bg-primary px-[40px] pt-[80px] border-top-2 border-primary less-padding">
+      <div className="bg-third dark:bg-primary px-[20px] lg:px-[40px] pt-[80px] lg:px-[120px] border-top-2 border-primary less-padding">
         <div className="flex justify-between items-start flex-col md:items-center lg:flex-row justify-around gap-[20px] lg:flex-row lg:gap-[80px] xxl:gap-[200px] pb-[40px]">
           <div className="flex flex-col gap-[20px] basis-[25%] grow-[0.6]">
             <div className="flex flex-row-reverse justify-between items-center gap-[20px] lg:flex-col">
               <div className="flex w-full justify-between">
-                <Logo />
+                <Logo showLogoText />
                 <div className="items-end">
                   <SwitchTheme />
                 </div>
@@ -103,22 +109,22 @@ export default function Footer() {
               This site is operated by Landshare LLC, which is not a registered broker-dealer or investment advisor.
             </div>
             <div className="flex justify-between">
-              <a href="https://t.me/landshare" className="w-[40px] h-[40px] rounded-[100px] outline-none bg-transparent flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
+              <a href="https://t.me/landshare" className="w-[40px] h-[40px] rounded-[100px] outline-none flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
                 <Image src={IconTelegram} alt="telegram" />
               </a>
-              <a href="https://discord.com/invite/p3tzFTnA8E" className="w-[40px] h-[40px] rounded-[100px] outline-none bg-transparent flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
+              <a href="https://discord.com/invite/p3tzFTnA8E" className="w-[40px] h-[40px] rounded-[100px] outline-none flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
                 <Image src={IconDiscord} alt="discord" width={20} height={20}/>
               </a>
-              <a href="https://www.youtube.com/channel/UCh_2bvsdIdD2QuhtpR20Wag" className="w-[40px] h-[40px] rounded-[100px] outline-none bg-transparent flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
+              <a href="https://www.youtube.com/channel/UCh_2bvsdIdD2QuhtpR20Wag" className="w-[40px] h-[40px] rounded-[100px] outline-none flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
                 <Image src={IconYoutube} alt="youtube" />
               </a>
-              <a href="https://twitter.com/landshareio" className="w-[40px] h-[40px] rounded-[100px] outline-none bg-transparent flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
+              <a href="https://twitter.com/landshareio" className="w-[40px] h-[40px] rounded-[100px] outline-none flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
                 <Image src={IconTwitter} alt="twitter" />
               </a>
-              <a href="https://coinmarketcap.com/community/profile/Landshare/" className="w-[40px] h-[40px] rounded-[100px] outline-none bg-transparent flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
+              <a href="https://coinmarketcap.com/community/profile/Landshare/" className="w-[40px] h-[40px] rounded-[100px] outline-none flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
                 <Image src={IconCMC} alt="coinmarketcap" />
               </a>
-              <a href="mailto:admin@landshare.io" className="w-[40px] h-[40px] rounded-[100px] outline-none bg-transparent flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
+              <a href="mailto:admin@landshare.io" className="w-[40px] h-[40px] rounded-[100px] outline-none flex justify-center items-center border-2 border-[#0A133920] dark:border-[#ffffff34]">
                 <Image src={IconMail} className="w-4 h-4" alt="mail" />
               </a>
             </div>
@@ -166,7 +172,7 @@ export default function Footer() {
             </div>
             <div className="font-normal text-[14px] leading-[22px] text-text-third">Get the latest info and enjoy the benefits</div>
             <form 
-              className="flex items-center justify-center gap-[12px] mt-[24px] p-[6px] pl-[24px] w-[280px] h-[44px] rounded-[50px] bg-gradient-to-r from-[#fffffff5] to-[#fffffff5] bg-[#1D4264]" 
+              className="flex items-center justify-between gap-[12px] mt-[24px] p-[6px] pl-[24px] w-full md:w-[280px] h-[44px] rounded-[50px] bg-gradient-to-r from-[#fffffff5] to-[#fffffff5] dark:from-[#222222] dark:to-[#222222] bg-[#1D4264]" 
               onSubmit={handleSubscribe}
             >
               <input
