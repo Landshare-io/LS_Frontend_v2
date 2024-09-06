@@ -3,3 +3,12 @@ export type PAGE = {
   path?: string
   url?: string
 }
+
+export type DASHBOARD_FEATURE = {
+  icon: any
+  darkIcon: any
+  title: string
+  description: string
+  routeName?: string
+  externalLink?: string
+}
