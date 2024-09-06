@@ -28,10 +28,11 @@ module.exports = {
         md: "768px",
         mlg: "1024px",
         lg: "1280px",
-        xl: "1440px"
+        xl: "1440px",
+        xxl: "1680px",
       },
       fontFamily: {
-        interTight: ['Inter Tight', 'sans-serif'],
+        inter: ['var(--font-inter)'],
       },
       keyframes: {
         sparkling: {
