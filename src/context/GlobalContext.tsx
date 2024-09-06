@@ -25,6 +25,8 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('land-v2-theme') as 'light' | 'dark' || 'light';
+    if (storedTheme == 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
     setTheme(storedTheme);
   }, []);
 
