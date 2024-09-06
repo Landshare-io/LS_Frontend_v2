@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
+import { Inter_Tight } from 'next/font/google';
 import { PAGES } from "../../config/constants/pages";
 import Logo from '../common/logo';
 import ConnectWallet from '../connect-wallet';
@@ -9,6 +10,12 @@ import MobileNavbar from './mobile';
 
 // Importing types
 import { PAGE } from "../../utils/type";
+
+const boldInterTight = Inter_Tight({
+  weight: "700",
+  style: "normal",
+  preload: false,
+});
 
 export default function Header() {
   const router = useRouter();
@@ -34,7 +41,7 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="w-full h-full fixed bg-[#80849890] z-10 top-0" />
       )}
-      <div className="relative bg-primary dark:bg-[#2e2e2e] px-[10px] pt-[20px] pb-[32px] xl:p-[32px]">
+      <div className="relative bg-primary px-[10px] pt-[20px] pb-[32px] xl:p-[32px]">
         <div className="flex justify-between items-center rounded-[90px] h-[64px] max-w-[1230px] m-auto xl:max-w-[1250px] pl-4 pr-4 mlg:pl-8 mlg:pr-8 md:h-[80px] bg-secondary">
           <Logo />
           <div className="flex itmes-center gap-[40px]">
@@ -46,12 +53,15 @@ export default function Header() {
                       href= {page?.name == "Swap" ? "https://app.dsswap.io/info" : "https://app.transporter.io/?tab=token&token=LAND"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 text-[#0f0a0a] font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left"
+                      className={`flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 text-[#0f0a0a] dark:text-[#f1f1f1] font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left ${boldInterTight.className}`}
                     >
                       {page.name}
                     </Link>
                   ) : (
-                    <Link href={page?.path ?? ''} className="text-[#0f0a0a] no-underline flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left">
+                    <Link 
+                      href={page?.path ?? ''} 
+                      className={`text-[#0f0a0a] dark:text-[#f1f1f1] no-underline flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left ${boldInterTight.className}`}
+                    >
                       {page.name}
                     </Link>
                   )}
@@ -75,13 +85,13 @@ export default function Header() {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <div className={`flex w-full justify-center items-center px-[24px] py-[13px] border-1 border-[#61cd81] rounded-[100px] font-inter font-bold text-[14px] leading-[20px] text-[#0a0a0a] no-underline ${pathname === page?.path ? 'text-[#0f0a0a]' : ''}`}>
+                            <div className={`flex w-full justify-center items-center px-[24px] py-[13px] border-1 border-[#61cd81] rounded-[100px] font-inter font-bold text-[14px] leading-[20px] text-[#0a0a0a] dark:text-[#f1f1f1] no-underline ${pathname === page?.path ? 'text-[#0f0a0a]' : ''}`}>
                               {page.name}
                             </div>
                           </a>
                         ) : (
                           <div
-                            className={`flex w-full justify-center items-center px-[24px] py-[13px] border-1 border-[#61cd81] rounded-[100px] font-inter font-bold text-[14px] leading-[20px] text-[#0a0a0a] no-underline ${pathname === page?.path ? 'text-[#0f0a0a]' : ''}`}
+                            className={`flex w-full justify-center items-center px-[24px] py-[13px] border-1 border-[#61cd81] rounded-[100px] font-inter font-bold text-[14px] leading-[20px] text-[#0a0a0a] dark:text-[#f1f1f1] no-underline ${pathname === page?.path ? 'text-[#0f0a0a]' : ''}`}
                             onClick={() => overlayRouteChangeHandler(page?.path ?? '')}
                           >
                             {page.name}
