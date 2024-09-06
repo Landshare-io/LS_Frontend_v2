@@ -13,7 +13,7 @@ import Footer from '../components/footer';
 import { config } from '../wagmi';
 
 const interTight = Inter_Tight({
-  weight: "700",
+  weight: "400",
   style: "normal",
   preload: false,
   variable: '--font-inter'
