@@ -2,7 +2,14 @@ import React from "react";
 import Head from "next/head";
 import { useRouter } from 'next/router';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
+
+const interTight = Inter_Tight({
+  weight: "700",
+  style: "normal",
+  preload: false,
+});
 
 interface ConnectWalletProps {
   containerClassName?: string
@@ -44,7 +51,7 @@ export default function ConnectWallet({
                 if (!connected) {
                   return (
                     <Button
-                      className={`text-[#fff] px-[24px] py-[13px] rounded-[100px] ${connectButtonClassName}`}
+                      className={`text-[#fff] px-[24px] py-[13px] rounded-[100px] hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81] ${interTight.className} ${connectButtonClassName}`}
                       onClick={openConnectModal}
                     >
                       Connect Wallet
@@ -56,50 +63,42 @@ export default function ConnectWallet({
                   return (
                     <Button
                       onClick={openChainModal}
-                      className="dark:text-[#3c3c3c] transition ease-in-out delay-400"
+                      className={`text-[#fff] px-[24px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81] ${interTight.className}`}
                     >
                       Wrong network
                     </Button>
                   );
                 }
 
-                // if (!isAuthenticated && pathname.includes('/nft') && chain.id == 56) {
-                //   return (
-                //     <button onClick={() => checkIsAuthenticated()} type="button-container" className="nav-btn bg-[#61CD81] text-button-text-secondary">
-                //       Login
-                //     </button>
-                //   );
-                // } else {
-                //   return (
-                //     // <button
-                //     //   onClick={openAccountModal}
-                //     //   type="button-container"
-                //     //   className="nav-btn dark:text-[#3c3c3c]"
-                //     // >
-                //     //   {account.displayName}
-                //     // </button>
-                //     <div className="flex items-center">
-                //       <button
-                //         onClick={openChainModal}
-                //         type="button"
-                //         className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2"
-                //       >
-                //         <img
-                //           src={chain.iconUrl}
-                //           alt={chain.name}
-                //           className="w-6 h-6"
-                //         />
-                //       </button>
-                //       <button
-                //         onClick={openAccountModal}
-                //         type="button-container"
-                //         className="nav-btn dark:text-[#3c3c3c]"
-                //       >
-                //         {account.displayName}
-                //       </button>
-                //     </div>
-                //   );
-                // }
+                if (pathname.includes('/nft') && chain.id == 56) { // !isAuthenticated && 
+                  return (
+                    <></>
+                    // <button onClick={() => checkIsAuthenticated()} type="button-container" className="nav-btn bg-[#61CD81] text-button-text-secondary">
+                    //   Login
+                    // </button>
+                  );
+                } else {
+                  return (
+                    <div className="flex items-center">
+                      <div
+                        onClick={openChainModal}
+                        className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2"
+                      >
+                        <img
+                          src={chain.iconUrl}
+                          alt={chain.name}
+                          className="w-6 h-6"
+                        />
+                      </div>
+                      <Button
+                        onClick={openAccountModal}
+                        className="text-[#fff] px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400  hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81]"
+                      >
+                        {account.displayName}
+                      </Button>
+                    </div>
+                  );
+                }
               })()}
             </div>
           );
