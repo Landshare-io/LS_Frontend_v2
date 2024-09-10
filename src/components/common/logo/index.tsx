@@ -12,10 +12,12 @@ const boldInterTight = Inter_Tight({
 });
 
 interface LogoProps {
+  logoClassName?: string;
+  textClassName?: string;
   showLogoText?: boolean;
 }
 
-export default function Logo({ showLogoText }: LogoProps) {
+export default function Logo({ logoClassName, textClassName, showLogoText }: LogoProps) {
   const { theme } = useGlobalContext();
 
   return (
@@ -24,12 +26,12 @@ export default function Logo({ showLogoText }: LogoProps) {
       href="/"
     >
       <Image 
-        className="w-[42px] h-[42px] md:w-[60px] md:h-[60px]" 
+        className={`w-[42px] h-[42px] md:w-[60px] md:h-[60px] ${logoClassName}`}
         src={theme == 'dark' ? logoDark : logo} 
         alt="logo" 
       />
       {showLogoText && (
-        <div className={`font-bold text-[20px] leading-[24px] text-[#0E1D18] dark:text-[#ffffff] ${boldInterTight.className}`}>Landshare</div>
+        <div className={`font-bold text-[20px] leading-[24px] text-[#0E1D18] dark:text-[#ffffff] ${boldInterTight.className} ${textClassName}`}>Landshare</div>
       )}
     </Link>
   );
