@@ -101,3 +101,17 @@ a {
 	--offset: calc(100% - 2.3rem);
 	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
