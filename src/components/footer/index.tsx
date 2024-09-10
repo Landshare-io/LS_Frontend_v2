@@ -94,12 +94,12 @@ export default function Footer() {
 
   return (
     <>
-      <div className="bg-third dark:bg-primary px-[20px] lg:px-[40px] pt-[80px] lg:px-[120px] border-top-2 border-primary less-padding">
+      <div className="bg-third dark:bg-primary px-[20px] mlg:px-[40px] pt-[80px] lg:px-[120px] border-top-2 border-primary less-padding">
         <div className="flex justify-between items-start flex-col md:items-center lg:flex-row justify-around gap-[20px] lg:flex-row lg:gap-[80px] xxl:gap-[200px] pb-[40px]">
           <div className="flex flex-col gap-[20px] basis-[25%] grow-[0.6]">
             <div className="flex flex-row-reverse justify-between items-center gap-[20px] lg:flex-col">
               <div className="flex w-full justify-between">
-                <Logo showLogoText />
+                <Logo showLogoText logoClassName='!w-[52.3px] !h-[54.4px]' />
                 <div className="items-end">
                   <SwitchTheme />
                 </div>
