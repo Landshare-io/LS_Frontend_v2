@@ -8,6 +8,7 @@ import { RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit';
 import { Inter_Tight } from 'next/font/google';
 
 import { GlobalProvider } from '../context/GlobalContext';
+import { StoreProvider } from '../lib/StoreProvider';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import { config } from '../wagmi';
@@ -50,9 +51,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             }
           >
             <GlobalProvider>
-              <Header />
-              <Component {...pageProps} />
-              <Footer />
+              <StoreProvider>
+                <Header />
+                <Component {...pageProps} />
+                <Footer />
+              </StoreProvider>
             </GlobalProvider>
           </RainbowKitProvider>
         </QueryClientProvider>
