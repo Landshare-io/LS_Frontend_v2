@@ -18,7 +18,7 @@ export default function MoreInvestment() {
 
   return (
     <div className="bg-[#E6E6F2] dark:bg-[#222222] p-0 lg:px-[20px] xl:px-[120px] xl:py-[100px]">
-      <div className="pt-[200px] pb-[100px] px-[20px] md:p-[80px] rounded-0 md:rounded-[24px] relative section-set-max-container max-w-[1280px] m-auto bg-[#0A1339] dark:bg-secondary">
+      <div className="pt-[200px] pb-[100px] px-[20px] md:p-[80px] rounded-0 md:rounded-[24px] relative section-set-max-container max-w-[1200px] m-auto bg-[#0A1339] dark:bg-secondary">
         {theme == 'dark' ? (
           <>
             <Image 
