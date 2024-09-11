@@ -1,11 +1,12 @@
+import { http } from 'wagmi';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import {
   arbitrum,
-  base,
-  mainnet,
-  optimism,
+  bsc,
   polygon,
+  bscTestnet,
   sepolia,
+  polygonAmoy
 } from 'wagmi/chains';
 import {
   metaMaskWallet,
@@ -22,12 +23,21 @@ export const config = getDefaultConfig({
     }
   ],
   chains: [
-    mainnet,
+    bsc,
     polygon,
-    optimism,
     arbitrum,
-    base,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [bscTestnet, sepolia, polygonAmoy] : []),
   ],
   ssr: true,
+  transports: {
+    [bsc.id]: http(),
+    [polygon.id]: http(),
+    [arbitrum.id]: http(),
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? {
+      [bscTestnet.id]: http(), 
+      [sepolia.id]: http(), 
+      [polygonAmoy.id]: http()
+    } : {} as Record<number, typeof http>),
+  },
 });
+
