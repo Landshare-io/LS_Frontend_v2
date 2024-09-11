@@ -3,7 +3,7 @@ import { bsc } from "viem/chains";
 import APIConsumerAbi from "../../../abis/APIConsumer.json";
 import { APICONSUMERCONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function useGetTotalValue() {
+export default function usePropertyValue() {
   const { data } = useReadContract({
     address: APICONSUMERCONTRACT_ADDRESS,
     abi: APIConsumerAbi,
