@@ -1,0 +1,104 @@
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { FiExternalLink } from "react-icons/fi";
+import { BigNumberish, formatEther } from "ethers";
+import Counter from "../common/counter";
+import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
+
+import useGetTotalValue from "../../hooks/contract/APIConsumerContract/useGetTotalValue";
+import useGetReserves from "../../hooks/contract/BNBApePairContract/useGetReserves";
+import useGetReservesPair from "../../hooks/contract/PancakePairContract/useGetReserves";
+import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
+import usePoolInfo from "../../hooks/contract/MasterchefContract/usePoolInfo";
+import useWBNBBalanceOf from "../../hooks/contract/WBNBTokenContract/useBalanceOf";
+import useLpTokenBalanceOf from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
+import useTotalSupply from "../../hooks/contract/LpTokenV2Contract/useTotalSupply";
+import useTotalStaked from "../../hooks/contract/MasterchefContract/useTotalStaked";
+import useGetApy from "../../hooks/get-apy/useGetApy";
+import { LPTOKENV2CONTRACT_ADDRESS, MASTERCHEFCONTRACT_ADDRESS } from "../../config/constants/environments";
+import { 
+  getData,
+  selectNetRentalPerMonth,
+  selectAppreciation,
+} from '../../lib/slices/firebase-slices/properties-rental';
+import { useAppDispatch, useAppSelector } from "../../lib/hooks";
+
+export default function StatusCard() {
+  const dispatch = useAppDispatch();
+  const netRentalPerMonth = useAppSelector(selectNetRentalPerMonth);
+  const appreciation = useAppSelector(selectAppreciation);
+  const [apr, setApr] = useState(0);
+  const [vaultBal, setVaultBal] = useState(0);
+  const apy = useGetApy();
+  const reservesBNB = useGetReserves() as any[];
+  const resercesToken = useGetReservesPair() as any[];
+  const allocPoints = usePoolInfo() as any[];
+  const totalPropertyValue = useGetTotalValue() as BigNumberish;
+  const landAmountInLp = useBalanceOf({ chainId: 56, address: LPTOKENV2CONTRACT_ADDRESS }) as BigNumberish;
+  const totalBNBinLp = useWBNBBalanceOf({ address: LPTOKENV2CONTRACT_ADDRESS }) as BigNumberish;
+  const totalLpInVault = useLpTokenBalanceOf({ address: MASTERCHEFCONTRACT_ADDRESS }) as BigNumberish;
+  const totalLpSupply = useTotalSupply() as BigNumberish;
+  const totalDeposited = useTotalStaked() as BigNumberish;
+
+  useEffect(() => {
+    dispatch(getData())
+    const bnbPrice = reservesBNB ? reservesBNB[1] / reservesBNB[0] : null;
+    const coin = resercesToken ? resercesToken[1] / resercesToken[0] : null;
+
+    const totalBNBValueinLpContract = Number(formatEther(totalBNBinLp)) * Number(bnbPrice);
+    const totalLANDValueinLpContract = Number(formatEther(landAmountInLp)) * Number(coin) * Number(bnbPrice);
+    const totalUSDValue = totalBNBValueinLpContract + totalLANDValueinLpContract;
+    const percentageOfLPInVault = Number(totalLpInVault) / Number(totalLpSupply);
+    const USDValueinVault = percentageOfLPInVault * totalUSDValue;
+    const totalMoneyAnnual = 365 * allocPoints[1].toNumber() * Number(coin) * Number(bnbPrice);
+    const farmApr = (totalMoneyAnnual / USDValueinVault) * 100;
+    const vaultBalance = Number(USDValueinVault) + Number(totalPropertyValue) + Number(Number(coin) * Number(bnbPrice) * Number(formatEther(totalDeposited)));
+    setApr(farmApr);
+    setVaultBal(vaultBalance);
+  })
+
+  return (
+    <div className="w-full p-[40px] pt-[0px] pb-[0px] flex justify-center items-center px-[20px]" >
+      <div className="max-w-[1200px] w-full bg-secondary py-[30px] grid grid-cols-4 justify-content-between px-[16px] lg:px-[0px] gap-y-[40px] relative border-2 border-[#fff] dark:border-[#42444d] rounded-[20px] shadow shadow-[rgba(100, 100, 111, 0.2) 0px 7px 29px 0px]">
+        <div className="col-span-2 md:col-span-1 h-full flex flex-col justify-center space-y-2 p-[0px] border-r-[0px] border-[#61cd81] md:border-r-[2px]">
+          <div className="w-full text-center text-xl md:text-2xl font-bold inter flex justify-center text-text-primary">
+            <Counter duration={10} formatType={"dollar"} number={vaultBal.toString()} decimal={0}></Counter>
+          </div>
+          <div className="w-full text-center text-[12px] md:text-sm text-text-secondary font-medium inter">
+            Total Value Locked
+          </div>
+        </div>
+        <div className="col-span-2 md:col-span-1 h-full flex flex-col justify-center space-y-2 p-[0px] border-r-[0px] border-[#61cd81] md:border-r-[2px]">
+          <div className="w-full text-center text-xl md:text-2xl font-bold inter flex justify-center text-text-primary">
+            <Counter duration={10} number={abbreviateNumber(Number(apy.toFixed(2)))} decimal={2} formatType={"percent"}></Counter>
+          </div>
+          <div className="w-full text-center text-[12px] md:text-sm text-text-secondary font-medium inter">
+            Staking APY <Link href="/vaults"><FiExternalLink className="text-[#61cd81] mb-1" /></Link>
+          </div>
+        </div>
+        <div className="absolute w-[80%] top-[50%] left-[50%] transform -translate-x-1/2 h-[2px] block md:hidden">
+          <div className="w-full h-full bg-[#61cd81] "></div>
+        </div>
+        <div className=" col-span-2 md:col-span-1 h-full flex flex-col justify-center space-y-2 p-[0px] border-r-[0px] border-[#61cd81] md:border-r-[2px]">
+          <div className="w-full text-center text-xl md:text-2xl font-bold inter flex justify-center text-text-primary">
+            <Counter duration={10} number={abbreviateNumber(Number(apr.toFixed(0)))} decimal={2} formatType={"percent"}></Counter>
+          </div>
+          <div className="w-full text-center text-[12px] md:text-sm text-text-secondary font-medium inter">
+            LP Farm APR <Link href="/vaults"><FiExternalLink className="text-[#61cd81] mb-1" /></Link>
+          </div>
+        </div>
+        <div className="col-span-2 md:col-span-1 h-full flex flex-col justify-center space-y-2 p-[0px]">
+          <div className="w-full text-center text-xl md:text-2xl font-bold inter flex justify-center text-text-primary">
+            <Counter duration={10} number={Number(
+              netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))
+            ).toFixed(3)} decimal={2} formatType={"percent"}></Counter>
+          </div>
+          <div className="w-full text-center text-[12px] md:text-sm text-text-secondary font-medium inter">
+            RWA APR <Link href="/rwa"><FiExternalLink className="text-[#61cd81] mb-1" /></Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
