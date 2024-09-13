@@ -8,13 +8,19 @@ interface UseBalanceOfProps {
 }
 
 export default function useBalanceOf({ address }: UseBalanceOfProps) {
-  const { data } = useReadContract({
+  const { data, isError, isLoading, error } = useReadContract({
     address: LPTOKENV2CONTRACT_ADDRESS,
     abi: LpTokenV2Abi,
     functionName: "balanceOf",
     chainId: bsc.id,
     args: [address]
   })
+
+  if (isLoading) return 0
+  if (isError) {
+    console.log('Fetching LpTokenV2Contract balanceOf error', error)
+    return 0
+  }
 
   return data
 }
