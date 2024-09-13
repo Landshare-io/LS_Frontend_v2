@@ -1,6 +1,15 @@
 import { getDefaultProvider } from "ethers";
 import type { Address } from "viem";
 
+export const FIREBASE_CONNECT_CONFIG = {
+  apiKey: "AIzaSyBjrzJ0FSNpeFxeeB-8ZmfNPIQ0HceEnNw",
+  authDomain: "landshare-28977.firebaseapp.com",
+  projectId: "landshare-28977",
+  storageBucket: "landshare-28977.appspot.com",
+  messagingSenderId: "644674595145",
+  appId: "1:644674595145:web:b72e453f72272dc602d298",
+  measurementId: "G-BLF8H8PN8W",
+};
 export const PROVIDER_URLS = {
   56: 'https://bsc-dataseed2.binance.org/',
   97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
