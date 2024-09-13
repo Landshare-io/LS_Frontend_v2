@@ -3,16 +3,11 @@ import { bsc } from "viem/chains";
 import MasterchefAbi from '../../../abis/Masterchef.json';
 import { MASTERCHEFCONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-interface UseTotalStakedProps {
-  address: string
-}
-
-export default function useTotalStaked({ address }: UseTotalStakedProps) {
+export default function useTotalStaked() {
   const { data } = useReadContract({
     address: MASTERCHEFCONTRACT_ADDRESS,
     abi: MasterchefAbi,
     functionName: "totalStaked",
-    args: [0, address],
     chainId: bsc.id
   })
 
