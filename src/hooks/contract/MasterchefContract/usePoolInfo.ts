@@ -3,14 +3,20 @@ import { bsc } from "viem/chains";
 import MasterchefAbi from '../../../abis/Masterchef.json';
 import { MASTERCHEFCONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function usePoolInfo() {
-  const { data } = useReadContract({
+export default function usePoolInfo(poolInfoArg: Number) {
+  const { data, isError, isLoading, error } = useReadContract({
     address: MASTERCHEFCONTRACT_ADDRESS,
     abi: MasterchefAbi,
-    functionName: "userInfo",
-    args: [0],
+    functionName: "poolInfo",
+    args: [poolInfoArg],
     chainId: bsc.id
   })
+
+  if (isLoading) return [0, 0]
+  if (isError) {
+    console.log('Fetching MasterchefContract poolInfo error', error)
+    return 0
+  }
 
   return data
 }

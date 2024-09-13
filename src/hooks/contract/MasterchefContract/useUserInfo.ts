@@ -8,13 +8,19 @@ interface UseUserInfoProps {
 }
 
 export default function useUserInfo({ address }: UseUserInfoProps) {
-  const { data } = useReadContract({
+  const { data, isError, isLoading, error } = useReadContract({
     address: MASTERCHEFCONTRACT_ADDRESS,
     abi: MasterchefAbi,
     functionName: "userInfo",
     args: [0, address],
     chainId: bsc.id
   })
+
+  if (isLoading) return 0
+  if (isError) {
+    console.log('Fetching MasterchefContract userInfo error', error)
+    return 0
+  }
 
   return data
 }
