@@ -4,12 +4,18 @@ import APIConsumerAbi from "../../../abis/APIConsumer.json";
 import { APICONSUMERCONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useGetRwaPrice() {
-  const { data } = useReadContract({
+  const { data, isError, isLoading, error } = useReadContract({
     address: APICONSUMERCONTRACT_ADDRESS,
     abi: APIConsumerAbi,
     functionName: "getRWAPrice",
     chainId: bsc.id
   })
+
+  if (isLoading) return 0
+  if (isError) {
+    console.log('Fetching APIConsumerContract getRWAPrice error', error)
+    return 0
+  }
 
   return data
 }
