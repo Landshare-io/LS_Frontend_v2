@@ -3,6 +3,7 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import DashboardFeautre from '../components/dashboard-features';
 import MoreInvestment from '../components/learn-more-future-investment';
+import StatusCard from '../components/status-card';
 
 const Home: NextPage = () => {
   return (
@@ -15,6 +16,7 @@ const Home: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
+      <StatusCard />
       <DashboardFeautre />
       <MoreInvestment />
     </div>
