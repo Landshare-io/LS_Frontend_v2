@@ -1,11 +1,11 @@
 import { useReadContracts } from "wagmi";
-import { toBigInt } from "ethers";
 import { bsc } from "viem/chains";
 import MasterchefAbi from '../../abis/Masterchef.json';
 import { MASTERCHEFCONTRACT_ADDRESS } from "../../config/constants/environments";
+import { toBigInt } from "ethers";
 
 export default function useLandPerBlock() {
-  const { data } = useReadContracts({
+  const { data, isError, isLoading, error } = useReadContracts({
     contracts: [
       {
         address: MASTERCHEFCONTRACT_ADDRESS,
@@ -33,14 +33,17 @@ export default function useLandPerBlock() {
         chainId: bsc.id
       }
     ]
-  }) as { data: any[] }
+  }) as { data: any[], isError: boolean, isLoading: boolean, error: any }
 
+  if (isLoading) return 0
+  if (isError) {
+    console.log('Fetching APR error', error)
+    return 0
+  }
 
-  console.log('==========================data', data)
+  const annualLand = data[0].result * toBigInt("10512000");
+  const totalLandPerYear = annualLand * data[1].result[1] / data[2].result;
+  const apr = ((Number(totalLandPerYear) / Number(data[3].result)) * 100).toFixed(2);
 
-  const annualLand = toBigInt(data[0]) * toBigInt('10512000')
-  const totalLandPerYear = annualLand * toBigInt(data[1][1]) / toBigInt(data[2])
-  const apr = totalLandPerYear / toBigInt(data[3]) * toBigInt(100)
-
-  return apr.toString()
+  return apr
 }
