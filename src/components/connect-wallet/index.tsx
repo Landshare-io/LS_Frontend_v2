@@ -52,6 +52,7 @@ export default function ConnectWallet({
                   return (
                     <Button
                       className={`text-[#fff] px-[24px] py-[13px] rounded-[100px] hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81] ${interTight.className} ${connectButtonClassName}`}
+                      textClassName="hover:dark:text-[#61CD81]"
                       onClick={openConnectModal}
                     >
                       Connect Wallet
@@ -64,6 +65,7 @@ export default function ConnectWallet({
                     <Button
                       onClick={openChainModal}
                       className={`text-[#fff] px-[24px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81] ${interTight.className}`}
+                      textClassName="hover:dark:text-[#61CD81]"
                     >
                       Wrong network
                     </Button>
@@ -92,7 +94,8 @@ export default function ConnectWallet({
                       </div>
                       <Button
                         onClick={openAccountModal}
-                        className="text-[#fff] px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400  hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81]"
+                        className="text-[#fff] px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81]"
+                        textClassName="hover:dark:text-[#61CD81]"
                       >
                         {account.displayName}
                       </Button>
