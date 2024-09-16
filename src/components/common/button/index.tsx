@@ -1,4 +1,10 @@
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { Inter_Tight } from "next/font/google";
+
+const boldInterTight = Inter_Tight({
+  weight: "700",
+  style: "normal",
+  preload: false,
+});
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -21,13 +27,13 @@ export default function Button ({
   return (
     <button
       className={`flex justify-center items-center disabled:cursor-not-allowed 
-        ${outlined ? ' bg-transparent border-[1px] border-[#61cd81] hover:bg-[#61cd81] hover:text-white ' : ' bg-[#61cd81] border-0 font-inter ' }
+        ${outlined ? ' bg-transparent border-[1px] border-[#61cd81] hover:bg-[#61cd81] hover:text-white ' : ' bg-[#61cd81] border-0 ' }
         ${className}
       `}
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`text-[14px] leading-[22px] font-bold dark:text-[#3c3c3c] ${textClassName}`}>
+      <span className={`text-[14px] leading-[22px] font-bold dark:text-[#3c3c3c] ${boldInterTight.className} ${textClassName}`}>
         {children}
       </span>
     </button>
