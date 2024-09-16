@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
-import "./style.css"
 
 interface CarouselProps {
   children: JSX.Element[];
-  containerClassName: string;
+  containerClassName?: string;
   activeIndex: number;
   setActiveIndex: Function;
+  setPaused: Function;
 }
 
 export default function Carousel({
@@ -14,9 +14,9 @@ export default function Carousel({
   containerClassName,
   activeIndex,
   setActiveIndex,
+  setPaused
 }: CarouselProps) {
-  const [paused, setPaused] = useState(false);
-  const [count, setCount] = useState(children.length);
+  const count = children.length;
 
   const updateIndex = (newIndex: number) => {
     if (newIndex < 0) {
@@ -28,20 +28,6 @@ export default function Carousel({
     setActiveIndex(newIndex);
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // if (!paused) {
-        updateIndex(activeIndex + 1);
-      // }
-    }, 10000);
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  });
-
   const handlers = useSwipeable({
     onSwipedLeft: () => updateIndex(activeIndex + 1),
     onSwipedRight: () => updateIndex(activeIndex - 1),
@@ -49,7 +35,7 @@ export default function Carousel({
 
   return (
     <div 
-      className={`nowrap transition-all duration-300 overflow-hidden ${containerClassName}`}
+      className={`whitespace-nowrap transition-all duration-300 overflow-hidden ${containerClassName}`}
       {...handlers}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
