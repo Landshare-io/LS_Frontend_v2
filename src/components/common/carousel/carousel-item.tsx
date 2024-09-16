@@ -1,16 +1,20 @@
 import React from "react";
-import "./style.css";
 
 interface CarouselItemProps {
-  children: JSX.Element[];
-  containerClassName: string;
+  children: JSX.Element;
+  containerClassName?: string;
   activeIndex: number;
-  active: boolean;
+  active?: boolean;
 }
 
 const CarouselItem = ({ children, containerClassName, active, activeIndex }: CarouselItemProps) => {
   return (
-    <div className={`inline-block w-full padding-0 nowrap transition-all duration-300 translate-x-[${activeIndex * 100}%] ${active ? 'visible' : ''} ${containerClassName}`}>
+    <div 
+      className={`inline-block w-full padding-0 whitespace-nowrap duration-300 ${active ? 'visible' : ''} ${containerClassName}`}
+      style={{
+        transform: `translateX(-${activeIndex * 100}%)`,
+      }}
+    >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child);
