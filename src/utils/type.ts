@@ -1,3 +1,7 @@
+export type StringKeyStringValueObject = {
+  [key: string]: string;
+};
+
 export type PAGE = {
   name: string
   path?: string
