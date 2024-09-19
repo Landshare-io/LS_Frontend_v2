@@ -1,17 +1,10 @@
 import Image from "next/image";
-import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
 import { useGlobalContext } from "../../context/GlobalContext";
+import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import IllustrationMap from "../../../public/img/dashboard/illustration-map.png";
 import IllustrationMapMobile from "../../../public/img/dashboard/illustration-map-mobile.png";
 import IllustrcationMapDark from "../../../public/img/dashboard/Illustration_map_dark.png"
-
-const boldInterTight = Inter_Tight({
-  weight: "700",
-  style: "normal",
-  preload: false,
-});
-
 
 export default function MoreInvestment() {
   const { theme } = useGlobalContext();
@@ -47,7 +40,7 @@ export default function MoreInvestment() {
           </>
         )}
         <div className="relative z-10">
-          <p className={`text-[32px] leading-[40px] text-center md:text-start md:text-[54px] md:leading-[68px] text-white ${boldInterTight.className}`}>
+          <p className={`text-[32px] leading-[40px] text-center md:text-start md:text-[54px] md:leading-[68px] text-white ${BOLD_INTER_TIGHT.className}`}>
             Learn more about the<br /> future of property<br /> investment
           </p>
           <div className="flex flex-col md:flex-row gap-[16px] mt-[40px]">
