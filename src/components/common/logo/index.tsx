@@ -1,15 +1,9 @@
 import Link from "next/link";
 import Image from 'next/image';
-import { Inter_Tight } from 'next/font/google';
+import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import logo from "../../../../public/logo.svg";
 import logoDark from "../../../../public/logo-dark.svg";
-
-const boldInterTight = Inter_Tight({
-  weight: "700",
-  style: "normal",
-  preload: false,
-});
 
 interface LogoProps {
   logoClassName?: string;
@@ -31,7 +25,7 @@ export default function Logo({ logoClassName, textClassName, showLogoText }: Log
         alt="logo" 
       />
       {showLogoText && (
-        <div className={`font-bold text-[20px] leading-[24px] text-[#0E1D18] dark:text-[#ffffff] ${boldInterTight.className} ${textClassName}`}>Landshare</div>
+        <div className={`font-bold text-[20px] leading-[24px] text-[#0E1D18] dark:text-[#ffffff] ${BOLD_INTER_TIGHT.className} ${textClassName}`}>Landshare</div>
       )}
     </Link>
   );
