@@ -1,16 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { Inter_Tight } from 'next/font/google';
+import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { DASHBOARD_FEATURE } from "../../utils/type";
 import Button from "../common/button";
-
-const boldInterTight = Inter_Tight({
-  weight: "700",
-  style: "normal",
-  preload: false,
-});
 
 export default function FeatureCard({
   icon,
@@ -45,7 +39,7 @@ export default function FeatureCard({
           <div className="bg-transparent w-[124px] mlg:w-[203px]"></div>
           <div className="bg-secondary py-[12px] pr-[12.5px] pl-[60px] w-full rounded-[6px] flex flex-col justify-between mlg:pt-[24px] mlg:pr-[32px] mlg:pb-[25px] mlg:pl-[80px]">
             <div className="flex flex-col gap-[2px] mlg:gap-[5px]">
-              <h4 className={`text-text-primary text-[18px] leading-[28px] mlg:text-[24px] mlg:leading-[30px] ${boldInterTight.className}`}>{title}</h4>
+              <h4 className={`text-text-primary text-[18px] leading-[28px] mlg:text-[24px] mlg:leading-[30px] ${BOLD_INTER_TIGHT.className}`}>{title}</h4>
               <p className="text-text-secondary text-[12px] leading-[18px] mlg:text-[14px] mlg:leading-[22px] overflow-hidden text-ellipsis">{description}</p>
             </div>
             <Button 
