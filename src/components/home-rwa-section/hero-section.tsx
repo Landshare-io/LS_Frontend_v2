@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Inter_Tight } from "next/font/google"
+import { BOLD_INTER_TIGHT } from "../../config/constants/environments"
 import Carousel from "../common/carousel"
 import CarouselItem from "../common/carousel/carousel-item"
 import CarouselControl from "../common/carousel/carousel-control"
@@ -12,11 +12,6 @@ import ImageHero1_Dark from "../../../public/img/dashboard/rwa-hero-image-1-dark
 import ImageHero2 from "../../../public/img/dashboard/rwa-hero-image-2.svg";
 import ImageHero2_Dark from "../../../public/img/dashboard/rwa-hero-image-2-dark.svg";
 
-const boldInterTight = Inter_Tight({
-  weight: "700",
-  style: "normal",
-  preload: false,
-});
 
 export default function HomeRwaHeroSection() {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -33,7 +28,7 @@ export default function HomeRwaHeroSection() {
           <div className="flex flex-col md:flex-row items-start md:justify-between md:items-center max-w-[1200px] m-auto">
             <div className="flex flex-col justify-end w-full whitespace-normal max-w-fit md:max-w-[560px]">
               <FeatureBadge icon="/icons/cube.svg" text="The Future of Investment" />
-              <h1 className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] my-[12px] ${boldInterTight.className}`}>
+              <h1 className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] my-[12px] ${BOLD_INTER_TIGHT.className}`}>
                 RWA Token is Now Live
               </h1>
               <p className="line-clamp-4 mb-0 md:text-[16px] md:leading-[24px] md:tracking-[2%] lg:mb-[40px] lg:text-[18px] lg:leading-[28px] lg:tracking-[0.36px] text-[#535457] dark:text-[#a9abaf]">
@@ -68,7 +63,7 @@ export default function HomeRwaHeroSection() {
           <div className="flex flex-col md:flex-row items-start md:justify-between md:items-center max-w-[1200px] m-auto">
             <div className="flex flex-col justify-end w-full whitespace-normal max-w-fit md:max-w-[560px]">
               <FeatureBadge icon="/icons/cube.svg" text="Stay Up To Date" />
-              <h1 className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] my-[12px] ${boldInterTight.className}`}>
+              <h1 className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] my-[12px] ${BOLD_INTER_TIGHT.className}`}>
                 Get the Latest Updates
               </h1>
               <p className="line-clamp-4 mb-0 md:text-[16px] md:leading-[24px] md:tracking-[2%] lg:mb-[40px] lg:text-[18px] lg:leading-[28px] lg:tracking-[0.36px] text-[#535457] dark:text-[#a9abaf]">
