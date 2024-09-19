@@ -1,6 +1,12 @@
 import { getDefaultProvider } from "ethers";
 import type { Address } from "viem";
+import { Inter_Tight } from "next/font/google";
 
+export const BOLD_INTER_TIGHT = Inter_Tight({
+  weight: "700",
+  style: "normal",
+  preload: false,
+});
 export const FIREBASE_CONNECT_CONFIG = {
   apiKey: "AIzaSyBjrzJ0FSNpeFxeeB-8ZmfNPIQ0HceEnNw",
   authDomain: "landshare-28977.firebaseapp.com",
