@@ -2,20 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
-import { Inter_Tight } from 'next/font/google';
+import { BOLD_INTER_TIGHT } from '../../config/constants/environments';
 import { PAGES } from "../../config/constants/pages";
 import Logo from '../common/logo';
 import ConnectWallet from '../connect-wallet';
 import MobileNavbar from './mobile';
-
-// Importing types
 import { PAGE } from "../../utils/type";
-
-const boldInterTight = Inter_Tight({
-  weight: "700",
-  style: "normal",
-  preload: false,
-});
 
 export default function Header() {
   const router = useRouter();
@@ -53,14 +45,14 @@ export default function Header() {
                       href= {page?.name == "Swap" ? "https://app.dsswap.io/info" : "https://app.transporter.io/?tab=token&token=LAND"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 text-[#0f0a0a] dark:text-[#f1f1f1] font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left ${boldInterTight.className}`}
+                      className={`flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 text-[#0f0a0a] dark:text-[#f1f1f1] font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left ${BOLD_INTER_TIGHT.className}`}
                     >
                       {page.name}
                     </Link>
                   ) : (
                     <Link 
                       href={page?.path ?? ''} 
-                      className={`text-[#0f0a0a] dark:text-[#f1f1f1] no-underline flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left ${boldInterTight.className}`}
+                      className={`text-[#0f0a0a] dark:text-[#f1f1f1] no-underline flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left ${BOLD_INTER_TIGHT.className}`}
                     >
                       {page.name}
                     </Link>
