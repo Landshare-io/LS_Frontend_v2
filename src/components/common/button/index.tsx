@@ -1,10 +1,4 @@
-import { Inter_Tight } from "next/font/google";
-
-const boldInterTight = Inter_Tight({
-  weight: "700",
-  style: "normal",
-  preload: false,
-});
+import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -33,7 +27,7 @@ export default function Button ({
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`text-[14px] leading-[22px] font-bold dark:text-[#3c3c3c] ${boldInterTight.className} ${textClassName}`}>
+      <span className={`text-[14px] leading-[22px] font-bold dark:text-[#3c3c3c] ${BOLD_INTER_TIGHT.className} ${textClassName}`}>
         {children}
       </span>
     </button>
