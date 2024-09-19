@@ -1,16 +1,12 @@
 import { useState } from "react";
-import { Inter_Tight } from "next/font/google";
+import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import FeatureBadge from "../common/feature-badge";
 import ToggleButton from "../common/toggle-button";
 import Carousel from "../common/carousel";
 import CarouselControl from "../common/carousel/carousel-control";
-
-
-const boldInterTight = Inter_Tight({
-  weight: "700",
-  style: "normal",
-  preload: false,
-});
+import CarouselItem from "../common/carousel/carousel-item";
+import PropertyCard from "../common/property-card";
+import FinancialPropertyCard from "../financial-property-card";
 
 export default function HomeRwaAssetsSummary() {
   const [selectedGraph, setSelectedGraph] = useState('rwa')
@@ -27,11 +23,13 @@ export default function HomeRwaAssetsSummary() {
               text="Real World Assets"
               type="gray"
             />
-            <h1 className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] md:my-[12px] md:mx-0 text-center md:text-start ${boldInterTight.className}`}>Asset Summary</h1>
+            <h1 className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] md:my-[12px] md:mx-0 text-center md:text-start ${BOLD_INTER_TIGHT.className}`}>
+              Asset Summary
+            </h1>
           </div>
           <div className="latest-group">
-            <div className="px-[10px] md:px-[40px]">
-              <div className="latest-properties-button-group">
+            <div className="flex flex-col flex-1 px-[10px] md:px-[40px]">
+              <div className="flex flex-col w-full gap-x-[64px] lg:flex-row lg:gap-x-[64px] gap-y-[32px]">
                 <ToggleButton
                   onClick={() => setSelectedGraph('rwa')}
                   active={selectedGraph == 'rwa'}
@@ -48,8 +46,8 @@ export default function HomeRwaAssetsSummary() {
                 </ToggleButton>
 
               </div>
-              <div className="latest-properties-graph-setion">
-                <div className="bg-primary latest-properties-graph">
+              <div className="pr-0 w-full">
+                <div className="bg-primary rounded-[16px] p-[14px] overflow-visible md:p-[24px]">
                   {/* <PriceGraph type={selectedGraph} landPrice={Number.parseFloat(landPrice).toFixed(5)} isDataLoading={landDataLoading} isRWAPage={false} /> */}
                 </div>
               </div>
@@ -62,7 +60,7 @@ export default function HomeRwaAssetsSummary() {
                 paused={paused}
                 carouselControlClass="mb-[20px] px-[10px] md:px-[40px]"
               />
-              <div className="latest-property-carousel-container">
+              <div className="flex justify-center items-center">
                 <Carousel
                   activeIndex={activeIndex}
                   setActiveIndex={setActiveIndex}
@@ -75,7 +73,7 @@ export default function HomeRwaAssetsSummary() {
                       preview: PROPERTIES[0].preview
                     }
                     return (
-                      <CarouselItem key={i} width="fit-content">
+                      <CarouselItem key={i} containerClassName="w-fit" activeIndex={activeIndex}>
                         <PropertyCard property={tmp} />
                       </CarouselItem>
                     );
@@ -84,71 +82,73 @@ export default function HomeRwaAssetsSummary() {
               </div>
             </div>
           </div>
-          {isMobile && (
-            <div className="financial-summary-properties latest-properties-financial-summary pr-0 lg:pr-[450px] overflow-hidden">
-              <div className="financial-summary-properties-carousel">
-                <div className="financial-summary-properties-container">
-                  <Carousel
-                    activeIndex={summaryActiveIndex}
-                    setActiveIndex={setSummaryActiveIndex}
+          <div className="block md:hidden flex gap-[24px] latest-properties-financial-summary mt-[12px] w-full pr-0 lg:pr-[450px] overflow-hidden">
+            <div className="w-full mt-0 md:w-[430px] md:mt-[56px] md:overflow-visible md:p-[20px]">
+              <div className="flex items-center justify-center">
+                <Carousel
+                  activeIndex={activeIndex}
+                  setActiveIndex={setActiveIndex}
+                  count={propertiesRental.length}
+                  paused={paused}
+                >
+                  <CarouselItem 
+                    activeIndex={activeIndex}
+                    containerClassName="w-fit"
                   >
-                    <CarouselItem width="fit-content">
-                      <FinancialPropertyCard
-                        title={selectedGraph == 'land' ? "Market Cap" : "Rental Yield"}
-                        value={selectedGraph == 'land' ? "$" + marketcap?.toLocaleString() : (netRentalPerMonth * 12 / totalPropertyValue * 100).toFixed(3) + "%"}
-                        loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
-                      />
-                    </CarouselItem>
-                    <CarouselItem width="fit-content">
-                      <FinancialPropertyCard
-                        title={selectedGraph == 'land' ? "Circulating Supply" : "Est. Appreciation"}
-                        value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / totalPropertyValue).toFixed(3) + "%"}
-                        loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
-                      />
-                    </CarouselItem>
-                    <CarouselItem width="fit-content">
-                      <FinancialPropertyCard
-                        title={selectedGraph == 'land' ? "Current Price" : "Ann. Return"}
-                        value={selectedGraph == 'land' ? Number.parseFloat(landPrice).toFixed(3) : (netRentalPerMonth * 12 / totalPropertyValue * 100 + appreciation / totalPropertyValue).toFixed(3) + "%"}
-                        loading={selectedGraph == 'land' ? "$" + landDataLoading : rwaDataLoading}
-                      />
-                    </CarouselItem>
-                  </Carousel>
-                </div>
-                <CarouselControlMobile
-                  isIndicator={true}
-                  isControl={true}
-                  activeIndex={summaryActiveIndex}
-                  setActiveIndex={setSummaryActiveIndex}
-                  count={3}
-                  isSmallControl={true}
-                  style={{
-                    margin: '0 0 20px 0',
-                  }}
-                  carouselControlClass="px-[10px] md:px-[40px] limited-width"
-                />
+                    <FinancialPropertyCard
+                      title={selectedGraph == 'land' ? "Market Cap" : "Rental Yield"}
+                      value={selectedGraph == 'land' ? "$" + marketcap?.toLocaleString() : (netRentalPerMonth * 12 / totalPropertyValue * 100).toFixed(3) + "%"}
+                      loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+                    />
+                  </CarouselItem>
+                  <CarouselItem 
+                    activeIndex={activeIndex}
+                    containerClassName="w-fit"
+                  >
+                    <FinancialPropertyCard
+                      title={selectedGraph == 'land' ? "Circulating Supply" : "Est. Appreciation"}
+                      value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / totalPropertyValue).toFixed(3) + "%"}
+                      loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+                    />
+                  </CarouselItem>
+                  <CarouselItem 
+                    activeIndex={activeIndex}
+                    containerClassName="w-fit"
+                  >
+                    <FinancialPropertyCard
+                      title={selectedGraph == 'land' ? "Current Price" : "Ann. Return"}
+                      value={selectedGraph == 'land' ? Number.parseFloat(landPrice).toFixed(3) : (netRentalPerMonth * 12 / totalPropertyValue * 100 + appreciation / totalPropertyValue).toFixed(3) + "%"}
+                      loading={selectedGraph == 'land' ? "$" + landDataLoading : rwaDataLoading}
+                    />
+                  </CarouselItem>
+                </Carousel>
               </div>
-            </div>
-          )}
-          {!isMobile && (
-            <div className="financial-summary-properties latest-properties-financial-summary pr-0 lg:pr-[450px] overflow-visible">
-              <FinancialPropertyCard
-                title={selectedGraph == 'land' ? "Market Cap" : "Rental Yield"}
-                value={selectedGraph == 'land' ? "$" + marketcap?.toLocaleString() : (netRentalPerMonth * 12 / totalPropertyValue * 100).toFixed(3) + "%"}
-                loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
-              />
-              <FinancialPropertyCard
-                title={selectedGraph == 'land' ? "Circulating Supply" : "Est. Appreciation"}
-                value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / totalPropertyValue).toFixed(3) + "%"}
-                loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
-              />
-              <FinancialPropertyCard
-                title={selectedGraph == 'land' ? "Current Price" : "Ann. Return"}
-                value={selectedGraph == 'land' ? "$" + Number.parseFloat(landPrice).toFixed(3) : (netRentalPerMonth * 12 / totalPropertyValue * 100 + appreciation / totalPropertyValue).toFixed(3) + "%"}
-                loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+              <CarouselControl
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
+                count={3}
+                paused={paused}
+                carouselControlClass="px-[10px] md:px-[40px] mb-[20px]"
               />
             </div>
-          )}
+          </div>
+          <div className="hidden md:block flex gap-[24px] mt-[12px] w-full pr-0 lg:pr-[450px] overflow-visible">
+            <FinancialPropertyCard
+              title={selectedGraph == 'land' ? "Market Cap" : "Rental Yield"}
+              value={selectedGraph == 'land' ? "$" + marketcap?.toLocaleString() : (netRentalPerMonth * 12 / totalPropertyValue * 100).toFixed(3) + "%"}
+              loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+            />
+            <FinancialPropertyCard
+              title={selectedGraph == 'land' ? "Circulating Supply" : "Est. Appreciation"}
+              value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / totalPropertyValue).toFixed(3) + "%"}
+              loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+            />
+            <FinancialPropertyCard
+              title={selectedGraph == 'land' ? "Current Price" : "Ann. Return"}
+              value={selectedGraph == 'land' ? "$" + Number.parseFloat(landPrice).toFixed(3) : (netRentalPerMonth * 12 / totalPropertyValue * 100 + appreciation / totalPropertyValue).toFixed(3) + "%"}
+              loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+            />
+          </div>
         </div>
       </div>
     </div>
