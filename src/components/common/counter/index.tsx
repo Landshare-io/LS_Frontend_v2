@@ -1,12 +1,6 @@
-import { Inter_Tight } from 'next/font/google';
 import React, { useState, useEffect } from 'react';
 import ReactLoading from 'react-loading';
-
-const boldInterTight = Inter_Tight({
-  weight: "700",
-  style: "normal",
-  preload: false,
-});
+import { BOLD_INTER_TIGHT } from '../../../config/constants/environments';
 
 interface CounterProps {
   number: string;
@@ -61,7 +55,7 @@ const Counter = ({ number, duration, decimal, formatType }: CounterProps) => {
   };
 
   return (
-    <div className={`h-[24px] md:h-[36px] ${boldInterTight.className}`}>
+    <div className={`h-[24px] md:h-[36px] ${BOLD_INTER_TIGHT.className}`}>
       {renderContent()}
     </div>
   );
