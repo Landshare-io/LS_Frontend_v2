@@ -5,7 +5,8 @@ import { createAppSlice } from "../../createAppSlice";
 import type { AppThunk } from "../../store";
 
 const initialState = {
-  status: 'idle',
+  loading: true,
+  propertiesRentalData: [],
   grossRentPerMonth: 0,
   monthlyExpenses: 0,
   taxes: 0,
@@ -51,6 +52,7 @@ export const firebasePropertiesRentalSlice = createAppSlice({
         })
 
         return {
+          propertiesRentalData: data,
           grossRentPerMonth,
           monthlyExpenses,
           taxes,
@@ -63,10 +65,11 @@ export const firebasePropertiesRentalSlice = createAppSlice({
       },
       {
         pending: (state) => {
-          state.status = "loading";
+          state.loading = true;
         },
         fulfilled: (state, action) => {
-          state.status = "idle";
+          state.loading = false;
+          state.propertiesRentalData = action.payload?.propertiesRentalData as never[];
           state.grossRentPerMonth = action?.payload?.grossRentPerMonth ?? 0;
           state.monthlyExpenses = action?.payload?.monthlyExpenses ?? 0;
           state.taxes = action?.payload?.taxes ?? 0;
@@ -77,7 +80,7 @@ export const firebasePropertiesRentalSlice = createAppSlice({
           state.netRentalPerMonth = action?.payload?.netRentalPerMonth ?? 0;
         },
         rejected: (state) => {
-          state.status = "failed";
+          state.loading = false;
         },
       },
     ),
@@ -85,7 +88,8 @@ export const firebasePropertiesRentalSlice = createAppSlice({
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
   selectors: {
-    selectStatus: (action) => action.status,
+    selectPropertiesRentalData: (action) => action.propertiesRentalData,
+    selectLoadingStatus: (action) => action.loading,
     selectGrossRentPerMonth: (action) => action.grossRentPerMonth,
     selectMonthlyExpenses: (action) => action.monthlyExpenses,
     selectTaxes: (action) => action.taxes,
@@ -103,7 +107,7 @@ firebasePropertiesRentalSlice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
 export const { 
-  selectStatus,
+  selectLoadingStatus,
   selectGrossRentPerMonth,
   selectMonthlyExpenses,
   selectTaxes,
@@ -112,5 +116,6 @@ export const {
   selectCapRate,
   selectAppreciation,
   selectNetRentalPerMonth,
+  selectPropertiesRentalData
 } = firebasePropertiesRentalSlice.selectors;
 
