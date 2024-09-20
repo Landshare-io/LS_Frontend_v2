@@ -16,3 +16,12 @@ export type DASHBOARD_FEATURE = {
   routeName?: string
   externalLink?: string
 }
+
+export type PROPERTY = {
+  preview: any
+  title: string
+  type: string
+  propertyValue: string
+  capRate: string
+  annReturn: string
+}
