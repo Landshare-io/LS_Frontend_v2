@@ -1,8 +1,6 @@
 import { collection, query, getDocs } from "firebase/firestore/lite";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { db } from "../../../utils/firebase";
 import { createAppSlice } from "../../createAppSlice";
-import type { AppThunk } from "../../store";
 
 const initialState = {
   loading: true,
