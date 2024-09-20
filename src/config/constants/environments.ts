@@ -8,13 +8,13 @@ export const BOLD_INTER_TIGHT = Inter_Tight({
   preload: false,
 });
 export const FIREBASE_CONNECT_CONFIG = {
-  apiKey: "AIzaSyBjrzJ0FSNpeFxeeB-8ZmfNPIQ0HceEnNw",
-  authDomain: "landshare-28977.firebaseapp.com",
-  projectId: "landshare-28977",
-  storageBucket: "landshare-28977.appspot.com",
-  messagingSenderId: "644674595145",
-  appId: "1:644674595145:web:b72e453f72272dc602d298",
-  measurementId: "G-BLF8H8PN8W",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 export const PROVIDER_URLS = {
   56: 'https://bsc-dataseed2.binance.org/',
@@ -47,6 +47,7 @@ export const LANDTOKENCONTRACT_ADDRESS = {
   42161: '0x27Bc2757fAb0b8aB406016D1f71d8123452095d3' as Address,
   421614: '0xA8C0c11bf64AF62CDCA6f93D3769B88BdD7cb93D' as Address
 }
+export const LANDMARKET_URL = 'http://159.203.181.148:5000/land_market'
 export const APICONSUMERCONTRACT_ADDRESS = '0x234fCeB8e266cc0843ea134f378f0157dB4d09dE' as Address
 export const LPTOKENV2CONTRACT_ADDRESS = '0x13F80c53b837622e899E1ac0021ED3D1775CAeFA' as Address
 export const MASTERCHEFCONTRACT_ADDRESS = '0x3f9458892fB114328Bc675E11e71ff10C847F93b' as Address
