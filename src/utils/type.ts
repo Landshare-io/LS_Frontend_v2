@@ -25,3 +25,8 @@ export type PROPERTY = {
   capRate: string
   annReturn: string
 }
+
+export type BREADCRUMB = {
+  name: string
+  url: string
+}
