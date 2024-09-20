@@ -1,5 +1,5 @@
 
-import { DASHBOARD_FEATURE } from "../../utils/type";
+import { DASHBOARD_FEATURE, PROPERTY } from "../../utils/type";
 import IconCoinStacked from "../../../public/icons/coin-stacked.svg";
 import IconHome from "../../../public/icons/home.svg";
 import IconDashboard from "../../../public/icons/dashboard.svg";
@@ -7,6 +7,9 @@ import IconCube from "../../../public/icons/cube.svg";
 import IconRotate from "../../../public/icons/rotate.svg";
 import IconListing from "../../../public/icons/listing.svg";
 import RotateDark from "../../../public/icons/rotate-dark.svg"
+import ImageHouse1 from "../../../public/img/real-house/house-1.png";
+import ImageHouse2 from "../../../public/img/real-house/house-2.png";
+import ImageHouse3 from "../../../public/img/real-house/house-3.png";
 
 export const FEATURES: DASHBOARD_FEATURE[] = [
   {
@@ -54,5 +57,33 @@ export const FEATURES: DASHBOARD_FEATURE[] = [
     title: "Landshare DAO",
     description: "View the latest community proposals in the Landshare DAO",
     routeName: "/dao"
+  },
+];
+
+
+export const PROPERTIES: PROPERTY[] = [
+  {
+    preview: ImageHouse1,
+    title: "3406 Parkview DriveRapid City, SD 57701",
+    type: "Rental Property",
+    propertyValue: "$ 140,000",
+    capRate: "27 - 52%",
+    annReturn: "27% - 52%",
+  },
+  {
+    preview: ImageHouse2,
+    title: "3406 Parkview DriveRapid City, SD 57702",
+    type: "Rental Property",
+    propertyValue: "$ 136,800",
+    capRate: "27% - 52%",
+    annReturn: "27% - 52%",
+  },
+  {
+    preview: ImageHouse3,
+    title: "3406 Parkview DriveRapid City, SD 57703",
+    type: "House Flip",
+    propertyValue: "$140,000",
+    capRate: "27% - 52%",
+    annReturn: "27% - 52%",
   },
 ];
