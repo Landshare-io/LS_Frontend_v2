@@ -9,6 +9,7 @@ import CarouselItem from "../common/carousel/carousel-item";
 import PropertyCard from "../common/property-card";
 import FinancialPropertyCard from "../financial-property-card";
 import { PROPERTIES } from "../../config/constants/page-data";
+import PriceGraph from "../price-line-chart";
 import useGetTotalValue from "../../hooks/contract/APIConsumerContract/useGetTotalValue";
 import { 
   getData,
@@ -40,7 +41,7 @@ export default function HomeRwaAssetsSummary() {
     <div className="pt-[30px] pb-[40px] px-0 md:pl-0 md:pr-0 lg:py-[80px] lg:px-[120px] bg-secondary">
       <div className="flex flex-col items-start md:flex-row justify-between md:items-center gap-[10px] xl:gap-[20px] 2xl:gap-[100px] pt-[100px] pr-0 max-w-[1200px] m-auto">
         <div className="flex flex-col items-start w-full gap-0">
-          <div className="px-[10px] md:px-[40px]">
+          <div className="px-[10px] md:px-[40px] lg:px-0">
             <FeatureBadge
               icon="/icons/wallet.svg"
               text="Real World Assets"
@@ -51,7 +52,7 @@ export default function HomeRwaAssetsSummary() {
             </h1>
           </div>
           <div className="flex flex-col mlg:flex-row w-full lg:gap-x-0 xl:gap-x-[64px] gap-y-[32px]">
-            <div className="flex flex-col flex-1 px-[10px] md:px-[40px] flex-1">
+            <div className="flex flex-col flex-1 px-[10px] md:px-[40px] lg:px-0 flex-1">
               <div className="flex items-center gap-[12px] mb-[24px]">
                 <ToggleButton
                   onClick={() => setSelectedGraph('rwa')}
@@ -71,7 +72,7 @@ export default function HomeRwaAssetsSummary() {
               </div>
               <div className="pr-0 w-full">
                 <div className="bg-primary rounded-[16px] p-[14px] overflow-visible md:p-[24px]">
-                  {/* <PriceGraph type={selectedGraph} landPrice={Number.parseFloat(landPrice).toFixed(5)} isDataLoading={landDataLoading} isRWAPage={false} /> */}
+                  <PriceGraph type={selectedGraph} showBuyButton={true} />
                 </div>
               </div>
             </div>
@@ -106,7 +107,7 @@ export default function HomeRwaAssetsSummary() {
               </div>
             </div>
           </div>
-          <div className="block md:hidden flex gap-[24px] mt-[12px] w-full pr-0 lg:pr-[450px] overflow-hidden">
+          <div className="flex md:hidden gap-[24px] mt-[12px] w-full pr-0 lg:pr-[450px] overflow-hidden">
             <div className="w-full mt-0 md:w-[430px] md:mt-[56px] md:overflow-visible md:p-[20px]">
               <div className="flex items-center justify-center">
                 <Carousel
