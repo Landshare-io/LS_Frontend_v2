@@ -1,17 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import FeatureBadge from "../common/feature-badge";
 import ToggleButton from "../common/toggle-button";
 import Carousel from "../common/carousel";
+import { BigNumberish, formatEther } from "ethers";
 import CarouselControl from "../common/carousel/carousel-control";
 import CarouselItem from "../common/carousel/carousel-item";
 import PropertyCard from "../common/property-card";
 import FinancialPropertyCard from "../financial-property-card";
+import { PROPERTIES } from "../../config/constants/page-data";
+import useGetTotalValue from "../../hooks/contract/APIConsumerContract/useGetTotalValue";
+import { 
+  getData,
+  selectLoadingStatus,
+  selectNetRentalPerMonth,
+  selectPropertiesRentalData,
+  selectAppreciation,
+} from '../../lib/slices/firebase-slices/properties-rental';
+import { useAppDispatch, useAppSelector } from "../../lib/hooks";
+import useGetLandPrice from "../../hooks/axios/useGetLandPrice";
 
 export default function HomeRwaAssetsSummary() {
   const [selectedGraph, setSelectedGraph] = useState('rwa')
-  const [activeIndex, setActiveIndex] = useState(0)
+  const dispatch = useAppDispatch();
+  const isRwaLoading = useAppSelector(selectLoadingStatus);
+  const propertiesRentalData = useAppSelector(selectPropertiesRentalData);
+  const netRentalPerMonth = useAppSelector(selectNetRentalPerMonth);
+  const appreciation = useAppSelector(selectAppreciation);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const totalPropertyValue = useGetTotalValue() as BigNumberish;
+  const { price: landPrice, isLoading, circulatingSupply } = useGetLandPrice();
+
+  useEffect(() => {
+    dispatch(getData())
+  }, [dispatch])
 
   return (
     <div className="pt-[30px] pb-[40px] px-0 md:pl-0 md:pr-0 lg:py-[80px] lg:px-[120px] bg-secondary">
@@ -27,9 +50,9 @@ export default function HomeRwaAssetsSummary() {
               Asset Summary
             </h1>
           </div>
-          <div className="latest-group">
-            <div className="flex flex-col flex-1 px-[10px] md:px-[40px]">
-              <div className="flex flex-col w-full gap-x-[64px] lg:flex-row lg:gap-x-[64px] gap-y-[32px]">
+          <div className="flex flex-col mlg:flex-row w-full lg:gap-x-0 xl:gap-x-[64px] gap-y-[32px]">
+            <div className="flex flex-col flex-1 px-[10px] md:px-[40px] flex-1">
+              <div className="flex items-center gap-[12px] mb-[24px]">
                 <ToggleButton
                   onClick={() => setSelectedGraph('rwa')}
                   active={selectedGraph == 'rwa'}
@@ -56,9 +79,9 @@ export default function HomeRwaAssetsSummary() {
               <CarouselControl
                 activeIndex={activeIndex}
                 setActiveIndex={setActiveIndex}
-                count={propertiesRental.length}
+                count={propertiesRentalData.length}
                 paused={paused}
-                carouselControlClass="mb-[20px] px-[10px] md:px-[40px]"
+                carouselControlClass="mb-[20px] px-[10px] md:px-[20px]"
               />
               <div className="flex justify-center items-center">
                 <Carousel
@@ -66,15 +89,16 @@ export default function HomeRwaAssetsSummary() {
                   setActiveIndex={setActiveIndex}
                   setPaused={setPaused}
                 >
-                  {propertiesRental.map((property, i) => {
-                    const tmp = {
+                  {propertiesRentalData.map((property: any, i) => {
+                    const propertyData = {
                       ...property,
                       type: "Rental Property",
                       preview: PROPERTIES[0].preview
                     }
+                    
                     return (
                       <CarouselItem key={i} containerClassName="w-fit" activeIndex={activeIndex}>
-                        <PropertyCard property={tmp} />
+                        <PropertyCard property={propertyData} />
                       </CarouselItem>
                     );
                   })}
@@ -82,14 +106,13 @@ export default function HomeRwaAssetsSummary() {
               </div>
             </div>
           </div>
-          <div className="block md:hidden flex gap-[24px] latest-properties-financial-summary mt-[12px] w-full pr-0 lg:pr-[450px] overflow-hidden">
+          <div className="block md:hidden flex gap-[24px] mt-[12px] w-full pr-0 lg:pr-[450px] overflow-hidden">
             <div className="w-full mt-0 md:w-[430px] md:mt-[56px] md:overflow-visible md:p-[20px]">
               <div className="flex items-center justify-center">
                 <Carousel
                   activeIndex={activeIndex}
                   setActiveIndex={setActiveIndex}
-                  count={propertiesRental.length}
-                  paused={paused}
+                  setPaused={setPaused}
                 >
                   <CarouselItem 
                     activeIndex={activeIndex}
@@ -97,8 +120,8 @@ export default function HomeRwaAssetsSummary() {
                   >
                     <FinancialPropertyCard
                       title={selectedGraph == 'land' ? "Market Cap" : "Rental Yield"}
-                      value={selectedGraph == 'land' ? "$" + marketcap?.toLocaleString() : (netRentalPerMonth * 12 / totalPropertyValue * 100).toFixed(3) + "%"}
-                      loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+                      value={selectedGraph == 'land' ? "$" + (circulatingSupply * landPrice).toLocaleString() : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"}
+                      loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
                     />
                   </CarouselItem>
                   <CarouselItem 
@@ -107,8 +130,8 @@ export default function HomeRwaAssetsSummary() {
                   >
                     <FinancialPropertyCard
                       title={selectedGraph == 'land' ? "Circulating Supply" : "Est. Appreciation"}
-                      value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / totalPropertyValue).toFixed(3) + "%"}
-                      loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+                      value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
+                      loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
                     />
                   </CarouselItem>
                   <CarouselItem 
@@ -117,8 +140,8 @@ export default function HomeRwaAssetsSummary() {
                   >
                     <FinancialPropertyCard
                       title={selectedGraph == 'land' ? "Current Price" : "Ann. Return"}
-                      value={selectedGraph == 'land' ? Number.parseFloat(landPrice).toFixed(3) : (netRentalPerMonth * 12 / totalPropertyValue * 100 + appreciation / totalPropertyValue).toFixed(3) + "%"}
-                      loading={selectedGraph == 'land' ? "$" + landDataLoading : rwaDataLoading}
+                      value={selectedGraph == 'land' ? "$" + Number.parseFloat(landPrice.toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
+                      loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
                     />
                   </CarouselItem>
                 </Carousel>
@@ -132,21 +155,21 @@ export default function HomeRwaAssetsSummary() {
               />
             </div>
           </div>
-          <div className="hidden md:block flex gap-[24px] mt-[12px] w-full pr-0 lg:pr-[450px] overflow-visible">
+          <div className="hidden md:flex gap-[24px] mt-[12px] w-full pr-0 lg:pr-[450px] overflow-visible">
             <FinancialPropertyCard
               title={selectedGraph == 'land' ? "Market Cap" : "Rental Yield"}
-              value={selectedGraph == 'land' ? "$" + marketcap?.toLocaleString() : (netRentalPerMonth * 12 / totalPropertyValue * 100).toFixed(3) + "%"}
-              loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+              value={selectedGraph == 'land' ? "$" + (circulatingSupply * landPrice).toLocaleString() : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"}
+              loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
             />
             <FinancialPropertyCard
               title={selectedGraph == 'land' ? "Circulating Supply" : "Est. Appreciation"}
-              value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / totalPropertyValue).toFixed(3) + "%"}
-              loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+              value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
+              loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
             />
             <FinancialPropertyCard
               title={selectedGraph == 'land' ? "Current Price" : "Ann. Return"}
-              value={selectedGraph == 'land' ? "$" + Number.parseFloat(landPrice).toFixed(3) : (netRentalPerMonth * 12 / totalPropertyValue * 100 + appreciation / totalPropertyValue).toFixed(3) + "%"}
-              loading={selectedGraph == 'land' ? landDataLoading : rwaDataLoading}
+              value={selectedGraph == 'land' ? "$" + Number.parseFloat(landPrice.toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
+              loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
             />
           </div>
         </div>
