@@ -9,22 +9,15 @@ import { useAccount } from "wagmi";
 import { BigNumberish, formatEther } from "ethers";
 import { useBalance } from "wagmi";
 import { useGlobalContext } from "../../context/GlobalContext";
-
-import { Collapse } from "@mui/material";
-import { KeyboardArrowDown } from "@mui/icons-material";
-import { db } from "../../../lib/firebase";
-import AutoRedeemABI from "../../../contexts/abis/AutoRedeemOptIn.json"
-import APIConsumerABI from "../../../contexts/abis/APIConsumer.json";
-import AssetToken from "../../../contexts/abis/firstNFT/LS81712NFToken.json";
-import Carousel from "../../re-usable/Carousel";
-import CarouselItem from "../../re-usable/Carousel/CarouselItem";
-import CarouselControlMobile from "../../re-usable/Carousel/CarouselControlMobile";
-import PropertyItem from "./PropertyItem";
-import PropertyCard from "../common/property-card";
-import myRwa from "../../../assets/img/icons/Coin_Stacked.svg";
-import ModalOpenIcon from "../../../assets/img/icons/finance-logs-open.png"
-import "./financial-summary.css"
-import "./property-item.css"
+import { IoIosArrowDown } from "react-icons/io";
+import Carousel from "../common/carousel";
+import CarouselItem from "../common/carousel/carousel-item";
+import CarouselControl from "../common/carousel/carousel-control";
+import PropertyItem from "../financial-property-item";
+import Collapse from "../common/collapse";
+import FinancialPropertyCard from "../financial-property-card";
+import myRwa from "../../../public/icons/coin-stacked-small.svg";
+import ModalOpenIcon from "../../../public/icons/finance-logs-open.png";
 import useGetTotalValue from "../../hooks/contract/APIConsumerContract/useGetTotalValue";
 import useBankBalance from "../../hooks/contract/APIConsumerContract/useBankBalance";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
@@ -54,6 +47,9 @@ import useBalanceOf from "../../hooks/contract/RWAContract/useBalanceOf";
 
 export default function FinancialSummary() {
   const { theme } = useGlobalContext();
+  const [openMonthlyExpences, setOpenMonthlyExpences] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useAppDispatch();
   const { address, isConnected } = useAccount();
   const totalPropertyValue = useGetTotalValue() as BigNumberish;
@@ -61,20 +57,25 @@ export default function FinancialSummary() {
   const rwaPrice = useGetRwaPrice() as BigNumberish;
   const rwaValue = useTotalSupply() as BigNumberish;
   const totalRWATokenBalanceOfReserveWallets = useReserveRwa() as BigNumberish;
-
+  let isAutoRedeem = useIsOptedIn(address) as boolean
+  const rwaBalance = useBalanceOf(address) as number
+  const { data: optOutData, isPending: isOptOutPending, onOptOut } = useOptOut()
+  const { data: optInData, isPending: isOptInPending, onOptIn } = useOptIn()
   const financeLogs = useAppSelector(selectFinancialLogs);
   const isSummaryLoading = useAppSelector(selectLoadingStatus);
-
   const grossRentPerMonth = useAppSelector(selectGrossRentPerMonth)
   const taxes = useAppSelector(selectTaxes)
   const insurance = useAppSelector(selectInsurance)
   const management = useAppSelector(selectManagement)
   const appreciation = useAppSelector(selectAppreciation)
   const netRentalPerMonth = useAppSelector(selectNetRentalPerMonth)
-  let isAutoRedeem = useIsOptedIn(address) as boolean
-  const rwaBalance = useBalanceOf(address) as number
-  const { data: optOutData, isPending: isOptOutPending, onOptOut } = useOptOut()
-  const { data: optInData, isPending: isOptInPending, onOptIn } = useOptIn()
+
+  const { data: balance } = useBalance({
+    address: address,
+    token: RWACONTRACT_ADDRESS,
+    chainId: bsc.id,
+  }) as { data: any }
+
 
   useEffect(() => {
     if (optOutData && isOptOutPending) {
@@ -90,16 +91,6 @@ export default function FinancialSummary() {
     dispatch(getFinancialLogsData())
     dispatch(getData())
   }, [dispatch])
-
-  const [openMonthlyExpences, setOpenMonthlyExpences] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const { data: balance } = useBalance({
-    address: address,
-    token: RWACONTRACT_ADDRESS,
-    chainId: bsc.id,
-  }) as { data: any }
 
   async function onAutoRedeem() {
     if (isAutoRedeem) {
@@ -141,7 +132,7 @@ export default function FinancialSummary() {
                     <Image src={myRwa} alt="refresh" className="w-[18px]" />
                   </div>
                   <span className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                    {(Number(formatEther(rwaPrice)) === undefined || isConnected === false) ? "0" : `${parseFloat(balance.formatted)}`}
+                    {(Number(formatEther(rwaPrice)) === undefined || isConnected === false) ? "0" : `${parseFloat(balance?.formatted ?? 0)}`}
                   </span>
                 </div>
               </div>
@@ -154,7 +145,7 @@ export default function FinancialSummary() {
                 checked={isAutoRedeem}
                 disabled={!isConnected}
               />
-              <span className="font-medium text-[14px] leading-[22px] ml-1 text-text-secondary">
+              <span className="font-medium text-[14px] leading-[22px] ml-1 text-text-secondary flex items-center">
                 Auto Redeem
                 <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/auto-redeem" target="_blank">
                   <BsLink45Deg className="w-5 h-5"></BsLink45Deg>
@@ -162,9 +153,8 @@ export default function FinancialSummary() {
               </span>
             </div>
           </div>
-          <PropertyCard page="rwa" title="Rental Yield" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"} />
-          {/* <PropertyCard title="Est. Appreciation" value={(appreciation / propertyValue).toFixed(3) + "%"} /> */}
-          <PropertyCard page="rwa" title="Ann. Return" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"} />
+          <FinancialPropertyCard page="rwa" title="Rental Yield" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"} />
+          <FinancialPropertyCard page="rwa" title="Ann. Return" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"} />
         </div>
         <div className="block md:hidden">
           <div className="flex gap-[24px]">
@@ -173,7 +163,7 @@ export default function FinancialSummary() {
               setActiveIndex={setActiveIndex}
               containerClassName="w-full m-0 items-center"
             >
-              <CarouselItem>
+              <CarouselItem activeIndex={activeIndex}>
                 <div className="bg-third md:bg-secondary flex flex-col justify-center items-center md:items-start w-full gap-[10px] rounded-[16px] min-w-max">
                   <div className="flex justify-center flex-row gap-8 w-full">
                     <div className="flex flex-col gap-[10px]">
@@ -205,25 +195,19 @@ export default function FinancialSummary() {
                   </div>
                 </div>
               </CarouselItem>
-              <CarouselItem>
-                <PropertyCard title="Rental Yield" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"} />
+              <CarouselItem activeIndex={activeIndex}>
+                <FinancialPropertyCard title="Rental Yield" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"} />
               </CarouselItem>
-              <CarouselItem>
-                <PropertyCard title="Ann. Return" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"} />
+              <CarouselItem activeIndex={activeIndex}>
+                <FinancialPropertyCard title="Ann. Return" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"} />
               </CarouselItem>
             </Carousel>
           </div>
-          <CarouselControlMobile
-            isIndicator={true}
-            isControl={true}
+          <CarouselControl
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             count={3}
-            isSmallControl={true}
-            style={{
-              margin: '0 0 20px 0',
-            }}
-            carouselControlClass="section-container-carousel limited-width"
+            carouselControlClass="px-[10px] md:px-[20px] mb-[20px]"
           />
         </div>
         <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
@@ -250,11 +234,11 @@ export default function FinancialSummary() {
               <div className="flex w-full justify-between py-[13px]" onClick={() => setOpenMonthlyExpences(!openMonthlyExpences)}>
                 <div className={`text-[14px] leading-[22px] tracking-[0.02em] flex items-center gap-[10px] cursor-pointer ${BOLD_INTER_TIGHT.className}`}>
                   <span>Annual Expenses</span>
-                  <KeyboardArrowDown fontSize="small" />
+                  <IoIosArrowDown className="text-[15px]" />
                 </div>
                 <div className="text-[14px] leading-[22px] tracking-[0.02em]"> {isSummaryLoading == true ? (<Skeleton className="rounded-lg" width={100} height={18} />) : ("-$" + ((taxes) + (insurance) + management).toLocaleString(undefined, { maximumFractionDigits: 2 }))}</div>
               </div>
-              <Collapse in={openMonthlyExpences}>
+              <Collapse isOpen={openMonthlyExpences}>
                 <div className="w-full rounded-[12px] px-[16px] pb-[24px] bg-secondary text-text-primary">
                   <div className="py-[13px] w-full flex justify-between font-medium text-[12px] leading-[20px] text-center tracking-[0.02em]">
                     <div>Property Taxes</div>
