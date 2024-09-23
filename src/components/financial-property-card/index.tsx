@@ -33,11 +33,11 @@ const tips: StringKeyStringValueObject = {
 interface FinancialPropertyCardProps {
   title: string;
   value: string;
-  loading: boolean;
+  loading?: boolean;
   page?: string;
 }
 
-export default function FinancialPropertyCard ({ title, value, loading, page }: FinancialPropertyCardProps) {
+export default function FinancialPropertyCard ({ title, value, loading = false, page }: FinancialPropertyCardProps) {
   const [currentLoading, setCurrentLoading] = useState(false);
   const { theme } = useGlobalContext();
   useEffect(() => {
