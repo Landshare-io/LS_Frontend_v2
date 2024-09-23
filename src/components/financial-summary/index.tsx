@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, use } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,11 +38,9 @@ import {
   getData,
   selectLoadingStatus,
   selectGrossRentPerMonth,
-  selectMonthlyExpenses,
   selectTaxes,
   selectInsurance,
   selectManagement,
-  selectCapRate,
   selectAppreciation,
   selectNetRentalPerMonth
 } from '../../lib/slices/firebase-slices/properties-rental';
@@ -50,6 +48,9 @@ import useIsOptedIn from "../../hooks/contract/AutoRedeemContract/useIsOptedIn";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { BOLD_INTER_TIGHT, RWACONTRACT_ADDRESS } from "../../config/constants/environments";
 import { getDateStringFromTimestamp } from "../../utils/helpers/convert-date";
+import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";
+import useOptIn from "../../hooks/contract/AutoRedeemContract/useOptIn";
+import useBalanceOf from "../../hooks/contract/RWAContract/useBalanceOf";
 
 export default function FinancialSummary() {
   const { theme } = useGlobalContext();
@@ -65,25 +66,31 @@ export default function FinancialSummary() {
   const isSummaryLoading = useAppSelector(selectLoadingStatus);
 
   const grossRentPerMonth = useAppSelector(selectGrossRentPerMonth)
-  const monthlyExpenses = useAppSelector(selectMonthlyExpenses)
   const taxes = useAppSelector(selectTaxes)
   const insurance = useAppSelector(selectInsurance)
   const management = useAppSelector(selectManagement)
-  const capRate = useAppSelector(selectCapRate)
   const appreciation = useAppSelector(selectAppreciation)
   const netRentalPerMonth = useAppSelector(selectNetRentalPerMonth)
-  const isAutoRedeem = useIsOptedIn(address) as boolean
+  let isAutoRedeem = useIsOptedIn(address) as boolean
+  const rwaBalance = useBalanceOf(address) as number
+  const { data: optOutData, isPending: isOptOutPending, onOptOut } = useOptOut()
+  const { data: optInData, isPending: isOptInPending, onOptIn } = useOptIn()
+
+  useEffect(() => {
+    if (optOutData && isOptOutPending) {
+      isAutoRedeem = !isAutoRedeem
+    }
+  
+    if (optInData && isOptInPending) {
+      isAutoRedeem = !isAutoRedeem
+    }
+  }, [optOutData, isOptOutPending, optInData, isOptInPending])
 
   useEffect(() => {
     dispatch(getFinancialLogsData())
     dispatch(getData())
   }, [dispatch])
 
-  const RWATokenContract = useContract({
-    address: process.env.REACT_APP_RWA_ADDR,
-    abi: AssetToken.abi,
-    signerOrProvider: provider,
-  });
   const [openMonthlyExpences, setOpenMonthlyExpences] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -94,50 +101,16 @@ export default function FinancialSummary() {
     chainId: bsc.id,
   }) as { data: any }
 
-  const AutoRedeemContract = useContract({
-    address: process.env.REACT_APP_AUTOREDEEMOPTIN_ADDR,
-    abi: AutoRedeemABI,
-    signerOrProvider: signer,
-  })
-
-  useEffect(() => {
-    async function checkRedemption() {
-      try {
-        if (address && AutoRedeemContract && AutoRedeemContract.signer) {
-          const result = await AutoRedeemContract.isOptedIn(address)
-          setAutoRedeem(result)
-        }
-      } catch (e) {}
-    }
-    checkRedemption()
-  }, [address, AutoRedeemContract])
-
   async function onAutoRedeem() {
     if (isAutoRedeem) {
-      const tx = await AutoRedeemContract.optOut();
-      tx.wait()
-      tx.wait()
-        .then((receipt) => {
-          setAutoRedeem(!isAutoRedeem)
-        })
-        .catch((error) => {
-          console.log(error)
-        });
+      onOptOut()
     }
     else {
-      if (await RWATokenContract.balanceOf(address) < 1000) {
+      if (rwaBalance < 1000) {
         window.alert("Must hold 1,000 RWA Tokens to opt into Auto Redemption")
         return
       }
-      const tx = await AutoRedeemContract.optIn();
-      tx.wait()
-        .then((receipt) => {
-          setAutoRedeem(!isAutoRedeem)
-
-        })
-        .catch((error) => {
-          console.log(error)
-        });
+      onOptIn()
     }
   }
   
@@ -154,8 +127,6 @@ export default function FinancialSummary() {
       background: '#00000080'
     }
   };
-
-  
 
   return (
     <>
