@@ -2,13 +2,17 @@ import { useReadContract } from "wagmi";
 import { bsc } from "viem/chains";
 import RwaContractAbi from "../../../abis/RWAContract.json";
 import { RWACONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { Address } from "viem";
 
-export default function useBalanceOf() {
+export default function useBalanceOf(address: Address | undefined) {
+  if (typeof address == 'undefined') return 0
+
   const { data, isError, isLoading, error } = useReadContract({
     address: RWACONTRACT_ADDRESS,
     abi: RwaContractAbi,
     functionName: "balanceOf",
-    chainId: bsc.id
+    chainId: bsc.id,
+    args: []
   })
 
   if (isLoading) return 0
