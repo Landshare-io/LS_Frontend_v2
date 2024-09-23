@@ -6,7 +6,7 @@ interface CarouselProps {
   containerClassName?: string;
   activeIndex: number;
   setActiveIndex: Function;
-  setPaused: Function;
+  setPaused?: Function;
 }
 
 export default function Carousel({
@@ -14,7 +14,7 @@ export default function Carousel({
   containerClassName,
   activeIndex,
   setActiveIndex,
-  setPaused
+  setPaused = () => {}
 }: CarouselProps) {
   const count = children.length;
 

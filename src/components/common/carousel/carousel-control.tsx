@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 interface CarouselControlProps {
   count: number; 
-  paused: boolean;
+  paused?: boolean;
   activeIndex: number;
   setActiveIndex: Function;
   carouselControlClass: string;
@@ -10,7 +10,7 @@ interface CarouselControlProps {
 
 export default function CarouselControl({ 
   count,
-  paused,
+  paused = false,
   activeIndex,
   setActiveIndex,
   carouselControlClass,
