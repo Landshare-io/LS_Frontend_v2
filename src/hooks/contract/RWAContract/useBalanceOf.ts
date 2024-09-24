@@ -12,7 +12,7 @@ export default function useBalanceOf(address: Address | undefined) {
     abi: RwaContractAbi,
     functionName: "balanceOf",
     chainId: bsc.id,
-    args: []
+    args: [address]
   })
 
   if (isLoading) return 0
