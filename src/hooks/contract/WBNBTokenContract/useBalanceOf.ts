@@ -1,7 +1,7 @@
 import { useReadContract } from "wagmi";
 import { bsc } from "viem/chains";
 import WBNBAbi from '../../../abis/WBNB.json';
-import { WBNBTOKENCONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { WBNB_TOKEN_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 interface UseBalanceOfProps {
   address: string;
@@ -9,7 +9,7 @@ interface UseBalanceOfProps {
 
 export default function useBalanceOf({ address }: UseBalanceOfProps) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: WBNBTOKENCONTRACT_ADDRESS,
+    address: WBNB_TOKEN_CONTRACT_ADDRESS,
     abi: WBNBAbi,
     functionName: "balanceOf",
     chainId: bsc.id,

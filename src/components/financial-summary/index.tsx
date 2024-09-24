@@ -39,7 +39,7 @@ import {
 } from '../../lib/slices/firebase-slices/properties-rental';
 import useIsOptedIn from "../../hooks/contract/AutoRedeemContract/useIsOptedIn";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { BOLD_INTER_TIGHT, RWACONTRACT_ADDRESS } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, RWA_CONTRACT_ADDRESS } from "../../config/constants/environments";
 import { getDateStringFromTimestamp } from "../../utils/helpers/convert-date";
 import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";
 import useOptIn from "../../hooks/contract/AutoRedeemContract/useOptIn";
@@ -72,7 +72,7 @@ export default function FinancialSummary() {
 
   const { data: balance } = useBalance({
     address: address,
-    token: RWACONTRACT_ADDRESS,
+    token: RWA_CONTRACT_ADDRESS,
     chainId: bsc.id,
   }) as { data: any }
 

@@ -1,3 +1,5 @@
+import type { Address } from "viem";
+
 export type StringKeyStringValueObject = {
   [key: string]: string;
 };
@@ -29,4 +31,8 @@ export type PROPERTY = {
 export type BREADCRUMB = {
   name: string
   url: string
+}
+
+export type MULTI_CHAIN_CONTRACT_TYPE = {
+  [key: number]: Address
 }
