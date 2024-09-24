@@ -4,7 +4,7 @@ import LandshareSaleAbi from "../../../abis/LandshareSale.json";
 import { LANDSHARE_SALE_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { Address } from "viem";
 
-export default function useGetSaleLimit(address: Address) {
+export default function useGetSaleLimit(address: Address | undefined) {
   const { data, isError, isLoading, error } = useReadContract({
     address: LANDSHARE_SALE_CONTRACT_ADDRESS,
     abi: LandshareSaleAbi,
