@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Breadcrumb from '../components/common/breadcrumb';
 import { BREADCRUMB } from '../utils/type';
 import PriceGraph from '../components/price-line-chart';
+import FinancialSummary from '../components/financial-summary';
 import styles from '../styles/Home.module.css';
 
 const breadcrumbItems: BREADCRUMB[] = [
@@ -43,7 +44,7 @@ const RwaPage: NextPage = () => {
                 showBuyButton={false}
               />
             </div>
-            {/* <FinancialSummary /> */}
+            <FinancialSummary />
           </div>
           {/* <SwapToken /> */}
         </div>

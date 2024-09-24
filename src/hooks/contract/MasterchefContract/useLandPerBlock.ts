@@ -1,11 +1,11 @@
 import { useReadContract } from "wagmi";
 import { bsc } from "viem/chains";
 import MasterchefAbi from '../../../abis/Masterchef.json';
-import { MASTERCHEFCONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useLandPerBlock() {
   const { data, isError, isLoading, error } = useReadContract({
-    address: MASTERCHEFCONTRACT_ADDRESS,
+    address: MASTERCHEF_CONTRACT_ADDRESS,
     abi: MasterchefAbi,
     functionName: "landPerBlock",
     chainId: bsc.id

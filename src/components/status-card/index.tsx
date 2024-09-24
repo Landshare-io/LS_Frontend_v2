@@ -15,7 +15,7 @@ import useLpTokenBalanceOf from "../../hooks/contract/LpTokenV2Contract/useBalan
 import useTotalSupply from "../../hooks/contract/LpTokenV2Contract/useTotalSupply";
 import useTotalStaked from "../../hooks/contract/MasterchefContract/useTotalStaked";
 import useGetApy from "../../hooks/get-apy/useGetApy";
-import { LPTOKENV2CONTRACT_ADDRESS, MASTERCHEFCONTRACT_ADDRESS } from "../../config/constants/environments";
+import { LP_TOKEN_V2_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../../config/constants/environments";
 import { 
   getData,
   selectNetRentalPerMonth,
@@ -34,9 +34,9 @@ export default function StatusCard() {
   const resercesToken = useGetReservesPair() as BigNumberish[];
   const allocPoints = usePoolInfo(1) as any[];
   const totalPropertyValue = useGetTotalValue() as BigNumberish;
-  const landAmountInLp = useBalanceOf({ chainId: 56, address: LPTOKENV2CONTRACT_ADDRESS }) as BigNumberish;
-  const totalBNBinLp = useWBNBBalanceOf({ address: LPTOKENV2CONTRACT_ADDRESS }) as BigNumberish;
-  const totalLpInVault = useLpTokenBalanceOf({ address: MASTERCHEFCONTRACT_ADDRESS }) as BigNumberish;
+  const landAmountInLp = useBalanceOf({ chainId: 56, address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as BigNumberish;
+  const totalBNBinLp = useWBNBBalanceOf({ address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as BigNumberish;
+  const totalLpInVault = useLpTokenBalanceOf({ address: MASTERCHEF_CONTRACT_ADDRESS }) as BigNumberish;
   const totalLpSupply = useTotalSupply() as BigNumberish;
   const totalDeposited = useTotalStaked() as BigNumberish;
 

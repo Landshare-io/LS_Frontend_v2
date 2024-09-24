@@ -1,11 +1,11 @@
 import { useReadContract } from "wagmi";
 import { bsc } from "viem/chains";
 import PancakePairAbi from '../../../abis/PancakePair.json';
-import { PANCAKEPAIRCONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { PANCAKE_PAIR_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useGetReserves() {
   const { data, isError, isLoading, error } = useReadContract({
-    address: PANCAKEPAIRCONTRACT_ADDRESS,
+    address: PANCAKE_PAIR_CONTRACT_ADDRESS,
     abi: PancakePairAbi,
     functionName: "getReserves",
     chainId: bsc.id
