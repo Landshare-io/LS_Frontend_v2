@@ -1,15 +1,11 @@
 import { useReadContract } from "wagmi";
 import { bsc } from "viem/chains";
+import { Address } from "viem";
 import LpTokenV2Abi from "../../../abis/LpTokenV2.json";
 import { LP_TOKEN_V2_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-interface UseBalanceOfProps {
-  approver: string;
-  to: string;
-}
-
-export default function useAllowance({ approver, to }: UseBalanceOfProps) {
-  const { data, isError, isLoading, error } = useReadContract({
+export default function useAllowance(approver: Address, to: Address) {
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: LP_TOKEN_V2_CONTRACT_ADDRESS,
     abi: LpTokenV2Abi,
     functionName: "allowance",
@@ -17,11 +13,11 @@ export default function useAllowance({ approver, to }: UseBalanceOfProps) {
     args: [approver, to]
   })
 
-  if (isLoading) return 0
+  if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching LpTokenV2Contract allowance error', error)
-    return 0
+    return { data: 0, refetch }
   }
 
-  return data
+  return { data, refetch }
 }
