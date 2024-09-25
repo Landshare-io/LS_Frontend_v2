@@ -10,7 +10,7 @@ export default function useIsWhitelistedAddress(address: Address | undefined) {
     abi: RwaContractAbi,
     functionName: "isWhitelistedAddress",
     chainId: bsc.id,
-    args: []
+    args: [address]
   })
 
   if (isLoading) return false
