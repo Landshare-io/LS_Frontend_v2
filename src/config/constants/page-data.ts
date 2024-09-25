@@ -1,5 +1,5 @@
 
-import { DASHBOARD_FEATURE, PROPERTY } from "../../utils/type";
+import { DASHBOARD_FEATURE, PROPERTY, TOKEN_TYPE } from "../../utils/type";
 import IconCoinStacked from "../../../public/icons/coin-stacked.svg";
 import IconHome from "../../../public/icons/home.svg";
 import IconDashboard from "../../../public/icons/dashboard.svg";
@@ -10,6 +10,9 @@ import RotateDark from "../../../public/icons/rotate-dark.svg"
 import ImageHouse1 from "../../../public/img/real-house/house-1.png";
 import ImageHouse2 from "../../../public/img/real-house/house-2.png";
 import ImageHouse3 from "../../../public/img/real-house/house-3.png";
+import IconUSDC from "../../../public/icons/usdc.png";
+import IconBNB from "../../../public/icons/bnb.png";
+import IconBTC from "../../../public/icons/btc.png";
 
 export const FEATURES: DASHBOARD_FEATURE[] = [
   {
@@ -85,5 +88,20 @@ export const PROPERTIES: PROPERTY[] = [
     propertyValue: "$140,000",
     capRate: "27% - 52%",
     annReturn: "27% - 52%",
+  },
+];
+
+export const TOKENS: TOKEN_TYPE[] = [
+  {
+    icon: IconUSDC,
+    symbol: "USDC",
+  },
+  {
+    icon: IconBNB,
+    symbol: "BNB",
+  },
+  {
+    icon: IconBTC,
+    symbol: "BTC",
   },
 ];
