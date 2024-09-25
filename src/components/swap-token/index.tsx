@@ -1,284 +1,129 @@
-import axios from "axios";
-import { ethers } from "ethers";
 import { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
-import { useAccount, useContract, useSigner, useProvider, useBalance, useContractRead, useNetwork } from "wagmi";
-import { Help } from "@mui/icons-material";
-import { Hidden, Tooltip, Typography } from "@mui/material";
-import CancelIcon from '@mui/icons-material/Cancel';
-import Link from '@mui/material/Link';
+import { BigNumberish, formatEther } from "ethers";
+import Image from "next/image";
+import Link from "next/link";
+import Modal from "react-modal"
+import { bsc } from "viem/chains";
+import { Address } from "viem";
+import { MdOutlineHelp, MdCancel } from "react-icons/md";
+import { useAccount, useBalance, useChainId } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { TOKENS } from "./data";
+import { TOKENS } from "../../config/constants/page-data";
+import { TOKEN_TYPE } from "../../utils/type";
 import { useLandshareFunctions } from "../../../contexts/LandshareFunctionsProvider";
-import { useGlobalContext } from "../../../contexts/GlobalContext";
-import APIConsumerABI from "../../../contexts/abis/APIConsumer.json";
-import AssetToken from "../../../contexts/abis/firstNFT/LS81712NFToken.json";
-import SaleABI from "../../../contexts/abis/Sale.json";
-import BuySaleABI from "../../../contexts/abis/BuySale.json";
-import USDCABI from "../../../contexts/abis/USDC.json";
-import AutoRedeemABI from "../../../contexts/abis/AutoRedeemOptIn.json";
-import { Modal } from "../../common/modal"
-import Button from "../../re-usable/Button";
-import ToggleButton from "../../re-usable/ToggleButton";
-import IconSwipelux from "../../../assets/img/icons/swipelux.svg";
-import IconPancakeswap from "../../../assets/img/icons/pancakeswap.png";
-import IconGateio from "../../../assets/img/icons/gateio.png";
-import IconMEXC from "../../../assets/img/icons/mexclogo.png";
-import ConnectWallet from "../../ConnectWallet";
-import FinancialSummary from "./FinancialSummary";
-import PriceGraph from "./PriceGraph";
-import IconUSDC from "../../../assets/img/new/usdc.png";
-import IconArrowDown from "../../../assets/img/new/arrow-down.svg";
-import IconArrowUpDown from "../../../assets/img/new/arrow-up-down.svg";
-import IconArrowRightUp from "../../../assets/img/new/arrow-right-up.svg";
-import IconDashboard from "../../../assets/img/new/dashboard.svg";
-import IconInfo from "../../../assets/img/new/info.svg";
-import IconInfoGray from "../../../assets/img/new/info-gray.svg";
-import IconClose from "../../../assets/img/new/close.svg";
-import ZeroIDWidget from './ZeroIDWidget';
-import ReactModal from "react-modal";
-import { PROVIDERS } from "../../../configs/ccip";
-import "../styles.css";
-import "./swaptoken.css";
+import { useGlobalContext } from "../../context/GlobalContext";
+import Button from "../common/button";
+import ToggleButton from "../common/toggle-button";
+import Tooltip from "../common/tooltip";
+import ConnectWallet from "../connect-wallet";
+import FinancialSummary from "../financial-summary";
+import PriceGraph from "../price-line-chart";
+import SwipeluxModal from "../common/modals/swipelux";
+import ZeroIDWidget from "../zero-id-widget";
+import useGetSaleLimit from "../../hooks/contract/LandshareSaleContract/useGetSaleLimit";
+import useGetAllowedToTransfer from "../../hooks/contract/LandshareSaleContract/useGetAllowedToTransfer";
+import useIsWhitelistedAddressOfLandshareSale from "../../hooks/contract/LandshareSaleContract/useIsWhitelistedAddress";
+import useLandFee from "../../hooks/contract/LandshareSaleContract/useLandFee";
+import { 
+  RWA_CONTRACT_ADDRESS, 
+  USDC_ADDRESS, 
+  RWA_POOL_CONTRACT_ADDRESS,
+  LANDTOKENCONTRACT_ADDRESS,
+  BOLD_INTER_TIGHT
+} from "../../config/constants/environments";
+import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
+import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
+import useGetLandFee from "../../hooks/contract/LandshareSaleContract/useGetLandFee";
+
+import IconSwipelux from "../../../public/icons/swipelux.svg";
+import IconPancakeswap from "../../../public/icons/pancakeswap.png";
+import IconGateio from "../../../public/icons/gateio.png";
+import IconMEXC from "../../../public/icons/mexclogo.png";
+import IconUSDC from "../../../public/icons/usdc.png";
+import IconArrowDown from "../../../public/icons/arrow-down.svg";
+import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
+import IconArrowRightUp from "../../../public/icons/arrow-right-up.svg";
+import IconDashboard from "../../../public/icons/dashboard.svg";
+import IconInfo from "../../../public/icons/info.svg";
+import IconInfoGray from "../../../public/icons/info-gray.svg";
+import IconClose from "../../../public/icons/close.svg";
 
 export default function SwapToken() {
-  const { data: signer } = useSigner();
   const { isConnected, address } = useAccount();
-  const { chain } = useNetwork();
+  const chainId = useChainId();
 
-  const [RWAPrice, setRWAPrice] = useState();
-  const [landFee, setLandFee] = useState();
-  const [landFeeAmount, setLandFeeAmount] = useState();
-  const [saleLimit, setSaleLimit] = useState();
-  const [limitDate, setLimitDate] = useState(new Date());
-  const [reachedLimit, setReachedLimit] = useState();
-  const [RWATokenAmount, setRWATokenAmount] = useState();
-  const [USDCAmount, setUSDCAmount] = useState();
+  const [RWATokenAmount, setRWATokenAmount] = useState(0);
+  const [usdcAmount, setUsdcAmount] = useState(0);
   const [isGraphShow, setIsGraphShow] = useState(false);
   const [isFinancialSummaryShow, setIsFinancialSummaryShow] = useState(false);
-  const [buyUSDCAmount, setBuyUSDCAmount] = useState();
-  const [buyLANDAmount, setBuyLANDAmount] = useState();
-  const [isKYC, setIsKYC] = useState(false);
+  const [buyUSDCAmount, setBuyUSDCAmount] = useState(0);
+  const [buyLANDAmount, setBuyLANDAmount] = useState(0);
   const [isSTAPShow, setIsSTAPshow] = useState(false);
   const [signAgreement, setSignAgreement] = useState(false);
-  const [RWAAllowance, setRWAAllowance] = useState()
-  const [LandAllowance, setLandAllowance] = useState()
-  const [usdcAllowance, setUSDCAllowance] = useState()
+  const [RWAAllowance, setRWAAllowance] = useState(0)
+  const [LandAllowance, setLandAllowance] = useState(0)
+  const [usdcAllowance, setUSDCAllowance] = useState(0)
   const [isShowTokenSelector, setIsShowTokenSelector] = useState(false);
   const [buyOrSell, setBuyOrSell] = useState("Buy");
-  const [allTokens, setAllTokens] = useState([]);
-  const [isAutoRedeem, setAutoRedeem] = useState(false);
   const [isSTPALoding, setIsSTPALoading] = useState(true);
   const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
+  const [isSwipeluxModalOpen, setIsSwipeluxModalOpen] = useState(false);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
 
-  const apiKey = '10000000-0000-0000-0000-7f9a2af16a1c';
-  const verifierUrl = 'https://landshare-zeroid-verdict.onrender.com/verdict';
-  const env = 'zeroid';
-
-  const balance = useBalance({
+  const { data: balance } = useBalance({
     address: address,
-    token: process.env.REACT_APP_RWA_ADDR,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    watch: true,
-  })
+    token: RWA_CONTRACT_ADDRESS,
+    chainId: bsc.id
+  }) as { data: any }
 
-  const USDCBalance = useBalance({
+  const { data: USDCBalance } = useBalance({
     address: address,
-    token: process.env.REACT_APP_USDC_ADDR,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    watch: true,
+    token: USDC_ADDRESS[bsc.id],
+    chainId: bsc.id
+  }) as { data: any }
 
-  })
+  const { data: poolBalance } = useBalance({
+    address: RWA_POOL_CONTRACT_ADDRESS,
+    token: USDC_ADDRESS[bsc.id],
+    chainId: bsc.id
+  }) as { data: any }
 
-  const poolBalance = useBalance({
-    address: process.env.REACT_APP_RWA_POOL,
-    token: process.env.REACT_APP_USDC_ADDR,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    watch: true,
-
-  })
-
-  const landBalance = useBalance({
+  const { data: landBalance } = useBalance({
     address: address,
-    token: process.env.REACT_APP_LAND_ADDR,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    watch: true,
-  })
+    token: LANDTOKENCONTRACT_ADDRESS[bsc.id],
+    chainId: bsc.id
+  }) as { data: any }
 
-  const SaleContract = useContract({
-    address: process.env.REACT_APP_SALE_ADDR,
-    abi: SaleABI,
-    signerOrProvider: chain?.id == 56 ? signer || PROVIDERS[56] : PROVIDERS[56],
-  });
+  const saleLimit = useGetSaleLimit(address) as [BigNumberish, number, number]
+  const limitDate = saleLimit ? new Date(saleLimit[1] != undefined ? Number(saleLimit[1]) * 1000 : Date.now() * 1000) : Date.now() * 1000
+  const reachedLimit = saleLimit ? saleLimit[2] != undefined ? saleLimit[2] : Date.now() : Date.now()
 
-  const LandTokenContract = useContract({
-    address: process.env.REACT_APP_LAND_ADDR,
-    abi: USDCABI,
-    signerOrProvider: chain?.id == 56 ? signer || PROVIDERS[56] : PROVIDERS[56],
-  });
+  const secondaryLimit = useGetAllowedToTransfer(address)
+  const isWhitelisted = useIsWhitelistedAddressOfLandshareSale(address)
+  const landFee = useLandFee() as number
+  const rwaPrice = useGetRwaPrice() as BigNumberish;
+  const { allTokens } = useGetAllTokens()
+  const landFeeAmount = useGetLandFee(usdcAmount) as BigNumberish
 
-  const APIConsumerContract = useContract({
-    address: process.env.REACT_APP_APICONSUMER_ADDR,
-    abi: APIConsumerABI,
-    signerOrProvider: chain?.id == 56 ? signer || PROVIDERS[56] : PROVIDERS[56],
-  });
-
-  const APIConsumerContractNotConnected = useContract({
-    address: process.env.REACT_APP_APICONSUMER_ADDR,
-    abi: APIConsumerABI,
-    signerOrProvider: chain?.id == 56 ? signer || PROVIDERS[56] : PROVIDERS[56],
-
-  });
-
-  const BuySaleContract = useContract({
-    address: process.env.REACT_APP_BUY_SALE_ADDR,
-    abi: BuySaleABI,
-    signerOrProvider: chain?.id == 56 ? signer || PROVIDERS[56] : PROVIDERS[56],
-  });
-
-  const RWATokenContract = useContract({
-    address: process.env.REACT_APP_RWA_ADDR,
-    abi: AssetToken.abi,
-    signerOrProvider: chain?.id == 56 ? signer || PROVIDERS[56] : PROVIDERS[56],
-  });
-
-  const USDCTokenContract = useContract({
-    address: process.env.REACT_APP_USDC_ADDR,
-    abi: USDCABI,
-    signerOrProvider: chain?.id == 56 ? signer || PROVIDERS[56] : PROVIDERS[56],
-  });
-
-  const AutoRedeemContract = useContract({
-    address: process.env.REACT_APP_AUTOREDEEMOPTIN_ADDR,
-    abi: AutoRedeemABI,
-    signerOrProvider: chain?.id == 56 ? signer || PROVIDERS[56] : PROVIDERS[56],
-  })
-
-  const { data: SaleLimit } = useContractRead({
-    address: process.env.REACT_APP_SALE_ADDR,
-    abi: SaleABI,
-    functionName: 'getSaleLimit',
-
-    args: [address],
-    watch: true
-  })
-
-  const { data: SaleInfo } = useContractRead({
-    address: process.env.REACT_APP_SALE_ADDR,
-    abi: SaleABI,
-    functionName: 'saleInfo',
-
-    args: [address]
-  })
-
-  const { data: secondaryLimit } = useContractRead({
-    address: process.env.REACT_APP_RWA_ADDR,
-    abi: AssetToken.abi,
-    functionName: 'getAllowedToTransfer',
-
-    args: [address],
-    watch: true
-  })
-
-  const { data: isWhitelisted } = useContractRead({
-    address: process.env.REACT_APP_RWA_ADDR,
-    abi: AssetToken.abi,
-    functionName: 'isWhitelistedAddress',
-    args: [address],
-    watch: true,
-  })
-
-
+  useEffect(() => {
+    setUsdcAmount(Number(formatEther(rwaPrice)) * RWATokenAmount)
+  }, [rwaPrice, RWATokenAmount])
+  
   const {
     startTransaction,
     transactionResult,
   } = useLandshareFunctions();
-
-  async function getRWAPrice() {
-    try {
-      const price = await APIConsumerContractNotConnected.getRWAPrice();
-      setRWAPrice(Number(ethers.utils.formatEther(price)));
-    } catch (e) { }
-  }
-
-  async function getLandFee() {
-    try {
-      if (SaleContract != undefined) {
-        const _landFee = await SaleContract.landFee();
-        setLandFee(_landFee.toNumber());
-      }
-    } catch (e) { }
-  }
-
-  async function getLandFeeAmount() {
-    try {
-      if (RWATokenAmount > 0 && SaleContract) {
-        const _landFeeAmount = USDCAmount != null ? await SaleContract.getLANDFee(USDCAmount?.toString()) : 0
-        setLandFeeAmount(_landFeeAmount);
-      } else {
-        setLandFeeAmount(0);
-      }
-    } catch (e) { }
-  }
-
-  async function getSaleLimit() {
-    try {
-      if (SaleLimit != undefined && SaleLimit.length == 3 && SaleInfo.length > 0) {
-        setSaleLimit(ethers.utils.formatEther(SaleLimit[0]).toString());
-        setLimitDate(new Date(SaleLimit[1] != undefined ? Number(SaleLimit[1]) * 1000 : Date.now() * 1000));
-        setReachedLimit(SaleLimit[2] != undefined ? SaleLimit[2] : Date.now());
-      }
-    } catch (e) { }
-  }
-  useEffect(async () => {
-    try {
-      if (isConnected && RWATokenContract && RWATokenContract.signer) {
-        const kyc = await RWATokenContract.isWhitelistedAddress(address.toString())
-        if (kyc) {
-          setIsKYC(true)
-        } else {
-          setIsKYC(false)
-        }
-      }
-    } catch (e) { }
-  }, [isConnected, RWATokenContract]);
-
-  useEffect(() => {
-    if (APIConsumerContractNotConnected) {
-      getRWAPrice();
-    }
-  }, [APIConsumerContractNotConnected])
-
-  useEffect(() => {
-    if (APIConsumerContract && APIConsumerContract.provider) {
-      getLandFee();
-    }
-  }, [APIConsumerContract]);
-
-  useEffect(() => {
-    if (APIConsumerContract && APIConsumerContract.provider) {
-      getLandFeeAmount()
-
-    }
-  }, [USDCAmount]);
-
-  useEffect(() => {
-    if (APIConsumerContract && address && APIConsumerContract.provider) {
-      getSaleLimit();
-    }
-  }, [APIConsumerContract, SaleLimit, APIConsumerContract.provider, address]);
 
   useEffect(() => {
     if (isSTAPShow) {
       get_information('https://docs.google.com/document/d/e/2PACX-1vSCbbmciud2wUhSDtRpwbXdimj_GF6ZaLvvtu_XmGSYxdfHc-bMP4psbMoZFUIgdWgJLpx53RubSxSb/pub?embedded=true', function (text) {
         var docElement = document.createElement('div');
         docElement.innerHTML = text;
-        docElement.classList.add('bg-tw-primary');
-        docElement.classList.add('dark:bg-tw-secondary');
-        docElement.classList.add('text-tw-text-primary');
-        var container = document.getElementById('doc');
+        docElement.classList.add('bg-primary');
+        docElement.classList.add('dark:bg-secondary');
+        docElement.classList.add('text-text-primary');
+        var container = document.getElementById('doc') as Element;
         container.appendChild(docElement);
         setIsSTPALoading(false);
       });
@@ -297,24 +142,23 @@ export default function SwapToken() {
     } catch (e) { }
   }, [LandTokenContract, address]);
 
-  useEffect(async () => {
-    try {
-      if (APIConsumerContract != undefined && BuySaleContract != undefined && RWATokenAmount != undefined && APIConsumerContract) {
-        const theRWAPrice = await APIConsumerContract.getRWAPrice()
-        setUSDCAmount(RWATokenAmount > 0 ? theRWAPrice.mul(RWATokenAmount) : null);
-
-        // Buy
-        if (RWATokenAmount.length > 0) {
-          const basePrice = await BuySaleContract.offeringSecurityToUSDPrice()
-          const tmp = await BuySaleContract.buyTokenView(RWATokenAmount, process.env.REACT_APP_USDC_ADDR)
-          setBuyUSDCAmount(tmp.amountOfStableCoin)
-          setBuyLANDAmount(tmp.amountOfLAND)
+  useEffect(() => {
+    (async () => {
+      try {
+        if (APIConsumerContract != undefined && BuySaleContract != undefined && RWATokenAmount != undefined && APIConsumerContract) {
+          // Buy
+          if (RWATokenAmount > 0) {
+            const basePrice = await BuySaleContract.offeringSecurityToUSDPrice()
+            const tmp = await BuySaleContract.buyTokenView(RWATokenAmount, process.env.REACT_APP_USDC_ADDR)
+            setBuyUSDCAmount(tmp.amountOfStableCoin)
+            setBuyLANDAmount(tmp.amountOfLAND)
+          }
         }
-      }
-    } catch (e) { }
-  }, [RWATokenAmount, RWAPrice]);
+      } catch (e) { }
+    })()
+  }, [RWATokenAmount, rwaPrice]);
 
-  async function getAllowance(token, spender) {
+  async function getAllowance(token: string, spender: Address) {
     try {
       if (token === 'rwa') {
         setRWAAllowance(await RWATokenContract.allowance(address, spender))
@@ -328,34 +172,6 @@ export default function SwapToken() {
     } catch (e) { }
   }
 
-  async function getAllTokens() {
-    try {
-      const res = await fetch(
-        new Request("https://api.livecoinwatch.com/coins/list"),
-        {
-          method: "POST",
-          headers: new Headers({
-            "content-type": "application/json",
-            "x-api-key": "95ce49d3-3e89-475d-b61e-6638a002b1fe",
-          }),
-          body: JSON.stringify({
-            currency: "USD",
-            sort: "rank",
-            order: "ascending",
-            offset: 0,
-            limit: 50,
-            meta: true,
-          }),
-        }
-      );
-      setAllTokens(await res.json());
-    } catch (e) { }
-  }
-
-  useEffect(() => {
-    getAllTokens();
-    getRWAPrice();
-  }, []);
   const customStyles = {
     content: {
       top: "50%",
@@ -382,7 +198,7 @@ export default function SwapToken() {
     },
   }
 
-  function get_information(link, callback) {
+  function get_information(link: string, callback: any) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", link, true);
     xhr.onreadystatechange = function () {
@@ -408,7 +224,7 @@ export default function SwapToken() {
       const amount = RWATokenAmount;
 
       try {
-        if (!RWAAllowance.gte(amount)) {
+        if (RWAAllowance < amount) {
           startTransaction("RWA Token Approval Pending...")
           const tx1 = await RWATokenContract.approve(SaleContract.address, RWATokenContract.balanceOf(address));
           await tx1.wait().then(async () => {
@@ -422,13 +238,13 @@ export default function SwapToken() {
         }
 
         const landAllowTmp = await LandTokenContract.allowance(address, SaleContract.address)
-        if (!landAllowTmp.gte(landFeeAmount)) {
+        if (landAllowTmp < landFeeAmount) {
           startTransaction("LAND Token Approval Pending...")
           const tx2 = await LandTokenContract.approve(SaleContract.address, LandTokenContract.balanceOf(address));
           await tx2.wait().then(async () => {
             const newLandAllowance = await LandTokenContract.allowance(address, SaleContract.address)
             await getAllowance('land', SaleContract.address)
-            if (!newLandAllowance.gte(landFeeAmount)) {
+            if (newLandAllowance < landFeeAmount) {
               window.alert("Please approve sufficient allowance.")
               throw new Error('Insufficient Allowance');
             }
@@ -443,7 +259,6 @@ export default function SwapToken() {
           transactionResult("Transaction Complete.")
 
         })
-        getSaleLimit()
 
       } catch (e) {
         transactionResult("Transaction Failed.")
@@ -467,7 +282,7 @@ export default function SwapToken() {
           await tx1.wait().then(async () => {
             const newLandAllowance = await USDCTokenContract.allowance(address, BuySaleContract.address)
             await getAllowance('usdc', BuySaleContract.address)
-            if (!newLandAllowance.gte(USDCAmount)) {
+            if (newLandAllowance < usdcAmount) {
               window.alert("Please approve sufficient allowance.")
               throw new Error('Insufficient Allowance');
             }
@@ -494,7 +309,6 @@ export default function SwapToken() {
 
           transactionResult("Transaction Complete.")
         })
-        getSaleLimit()
       } catch (e) {
         transactionResult("Transaction Failed.")
         console.log(e)
@@ -502,9 +316,9 @@ export default function SwapToken() {
     } catch (e) { }
   }
 
-  const { isDarkMode } = useGlobalContext();
+  const { theme } = useGlobalContext();
 
-  const handleLinkClick = (event) => {
+  const handleLinkClick = (event: any) => {
     console.log("isWhitelisted", isWhitelisted);
     event.preventDefault(); // Prevent the default link behavior
     setKycopen(false)
@@ -514,40 +328,34 @@ export default function SwapToken() {
 
   return (
     <div>
-      <div className="bg-tw-third swap-card-container max-h-none ">
-        <div className="swap-card-title-section">
+      <div className="flex flex-col items-start bg-third p-[18px] md:p-0 md:max-w-full lg:p-[24px] rounded-[16px] gap-[16px] max-h-none">
+        <div className="flex justify-between items-center w-full">
           <div>
-            <div className="swap-card-title text-tw-text-primary">
+            <div className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT}`}>
               Swap RWA
             </div>
-            <div className="swap-card-subtitle text-tw-text-secondary">
+            <div className="text-[14px] leading-[22px] tracking-[0.02em] text-left pt-[4px] text-text-secondary">
               Trade tokens in an instant
             </div>
           </div>
-          <div className="swap-price-card-icons">
-            <img
+          <div className="flex gap-[20px] md:hidden">
+            <Image
               src={IconDashboard}
               alt="dashboard"
-              className="swap-price-card-icon"
+              className="w-[24px] h-[24px] p-[1.5px] grayscale cursor-pointer"
               onClick={() => setIsGraphShow(true)}
             />
-            {/* <img
-              src={IconListing}
-              alt="listing"
-              className="swap-price-card-icon"
-              onClick={() => setIsFinancialSummaryShow(true)}
-            /> */}
           </div>
         </div>
-        <div className="swap-card-button-group">
+        <div className="flex w-full gap-[10px] justify-between">
           <ToggleButton
             active={buyOrSell == "Buy"}
             type={"pricegraph"}
             onClick={() => {
               setBuyOrSell("Buy");
-              setRWATokenAmount(null)
-              setBuyLANDAmount(null)
-              setBuyUSDCAmount(null)
+              setRWATokenAmount(0)
+              setBuyLANDAmount(0)
+              setBuyUSDCAmount(0)
             }}
           >
             Buy
@@ -557,199 +365,163 @@ export default function SwapToken() {
             type={"pricegraph"}
             onClick={() => {
               setBuyOrSell("Sell");
-              setRWATokenAmount(null)
-              setUSDCAmount(null)
-
+              setRWATokenAmount(0)
+              setUsdcAmount(0)
             }}
           >
             Sell
           </ToggleButton>
         </div>
 
-        <ReactModal
+        <Modal
           isOpen={iskycmodal}
           onRequestClose={() => { setKycopen(false), document.body.classList.remove('modal-open'); }}
           style={customStyles}
-          contentLabel="current-apr Modal"
+          contentLabel="Modal"
         >
-          <CancelIcon onClick={handleclosemodal} sx={{
-            float: "right",
-            color: "#000",
-            cursor: "pointer",
-            position: "absolute",
-            right: "20px",
-            top: "15px",
-            ':hover': {
-              color: 'gray',
-            }
-          }} />
+          <MdCancel onClick={handleclosemodal} className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray" />
           <div className="w-full">
-            <Typography variant="h5" component="h5" align="center" sx={{ fontWeight: 700 }}>
+            <h5 className={`text-center ${BOLD_INTER_TIGHT.className}`}>
               KYC Verification
-            </Typography>
-            <Typography variant="p" component="p" align="center" sx={{
-              fontSize: "16px",
-              fontStyle: "Bold",
-              paddingTop: "10px",
-              lineHeight: "28px",
-              fontWeight: 500,
-              letterSpacing: "2%"
-            }}>
+            </h5>
+            <p className={`text-[16px] pt-[10px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}>
               Complete the KYC process to access RWA Tokens
-            </Typography>
+            </p>
           </div>
           <div className="w-full mt-3">
             <a href="https://dashboard.landshare.io">
-              <button className="flex flex-col justify-center items-center w-full pb-[10px] bg-0ed145 br-20 pt-[10px] border-b relative hover:bg-green-600 transition-colors">
-                <Typography component="p" sx={{
-                  color: "#fff",
-                  fontSize: "16px",
-                  fontStyle: "Bold",
-                  lineHeight: "28px",
-                  letterSpacing: "2%",
-                  fontWeight: 700
-                }}>Manual Verification</Typography>
-              </button>
+              <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-[#0ed145] br-20 pt-[10px] border-b relative hover:bg-green-600 transition-colors">
+                <p className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}>
+                  Manual Verification
+                </p>
+              </Button>
             </a>
             <div onClick={handleLinkClick}>
-              {/* <a href={`https://${env}.swipelux.com?apiKey=${apiKey}&verifierUrl=${verifierUrl}`}> */}
-              {/* <button disabled={true} className="flex flex-col justify-center items-center w-full mt-4 pb-[10px] bg-0ed145 br-20 pt-[6px] border-b relative hover:bg-green-600 transition-colors"> */}
-              <button className="flex flex-col justify-center items-center w-full pb-[10px] bg-0ed145 br-20 pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
-              disabled
+              <Button 
+                className="flex flex-col justify-center items-center w-full pb-[10px] bg-[#0ed145] br-20 pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
+                disabled
               >
-                <Typography component="p" className="text-[20px] font-[600]" sx={{
-                  color: "#fff",
-                  fontSize: "16px",
-                  fontStyle: "Bold",
-                  lineHeight: "28px",
-                  letterSpacing: "2%",
-                  fontWeight: 700
-                }}>ZeroID Verification</Typography>
-              </button>
+                <p className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}>
+                  ZeroID Verification
+                </p>
+              </Button>
             </div>
           </div>
-        </ReactModal>
+        </Modal>
 
-        <ReactModal
+        <Modal
           isOpen={isZeroIDModal}
           onRequestClose={() => { setZeroIDModalOpen(true), document.body.classList.remove('modal-open'); }}
           style={zeroIDStyles}
           contentLabel="ZeroID Modal"
           className="zeroid-modal"
         >
-          <CancelIcon onClick={() => { setZeroIDModalOpen(false); document.body.style.overflow = 'auto' }} sx={{
-            float: "right",
-            color: "#000",
-            cursor: "pointer",
-            position: "absolute",
-            right: "20px",
-            top: "15px",
-            ':hover': {
-              color: 'gray',
-            }
-          }} />
-          <ZeroIDWidget apiKey={apiKey} verifierUrl={verifierUrl} env={env} />
-        </ReactModal>
-        <ReactModal
+          <MdCancel 
+            onClick={() => { setZeroIDModalOpen(false); document.body.style.overflow = 'auto' }} 
+            className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
+          />
+          <ZeroIDWidget />
+        </Modal>
+        <Modal
           isOpen={isBuyModalOpen}
           onRequestClose={() => { setIsBuyModalOpen(false), document.body.classList.remove('modal-open'); }}
           style={customStyles}
           contentLabel="current-apr Modal"
         >
-          <div className="w-full" id="button-list">
-            <button onClick={() => openSwipelux()} className="h-[115px] flex flex-col justify-center items-center w-full pb-[20px] border-b relative hover:bg-gray-300 transition-colors">
-              <img src={IconSwipelux} alt="" className="w-[40px]" />
+          <div className="w-full overflow-y-scroll h-[460px]">
+            <Button onClick={() => setIsSwipeluxModalOpen(true)} className="h-[115px] flex flex-col justify-center items-center w-full pb-[20px] border-b relative hover:bg-gray-300 transition-colors">
+              <Image src={IconSwipelux} alt="" className="w-[40px]" />
               <div className="text-[24px] font-bold">Swipelux</div>
               <div className="text-[16px] text-[#b6b0b0]">Credit or Debit Card</div>
-            </button>
-            <a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C" target="_blank" className="h-[115px] flex flex-col justify-center items-center w-full pt-[20px] pb-[20px] border-b hover:bg-gray-300 transition-colors">
-              <img src={IconPancakeswap} alt="" className="w-[40px]" />
+            </Button>
+            <Link href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C" target="_blank" className="h-[115px] flex flex-col justify-center items-center w-full pt-[20px] pb-[20px] border-b hover:bg-gray-300 transition-colors">
+              <Image src={IconPancakeswap} alt="" className="w-[40px]" />
               <div className="text-[24px] font-bold">PancakeSwap</div>
               <div className="text-[16px] text-[#b6b0b0]">Decentralized Exchange</div>
-            </a>
-            <a href="https://www.gate.io/trade/LANDSHARE_USDT" target="_blank" className="h-[115px] flex flex-col justify-center items-center w-full  pt-[20px] pb-[20px] border-b hover:bg-gray-300 transition-colors">
-              <img src={IconGateio} alt="" className="w-[40px]" />
+            </Link>
+            <Link href="https://www.gate.io/trade/LANDSHARE_USDT" target="_blank" className="h-[115px] flex flex-col justify-center items-center w-full  pt-[20px] pb-[20px] border-b hover:bg-gray-300 transition-colors">
+              <Image src={IconGateio} alt="" className="w-[40px]" />
               <div className="text-[24px] font-bold">Gate.io</div>
               <div className="text-[16px] text-[#b6b0b0]">Centralized Exchange</div>
-            </a>
-            <a href="https://www.mexc.com/exchange/LANDSHARE_USDT" target="_blank" className="h-[115px] flex flex-col justify-center items-center w-full hover:bg-gray-300 transition-colors">
-              <img src={IconMEXC} alt="" className="w-[40px] h-[40px]" />
+            </Link>
+            <Link href="https://www.mexc.com/exchange/LANDSHARE_USDT" target="_blank" className="h-[115px] flex flex-col justify-center items-center w-full hover:bg-gray-300 transition-colors">
+              <Image src={IconMEXC} alt="" className="w-[40px] h-[40px]" />
               <div className="text-[24px] font-bold">MEXC</div>
               <div className="text-[16px] text-[#b6b0b0]">Centralized Exchange</div>
-            </a>
+            </Link>
           </div>
-        </ReactModal>
+        </Modal>
         {buyOrSell === "Sell" &&
           <>
-            <div className="swap-card-price-section">
-              <div className="swap-card-balance-section">
-                <label className="text-tw-text-secondary">RWA Token</label>
-                <div className="swap-card-token-section">
-                  <label className="text-tw-text-secondary">Balance:</label>
-                  <span className="text-tw-text-primary">
-                    {(RWAPrice == undefined || isConnected === false) ? "0" : `${parseFloat(balance?.data?.formatted)} ($${(RWAPrice * parseFloat(balance?.data?.formatted)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})`}
+            <div className="flex flex-col w-full gap-[4px] min-h-[76px]">
+              <div className="flex justify-between items-center">
+                <label className="text-text-secondary">RWA Token</label>
+                <div className="flex justify-between items-center gap-[5px]">
+                  <label className="text-text-secondary text-[12px] leading-[22px]">Balance:</label>
+                  <span className={`text-text-primary text-[12px] leading-[20px] ${BOLD_INTER_TIGHT.className}`}>
+                    {(rwaPrice == undefined || isConnected === false) ? "0" : `${parseFloat(balance?.formatted)} ($${(Number(formatEther(rwaPrice)) * parseFloat(balance?.formatted)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})`}
                   </span>
                 </div>
               </div>
               <input
-                className="bg-tw-primary dark:bg-tw-secondary text-tw-text-primary"
+                className="bg-primary dark:bg-secondary text-text-primary"
                 placeholder="0 RWA"
                 type="number"
                 disabled={!isConnected}
-                onChange={(e) => {
+                onChange={(e: any) => {
                   const regex = /^[0-9\b]/;
                   if (e.target.value === "" || regex.test(e.target.value))
                     setRWATokenAmount(e.target.value)
                 }}
               />
             </div>
-            <div className="swap-card-price-section">
-              <div className="swap-card-token-section">
+            <div className="flex flex-col w-full gap-[4px] min-h-[76px]">
+              <div className="flex justify-between items-center gap-[5px]">
                 <div
-                  className="swap-card-token-selector"
+                  className="flex items-center gap-[5px] cursor-pointer"
                 // onClick={() => setIsShowTokenSelector(true)}
                 >
-                  <img src={IconUSDC} alt="usdc" />
-                  <span className="text-tw-text-primary">USDC</span>
-                  <img src={IconArrowDown} alt="arrow down" />
+                  <Image src={IconUSDC} alt="usdc" className="w-[20px] h-[20px]" />
+                  <span className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>USDC</span>
+                  <Image src={IconArrowDown} alt="arrow down" className="w-[20px] h-[20px]" />
                 </div>
                 <div>
-                  <img src={IconArrowUpDown} alt="arrow up down" />
+                  <Image src={IconArrowUpDown} alt="arrow up down" className="w-[18px] h-[18px]" />
                 </div>
-                <div className="swap-card-token-section">
-                  <label className="text-tw-text-secondary">Price:</label>
-                  <span className="text-tw-text-primary">
-                    ${RWAPrice == undefined ? "Loading..." : RWAPrice.toLocaleString(undefined, { minimumFractionDigits: 4 })}
+                <div className="flex justify-between items-center gap-[5px]">
+                  <label className="text-text-secondary text-[12px] leading-[22px]">Price:</label>
+                  <span className={`text-text-primary text-[12px] leading-[20px] ${BOLD_INTER_TIGHT.className}`}>
+                    ${rwaPrice == 0 ? "Loading..." : Number(formatEther(rwaPrice)).toLocaleString(undefined, { minimumFractionDigits: 4 })}
                   </span>
                 </div>
               </div>
               <input
-                className="bg-tw-primary dark:bg-tw-secondary text-tw-text-primary"
+                className="bg-primary dark:bg-secondary text-text-primary"
                 placeholder="00.00 USDC"
                 readOnly
-                value={USDCAmount == undefined ? "" : ethers.utils.formatEther(USDCAmount.toString())}
-                onChange={(e) => setUSDCAmount(e.target.value)}
+                value={usdcAllowance == 0 ? "" : usdcAllowance.toString()}
+                onChange={(e: any) => setUsdcAmount(e.target.value)}
               />
 
             </div>
             {isConnected &&
               <>
-                <div className="text-tw-text-primary swap-card-price-total">
-                  <span>LAND Fee ({landFee}%)</span>
-                  <span>{landFeeAmount ? ethers.utils.formatEther(landFeeAmount).toString().substr(0, 12) : 0} Land </span>
+                <div className="text-text-primary w-full flex justify-between">
+                  <span className="font-medium text-[14px] leading-[22px]">LAND Fee ({landFee.toNumber()}%)</span>
+                  <span className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>{landFeeAmount ? formatEther(landFeeAmount).toString().substr(0, 12) : 0} Land </span>
                 </div>
-                <div className="text-tw-text-primary swap-card-monthly-limit swap-card-price-total">
-                  <div>
-                    <span className="bold">Monthly Sale Limit</span>
+                <div className="text-text-primary w-full flex justify-between">
+                  <div className="flex items-center">
+                    <span className={`text-[14px] ml-[5px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>Monthly Sale Limit</span>
                     <Tooltip title={reachedLimit ? "Your remaining monthly USDC sale limit. To make a larger sale, please contact admin@landshare.io." : `Your remaining monthly USDC sale limit. Your limit resets on [${limitDate.getFullYear() + "/" + (limitDate.getMonth() + 1) + "/" + limitDate.getDate()}]. To make a larger sale, please contact admin@landshare.io`}>
-                      <Help sx={{ fontSize: 16 }} />
+                      <MdOutlineHelp className="text-[16px]" />
                     </Tooltip>
                   </div>
-                  <span>{saleLimit ? `$${Number(saleLimit).toFixed(2)}` : "Loading"}</span>
+                  <span className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>{saleLimit ? `$${Number(formatEther(saleLimit[0]).toString()).toFixed(2)}` : "Loading"}</span>
                 </div>
-                <div className="text-tw-text-primary swap-card-monthly-limit swap-card-secondary-limit swap-card-price-total">
-                  <div>
-                    <span className="bold">Transfer Limit</span>
+                <div className="text-text-primary mb-[18px] w-full flex justify-between">
+                  <div className="flex items-center">
+                    <span className={`text-[14px] ml-[5px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>Transfer Limit</span>
                     <Tooltip title={
                       <>
                         Remaining number of RWA Tokens that can be transferred from your wallet based on your Secondary Trading Limit.
@@ -757,10 +529,10 @@ export default function SwapToken() {
                         To learn more, <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/secondary-trading-limits" target="_blank" rel="noopener" sx={{ color: 'inherit', fontWeight: 'bold' }}>click here</Link>.
                       </>
                     }>
-                      <Help sx={{ fontSize: 16 }} />
+                      <MdOutlineHelp className="text-[16px]" />
                     </Tooltip>
                   </div>
-                  <span>{secondaryLimit ? secondaryLimit.toString() : "Loading"}</span>
+                  <span className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>{secondaryLimit ? secondaryLimit.toString() : "Loading"}</span>
                 </div>
               </>
             }
@@ -768,25 +540,25 @@ export default function SwapToken() {
         }
         {buyOrSell === "Buy" &&
           <>
-            <div className="swap-card-price-section">
-              <div className="swap-card-balance-section">
-                <label className="text-tw-text-secondary">RWA Token </label>
+            <div className="flex flex-col w-full gap-[4px] min-h-[76px]">
+              <div className="flex justify-between items-center">
+                <label className="text-text-secondary">RWA Token </label>
                 {isConnected &&
-                  <div className="swap-card-token-section">
-                    <label className="text-tw-text-secondary">Balance:</label>
-                    <span className="text-tw-text-primary">
-                      {(RWAPrice == undefined || isConnected === false) ? "0" : `${parseFloat(balance?.data?.formatted)} ($${(RWAPrice * parseFloat(balance?.data?.formatted)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})`}
+                  <div className="flex justify-between items-center gap-[5px]">
+                    <label className="text-text-secondary text-[12px] leading-[22px]">Balance:</label>
+                    <span className={`text-text-primary text-[12px] leading-[20px] ${BOLD_INTER_TIGHT.className}`}>
+                      {(rwaPrice == undefined) ? "0" : `${parseFloat(balance?.formatted)} ($${(Number(formatEther(rwaPrice)) * parseFloat(balance?.formatted)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})`}
                     </span>
                   </div>
                 }
               </div>
               <input
-                className="bg-tw-primary dark:bg-tw-secondary text-tw-text-primary"
+                className="bg-primary dark:bg-secondary text-text-primary"
                 placeholder="0 RWA"
                 value={RWATokenAmount}
                 disabled={!isConnected}
                 type="number"
-                onChange={(e) => {
+                onChange={(e: any) => {
                   const regex = /^[0-9\b]/;
                   if (e.target.value === "" || regex.test(e.target.value))
                     setRWATokenAmount(e.target.value)
@@ -794,99 +566,76 @@ export default function SwapToken() {
               />
             </div>
 
-            <div className="swap-card-price-section-buy">
-              <div className="swap-card-price-section">
-                <div className="swap-card-token-section">
-                  <div className="swap-card-token-selector">
-                    <img src={IconUSDC} alt="usdc" />
-                    <span className="text-tw-text-primary">USDC</span>
+            <div className="flex min-h-[76px] w-full">
+              <div className="flex flex-col flex-1 w-full gap-[4px] min-h-[76px]">
+                <div className="flex justify-between items-center gap-[5px] ml-[16px]">
+                  <div className="flex items-center gap-[5px] cursor-pointer">
+                    <Image src={IconUSDC} alt="usdc" className="w-[20px] h-[20px]" />
+                    <span className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>USDC</span>
                   </div>
                 </div>
                 <input
-                  className="bg-tw-primary dark:bg-tw-secondary text-tw-text-primary"
+                  className="bg-primary dark:bg-secondary text-text-primary"
                   placeholder="00.00 USDC"
                   readOnly
-                  value={(buyUSDCAmount == undefined || RWATokenAmount === "") ? "" : ethers.utils.formatEther(buyUSDCAmount.toString())}
+                  value={(buyUSDCAmount == undefined || RWATokenAmount === 0) ? "" : formatEther(buyUSDCAmount.toString())}
                 />
                 {isConnected &&
-                  <div className="swap-card-token-section swap-card-balance-section1">
-                    <label className="text-tw-text-secondary">Balance:</label>
-                    <span className="text-tw-text-primary">
-                      {(USDCBalance === undefined) ? "Loading..." : parseFloat(USDCBalance?.data?.formatted).toFixed(3)}
+                  <div className="flex items-center gap-[5px] justify-end w-full">
+                    <label className="text-text-secondary text-[12px] leading-[22px]">Balance:</label>
+                    <span className={`text-text-primary text-[12px] leading-[20px] ${BOLD_INTER_TIGHT.className}`}>
+                      {(USDCBalance === undefined) ? "Loading..." : parseFloat(USDCBalance?.formatted).toFixed(3)}
                     </span>
                   </div>
                 }
               </div>
-              <div className="swap-card-price-section">
-                <div className="swap-card-token-section">
-                  <div className="swap-card-token-selector">
-                    <span className="text-tw-text-primary">LAND</span>
+              <div className="flex flex-col w-full gap-[4px] min-h-[76px]">
+                <div className="flex justify-between items-center gap-[5px]">
+                  <div className="flex items-center gap-[5px] cursor-pointer">
+                    <span className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>LAND</span>
                   </div>
                 </div>
                 <input
-                  className="bg-tw-primary dark:bg-tw-secondary text-tw-text-primary"
+                  className="bg-primary dark:bg-secondary text-text-primary"
                   placeholder="00.00 LAND"
                   readOnly
-                  value={(buyLANDAmount == undefined || RWATokenAmount === "") ? "" : ethers.utils.formatEther(buyLANDAmount.toString())}
+                  value={(buyLANDAmount == undefined || RWATokenAmount === 0) ? "" : formatEther(buyLANDAmount.toString())}
                 />
                 {isConnected &&
-                  <div className="swap-card-token-section swap-card-balance-section1">
-                    <label className="text-tw-text-secondary">Balance:</label>
-                    <span className="text-tw-text-primary">
-                      {(landBalance === undefined) ? "0" : Number(landBalance?.data?.formatted).toFixed(3)}
+                  <div className="flex items-center gap-[5px] justify-end w-full">
+                    <label className="text-text-secondary text-[12px] leading-[22px]">Balance:</label>
+                    <span className={`text-text-primary text-[12px] leading-[20px] ${BOLD_INTER_TIGHT.className}`}>
+                      {(landBalance === undefined) ? "0" : Number(landBalance?.formatted).toFixed(3)}
                     </span>
                   </div>
                 }
               </div>
             </div>
-
-            {isConnected &&
-              <div className="swap-card-balance-section1">
-
-              </div>
-            }
-            {isConnected && buyOrSell === "Sell" &&
-              <>
-                <div className="swap-card-price-total">
-                  <span className="bold">LAND Fee ({landFee}%)</span>
-                  <span>{landFeeAmount ? ethers.utils.formatEther(landFeeAmount).toString().substr(0, 12) : 0} LAND </span>
-                </div>
-                <div className="swap-card-price-total">
-                  <div>
-                    <span className="bold">Monthly Limit</span>
-                    <Tooltip title={reachedLimit ? "Your remaining monthly USDC sale limit. To make a larger sale, please contact admin@landshare.io." : `Your remaining monthly USDC sale limit. Your limit sets on [${limitDate.getFullYear() + "/" + (limitDate.getMonth() + 1) + "/" + limitDate.getDate()}]. To make a larger sale, please contact admin@landshare.io.`}>
-                      <Help fontSize="small" />
-                    </Tooltip>
-                  </div>
-                  <span>${Number(saleLimit).toFixed(2)}</span>
-                </div>
-              </>
-            }
           </>
         }
         <div className="swap-card-connect-container ">
           {isConnected ? (
-            chain?.id == 56 ? (
+            chainId == 56 ? (
               <>
                 {isWhitelisted &&
                   <>
                     {buyOrSell === "Sell" &&
                       <Button
-                        color="#fff"
-                        style={{ width: "100%", marginBottom: "16px" }}
                         disabled={
-                          isWhitelisted == false || RWATokenAmount === undefined || RWATokenAmount < 1 || RWATokenAmount === ''
-                          || RWATokenAmount > parseFloat(balance?.data?.formatted) || ethers.utils.formatEther(landFeeAmount ? landFeeAmount : 0) > parseFloat(landBalance?.data?.formatted)
-                          || Number(saleLimit) < Number(USDCAmount == undefined ? 0 : ethers.utils.formatEther(USDCAmount.toString())) ||
-                          Number(USDCAmount == undefined ? 0 : ethers.utils.formatEther(USDCAmount.toString())) > poolBalance?.data?.formatted
+                          isWhitelisted == false || RWATokenAmount === undefined || RWATokenAmount < 1 || RWATokenAmount === 0
+                          || RWATokenAmount > parseFloat(balance?.formatted) || Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted)
+                          || Number(saleLimit) < Number(usdcAmount == 0 ? 0 : usdcAmount.toString()) ||
+                          Number(usdcAmount == 0 ? 0 : Number(usdcAmount.toString())) > Number(poolBalance?.formatted)
                         }
                         onClick={sellTokens}
+                        textClassName="text-[#fff]"
+                        className="w-fll mb-[16px]"
                       >
-                        {RWATokenAmount && USDCAmount && landFeeAmount
-                          ? (RWATokenAmount > parseFloat(balance?.data?.formatted) ? "Insufficient RWA Balance" :
-                            ethers.utils.formatEther(landFeeAmount) > parseFloat(landBalance?.data?.formatted) ? "Insufficient LAND Balance" :
-                              Number(saleLimit) < Number(USDCAmount == undefined ? 0 : ethers.utils.formatEther(USDCAmount.toString())) ? "Insufficient Limit" :
-                                Number(USDCAmount == undefined ? 0 : ethers.utils.formatEther(USDCAmount.toString())) > poolBalance?.data?.formatted ? "Insufficient Liquidity" :
+                        {RWATokenAmount && usdcAmount && landFeeAmount
+                          ? (RWATokenAmount > parseFloat(balance?.formatted) ? "Insufficient RWA Balance" :
+                            Number(formatEther(landFeeAmount)) > parseFloat(landBalance?.formatted) ? "Insufficient LAND Balance" :
+                              Number(saleLimit) < Number(usdcAmount == 0 ? 0 : usdcAmount.toString()) ? "Insufficient Limit" :
+                                Number(usdcAmount == 0 ? 0 : Number(usdcAmount.toString())) > Number(poolBalance?.formatted) ? "Insufficient Liquidity" :
                                   "Sell"
                           )
                           : "Enter Amount"}
@@ -894,18 +643,18 @@ export default function SwapToken() {
                     }
                     {buyOrSell === "Buy" &&
                       <Button
-                        color="#fff"
-                        style={{ width: "100%", marginBottom: "16px" }}
                         disabled={
-                          isWhitelisted == false || RWATokenAmount === undefined || RWATokenAmount < 1 || RWATokenAmount === '' || ethers.utils.formatEther(buyLANDAmount ? buyLANDAmount.toString() : 0) > parseFloat(landBalance?.data?.formatted) || ethers.utils.formatEther(buyUSDCAmount ? buyUSDCAmount.toString() : 0) > parseFloat(USDCBalance?.data?.formatted)
+                          isWhitelisted == false || RWATokenAmount === undefined || RWATokenAmount < 1 || RWATokenAmount === 0 || Number(formatEther(buyLANDAmount ? buyLANDAmount.toString() : 0)) > parseFloat(landBalance?.formatted) || Number(formatEther(buyUSDCAmount ? buyUSDCAmount.toString() : 0)) > parseFloat(USDCBalance?.formatted)
                         }
                         onClick={() => { setIsSTAPshow(true); }}
+                        textClassName="text-[#fff]"
+                        className="w-fll mb-[16px]"
                       >
-                        {RWATokenAmount && buyLANDAmount && USDCAmount
+                        {RWATokenAmount && buyLANDAmount && usdcAmount
                           ? (
-                            ethers.utils.formatEther(buyLANDAmount.toString()) > parseFloat(landBalance?.data?.formatted) ? "Insufficient LAND Balance" :
-                              ethers.utils.formatEther(buyUSDCAmount.toString()) > parseFloat(USDCBalance?.data?.formatted) ? "Insufficient USDC Balance" :
-                                buyOrSell)
+                            Number(formatEther(buyLANDAmount.toString())) > parseFloat(landBalance?.formatted) ? "Insufficient LAND Balance" :
+                            Number(formatEther(buyUSDCAmount.toString())) > parseFloat(USDCBalance?.formatted) ? "Insufficient USDC Balance" :
+                              buyOrSell)
 
                           : "Enter Amount"}
                       </Button>
@@ -919,59 +668,59 @@ export default function SwapToken() {
                     rel="noopener noreferrer"
                     className="text-decoration-none"
                   >
-                    <Button outlined style={{ width: "100%" }}>
+                    <Button outlined className="w-full">
                       Trade on DS Swap
                     </Button>
                   </a>
                 ) : (
-                  <div className="swap-card-kyc-section bg-tw-primary">
-                    <div className="swap-card-kyc-status">
-                      <img src={IconInfo} alt="icon info" />
-                      <span>KYC not verified</span>
+                  <div className="bg-[#f6f8f9] p-[16px] rounded-[12px] bg-primary">
+                    <div className="flex items-center gap-[10px] mb-[4px]">
+                      <Image src={IconInfo} alt="icon info" className="w-[20px] h-[20px]" />
+                      <span className={`text-[14px] leading-[22px] text-[#d21111] ${BOLD_INTER_TIGHT.className}`}>KYC not verified</span>
                     </div>
-                    <span className="text-tw-text-secondary">
+                    <span className="text-text-secondary">
                       Complete the KYC process on the dashboard to access RWA Tokens
                     </span>
                     <Button
-                      color="#fff"
-                      style={{ width: "100%", marginTop: '14px' }}
                       onClick={handlemodalkyc}
+                      textClassName="text-[#fff]"
+                      className="w-full mt-[14px]"
                     >
                       Verify Now
                     </Button>
                   </div>
                 )}
-                <div className="swap-card-connect-section">
-                  <div />
+                <div className="flex flex-col items-center gap-[18px]">
+                  <div className="w-full" />
                   <a>
-                    <button onClick={() => { setIsBuyModalOpen(true) }}>
-                      <span>Get LAND Token</span>
-                      <img src={IconArrowRightUp} alt="arrow right up" />
-                    </button>
+                    <Button className="flex" onClick={() => { setIsBuyModalOpen(true) }}>
+                      <span className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}>Get LAND Token</span>
+                      <Image src={IconArrowRightUp} alt="arrow right up" />
+                    </Button>
                   </a>
                 </div>
               </>
             ) : (
-              <div className="swap-card-kyc-section bg-tw-primary">
-                <div className="swap-card-kyc-status">
-                  <img src={IconInfo} alt="icon info" />
-                  <span>Not supported Chain</span>
+              <div className="bg-[#f6f8f9] p-[16px] rounded-[12px] bg-primary">
+                <div className="flex items-center gap-[10px] mb-[4px]">
+                  <Image src={IconInfo} alt="icon info" className="w-[20px] h-[20px]" />
+                  <span className={`text-[14px] leading-[22px] text-[#d21111] ${BOLD_INTER_TIGHT.className}`}>Not supported Chain</span>
                 </div>
-                <span className="text-tw-text-secondary">
+                <span className="text-text-secondary">
                   Please swtich your network to the BSC.
                 </span>
               </div>
             )
           ) : (
-            <div className="swap-card-connect-section">
-              <div>
-                <ConnectWallet style={{ width: "100%" }} containerStyle={{ marginRight: 0 }} />
+            <div className="flex flex-col items-center gap-[18px]">
+              <div className="w-full">
+                <ConnectWallet containerClassName="w-full mr-0" />
               </div>
               <a>
-                <button onClick={() => { setIsBuyModalOpen(true) }}>
-                  <span>Get LAND Token</span>
-                  <img src={IconArrowRightUp} alt="arrow right up  " />
-                </button>
+                <Button className="flex" onClick={() => { setIsBuyModalOpen(true) }}>
+                  <span className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}>Get LAND Token</span>
+                  <Image src={IconArrowRightUp} alt="arrow right up  " />
+                </Button>
               </a>
             </div>
           )}
@@ -985,66 +734,64 @@ export default function SwapToken() {
         modalOptions={{
           centered: true
         }}
-        className="token-selector-modal-content"
+        className="max-w-[384px]"
       >
-        <Modal.Header>
-          <div className="token-selector-header">
-            <div className="token-selector-header-title">
-              Select Token
-            </div>
-            <img
-              src={IconClose}
-              alt="icon close"
-              className="token-selector-header-closer"
-              onClick={() => setIsShowTokenSelector(false)}
+        <div className="bg-[#f6f8f9] flex justify-between items-center px-[24px] pt-[24px] pb-[16px] rounded-t-[16px]">
+          <div className={`text-[18px] leading-[28px] text-[#0a0a0a] ${BOLD_INTER_TIGHT.className}`}>
+            Select Token
+          </div>
+          <Image
+            src={IconClose}
+            alt="icon close"
+            className="w-[24px] h-[24px] cursor-pointer"
+            onClick={() => setIsShowTokenSelector(false)}
+          />
+        </div>
+        <div className="flex flex-col py-[16px] px-[24px]">
+          <input
+            className="bg-[#f6f8f9] rounded-[12px] py-[13px] px-[20px] w-full text-[14px] leading-[22px]"
+            placeholder="Search name or paste"
+            onChange={(e: any) => setRWATokenAmount(e.target.value)}
+          />
+          <div className="flex gap-[5.5px] items-center mt-[16px] mb-[4px]">
+            <span className="text-[12px] leading-[20px]">Common bases</span>
+            <Image
+              src={IconInfoGray}
+              alt="icon info"
+              className="w-[13px] h-[13px]"
             />
           </div>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="token-selector-body">
-            <input
-              className="token-selector-body-search"
-              placeholder="Search name or paste"
-              onChange={(e) => setRWATokenAmount(e.target.value)}
-            />
-            <div className="token-selector-common-tokens-title">
-              <span>Common bases</span>
-              <img
-                src={IconInfoGray}
-                alt="icon info"
-              />
-            </div>
-            <div className="token-selector-common-tokens">
-              {TOKENS.map((token) => {
-                return (
-                  <div className="token-selector-common-token" key={token.symbol}>
-                    <img
-                      src={token.icon}
-                      alt={token.symbol}
-                    />
-                    <span>{token.symbol}</span>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="token-selector-tokens-list">
-              {allTokens.map((token) => {
-                return (
-                  <div className="token-selector-token-info" key={token.name}>
-                    <img
-                      src={token.png32}
-                      alt={token.code}
-                    />
-                    <div className="token-selector-token-info-name-info">
-                      <span className="token-selector-token-info-name">{token.code}</span>
-                      <span className="token-selector-token-info-fullname">{token.name}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="flex gap-[12px]">
+            {TOKENS.map((token: TOKEN_TYPE) => {
+              return (
+                <div className="flex justify-center items-center gap-[7px] bg-[#f6f8f9] rounded-[12px] w-[90px] pt-[6px] pr-[12px] pb-[8px] pl-[13px]" key={token.symbol}>
+                  <Image
+                    className="w-[18px] h-[18px]"
+                    src={token.icon}
+                    alt={token.symbol}
+                  />
+                  <span className={`text-[14px] leading-[22px] text-[#0a0a0a] ${BOLD_INTER_TIGHT.className}`}>{token.symbol}</span>
+                </div>
+              );
+            })}
           </div>
-        </Modal.Body>
+          <div className="flex flex-col gap-[16px] mt-[16px] max-h-[300px] overflow-y-scroll">
+            {allTokens.map((token: any) => {
+              return (
+                <div className="flex gap-[9px]" key={token.name}>
+                  <Image
+                    src={token.png32}
+                    alt={token.code}
+                  />
+                  <div className="flex flex-col">
+                    <span className={`text-[12px] leading-[20px] text-[#0a133999] ${BOLD_INTER_TIGHT.className}`}>{token.code}</span>
+                    <span className="text-[12px] leading-[22px] text-[#0a133999]">{token.name}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </Modal>
       <Modal
         modalShow={isGraphShow}
@@ -1053,27 +800,22 @@ export default function SwapToken() {
           centered: true
         }}
       >
-        <Modal.Header>
-          <div className={`${isDarkMode && "dark bg-tw-secondary"} header-closer`}>
-            <img
-              src={IconClose}
-              alt="icon close"
-              className="token-selector-header-closer"
-              onClick={() => setIsGraphShow(false)}
-            />
-          </div>
-        </Modal.Header>
-        <Modal.Body>
-          <div className={`${isDarkMode && "dark bg-tw-secondary"} swap-modal-content`}>
-            <PriceGraph
-              contentStyle={{ padding: '24px', width: '100%' }}
-              titleIconStyle={{ height: '24px' }}
-              titleStyle={{ fontSize: '16px', lineHeight: '24px' }}
-              type="rwa"
-              isRWAPage={true}
-            />
-          </div>
-        </Modal.Body>
+        <div className="bg-secondary flex justify-end px-[16px] pt-[16px]">
+          <Image
+            src={IconClose}
+            alt="icon close"
+            className="w-[24px] h-[24px] cursor-pointer"
+            onClick={() => setIsGraphShow(false)}
+          />
+        </div>
+        <div className="bg-secondary !pt-0">
+          <PriceGraph
+            containerClassName="p-[24px] w-full"
+            titleClassName="text-[16px] leading-[24px]"
+            type="rwa"
+            showBuyButton={false}
+          />
+        </div>
       </Modal>
       <Modal
         modalShow={isFinancialSummaryShow}
@@ -1082,21 +824,17 @@ export default function SwapToken() {
           centered: true
         }}
       >
-        <Modal.Header>
-          <div className="header-closer">
-            <img
-              src={IconClose}
-              alt="icon close"
-              className="token-selector-header-closer"
-              onClick={() => setIsFinancialSummaryShow(false)}
-            />
-          </div>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="swap-modal-content">
-            <FinancialSummary />
-          </div>
-        </Modal.Body>
+        <div className="flex justify-end px-[16px] pt-[16px]">
+          <Image
+            src={IconClose}
+            alt="icon close"
+            className="w-[24px] h-[24px] cursor-pointer"
+            onClick={() => setIsFinancialSummaryShow(false)}
+          />
+        </div>
+        <div className="!pt-0">
+          <FinancialSummary />
+        </div>
       </Modal>
       <Modal
         modalShow={isSTAPShow}
@@ -1105,77 +843,72 @@ export default function SwapToken() {
           centered: true
         }}
       >
-        <Modal.Header>
-          <div className="flex w-full justify-between items-center pl-4 z-10 bg-tw-secondary">
-            <div className="text-[16px] md:text-[24px]">Security Token Purchase Agreement</div>
-            <div className="header-closer pb-3">
-              <img
-                src={IconClose}
-
-                alt="icon close"
-                className="token-selector-header-closer"
-                onClick={() => setIsSTAPshow(false)}
-              />
-            </div>
+        <div className="flex w-full justify-between items-center pl-4 z-10 bg-secondary">
+          <div className="text-[16px] md:text-[24px]">Security Token Purchase Agreement</div>
+          <div className="flex justify-end px-[16px] pt-[16px] pb-3">
+            <Image
+              src={IconClose}
+              alt="icon close"
+              className="w-[24px] h-[24px] cursor-pointer"
+              onClick={() => setIsSTAPshow(false)}
+            />
           </div>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="swap-modal-content p-3 flex flex-col space-y-4">
-            <div className="w-full google-doc-content bg-tw-secondary">
-              {!isSTPALoding ? (<></>)
-                : (
-                  <SkeletonTheme baseColor={`${isDarkMode ? "#31333b" : "#dbdde0"}`} highlightColor={`${isDarkMode ? "#52545e" : "#f6f7f9"}`}>
-                    <div className="w-full h-[300px] absolute left-0 top-0 flex flex-col gap-2 pt-[70px] px-7">
-                      <Skeleton className="rounded-lg w-2/3" height={18} />
-                      <Skeleton className="rounded-lg w-full" height={18} />
-                      <Skeleton className="rounded-lg w-1/3" height={18} />
-                      <Skeleton className="rounded-lg w-full" height={18} />
-                      <Skeleton className="rounded-lg w-1/2" height={18} />
-                      <Skeleton className="rounded-lg w-4/5" height={18} />
-                      <Skeleton className="rounded-lg w-full" height={18} />
-                      <Skeleton className="rounded-lg w-full" height={18} />
-                      <Skeleton className="rounded-lg w-1/4" height={18} />
-                    </div>
-                  </SkeletonTheme>)}
-              <div className="z-10 relative h-[300px] w-full bg-tw-secondary text-tw-text-secondary" id='doc'></div>
-              {/* <iframe className="-mt-[120px] z-10 relative" id="doc" src={docContent} width="105%" height="420px" onLoad={() => setIsSTPALoading(false)} /> */}
-            </div>
-            <div className="">
-              <span className="disclaimer-color-text  text-tw-text-secondary">By finalizing the purchase of RWA Tokens, you hereby affirm your acceptance of the terms outlined in the STPA. To obtain a duly signed copy of the STPA, kindly complete the purchase process through the <a href="https://dashboard.landshare.io" target="_blank">Landshare Dashboard</a>.</span>
-              <Form.Check
-                type="checkbox"
-                id="checkbox-token"
-                label={
-                  <span className="fs-16 fw-600 text-black-700 cursor-pointer">
-                    Acknowledge and sign
-                  </span>
-
-                }
-                className="custom-checkbox pt-2"
+        </div>
+        <div className="pt-0 p-3 flex flex-col space-y-4">
+          <div className="w-full google-doc-content overflow-x-hidden overflow-y-scroll bg-secondary">
+            {!isSTPALoding ? (<></>)
+              : (
+                <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
+                  <div className="w-full h-[300px] absolute left-0 top-0 flex flex-col gap-2 pt-[70px] px-7">
+                    <Skeleton className="rounded-lg w-2/3" height={18} />
+                    <Skeleton className="rounded-lg w-full" height={18} />
+                    <Skeleton className="rounded-lg w-1/3" height={18} />
+                    <Skeleton className="rounded-lg w-full" height={18} />
+                    <Skeleton className="rounded-lg w-1/2" height={18} />
+                    <Skeleton className="rounded-lg w-4/5" height={18} />
+                    <Skeleton className="rounded-lg w-full" height={18} />
+                    <Skeleton className="rounded-lg w-full" height={18} />
+                    <Skeleton className="rounded-lg w-1/4" height={18} />
+                  </div>
+                </SkeletonTheme>)}
+            <div className="z-10 relative h-[300px] w-full bg-secondary text-text-secondary" id='doc'></div>
+          </div>
+          <div className="">
+            <span className="text-[13px] leading-[24px] text-[#0a133999] mt-[5px] pr-[15px] text-text-secondary">By finalizing the purchase of RWA Tokens, you hereby affirm your acceptance of the terms outlined in the STPA. To obtain a duly signed copy of the STPA, kindly complete the purchase process through the <a href="https://dashboard.landshare.io" target="_blank">Landshare Dashboard</a>.</span>
+            <div className="relative pt-2">
+              <input 
+                type="checkbox" 
+                id="custom-checkbox" 
+                className="peer hidden" 
                 checked={signAgreement}
-                disabled={false}
-                onChange={(e) => setSignAgreement((prevState) => !prevState)}
+                onChange={() => setSignAgreement((prevState) => !prevState)}
               />
-
-
-            </div>
-
-            <div>
-              <button
-                className="btn nav-btn d-flex justify-content-center align-items-center"
-                onClick={async () => {
-                  setIsSTAPshow(false);
-                  buyOrSell == "Buy" ? buyTokens() : sellTokens();
-                }}
-                disabled={false}
+              <label
+                htmlFor="custom-checkbox"
+                className="before:content-[''] before:inline-block before:absolute before:w-[20px] before:h-[20px] before:left-0 before:ml-[-20px] before:border before:border-gray-700 before:rounded before:bg-white before:transition before:ease-in-out peer-checked:before:bg-red-500 text-[16px] font-bold text-black-700 cursor-pointer"
               >
-                Submit
-              </button>
+                Acknowledge and sign
+              </label>
             </div>
           </div>
-        </Modal.Body>
+          <div>
+            <Button
+              className="flex justify-center items-center"
+              onClick={async () => {
+                setIsSTAPshow(false);
+                buyOrSell == "Buy" ? buyTokens() : sellTokens();
+              }}
+              disabled={false}
+            >
+              Submit
+            </Button>
+          </div>
+        </div>
       </Modal>
-
+      <SwipeluxModal 
+        isOpen={isSwipeluxModalOpen}
+        setIsOpen={setIsSwipeluxModalOpen}
+      />
     </div >
   );
 }

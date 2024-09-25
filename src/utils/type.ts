@@ -36,3 +36,8 @@ export type BREADCRUMB = {
 export type MULTI_CHAIN_CONTRACT_TYPE = {
   [key: number]: Address
 }
+
+export type TOKEN_TYPE = {
+  icon: any
+  symbol: string
+}
