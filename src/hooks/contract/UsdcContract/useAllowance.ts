@@ -4,7 +4,7 @@ import { USDC_ADDRESS } from "../../../config/constants/environments";
 import { Address } from "viem";
 
 export default function useAllowance(chainId: number, address: Address | undefined, spender: Address | undefined) {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: USDC_ADDRESS[chainId ?? 56],
     abi: usdcAbi,
     functionName: "allowance",
@@ -12,11 +12,11 @@ export default function useAllowance(chainId: number, address: Address | undefin
     args: [address, spender]
   })
 
-  if (isLoading) return 0
+  if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching UsdcContract allowance error', error)
-    return 0
+    return { data: 0, refetch }
   }
 
-  return data
+  return { data, refetch }
 }
