@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ethers } from 'ethers';
 import { useWaitForTransactionReceipt, useReadContract } from 'wagmi';
 import { bsc } from 'viem/chains';
 import { Address } from 'viem';
@@ -8,13 +9,20 @@ import useApproveOfLandContract from '../contract/LandTokenContract/useApprove';
 import useSellRwa from '../contract/LandshareBuySaleContract/useSellRwa';
 import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
 import { RWA_CONTRACT_ADDRESS, LANDSHARE_SALE_CONTRACT_ADDRESS } from '../../config/constants/environments';
+import { BigNumberish } from 'ethers';
 
-export default function useSellTokens(address: Address) {
+export default function useSellTokens(address: Address | undefined, landFeeAmount: BigNumberish, amount: number) {
   // 1. Read RWA Allowance
-  const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(address, RWA_CONTRACT_ADDRESS)
+  const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(address, RWA_CONTRACT_ADDRESS) as {
+    data: BigNumberish,
+    refetch: Function
+  }
 
   // 2. Read LAND Allowance
-  const { data: landAllowance, refetch: landAllowanceRefetch } = useAllowanceOfLandContract(address, LANDSHARE_SALE_CONTRACT_ADDRESS)
+  const { data: landAllowance, refetch: landAllowanceRefetch } = useAllowanceOfLandContract(address, LANDSHARE_SALE_CONTRACT_ADDRESS) as {
+    data: BigNumberish,
+    refetch: Function
+  }
 
   // 3. Approve RWA Token
   const { approve: approveRWA, data: rwaApproveTx } = useApproveOfRwaContract()
@@ -38,42 +46,47 @@ export default function useSellTokens(address: Address) {
     hash: sellTx,
   });
 
+  useEffect(() => {
+    (async () => {
+      await rwaAllowanceRefetch()
+      if (BigInt(rwaAllowance) < amount) {
+        return ''
+      }
+
+      if (rwaApproveSuccess) {
+        if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
+          await approveLand(bsc.id, LANDSHARE_SALE_CONTRACT_ADDRESS, landFeeAmount)
+          await landAllowanceRefetch()
+        }
+      }
+    })()
+  }, [rwaApproveSuccess])
+
+  useEffect(() => {
+    (async () => {
+      await landAllowanceRefetch()
+      if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
+        return ''
+      }
+
+      if (landApproveSuccess) {
+        await sellRwa(amount)
+      }
+    })()
+  }, [landApproveSuccess])
+
+  useEffect(() => {
+    if (sellSuccess) {
+
+    }
+  }, [sellSuccess])
+
   // Handle Token Approval and Sale Logic
-  const sellTokens = async (amount: number) => {
+  const sellTokens = async () => {
     try {
-      // Step 1: Check and Approve RWA Allowance
-      if (!rwaAllowance || rwaAllowance.lt(amount)) {
-        const approveRwaTx = await approveRWA(LANDSHARE_SALE_CONTRACT_ADDRESS, amount); // Trigger RWA approval
-        
-        if (approveRwaTx) {
-          const rwaAllowance = await rwaAllowanceRefetch(); // Refetch RWA allowance after approval
-          console.log('rwaAllowance', rwaAllowance)
-          if (!rwaAllowance.gte(amount)) {
-            window.alert('Please approve sufficient allowance.');
-            throw new Error('Insufficient Allowance');
-          }
-        }
-      }
-
-      // Step 2: Check and Approve LAND Allowance
-      if (!landAllowance || landAllowance.lt(landFeeAmount)) {
-        const approveLandTx = await approveLand(bsc.id, LANDSHARE_SALE_CONTRACT_ADDRESS, amount); // Trigger LAND approval
-
-        if (approveLandTx) {
-          await landAllowanceRefetch(); // Refetch LAND allowance after approval
-
-          if (!landAllowance.gte(landFeeAmount)) {
-            window.alert('Please approve sufficient allowance.');
-            throw new Error('Insufficient Allowance');
-          }
-        }
-      }
-
-      sellRwa(amount); // Trigger sell transaction
-
-      if (sellSuccess) {
-        await rwaAllowanceRefetch(); // Refetch RWA allowance after sell
-        await landAllowanceRefetch(); // Refetch LAND allowance after sell
+      if (BigInt(rwaAllowance) < amount) {
+        await approveRWA(LANDSHARE_SALE_CONTRACT_ADDRESS, amount);
+        await rwaAllowanceRefetch()
       }
     } catch (error) {
       console.error(error);
@@ -81,9 +94,6 @@ export default function useSellTokens(address: Address) {
   };
 
   return {
-    sellTokens,
-    rwaApproveLoading,
-    landApproveLoading,
-    sellLoading,
+    sellTokens
   };
 }
