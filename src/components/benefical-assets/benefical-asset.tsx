@@ -23,14 +23,14 @@ export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
   }
 
   return (
-    <Link className="relative cursor-pointer" href={`/tokenized-asset/${asset?.id}`}>
+    <Link className="relative cursor-pointer w-[311px] sm:w-[361px] md:w-[381px]" href={`/tokenized-asset/${asset?.id}`}>
       <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
         <div
           className={`absolute w-[120px] h-[28px] right-0 top-[16px] z-10 rounded-l-[50px] rounded-r-[20px] text-[12px] leading-[20px] text-right tracking-[0.02em] text-[#fff] flex justify-center items-center ${type == "Rental Property" ? "bg-[#FF5454]" : "bg-[#3B98EE]"} ${BOLD_INTER_TIGHT.className}`}
         >
           {type}
         </div>
-        <div className="w-[300px] sm:w-[350px] rounded-[24px] md:w-[370px] border-1 border-[#e6e7eb] dark:border-[#6e6e6e] bg-secondary">
+        <div className="w-[300px] sm:w-[350px] rounded-[24px] md:w-[370px] border-[1px] border-[#e6e7eb] dark:border-[#6e6e6e] bg-secondary">
           <div className="relative">
             <img
               src={asset?.pictures[0]}
@@ -45,7 +45,7 @@ export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
           <div className="flex justify-between pt-[24px] px-[20px] pb-[16px] sm:px-[24px]">
             <div className="flex flex-col justify-center">
               <label className="text-[12px] leading-[20px] text-center tracking-[0.02em] text-text-secondary">Property Value</label>
-              {isLoading ? (<Skeleton className="rounded-lg" height={28} />) : (<span className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>${formatEther(propertyValue).toLocaleString()}</span>)}
+              {isLoading ? (<Skeleton className="rounded-lg" height={28} />) : (<span className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>${Number(formatEther(propertyValue)).toLocaleString()}</span>)}
             </div>
             <div className="flex flex-col justify-center">
               <label className="text-[12px] leading-[20px] text-center tracking-[0.02em] text-text-secondary">Rental Yield</label>
