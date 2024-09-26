@@ -50,7 +50,7 @@ const RwaPage: NextPage = () => {
           {/* <SwapToken /> */}
         </div>
       </div>
-      <div className="bg-tw-secondary section-container">
+      <div className="bg-secondary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
         <BeneficalAssets />
       </div>
     </div>
