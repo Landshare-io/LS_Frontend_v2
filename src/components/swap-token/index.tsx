@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Modal from "react-modal"
 import { bsc } from "viem/chains";
-import { Address } from "viem";
 import { MdOutlineHelp, MdCancel } from "react-icons/md";
 import { useAccount, useBalance, useChainId } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -97,24 +96,18 @@ export default function SwapToken() {
     chainId: bsc.id
   }) as { data: any }
 
-  const saleLimit = useGetSaleLimit(address) as [BigNumberish, number, number]
+  const { data: saleLimit, refetch: refetchSaleLimit } = useGetSaleLimit(address) as { data: [BigNumberish, number, number], refetch: Function }
   const limitDate = saleLimit ? new Date(saleLimit[1] != undefined ? Number(saleLimit[1]) * 1000 : Date.now() * 1000) : Date.now() * 1000
   const reachedLimit = saleLimit ? saleLimit[2] != undefined ? saleLimit[2] : Date.now() : Date.now()
-
+  
   const secondaryLimit = useGetAllowedToTransfer(address)
   const isWhitelisted = useIsWhitelistedAddressOfLandshareSale(address)
   const landFee = useLandFee() as number
   const rwaPrice = useGetRwaPrice() as BigNumberish;
   const { allTokens } = useGetAllTokens()
   const landFeeAmount = useGetLandFee(usdcAmount) as BigNumberish
-  const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(address, LANDSHARE_SALE_CONTRACT_ADDRESS) as {
-    data: BigNumberish,
-    refetch: Function
-  }
-  const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_SALE_CONTRACT_ADDRESS) as {
-    data: BigNumberish,
-    refetch: Function
-  }
+  const { data: usdcAllowance } = useAllowanceOfUsdcContract(bsc.id, address, LANDSHARE_SALE_CONTRACT_ADDRESS) as { data: BigNumberish }
+  const { sellTokens } = useSellTokens(address, landFeeAmount, RWATokenAmount)
 
   useEffect(() => {
     setUsdcAmount(Number(formatEther(rwaPrice)) * RWATokenAmount)
@@ -423,13 +416,13 @@ export default function SwapToken() {
             {isConnected &&
               <>
                 <div className="text-text-primary w-full flex justify-between">
-                  <span className="font-medium text-[14px] leading-[22px]">LAND Fee ({landFee.toNumber()}%)</span>
+                  <span className="font-medium text-[14px] leading-[22px]">LAND Fee ({landFee}%)</span>
                   <span className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>{landFeeAmount ? formatEther(landFeeAmount).toString().substr(0, 12) : 0} Land </span>
                 </div>
                 <div className="text-text-primary w-full flex justify-between">
                   <div className="flex items-center">
                     <span className={`text-[14px] ml-[5px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>Monthly Sale Limit</span>
-                    <Tooltip title={reachedLimit ? "Your remaining monthly USDC sale limit. To make a larger sale, please contact admin@landshare.io." : `Your remaining monthly USDC sale limit. Your limit resets on [${limitDate.getFullYear() + "/" + (limitDate.getMonth() + 1) + "/" + limitDate.getDate()}]. To make a larger sale, please contact admin@landshare.io`}>
+                    <Tooltip title={reachedLimit ? "Your remaining monthly USDC sale limit. To make a larger sale, please contact admin@landshare.io." : `Your remaining monthly USDC sale limit. Your limit resets on [${new Date(limitDate).getFullYear() + "/" + (new Date(limitDate).getMonth() + 1) + "/" + new Date(limitDate).getDate()}]. To make a larger sale, please contact admin@landshare.io`}>
                       <MdOutlineHelp className="text-[16px]" />
                     </Tooltip>
                   </div>
@@ -442,7 +435,15 @@ export default function SwapToken() {
                       <>
                         Remaining number of RWA Tokens that can be transferred from your wallet based on your Secondary Trading Limit.
                         Number must exceed the RWA Tokens to be sold. Limit can be raised on the dashboard.
-                        To learn more, <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/secondary-trading-limits" target="_blank" rel="noopener" sx={{ color: 'inherit', fontWeight: 'bold' }}>click here</Link>.
+                        To learn more, 
+                        <Link 
+                          href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/secondary-trading-limits" 
+                          target="_blank" 
+                          rel="noopener"
+                          className="text-inherit font-bold"
+                        >
+                          click here
+                        </Link>.
                       </>
                     }>
                       <MdOutlineHelp className="text-[16px]" />
