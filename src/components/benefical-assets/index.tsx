@@ -17,9 +17,11 @@ export default function BeneficalAssets() {
 
   return (
     <>
-      <div className="flex flex-col gap-[40px] items-center p-0 mlg:px-[20px] xl:pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
-        <h1 className={`text-text-primary text-[34px] leading-[50px] mb-[-50px] mt-[-20px] md:text-[54px] md:leading-[68px] ${BOLD_INTER_TIGHT.className}`}>Our Current Assets</h1>
-        <div className="flex flex-col p-0 gap-[40px] items-center mlg:w-full mlg:grid mlg:grid-cols-2 md:auto-cols-[minmax(381px,max-content)] lg:grid-cols-3 md:justify-between md:gap-y-[40px]">
+      <div className="flex flex-col gap-[40px] items-center p-0 mlg:px-[20px] md:pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
+        <h1 className={`text-text-primary text-[34px] leading-[50px] md:text-[54px] md:leading-[68px] ${BOLD_INTER_TIGHT.className}`}>
+          Our Current Assets
+        </h1>
+        <div className="flex flex-col p-0 items-center mlg:w-full mlg:grid mlg:grid-cols-[minmax(381px,max-content),minmax(381px,max-content)] xl:grid-cols-[minmax(381px,max-content),minmax(381px,max-content),minmax(381px,max-content)] justify-between md:gap-y-[40px]">
           {propertiesRentalData.map((asset, index) => (
             <BeneficalAsset
               key={`benefical-asset-rental-${index}`}
