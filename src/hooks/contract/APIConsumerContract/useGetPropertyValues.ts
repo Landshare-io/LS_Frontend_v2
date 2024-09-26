@@ -18,7 +18,7 @@ export default function usePropertyValues(id: string) {
   }
   if (isError) {
     console.log('Fetching APIConsumerContract propertyValue error', error)
-    return 0
+    return { isLoading: false, data: 0 }
   }
 
   return {
