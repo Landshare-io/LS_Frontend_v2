@@ -5,7 +5,7 @@ import { LANDSHARE_SALE_CONTRACT_ADDRESS } from "../../../config/constants/envir
 import { Address } from "viem";
 
 export default function useGetSaleLimit(address: Address | undefined) {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: LANDSHARE_SALE_CONTRACT_ADDRESS,
     abi: LandshareSaleAbi,
     functionName: "getSaleLimit",
@@ -13,11 +13,17 @@ export default function useGetSaleLimit(address: Address | undefined) {
     args: [address]
   })
 
-  if (isLoading) return [0, 0, 0]
+  if (isLoading) return {
+    data: [0, 0, 0],
+    refetch
+  }
   if (isError) {
     console.log('Fetching LandshareSaleContract getSaleLimit error', error)
-    return [0, 0, 0]
+    return {
+      data: [0, 0, 0],
+      refetch
+    }
   }
 
-  return data
+  return { data, refetch }
 }
