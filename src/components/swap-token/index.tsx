@@ -28,12 +28,17 @@ import {
   RWA_CONTRACT_ADDRESS, 
   USDC_ADDRESS, 
   RWA_POOL_CONTRACT_ADDRESS,
-  LANDTOKENCONTRACT_ADDRESS,
-  BOLD_INTER_TIGHT
+  LAND_TOKEN_CONTRACT_ADDRESS,
+  BOLD_INTER_TIGHT,
+  LANDSHARE_SALE_CONTRACT_ADDRESS
 } from "../../config/constants/environments";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
 import useGetLandFee from "../../hooks/contract/LandshareSaleContract/useGetLandFee";
+import useAllowanceOfRwaContract from "../../hooks/contract/RWAContract/useAllowance";
+import useAllowanceOfUsdcContract from "../../hooks/contract/UsdcContract/useAllowance";
+import useBuyTokenView from "../../hooks/contract/LandshareBuySaleContract/useBuyTokenView";
+import useSellTokens from "../../hooks/swap-token/useSellTokens";
 
 import IconSwipelux from "../../../public/icons/swipelux.svg";
 import IconPancakeswap from "../../../public/icons/pancakeswap.png";
@@ -60,9 +65,6 @@ export default function SwapToken() {
   const [buyLANDAmount, setBuyLANDAmount] = useState(0);
   const [isSTAPShow, setIsSTAPshow] = useState(false);
   const [signAgreement, setSignAgreement] = useState(false);
-  const [RWAAllowance, setRWAAllowance] = useState(0)
-  const [LandAllowance, setLandAllowance] = useState(0)
-  const [usdcAllowance, setUSDCAllowance] = useState(0)
   const [isShowTokenSelector, setIsShowTokenSelector] = useState(false);
   const [buyOrSell, setBuyOrSell] = useState("Buy");
   const [isSTPALoding, setIsSTPALoading] = useState(true);
@@ -91,7 +93,7 @@ export default function SwapToken() {
 
   const { data: landBalance } = useBalance({
     address: address,
-    token: LANDTOKENCONTRACT_ADDRESS[bsc.id],
+    token: LAND_TOKEN_CONTRACT_ADDRESS[bsc.id],
     chainId: bsc.id
   }) as { data: any }
 
@@ -105,6 +107,14 @@ export default function SwapToken() {
   const rwaPrice = useGetRwaPrice() as BigNumberish;
   const { allTokens } = useGetAllTokens()
   const landFeeAmount = useGetLandFee(usdcAmount) as BigNumberish
+  const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(address, LANDSHARE_SALE_CONTRACT_ADDRESS) as {
+    data: BigNumberish,
+    refetch: Function
+  }
+  const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_SALE_CONTRACT_ADDRESS) as {
+    data: BigNumberish,
+    refetch: Function
+  }
 
   useEffect(() => {
     setUsdcAmount(Number(formatEther(rwaPrice)) * RWATokenAmount)
@@ -117,7 +127,7 @@ export default function SwapToken() {
 
   useEffect(() => {
     if (isSTAPShow) {
-      get_information('https://docs.google.com/document/d/e/2PACX-1vSCbbmciud2wUhSDtRpwbXdimj_GF6ZaLvvtu_XmGSYxdfHc-bMP4psbMoZFUIgdWgJLpx53RubSxSb/pub?embedded=true', function (text) {
+      get_information('https://docs.google.com/document/d/e/2PACX-1vSCbbmciud2wUhSDtRpwbXdimj_GF6ZaLvvtu_XmGSYxdfHc-bMP4psbMoZFUIgdWgJLpx53RubSxSb/pub?embedded=true', function (text: string) {
         var docElement = document.createElement('div');
         docElement.innerHTML = text;
         docElement.classList.add('bg-primary');
@@ -130,49 +140,14 @@ export default function SwapToken() {
     }
   }, [isSTAPShow]);
 
-  useEffect(() => {
-    try {
-      if (RWATokenContract.provider && address) getAllowance('rwa', SaleContract.address);
-    } catch (e) { }
-  }, [RWATokenContract, address]);
+  const buyTokenAmount = useBuyTokenView(RWATokenAmount, USDC_ADDRESS[chainId ?? 56]) as any;
 
   useEffect(() => {
-    try {
-      if (LandTokenContract.provider && address) getAllowance('land', SaleContract.address);
-    } catch (e) { }
-  }, [LandTokenContract, address]);
+    buyTokenAmount(buyTokenAmount.amountOfStableCoin)
+    buyTokenAmount(buyTokenAmount.amountOfLAND)
+  }, [buyTokenAmount])
 
-  useEffect(() => {
-    (async () => {
-      try {
-        if (APIConsumerContract != undefined && BuySaleContract != undefined && RWATokenAmount != undefined && APIConsumerContract) {
-          // Buy
-          if (RWATokenAmount > 0) {
-            const basePrice = await BuySaleContract.offeringSecurityToUSDPrice()
-            const tmp = await BuySaleContract.buyTokenView(RWATokenAmount, process.env.REACT_APP_USDC_ADDR)
-            setBuyUSDCAmount(tmp.amountOfStableCoin)
-            setBuyLANDAmount(tmp.amountOfLAND)
-          }
-        }
-      } catch (e) { }
-    })()
-  }, [RWATokenAmount, rwaPrice]);
-
-  async function getAllowance(token: string, spender: Address) {
-    try {
-      if (token === 'rwa') {
-        setRWAAllowance(await RWATokenContract.allowance(address, spender))
-      }
-      if (token === 'land') {
-        setLandAllowance(await LandTokenContract.allowance(address, spender))
-      }
-      if (token === 'usdc') {
-        setUSDCAllowance(await USDCTokenContract.allowance(address, spender))
-      }
-    } catch (e) { }
-  }
-
-  const customStyles = {
+  const customModalStyles = {
     content: {
       top: "50%",
       left: "50%",
@@ -183,20 +158,10 @@ export default function SwapToken() {
       height: "fit-content",
       borderRadius: "20px"
     },
+    overlay: {
+      background: '#00000080'
+    }
   };
-
-  const zeroIDStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      overflow: "hidden",
-      maxWidth: "500px",
-      width: "100%",
-      height: "fit-content",
-      borderRadius: "20px"
-    },
-  }
 
   function get_information(link: string, callback: any) {
     var xhr = new XMLHttpRequest();
@@ -218,103 +183,54 @@ export default function SwapToken() {
     setKycopen(false);
     document.body.style.overflow = 'auto';
   }
-  async function sellTokens() {
-    try {
 
-      const amount = RWATokenAmount;
+  // async function buyTokens() {
+  //   try {
+  //     const amount = RWATokenAmount;
+  //     if (!signAgreement)
+  //       return;
+  //     startTransaction()
+  //     try {
+  //       const usdcAllowTmp = await USDCTokenContract.allowance(address, BuySaleContract.address)
 
-      try {
-        if (RWAAllowance < amount) {
-          startTransaction("RWA Token Approval Pending...")
-          const tx1 = await RWATokenContract.approve(SaleContract.address, RWATokenContract.balanceOf(address));
-          await tx1.wait().then(async () => {
-            const newRWAAllowance = await RWATokenContract.allowance(address, SaleContract.address)
-            await getAllowance('rwa', SaleContract.address)
-            if (!newRWAAllowance.gte(amount)) {
-              window.alert("Please approve sufficient allowance.")
-              throw new Error('Insufficient Allowance');
-            }
-          })
-        }
+  //       if (!usdcAllowTmp.gte(buyUSDCAmount)) {
+  //         const tx1 = await USDCTokenContract.approve(BuySaleContract.address, USDCTokenContract.balanceOf(address));
+  //         await tx1.wait().then(async () => {
+  //           const newLandAllowance = await USDCTokenContract.allowance(address, BuySaleContract.address)
+  //           await getAllowance('usdc', BuySaleContract.address)
+  //           if (newLandAllowance < usdcAmount) {
+  //             window.alert("Please approve sufficient allowance.")
+  //             throw new Error('Insufficient Allowance');
+  //           }
+  //         })
+  //       }
 
-        const landAllowTmp = await LandTokenContract.allowance(address, SaleContract.address)
-        if (landAllowTmp < landFeeAmount) {
-          startTransaction("LAND Token Approval Pending...")
-          const tx2 = await LandTokenContract.approve(SaleContract.address, LandTokenContract.balanceOf(address));
-          await tx2.wait().then(async () => {
-            const newLandAllowance = await LandTokenContract.allowance(address, SaleContract.address)
-            await getAllowance('land', SaleContract.address)
-            if (newLandAllowance < landFeeAmount) {
-              window.alert("Please approve sufficient allowance.")
-              throw new Error('Insufficient Allowance');
-            }
-          })
-        }
-        startTransaction("Sell RWA Pending...")
-        const tx3 = await SaleContract.sellRWA(amount)
-        await tx3.wait().then(async () => {
-          await getAllowance('rwa', SaleContract.address)
-          await getAllowance('land', SaleContract.address)
+  //       const landAllowTmp = await LandTokenContract.allowance(address, BuySaleContract.address)
+  //       if (!landAllowTmp.gte(buyLANDAmount)) {
+  //         const tx2 = await LandTokenContract.approve(BuySaleContract.address, LandTokenContract.balanceOf(address));
+  //         await tx2.wait().then(async () => {
+  //           const newLandAllowance = await LandTokenContract.allowance(address, BuySaleContract.address)
+  //           await getAllowance('land', BuySaleContract.address)
+  //           if (!newLandAllowance.gte(buyLANDAmount)) {
+  //             window.alert("Please approve sufficient allowance.")
+  //             throw new Error('Insufficient Allowance');
+  //           }
+  //         })
+  //       }
 
-          transactionResult("Transaction Complete.")
+  //       const tx3 = await BuySaleContract.buyToken(amount, process.env.REACT_APP_USDC_ADDR)
+  //       await tx3.wait().then(async () => {
+  //         await getAllowance('usdc', BuySaleContract.address)
+  //         await getAllowance('land', BuySaleContract.address)
 
-        })
-
-      } catch (e) {
-        transactionResult("Transaction Failed.")
-
-        console.log(e)
-      }
-    } catch (e) { }
-  }
-
-  async function buyTokens() {
-    try {
-      const amount = RWATokenAmount;
-      if (!signAgreement)
-        return;
-      startTransaction()
-      try {
-        const usdcAllowTmp = await USDCTokenContract.allowance(address, BuySaleContract.address)
-
-        if (!usdcAllowTmp.gte(buyUSDCAmount)) {
-          const tx1 = await USDCTokenContract.approve(BuySaleContract.address, USDCTokenContract.balanceOf(address));
-          await tx1.wait().then(async () => {
-            const newLandAllowance = await USDCTokenContract.allowance(address, BuySaleContract.address)
-            await getAllowance('usdc', BuySaleContract.address)
-            if (newLandAllowance < usdcAmount) {
-              window.alert("Please approve sufficient allowance.")
-              throw new Error('Insufficient Allowance');
-            }
-          })
-        }
-
-        const landAllowTmp = await LandTokenContract.allowance(address, BuySaleContract.address)
-        if (!landAllowTmp.gte(buyLANDAmount)) {
-          const tx2 = await LandTokenContract.approve(BuySaleContract.address, LandTokenContract.balanceOf(address));
-          await tx2.wait().then(async () => {
-            const newLandAllowance = await LandTokenContract.allowance(address, BuySaleContract.address)
-            await getAllowance('land', BuySaleContract.address)
-            if (!newLandAllowance.gte(buyLANDAmount)) {
-              window.alert("Please approve sufficient allowance.")
-              throw new Error('Insufficient Allowance');
-            }
-          })
-        }
-
-        const tx3 = await BuySaleContract.buyToken(amount, process.env.REACT_APP_USDC_ADDR)
-        await tx3.wait().then(async () => {
-          await getAllowance('usdc', BuySaleContract.address)
-          await getAllowance('land', BuySaleContract.address)
-
-          transactionResult("Transaction Complete.")
-        })
-      } catch (e) {
-        transactionResult("Transaction Failed.")
-        console.log(e)
-      }
-    } catch (e) { }
-  }
+  //         transactionResult("Transaction Complete.")
+  //       })
+  //     } catch (e) {
+  //       transactionResult("Transaction Failed.")
+  //       console.log(e)
+  //     }
+  //   } catch (e) { }
+  // }
 
   const { theme } = useGlobalContext();
 
@@ -376,7 +292,7 @@ export default function SwapToken() {
         <Modal
           isOpen={iskycmodal}
           onRequestClose={() => { setKycopen(false), document.body.classList.remove('modal-open'); }}
-          style={customStyles}
+          style={customModalStyles}
           contentLabel="Modal"
         >
           <MdCancel onClick={handleclosemodal} className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray" />
@@ -412,7 +328,7 @@ export default function SwapToken() {
         <Modal
           isOpen={isZeroIDModal}
           onRequestClose={() => { setZeroIDModalOpen(true), document.body.classList.remove('modal-open'); }}
-          style={zeroIDStyles}
+          style={customModalStyles}
           contentLabel="ZeroID Modal"
           className="zeroid-modal"
         >
@@ -425,7 +341,7 @@ export default function SwapToken() {
         <Modal
           isOpen={isBuyModalOpen}
           onRequestClose={() => { setIsBuyModalOpen(false), document.body.classList.remove('modal-open'); }}
-          style={customStyles}
+          style={customModalStyles}
           contentLabel="current-apr Modal"
         >
           <div className="w-full overflow-y-scroll h-[460px]">
@@ -499,7 +415,7 @@ export default function SwapToken() {
                 className="bg-primary dark:bg-secondary text-text-primary"
                 placeholder="00.00 USDC"
                 readOnly
-                value={usdcAllowance == 0 ? "" : usdcAllowance.toString()}
+                value={Number(formatEther(usdcAllowance)) == 0 ? "" : formatEther(usdcAllowance)}
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
               />
 

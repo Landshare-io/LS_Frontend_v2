@@ -9,7 +9,7 @@ import useSellRwa from '../contract/LandshareBuySaleContract/useSellRwa';
 import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
 import { RWA_CONTRACT_ADDRESS, LANDSHARE_SALE_CONTRACT_ADDRESS } from '../../config/constants/environments';
 
-export function useSellTokens(address: Address) {
+export default function useSellTokens(address: Address) {
   // 1. Read RWA Allowance
   const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(address, RWA_CONTRACT_ADDRESS)
 
@@ -43,13 +43,11 @@ export function useSellTokens(address: Address) {
     try {
       // Step 1: Check and Approve RWA Allowance
       if (!rwaAllowance || rwaAllowance.lt(amount)) {
-        approveRWA(LANDSHARE_SALE_CONTRACT_ADDRESS, amount); // Trigger RWA approval
-
-        if (rwaApproveLoading) return; // Wait for transaction
-
-        if (rwaApproveSuccess) {
-          await rwaAllowanceRefetch(); // Refetch RWA allowance after approval
-
+        const approveRwaTx = await approveRWA(LANDSHARE_SALE_CONTRACT_ADDRESS, amount); // Trigger RWA approval
+        
+        if (approveRwaTx) {
+          const rwaAllowance = await rwaAllowanceRefetch(); // Refetch RWA allowance after approval
+          console.log('rwaAllowance', rwaAllowance)
           if (!rwaAllowance.gte(amount)) {
             window.alert('Please approve sufficient allowance.');
             throw new Error('Insufficient Allowance');
@@ -59,11 +57,9 @@ export function useSellTokens(address: Address) {
 
       // Step 2: Check and Approve LAND Allowance
       if (!landAllowance || landAllowance.lt(landFeeAmount)) {
-        approveLand(bsc.id, LANDSHARE_SALE_CONTRACT_ADDRESS, amount); // Trigger LAND approval
+        const approveLandTx = await approveLand(bsc.id, LANDSHARE_SALE_CONTRACT_ADDRESS, amount); // Trigger LAND approval
 
-        if (landApproveLoading) return; // Wait for transaction
-
-        if (landApproveSuccess) {
+        if (approveLandTx) {
           await landAllowanceRefetch(); // Refetch LAND allowance after approval
 
           if (!landAllowance.gte(landFeeAmount)) {
