@@ -9,7 +9,6 @@ import { useAccount, useBalance, useChainId } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { TOKENS } from "../../config/constants/page-data";
 import { TOKEN_TYPE } from "../../utils/type";
-import { useLandshareFunctions } from "../../../contexts/LandshareFunctionsProvider";
 import { useGlobalContext } from "../../context/GlobalContext";
 import Button from "../common/button";
 import ToggleButton from "../common/toggle-button";
@@ -34,10 +33,10 @@ import {
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
 import useGetLandFee from "../../hooks/contract/LandshareSaleContract/useGetLandFee";
-import useAllowanceOfRwaContract from "../../hooks/contract/RWAContract/useAllowance";
 import useAllowanceOfUsdcContract from "../../hooks/contract/UsdcContract/useAllowance";
 import useBuyTokenView from "../../hooks/contract/LandshareBuySaleContract/useBuyTokenView";
 import useSellTokens from "../../hooks/swap-token/useSellTokens";
+import useBuyTokens from "../../hooks/swap-token/useBuyTokens";
 
 import IconSwipelux from "../../../public/icons/swipelux.svg";
 import IconPancakeswap from "../../../public/icons/pancakeswap.png";
@@ -107,16 +106,12 @@ export default function SwapToken() {
   const { allTokens } = useGetAllTokens()
   const landFeeAmount = useGetLandFee(usdcAmount) as BigNumberish
   const { data: usdcAllowance } = useAllowanceOfUsdcContract(bsc.id, address, LANDSHARE_SALE_CONTRACT_ADDRESS) as { data: BigNumberish }
-  const { sellTokens } = useSellTokens(address, landFeeAmount, RWATokenAmount)
+  const { sellTokens, transactionStatus: sellTransactionStatus } = useSellTokens(address, landFeeAmount, RWATokenAmount)
+  const { buyTokens, transactionStatus: buyTransactionStatus } = useBuyTokens(bsc.id, address, buyLANDAmount, RWATokenAmount)
 
   useEffect(() => {
     setUsdcAmount(Number(formatEther(rwaPrice)) * RWATokenAmount)
   }, [rwaPrice, RWATokenAmount])
-  
-  const {
-    startTransaction,
-    transactionResult,
-  } = useLandshareFunctions();
 
   useEffect(() => {
     if (isSTAPShow) {
@@ -176,54 +171,6 @@ export default function SwapToken() {
     setKycopen(false);
     document.body.style.overflow = 'auto';
   }
-
-  // async function buyTokens() {
-  //   try {
-  //     const amount = RWATokenAmount;
-  //     if (!signAgreement)
-  //       return;
-  //     startTransaction()
-  //     try {
-  //       const usdcAllowTmp = await USDCTokenContract.allowance(address, BuySaleContract.address)
-
-  //       if (!usdcAllowTmp.gte(buyUSDCAmount)) {
-  //         const tx1 = await USDCTokenContract.approve(BuySaleContract.address, USDCTokenContract.balanceOf(address));
-  //         await tx1.wait().then(async () => {
-  //           const newLandAllowance = await USDCTokenContract.allowance(address, BuySaleContract.address)
-  //           await getAllowance('usdc', BuySaleContract.address)
-  //           if (newLandAllowance < usdcAmount) {
-  //             window.alert("Please approve sufficient allowance.")
-  //             throw new Error('Insufficient Allowance');
-  //           }
-  //         })
-  //       }
-
-  //       const landAllowTmp = await LandTokenContract.allowance(address, BuySaleContract.address)
-  //       if (!landAllowTmp.gte(buyLANDAmount)) {
-  //         const tx2 = await LandTokenContract.approve(BuySaleContract.address, LandTokenContract.balanceOf(address));
-  //         await tx2.wait().then(async () => {
-  //           const newLandAllowance = await LandTokenContract.allowance(address, BuySaleContract.address)
-  //           await getAllowance('land', BuySaleContract.address)
-  //           if (!newLandAllowance.gte(buyLANDAmount)) {
-  //             window.alert("Please approve sufficient allowance.")
-  //             throw new Error('Insufficient Allowance');
-  //           }
-  //         })
-  //       }
-
-  //       const tx3 = await BuySaleContract.buyToken(amount, process.env.REACT_APP_USDC_ADDR)
-  //       await tx3.wait().then(async () => {
-  //         await getAllowance('usdc', BuySaleContract.address)
-  //         await getAllowance('land', BuySaleContract.address)
-
-  //         transactionResult("Transaction Complete.")
-  //       })
-  //     } catch (e) {
-  //       transactionResult("Transaction Failed.")
-  //       console.log(e)
-  //     }
-  //   } catch (e) { }
-  // }
 
   const { theme } = useGlobalContext();
 
@@ -388,7 +335,6 @@ export default function SwapToken() {
               <div className="flex justify-between items-center gap-[5px]">
                 <div
                   className="flex items-center gap-[5px] cursor-pointer"
-                // onClick={() => setIsShowTokenSelector(true)}
                 >
                   <Image src={IconUSDC} alt="usdc" className="w-[20px] h-[20px]" />
                   <span className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>USDC</span>
