@@ -4,6 +4,7 @@ import Breadcrumb from '../components/common/breadcrumb';
 import { BREADCRUMB } from '../utils/type';
 import PriceGraph from '../components/price-line-chart';
 import FinancialSummary from '../components/financial-summary';
+import BeneficalAssets from '../components/benefical-assets';
 import styles from '../styles/Home.module.css';
 
 const breadcrumbItems: BREADCRUMB[] = [
@@ -48,6 +49,9 @@ const RwaPage: NextPage = () => {
           </div>
           {/* <SwapToken /> */}
         </div>
+      </div>
+      <div className="bg-tw-secondary section-container">
+        <BeneficalAssets />
       </div>
     </div>
   );
