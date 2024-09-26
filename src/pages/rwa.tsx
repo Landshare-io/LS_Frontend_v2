@@ -4,6 +4,7 @@ import Breadcrumb from '../components/common/breadcrumb';
 import { BREADCRUMB } from '../utils/type';
 import PriceGraph from '../components/price-line-chart';
 import FinancialSummary from '../components/financial-summary';
+import SwapToken from '../components/swap-token';
 import BeneficalAssets from '../components/benefical-assets';
 import styles from '../styles/Home.module.css';
 
@@ -47,7 +48,7 @@ const RwaPage: NextPage = () => {
             </div>
             <FinancialSummary />
           </div>
-          {/* <SwapToken /> */}
+          <SwapToken />
         </div>
       </div>
       <div className="bg-secondary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
