@@ -5,8 +5,6 @@ import { RWA_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { Address } from "viem";
 
 export default function useBalanceOf(address: Address | undefined) {
-  if (typeof address == 'undefined') return 0
-
   const { data, isError, isLoading, error } = useReadContract({
     address: RWA_CONTRACT_ADDRESS,
     abi: RwaContractAbi,
