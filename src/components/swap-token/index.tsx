@@ -130,11 +130,6 @@ export default function SwapToken() {
 
   const buyTokenAmount = useBuyTokenView(RWATokenAmount, USDC_ADDRESS[chainId ?? 56]) as any;
 
-  useEffect(() => {
-    buyTokenAmount(buyTokenAmount.amountOfStableCoin)
-    buyTokenAmount(buyTokenAmount.amountOfLAND)
-  }, [buyTokenAmount])
-
   const customModalStyles = {
     content: {
       top: "50%",
@@ -184,10 +179,10 @@ export default function SwapToken() {
 
   return (
     <div>
-      <div className="flex flex-col items-start bg-third p-[18px] md:p-0 md:max-w-full lg:p-[24px] rounded-[16px] gap-[16px] max-h-none">
+      <div className="flex flex-col w-full md:w-[371px] max-w-full md:max-w-[371px] items-start bg-third p-[18px] lg:p-[24px] rounded-[16px] gap-[16px] max-h-none">
         <div className="flex justify-between items-center w-full">
           <div>
-            <div className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT}`}>
+            <div className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
               Swap RWA
             </div>
             <div className="text-[14px] leading-[22px] tracking-[0.02em] text-left pt-[4px] text-text-secondary">
@@ -213,6 +208,7 @@ export default function SwapToken() {
               setBuyLANDAmount(0)
               setBuyUSDCAmount(0)
             }}
+            className="w-full h-[40px]"
           >
             Buy
           </ToggleButton>
@@ -224,6 +220,7 @@ export default function SwapToken() {
               setRWATokenAmount(0)
               setUsdcAmount(0)
             }}
+            className="w-full h-[40px]"
           >
             Sell
           </ToggleButton>
@@ -320,7 +317,7 @@ export default function SwapToken() {
                 </div>
               </div>
               <input
-                className="bg-primary dark:bg-secondary text-text-primary"
+                className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
                 placeholder="0 RWA"
                 type="number"
                 disabled={!isConnected}
@@ -351,7 +348,7 @@ export default function SwapToken() {
                 </div>
               </div>
               <input
-                className="bg-primary dark:bg-secondary text-text-primary"
+                className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
                 placeholder="00.00 USDC"
                 readOnly
                 value={Number(formatEther(usdcAllowance)) == 0 ? "" : formatEther(usdcAllowance)}
@@ -416,9 +413,9 @@ export default function SwapToken() {
                 }
               </div>
               <input
-                className="bg-primary dark:bg-secondary text-text-primary"
+                className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
                 placeholder="0 RWA"
-                value={RWATokenAmount}
+                value={RWATokenAmount == 0 ? '' : RWATokenAmount}
                 disabled={!isConnected}
                 type="number"
                 onChange={(e: any) => {
@@ -429,7 +426,7 @@ export default function SwapToken() {
               />
             </div>
 
-            <div className="flex min-h-[76px] w-full">
+            <div className="flex min-h-[76px] w-full gap-[16px]">
               <div className="flex flex-col flex-1 w-full gap-[4px] min-h-[76px]">
                 <div className="flex justify-between items-center gap-[5px] ml-[16px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
@@ -438,7 +435,7 @@ export default function SwapToken() {
                   </div>
                 </div>
                 <input
-                  className="bg-primary dark:bg-secondary text-text-primary"
+                  className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
                   placeholder="00.00 USDC"
                   readOnly
                   value={(buyUSDCAmount == undefined || RWATokenAmount === 0) ? "" : formatEther(buyUSDCAmount.toString())}
@@ -452,14 +449,14 @@ export default function SwapToken() {
                   </div>
                 }
               </div>
-              <div className="flex flex-col w-full gap-[4px] min-h-[76px]">
+              <div className="flex flex-col flex-1 w-full gap-[4px] min-h-[76px]">
                 <div className="flex justify-between items-center gap-[5px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
                     <span className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>LAND</span>
                   </div>
                 </div>
                 <input
-                  className="bg-primary dark:bg-secondary text-text-primary"
+                  className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
                   placeholder="00.00 LAND"
                   readOnly
                   value={(buyLANDAmount == undefined || RWATokenAmount === 0) ? "" : formatEther(buyLANDAmount.toString())}
@@ -476,7 +473,7 @@ export default function SwapToken() {
             </div>
           </>
         }
-        <div className="swap-card-connect-container ">
+        <div className="w-full">
           {isConnected ? (
             chainId == 56 ? (
               <>
@@ -553,14 +550,12 @@ export default function SwapToken() {
                     </Button>
                   </div>
                 )}
-                <div className="flex flex-col items-center gap-[18px]">
+                <div className="flex flex-col items-center gap-[18px] w-full">
                   <div className="w-full" />
-                  <a>
-                    <Button className="flex" onClick={() => { setIsBuyModalOpen(true) }}>
-                      <span className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}>Get LAND Token</span>
-                      <Image src={IconArrowRightUp} alt="arrow right up" />
-                    </Button>
-                  </a>
+                  <div className="flex !bg-transparent items-center justify-center" onClick={() => { setIsBuyModalOpen(true) }}>
+                    <span className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}>Get LAND Token</span>
+                    <Image src={IconArrowRightUp} alt="arrow right up" />
+                  </div>
                 </div>
               </>
             ) : (
@@ -575,16 +570,14 @@ export default function SwapToken() {
               </div>
             )
           ) : (
-            <div className="flex flex-col items-center gap-[18px]">
+            <div className="flex flex-col items-center gap-[18px] w-full">
               <div className="w-full">
                 <ConnectWallet containerClassName="w-full mr-0" />
               </div>
-              <a>
-                <Button className="flex" onClick={() => { setIsBuyModalOpen(true) }}>
-                  <span className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}>Get LAND Token</span>
-                  <Image src={IconArrowRightUp} alt="arrow right up  " />
-                </Button>
-              </a>
+              <div className="flex !bg-transparent items-center justify-center" onClick={() => { setIsBuyModalOpen(true) }}>
+                <span className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}>Get LAND Token</span>
+                <Image src={IconArrowRightUp} alt="arrow right up  " />
+              </div>
             </div>
           )}
         </div>
