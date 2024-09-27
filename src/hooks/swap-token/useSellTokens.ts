@@ -90,7 +90,7 @@ export default function useSellTokens(address: Address | undefined, landFeeAmoun
 
   const sellTokens = async () => {
     try {
-      if (BigInt(rwaAllowance) < amount) {
+      if (BigInt(rwaAllowance ?? 0) < amount) {
         await approveRWA(LANDSHARE_SALE_CONTRACT_ADDRESS, amount);
         await rwaAllowanceRefetch()
       }
