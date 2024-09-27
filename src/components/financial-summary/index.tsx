@@ -113,6 +113,7 @@ export default function FinancialSummary() {
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
       backgroundColor: theme == 'dark' ? "#31333b" : "#f6f7f9",
+      maxHeight: '90%'
     },
     overlay: {
       background: '#00000080'
@@ -123,12 +124,12 @@ export default function FinancialSummary() {
     <>
       <div className="flex flex-col w-full gap-[24px]">
         <div className="hidden md:flex gap-[24px]">
-          <div className="flex flex-col items-start w-full max-w-[371px] px-[24px] pt-[24px] pb-[8px] bg-third">
+          <div className="flex flex-col items-start w-full max-w-[371px] px-[24px] pt-[24px] pb-[8px] bg-third rounded-[16px] gap-[8px]">
             <div className="flex justify-start flex-row gap-8 w-full">
               <div className="flex flex-col gap-[10px]">
                 <span className="font-medium text-[14px] leading-[22px] text-text-secondary">My RWA Balance</span>
                 <div className="flex gap-[8px]">
-                  <div className="flex items-center jsutify-center w-[32px] h-[32px] py-[6.23px] px-[7px] bg-[#F6F7F9]">
+                  <div className="flex items-center jsutify-center w-[32px] h-[32px] py-[6.23px] px-[7px] bg-[#F6F7F9] rounded-full">
                     <Image src={myRwa} alt="refresh" className="w-[18px]" />
                   </div>
                   <span className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
@@ -164,13 +165,13 @@ export default function FinancialSummary() {
               containerClassName="w-full m-0 items-center"
             >
               <CarouselItem activeIndex={activeIndex}>
-                <div className="bg-third md:bg-secondary flex flex-col justify-center items-center md:items-start w-full gap-[10px] rounded-[16px] min-w-max">
+                <div className="bg-third md:bg-secondary flex flex-col justify-center items-center md:items-start w-full gap-[10px] rounded-[16px] min-w-max py-[32px] px-[24px]">
                   <div className="flex justify-center flex-row gap-8 w-full">
                     <div className="flex flex-col gap-[10px]">
                       <span className="font-medium text-[14px] leading-[22px] dark:text-[#bec8f399] text-[#0a133999]">My RWA Balance</span>
                       <div className="flex gap-[8px]">
                         <div className="w-[32px] h-[32px] py-[6.23px] px-[7px] rounded-[30px] flex justify-center items-center bg-[#F6F7F9]" >
-                          <img src={myRwa} alt="refresh" width="18px" />
+                          <Image src={myRwa} alt="refresh" className="w-[18px]" />
                         </div>
                         <span className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                           {(Number(formatEther(rwaPrice)) === undefined || isConnected === false) ? "0" : `${parseFloat(balance?.data?.formatted)}`}
@@ -186,8 +187,8 @@ export default function FinancialSummary() {
                       checked={isAutoRedeem}
                       disabled={!isConnected}
                     />
-                    <span className="font-medium text-[14px] leading-[22px] ml-1 dark:text-[#bec8f399] text-[#0a133999]">
-                      Auto Redeem
+                    <span className="flex items-center font-medium text-[12px] leading-[22px] ml-1 dark:text-[#bec8f399] text-[#0a133999]">
+                      <span>Auto Redeem</span>
                       <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/auto-redeem" target="_blank">
                         <BsLink45Deg className="w-5 h-5"></BsLink45Deg>
                       </Link>
@@ -207,7 +208,7 @@ export default function FinancialSummary() {
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             count={3}
-            carouselControlClass="px-[10px] md:px-[20px] mb-[20px]"
+            carouselControlClass="px-[10px] md:px-[20px] mb-[20px] mt-[20px]"
           />
         </div>
         <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
@@ -216,7 +217,7 @@ export default function FinancialSummary() {
               <div className="flex gap-x-1">
                 <div>Financial Summary</div>
                 <div className="relative flex items-center">
-                  <BsInfoCircle id="tooltip-icon" className="w-4 h-4 cursor-pointer z-50"></BsInfoCircle>
+                  <BsInfoCircle id="tooltip-icon" className="w-4 h-4 cursor-pointer"></BsInfoCircle>
                   <div id="tooltip-content" className="hidden md:block absolute -left-[1000px] z-40 bg-white top-5 w-[200px] md:w-[400px] opacity-0 hover:opacity-100 hover:left-5 transition delay-75 text-[15px] rounded-lg shadow-lg px-3 py-2 font-normal">
                     Financial information is provided for your information only. Expenses and property valuations are estimated and subject to change at any time. Maintenance costs, vacancies, and other factors can affect property returns.
                   </div>
