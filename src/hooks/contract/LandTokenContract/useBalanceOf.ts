@@ -1,10 +1,11 @@
 import { useReadContract } from "wagmi";
+import { Address } from "viem";
 import LpTokenV2Abi from "../../../abis/LpTokenV2.json";
 import { LAND_TOKEN_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 interface UseBalanceOfProps {
-  chainId: 56 | 97 | 1 | 11155111 | 137 | 80002 | 42161 | 421614;
-  address: string;
+  chainId: number;
+  address: Address | undefined;
 }
 
 export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
