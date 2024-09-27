@@ -19,8 +19,8 @@ import PriceGraph from "../price-line-chart";
 import SwipeluxModal from "../common/modals/swipelux";
 import ZeroIDWidget from "../zero-id-widget";
 import useGetSaleLimit from "../../hooks/contract/LandshareSaleContract/useGetSaleLimit";
-import useGetAllowedToTransfer from "../../hooks/contract/LandshareSaleContract/useGetAllowedToTransfer";
-import useIsWhitelistedAddressOfLandshareSale from "../../hooks/contract/LandshareSaleContract/useIsWhitelistedAddress";
+import useGetAllowedToTransfer from "../../hooks/contract/RWAContract/useGetAllowedToTransfer";
+import useIsWhitelistedAddressOfRwa from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
 import useLandFee from "../../hooks/contract/LandshareSaleContract/useLandFee";
 import { 
   RWA_CONTRACT_ADDRESS, 
@@ -100,7 +100,7 @@ export default function SwapToken() {
   const reachedLimit = saleLimit ? saleLimit[2] != undefined ? saleLimit[2] : Date.now() : Date.now()
   
   const secondaryLimit = useGetAllowedToTransfer(address)
-  const isWhitelisted = useIsWhitelistedAddressOfLandshareSale(address)
+  const isWhitelisted = useIsWhitelistedAddressOfRwa(address)
   const landFee = useLandFee() as number
   const rwaPrice = useGetRwaPrice() as BigNumberish;
   const { allTokens } = useGetAllTokens()
@@ -544,7 +544,7 @@ export default function SwapToken() {
                     <Button
                       onClick={handlemodalkyc}
                       textClassName="text-[#fff]"
-                      className="w-full mt-[14px]"
+                      className="w-full mt-[14px] py-[13px] px-[24px] rounded-[100px]"
                     >
                       Verify Now
                     </Button>
