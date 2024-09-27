@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 interface CollapseProps {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
   isOpen: boolean;
 }
 
