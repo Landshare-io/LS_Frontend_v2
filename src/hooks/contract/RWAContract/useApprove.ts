@@ -13,13 +13,15 @@ export default function useApprove() {
   } = useWriteContract();
 
   async function approve(approveAddress: Address, amount: number | BigNumberish) {
-    await writeContract({
+    const result = await writeContract({
       address: RWA_CONTRACT_ADDRESS,
       abi: RwaContractAbi,
       functionName: "approve",
       chainId: bsc.id,
       args: [approveAddress, amount]
     });
+
+    console.log('==============', result)
   }
 
   return {
