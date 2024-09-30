@@ -9,7 +9,7 @@ interface UseUserInfoProps {
 }
 
 export default function useUserInfo({ address }: UseUserInfoProps) {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: MASTERCHEF_CONTRACT_ADDRESS,
     abi: MasterchefAbi,
     functionName: "userInfo",
@@ -17,11 +17,11 @@ export default function useUserInfo({ address }: UseUserInfoProps) {
     chainId: bsc.id
   })
 
-  if (isLoading) return [0, 0]
+  if (isLoading) return { data: [0, 0], refetch }
   if (isError) {
     console.log('Fetching MasterchefContract userInfo error', error)
-    return [0, 0]
+    return { data: [0, 0], refetch }
   }
 
-  return data
+  return { data, refetch }
 }

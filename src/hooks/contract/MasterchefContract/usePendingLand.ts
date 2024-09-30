@@ -9,7 +9,7 @@ interface UsePendingLandProps {
 }
 
 export default function usePendingLand({ address }: UsePendingLandProps) {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: MASTERCHEF_CONTRACT_ADDRESS,
     abi: MasterchefAbi,
     functionName: "pendingLand",
@@ -17,11 +17,11 @@ export default function usePendingLand({ address }: UsePendingLandProps) {
     chainId: bsc.id
   })
 
-  if (isLoading) return 0
+  if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching MasterchefContract pendingLand error', error)
-    return 0
+    return { data: 0, refetch }
   }
 
-  return data
+  return { data, refetch }
 }
