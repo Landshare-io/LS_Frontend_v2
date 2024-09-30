@@ -4,18 +4,18 @@ import MasterchefAbi from '../../../abis/Masterchef.json';
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useTotalStaked() {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: MASTERCHEF_CONTRACT_ADDRESS,
     abi: MasterchefAbi,
     functionName: "totalStaked",
     chainId: bsc.id
   })
 
-  if (isLoading) return 0
+  if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching MasterchefContract totalStaked error', error)
-    return 0
+    return { data: 0, refetch }
   }
 
-  return data
+  return { data, refetch }
 }
