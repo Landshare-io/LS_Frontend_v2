@@ -5,25 +5,25 @@ import AutoVaultV2Contract from "../../../abis/AutoVaultV2.json"
 import { AUTO_VAULT_V3_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { BigNumberish } from "ethers";
 
-export default function useDeposit() {
+export default function useWithdraw() {
   const {
     data,
     isPending,
     writeContract
   } = useWriteContract();
 
-  async function deposit(amount: BigNumberish) {
+  async function withdraw(amount: BigNumberish) {
     await writeContract({
       address: AUTO_VAULT_V3_CONTRACT_ADDRESS as Address,
       abi: AutoVaultV2Contract,
-      functionName: "deposit",
+      functionName: "withdraw",
       chainId: bsc.id,
-      args: [amount]
+      args: [0, amount]
     });
   }
 
   return {
-    deposit,
+    withdraw,
     isPending,
     data
   }
