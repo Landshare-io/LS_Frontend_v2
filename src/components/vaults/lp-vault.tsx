@@ -22,11 +22,12 @@ import pcsBunny from "../../assets/img/icons/pancakeswap-cake-logo.svg"
 import "./styles.css"
 import smallicon from "../../assets/img/new/bnb.png";
 import ConnectWallet from "../connect-wallet";
+import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 export default function LpVault(props) {
   const { chain } = useNetwork();
   const { connect, connectors } = useConnect();
-  const { theme == 'dark' } = useGlobalContext();
+  const { theme } = useGlobalContext();
   const [details, setDetails] = useState(false)
   const [depositing, setDepositing] = useState(true)
   const [inputValue, setInputValue] = useState("");
@@ -335,7 +336,7 @@ export default function LpVault(props) {
   return (
     <div className="w-full mlg:max-w-[880px]">
       <div className="w-full">
-        <div className={`p-[12px] flex flex-col md:p-[24px] w-full rounded-[24px] bg-tw-third`}>
+        <div className={`p-[12px] flex flex-col md:p-[24px] w-full rounded-[24px] bg-third`}>
           {isVaultsLoading ? (
             <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
               <div className="flex justify-center items-center m-auto flex-col w-full">
@@ -354,7 +355,7 @@ export default function LpVault(props) {
                     </div>
 
                   </div>
-                  <div className="apr-container">
+                  <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                     <div className="md:w-1/4 w-full">
                       <Skeleton height={46} />
                     </div>
@@ -375,15 +376,15 @@ export default function LpVault(props) {
             <>
               <div className="flex flex-col justify-center p-0 gap-[16px]">
                 <div className="flex flex-row gap-[8px] hidden">
-                  <div className="coin-icon" style={{ flexShrink: 0 }}>
+                  <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
                     <img src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                     <img src={smallicon} />
                   </div>
-                  <div className="title-text text-tw-text-primary flex flex-row whitespace-nowrap items-center gap-2">
+                  <div className={`text-[16px] leading-[28px] overflow-hidden text-ellipsis shrink-1 text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                     {props.title}
                   </div>
-                  <div className="vault-type" style={{ flexShrink: 0 }}>
-                    <div className="type-btn">
+                  <div className="flex items-center p-0 shrink-0">
+                    <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] ${BOLD_INTER_TIGHT.className}`}>
                       <img src={book} alt="book" className="book" />
                       <span>Manual</span>
                     </div>
@@ -394,27 +395,27 @@ export default function LpVault(props) {
                       />
                     </div>
                   </div>
-                  <button className="div show-details-btn" style={{ marginLeft: "auto" }} onClick={() => setDetails(!details)}>
+                  <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                     <img src={details ? up : down}></img>
                   </button>
 
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
                   <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
-                    <img src={theme == 'dark' ? UnionDark : Union} className="border-tw-primary border-[6px]" alt="token pair" />
-                    <img src={smallicon} className="border-tw-primary border-[6px]" />
+                    <img src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px]" alt="token pair" />
+                    <img src={smallicon} className="border-primary border-[6px]" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
-                    <div className={`w-full overflow-hidden text-ellipsis leading-[28px] text-tw-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
+                    <div className={`w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {props.title}
-                      <button className="div show-details-btn collapse-desktop" onClick={() => setDetails(!details)}
+                      <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}
                       // disabled={chain?.id != 56 || chain?.id != 97}
                       >
                         <img src={details ? up : down}></img>
                       </button>
                     </div>
-                    <div className="vault-type">
-                      <div className="type-btn mr-2">
+                    <div className="flex items-center p-0">
+                      <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] ${BOLD_INTER_TIGHT.className}`}>
                         <img src={book} alt="book" className="book" />
                         <span>Manual</span>
                       </div>
@@ -427,15 +428,15 @@ export default function LpVault(props) {
                     </div>
                   </div>
                 </div>
-                <div className="apr-container">
-                  <div className="apr-button bg-tw-vault-input">
-                    <span className="light-font">TVL</span>
-                    <span className="bold-font text-tw-text-primary">{"$" + abbreviateNumber(TVL.toString().substr(0, 8))}</span>
+                <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                    <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
+                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{"$" + abbreviateNumber(TVL.toString().substr(0, 8))}</span>
                   </div>
-                  <div className="apr-button bg-tw-vault-input">
-                    <span className="light-font">APR</span>
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                    <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
                     <div className="calculator-container">
-                      <span className="bold-font text-tw-text-primary">{isNaN(apr) ? "—" : abbreviateNumber(Number(apr).toFixed(0)) + "%"}</span>
+                      <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{isNaN(apr) ? "—" : abbreviateNumber(Number(apr).toFixed(0)) + "%"}</span>
                       <button onClick={() => {
                         props.setShowModal(true)
                         props.setShowModalApy(abbreviateNumber(apr.toString().substr(0, 4)))
@@ -446,19 +447,19 @@ export default function LpVault(props) {
                       </button>
                     </div>
                   </div>
-                  <div className="apr-button bg-tw-vault-input">
-                    <span className="light-font">Deposit</span>
-                    <span className="bold-font text-tw-text-primary">{ethers.utils
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                    <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
+                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{ethers.utils
                       .formatEther(depositBalanceLP.toString())
                       .substr(0, 7)}</span>
                   </div>
-                  <div className="apr-button bg-tw-vault-input">
-                    <span className="light-font">Rewards</span>
-                    <span className="bold-font text-tw-text-primary">{formatEther(rewardLP.toString()).substr(0, 5)}</span>
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                    <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
+                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{formatEther(rewardLP.toString()).substr(0, 5)}</span>
                   </div>
                 </div>
               </div>
-              <div className="collapse-mobile">
+              <div className="block md:hidden">
                 <Tabs
                   value={value}
                   onChange={handleChange}
@@ -475,10 +476,10 @@ export default function LpVault(props) {
                   <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="deposit" label="Deposit" />
                   <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="withdraw" label="Withdraw" />
                 </Tabs>
-                <div className="input-section">
-                  <span className="set-amount">Set Amount</span>
-                  <div className="input-bar-section">
-                    <input className="input-bar bg-tw-vault-input text-tw-button-text-primary" placeholder="0.00 LAND" type="text"
+                <div className="flex flex-col justify-center items-end pt-[12px] pb-[24px] gap-[12px]">
+                  <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
+                  <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
+                    <input className="placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
                       value={inputValue}
                       onChange={(e) =>
                         setInputValue(
@@ -490,17 +491,17 @@ export default function LpVault(props) {
                             .replace(/^(\d+\.\d{18})\d+$/g, "$1")
                         )
                       } />
-                    <div className="percent-buttons">
-                      <button className="percent-btn" onClick={() => handlePercents(10)}>10%</button>
-                      <button className="percent-btn" onClick={() => handlePercents(25)}>25%</button>
-                      <button className="percent-btn" onClick={() => handlePercents(50)}>50%</button>
-                      <button className="percent-btn" onClick={() => handlePercents(75)}>75%</button>
-                      <button className="percent-btn" onClick={() => handlePercents(100)} > 100%</button>
+                    <div className="flex w-full jsutify-between items-center gap-[8px] mt-[12px]">
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(100)} > 100%</button>
                     </div>
                   </div>
                 </div>
-                <div className="vault-bottom-container">
-                  <div className="btn-container">
+                <div className="flex flex-col items-center p-0 gap-[24px] w-full">
+                  <div className="flex gap-[12px] w-full flex-col md:flex-row">
                     {account == 'Not Connected' ? (
                       <div className="d-flex flex-column align-items-center">
                         <ConnectWallet style={{ width: "300px" }} />
@@ -508,7 +509,7 @@ export default function LpVault(props) {
                     ) : (
                       <>
                         <button
-                          className="enable-btn  text-tw-button-text-secondary"
+                          className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
                             if (chain?.id == 56) {
                               if (inputValue && Number(inputValue) > Number(0)) {
@@ -528,7 +529,7 @@ export default function LpVault(props) {
                         </button>
                         {chain?.id == 56 && (
                           <button
-                            className="harvest-btn text-tw-text-primary"
+                            className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => withdrawLP(0)}
                             disabled={chain?.id != 56}
                           >
@@ -538,7 +539,7 @@ export default function LpVault(props) {
                       </>
                     )}
                   </div>
-                  <button className="div show-details-btn" onClick={() => setDetails(!details)}>
+                  <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                     {details ? 'Hide' : 'Show'} Details
                     <img src={details ? up : down} />
                   </button>
@@ -546,37 +547,6 @@ export default function LpVault(props) {
               </div>
               <div className="w-full">
                 <Collapse in={details}>
-
-                  <div className="apr-container-mobile" style={{ marginTop: "20px" }}>
-                    <div className="apr-button bg-tw-vault-input">
-                      <span className="light-font">TVL</span>
-                      <span className="bold-font text-tw-text-primary">{"$" + abbreviateNumber(TVL.toString().substr(0, 8))}</span>
-                    </div>
-                    <div className="apr-button bg-tw-vault-input">
-                      <span className="light-font">APR</span>
-                      <div className="calculator-container">
-                        <span className="bold-font text-tw-text-primary">{abbreviateNumber(Number(apr).toFixed(0)) + "%"}</span>
-                        <button onClick={() => {
-                          props.setShowModal(true)
-                          props.setShowModalApy(abbreviateNumber(apr.toString().substr(0, 4)))
-                          props.setTokenUsdPrice(usdValueLP)
-                          props.setIsLPVault(true)
-                        }}>
-                          <img src={calc} alt="" />
-                        </button>
-                      </div>
-                    </div>
-                    <div className="apr-button bg-tw-vault-input">
-                      <span className="light-font">Deposit</span>
-                      <span className="bold-font text-tw-text-primary">{ethers.utils
-                        .formatEther(depositBalanceLP.toString())
-                        .substr(0, 7)}</span>
-                    </div>
-                    <div className="apr-button bg-tw-vault-input">
-                      <span className="light-font">Rewards</span>
-                      <span className="bold-font text-tw-text-primary">{formatEther(rewardLP.toString()).substr(0, 5)}</span>
-                    </div>
-                  </div>
                   <div className="collapse-desktop">
                     <Tabs
                       value={value}
@@ -595,32 +565,32 @@ export default function LpVault(props) {
                       <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="deposit" label="Deposit" />
                       <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="withdraw" label="Withdraw" />
                     </Tabs>
-                    <div className="input-section">
-                      <span className="set-amount">Set Amount</span>
-                      <div className="input-bar-section">
+                    <div className="flex flex-col justify-center items-end pt-[12px] pb-[24px] gap-[12px]">
+                      <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
+                      <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
                         <input
-                          className="input-bar bg-tw-vault-input text-tw-button-text-primary"
+                          className="placeholder:text-[#cbcbcb] text-button-text-primary"
                           placeholder="0.00 LAND"
                           value={inputValue}
                           onChange={(e) => setInputValue(e.target.value)}
                         />
-                        <div className="percent-buttons">
-                          <button className="percent-btn" onClick={() => handlePercents(10)}>10%</button>
-                          <button className="percent-btn" onClick={() => handlePercents(25)}>25%</button>
-                          <button className="percent-btn" onClick={() => handlePercents(50)}>50%</button>
-                          <button className="percent-btn" onClick={() => handlePercents(75)}>75%</button>
-                          <button className="percent-btn" onClick={() => handlePercents(100)}>100%</button>
+                        <div className="flex w-full jsutify-between items-center gap-[8px] mt-[12px]">
+                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
+                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
+                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
+                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
+                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(100)}>100%</button>
                         </div>
                       </div>
                     </div>
-                    <div className="vault-bottom-container">
-                      <div className="btn-container justify-content-center">
+                    <div className="flex flex-col items-center p-0 gap-[24px] w-full">
+                      <div className="flex gap-[12px] w-full flex-col md:flex-row justify-content-center">
                         {account == 'Not Connected' ? (
                           <ConnectWallet style={{ width: "300px" }} />
                         ) : (
                           <>
                             <button
-                              className="enable-btn  text-tw-button-text-secondary"
+                              className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
                                 if (chain?.id == 56) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
@@ -640,7 +610,7 @@ export default function LpVault(props) {
                             </button>
                             {chain?.id == 56 && (
                               <button
-                                className="harvest-btn text-tw-text-primary"
+                                className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawLP(0)}
                                 disabled={chain?.id != 56}
                               >
@@ -652,30 +622,30 @@ export default function LpVault(props) {
                       </div>
                     </div>
                   </div>
-                  <div className="details-container bg-tw-primary dark:bg-tw-secondary" style={{ marginTop: "24px" }}>
-                    <div className="sub-container">
-                      <div className="w-8 h-8 rounded-full bg-tw-third">
-                        <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"><img className="sub-container-image" src={viewContract} alt="" /></a>
+                  <div className="flex items-start p-0 gap-[8px] w-full rounded-[12px] bg-primary dark:bg-secondary mt-[24px]" style={{ marginTop: "24px" }}>
+                    <div className="flex w-full flex-col items-center justify-center p-[16px]">
+                      <div className="w-8 h-8 rounded-full bg-third">
+                        <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"><img className="w-[32px] h-[32px] p-[6px]" src={viewContract} alt="" /></a>
                       </div>
-                      <div className="sub-container-description text-tw-text-primary">
+                      <div className="flex flex-col mt-[8px] items-center text-text-primary">
                         <span><a href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens">Vault Guide</a></span>
                         <a
-                          style={{ display: "inline" }}
+                          className="inline"
                           href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"
                         >
                           View Details
                         </a>
                       </div>
                     </div>
-                    <div className="sub-container">
-                      <div className="w-8 h-8 rounded-full bg-tw-third">
-                        <a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"><img className="sub-container-image" src={pcsBunny} alt="" /></a>
+                    <div className="flex w-full flex-col items-center justify-center p-[16px]">
+                      <div className="w-8 h-8 rounded-full bg-third">
+                        <a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"><img className="w-[32px] h-[32px] p-[6px]" src={pcsBunny} alt="" /></a>
 
                       </div>
-                      <div className="sub-container-description text-tw-text-primary">
+                      <div className="flex flex-col mt-[8px] items-center text-text-primary">
                         <span><a href="https://pancakeswap.finance/v2/add/0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C/BNB">Get LAND-BNB LP</a></span>
                         <a
-                          style={{ display: "inline" }}
+                          className="inline"
                           href="https://pancakeswap.finance/v2/add/0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C/BNB"
                         >
                           Pancakeswap
