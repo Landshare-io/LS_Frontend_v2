@@ -2,13 +2,14 @@ import { useReadContract } from "wagmi";
 import { bsc } from "viem/chains";
 import WBNBAbi from '../../../abis/WBNB.json';
 import { WBNB_TOKEN_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { Address } from "viem";
 
 interface UseBalanceOfProps {
-  address: string;
+  address: Address | undefined;
 }
 
 export default function useBalanceOf({ address }: UseBalanceOfProps) {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: WBNB_TOKEN_CONTRACT_ADDRESS,
     abi: WBNBAbi,
     functionName: "balanceOf",
@@ -16,11 +17,11 @@ export default function useBalanceOf({ address }: UseBalanceOfProps) {
     args: [address]
   })
 
-  if (isLoading) return 0
+  if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching WBNBTokenContract balanceOf error', error)
-    return 0
+    return { data: 0, refetch }
   }
 
-  return data
+  return { data, refetch }
 }
