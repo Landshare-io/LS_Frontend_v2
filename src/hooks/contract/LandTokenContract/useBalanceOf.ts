@@ -9,7 +9,7 @@ interface UseBalanceOfProps {
 }
 
 export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
     abi: LpTokenV2Abi,
     functionName: "balanceOf",
@@ -17,11 +17,11 @@ export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
     args: [address]
   })
 
-  if (isLoading) return 0
+  if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching LandTokenContract balanceOf error', error)
-    return 0
+    return { data: 0, refetch }
   }
 
-  return data
+  return { data, refetch }
 }
