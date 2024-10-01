@@ -17,11 +17,11 @@ export default function useUserInfo({ address }: UseUserInfoProps) {
     chainId: bsc.id
   })
 
-  if (isLoading) return { data: [0, 0], refetch }
+  if (isLoading) return { data: [0, 0], refetch, isLoading }
   if (isError) {
     console.log('Fetching MasterchefContract userInfo error', error)
-    return { data: [0, 0], refetch }
+    return { data: [0, 0], refetch, isLoading: false }
   }
 
-  return { data, refetch }
+  return { data, refetch, isLoading }
 }
