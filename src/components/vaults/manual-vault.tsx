@@ -1,99 +1,70 @@
-import axios from "axios"
-import numeral from "numeral";
-import { formatEther, ethers, parseEther, BigNumberish } from "ethers";
-import { useChainId, useConnect, useAccount, useSwitchChain } from "wagmi";
 import { useState, useEffect } from "react";
+import { formatEther, parseEther, BigNumberish } from "ethers";
+import { useChainId, useAccount, useSwitchChain } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import Image from "next/image";
 import Collapse from "../common/collapse";
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import { useLandshareFunctions } from "../../contexts/LandshareFunctionsProvider";
-import gameSetting from "../../contexts/game/setting.json";
-import { useVaultsContext } from "../../contexts/VaultsContext";
-import { useGlobalContext } from "../../contexts/GlobalContext";
-
-import useDepositLS from "../../hooks/useDepositLS";
-import useWithDrawLS from "../../hooks/useWithDrawLS2";
-import useApproveLS2 from "../../hooks/useApproveLS2";
+import ConnectWallet from "../connect-wallet";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
-
-import Union from "../../assets/img/new/greenlogo.svg";
-import UnionDark from "../../assets/img/new/greenlogo.svg";
-import book from "../../assets/img/new/book.svg";
-import down from "../../assets/img/icons/Down.svg";
-import up from "../../assets/img/new/arrow-up.svg";
-import calc from "../../assets/img/new/calculator.svg";
-import viewContract from "../../assets/img/new/view-contract.png";
-import pcsBunny from "../../assets/img/icons/pancakeswap-cake-logo.svg"
-import bscIcon from "../../assets/img/new/bsc.svg"
-import ConnectWallet from "../../components/ConnectWallet";
-import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS } from "../../config/constants/environments";
-
+import useVaultBalanceManual from "../../hooks/contract/vault/useVaultBalanceManual";
 import useTotalStaked from "../../hooks/contract/MasterchefContract/useTotalStaked";
 import useUserInfo from "../../hooks/contract/MasterchefContract/useUserInfo";
 import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLand";
 import useGetApr from "../../hooks/get-apy/useGetApr";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useAllowanceOfLandTokenContract from "../../hooks/contract/LandTokenContract/useAllowance";
+import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS } from "../../config/constants/environments";
+import Union from "../../assets/img/new/greenlogo.svg";
+import UnionDark from "../../assets/img/new/greenlogo.svg";
+import book from "../../../public/icons/book.svg";
+import down from "../../../public/icons/down.svg";
+import up from "../../../public/icons/arrow-up.svg";
+import calc from "../../../public/icons/calculator.svg";
+import viewContract from "../../../public/icons/view-contract.png";
+import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
+import bscIcon from "../../../public/icons/bsc.svg"
 
+interface ManualVaultProps {
+  setShowModal: Function
+  setIsLPVault: Function
+  setIsRUSD: Function
+}
 
-
-export default function StakingVault(props) {
-  const { theme } = useGlobalContext();
+export default function ManualVault({
+  setShowModal,
+  setIsLPVault,
+  setIsRUSD,
+}: ManualVaultProps) {
+  const { 
+    theme, 
+    notifyError,
+    setScreenLoadingStatus
+  } = useGlobalContext();
   const chainId = useChainId()
-  const { connect, connectors } = useConnect();
   const { isConnected, address } = useAccount();
-  const { chains, switchChain } = useSwitchChain()
+  const { switchChain } = useSwitchChain()
 
-  const totalStaked = useTotalStaked() as BigNumberish
-  const userInfo = useUserInfo({ address }) as [BigNumberish, BigNumberish]
-  const pendingLand = usePendingLand({ address }) as BigNumberish
+  const { data: totalStaked } = useTotalStaked() as { data: BigNumberish }
+  const { data: userInfo } = useUserInfo({ address }) as { data: [BigNumberish, BigNumberish] }
+  const { data: pendingLand } = usePendingLand({ address }) as { data: BigNumberish }
   const apr = useGetApr() as number
   const landBalance = useBalanceOf({ chainId, address }) as BigNumberish
   const landAllowance = useAllowanceOfLandTokenContract(chainId, address, MASTERCHEF_CONTRACT_ADDRESS) as BigNumberish
 
+  const { 
+    depositVault,
+    withdrawVault,
+    approveVault
+  } = useVaultBalanceManual(address, updateStatus)
 
-  const {
-    startTransaction,
-    endTransaction,
-    transactionResult
-  } = useLandshareFunctions();
-
-  const { depositLS2 } = useDepositLS({
-    startTransaction,
-    endTransaction,
-    transactionResult
-  });
-  const { withdrawLS2 } = useWithDrawLS({
-    startTransaction,
-    endTransaction,
-    transactionResult
-  })
-  const { approveLS2 } = useApproveLS2({
-    startTransaction,
-    endTransaction,
-    transactionResult,
-    updateStatus
-  })
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
   const [depositing, setDepositing] = useState(true)
   const [isWithdrawable, setIsWithdrawable] = useState(true);
   const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
-  const [value, setValue] = useState('deposit');
   const isVaultsLoading = false
-
-
-  const {
-    notifyError,
-  } = useGlobalContext();
-
-  const handleChange = (event: any, newValue: string) => {
-    setValue(newValue);
-    setDepositing(newValue === "deposit" ? true : false)
-  };
 
   function handlePercents(percent: number) {
     if (depositing) {
@@ -119,8 +90,7 @@ export default function StakingVault(props) {
     }
     amountLS = parseEther(amountLS).toString(); //convert to wei
 
-    depositLS2(amountLS);
-
+    depositVault(amountLS);
   };
 
   async function updateStatus() {
@@ -152,10 +122,15 @@ export default function StakingVault(props) {
       setInputValue("")
       return;
     }
+
+    if (Number(userInfo[0]) == 0) {
+      notifyError("No Rewards Found")
+      return
+    }
     // SETTING INPUT VALUE EMPTY
     setInputValue("");
     amountLS = parseEther(amountLS).toString(); //convert to wei
-    withdrawLS2(amountLS);
+    withdrawVault(amountLS);
   };
 
   useEffect(() => {
@@ -163,16 +138,9 @@ export default function StakingVault(props) {
   }, [inputValue]);
 
   const openCalcModal = async () => {
-
-    const tokenPriceData = await axios(gameSetting.landshareCostApi);
-    let tokenPriceUSD = numeral(
-      Number(tokenPriceData.data.landshare.usd)
-    ).format("0.[000]");
-    props.setTokenUsdPrice(tokenPriceUSD)
-    props.setShowModal(true)
-    props.setShowModalApy(apr.toString().substr(0, 4))
-    props.setIsLPVault(false)
-    props.setIsRUSD(false)
+    setShowModal(true)
+    setIsLPVault(false)
+    setIsRUSD(false)
   }
 
   return (
@@ -222,7 +190,7 @@ export default function StakingVault(props) {
                     <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
                   <div className={`leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
-                    {props.title}
+                    LAND Token Staking
                   </div>
                   <div className="flex items-center p-0 shrink-0">
                     <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] ${BOLD_INTER_TIGHT.className}`}>
@@ -242,7 +210,7 @@ export default function StakingVault(props) {
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`text-[18px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
-                      {props.title}
+                      LAND Token Staking
                       <button className={`flex items-center justify-center gap-[4px] text-[14px] leading-[22px] tracking-[0.28px] text-[#61CD81] shrink-0 mt-2 collapse-desktop ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                         <Image src={details ? up : down} alt="detail" />
                       </button>
@@ -288,22 +256,20 @@ export default function StakingVault(props) {
                   </div>
                 </div>
                 <div className="block md:hidden">
-                  <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    TabIndicatorProps={{
-                      sx: {
-                        bgcolor: "#61CD81",
-                        height: "1px"
-                      }
-                    }}
-                    className="deposit-withdraw"
-                    aria-label="secondary tabs example"
-                    style={{ width: "100%", marginTop: 20 }}
-                  >
-                    <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="deposit" label="Deposit" />
-                    <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="withdraw" label="Withdraw" />
-                  </Tabs>
+                  <div className="bg-[#61CD81] h-[1px] w-full">
+                    <div 
+                      className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                      onClick={() => setDepositing(true)}
+                    >
+                      Deposit
+                    </div>
+                    <div 
+                      className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                      onClick={() => setDepositing(false)}
+                    >
+                      Withdraw
+                    </div>
+                  </div>
                   <div className="flex flex-col justify-center items-end pt-[12px] pb-[24px] gap-[12px]">
                     <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
                     <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
@@ -332,7 +298,7 @@ export default function StakingVault(props) {
                     <div className="flex gap-[12px] w-full flex-col md:flex-row">
                       {(typeof address == 'undefined') ? (
                         <div className="flex flex-col items-center">
-                          <ConnectWallet className="w-[300px]" />
+                          <ConnectWallet containerClassName="w-[300px]" />
                         </div>
                       ) : (
                         <>
@@ -340,7 +306,7 @@ export default function StakingVault(props) {
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => {
                               if (inputValue && Number(inputValue) > Number(0)) {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveLS2() : withdrawHandler()
+                                depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
@@ -351,7 +317,7 @@ export default function StakingVault(props) {
                           </button>
                           <button 
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
-                            onClick={() => withdrawLS2(0)}
+                            onClick={() => withdrawVault(0)}
                           >
                             Harvest
                           </button>
@@ -368,22 +334,20 @@ export default function StakingVault(props) {
               <div className="w-full">
                 <Collapse isOpen={details}>
                   <div className="collapse-desktop">
-                    <Tabs
-                      value={value}
-                      onChange={handleChange}
-                      TabIndicatorProps={{
-                        sx: {
-                          bgcolor: "#61CD81",
-                          height: "1px"
-                        }
-                      }}
-                      className="deposit-withdraw"
-                      aria-label="secondary tabs example"
-                      style={{ width: "100%", marginTop: 20 }}
-                    >
-                      <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="deposit" label="Deposit" />
-                      <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="withdraw" label="Withdraw" />
-                    </Tabs>
+                    <div className="bg-[#61CD81] h-[1px] w-full">
+                      <div 
+                        className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                        onClick={() => setDepositing(true)}
+                      >
+                        Deposit
+                      </div>
+                      <div 
+                        className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                        onClick={() => setDepositing(false)}
+                      >
+                        Withdraw
+                      </div>
+                    </div>
                     <div className="flex flex-col justify-center items-end pt-[12px] pb-[24px] gap-[12px]">
                       <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8]">Set Amount</span>
                       <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
@@ -412,7 +376,7 @@ export default function StakingVault(props) {
                       <div className="flex flex-col md:flex-row gap-[12px] w-full justify-center">
                         {(typeof address == 'undefined') ? (
                           <div className="flex flex-col items-center">
-                            <ConnectWallet className="w-[300px]" />
+                            <ConnectWallet containerClassName="w-[300px]" />
                           </div>
                         ) : (
                           <>
@@ -421,7 +385,7 @@ export default function StakingVault(props) {
                               onClick={() => {
                                 if (chainId == 56) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    depositing ? isApprovedLandStake ? depositHandler() : approveLS2() : withdrawHandler()
+                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
@@ -438,7 +402,7 @@ export default function StakingVault(props) {
                             {chainId == 56 && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
-                                onClick={() => withdrawLS2(0)}
+                                onClick={() => withdrawVault(0)}
                                 disabled={(typeof address == 'undefined') || chainId != 56}
                               >
                                 Harvest
