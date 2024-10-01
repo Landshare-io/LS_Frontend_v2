@@ -34,10 +34,10 @@ export default function StatusCard() {
   const resercesToken = useGetReservesPair() as BigNumberish[];
   const allocPoints = usePoolInfo(1) as any[];
   const totalPropertyValue = useGetTotalValue() as BigNumberish;
-  const landAmountInLp = useBalanceOf({ chainId: 56, address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as BigNumberish;
-  const totalBNBinLp = useWBNBBalanceOf({ address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as BigNumberish;
+  const { data: landAmountInLp } = useBalanceOf({ chainId: 56, address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as { data: BigNumberish };
+  const { data: totalBNBinLp } = useWBNBBalanceOf({ address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as { data: BigNumberish };
   const { data: totalLpInVault } = useLpTokenBalanceOf({ address: MASTERCHEF_CONTRACT_ADDRESS }) as { data: BigNumberish };
-  const totalLpSupply = useTotalSupply() as BigNumberish;
+  const { data: totalLpSupply } = useTotalSupply() as { data: BigNumberish };
   const { data: totalDeposited } = useTotalStaked() as { data: BigNumberish };
 
   useEffect(() => {
