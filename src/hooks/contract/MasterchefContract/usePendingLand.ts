@@ -17,11 +17,11 @@ export default function usePendingLand({ address }: UsePendingLandProps) {
     chainId: bsc.id
   })
 
-  if (isLoading) return { data: 0, refetch }
+  if (isLoading) return { data: 0, refetch, isLoading }
   if (isError) {
     console.log('Fetching MasterchefContract pendingLand error', error)
-    return { data: 0, refetch }
+    return { data: 0, refetch, isLoading: false }
   }
 
-  return { data, refetch }
+  return { data, refetch, isLoading }
 }
