@@ -26,7 +26,7 @@ export default function useVaultBalanceManual(address: Address | undefined, upda
   const { refetch: refetchAllowanceOfLpTokenV2OfVault } = useAllowanceOfLpTokenV2(address, AUTO_VAULT_V3_CONTRACT_ADDRESS)
   const { refetch: refetchAllowanceOfLpTokenV2OfMasterChef } = useAllowanceOfLpTokenV2(address, MASTERCHEF_CONTRACT_ADDRESS)
   const { refetch: refetchTotalStaked } = useTotalStaked()
-  const { refetch: refetchUserInfo } = useUserInfo({ address })
+  const { refetch: refetchUserInfo } = useUserInfo({ userInfoId: 0, address })
   const { refetch: refetchPendingLand } = usePendingLand({ address })
 
   const { isSuccess: depositSuccess } = useWaitForTransactionReceipt({
