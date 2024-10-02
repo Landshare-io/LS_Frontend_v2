@@ -5,15 +5,16 @@ import MasterchefAbi from '../../../abis/Masterchef.json';
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 interface UseUserInfoProps {
+  userInfoId: number
   address: Address | undefined
 }
 
-export default function useUserInfo({ address }: UseUserInfoProps) {
+export default function useUserInfo({ userInfoId, address }: UseUserInfoProps) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
     address: MASTERCHEF_CONTRACT_ADDRESS,
     abi: MasterchefAbi,
     functionName: "userInfo",
-    args: [0, address],
+    args: [userInfoId, address],
     chainId: bsc.id
   })
 
