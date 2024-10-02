@@ -11,7 +11,7 @@ import useApprove from "../RwaLpTokenContract/useApprove";
 import useUserInfo from "../MasterchefContract/useUserInfo";
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function useLpVault(address: Address | undefined) {
+export default function useUsdtVault(address: Address | undefined) {
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
   const { deposit, data: depositTx } = useDeposit()
   const { withdraw, data: withdrawTx } = useWithdraw()
