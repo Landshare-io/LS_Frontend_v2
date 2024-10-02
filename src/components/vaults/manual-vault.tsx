@@ -50,7 +50,7 @@ export default function ManualVault({
   const { switchChain } = useSwitchChain()
 
   const { data: totalStaked, isLoading: totalStakedLoading } = useTotalStaked() as { data: BigNumberish, isLoading: boolean }
-  const { data: userInfo, isLoading: userInfoLoading } = useUserInfo({ address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
+  const { data: userInfo, isLoading: userInfoLoading } = useUserInfo({ userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
   const { data: pendingLand, isLoading: pendingLandLoading } = usePendingLand({ address }) as { data: BigNumberish, isLoading: boolean }
   const apr = useGetApr() as number
   const { data: landBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
