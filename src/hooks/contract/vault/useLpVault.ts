@@ -24,7 +24,7 @@ export default function useLpVault(address: Address | undefined, updateStatus: F
     data: BigNumberish,
     refetch: Function
   }
-  const { refetch: refetchUserInfo } = useUserInfo({ address })
+  const { refetch: refetchUserInfo } = useUserInfo({ userInfoId: 0, address })
   const { refetch: refetchPendingLand } = usePendingLand({ address })
   const { refetch: refetchTotalSupply } = useTotalSupply()
   const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ address: LP_TOKEN_V2_CONTRACT_ADDRESS })
