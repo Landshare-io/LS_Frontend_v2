@@ -61,7 +61,7 @@ export default function LpVault({
   const { data: totalLPSupply } = useTotalSupplyOfLpTokenV2() as { data: BigNumberish }
   const { data: totalBNBinLPContract } = useBalanceOfWBNB({ address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as { data: BigNumberish }
   const { data: userInfo } = useUserInfo({ userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
-  const { data: pendingLand } = usePendingLand({ address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: pendingLand } = usePendingLand({ pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
   const { data: approvedLAND } = useAllowance(address, MASTERCHEF_CONTRACT_ADDRESS) as { data: BigNumberish }
   const allocPoints = usePoolInfo(1) as any[];
 
