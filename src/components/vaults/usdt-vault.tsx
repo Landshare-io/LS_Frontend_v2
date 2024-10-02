@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useAccount, useBalance, useContractRead, useNetwork, useConnect } from "wagmi";
+import { useAccount, useBalance, useContractRead, useChainId, useSwitchChain } from "wagmi";
+import { bsc } from "viem/chains";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { ethers } from "ethers";
+import { formatEther, parseEther } from "ethers";
 import numeral from "numeral";
 import axios from "axios"
 import { Collapse } from "@mui/material";
@@ -36,12 +37,13 @@ import LSRWALPABI from "../../contexts/abis/LSRWALP.json"
 import book from "../../assets/img/new/book.svg";
 import ConnectWallet from "../../components/ConnectWallet";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import Image from "next/image";
 
 export default function UsdtvaultComponent(props) {
-  const { theme == 'dark', price } = useGlobalContext();
-  const { address } = useAccount()
-  const { chain } = useNetwork();
-  const { connect, connectors } = useConnect();
+  const { theme, price } = useGlobalContext();
+  const { isConnected, address } = useAccount()
+  const chainId = useChainId()
+  const { switchChain } = useSwitchChain()
 
   const {
     startTransaction,
@@ -54,7 +56,7 @@ export default function UsdtvaultComponent(props) {
   } = useVaultsContext();
   const {
 
-    isConnected,
+    
     landTokenV2Contract,
     account,
     notifySuccess,
@@ -173,7 +175,7 @@ export default function UsdtvaultComponent(props) {
       const totalValueInLP = contractLPUSDTBalance.value.add(contractLPLSRWABalance.value.mul(rwaTokenPrice))
 
       const percentageLPInVault = amountLSRWALPInVault.value.mul(totalValueInLP).div(LSRWALPTotalSupply)
-      setTVL(ethers.utils.formatEther(percentageLPInVault))
+      setTVL(formatEther(percentageLPInVault))
       setLSRWALPValue(totalValueInLP.div(LSRWALPTotalSupply))
       console.log("1: " + LSRWALPValue)
     }
@@ -194,10 +196,10 @@ export default function UsdtvaultComponent(props) {
 
   function handlePercents(percent) {
     if (depositing) {
-      setInputValue(ethers.utils.formatEther(balance.data.value.mul(percent).div(100).toString()))
+      setInputValue(formatEther(balance.data.value.mul(percent).div(100).toString()))
     } else {
 
-      setInputValue(ethers.utils.formatEther(userBalance[0].mul(percent).div(100).toString()))
+      setInputValue(formatEther(userBalance[0].mul(percent).div(100).toString()))
     }
   }
 
@@ -213,7 +215,7 @@ export default function UsdtvaultComponent(props) {
     if (!isApprovedLandStake) {
 
     }
-    amountLS = ethers.utils.parseEther(amountLS); //convert to wei
+    amountLS = parseEther(amountLS); //convert to wei
     depositLSRWALP(amountLS);
   };
 
@@ -226,7 +228,7 @@ export default function UsdtvaultComponent(props) {
     }
     // SETTING INPUT VALUE EMPTY
     setInputValue("");
-    amountLS = ethers.utils.parseEther(amountLS).toString(); //convert to wei
+    amountLS = parseEther(amountLS).toString(); //convert to wei
     withdrawLSRWA(amountLS)
   };
 
@@ -234,7 +236,7 @@ export default function UsdtvaultComponent(props) {
     if (!isConnected) return
 
     if (LSRWALPAllowance) {
-      const approvedLANDETH = ethers.utils.formatEther(LSRWALPAllowance);
+      const approvedLANDETH = formatEther(LSRWALPAllowance);
 
       setIsApprovedLandStake(inputValue > 0 && Number(approvedLANDETH) >= Number(inputValue))
     }
@@ -242,20 +244,18 @@ export default function UsdtvaultComponent(props) {
     if (userBalance) {
       SetWithdrawable(
         Number(inputValue) <=
-        Number(ethers.utils.formatEther(userBalance ? userBalance[0].toString() : 0))
+        Number(formatEther(userBalance ? userBalance[0].toString() : 0))
       );
     }
     if (balance) {
       SetDepositable(
-        Number(ethers.utils.formatEther(balance?.data.value.toString())) >=
+        Number(formatEther(balance?.data.value.toString())) >=
         Number(inputValue)
       );
     }
   }
 
-
-
-  useEffect(async () => {
+  useEffect(() => {
     updateStatus()
   }, [inputValue, LSRWALPAllowance]);
 
@@ -270,25 +270,6 @@ export default function UsdtvaultComponent(props) {
     props.setIsLPVault(false)
     props.setIsRUSD(true);
   }
-
-  const handleNetworkSwitch = async (chainId) => {
-    try {
-      const connector = connectors.find((c) => c.chains.some((chain) => chain.id === chainId));
-
-      if (connector) {
-        if (!isConnected) {
-          await connect({ connector });
-        } else {
-          console.log('Connector already connected, switching network...');
-          await connector.switchChain(chainId);
-        }
-      } else {
-        console.error(`Unsupported chain ID: ${chainId}`);
-      }
-    } catch (error) {
-      console.error('Error switching network:', error);
-    }
-  };
 
   return (
     <div className="w-full mlg:max-w-[880px]">
@@ -334,44 +315,41 @@ export default function UsdtvaultComponent(props) {
               <div className="flex flex-col justify-center p-0 gap-[16px]">
                 <div className="flex flex-row gap-[8px] hidden">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
-                    <img src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
                   <div className={`text-[16px] leading-[28px] overflow-hidden text-ellipsis shrink-1 text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                     {props.title}
                   </div>
                   <div className="flex items-center p-0 shrink-0 mr-2">
                     <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] ${BOLD_INTER_TIGHT.className}`}>
-                      <img src={book} alt="book" className="book" />
+                      <Image src={book} alt="book" className="book" />
                       <span>Manual</span>
                     </div>
                   </div>
                   <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} style={{ marginLeft: "auto" }} onClick={() => setDetails(!details)}>
-                    <img src={details ? up : down}></img>
+                    <Image src={details ? up : down} alt="" />
                   </button>
 
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
                   <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
-                    <img src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px]" alt="token pair" />
-                    <img src={smallicon} className="border-primary border-[6px]" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px]" alt="token pair" />
+                    <Image src={smallicon} className="border-primary border-[6px]" alt="" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {props.title}
                       <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
-                        <img src={details ? up : down}></img>
+                        <Image src={details ? up : down} alt="" />
                       </button>
                     </div>
                     <div className="p-0 flex items-center">
                       <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#3b98ee1f] text-[#3B98EE] max-w-[87px] ${BOLD_INTER_TIGHT.className}`}>
-                        <img src={book} alt="book" className="book" />
+                        <Image src={book} alt="book" className="book" />
                         <span>Manual</span>
                       </div>
                       <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
-                        <img
-                          src={bscIcon}
-                          className="w-8 h-8"
-                        />
+                        <Image src={bscIcon} className="w-8 h-8" alt="" />
                       </div>
                     </div>
                   </div>
@@ -387,20 +365,20 @@ export default function UsdtvaultComponent(props) {
                     <div className="calculator-container">
                       <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(APY?.toString() ?? 0) + "%"}</span>
                       <button onClick={() => openCalcModal()}>
-                        <img src={calc} alt="" />
+                        <Image src={calc} alt="" />
                       </button>
                     </div>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
                     <div className="d-flex align-items-center">
-                      <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{userBalance ? Number(userBalance[0]) > 0 ? Number(ethers.utils.formatEther(userBalance[0])).toExponential(2) : 0.0 : "0.0"} </span>
+                      <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{userBalance ? Number(userBalance[0]) > 0 ? Number(formatEther(userBalance[0])).toExponential(2) : 0.0 : "0.0"} </span>
                     </div>
 
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? abbreviateNumber(ethers.utils.formatEther(rewardsLSRWALP?.toString())) : "0.0"}</span>
+                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? abbreviateNumber(formatEther(rewardsLSRWALP?.toString())) : "0.0"}</span>
                   </div>
                 </div>
               </div>
@@ -448,7 +426,7 @@ export default function UsdtvaultComponent(props) {
                 </div>
                 <div className="flex flex-col items-center p-0 gap-[24px] w-full">
                   <div className="flex gap-[12px] w-full flex-col md:flex-row">
-                    {(account == 'Not Connected') ? (
+                    {(typeof address == 'undefined') ? (
                       <div className="d-flex flex-column align-items-center">
                         <ConnectWallet style={{ width: "300px" }} />
                       </div>
@@ -457,28 +435,28 @@ export default function UsdtvaultComponent(props) {
                         <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
-                            if (chain?.id == 56) {
+                            if (chainId == 56) {
                               if (inputValue && Number(inputValue) > Number(0)) {
                                 depositing ? isApprovedLandStake ? depositHandler() : approveLSRWALP() : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
                             } else {
-                              handleNetworkSwitch(56)
+                              switchChain({ chainId: bsc.id })
                             }
                           }}
                           disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                         >
                           {
-                            chain?.id != 56 ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                            chainId != 56 ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                           }
                         </button>
 
-                        {chain?.id == 56 && (
+                        {chainId == 56 && (
                           <button
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => withdrawLSRWA(0)}
-                            disabled={chain?.id != 56}
+                            disabled={chainId != 56}
                           >
                             Harvest
                           </button>
@@ -488,7 +466,7 @@ export default function UsdtvaultComponent(props) {
                   </div>
                   <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                     {details ? 'Hide' : 'Show'} Details
-                    <img src={details ? up : down} />
+                    <Image src={details ? up : down} alt="" />
                   </button>
                 </div>
               </div>
@@ -541,35 +519,35 @@ export default function UsdtvaultComponent(props) {
                     </div>
                     <div className="flex flex-col items-center p-0 gap-[24px] w-full">
                       <div className="flex gap-[12px] w-full flex-col md:flex-row justify-center">
-                        {(account == 'Not Connected') ? (
+                        {(typeof address == 'undefined') ? (
                           <ConnectWallet style={{ width: "300px" }} />
                         ) : (
                           <>
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if (chain?.id == 56) {
+                                if (chainId == 56) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     depositing ? isApprovedLandStake ? depositHandler() : approveLSRWALP() : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  handleNetworkSwitch(56)
+                                  switchChain({ chainId: bsc.id })
                                 }
                               }}
                               disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                chain?.id != 56 ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                chainId != 56 ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
 
-                            {chain?.id == 56 && (
+                            {chainId == 56 && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawLSRWA(0)}
-                                disabled={chain?.id != 56}
+                                disabled={chainId != 56}
                               >
                                 Harvest
                               </button>
@@ -582,7 +560,7 @@ export default function UsdtvaultComponent(props) {
                   <div className="flex items-start p-0 gap-[8px] w-full rounded-[12px] bg-primary dark:bg-secondary mt-[24px]" style={{ marginTop: "24px" }}>
                     <div className="flex w-full flex-col items-center justify-center p-[16px]">
                       <div className="w-8 h-8 rounded-full bg-third">
-                        <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-lsrwa-usdt-lp-tokens" target="_blank" rel="noopener noreferrer"><img className="w-[32px] h-[32px] p-[6px]" src={viewContract} alt="" /></a>
+                        <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-lsrwa-usdt-lp-tokens" target="_blank" rel="noopener noreferrer"><Image className="w-[32px] h-[32px] p-[6px]" src={viewContract} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
                         <span><a href="https://docs.landshare.io/quickstart-guides/how-to-stake-lsrwa-usdt-lp-tokens" target="_blank" rel="noopener noreferrer">Vault Guide</a></span>
@@ -596,7 +574,7 @@ export default function UsdtvaultComponent(props) {
                     </div>
                     <div className="flex w-full flex-col items-center justify-center p-[16px]">
                       <div className="w-8 h-8 rounded-full bg-third">
-                        <a href="https://app.landshare.io/rwa" target="_blank" rel="noopener noreferrer"><img className="w-[32px] h-[32px] p-[6px]" src={theme == 'dark' ? UnionDark : Union} alt="" /></a>
+                        <a href="https://app.landshare.io/rwa" target="_blank" rel="noopener noreferrer"><Image className="w-[32px] h-[32px] p-[6px]" src={theme == 'dark' ? UnionDark : Union} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
                         <span><a href="https://app.landshare.io/rwa" target="_blank" rel="noopener noreferrer">Get LSRWA Token</a></span>
