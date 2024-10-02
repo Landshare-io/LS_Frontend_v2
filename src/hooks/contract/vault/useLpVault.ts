@@ -135,7 +135,7 @@ export default function useLpVault(address: Address | undefined, updateStatus: F
     }
 
     setScreenLoadingStatus("Deposit Transaction in progress...")
-    deposit(amount)
+    deposit(1, amount)
   }
 
   const withdrawVault = (depositBalanceLP: BigNumberish, amount: BigNumberish) => {
@@ -149,7 +149,7 @@ export default function useLpVault(address: Address | undefined, updateStatus: F
     }
 
     setScreenLoadingStatus("Withdraw Transaction in progress...")
-    withdraw(amount)
+    withdraw(1, amount)
   }
 
   const approveVault = () => {
