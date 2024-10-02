@@ -5,7 +5,7 @@ import { RWA_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { Address } from "viem";
 
 export default function useBalanceOf(address: Address | undefined) {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: RWA_CONTRACT_ADDRESS,
     abi: RwaContractAbi,
     functionName: "balanceOf",
@@ -13,11 +13,11 @@ export default function useBalanceOf(address: Address | undefined) {
     args: [address]
   })
 
-  if (isLoading) return 0
+  if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching RWAContract balanceOf error', error)
-    return 0
+    return { data: 0, refetch }
   }
 
-  return data
+  return { data, refetch }
 }
