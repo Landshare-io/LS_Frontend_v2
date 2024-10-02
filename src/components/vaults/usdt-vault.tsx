@@ -2,22 +2,25 @@ import { useEffect, useState } from "react";
 import { useAccount, useBalance, useContractRead, useChainId, useSwitchChain } from "wagmi";
 import { bsc } from "viem/chains";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { formatEther, parseEther } from "ethers";
+import { BigNumberish, formatEther, parseEther } from "ethers";
 import numeral from "numeral";
-import axios from "axios"
+
+
 import { Collapse } from "@mui/material";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import gameSetting from "../../contexts/game/setting.json";
 import { useVaultsContext } from "../../contexts/VaultsContext";
 import { useGlobalContext } from "../../contexts/GlobalContext";
-import { useLandshareFunctions } from "../../contexts/LandshareFunctionsProvider";
-import useDepositLSRWALP from "../../hooks/useDepositLSRWALP";
-import useWithdrawAll from "../../hooks/useWithdrawAll";
-import useWithDrawLSRWA from "../../hooks/useWithDrawLSRWA";
-import useApproveLSRWALP from "../../hooks/useApproveLSRWALP";
-import useClaimBountyLS from "../../hooks/useClaimBountyLS";
-import abbreviateNumber from "../main/numberAbbreviator";
+import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
+
+import useUsdtVault from "../../hooks/contract/vault/useUsdtVault";
+import useBalanceOfRwaLp from "../../hooks/contract/RwaLpTokenContract/useBalanceOf";
+import useBalanceOfUsdt from "../../hooks/contract/UsdtContract/useBalanceOf";
+import useBalanceOfRwa from "../../hooks/contract/RWAContract/useBalanceOf";
+import useUserInfo from "../../hooks/contract/MasterchefContract/useUserInfo";
+import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
+import useTotalSupplyOfRwaLp from "../../hooks/contract/RwaLpTokenContract/useTotalSupply";
+
 import Union from "../../assets/img/new/bluelogo.svg";
 import UnionDark from "../../assets/img/new/bluelogo.svg";
 import rotateBlue from "../../assets/img/new/rotate-blue.svg";
@@ -26,7 +29,7 @@ import calc from "../../assets/img/new/calculator.svg";
 import viewContract from "../../assets/img/new/view-contract.png";
 import up from "../../assets/img/new/arrow-up.svg";
 import pcsBunny from "../../assets/img/icons/pancakeswap-cake-logo.svg"
-import "./styles.css"
+
 import smallicon from "../../assets/img/new/tether.svg"
 import bscIcon from "../../assets/img/new/bsc.svg";
 import polygonIcon from "../../assets/img/new/polygon.svg";
@@ -36,113 +39,34 @@ import APIConsumerABI from "../../contexts/abis/APIConsumer.json"
 import LSRWALPABI from "../../contexts/abis/LSRWALP.json"
 import book from "../../assets/img/new/book.svg";
 import ConnectWallet from "../../components/ConnectWallet";
-import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, RWA_LP_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../../config/constants/environments";
 import Image from "next/image";
 
 export default function UsdtvaultComponent(props) {
-  const { theme, price } = useGlobalContext();
+  const { theme, price, notifyError } = useGlobalContext();
   const { isConnected, address } = useAccount()
   const chainId = useChainId()
   const { switchChain } = useSwitchChain()
 
   const {
-    startTransaction,
-    endTransaction,
-    transactionResult
-  } = useLandshareFunctions();
-  const {
     isVaultsLoading,
     LSRWALPAllowance
   } = useVaultsContext();
+
   const {
+    depositVault,
+    withdrawVault,
+    approveVault
+  } = useUsdtVault(address)
 
-    
-    landTokenV2Contract,
-    account,
-    notifySuccess,
-    notifyError,
-    signer,
-    provider,
-
-  } = useGlobalContext();
-
-
-
-  const { depositLSRWALP } = useDepositLSRWALP({
-    startTransaction,
-    transactionResult,
-  });
-  const { withdrawLSRWA } = useWithDrawLSRWA({
-    startTransaction,
-    transactionResult,
-  })
-  const { approveLSRWALP } = useApproveLSRWALP({
-    startTransaction,
-    endTransaction,
-    transactionResult,
-    updateStatus
-  })
-
-  const balance = useBalance({
-    address: address,
-    token: process.env.REACT_APP_RWA_LP_TOKEN,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    watch: true,
-  })
-
-  const vaultLPTokenBalance = useBalance({
-    address: address,
-    token: process.env.REACT_APP_RWA_LP_TOKEN,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    watch: true,
-  })
-
-  const { data: userBalance } = useContractRead({
-    address: process.env.REACT_APP_MASTERCHEF,
-    abi: MasterChefABI,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    functionName: "userInfo",
-    args: [4, address],
-    watch: true,
-  });
-
-
-  const { data: contractLPUSDTBalance } = useBalance({
-    address: process.env.REACT_APP_RWA_LP_TOKEN,
-    token: process.env.REACT_APP_USDT_TOKEN,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    watch: true,
-  })
-
-  const { data: contractLPLSRWABalance } = useBalance({
-    address: process.env.REACT_APP_RWA_LP_TOKEN,
-    token: process.env.REACT_APP_RWA_ADDR,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    watch: true,
-  })
-
-  const { data: rwaTokenPrice } = useContractRead({
-    address: process.env.REACT_APP_APICONSUMER_ADDR,
-    abi: APIConsumerABI,
-    functionName: "getRWAPrice",
-    chainId: Number(process.env.REACT_APP_NET_ID),
-
-  })
-
-  const { data: LSRWALPTotalSupply } = useContractRead({
-    address: process.env.REACT_APP_RWA_LP_TOKEN,
-    abi: LSRWALPABI,
-    functionName: "totalSupply",
-    chainId: Number(process.env.REACT_APP_NET_ID),
-
-  })
-
-  const { data: amountLSRWALPInVault } = useBalance({
-    address: process.env.REACT_APP_MASTERCHEF,
-    token: process.env.REACT_APP_RWA_LP_TOKEN,
-    chainId: Number(process.env.REACT_APP_NET_ID),
-    watch: true,
-  })
+  const { data: balance } = useBalanceOfRwaLp(address) as { data: BigNumberish }
+  const { data: contractLPUSDTBalance } = useBalanceOfUsdt(bsc.id, RWA_LP_CONTRACT_ADDRESS) as { data: BigNumberish }
+  const { data: contractLPLSRWABalance } = useBalanceOfRwa(RWA_LP_CONTRACT_ADDRESS) as { data: BigNumberish }
+  const { data: amountLSRWALPInVault } = useBalanceOfRwaLp(MASTERCHEF_CONTRACT_ADDRESS) as { data: BigNumberish }
+  const { data: userBalance } = useUserInfo({ userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish] }
+  const rwaTokenPrice = useGetRwaPrice() as BigNumberish
+  const LSRWALPTotalSupply = useTotalSupplyOfRwaLp() as BigNumberish
+  
 
   const { data: rewardsLSRWALP } = useContractRead({
     address: process.env.REACT_APP_MASTERCHEF,
@@ -196,7 +120,7 @@ export default function UsdtvaultComponent(props) {
 
   function handlePercents(percent) {
     if (depositing) {
-      setInputValue(formatEther(balance.data.value.mul(percent).div(100).toString()))
+      setInputValue(formatEther(balance.mul(percent).div(100).toString()))
     } else {
 
       setInputValue(formatEther(userBalance[0].mul(percent).div(100).toString()))
@@ -216,7 +140,7 @@ export default function UsdtvaultComponent(props) {
 
     }
     amountLS = parseEther(amountLS); //convert to wei
-    depositLSRWALP(amountLS);
+    depositVault(amountLS);
   };
 
   const withdrawHandler = () => {
@@ -229,7 +153,7 @@ export default function UsdtvaultComponent(props) {
     // SETTING INPUT VALUE EMPTY
     setInputValue("");
     amountLS = parseEther(amountLS).toString(); //convert to wei
-    withdrawLSRWA(amountLS)
+    withdrawVault(amountLS)
   };
 
   async function updateStatus() {
@@ -249,7 +173,7 @@ export default function UsdtvaultComponent(props) {
     }
     if (balance) {
       SetDepositable(
-        Number(formatEther(balance?.data.value.toString())) >=
+        Number(formatEther(balance.toString())) >=
         Number(inputValue)
       );
     }
@@ -437,7 +361,7 @@ export default function UsdtvaultComponent(props) {
                           onClick={() => {
                             if (chainId == 56) {
                               if (inputValue && Number(inputValue) > Number(0)) {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveLSRWALP() : withdrawHandler()
+                                depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
@@ -528,7 +452,7 @@ export default function UsdtvaultComponent(props) {
                               onClick={() => {
                                 if (chainId == 56) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    depositing ? isApprovedLandStake ? depositHandler() : approveLSRWALP() : withdrawHandler()
+                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
