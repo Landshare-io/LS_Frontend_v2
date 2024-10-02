@@ -5,10 +5,11 @@ import MasterchefAbi from '../../../abis/Masterchef.json';
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 interface UsePendingLandProps {
+  pendingLandId: Number
   address: Address | undefined
 }
 
-export default function usePendingLand({ address }: UsePendingLandProps) {
+export default function usePendingLand({ pendingLandId, address }: UsePendingLandProps) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
     address: MASTERCHEF_CONTRACT_ADDRESS,
     abi: MasterchefAbi,

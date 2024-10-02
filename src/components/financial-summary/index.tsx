@@ -58,7 +58,7 @@ export default function FinancialSummary() {
   const rwaValue = useTotalSupply() as BigNumberish;
   const totalRWATokenBalanceOfReserveWallets = useReserveRwa() as BigNumberish;
   let isAutoRedeem = useIsOptedIn(address) as boolean
-  const rwaBalance = useBalanceOf(address) as number
+  const { data: rwaBalance } = useBalanceOf(address) as { data: number }
   const { data: optOutData, isPending: isOptOutPending, onOptOut } = useOptOut()
   const { data: optInData, isPending: isOptInPending, onOptIn } = useOptIn()
   const financeLogs = useAppSelector(selectFinancialLogs);
