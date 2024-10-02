@@ -12,13 +12,13 @@ export default function useWithdraw() {
     writeContract
   } = useWriteContract();
 
-  async function withdraw(amount: BigNumberish) {
+  async function withdraw(withdrawId: number, amount: BigNumberish) {
     await writeContract({
       address: MASTERCHEF_CONTRACT_ADDRESS as Address,
       abi: MasterchefAbi,
       functionName: "withdraw",
       chainId: bsc.id,
-      args: [1, amount]
+      args: [withdrawId, amount]
     });
   }
 
