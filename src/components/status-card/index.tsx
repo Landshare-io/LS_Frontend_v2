@@ -4,10 +4,8 @@ import { FiExternalLink } from "react-icons/fi";
 import { BigNumberish, formatEther } from "ethers";
 import Counter from "../common/counter";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
-
 import useGetTotalValue from "../../hooks/contract/APIConsumerContract/useGetTotalValue";
-import useGetReserves from "../../hooks/contract/BNBApePairContract/useGetReserves";
-import useGetReservesPair from "../../hooks/contract/PancakePairContract/useGetReserves";
+import useGetPrice from "../../hooks/get-apy/useGetPrice";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import usePoolInfo from "../../hooks/contract/MasterchefContract/usePoolInfo";
 import useWBNBBalanceOf from "../../hooks/contract/WBNBTokenContract/useBalanceOf";
@@ -30,8 +28,7 @@ export default function StatusCard() {
   const [apr, setApr] = useState(0);
   const [vaultBal, setVaultBal] = useState(0);
   const apy = useGetApy();
-  const reservesBNB = useGetReserves() as BigNumberish[];
-  const resercesToken = useGetReservesPair() as BigNumberish[];
+  const { bnbPrice, coinPrice: coin } = useGetPrice()
   const allocPoints = usePoolInfo(1) as any[];
   const totalPropertyValue = useGetTotalValue() as BigNumberish;
   const { data: landAmountInLp } = useBalanceOf({ chainId: 56, address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as { data: BigNumberish };
@@ -42,9 +39,6 @@ export default function StatusCard() {
 
   useEffect(() => {
     dispatch(getData())
-    const bnbPrice = reservesBNB ? Number(formatEther(reservesBNB[1])) / Number(formatEther(reservesBNB[0])) : null;
-    const coin = resercesToken ? Number(formatEther(resercesToken[1])) / Number(formatEther(resercesToken[0])) : null;
-
     const totalBNBValueinLpContract = Number(formatEther(totalBNBinLp)) * Number(bnbPrice);
     const totalLANDValueinLpContract = Number(formatEther(landAmountInLp)) * Number(coin) * Number(bnbPrice);
     const totalUSDValue = totalBNBValueinLpContract + totalLANDValueinLpContract;
@@ -55,7 +49,7 @@ export default function StatusCard() {
     const vaultBalance = Number(USDValueinVault) + Number(formatEther(totalPropertyValue)) + Number(Number(coin) * Number(bnbPrice) * Number(formatEther(totalDeposited)));
     setApr(farmApr);
     setVaultBal(vaultBalance);
-  }, [totalBNBinLp, landAmountInLp, reservesBNB, totalLpInVault, totalLpSupply, allocPoints, totalDeposited])
+  }, [totalBNBinLp, landAmountInLp, totalLpInVault, totalLpSupply, allocPoints, totalDeposited])
 
   return (
     <div className="bg-primary">
