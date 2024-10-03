@@ -26,7 +26,7 @@ import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPr
 import useTotalSupplyOfRwaLp from "../../hooks/contract/RwaLpTokenContract/useTotalSupply";
 import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLand";
 import useAllowanceOfRwaLp from "../../hooks/contract/RwaLpTokenContract/useAllowance";
-
+import useGetPrice from "../../hooks/get-apy/useGetPrice";
 import Union from "../../../public/blue-logo.svg";
 import UnionDark from "../../../public/blue-logo.svg";
 import down from "../../../public/icons/down.svg";
@@ -59,7 +59,7 @@ export default function Usdtvault({
   setIsLPVault,
   setIsRUSD
 }: UsdtVaultProps) {
-  const { theme, price, notifyError } = useGlobalContext(); // need to get price
+  const { theme, notifyError } = useGlobalContext();
   const { isConnected, address } = useAccount()
   const chainId = useChainId()
   const { switchChain } = useSwitchChain()
@@ -80,6 +80,7 @@ export default function Usdtvault({
   const LSRWALPTotalSupply = useTotalSupplyOfRwaLp() as BigNumberish
   const { data: rewardsLSRWALP } = usePendingLand({ pendingLandId: 4, address }) as { data: BigNumberish }
   const { data: LSRWALPAllowance } = useAllowanceOfRwaLp(address, MASTERCHEF_CONTRACT_ADDRESS) as { data: BigNumberish }
+  const { price } = useGetPrice()
 
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
