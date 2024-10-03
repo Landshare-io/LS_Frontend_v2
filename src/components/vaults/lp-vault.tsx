@@ -12,8 +12,7 @@ import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBal
 import useTotalSupplyOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useTotalSupply";
 import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useBalanceOfWBNB from "../../hooks/contract/WBNBTokenContract/useBalanceOf";
-import useGetReserves from "../../hooks/contract/BNBApePairContract/useGetReserves";
-import useGetReservesPair from "../../hooks/contract/LpTokenV2Contract/useGetReserves";
+import useGetPrice from "../../hooks/get-apy/useGetPrice";
 import useAllowance from "../../hooks/contract/LpTokenV2Contract/useAllowance";
 import useLpVault from "../../hooks/contract/vault/useLpVault";
 import usePoolInfo from "../../hooks/contract/MasterchefContract/usePoolInfo";
@@ -64,9 +63,9 @@ export default function LpVault({
   const { data: pendingLand } = usePendingLand({ pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
   const { data: approvedLAND } = useAllowance(address, MASTERCHEF_CONTRACT_ADDRESS) as { data: BigNumberish }
   const allocPoints = usePoolInfo(1) as any[];
+  const { bnbPrice, coinPrice: coin, price } = useGetPrice()
 
-  const reservesBNB = useGetReserves() as BigNumberish[];
-  const resercesToken = useGetReservesPair() as BigNumberish[];
+  
   const {
     depositVault,
     withdrawVault,
@@ -153,11 +152,7 @@ export default function LpVault({
   };
 
   async function updateLPFarm() {
-    const bnbPrice = reservesBNB ? Number(formatEther(reservesBNB[1])) / Number(formatEther(reservesBNB[0])) : 0;
-    const coin = resercesToken ? Number(formatEther(resercesToken[1])) / Number(formatEther(resercesToken[0])) : 0;
-    const price = coin * bnbPrice
     const totalBNBValueinLPContract = Number(formatEther(totalBNBinLPContract)) * Number(bnbPrice);
-
     let totalLANDValueinLPContract = 0;
     try {
       totalLANDValueinLPContract = Number(formatEther(totalLANDinLPContract?.toString() || '0')) * Number(price);
