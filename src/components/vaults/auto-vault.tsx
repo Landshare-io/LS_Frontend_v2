@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { ethers } from "ethers";
-import numeral from "numeral";
-import axios from "axios"
-import { useNetwork } from "wagmi";
-import { Collapse } from "@mui/material";
+import { formatEther, parseEther } from "ethers";
+import { useChainId } from "wagmi";
+import Collapse from "../common/collapse";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ReactLoading from "react-loading";
@@ -38,10 +36,11 @@ import ConnectWallet from "../../components/ConnectWallet";
 import Timer from "../timer/Timer";
 import "./styles.css"
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import Image from "next/image";
 
 export default function StakingVault(props) {
-  const { chain } = useNetwork()
-  const { theme == 'dark' } = useGlobalContext();
+  const chainId = useChainId();
+  const { theme } = useGlobalContext();
   const {
     startTransaction,
     endTransaction,
@@ -107,7 +106,7 @@ export default function StakingVault(props) {
 
 
   async function updateCCIP() {
-    if (chain?.id != 56 && isConnected) {
+    if (chainId != 56 && isConnected) {
       const { data } = await ccipAxios.get(`/ccip-transaction/count/${account}`)
       setCcipTransactions(data.data)
       const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${account}`)
@@ -127,7 +126,7 @@ export default function StakingVault(props) {
     }
 
     (async () => {
-      if (chain?.id != 56 && isConnected) {
+      if (chainId != 56 && isConnected) {
         setCCIPLoading(true)
         const { data } = await ccipAxios.get(`/ccip-transaction/count/${account}`)
         setCcipTransactions(data.data)
@@ -147,20 +146,21 @@ export default function StakingVault(props) {
     }, 60000);
 
     return () => clearInterval(intervalCcipUpdate);
-  }, [chain, account])
+  }, [chainId, account])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setDepositing(newValue === "deposit" ? true : false)
   };
 
+
   function handlePercents(percent) {
     if (depositing) {
       const bal = balance.landTokenV2.mul(percent).div(100)
-      setInputValue(ethers.utils.formatEther(bal))
+      setInputValue(formatEther(bal))
     } else {
-      const bal = chain?.id == 56 ? vaultBalance.autoLandV3.mul(percent).div(100) : ccipStakeAuto.mul(percent).div(100)
-      setInputValue(ethers.utils.formatEther(bal))
+      const bal = chainId == 56 ? vaultBalance.autoLandV3.mul(percent).div(100) : ccipStakeAuto.mul(percent).div(100)
+      setInputValue(formatEther(bal))
     }
   }
 
@@ -174,19 +174,19 @@ export default function StakingVault(props) {
         return;
       }
 
-      if (chain?.id != 56) {
+      if (chainId != 56) {
         const minTransferAmount = await ccipChainEthSenderContract.minTransferAmount()
-        amountLS = ethers.utils.parseEther(amountLS); //convert to wei
+        amountLS = parseEther(amountLS); //convert to wei
         if (
           ethers.BigNumber.from(minTransferAmount).gt(
             ethers.BigNumber.from(amountLS)
           )
         ) {
-          notifyError(`Minimum transfer amount is ${ethers.utils.formatEther(minTransferAmount.toString())} LAND`);
+          notifyError(`Minimum transfer amount is ${formatEther(minTransferAmount.toString())} LAND`);
           return;
         }
       } else {
-        amountLS = ethers.utils.parseEther(amountLS); //convert to wei
+        amountLS = parseEther(amountLS); //convert to wei
       }
 
       // SETTING INPUT VALUE EMPTY
@@ -195,10 +195,10 @@ export default function StakingVault(props) {
 
       }
       setIsDepositing(true)
-      if (chain?.id != 56) {
+      if (chainId != 56) {
         const allowance = await landTokenV2Contract.allowance(
           account,
-          process.env.REACT_APP_IS_CCIP_TESTING == 'true' ? CCIP_CHAIN_SENDER_ADDRESS[chain?.id ?? 11155111] : CCIP_CHAIN_SENDER_ADDRESS[chain?.id]
+          process.env.REACT_APP_IS_CCIP_TESTING == 'true' ? CCIP_CHAIN_SENDER_ADDRESS[chainId ?? 11155111] : CCIP_CHAIN_SENDER_ADDRESS[chainId]
         )
 
         if (
@@ -209,7 +209,7 @@ export default function StakingVault(props) {
           await depositCcip(account, amountLS, chain);
         } else {
           const transaction = await landTokenV2Contract.approve(
-            process.env.REACT_APP_IS_CCIP_TESTING == 'true' ? CCIP_CHAIN_SENDER_ADDRESS[chain?.id ?? 11155111] : CCIP_CHAIN_SENDER_ADDRESS[chain?.id],
+            process.env.REACT_APP_IS_CCIP_TESTING == 'true' ? CCIP_CHAIN_SENDER_ADDRESS[chainId ?? 11155111] : CCIP_CHAIN_SENDER_ADDRESS[chainId],
             amountLS
           )
 
@@ -240,25 +240,25 @@ export default function StakingVault(props) {
       setInputValue("")
       return;
     }
-    if (chain?.id != 56) {
+    if (chainId != 56) {
       const minTransferAmount = await ccipChainEthSenderContract.minTransferAmount()
-      amountLS = ethers.utils.parseEther(amountLS); //convert to wei
+      amountLS = parseEther(amountLS); //convert to wei
       if (
         ethers.BigNumber.from(minTransferAmount).gt(
           ethers.BigNumber.from(amountLS)
         )
       ) {
         setInputValue("");
-        notifyError(`Minimum transfer amount is ${ethers.utils.formatEther(minTransferAmount.toString())} LAND`);
+        notifyError(`Minimum transfer amount is ${formatEther(minTransferAmount.toString())} LAND`);
         return;
       }
     } else {
-      amountLS = ethers.utils.parseEther(amountLS); //convert to wei
+      amountLS = parseEther(amountLS); //convert to wei
     }
     // SETTING INPUT VALUE EMPTY
     setInputValue("");
-    if (inputValue === ethers.utils.formatEther(chain?.id != 56 ? ccipStakeAuto ?? 0 : vaultBalance.autoLandV3)) {
-      if (chain?.id != 56) {
+    if (inputValue === formatEther(chainId != 56 ? ccipStakeAuto ?? 0 : vaultBalance.autoLandV3)) {
+      if (chainId != 56) {
         await withdrawCcipAll(account, chain)
         const { data } = await ccipAxios.get(`/ccip-transaction/count/${account}`)
         const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${account}`)
@@ -270,7 +270,7 @@ export default function StakingVault(props) {
         updateCCIP()
       }
     } else {
-      if (chain?.id != 56) {
+      if (chainId != 56) {
         await withdrawCcip(account, amountLS, chain)
         const { data } = await ccipAxios.get(`/ccip-transaction/count/${account}`)
         const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${account}`)
@@ -286,15 +286,15 @@ export default function StakingVault(props) {
   async function updateStatus() {
     try {
       if (!isConnected || !account) return
-      if (chain?.id != 56 ? ccipStakeAuto ?? 0 : vaultBalance.autoLandV3) {
+      if (chainId != 56 ? ccipStakeAuto ?? 0 : vaultBalance.autoLandV3) {
         SetWithdrawable(
           Number(inputValue) <=
-          Number(ethers.utils.formatEther(chain?.id != 56 ? ccipStakeAuto ?? 0 : vaultBalance.autoLandV3))
+          Number(formatEther(chainId != 56 ? ccipStakeAuto ?? 0 : vaultBalance.autoLandV3))
         );
       }
       if (balance.landTokenV2) {
         SetDepositable(
-          Number(ethers.utils.formatEther(balance.landTokenV2)) >=
+          Number(formatEther(balance.landTokenV2)) >=
           Number(inputValue)
         );
       }
@@ -303,7 +303,7 @@ export default function StakingVault(props) {
         account,
         process.env.REACT_APP_AUTOLANDV3
       );
-      const approvedLANDETH = ethers.utils.formatEther(approvedLAND);
+      const approvedLANDETH = formatEther(approvedLAND);
       setIsApprovedLandStake(inputValue > 0 && Number(approvedLANDETH) >= Number(inputValue));
     } catch (e) {
       console.log(e)
@@ -314,6 +314,13 @@ export default function StakingVault(props) {
   useEffect(() => {
     updateStatus()
   }, [inputValue]);
+
+  const openCalcModal = async () => {
+    props.setShowModal(true)
+    props.setShowModalApy(apr.toString().substr(0, 4))
+    props.setIsLPVault(false)
+    props.setIsRUSD(false)
+  }
 
   return (
     <div className="w-full mlg:max-w-[880px]">
@@ -359,85 +366,67 @@ export default function StakingVault(props) {
               <div className="flex flex-col justify-center p-0 gap-[16px] relative">
                 <div className="flex flex-row gap-[8px] hidden">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
-                    <img src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px]" alt="token pair" />
-                    <img src={smallicon} className="border-primary border-[6px]" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px]" alt="token pair" />
+                    <Image src={smallicon} className="border-primary border-[6px]" alt="" />
                   </div>
                   <div className={`text-[16px] leading-[28px] overflow-hidden text-ellipsis shrink-1 text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                     {props.title}
                   </div>
                   <div className="flex items-center p-0 shrink-0">
                     <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
-                      <img src={rotateBlue} alt="book" className="rotate" />
+                      <Image src={rotateBlue} alt="book" className="rotate" />
                       <span>Auto</span>
                     </div>
                     <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
-                      <img
-                        src={bscIcon}
-                        className="w-8 h-8"
-                      />
+                      <Image src={bscIcon} className="w-8 h-8" alt="" />
                     </div>
                     <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
-                      <img
-                        src={polygonIcon}
-                        className="w-8 h-8"
-                      />
+                      <Image src={polygonIcon} className="w-8 h-8" alt="" />
                     </div>
                     <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
-                      <img
-                        src={arbitrumIcon}
-                        className="w-8 h-8"
-                      />
+                      <Image src={arbitrumIcon} className="w-8 h-8" alt="" />
                     </div>
                   </div>
-                  {((chain?.id != 56) && (ccipTransactions > 0)) && (isConnected) && (
+                  {((chainId != 56) && (ccipTransactions > 0)) && (isConnected) && (
                     <a className="ml-auto mr-0 font-bold text-primary-700" href="/vaults/ccip-transactions">
                       View all CCIP Transactions
                     </a>
                   )}
                   <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
-                    <img src={details ? up : down}></img>
+                    <Image src={details ? up : down}  alt="" />
                   </button>
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
                   <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
-                    <img src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px]" alt="token pair" />
-                    <img src={smallicon} className="border-primary border-[6px]" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px]" alt="token pair" />
+                    <Image src={smallicon} className="border-primary border-[6px]" alt="" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {props.title}
                       <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
-                        <img src={details ? up : down}></img>
+                        <Image src={details ? up : down} alt="" />
                       </button>
                     </div>
                     <div className="p-0 flex items-center">
                       <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#3b98ee1f] text-[#3B98EE] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
-                        <img src={rotateBlue} alt="book" className="rotate" />
+                        <Image src={rotateBlue} alt="book" className="rotate" />
                         <span>Auto</span>
                       </div>
                       <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
-                        <img
-                          src={bscIcon}
-                          className="w-8 h-8"
-                        />
+                        <Image src={bscIcon} className="w-8 h-8" alt="" />
                       </div>
                       <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
-                        <img
-                          src={polygonIcon}
-                          className="w-8 h-8"
-                        />
+                        <Image src={polygonIcon} className="w-8 h-8" alt="" />
                       </div>
                       <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
-                        <img
-                          src={arbitrumIcon}
-                          className="w-8 h-8"
-                        />
+                        <Image src={arbitrumIcon} className="w-8 h-8" alt="" />
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="ccip-transaction md:absolute md:top-[20px] md:right-[10px]">
-                  {(chain?.id != 56) && (isConnected) && (
+                  {(chainId != 56) && (isConnected) && (
                     ccipLoading ?
 
                       <div className="flex items-center justify-center mb-2 flex-row">
@@ -448,7 +437,7 @@ export default function StakingVault(props) {
                       ccipPendingTransactions > 0 ? (
                         <div className="flex items-center justify-center mb-2">
                           <div className="hidden sm:flex flex-col bg-gray-200 rounded-full items-center justify-center mr-3 w-10 h-10 text-[0.5rem] font-bold">
-                            <img src={clockIcon} alt="Clock" className="h-3 w-3 mb-[0.1rem]" />
+                            <Image src={clockIcon} alt="Clock" className="h-3 w-3 mb-[0.1rem]" />
                             <Timer countTime={lastTransactionEstimateTime} />
                           </div>
                           <div className="flex flex-col">
@@ -486,25 +475,25 @@ export default function StakingVault(props) {
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(ethers.utils.formatEther(vaultBalance?.total?.toString() ?? 0))}</span>
+                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(formatEther(vaultBalance?.total?.toString() ?? 0))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APY</span>
                     <div className="calculator-container">
                       <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(apy?.toString() ?? 0) + "%"}</span>
                       <button onClick={() => openCalcModal()}>
-                        <img src={calc} alt="" />
+                        <Image src={calc} alt="" />
                       </button>
                     </div>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{chain?.id == 56 ? abbreviateNumber(ethers.utils.formatEther(vaultBalance.autoLandV3.toString())) : abbreviateNumber(ethers.utils.formatEther((ccipVaultBalance?.autoLandV3 ?? 0).toString()))}</span>
+                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{chainId == 56 ? abbreviateNumber(formatEther(vaultBalance.autoLandV3.toString())) : abbreviateNumber(formatEther((ccipVaultBalance?.autoLandV3 ?? 0).toString()))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                      {chain?.id != 56 ? ccipVaultBalance?.autoReward ?? 0 : vaultBalance?.autoReward ?? 0}</span>
+                      {chainId != 56 ? ccipVaultBalance?.autoReward ?? 0 : vaultBalance?.autoReward ?? 0}</span>
                   </div>
                 </div>
               </div>
@@ -559,7 +548,7 @@ export default function StakingVault(props) {
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
                             if (inputValue && Number(inputValue) > Number(0)) {
-                              if (chain?.id == 56) {
+                              if (chainId == 56) {
                                 depositing ? isApprovedLandStake ? depositHandler() : approveLS() : withdrawHandler()
                               } else {
                                 depositing ? depositHandler() : withdrawHandler()
@@ -572,7 +561,7 @@ export default function StakingVault(props) {
                         >
                           {
                             inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
-                              (chain?.id === 56 || chain?.id === 97) ? "Withdraw" : "Withdraw"
+                              (chainId === 56 || chainId === 97) ? "Withdraw" : "Withdraw"
                             )) : "Enter Amount"
                           }
                         </button>
@@ -593,12 +582,12 @@ export default function StakingVault(props) {
                   </div>
                   <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                     {details ? 'Hide' : 'Show'} Details
-                    <img src={details ? up : down} />
+                    <Image src={details ? up : down} alt="" />
                   </button>
                 </div>
               </div>
               <div className="w-full">
-                <Collapse in={details}>
+                <Collapse isOpen={details}>
                   <div className="collapse-desktop">
                     <Tabs
                       value={value}
@@ -654,7 +643,7 @@ export default function StakingVault(props) {
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className} ${isDepositing ? 'flex justify-center items-center' : ''}`}
                                 onClick={() => {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    if (chain?.id == 56) {
+                                    if (chainId == 56) {
                                       depositing ? isApprovedLandStake ? depositHandler() : approveLS() : withdrawHandler()
                                     } else {
                                       depositing ? depositHandler() : withdrawHandler()
@@ -682,7 +671,7 @@ export default function StakingVault(props) {
                                       </span>
                                     </>
                                   ) : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
-                                    (chain?.id === 56 || chain?.id === 97) ? "Withdraw" : "Withdraw"
+                                    (chainId === 56 || chainId === 97) ? "Withdraw" : "Withdraw"
                                   )) : "Enter Amount"}
 
                               </button>
@@ -691,7 +680,7 @@ export default function StakingVault(props) {
                                 onClick={() => claimBountyLS()}
                                 disabled={account == 'Not Connected'}
                               >
-                                {`Claim Bounty (${chain.id == 56 ? (ethers.utils.formatEther(bountyReward).substr(0, 6)) : (ethers.utils.formatEther(ccipBountyReward).substr(0, 6))} LAND)`}
+                                {`Claim Bounty (${chainId == 56 ? (formatEther(bountyReward).substr(0, 6)) : (formatEther(ccipBountyReward).substr(0, 6))} LAND)`}
                               </button>
                             </>
                           )
@@ -703,7 +692,7 @@ export default function StakingVault(props) {
                   <div className="flex items-start p-0 gap-[8px] w-full rounded-[12px] bg-primary dark:bg-secondary mt-[24px]" style={{ marginTop: "24px" }}>
                     <div className="flex w-full flex-col items-center justify-center p-[16px]">
                       <div className="w-8 h-8 rounded-full bg-third">
-                        <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"><img className="sub-container-image" src={viewContract} alt="" /></a>
+                        <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"><Image className="sub-container-image" src={viewContract} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
                         <span><a href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens">Vault Guide</a></span>
@@ -716,10 +705,10 @@ export default function StakingVault(props) {
                       </div>
                     </div>
                     <div className="flex w-full flex-col items-center justify-center p-[16px]">
-                      {chain?.id == 137 ? (
+                      {chainId == 137 ? (
                         <>
                           <div className="w-8 h-8 rounded-full bg-third">
-                            <a href="https://quickswap.exchange/#/swap?currency0=ETH&currency1=0xC03E6ad83dE7C58c9166fF08D66B960d78e64105&swapIndex=0"><img className="w-[32px] h-[32px]" src={quickSwap} alt="" /></a>
+                            <a href="https://quickswap.exchange/#/swap?currency0=ETH&currency1=0xC03E6ad83dE7C58c9166fF08D66B960d78e64105&swapIndex=0"><Image className="w-[32px] h-[32px]" src={quickSwap} alt="" /></a>
                           </div>
                           <div className="flex flex-col mt-[8px] items-center text-text-primary">
                             <span><a href="https://quickswap.exchange/#/swap?currency0=ETH&currency1=0xC03E6ad83dE7C58c9166fF08D66B960d78e64105&swapIndex=0">Buy on Quickswap</a></span>
@@ -734,7 +723,7 @@ export default function StakingVault(props) {
                       ) : (
                         <>
                           <div className="w-8 h-8 rounded-full bg-third">
-                            <a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"><img className="w-[32px] h-[32px] p-[6px]" src={pcsBunny} alt="" /></a>
+                            <a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"><Image className="w-[32px] h-[32px] p-[6px]" src={pcsBunny} alt="" /></a>
                           </div>
                           <div className="flex flex-col mt-[8px] items-center text-text-primary">
                             <span><a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C">Get LAND Token</a></span>
