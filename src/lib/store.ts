@@ -1,5 +1,6 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
+import { APIConsumerCcipTransactionsSlice } from "./slices/contract-slices/APIConsumerCcipTransactions";
 import { apiConsumerContractSlice } from "./slices/contract-slices/APIConsumerContractSlice";
 import { firebasePropertiesRentalSlice } from "./slices/firebase-slices/properties-rental";
 import { firebaseFinancialLogsSlice } from "./slices/firebase-slices/financial-logs";
@@ -9,7 +10,8 @@ import { firebaseFinancialLogsSlice } from "./slices/firebase-slices/financial-l
 const rootReducer = combineSlices(
   apiConsumerContractSlice,
   firebasePropertiesRentalSlice,
-  firebaseFinancialLogsSlice
+  firebaseFinancialLogsSlice,
+  APIConsumerCcipTransactionsSlice
 );
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
