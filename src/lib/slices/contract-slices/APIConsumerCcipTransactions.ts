@@ -7,7 +7,7 @@ import { fetchLastPendingCcipTransaction } from "./APIs/fetchLastPendingCcipTran
 
 export interface CCIPTransactionSliceState {
   ccipTransactions: number;
-  ccipPendingTransactions: any[];
+  ccipPendingTransactions: number;
   lastPendingCcipTransaction: any;
   coolDownTime: number
   isLoading: boolean;
@@ -15,7 +15,7 @@ export interface CCIPTransactionSliceState {
 
 const initialState: CCIPTransactionSliceState = {
   ccipTransactions: 0,
-  ccipPendingTransactions: [],
+  ccipPendingTransactions: 0,
   lastPendingCcipTransaction: {},
   coolDownTime: 0,
   isLoading: false,
@@ -27,15 +27,15 @@ export const APIConsumerCcipTransactionsSlice = createAppSlice({
   reducers: (create) => ({
     getTransactions: create.asyncThunk(
       async (address: Address | undefined) => {
-        if (!address) return {
+        if (typeof address == 'undefined') return {
           coolDownTime: 0,
           ccipTransactions: 0,
-          ccipPendingTransactions: [],
+          ccipPendingTransactions: 0,
           lastPendingCcipTransaction: {}
         }
 
         const ccipTransactions = await fetchCcipTransactionsCount(address) as number;
-        const ccipPendingTransactions = await fetchPendingCcipTransactions(address) as any[];
+        const ccipPendingTransactions = await fetchPendingCcipTransactions(address) as number;
         const lastPendingCcipTransaction = await fetchLastPendingCcipTransaction(address) as any;
         const coolDownTime = new Date(lastPendingCcipTransaction.createDateTime).getTime() + lastPendingCcipTransaction.estimateTime - new Date().getTime()
 
