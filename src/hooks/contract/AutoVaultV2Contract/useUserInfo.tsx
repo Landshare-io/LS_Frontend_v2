@@ -17,10 +17,11 @@ export default function useUserInfo({ address }: UseUserInfoProps) {
     chainId: bsc.id
   })
 
-  if (isLoading) return { data: [0, 0], refetch, isLoading }
+  if (typeof address == 'undefined') return { data: [0, 0, 0, 0], refetch, isLoading }
+  if (isLoading) return { data: [0, 0, 0, 0], refetch, isLoading }
   if (isError) {
     console.log('Fetching autoVaultv3 userInfo error', error)
-    return { data: [0, 0], refetch, isLoading: false }
+    return { data: [0, 0, 0, 0], refetch, isLoading: false }
   }
 
   return { data, refetch, isLoading }

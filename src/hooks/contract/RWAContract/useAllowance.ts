@@ -13,6 +13,7 @@ export default function useAllowance(address: Address | undefined, spender: Addr
     args: [address, spender]
   })
 
+  if (typeof address == 'undefined') return { data: 0, refetch }
   if (isLoading) return {
     data: 0,
     refetch

@@ -13,15 +13,18 @@ export default function useGetSaleLimit(address: Address | undefined) {
     args: [address]
   })
 
+  if (typeof address == 'undefined') return { data: [0, 0, 0], refetch, isLoading }
   if (isLoading) return {
     data: [0, 0, 0],
-    refetch
+    refetch, 
+    isLoading
   }
   if (isError) {
     console.log('Fetching LandshareSaleContract getSaleLimit error', error)
     return {
       data: [0, 0, 0],
-      refetch
+      refetch, 
+      isLoading
     }
   }
 

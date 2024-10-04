@@ -12,6 +12,7 @@ export default function useAllowance(chainId: number, address: Address | undefin
     args: [address, spender]
   })
 
+  if (typeof address == 'undefined') return 0
   if (isLoading) return 0
   if (isError) {
     console.log('Fetching LandTokenContract allowance error', error)

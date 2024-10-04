@@ -12,6 +12,7 @@ export default function useAllowance(chainId: number, address: Address | undefin
     args: [address, spender]
   })
 
+  if (typeof address == 'undefined') return { data: 0, refetch }
   if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching UsdcContract allowance error', error)

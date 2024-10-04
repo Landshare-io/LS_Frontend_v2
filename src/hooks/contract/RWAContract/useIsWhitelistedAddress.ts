@@ -13,6 +13,7 @@ export default function useIsWhitelistedAddress(address: Address | undefined) {
     args: [address]
   })
 
+  if (typeof address == 'undefined') return false
   if (isLoading) return false
   if (isError) {
     console.log('Fetching RWAContract isWhitelistedAddress error', error)
