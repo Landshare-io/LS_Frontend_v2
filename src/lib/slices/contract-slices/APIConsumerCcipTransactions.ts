@@ -3,6 +3,7 @@ import { createAppSlice } from "../../createAppSlice";
 import { fetchCcipTransactionsCount } from "./APIs/fetchCcipTransactionsCount";
 import { fetchPendingCcipTransactions } from "./APIs/fetchPendingCcipTransactions";
 import { fetchLastPendingCcipTransaction } from "./APIs/fetchLastPendingCcipTransaction";
+import { updateCcipTransaction as updateTransaction } from "./APIs/updateCcipTransaction";
 
 
 export interface CCIPTransactionSliceState {
@@ -62,6 +63,33 @@ export const APIConsumerCcipTransactionsSlice = createAppSlice({
         },
       },
     ),
+    updateCcipTransaction: create.asyncThunk(
+      async (data: any) => {
+        const transactionData = await updateTransaction(data)
+        const lastPendingCcipTransaction = await fetchLastPendingCcipTransaction(data.walletAddress) as any;
+        const coolDownTime = new Date(lastPendingCcipTransaction.createDateTime).getTime() + lastPendingCcipTransaction.estimateTime - new Date().getTime()
+
+        return {
+          lastPendingCcipTransaction: transactionData,
+          coolDownTime
+        }
+      },
+      {
+        pending: (state) => {
+          state.isLoading = true;
+        },
+        fulfilled: (state, action) => {
+          state.isLoading = false;
+          state.coolDownTime = action.payload.coolDownTime;
+          state.ccipTransactions = state.ccipTransactions + 1;
+          state.ccipPendingTransactions = state.ccipPendingTransactions + 1;
+          state.lastPendingCcipTransaction = action.payload.lastPendingCcipTransaction;
+        },
+        rejected: (state) => {
+          state.isLoading = false;
+        },
+      },
+    )
   }),
   selectors: {
     selectIsLoading: (state) => state.isLoading,
@@ -72,7 +100,7 @@ export const APIConsumerCcipTransactionsSlice = createAppSlice({
   },
 });
 
-export const { getTransactions } =
+export const { getTransactions, updateCcipTransaction } =
 APIConsumerCcipTransactionsSlice.actions;
 
 export const { 
