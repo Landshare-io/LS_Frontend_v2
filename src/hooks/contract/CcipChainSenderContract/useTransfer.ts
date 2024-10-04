@@ -18,7 +18,7 @@ export default function useTransfer() {
     writeContract
   } = useWriteContract();
 
-  async function transfer(chainId: number, amount: BigNumberish) {
+  async function transfer(chainId: number, amount: BigNumberish, action: number, feeNumber: number, feeAmount: number) {
     const { request } = await simulateContract(config, {
       address: CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId],
       abi: CrossChainSenderAbi,
@@ -28,9 +28,9 @@ export default function useTransfer() {
         CCIP_CHAIN_ID[56],
         CCIP_CHAIN_RECEIVER[56],
         amount,
-        0,
-        0,
-        500000,
+        action,
+        feeNumber,
+        feeAmount,
       ],
       chainOverride: {
         value: GAS_COSTS[chainId],
