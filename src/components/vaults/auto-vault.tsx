@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { formatEther, parseEther } from "ethers";
-import { useChainId } from "wagmi";
+import { BigNumberish, formatEther, parseEther } from "ethers";
+import { useChainId, useAccount } from "wagmi";
 import Collapse from "../common/collapse";
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import ReactLoading from "react-loading";
 import { useVaultsContext } from "../../contexts/VaultsContext";
 import { useGlobalContext } from "../../contexts/GlobalContext";
@@ -38,19 +36,38 @@ import "./styles.css"
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import Image from "next/image";
 
+import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
+import useAutoLandV3 from "../../hooks/contract/AutoVaultV2Contract/useAutoLandV3";
+
+
+import { 
+  getTransactions,
+  selectIsLoading,
+  selectCoolDownTime,
+  selectCcipTransactionCounts, 
+  selectCcipPendingTransactions, 
+  selectLastPendingCcipTransaction 
+} from '../../lib/slices/contract-slices/APIConsumerCcipTransactions';
+
 export default function StakingVault(props) {
   const chainId = useChainId();
+  const { isConnected, address } = useAccount();
   const { theme } = useGlobalContext();
+
+  const { data: lpTokenV2Balance } = useBalanceOfLpTokenV2({ address }) as { data: BigNumberish }
+  const vaultBalance = useAutoLandV3(address) as {
+    total: BigNumberish,
+    autoLandV3: BigNumberish
+  }
+  const isVaultsLoading = false // need to update
   const {
     startTransaction,
     endTransaction,
     transactionResult
   } = useLandshareFunctions();
   const {
-    isVaultsLoading,
     apr,
     apy,
-    vaultBalance,
     ccipVaultBalance,
     bountyReward,
     ccipBountyReward,
@@ -58,11 +75,7 @@ export default function StakingVault(props) {
   } = useVaultsContext();
   const { contract: { ccipChainEthSenderContract } } = useLandshareV2Context()
   const {
-    balance,
-    isConnected,
     landTokenV2Contract,
-    account,
-    notifySuccess,
     notifyError,
     updateLandTokenV2Balance
   } = useGlobalContext();
@@ -90,7 +103,6 @@ export default function StakingVault(props) {
     startTransaction,
     transactionResult
   })
-  const [value, setValue] = useState('deposit');
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
   const [depositing, setDepositing] = useState(true)
@@ -107,10 +119,10 @@ export default function StakingVault(props) {
 
   async function updateCCIP() {
     if (chainId != 56 && isConnected) {
-      const { data } = await ccipAxios.get(`/ccip-transaction/count/${account}`)
+      const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
       setCcipTransactions(data.data)
-      const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${account}`)
-      const { data: lastTxId } = await ccipAxios.get(`/ccip-transaction/get-last-pending-tx/${account}`)
+      const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
+      const { data: lastTxId } = await ccipAxios.get(`/ccip-transaction/get-last-pending-tx/${address}`)
       setCcipPendingTransactions(pendingData)
       console.log('==========================lastTxId,', lastTxId)
       const coolTimeTime = new Date(lastTxId.createDateTime).getTime() + lastTxId.estimateTime - new Date().getTime()
@@ -128,10 +140,10 @@ export default function StakingVault(props) {
     (async () => {
       if (chainId != 56 && isConnected) {
         setCCIPLoading(true)
-        const { data } = await ccipAxios.get(`/ccip-transaction/count/${account}`)
+        const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
         setCcipTransactions(data.data)
-        const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${account}`)
-        const { data: lastTxId } = await ccipAxios.get(`/ccip-transaction/get-last-pending-tx/${account}`)
+        const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
+        const { data: lastTxId } = await ccipAxios.get(`/ccip-transaction/get-last-pending-tx/${address}`)
         setCcipPendingTransactions(pendingData)
         console.log('==========================lastTxId,', lastTxId)
         const coolTimeTime = new Date(lastTxId.createDateTime).getTime() + lastTxId.estimateTime - new Date().getTime()
@@ -146,17 +158,12 @@ export default function StakingVault(props) {
     }, 60000);
 
     return () => clearInterval(intervalCcipUpdate);
-  }, [chainId, account])
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    setDepositing(newValue === "deposit" ? true : false)
-  };
+  }, [chainId, address])
 
 
   function handlePercents(percent) {
     if (depositing) {
-      const bal = balance.landTokenV2.mul(percent).div(100)
+      const bal = lpTokenV2Balance.mul(percent).div(100)
       setInputValue(formatEther(bal))
     } else {
       const bal = chainId == 56 ? vaultBalance.autoLandV3.mul(percent).div(100) : ccipStakeAuto.mul(percent).div(100)
@@ -197,7 +204,7 @@ export default function StakingVault(props) {
       setIsDepositing(true)
       if (chainId != 56) {
         const allowance = await landTokenV2Contract.allowance(
-          account,
+          address,
           process.env.REACT_APP_IS_CCIP_TESTING == 'true' ? CCIP_CHAIN_SENDER_ADDRESS[chainId ?? 11155111] : CCIP_CHAIN_SENDER_ADDRESS[chainId]
         )
 
@@ -206,7 +213,7 @@ export default function StakingVault(props) {
             ethers.BigNumber.from(amountLS)
           )
         ) {
-          await depositCcip(account, amountLS, chain);
+          await depositCcip(address, amountLS, chain);
         } else {
           const transaction = await landTokenV2Contract.approve(
             process.env.REACT_APP_IS_CCIP_TESTING == 'true' ? CCIP_CHAIN_SENDER_ADDRESS[chainId ?? 11155111] : CCIP_CHAIN_SENDER_ADDRESS[chainId],
@@ -215,11 +222,11 @@ export default function StakingVault(props) {
 
           const receipt = await transaction.wait()
           if (receipt.status) {
-            await depositCcip(account, amountLS, chain);
+            await depositCcip(address, amountLS, chain);
           }
         }
-        const { data } = await ccipAxios.get(`/ccip-transaction/count/${account}`)
-        const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${account}`)
+        const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
+        const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
 
         updateCCIP()
         setIsDepositing(false)
@@ -259,9 +266,9 @@ export default function StakingVault(props) {
     setInputValue("");
     if (inputValue === formatEther(chainId != 56 ? ccipStakeAuto ?? 0 : vaultBalance.autoLandV3)) {
       if (chainId != 56) {
-        await withdrawCcipAll(account, chain)
-        const { data } = await ccipAxios.get(`/ccip-transaction/count/${account}`)
-        const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${account}`)
+        await withdrawCcipAll(address, chain)
+        const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
+        const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
 
         updateCCIP()
 
@@ -271,9 +278,9 @@ export default function StakingVault(props) {
       }
     } else {
       if (chainId != 56) {
-        await withdrawCcip(account, amountLS, chain)
-        const { data } = await ccipAxios.get(`/ccip-transaction/count/${account}`)
-        const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${account}`)
+        await withdrawCcip(address, amountLS, chain)
+        const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
+        const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
 
         updateCCIP()
 
@@ -285,22 +292,22 @@ export default function StakingVault(props) {
 
   async function updateStatus() {
     try {
-      if (!isConnected || !account) return
+      if (!isConnected || typeof address == 'undefined') return
       if (chainId != 56 ? ccipStakeAuto ?? 0 : vaultBalance.autoLandV3) {
         SetWithdrawable(
           Number(inputValue) <=
           Number(formatEther(chainId != 56 ? ccipStakeAuto ?? 0 : vaultBalance.autoLandV3))
         );
       }
-      if (balance.landTokenV2) {
+      if (lpTokenV2Balance) {
         SetDepositable(
-          Number(formatEther(balance.landTokenV2)) >=
+          Number(formatEther(lpTokenV2Balance)) >=
           Number(inputValue)
         );
       }
 
       const approvedLAND = await landTokenV2Contract.allowance(
-        account,
+        address,
         process.env.REACT_APP_AUTOLANDV3
       );
       const approvedLANDETH = formatEther(approvedLAND);
@@ -499,22 +506,20 @@ export default function StakingVault(props) {
               </div>
 
               <div className="block md:hidden">
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  TabIndicatorProps={{
-                    sx: {
-                      bgcolor: "#61CD81",
-                      height: "1px"
-                    }
-                  }}
-                  className="deposit-withdraw"
-                  aria-label="secondary tabs example"
-                  style={{ width: "100%", marginTop: 20 }}
-                >
-                  <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="deposit" label="Deposit" />
-                  <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="withdraw" label="Withdraw" />
-                </Tabs>
+                <div className="bg-[#61CD81] h-[1px] w-full mt-[20px]">
+                  <div 
+                    className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                    onClick={() => setDepositing(true)}
+                  >
+                    Deposit
+                  </div>
+                  <div 
+                    className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                    onClick={() => setDepositing(false)}
+                  >
+                    Withdraw
+                  </div>
+                </div>
                 <div className="flex flex-col justify-center items-end pt-[12px] pb-[24px] gap-[12px]">
                   <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
                   <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
@@ -542,7 +547,7 @@ export default function StakingVault(props) {
                 <div className="flex flex-col items-center p-0 gap-[24px] w-full">
                   <div className="flex gap-[12px] w-full flex-col md:flex-row">
 
-                    {(account != 'Not Connected') ? (
+                    {(typeof address !== 'undefined') ? (
                       <>
                         <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
@@ -557,7 +562,7 @@ export default function StakingVault(props) {
                               notifyError('Please enter an amount')
                             }
                           }}
-                          disabled={(account == 'Not Connected') || depositing && !isDepositable || !depositing && !isWithdrawable}
+                          disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable}
                         >
                           {
                             inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
@@ -567,7 +572,7 @@ export default function StakingVault(props) {
                         </button>
                         <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`} onClick={() => withdrawLS2(0)}
-                          disabled={account == 'Not Connected'}
+                          disabled={typeof address == 'undefined'}
                         >
                           Harvest
                         </button>
@@ -589,23 +594,20 @@ export default function StakingVault(props) {
               <div className="w-full">
                 <Collapse isOpen={details}>
                   <div className="collapse-desktop">
-                    <Tabs
-                      value={value}
-                      onChange={handleChange}
-                      textColor="secondary"
-                      TabIndicatorProps={{
-                        sx: {
-                          bgcolor: "#61CD81",
-                          height: "1px"
-                        }
-                      }}
-                      className="deposit-withdraw"
-                      aria-label="secondary tabs example"
-                      style={{ width: "100%", marginTop: 20 }}
-                    >
-                      <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="deposit" label="Deposit" />
-                      <Tab style={{ flex: 1, color: theme == 'dark' ? "#cacaca" : "#0A1339", width: "100%", maxWidth: "1000px" }} value="withdraw" label="Withdraw" />
-                    </Tabs>
+                    <div className="bg-[#61CD81] h-[1px] w-full mt-[20px]">
+                      <div 
+                        className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                        onClick={() => setDepositing(true)}
+                      >
+                        Deposit
+                      </div>
+                      <div 
+                        className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                        onClick={() => setDepositing(false)}
+                      >
+                        Withdraw
+                      </div>
+                    </div>
                     <div className="flex flex-col justify-center items-end pt-[12px] pb-[24px] gap-[12px]">
                       <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
                       <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
@@ -634,7 +636,7 @@ export default function StakingVault(props) {
                     </div>
                     <div className="flex flex-col items-center p-0 gap-[24px] w-full">
                       <div className="flex gap-[12px] w-full flex-col md:flex-row justify-center">
-                        {(account == 'Not Connected') ?
+                        {(typeof address == 'undefined') ?
                           (
                             <ConnectWallet style={{ width: "300px" }} />
                           ) : (
@@ -653,10 +655,10 @@ export default function StakingVault(props) {
                                   }
                                 }}
                                 style={{ width: "100%", maxWidth: "1000px" }}
-                                disabled={(account == 'Not Connected') || depositing && !isDepositable || !depositing && !isWithdrawable || isDepositing}
+                                disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable || isDepositing}
                               >
                                 {
-                                  // (account == 'Not Connected') ?
+                                  // (typeof address == 'undefined') ?
                                   //   "Connect Wallet" :
                                   isDepositing ? (
                                     <>
@@ -678,7 +680,7 @@ export default function StakingVault(props) {
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => claimBountyLS()}
-                                disabled={account == 'Not Connected'}
+                                disabled={typeof address == 'undefined'}
                               >
                                 {`Claim Bounty (${chainId == 56 ? (formatEther(bountyReward).substr(0, 6)) : (formatEther(ccipBountyReward).substr(0, 6))} LAND)`}
                               </button>
