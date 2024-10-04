@@ -4,7 +4,7 @@ import MasterchefAbi from '../../abis/Masterchef.json';
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../config/constants/environments";
 import { toBigInt } from "ethers";
 
-export default function useLandPerBlock() {
+export default function useGetApr() {
   const { data, isError, isLoading, error } = useReadContracts({
     contracts: [
       {

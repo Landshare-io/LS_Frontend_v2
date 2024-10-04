@@ -26,7 +26,14 @@ export const APIConsumerCcipTransactionsSlice = createAppSlice({
   initialState,
   reducers: (create) => ({
     getTransactions: create.asyncThunk(
-      async (address: Address) => {
+      async (address: Address | undefined) => {
+        if (!address) return {
+          coolDownTime: 0,
+          ccipTransactions: 0,
+          ccipPendingTransactions: [],
+          lastPendingCcipTransaction: {}
+        }
+
         const ccipTransactions = await fetchCcipTransactionsCount(address) as number;
         const ccipPendingTransactions = await fetchPendingCcipTransactions(address) as any[];
         const lastPendingCcipTransaction = await fetchLastPendingCcipTransaction(address) as any;
