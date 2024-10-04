@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import Head from 'next/head';
-import Collapse from "../components/common/collapse";
 import { useChainId } from "wagmi"
 import numeral from "numeral"
+import Image from "next/image";
 import { BigNumberish } from "ethers";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-
-import LandshareVaultsProvider from "../../contexts/VaultsContext";
-import { Modal } from "../common/modal/index";
-import Breadcrumb from "../re-usable/Breadcrumb";
-import ManualVaultComponent from "./ManualVaultComponent.jsx"
-import AutoVaultComponent from "./AutoVaultComponent.jsx"
-import LPVaultComponent from "./LPVaultComponent.jsx"
-import Footer from "../Footer";
+import Slider from 'react-slick';
+import Carousel from "../components/common/carousel";
+import Collapse from "../components/common/collapse";
+import ReactModal from "react-modal";
+import Breadcrumb from "../components/common/breadcrumb";
+import ManualVault from "../components/vaults/manual-vault";
+import AutoVault from "../components/vaults/auto-vault";
+import LPVault from "../components/vaults/lp-vault";
+import Usdtvault from "../components/vaults/usdt-vault";
+import { useGlobalContext } from "../context/GlobalContext";
+import { supportChainIds } from "../wagmi";
+import useGetPrice from "../hooks/get-apy/useGetPrice";
+import { BOLD_INTER_TIGHT } from "../config/constants/environments";
 import coinStack from "../../assets/img/new/coin-stack-sm.svg"
 import tabIcon3 from "../../assets/img/new/tab-icon3.svg"
 import tabIcon4 from "../../assets/img/new/tether.svg"
@@ -22,17 +27,6 @@ import CloseIcon from "../../assets/img/icons/close.svg";
 import CloseIconDark from "../../assets/img/icons/close-dark.svg";
 import leftRight from "../../assets/img/new/left-right.svg";
 import IconArrowUpDown from "../../assets/img/new/arrow-up-down.svg";
-import down from "../../assets/img/icons/Down.svg";
-import up from "../../assets/img/new/arrow-up.svg";
-import "./styles.css"
-import UsdtvaultComponent from "./UsdtVaultComponent.jsx";
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import { useGlobalContext } from "../../contexts/GlobalContext";
-
-import useGetReserves from "../hooks/contract/BNBApePairContract/useGetReserves";
-import useGetReservesPair from "../hooks/contract/PancakePairContract/useGetReserves";
 
 const breadcrumbItems = [
   {
@@ -47,13 +41,7 @@ const breadcrumbItems = [
 
 export default function StakingPage() {
   const { theme } = useGlobalContext();
-  const reservesBNB = useGetReserves() as BigNumberish[];
-  const resercesToken = useGetReservesPair() as BigNumberish[];
-  const bnb = reservesBNB ? BigInt(reservesBNB[1]) / BigInt(reservesBNB[0]) : 0;
-  const coin = resercesToken ? BigInt(resercesToken[1]) / BigInt(resercesToken[0]) : 0;
-  const price = Number(bnb) * Number(coin)
-
-
+  const { price } = useGetPrice()
 
   const [selectedVault, useSelectedVault] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -68,16 +56,28 @@ export default function StakingPage() {
   const [rewardPercent, setRewardPercent] = useState(0)
   const [isLPVault, setIsLPVault] = useState(false)
   const [isRUSD, setIsRUSD] = useState(false)
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const handleSlider = (index) => {
-    setCurrentIndex(index);
+
+  const customModalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      maxWidth: "400px",
+      width: "90%",
+      height: "fit-content",
+      borderRadius: "20px"
+    },
+    overlay: {
+      background: '#00000080'
+    }
   };
 
-  const chainId = useChainId()
 
-  function handleClick(tab) {
+  const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
+
+  function handleClick(tab: number) {
     useSelectedVault(tab)
-    console.log("price: " + price)
   }
   const sliderSettings = {
     dots: true,
@@ -111,19 +111,6 @@ export default function StakingPage() {
  
   ];
 
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth <= 885);
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   useEffect(() => {
     if (chainId !== 56) {
       useSelectedVault(1)
@@ -137,18 +124,18 @@ export default function StakingPage() {
   }, [showModal]);
 
   useEffect(() => {
-    setRewardPercent(numeral(showModalApy).format('0.[00000]'))
+    setRewardPercent(Number(numeral(showModalApy).format('0.[00000]')))
   }, [showModalApy]);
 
   useEffect(() => {
     if (isShowUsdPrice) {
-      setUsdAmount(roiInputCalculValue)
-      setTokenAmount(roiInputCalculValue / tokenUsdPrice)
+      setUsdAmount(Number(roiInputCalculValue))
+      setTokenAmount(Number(roiInputCalculValue) / tokenUsdPrice)
     } else {
-      setTokenAmount(roiInputCalculValue)
-      setUsdAmount(roiInputCalculValue * tokenUsdPrice)
+      setTokenAmount(Number(roiInputCalculValue))
+      setUsdAmount(Number(roiInputCalculValue) * tokenUsdPrice)
     }
-    setRewardPercent(numeral(showModalApy).format('0.[00000]'))
+    setRewardPercent(Number(numeral(showModalApy).format('0.[00000]')))
   }, [roiInputCalculValue, isShowUsdPrice]);
 
 
@@ -163,56 +150,29 @@ export default function StakingPage() {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <div className="bg-primary breadcrumb-container">
-        <div className="section-set-max-container">
+      <div className="bg-primary pt-[41px] pb-[25px] px-[20px] lg:px-[120px]">
+        <div className="max-w-[1200px] m-auto">
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
-      {chain?.unsupported && (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
+      {supportChainIds.includes(chainId) && (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
         Chain not Supported
       </div>)}
-      <div className="bg-primary section-container less-padding pt-0">
-        <div className="section-content section-set-max-container vault-header-content">
-          <div className="liquidity-token bg-secondary">
-            <div className="coin-icon-container bg-primary">
-              <img src={coinStack} alt="" />
+      <div className="bg-primary py-[20px] px-[20px] md:py-[80px] md:px-[40px] lg:px-[120px] pt-0">
+        <div className="flex flex-col md:flex-row items-start md:justify-between md:items-center max-w-[1200px] m-auto">
+          <div className="flex items-center m-auto py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-secondary">
+            <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-primary">
+              <Image src={coinStack} alt="" />
             </div>
-            <span className="feature-btn-text text-text-primary">LAND Staking</span>
+            <span className="text-[14px] leading-[22px] tracking-[0.02em] font-medium text-text-primary">LAND Staking</span>
           </div>
-          <h1 className="vault-header-title text-text-primary">Vaults</h1>
-          <p className="vault-header-title-description">
+          <h1 className={`text-[54px] leading-[68px] m-auto p-0 text-text-primary ${BOLD_INTER_TIGHT.className}`}>Vaults</h1>
+          <p className="text-center text-[18px] leading-[27px] tracking-[0.02em] text-[#7c7c80]">
             Earn Rewards for Staking in our DeFi Vaults
           </p>
         </div>
-        <div className="section-content section-set-max-container vaults-cards-section">
-          {isSmallScreen ? (
-            <div className="tabs-container">
-              {/*<button className={selectedVault === 0 ? 'active-tab' : 'bg-secondary inactive-tab'} onClick={() => handleClick(0)}>
-                <div className="w-7 h-7 p-[1px] bg-primary rounded-full">
-                  <img src={tabBook} className="w-full h-full" alt="" />
-                </div>
-                <span>LAND Token Staking</span>
-
-              </button>
-              <button className={selectedVault === 1 ? 'active-tab' : 'bg-secondary inactive-tab'} onClick={() => handleClick(1)}>
-                <div className="w-7 h-7 p-[1px] bg-primary rounded-full">
-                  <img src={rotateBlue} className="w-full h-full" alt="" />
-                </div>
-                <span>Auto LAND Staking</span>
-
-              </button>
-              <button className={selectedVault === 2 ? 'active-tab' : 'bg-secondary inactive-tab'} onClick={() => handleClick(2)}>
-                <div className="w-7 h-7 p-1 bg-primary rounded-full">
-                  <img src={tabIcon3} alt="" />
-                </div>
-                <span>LAND-BNB LP Staking</span>
-              </button>
-              <button className={selectedVault === 3 ? 'active-tab' : 'bg-secondary inactive-tab'} onClick={() => handleClick(3)}>
-                <div className="w-7 h-7 p-1 bg-primary rounded-full">
-                  <img src={tabIcon4} alt="" />
-                </div>
-                <span>LSRWA-USDT LP Staking</span>
-              </button>*/}
+        <div className="flex flex-col items-start md:justify-between md:items-center max-w-[1200px] m-auto w-full gap-[24px] mt-[32px] lg:grid lg:grid-cols-[minmax(378.66px,max-content),minmax(378.66px,max-content)] xl:flex xl:justify-center xl:gap-[32px] xl:gap-y-[32px]">
+            <div className="flex md:hidden justify-between p-0 h-[132px] w-full gap-[20px] mb-[20px]">
               <Slider {...sliderSettings} centerPadding="10px" className="w-full">
                 {vaults.map((vault) => (
                   <div key={vault.index}>
@@ -221,7 +181,7 @@ export default function StakingPage() {
                       onClick={() => handleClick(vault.index)}
                     >
                       <div className="w-7 h-7 p-[1px] bg-primary rounded-full">
-                        <img src={vault.icon} className="w-full h-full" alt="" />
+                        <Image src={vault.icon} className="w-full h-full" alt="" />
                       </div>
                       <span>{vault.label}</span>
                     </button>
@@ -229,91 +189,88 @@ export default function StakingPage() {
                 ))}
               </Slider>
             </div>
-
-          ) : null}
-          <LandshareVaultsProvider>
-            {isSmallScreen ?
-
-              (selectedVault === 0 ?
-                <ManualVaultComponent
-                  title={"LAND Token Staking"}
+          <div className="flex md:hidden">
+            {(selectedVault === 0 ?
+              <ManualVault
+                title="LAND Token Staking"
+                setShowModal={setShowModal}
+                setIsLPVault={setIsLPVault}
+                setIsRUSD={setIsRUSD}
+                setTokenUsdPrice={setTokenUsdPrice}
+              /> :
+              selectedVault === 1 ?
+                <AutoVault
+                  title={"Auto LAND Staking"}
                   setShowModal={setShowModal}
                   setShowModalApy={setShowModalApy}
                   setTokenUsdPrice={setTokenUsdPrice}
                   setIsLPVault={setIsLPVault}
                   setIsRUSD={setIsRUSD}
-                /> :
-                selectedVault === 1 ?
-                  <AutoVaultComponent
-                    title={"Auto LAND Staking"}
+                /> : selectedVault === 2 ?
+                  <LPVault
+                    title={"LAND-BNB LP"}
+                    setShowModal={setShowModal}
+                    setShowModalApy={setShowModalApy}
+                    setTokenUsdPrice={setTokenUsdPrice}
+                    setIsLPVault={setIsLPVault}
+                  /> :
+                  <Usdtvault
+                    title={"LSRWA-USDT LP"}
                     setShowModal={setShowModal}
                     setShowModalApy={setShowModalApy}
                     setTokenUsdPrice={setTokenUsdPrice}
                     setIsLPVault={setIsLPVault}
                     setIsRUSD={setIsRUSD}
-                  /> : selectedVault === 2 ?
-                    <LPVaultComponent
-                      title={"LAND-BNB LP"}
-                      setShowModal={setShowModal}
-                      setShowModalApy={setShowModalApy}
-                      setTokenUsdPrice={setTokenUsdPrice}
-                      setIsLPVault={setIsLPVault}
-                      setIsRUSD={setIsRUSD}
-                    /> :
-                    <UsdtvaultComponent
-                      title={"LSRWA-USDT LP"}
-                      setShowModal={setShowModal}
-                      setShowModalApy={setShowModalApy}
-                      setTokenUsdPrice={setTokenUsdPrice}
-                      setIsLPVault={setIsLPVault}
-                      setIsRUSD={setIsRUSD}
-                    />
-              ) :
-              (<>
+                  />
+            )}
+          </div>
+              {(<>
                 {chainId == 56 || chainId == 97 ? (
                   <>
-                    <ManualVaultComponent
-                      title={"LAND Token Staking"}
+                    <ManualVault
+                      title="LAND Token Staking"
                       setShowModal={setShowModal}
-                      setShowModalApy={setShowModalApy}
-                      setTokenUsdPrice={setTokenUsdPrice}
                       setIsLPVault={setIsLPVault}
+                      setIsRUSD={setIsRUSD}
+                      setTokenUsdPrice={setTokenUsdPrice}
                     />
-                    <AutoVaultComponent
+                    <AutoVault
                       title={"Auto LAND Staking"}
                       setShowModal={setShowModal}
                       setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                       setIsLPVault={setIsLPVault}
+                      setIsRUSD={setIsRUSD}
                     />
                   </>
                 ) : (
                   <>
-                    <AutoVaultComponent
+                    <AutoVault
                       title={"Auto LAND Staking"}
                       setShowModal={setShowModal}
                       setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                       setIsLPVault={setIsLPVault}
+                      setIsRUSD={setIsRUSD}
                     />
-                    <ManualVaultComponent
-                      title={"LAND Token Staking"}
+                    <ManualVault
+                      title="LAND Token Staking"
                       setShowModal={setShowModal}
-                      setShowModalApy={setShowModalApy}
-                      setTokenUsdPrice={setTokenUsdPrice}
                       setIsLPVault={setIsLPVault}
+                      setIsRUSD={setIsRUSD}
+                      setTokenUsdPrice={setTokenUsdPrice}
                     />
                   </>
                 )}
 
-                <LPVaultComponent
+                <LPVault
                   title={"LAND-BNB LP Staking"}
                   setShowModal={setShowModal}
                   setShowModalApy={setShowModalApy}
                   setTokenUsdPrice={setTokenUsdPrice}
                   setIsLPVault={setIsLPVault}
                 />
-                <UsdtvaultComponent
+                <Usdtvault
                   title={"LSRWA-USDT LP"}
                   setShowModal={setShowModal}
                   setShowModalApy={setShowModalApy}
@@ -322,147 +279,150 @@ export default function StakingPage() {
                   setIsRUSD={setIsRUSD}
                 />
               </>
-              )}
-          </LandshareVaultsProvider >
+            )}
         </div>
       </div>
-      <Footer />
-      <Modal
-        modalShow={showModal}
-        setModalShow={setShowModal}
-        modalOptions={{
-          centered: true
-        }}
-        className={`roi-calculator-card ${theme ? "dark" : ""}`}
+      <ReactModal
+        isOpen={showModal}
+        onRequestClose={() => { setShowModal(false), document.body.classList.remove('modal-open'); }}
+        style={customModalStyles}
       >
-        <Modal.Header>
-          <div className="roi-calculator-card-header bg-primary text-text-primary">
-            <span>ROI Calculator</span>
-            <img src={theme == 'dark' ? CloseIconDark : CloseIcon} alt="" className="close" onClick={() => setShowModal(false)} />
-          </div>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="roi-calculator-card-content bg-secondary">
-            <div className="roi-calculator-amount-container">
-              <div className="roi-input-container text-text-third">
-                <span>Set Amount</span>
-                <div className="roi-input-bar bg-primary">
-                  <div className="roi-input-bar-label">
-                    <img
-                      onClick={() => {
-                        setIsShowUsdPrice(!isShowUsdPrice); { !isShowUsdPrice ? setRoiInputCalculValue(usdAmount) : setRoiInputCalculValue(tokenAmount) };
-                      }}
-                      src={leftRight}
-                      alt="leftRight"
-                      style={{ cursor: 'pointer' }}
-                    />
-                    <input
-                      type="text"
-                      placeholder={isShowUsdPrice ? '0.00 USD' : isLPVault ? '0.00 LAND-BNB LP' : isRUSD ? "0.00 LSRWA-USDT" : '0.00 LAND'}
-                      className="roi-input-field bg-primary"
-                      value={roiInputCalculValue}
-                      onChange={(e) => setRoiInputCalculValue(e.target.value)}
-                    />
-                  </div>
-                  <div className="light-text nowrap">
-                    {isShowUsdPrice ?
-                      isRUSD ? Number(roiInputCalculValue / (tokenUsdPrice ?? 1)).toExponential(2) : numeral(Number(roiInputCalculValue / (tokenUsdPrice ?? 1))).format('0.00') :
-                      numeral(roiInputCalculValue * tokenUsdPrice).format('0.00')
-                    } {isShowUsdPrice ? isLPVault ? 'LAND-BNB LP' : isRUSD ? 'LSRWA-USDT LP' : 'LAND' : 'USD'}
-                  </div>
+        <div className={`flex items-center justify-between w-inherit pt-[24px] px-[24px] pb-[16px] rounded-r-[16px] text-[18px] leading-[28px] tracking-[0.36px] bg-primary text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+          <span>ROI Calculator</span>
+          <Image src={theme == 'dark' ? CloseIconDark : CloseIcon} alt="" className="close" onClick={() => setShowModal(false)} />
+        </div>
+        <div className="flex flex-col py-[16px] px-[24px] gap-[32px] w-full bg-secondary">
+          <div className="flex flex-col gap-[16px]">
+            <div className="felx flex-col items-center p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
+              <span>Set Amount</span>
+              <div className="flex items-center justify-between py-[13px] px-[16px] gap-[8px] w-full rounded-[12px] outline-0 bg-primary">
+                <div className="flex">
+                  <Image
+                    onClick={() => {
+                      setIsShowUsdPrice(!isShowUsdPrice); { !isShowUsdPrice ? setRoiInputCalculValue(Number(usdAmount).toString()) : setRoiInputCalculValue(Number(tokenAmount).toString()) };
+                    }}
+                    src={leftRight}
+                    alt="leftRight"
+                    className="cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    placeholder={isShowUsdPrice ? '0.00 USD' : isLPVault ? '0.00 LAND-BNB LP' : isRUSD ? "0.00 LSRWA-USDT" : '0.00 LAND'}
+                    className="w-full outline-0 ml-[8px] text-[14px] bg-primary placeholder:text-[#9d9fa8]"
+                    value={roiInputCalculValue}
+                    onChange={(e) => setRoiInputCalculValue(e.target.value)}
+                  />
                 </div>
-              </div>
-              <div className="roi-input-container text-text-third">
-                <span>Staked for</span>
-                <div className="time-selection-bar bg-primary">
-                  <button
-                    className={timeframe === "1d" ? "active-section" : "inactive-section"}
-                    onClick={() => {
-                      setTimeframe("1d")
-                      setRewardPercent(numeral(showModalApy / 365).format('0.[00000]'))
-                    }}
-                  >
-                    1D
-                  </button>
-                  <button
-                    className={timeframe === "7d" ? "active-section" : "inactive-section"}
-                    onClick={() => {
-                      setTimeframe("7d")
-                      setRewardPercent(numeral(showModalApy / 365 * 7).format('0.[00000]'))
-                    }}
-                  >
-                    7D
-                  </button>
-                  <button
-                    className={timeframe === "30d" ? "active-section" : "inactive-section"}
-                    onClick={() => {
-                      setTimeframe("30d")
-                      setRewardPercent(numeral(showModalApy / 12).format('0.[00000]'))
-                    }}
-                  >
-                    30D
-                  </button>
-                  <button
-                    className={timeframe === "3m" ? "active-section" : "inactive-section"}
-                    onClick={() => {
-                      setTimeframe("3m")
-                      setRewardPercent(numeral(showModalApy / 4).format('0.[00000]'))
-                    }}
-                  >
-                    3M
-                  </button>
-                  <button
-                    className={timeframe === "6m" ? "active-section" : "inactive-section"}
-                    onClick={() => {
-                      setTimeframe("6m")
-                      setRewardPercent(numeral(showModalApy / 2).format('0.[00000]'))
-                    }}
-                  >
-                    6M
-                  </button>
-                  <button
-                    className={timeframe === "1y" ? "active-section" : "inactive-section"}
-                    onClick={() => {
-                      setTimeframe("1y")
-                      setRewardPercent(numeral(showModalApy).format('0.[00000]'))
-                    }}
-                  >
-                    1Y
-                  </button>
-                </div>
-              </div>
-              <img src={IconArrowUpDown} style={{ width: 'auto', height: '18px' }} alt="" />
-              <div className="roi-input-container text-text-third">
-                <span>ROI at current rate</span>
-                <div className="roi-input-bar bg-primary">
-                  <div className="roi-input-field-show-rate">
-
-                    {
-
-                      rewardPercent / 100 * numeral(usdAmount / price).format('0.[00000]')
-
-                    }
-                    {" "} LAND
-                  </div>
-                  <div className="light-text">{numeral(rewardPercent / 100 * usdAmount).format('0.[000]')} USD  ({rewardPercent}%) </div>
+                <div className="light-text nowrap">
+                  {isShowUsdPrice ?
+                    isRUSD ? Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1)).toExponential(2) : numeral(Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1))).format('0.00') :
+                    numeral(Number(roiInputCalculValue) * tokenUsdPrice).format('0.00')
+                  } {isShowUsdPrice ? isLPVault ? 'LAND-BNB LP' : isRUSD ? 'LSRWA-USDT LP' : 'LAND' : 'USD'}
                 </div>
               </div>
             </div>
-            <Collapse in={roiShowDetails}>
-              <div className="roi-apr-result">
-                <div className="roi-apr-section">
-                  <span className="light-font">APR</span>
-                  <span className="bold-font text-text-primary">{numeral(showModalApy).format('0.[00000]')} %</span>
-                </div>
-                <ul className="text-[#545458] dark:text-[#bbbbc4]">
-                  <li>Calculated Based On Current Rates.</li>
-                  <li>All figures are estimates provided for your convenience only, and by no means represent guaranteed returns.</li>
-                </ul>
+            <div className="flex flex-col items-center p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
+              <span>Staked for</span>
+              <div className="flex items-start p-0 gap-[4px] w-full rounded-[100px] bg-primary">
+                <button
+                  className={timeframe === "1d" ? 
+                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                   : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                  onClick={() => {
+                    setTimeframe("1d")
+                    setRewardPercent(Number(numeral(showModalApy / 365).format('0.[00000]')))
+                  }}
+                >
+                  1D
+                </button>
+                <button
+                  className={timeframe === "7d" ? 
+                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]" 
+                   : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                  onClick={() => {
+                    setTimeframe("7d")
+                    setRewardPercent(Number(numeral(showModalApy / 365 * 7).format('0.[00000]')))
+                  }}
+                >
+                  7D
+                </button>
+                <button
+                  className={timeframe === "30d" ? 
+                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                   : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                  onClick={() => {
+                    setTimeframe("30d")
+                    setRewardPercent(Number(numeral(showModalApy / 12).format('0.[00000]')))
+                  }}
+                >
+                  30D
+                </button>
+                <button
+                  className={timeframe === "3m" ? 
+                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                   : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                  onClick={() => {
+                    setTimeframe("3m")
+                    setRewardPercent(Number(numeral(showModalApy / 4).format('0.[00000]')))
+                  }}
+                >
+                  3M
+                </button>
+                <button
+                  className={timeframe === "6m" ? 
+                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                     : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                  onClick={() => {
+                    setTimeframe("6m")
+                    setRewardPercent(Number(numeral(showModalApy / 2).format('0.[00000]')))
+                  }}
+                >
+                  6M
+                </button>
+                <button
+                  className={timeframe === "1y" ? 
+                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                     : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                  onClick={() => {
+                    setTimeframe("1y")
+                    setRewardPercent(Number(numeral(showModalApy).format('0.[00000]')))
+                  }}
+                >
+                  1Y
+                </button>
               </div>
-            </Collapse>
+            </div>
+            <Image src={IconArrowUpDown} style={{ width: 'auto', height: '18px' }} alt="" />
+            <div className="flex flex-col items-center p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
+              <span>ROI at current rate</span>
+              <div className="roi-input-bar bg-primary">
+                <div className="roi-input-field-show-rate">
+
+                  {
+
+                    rewardPercent / 100 * Number(numeral(usdAmount / price).format('0.[00000]'))
+
+                  }
+                  {" "} LAND
+                </div>
+                <div className="light-text">{numeral(rewardPercent / 100 * usdAmount).format('0.[000]')} USD  ({rewardPercent}%) </div>
+              </div>
+            </div>
           </div>
-        </Modal.Body>
-      </Modal>
+          <Collapse isOpen={roiShowDetails}>
+            <div className="roi-apr-result">
+              <div className="roi-apr-section">
+                <span className="light-font">APR</span>
+                <span className="bold-font text-text-primary">{numeral(showModalApy).format('0.[00000]')} %</span>
+              </div>
+              <ul className="text-[#545458] dark:text-[#bbbbc4]">
+                <li>Calculated Based On Current Rates.</li>
+                <li>All figures are estimates provided for your convenience only, and by no means represent guaranteed returns.</li>
+              </ul>
+            </div>
+          </Collapse>
+        </div>
+      </ReactModal>
     </div>
   )
 }

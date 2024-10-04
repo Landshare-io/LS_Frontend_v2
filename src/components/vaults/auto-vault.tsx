@@ -8,7 +8,7 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import ConnectWallet from "../connect-wallet";
 import Timer from "../common/timer";
-import { BOLD_INTER_TIGHT, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS, AUTO_VAULT_V3_CONTRACT_ADDRESS } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, AUTO_VAULT_V3_CONTRACT_ADDRESS } from "../../config/constants/environments";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
@@ -75,7 +75,6 @@ export default function AutoVault({
     autoReward: BigNumberish;
   }
   const minTransferAmount = useMinTransferAmount(chainId) as BigNumberish
-  const ccipAllowance = useAllowanceOfLandToken(chainId, address, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId]) as BigNumberish
   const autoLandAllowance = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS) as BigNumberish
 
   const ccipTransactions = useAppSelector(selectCcipTransactionCounts)
