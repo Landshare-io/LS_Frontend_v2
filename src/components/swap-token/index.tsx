@@ -585,11 +585,9 @@ export default function SwapToken() {
       </div>
 
       <Modal
-        modalShow={isShowTokenSelector}
-        setModalShow={setIsShowTokenSelector}
-        modalOptions={{
-          centered: true
-        }}
+        isOpen={isShowTokenSelector}
+        onRequestClose={() => { setIsShowTokenSelector(false), document.body.classList.remove('modal-open'); }}
+        style={customModalStyles}
         className="max-w-[384px]"
       >
         <div className="bg-[#f6f8f9] flex justify-between items-center px-[24px] pt-[24px] pb-[16px] rounded-t-[16px]">
@@ -650,11 +648,9 @@ export default function SwapToken() {
         </div>
       </Modal>
       <Modal
-        modalShow={isGraphShow}
-        setModalShow={setIsGraphShow}
-        modalOptions={{
-          centered: true
-        }}
+        isOpen={isGraphShow}
+        onRequestClose={() => { setIsGraphShow(false), document.body.classList.remove('modal-open'); }}
+        style={customModalStyles}
       >
         <div className="bg-secondary flex justify-end px-[16px] pt-[16px]">
           <Image
@@ -674,11 +670,9 @@ export default function SwapToken() {
         </div>
       </Modal>
       <Modal
-        modalShow={isFinancialSummaryShow}
-        setModalShow={setIsFinancialSummaryShow}
-        modalOptions={{
-          centered: true
-        }}
+        isOpen={isFinancialSummaryShow}
+        onRequestClose={() => { setIsFinancialSummaryShow(false), document.body.classList.remove('modal-open'); }}
+        style={customModalStyles}
       >
         <div className="flex justify-end px-[16px] pt-[16px]">
           <Image
@@ -693,11 +687,9 @@ export default function SwapToken() {
         </div>
       </Modal>
       <Modal
-        modalShow={isSTAPShow}
-        setModalShow={setIsSTAPshow}
-        modalOptions={{
-          centered: true
-        }}
+        isOpen={isSTAPShow}
+        onRequestClose={() => { setIsSTAPshow(false), document.body.classList.remove('modal-open'); }}
+        style={customModalStyles}
       >
         <div className="flex w-full justify-between items-center pl-4 z-10 bg-secondary">
           <div className="text-[16px] md:text-[24px]">Security Token Purchase Agreement</div>

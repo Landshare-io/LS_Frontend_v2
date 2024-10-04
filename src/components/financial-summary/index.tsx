@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import Link from "next/link";
