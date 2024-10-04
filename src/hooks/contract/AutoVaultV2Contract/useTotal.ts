@@ -13,10 +13,10 @@ export default function useTotal() {
     chainId: bsc.id
   })
 
-  if (isLoading) return { data: [0, 0], refetch, isLoading }
+  if (isLoading) return { data: 0, refetch, isLoading }
   if (isError) {
     console.log('Fetching autoVaultv3 getting Total error', error)
-    return { data: [0, 0], refetch, isLoading: false }
+    return { data: 0, refetch, isLoading: false }
   }
 
   return { data, refetch, isLoading }

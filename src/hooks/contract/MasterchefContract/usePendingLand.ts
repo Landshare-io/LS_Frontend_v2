@@ -14,10 +14,11 @@ export default function usePendingLand({ pendingLandId, address }: UsePendingLan
     address: MASTERCHEF_CONTRACT_ADDRESS,
     abi: MasterchefAbi,
     functionName: "pendingLand",
-    args: [0, address],
+    args: [pendingLandId, address],
     chainId: bsc.id
   })
 
+  if (typeof address == 'undefined') return { data: 0, refetch, isLoading }
   if (isLoading) return { data: 0, refetch, isLoading }
   if (isError) {
     console.log('Fetching MasterchefContract pendingLand error', error)

@@ -17,6 +17,7 @@ export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
     args: [address]
   })
 
+  if (typeof address == 'undefined') return { data: 0, refetch }
   if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching LandTokenContract balanceOf error', error)

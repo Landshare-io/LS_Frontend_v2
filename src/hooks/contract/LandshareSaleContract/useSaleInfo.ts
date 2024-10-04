@@ -13,10 +13,11 @@ export default function useSaleInfo(address: Address | undefined) {
     args: [address]
   })
 
-  if (isLoading) return []
+  if (typeof address == 'undefined') return [0, 0]
+  if (isLoading) return [0, 0]
   if (isError) {
     console.log('Fetching LandshareSaleContract saleInfo error', error)
-    return []
+    return [0, 0]
   }
 
   return data
