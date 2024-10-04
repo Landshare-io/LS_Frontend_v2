@@ -6,8 +6,6 @@ import Collapse from "../common/collapse";
 import ReactLoading from "react-loading";
 import { useVaultsContext } from "../../contexts/VaultsContext";
 import { useGlobalContext } from "../../contexts/GlobalContext";
-import { useLandshareFunctions } from "../../contexts/LandshareFunctionsProvider";
-import { useLandshareV2Context } from "../../contexts/LandshareV2Context";
 import useDepositLS from "../../hooks/useDepositLS";
 import useWithdrawAll from "../../hooks/useWithdrawAll";
 import useWithDrawLS from "../../hooks/useWithDrawLS";
@@ -28,16 +26,20 @@ import arbitrumIcon from "../../assets/img/new/arbitrum.svg";
 import pcsBunny from "../../assets/img/icons/pancakeswap-cake-logo.svg"
 import quickSwap from "../../assets/img/icons/quickswap-logo.svg"
 import smallicon from "../../assets/img/new/rotate-black.svg"
-import { CCIP_CHAIN_SENDER_ADDRESS } from "../../configs/ccip";
 import ccipAxios from "../../helper/ccip-axios";
 import ConnectWallet from "../../components/ConnectWallet";
 import Timer from "../timer/Timer";
 import "./styles.css"
-import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS, AUTO_VAULT_V3_CONTRACT_ADDRESS } from "../../config/constants/environments";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 
 import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
 import useAutoLandV3 from "../../hooks/contract/AutoVaultV2Contract/useAutoLandV3";
+import useMinTransferAmount from "../../hooks/contract/CcipChainSenderContract/useMinTransferAmount";
+import useAllowanceOfLandToken from "../../hooks/contract/LandTokenContract/useAllowance";
+import useGetApr from "../../hooks/get-apy/useGetApr";
+import useGetApy from "../../hooks/get-apy/useGetApy";
 
 
 import { 
@@ -53,12 +55,26 @@ export default function StakingVault(props) {
   const chainId = useChainId();
   const { isConnected, address } = useAccount();
   const { theme } = useGlobalContext();
+  const dispatch = useAppDispatch();
 
   const { data: lpTokenV2Balance } = useBalanceOfLpTokenV2({ address }) as { data: BigNumberish }
   const vaultBalance = useAutoLandV3(address) as {
     total: BigNumberish,
     autoLandV3: BigNumberish
   }
+  const minTransferAmount = useMinTransferAmount(chainId) as BigNumberish
+  const ccipAllowance = useAllowanceOfLandToken(chainId, address, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId]) as BigNumberish
+  const autoLandAllowance = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS) as BigNumberish
+
+  const ccipTransactions = useAppSelector(selectCcipTransactionCounts)
+  const ccipPendingTransactions = useAppSelector(selectCcipPendingTransactions)
+  const lastTransactionId = useAppSelector(selectLastPendingCcipTransaction)
+  const lastTransactionEstimateTime = useAppSelector(selectCoolDownTime)
+  const ccipLoading = useAppSelector(selectIsLoading)
+  const apr = useGetApr()
+  const apy = useGetApy()
+
+
   const isVaultsLoading = false // need to update
   const {
     startTransaction,
@@ -66,14 +82,11 @@ export default function StakingVault(props) {
     transactionResult
   } = useLandshareFunctions();
   const {
-    apr,
-    apy,
     ccipVaultBalance,
     bountyReward,
     ccipBountyReward,
     ccipStakeAuto
   } = useVaultsContext();
-  const { contract: { ccipChainEthSenderContract } } = useLandshareV2Context()
   const {
     landTokenV2Contract,
     notifyError,
@@ -110,51 +123,14 @@ export default function StakingVault(props) {
   const [isDepositable, SetDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const [isDepositing, setIsDepositing] = useState(false);
-  const [ccipTransactions, setCcipTransactions] = useState(0);
-  const [ccipPendingTransactions, setCcipPendingTransactions] = useState(0);
-  const [lastTransactionId, setLastTransactionId] = useState('');
-  const [lastTransactionEstimateTime, setLastTransactionEstimateTime] = useState(0)
-  const [ccipLoading, setCCIPLoading] = useState(true)
-
-
-  async function updateCCIP() {
-    if (chainId != 56 && isConnected) {
-      const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
-      setCcipTransactions(data.data)
-      const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
-      const { data: lastTxId } = await ccipAxios.get(`/ccip-transaction/get-last-pending-tx/${address}`)
-      setCcipPendingTransactions(pendingData)
-      console.log('==========================lastTxId,', lastTxId)
-      const coolTimeTime = new Date(lastTxId.createDateTime).getTime() + lastTxId.estimateTime - new Date().getTime()
-      setLastTransactionEstimateTime(coolTimeTime)
-      setLastTransactionId(lastTxId.messageId)
-    }
-  }
 
   useEffect(() => {
-    if(!isConnected) {
-      setCCIPLoading(false)
-      return
-    }
-
     (async () => {
-      if (chainId != 56 && isConnected) {
-        setCCIPLoading(true)
-        const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
-        setCcipTransactions(data.data)
-        const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
-        const { data: lastTxId } = await ccipAxios.get(`/ccip-transaction/get-last-pending-tx/${address}`)
-        setCcipPendingTransactions(pendingData)
-        console.log('==========================lastTxId,', lastTxId)
-        const coolTimeTime = new Date(lastTxId.createDateTime).getTime() + lastTxId.estimateTime - new Date().getTime()
-        setLastTransactionEstimateTime(coolTimeTime)
-        setLastTransactionId(lastTxId.messageId)
-        setCCIPLoading(false)
-      }
+      dispatch(getTransactions(address))
     })()
 
     const intervalCcipUpdate = setInterval(() => {
-      updateCCIP()
+      dispatch(getTransactions(address))
     }, 60000);
 
     return () => clearInterval(intervalCcipUpdate);
@@ -182,7 +158,6 @@ export default function StakingVault(props) {
       }
 
       if (chainId != 56) {
-        const minTransferAmount = await ccipChainEthSenderContract.minTransferAmount()
         amountLS = parseEther(amountLS); //convert to wei
         if (
           ethers.BigNumber.from(minTransferAmount).gt(
@@ -203,13 +178,8 @@ export default function StakingVault(props) {
       }
       setIsDepositing(true)
       if (chainId != 56) {
-        const allowance = await landTokenV2Contract.allowance(
-          address,
-          process.env.REACT_APP_IS_CCIP_TESTING == 'true' ? CCIP_CHAIN_SENDER_ADDRESS[chainId ?? 11155111] : CCIP_CHAIN_SENDER_ADDRESS[chainId]
-        )
-
         if (
-          ethers.BigNumber.from(allowance).gte(
+          ethers.BigNumber.from(ccipAllowance).gte(
             ethers.BigNumber.from(amountLS)
           )
         ) {
@@ -228,7 +198,7 @@ export default function StakingVault(props) {
         const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
         const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
 
-        updateCCIP()
+        dispatch(getTransactions(address))
         setIsDepositing(false)
       } else {
         depositLS(amountLS)
@@ -248,7 +218,6 @@ export default function StakingVault(props) {
       return;
     }
     if (chainId != 56) {
-      const minTransferAmount = await ccipChainEthSenderContract.minTransferAmount()
       amountLS = parseEther(amountLS); //convert to wei
       if (
         ethers.BigNumber.from(minTransferAmount).gt(
@@ -270,11 +239,11 @@ export default function StakingVault(props) {
         const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
         const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
 
-        updateCCIP()
+        dispatch(getTransactions(address))
 
       } else {
         await withdrawAll()
-        updateCCIP()
+        dispatch(getTransactions(address))
       }
     } else {
       if (chainId != 56) {
@@ -282,7 +251,7 @@ export default function StakingVault(props) {
         const { data } = await ccipAxios.get(`/ccip-transaction/count/${address}`)
         const { data: pendingData } = await ccipAxios.get(`/ccip-transaction/pending/${address}`)
 
-        updateCCIP()
+        dispatch(getTransactions(address))
 
       } else {
         withdrawLS(amountLS);
@@ -306,11 +275,7 @@ export default function StakingVault(props) {
         );
       }
 
-      const approvedLAND = await landTokenV2Contract.allowance(
-        address,
-        process.env.REACT_APP_AUTOLANDV3
-      );
-      const approvedLANDETH = formatEther(approvedLAND);
+      const approvedLANDETH = formatEther(autoLandAllowance);
       setIsApprovedLandStake(inputValue > 0 && Number(approvedLANDETH) >= Number(inputValue));
     } catch (e) {
       console.log(e)
