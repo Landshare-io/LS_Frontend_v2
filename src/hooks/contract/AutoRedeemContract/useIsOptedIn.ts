@@ -13,6 +13,7 @@ export default function useIsOptedIn(address: Address | undefined) {
     chainId: bsc.id
   })
 
+  if (typeof address == 'undefined') return false
   if (isLoading) return false
   if (isError) {
     console.log('Fetching AutoRedeemContract useIsOptedIn error', error)
