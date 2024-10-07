@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useChainId } from "wagmi";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import FeatureBadge from "../common/feature-badge";
 import ToggleButton from "../common/toggle-button";
@@ -22,6 +23,7 @@ import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import useGetLandPrice from "../../hooks/axios/useGetLandPrice";
 
 export default function HomeRwaAssetsSummary() {
+  const chainId = useChainId();
   const [selectedGraph, setSelectedGraph] = useState('rwa')
   const dispatch = useAppDispatch();
   const isRwaLoading = useAppSelector(selectLoadingStatus);
@@ -30,7 +32,7 @@ export default function HomeRwaAssetsSummary() {
   const appreciation = useAppSelector(selectAppreciation);
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const totalPropertyValue = useGetTotalValue() as BigNumberish;
+  const totalPropertyValue = useGetTotalValue(chainId) as BigNumberish;
   const { price: landPrice, isLoading, circulatingSupply } = useGetLandPrice();
 
   useEffect(() => {

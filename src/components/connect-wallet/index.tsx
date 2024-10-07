@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
+import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 
 const interTight = Inter_Tight({
   weight: "700",
@@ -72,7 +73,7 @@ export default function ConnectWallet({
                   );
                 }
 
-                if (pathname.includes('/nft') && chain.id == 56) { // !isAuthenticated && 
+                if (pathname.includes('/nft') && chain.id == MAJOR_WORK_CHAIN.id) { // !isAuthenticated && 
                   return (
                     <></>
                     // <button onClick={() => checkIsAuthenticated()} type="button-container" className="nav-btn bg-[#61CD81] text-button-text-secondary">
