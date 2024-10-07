@@ -13,10 +13,10 @@ export default function useApprove() {
 
   async function approve(chainId: number, approveAddress: Address, amount: number | BigNumberish) {
     await writeContract({
-      address: LAND_TOKEN_CONTRACT_ADDRESS[chainId ?? 56],
+      address: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
       abi: LpTokenV2Abi,
       functionName: "approve",
-      chainId: chainId ?? 56,
+      chainId: chainId,
       args: [approveAddress, amount]
     });
   }

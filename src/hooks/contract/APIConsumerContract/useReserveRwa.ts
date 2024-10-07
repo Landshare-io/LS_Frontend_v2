@@ -1,13 +1,14 @@
 import { useReadContract } from "wagmi";
+import { bsc } from "viem/chains";
 import APIConsumerAbi from "../../../abis/APIConsumer.json";
 import { API_CONSUMER_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useReserveRwa(chainId: number) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: API_CONSUMER_CONTRACT_ADDRESS[chainId],
+    address: API_CONSUMER_CONTRACT_ADDRESS[bsc.id],
     abi: APIConsumerAbi,
     functionName: "reserveRWA",
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return 0

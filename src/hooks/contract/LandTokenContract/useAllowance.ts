@@ -5,10 +5,10 @@ import { Address } from "viem";
 
 export default function useAllowance(chainId: number, address: Address | undefined, spender: Address | undefined) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: LAND_TOKEN_CONTRACT_ADDRESS[chainId ?? 56],
+    address: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
     abi: LpTokenV2Abi,
     functionName: "allowance",
-    chainId: chainId ?? 56,
+    chainId: chainId,
     args: [address, spender]
   })
 

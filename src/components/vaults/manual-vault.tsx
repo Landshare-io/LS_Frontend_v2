@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { formatEther, parseEther, BigNumberish } from "ethers";
 import { useChainId, useAccount, useSwitchChain } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { bsc } from "viem/chains";
 import Image from "next/image";
 import Collapse from "../common/collapse";
 import ConnectWallet from "../connect-wallet";
@@ -54,7 +55,7 @@ export default function ManualVault({
   const { data: pendingLand, isLoading: pendingLandLoading } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
   const apr = useGetApr(chainId) as number
   const { data: landBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
-  const landAllowance = useAllowanceOfLandTokenContract(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as BigNumberish
+  const landAllowance = useAllowanceOfLandTokenContract(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as BigNumberish
 
   const { 
     depositVault,

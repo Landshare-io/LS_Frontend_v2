@@ -1,5 +1,4 @@
 import { useEffect } from "react"
-import { useChainId } from "wagmi";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { BigNumberish } from "ethers";
 import { bsc } from "viem/chains";
@@ -16,33 +15,32 @@ import useTotalSupply from "../LpTokenV2Contract/useTotalSupply";
 import useBalanceOfWBNB from "../WBNBTokenContract/useBalanceOf";
 import { LP_TOKEN_V2_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function useLpVault(address: Address | undefined, updateStatus: Function, updateLPFarm: Function) {
+export default function useLpVault(chainId: number, address: Address | undefined, updateStatus: Function, updateLPFarm: Function) {
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
-  const chainId = useChainId()
-  const { deposit, data: depositTx } = useDeposit()
-  const { withdraw, data: withdrawTx } = useWithdraw()
+  const { deposit, data: depositTx } = useDeposit(chainId)
+  const { withdraw, data: withdrawTx } = useWithdraw(chainId)
   const { approve, data: approveTx } = useApprove(chainId)
-  const { data: lpTokenV2Balance, refetch: refetchLpTokenV2 } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[chainId] }) as {
+  const { data: lpTokenV2Balance, refetch: refetchLpTokenV2 } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as {
     data: BigNumberish,
     refetch: Function
   }
-  const { refetch: refetchUserInfo } = useUserInfo({ userInfoId: 0, address })
-  const { refetch: refetchPendingLand } = usePendingLand({ pendingLandId: 0, address })
+  const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 0, address })
+  const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 0, address })
   const { refetch: refetchTotalSupply } = useTotalSupply(chainId)
-  const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] })
-  const { refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId: bsc.id, address })
+  const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] })
+  const { refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId, address })
 
   const { isSuccess: depositSuccess } = useWaitForTransactionReceipt({
     hash: depositTx,
-    chainId: bsc.id
+    chainId: chainId
   });
   const { isSuccess: withdrawSuccess } = useWaitForTransactionReceipt({
     hash: withdrawTx,
-    chainId: bsc.id
+    chainId: chainId
   });
   const { isSuccess: approveSuccess } = useWaitForTransactionReceipt({
     hash: approveTx,
-    chainId: bsc.id
+    chainId: chainId
   });
 
   useEffect(() => {
@@ -156,7 +154,7 @@ export default function useLpVault(address: Address | undefined, updateStatus: F
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(MASTERCHEF_CONTRACT_ADDRESS[chainId], lpTokenV2Balance)
+    approve(MASTERCHEF_CONTRACT_ADDRESS[bsc.id], lpTokenV2Balance)
   }
 
   return {

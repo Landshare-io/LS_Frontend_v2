@@ -3,6 +3,7 @@ import { useChainId } from "wagmi";
 import Modal from "react-modal";
 import Image from "next/image";
 import Link from "next/link";
+import { bsc } from "viem/chains";
 import { BsInfoCircle, BsLink45Deg } from "react-icons/bs";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useAccount } from "wagmi";
@@ -73,7 +74,7 @@ export default function FinancialSummary() {
 
   const { data: balance } = useBalance({
     address: address,
-    token: RWA_CONTRACT_ADDRESS[chainId],
+    token: RWA_CONTRACT_ADDRESS[bsc.id],
     chainId: MAJOR_WORK_CHAIN.id,
   }) as { data: any }
 

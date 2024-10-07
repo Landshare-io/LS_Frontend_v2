@@ -6,10 +6,10 @@ import { LP_TOKEN_V2_CONTRACT_ADDRESS } from "../../../config/constants/environm
 
 export default function useAllowance(chainId: number, approver: Address | undefined, to: Address) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId],
+    address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id],
     abi: LpTokenV2Abi,
     functionName: "allowance",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [approver, to]
   })
 

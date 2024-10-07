@@ -3,6 +3,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { BigNumberish, formatEther, parseEther } from "ethers";
 import { useChainId, useAccount } from "wagmi";
 import ReactLoading from "react-loading";
+import { bsc } from "viem/chains";
 import Collapse from "../common/collapse";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
@@ -79,7 +80,7 @@ export default function AutoVault({
     autoReward: BigNumberish;
   }
   const minTransferAmount = useMinTransferAmount(chainId) as BigNumberish
-  const autoLandAllowance = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId]) as BigNumberish
+  const autoLandAllowance = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id]) as BigNumberish
 
   const ccipTransactions = useAppSelector(selectCcipTransactionCounts)
   const ccipPendingTransactions = useAppSelector(selectCcipPendingTransactions)

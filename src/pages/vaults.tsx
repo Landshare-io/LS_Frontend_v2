@@ -3,10 +3,8 @@ import Head from 'next/head';
 import { useChainId } from "wagmi"
 import numeral from "numeral"
 import Image from "next/image";
-import { BigNumberish } from "ethers";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import Slider from 'react-slick';
-import Carousel from "../components/common/carousel";
 import Collapse from "../components/common/collapse";
 import ReactModal from "react-modal";
 import Breadcrumb from "../components/common/breadcrumb";
@@ -27,6 +25,7 @@ import CloseIcon from "../../assets/img/icons/close.svg";
 import CloseIconDark from "../../assets/img/icons/close-dark.svg";
 import leftRight from "../../assets/img/new/left-right.svg";
 import IconArrowUpDown from "../../assets/img/new/arrow-up-down.svg";
+import { MAJOR_WORK_CHAIN } from "../config/constants/environments";
 
 const breadcrumbItems = [
   {
@@ -41,7 +40,8 @@ const breadcrumbItems = [
 
 export default function StakingPage() {
   const { theme } = useGlobalContext();
-  const { price } = useGetPrice()
+  const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
+  const { price } = useGetPrice(chainId)
 
   const [selectedVault, useSelectedVault] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -72,9 +72,6 @@ export default function StakingPage() {
       background: '#00000080'
     }
   };
-
-
-  const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
 
   function handleClick(tab: number) {
     useSelectedVault(tab)
@@ -112,7 +109,7 @@ export default function StakingPage() {
   ];
 
   useEffect(() => {
-    if (chainId !== 56) {
+    if (chainId !== MAJOR_WORK_CHAIN.id) {
       useSelectedVault(1)
     } else {
       useSelectedVault(0)
@@ -120,7 +117,7 @@ export default function StakingPage() {
   }, [chainId])
 
   useEffect(() => {
-    showModal ? disableBodyScroll(document) : enableBodyScroll(document)
+    showModal ? disableBodyScroll(document.documentElement) : enableBodyScroll(document.documentElement)
   }, [showModal]);
 
   useEffect(() => {
@@ -225,7 +222,7 @@ export default function StakingPage() {
             )}
           </div>
               {(<>
-                {chainId == 56 || chainId == 97 ? (
+                {chainId == MAJOR_WORK_CHAIN.id ? (
                   <>
                     <ManualVault
                       title="LAND Token Staking"
