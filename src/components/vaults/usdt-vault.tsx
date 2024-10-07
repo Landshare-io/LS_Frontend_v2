@@ -5,7 +5,6 @@ import {
   useChainId, 
   useSwitchChain 
 } from "wagmi";
-import { bsc } from "viem/chains";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { 
   BigNumberish, 
@@ -37,6 +36,7 @@ import smallicon from "../../../public/icons/tether.svg"
 import bscIcon from "../../../public/icons/bsc.svg";
 import book from "../../../public/icons/book.svg";
 import { 
+  MAJOR_WORK_CHAIN,
   BOLD_INTER_TIGHT, 
   RWA_LP_CONTRACT_ADDRESS, 
   MASTERCHEF_CONTRACT_ADDRESS 
@@ -69,18 +69,18 @@ export default function Usdtvault({
     depositVault,
     withdrawVault,
     approveVault
-  } = useUsdtVault(address)
+  } = useUsdtVault(chainId, address)
 
-  const { data: balance } = useBalanceOfRwaLp(address) as { data: BigNumberish }
-  const { data: contractLPUSDTBalance } = useBalanceOfUsdt(bsc.id, RWA_LP_CONTRACT_ADDRESS) as { data: BigNumberish }
-  const { data: contractLPLSRWABalance } = useBalanceOfRwa(RWA_LP_CONTRACT_ADDRESS) as { data: BigNumberish }
-  const { data: amountLSRWALPInVault } = useBalanceOfRwaLp(MASTERCHEF_CONTRACT_ADDRESS) as { data: BigNumberish }
-  const { data: userBalance } = useUserInfo({ userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish] }
-  const rwaTokenPrice = useGetRwaPrice() as BigNumberish
-  const LSRWALPTotalSupply = useTotalSupplyOfRwaLp() as BigNumberish
-  const { data: rewardsLSRWALP } = usePendingLand({ pendingLandId: 4, address }) as { data: BigNumberish }
-  const { data: LSRWALPAllowance } = useAllowanceOfRwaLp(address, MASTERCHEF_CONTRACT_ADDRESS) as { data: BigNumberish }
-  const { price } = useGetPrice()
+  const { data: balance } = useBalanceOfRwaLp(chainId, address) as { data: BigNumberish }
+  const { data: contractLPUSDTBalance } = useBalanceOfUsdt(chainId, RWA_LP_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { data: contractLPLSRWABalance } = useBalanceOfRwa(chainId, RWA_LP_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { data: amountLSRWALPInVault } = useBalanceOfRwaLp(chainId, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { data: userBalance } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish] }
+  const rwaTokenPrice = useGetRwaPrice(chainId) as BigNumberish
+  const LSRWALPTotalSupply = useTotalSupplyOfRwaLp(chainId) as BigNumberish
+  const { data: rewardsLSRWALP } = usePendingLand({ chainId, pendingLandId: 4, address }) as { data: BigNumberish }
+  const { data: LSRWALPAllowance } = useAllowanceOfRwaLp(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { price } = useGetPrice(chainId)
 
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
@@ -354,28 +354,28 @@ export default function Usdtvault({
                         <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
-                            if (chainId == 56) {
+                            if (chainId == MAJOR_WORK_CHAIN.id) {
                               if (inputValue && Number(inputValue) > Number(0)) {
                                 depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
                             } else {
-                              switchChain({ chainId: bsc.id })
+                              switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                             }
                           }}
                           disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                         >
                           {
-                            chainId != 56 ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                            chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                           }
                         </button>
 
-                        {chainId == 56 && (
+                        {chainId == MAJOR_WORK_CHAIN.id && (
                           <button
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => withdrawVault(0)}
-                            disabled={chainId != 56}
+                            disabled={chainId != MAJOR_WORK_CHAIN.id}
                           >
                             Harvest
                           </button>
@@ -442,28 +442,28 @@ export default function Usdtvault({
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if (chainId == 56) {
+                                if (chainId == MAJOR_WORK_CHAIN.id) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  switchChain({ chainId: bsc.id })
+                                  switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                chainId != 56 ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
 
-                            {chainId == 56 && (
+                            {chainId == MAJOR_WORK_CHAIN.id && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawVault(0)}
-                                disabled={chainId != 56}
+                                disabled={chainId != MAJOR_WORK_CHAIN.id}
                               >
                                 Harvest
                               </button>

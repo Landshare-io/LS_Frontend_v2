@@ -1,8 +1,11 @@
 import { getDefaultProvider } from "ethers";
+import { bsc, bscTestnet } from "wagmi/chains";
 import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
 import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
+export const IS_TEST_MODE = false
+export const MAJOR_WORK_CHAIN = IS_TEST_MODE ? bscTestnet : bsc
 export const BOLD_INTER_TIGHT = Inter_Tight({
   weight: "700",
   style: "normal",
@@ -27,7 +30,9 @@ export const PROVIDER_URLS = {
   42161: 'https://arb1.arbitrum.io/rpc',
   421614: 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public'
 }
-export const PROVIDERS = {
+export const PROVIDERS: {
+  [key: number]: any
+} = {
   56: getDefaultProvider(PROVIDER_URLS['56']),
   97: getDefaultProvider(PROVIDER_URLS['97']),
   1: getDefaultProvider(PROVIDER_URLS['1']),

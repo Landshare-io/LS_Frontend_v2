@@ -3,7 +3,6 @@ import { BigNumberish, formatEther } from "ethers";
 import Image from "next/image";
 import Link from "next/link";
 import Modal from "react-modal"
-import { bsc } from "viem/chains";
 import { MdOutlineHelp, MdCancel } from "react-icons/md";
 import { useAccount, useBalance, useChainId } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -28,7 +27,8 @@ import {
   RWA_POOL_CONTRACT_ADDRESS,
   LAND_TOKEN_CONTRACT_ADDRESS,
   BOLD_INTER_TIGHT,
-  LANDSHARE_SALE_CONTRACT_ADDRESS
+  LANDSHARE_SALE_CONTRACT_ADDRESS,
+  MAJOR_WORK_CHAIN
 } from "../../config/constants/environments";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
@@ -37,7 +37,6 @@ import useAllowanceOfUsdcContract from "../../hooks/contract/UsdcContract/useAll
 import useBuyTokenView from "../../hooks/contract/LandshareBuySaleContract/useBuyTokenView";
 import useSellTokens from "../../hooks/swap-token/useSellTokens";
 import useBuyTokens from "../../hooks/swap-token/useBuyTokens";
-
 import IconSwipelux from "../../../public/icons/swipelux.svg";
 import IconPancakeswap from "../../../public/icons/pancakeswap.png";
 import IconGateio from "../../../public/icons/gateio.png";
@@ -73,41 +72,41 @@ export default function SwapToken() {
 
   const { data: balance } = useBalance({
     address: address,
-    token: RWA_CONTRACT_ADDRESS,
-    chainId: bsc.id
+    token: RWA_CONTRACT_ADDRESS[chainId],
+    chainId: chainId
   }) as { data: any }
 
   const { data: USDCBalance } = useBalance({
     address: address,
-    token: USDC_ADDRESS[bsc.id],
-    chainId: bsc.id
+    token: USDC_ADDRESS[chainId],
+    chainId: chainId
   }) as { data: any }
 
   const { data: poolBalance } = useBalance({
-    address: RWA_POOL_CONTRACT_ADDRESS,
-    token: USDC_ADDRESS[bsc.id],
-    chainId: bsc.id
+    address: RWA_POOL_CONTRACT_ADDRESS[chainId],
+    token: USDC_ADDRESS[chainId],
+    chainId: chainId
   }) as { data: any }
 
   const { data: landBalance } = useBalance({
     address: address,
-    token: LAND_TOKEN_CONTRACT_ADDRESS[bsc.id],
-    chainId: bsc.id
+    token: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
+    chainId: chainId
   }) as { data: any }
 
-  const { data: saleLimit, refetch: refetchSaleLimit } = useGetSaleLimit(address) as { data: [BigNumberish, number, number], refetch: Function }
+  const { data: saleLimit, refetch: refetchSaleLimit } = useGetSaleLimit(chainId, address) as { data: [BigNumberish, number, number], refetch: Function }
   const limitDate = saleLimit ? new Date(saleLimit[1] != undefined ? Number(saleLimit[1]) * 1000 : Date.now() * 1000) : Date.now() * 1000
   const reachedLimit = saleLimit ? saleLimit[2] != undefined ? saleLimit[2] : Date.now() : Date.now()
   
-  const secondaryLimit = useGetAllowedToTransfer(address)
-  const isWhitelisted = useIsWhitelistedAddressOfRwa(address)
-  const landFee = useLandFee() as number
-  const rwaPrice = useGetRwaPrice() as BigNumberish;
+  const secondaryLimit = useGetAllowedToTransfer(chainId, address)
+  const isWhitelisted = useIsWhitelistedAddressOfRwa(chainId, address)
+  const landFee = useLandFee(chainId) as number
+  const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
   const { allTokens } = useGetAllTokens()
-  const landFeeAmount = useGetLandFee(usdcAmount) as BigNumberish
-  const { data: usdcAllowance } = useAllowanceOfUsdcContract(bsc.id, address, LANDSHARE_SALE_CONTRACT_ADDRESS) as { data: BigNumberish }
-  const { sellTokens, transactionStatus: sellTransactionStatus } = useSellTokens(address, landFeeAmount, RWATokenAmount)
-  const { buyTokens, transactionStatus: buyTransactionStatus } = useBuyTokens(bsc.id, address, buyLANDAmount, RWATokenAmount)
+  const landFeeAmount = useGetLandFee(chainId, usdcAmount) as BigNumberish
+  const { data: usdcAllowance } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { sellTokens, transactionStatus: sellTransactionStatus } = useSellTokens(chainId, address, landFeeAmount, RWATokenAmount)
+  const { buyTokens, transactionStatus: buyTransactionStatus } = useBuyTokens(chainId, address, buyLANDAmount, RWATokenAmount)
 
   useEffect(() => {
     setUsdcAmount(Number(formatEther(rwaPrice)) * RWATokenAmount)
@@ -128,7 +127,7 @@ export default function SwapToken() {
     }
   }, [isSTAPShow]);
 
-  const buyTokenAmount = useBuyTokenView(RWATokenAmount, USDC_ADDRESS[chainId ?? 56]) as any;
+  const buyTokenAmount = useBuyTokenView(chainId, RWATokenAmount, USDC_ADDRESS[chainId]) as any;
 
   const customModalStyles = {
     content: {
@@ -475,7 +474,7 @@ export default function SwapToken() {
         }
         <div className="w-full">
           {isConnected ? (
-            chainId == 56 ? (
+            chainId == MAJOR_WORK_CHAIN.id ? (
               <>
                 {isWhitelisted &&
                   <>

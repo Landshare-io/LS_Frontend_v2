@@ -14,7 +14,7 @@ import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLa
 import useGetApr from "../../hooks/get-apy/useGetApr";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useAllowanceOfLandTokenContract from "../../hooks/contract/LandTokenContract/useAllowance";
-import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 import Union from "../../assets/img/new/greenlogo.svg";
 import UnionDark from "../../assets/img/new/greenlogo.svg";
 import book from "../../../public/icons/book.svg";
@@ -49,18 +49,18 @@ export default function ManualVault({
   const { isConnected, address } = useAccount();
   const { switchChain } = useSwitchChain()
 
-  const { data: totalStaked, isLoading: totalStakedLoading } = useTotalStaked() as { data: BigNumberish, isLoading: boolean }
-  const { data: userInfo, isLoading: userInfoLoading } = useUserInfo({ userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
-  const { data: pendingLand, isLoading: pendingLandLoading } = usePendingLand({ pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
-  const apr = useGetApr() as number
+  const { data: totalStaked, isLoading: totalStakedLoading } = useTotalStaked(chainId) as { data: BigNumberish, isLoading: boolean }
+  const { data: userInfo, isLoading: userInfoLoading } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
+  const { data: pendingLand, isLoading: pendingLandLoading } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
+  const apr = useGetApr(chainId) as number
   const { data: landBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
-  const landAllowance = useAllowanceOfLandTokenContract(chainId, address, MASTERCHEF_CONTRACT_ADDRESS) as BigNumberish
+  const landAllowance = useAllowanceOfLandTokenContract(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as BigNumberish
 
   const { 
     depositVault,
     withdrawVault,
     approveVault
-  } = useVaultBalanceManual(address, updateStatus)
+  } = useVaultBalanceManual(chainId, address, updateStatus)
 
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
@@ -386,27 +386,27 @@ export default function ManualVault({
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if (chainId == 56) {
+                                if (chainId == MAJOR_WORK_CHAIN.id) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  switchChain({ chainId: 56 })
+                                  switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                chainId != 56 ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
-                            {chainId == 56 && (
+                            {chainId == MAJOR_WORK_CHAIN.id && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawVault(0)}
-                                disabled={(typeof address == 'undefined') || chainId != 56}
+                                disabled={(typeof address == 'undefined') || chainId != MAJOR_WORK_CHAIN.id}
                               >
                                 Harvest
                               </button>

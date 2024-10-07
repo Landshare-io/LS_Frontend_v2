@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useChainId } from "wagmi";
 import Image from "next/image";
 import IconSofa from "../../../../public/icons/sofa.svg";
 import IconBathroom from "../../../../public/icons/bathroom.svg";
@@ -15,11 +16,12 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property }: PropertyCardProps) {
   const { theme } = useGlobalContext();
+  const chainId = useChainId();
   const router = useRouter();
   const {
     isLoading,
     data: propertyValue
-  } = useGetPropertyValues(property?.coreLogicID ?? '0') as {
+  } = useGetPropertyValues(chainId, property?.coreLogicID ?? '0') as {
     isLoading: boolean,
     data: BigNumberish
   }

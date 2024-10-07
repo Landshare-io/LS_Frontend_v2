@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useChainId } from "wagmi";
 import { formatEther } from "ethers";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useGlobalContext } from "../../context/GlobalContext";
@@ -17,7 +18,8 @@ interface BeneficalAssetProps {
 
 export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
   const { theme } = useGlobalContext();
-  const { isLoading, data: propertyValue } = usePropertyValues(asset.coreLogicID) as {
+  const chainId = useChainId();
+  const { isLoading, data: propertyValue } = usePropertyValues(chainId, asset.coreLogicID) as {
     isLoading: boolean,
     data: BigNumberish
   }

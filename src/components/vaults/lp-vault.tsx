@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { BigNumberish, formatEther, parseEther } from "ethers";
 import Image from "next/image";
-import { bsc } from "viem/chains";
 import { useChainId, useAccount, useSwitchChain } from "wagmi";
 import Collapse from "../common/collapse";
 import ConnectWallet from "../connect-wallet";
@@ -21,7 +20,8 @@ import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLa
 import { 
   BOLD_INTER_TIGHT,
   LP_TOKEN_V2_CONTRACT_ADDRESS,
-  MASTERCHEF_CONTRACT_ADDRESS
+  MASTERCHEF_CONTRACT_ADDRESS,
+  MAJOR_WORK_CHAIN
 } from "../../config/constants/environments";
 import Union from "../../../public/green-logo.svg";
 import UnionDark from "../../../public/green-logo.svg";
@@ -54,23 +54,23 @@ export default function LpVault({
   const { switchChain } = useSwitchChain()
   const { theme, notifyError } = useGlobalContext();
 
-  const { data: lpTokenV2Balance } = useBalanceOfLpTokenV2({ address }) as { data: BigNumberish }
-  const { data: totalLPInVault } = useBalanceOfLpTokenV2({ address: MASTERCHEF_CONTRACT_ADDRESS }) as { data: BigNumberish }
-  const { data: totalLANDinLPContract } = useBalanceOfLandToken({ chainId: bsc.id, address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as { data: BigNumberish }
-  const { data: totalLPSupply } = useTotalSupplyOfLpTokenV2() as { data: BigNumberish }
-  const { data: totalBNBinLPContract } = useBalanceOfWBNB({ address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as { data: BigNumberish }
-  const { data: userInfo } = useUserInfo({ userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
-  const { data: pendingLand } = usePendingLand({ pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
-  const { data: approvedLAND } = useAllowance(address, MASTERCHEF_CONTRACT_ADDRESS) as { data: BigNumberish }
-  const allocPoints = usePoolInfo(1) as any[];
-  const { bnbPrice, coinPrice: coin, price } = useGetPrice()
+  const { data: lpTokenV2Balance } = useBalanceOfLpTokenV2({ chainId, address }) as { data: BigNumberish }
+  const { data: totalLPInVault } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish }
+  const { data: totalLANDinLPContract } = useBalanceOfLandToken({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish }
+  const { data: totalLPSupply } = useTotalSupplyOfLpTokenV2(chainId) as { data: BigNumberish }
+  const { data: totalBNBinLPContract } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish }
+  const { data: userInfo } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
+  const { data: pendingLand } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: approvedLAND } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const allocPoints = usePoolInfo(chainId, 1) as any[];
+  const { bnbPrice, coinPrice: coin, price } = useGetPrice(chainId)
 
   
   const {
     depositVault,
     withdrawVault,
     approveVault
-  } = useLpVault(address, updateStatus, updateLPFarm)
+  } = useLpVault(chainId, address, updateStatus, updateLPFarm)
 
   const [details, setDetails] = useState(false)
   const [depositing, setDepositing] = useState(true)
@@ -355,27 +355,27 @@ export default function LpVault({
                         <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
-                            if (chainId == 56) {
+                            if (chainId == MAJOR_WORK_CHAIN.id) {
                               if (inputValue && Number(inputValue) > Number(0)) {
                                 depositing ? isApprovedLP ? depositHandler() : approveVault() : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
                             } else {
-                              switchChain({ chainId: bsc.id })
+                              switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                             }
                           }}
                           disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                         >
                           {
-                            chainId != 56 ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                            chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                           }
                         </button>
-                        {chainId == 56 && (
+                        {chainId == MAJOR_WORK_CHAIN.id && (
                           <button
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => withdrawVault(depositBalanceLP, 0)}
-                            disabled={chainId != 56}
+                            disabled={chainId != MAJOR_WORK_CHAIN.id}
                           >
                             Harvest
                           </button>
@@ -433,27 +433,27 @@ export default function LpVault({
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if (chainId == 56) {
+                                if (chainId == MAJOR_WORK_CHAIN.id) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     depositing ? isApprovedLP ? depositHandler() : approveVault() : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  switchChain({ chainId: bsc.id })
+                                  switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                chainId != 56 ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
-                            {chainId == 56 && (
+                            {chainId == MAJOR_WORK_CHAIN.id && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawVault(depositBalanceLP, 0)}
-                                disabled={chainId != 56}
+                                disabled={chainId != MAJOR_WORK_CHAIN.id}
                               >
                                 Harvest
                               </button>

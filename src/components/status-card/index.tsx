@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useChainId } from "wagmi";
 import Link from "next/link";
 import { FiExternalLink } from "react-icons/fi";
 import { BigNumberish, formatEther } from "ethers";
@@ -23,19 +24,20 @@ import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 
 export default function StatusCard() {
   const dispatch = useAppDispatch();
+  const chainId = useChainId()
   const netRentalPerMonth = useAppSelector(selectNetRentalPerMonth);
   const appreciation = useAppSelector(selectAppreciation);
   const [apr, setApr] = useState(0);
   const [vaultBal, setVaultBal] = useState(0);
-  const apy = useGetApy();
-  const { bnbPrice, coinPrice: coin } = useGetPrice()
-  const allocPoints = usePoolInfo(1) as any[];
-  const totalPropertyValue = useGetTotalValue() as BigNumberish;
-  const { data: landAmountInLp } = useBalanceOf({ chainId: 56, address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as { data: BigNumberish };
-  const { data: totalBNBinLp } = useWBNBBalanceOf({ address: LP_TOKEN_V2_CONTRACT_ADDRESS }) as { data: BigNumberish };
-  const { data: totalLpInVault } = useLpTokenBalanceOf({ address: MASTERCHEF_CONTRACT_ADDRESS }) as { data: BigNumberish };
-  const { data: totalLpSupply } = useTotalSupply() as { data: BigNumberish };
-  const { data: totalDeposited } = useTotalStaked() as { data: BigNumberish };
+  const apy = useGetApy(chainId);
+  const { bnbPrice, coinPrice: coin } = useGetPrice(chainId)
+  const allocPoints = usePoolInfo(chainId, 1) as any[];
+  const totalPropertyValue = useGetTotalValue(chainId) as BigNumberish;
+  const { data: landAmountInLp } = useBalanceOf({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish };
+  const { data: totalBNBinLp } = useWBNBBalanceOf({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish };
+  const { data: totalLpInVault } = useLpTokenBalanceOf({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish };
+  const { data: totalLpSupply } = useTotalSupply(chainId) as { data: BigNumberish };
+  const { data: totalDeposited } = useTotalStaked(chainId) as { data: BigNumberish };
 
   useEffect(() => {
     dispatch(getData())

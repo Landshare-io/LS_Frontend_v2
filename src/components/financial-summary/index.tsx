@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
+import { useChainId } from "wagmi";
 import Modal from "react-modal";
 import Image from "next/image";
 import Link from "next/link";
 import { BsInfoCircle, BsLink45Deg } from "react-icons/bs";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { bsc } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BigNumberish, formatEther } from "ethers";
 import { useBalance } from "wagmi";
@@ -39,7 +39,7 @@ import {
 } from '../../lib/slices/firebase-slices/properties-rental';
 import useIsOptedIn from "../../hooks/contract/AutoRedeemContract/useIsOptedIn";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { BOLD_INTER_TIGHT, RWA_CONTRACT_ADDRESS } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, RWA_CONTRACT_ADDRESS, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 import { getDateStringFromTimestamp } from "../../utils/helpers/convert-date";
 import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";
 import useOptIn from "../../hooks/contract/AutoRedeemContract/useOptIn";
@@ -47,20 +47,21 @@ import useBalanceOf from "../../hooks/contract/RWAContract/useBalanceOf";
 
 export default function FinancialSummary() {
   const { theme } = useGlobalContext();
+  const chainId = useChainId();
   const [openMonthlyExpences, setOpenMonthlyExpences] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useAppDispatch();
   const { address, isConnected } = useAccount();
-  const totalPropertyValue = useGetTotalValue() as BigNumberish;
-  const bankBalance = useBankBalance() as BigNumberish;
-  const rwaPrice = useGetRwaPrice() as BigNumberish;
-  const rwaValue = useTotalSupply() as BigNumberish;
-  const totalRWATokenBalanceOfReserveWallets = useReserveRwa() as BigNumberish;
-  let isAutoRedeem = useIsOptedIn(address) as boolean
-  const { data: rwaBalance } = useBalanceOf(address) as { data: number }
-  const { data: optOutData, isPending: isOptOutPending, onOptOut } = useOptOut()
-  const { data: optInData, isPending: isOptInPending, onOptIn } = useOptIn()
+  const totalPropertyValue = useGetTotalValue(chainId) as BigNumberish;
+  const bankBalance = useBankBalance(chainId) as BigNumberish;
+  const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
+  const rwaValue = useTotalSupply(chainId) as BigNumberish;
+  const totalRWATokenBalanceOfReserveWallets = useReserveRwa(chainId) as BigNumberish;
+  let isAutoRedeem = useIsOptedIn(chainId, address) as boolean
+  const { data: rwaBalance } = useBalanceOf(chainId, address) as { data: number }
+  const { data: optOutData, isPending: isOptOutPending, onOptOut } = useOptOut(chainId)
+  const { data: optInData, isPending: isOptInPending, onOptIn } = useOptIn(chainId)
   const financeLogs = useAppSelector(selectFinancialLogs);
   const isSummaryLoading = useAppSelector(selectLoadingStatus);
   const grossRentPerMonth = useAppSelector(selectGrossRentPerMonth)
@@ -72,8 +73,8 @@ export default function FinancialSummary() {
 
   const { data: balance } = useBalance({
     address: address,
-    token: RWA_CONTRACT_ADDRESS,
-    chainId: bsc.id,
+    token: RWA_CONTRACT_ADDRESS[chainId],
+    chainId: MAJOR_WORK_CHAIN.id,
   }) as { data: any }
 
 
