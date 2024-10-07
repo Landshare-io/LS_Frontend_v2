@@ -21,6 +21,8 @@ import useWithdrawAll from "../AutoVaultV2Contract/useWithdrawAll";
 import useWithdraw from "../AutoVaultV2Contract/useWithdraw";
 import useHarvest from "../AutoVaultV2Contract/useHarvest";
 import { 
+  PROVIDERS,
+  MAJOR_WORK_CHAIN,
   CCIP_CHAIN_SENDER_CONTRACT_ADDRESS, 
   GAS_COSTS, 
   CCIP_CHAIN_ID, 
@@ -33,11 +35,11 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   const [depositAmount, setDepositAmount] = useState<BigNumberish>(0)
   const [transferAction, setTransferAction] = useState('')
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
-  const { deposit, data: depositTx } = useDeposit()
-  const { withdraw, data: withdrawTx } = useWithdraw()
+  const { deposit, data: depositTx } = useDeposit(chainId)
+  const { withdraw, data: withdrawTx } = useWithdraw(chainId)
   const dispatch = useAppDispatch()
-  const { withdrawAll, data: withdrawAllTx } = useWithdrawAll()
-  const { harvest, data: harvestTx } = useHarvest()
+  const { withdrawAll, data: withdrawAllTx } = useWithdrawAll(chainId)
+  const { harvest, data: harvestTx } = useHarvest(chainId)
   const { data: gasBalance } = useBalance({
     address,
     chainId
@@ -53,14 +55,14 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     total,
     autoLandV3: ccipAutoLandV3 
   } = useCcipVaultBalance(chainId, address) as { totalSharesV3: BigNumberish, total: BigNumberish, autoLandV3: BigNumberish }
-  const { autoLandV3 } = useAutoLandV3(address) as { autoLandV3: BigNumberish }
-  const { refetch: refetchUserInfo } = useUserInfo({ userInfoId: 0, address })
-  const { refetch: refetchPendingLand } = usePendingLand({ pendingLandId: 0, address })
+  const { autoLandV3 } = useAutoLandV3(chainId, address) as { autoLandV3: BigNumberish }
+  const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 0, address })
+  const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 0, address })
   const { refetch: refetchTotalSupply } = useTotalSupply(chainId)
-  const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] })
-  const { data: landTokenBalance, refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId: bsc.id, address }) as { data: BigNumberish, refetch: Function }
-  const { transfer, data: transferTx } = useTransfer()
-  const { isSuccess: transferSuccess, refetch: refetchTransferTx } = useWaitForTransactionReceipt({
+  const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] })
+  const { data: landTokenBalance, refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish, refetch: Function }
+  const { transfer, data: transferTx } = useTransfer(chainId)
+  const { isSuccess: transferSuccess, refetch: refetchTransferTx, data: receiptTx } = useWaitForTransactionReceipt({
     hash: transferTx,
     chainId: chainId
   });
@@ -70,15 +72,15 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   });
   const { isSuccess: depositSuccess } = useWaitForTransactionReceipt({
     hash: depositTx,
-    chainId: bsc.id
+    chainId: chainId
   });
   const { isSuccess: withdrawSuccess } = useWaitForTransactionReceipt({
     hash: withdrawTx,
-    chainId: bsc.id
+    chainId: chainId
   });
   const { isSuccess: harvestSuccess } = useWaitForTransactionReceipt({
     hash: harvestTx,
-    chainId: bsc.id
+    chainId: chainId
   });
 
   useEffect(() => {
@@ -117,15 +119,15 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     (async () => {
       if (transferSuccess) {
-        const receipt = await refetchTransferTx()
-        const messageId = receipt?.events.filter((item: any) => item.hasOwnProperty('args')).map((item: any) => item.args)[0][0]
+        const receiptTx = await PROVIDERS[chainId].getTransactionReceipt(transferTx);
+        const messageId = receiptTx?.events.filter((item: any) => item.hasOwnProperty('args')).map((item: any) => item.args)[0][0]
         dispatch(updateCcipTransaction({
           walletAddress: address,
           status: 'PENDING',
           action: transferAction,
           messageId,
           sourceChain: CCIP_CHAIN_ID[chainId],
-          destinationChain: CCIP_CHAIN_ID[bsc.id]
+          destinationChain: CCIP_CHAIN_ID[MAJOR_WORK_CHAIN.id]
         }))
         setScreenLoadingStatus(`${transferAction} Transaction success`)
       } else {
@@ -226,13 +228,13 @@ export default function useAutoVault(chainId: number, address: Address | undefin
       return
     }
 
-    if (chainId !== bsc.id && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
+    if (chainId !== MAJOR_WORK_CHAIN.id && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
       notifyError('Insufficient Funds for Gas')
       return
     }
 
     
-    if (chainId !== bsc.id) {
+    if (chainId !== MAJOR_WORK_CHAIN.id) {
       if (ccipAllowance < amount) {
         approveLand(chainId, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId], amount)
       }
@@ -246,10 +248,10 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
   const withdrawVault = (amount: BigNumberish) => {
     // check withdraw all
-    if (chainId != bsc.id) {
+    if (chainId != MAJOR_WORK_CHAIN.id) {
       setTransferAction('Withdraw All')
       if (amount == 0 || amount == ccipAutoLandV3) {
-        if (chainId !== bsc.id && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
+        if (chainId !== MAJOR_WORK_CHAIN.id && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
           notifyError('Insufficient Funds for Gas')
           return
         }
@@ -264,8 +266,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     }
 
     setTransferAction('Withdraw')
-    if (chainId != bsc.id) {
-      if (chainId !== bsc.id && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
+    if (chainId != MAJOR_WORK_CHAIN.id) {
+      if (chainId !== MAJOR_WORK_CHAIN.id && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
         notifyError('Insufficient Funds for Gas')
         return
       }
@@ -281,7 +283,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approveLand(chainId, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId], "1000000000000000000000000000000")
+    approveLand(chainId, AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id], "1000000000000000000000000000000")
   }
 
   const clainBounty = () => {

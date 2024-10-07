@@ -1,5 +1,6 @@
 import { useReadContract } from "wagmi";
 import { Address } from "viem";
+import { bsc } from "viem/chains";
 import MasterchefAbi from '../../../abis/Masterchef.json';
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
@@ -11,7 +12,7 @@ interface UsePendingLandProps {
 
 export default function usePendingLand({ chainId, pendingLandId, address }: UsePendingLandProps) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: MASTERCHEF_CONTRACT_ADDRESS[chainId],
+    address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id],
     abi: MasterchefAbi,
     functionName: "pendingLand",
     args: [pendingLandId, address],

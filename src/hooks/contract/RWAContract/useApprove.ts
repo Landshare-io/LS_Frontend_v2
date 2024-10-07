@@ -1,4 +1,5 @@
 import { useWriteContract } from 'wagmi'
+import { bsc } from "viem/chains"
 import RwaContractAbi from "../../../abis/RWAContract.json";
 import { RWA_CONTRACT_ADDRESS } from '../../../config/constants/environments';
 import { Address } from 'viem';
@@ -12,15 +13,13 @@ export default function useApprove(chainId: number) {
   } = useWriteContract();
 
   async function approve(approveAddress: Address, amount: number | BigNumberish) {
-    const result = await writeContract({
-      address: RWA_CONTRACT_ADDRESS[chainId],
+    await writeContract({
+      address: RWA_CONTRACT_ADDRESS[bsc.id],
       abi: RwaContractAbi,
       functionName: "approve",
       chainId: chainId,
       args: [approveAddress, amount]
     });
-
-    console.log('==============', result)
   }
 
   return {

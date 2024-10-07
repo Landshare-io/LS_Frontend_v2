@@ -11,7 +11,7 @@ interface UseBalanceOfProps {
 
 export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: WBNB_TOKEN_CONTRACT_ADDRESS[chainId],
+    address: WBNB_TOKEN_CONTRACT_ADDRESS[bsc.id],
     abi: WBNBAbi,
     functionName: "balanceOf",
     args: [address]

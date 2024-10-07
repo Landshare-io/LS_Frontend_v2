@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useWaitForTransactionReceipt } from "wagmi";
 import { formatEther, BigNumberish } from "ethers";
 import { Address } from "viem";
+import { bsc } from "viem/chains";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useDeposit from "../AutoVaultV2Contract/useDeposit";
 import useWithdraw from "../AutoVaultV2Contract/useWithdraw";
@@ -15,15 +16,15 @@ import { AUTO_VAULT_V3_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../
 
 export default function useVaultBalanceManual(chainId: number, address: Address | undefined, updateStatus: Function) {
   const { setScreenLoadingStatus } = useGlobalContext()
-  const { deposit, data: depositTx } = useDeposit()
-  const { withdraw, data: withdrawTx } = useWithdraw()
+  const { deposit, data: depositTx } = useDeposit(chainId)
+  const { withdraw, data: withdrawTx } = useWithdraw(chainId)
   const { approve, data: approveTx } = useApprove(chainId)
   const { data: lpTokenV2Balance, refetch: refetchLpTokenV2 } = useBalanceOfLpTokenV2({ chainId, address }) as {
     data: BigNumberish,
     refetch: Function
   }
-  const { refetch: refetchAllowanceOfLpTokenV2OfVault } = useAllowanceOfLpTokenV2(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId])
-  const { refetch: refetchAllowanceOfLpTokenV2OfMasterChef } = useAllowanceOfLpTokenV2(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId])
+  const { refetch: refetchAllowanceOfLpTokenV2OfVault } = useAllowanceOfLpTokenV2(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id])
+  const { refetch: refetchAllowanceOfLpTokenV2OfMasterChef } = useAllowanceOfLpTokenV2(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id])
   const { refetch: refetchTotalStaked } = useTotalStaked(chainId)
   const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 0, address })
   const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 0, address })
@@ -125,7 +126,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(MASTERCHEF_CONTRACT_ADDRESS[chainId], "1000000000000000000000000000000")
+    approve(MASTERCHEF_CONTRACT_ADDRESS[bsc.id], "1000000000000000000000000000000")
     updateStatus()
   }
 

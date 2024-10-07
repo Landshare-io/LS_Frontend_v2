@@ -5,6 +5,7 @@ import {
   useChainId, 
   useSwitchChain 
 } from "wagmi";
+import { bsc } from "viem/chains";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { 
   BigNumberish, 
@@ -72,14 +73,14 @@ export default function Usdtvault({
   } = useUsdtVault(chainId, address)
 
   const { data: balance } = useBalanceOfRwaLp(chainId, address) as { data: BigNumberish }
-  const { data: contractLPUSDTBalance } = useBalanceOfUsdt(chainId, RWA_LP_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
-  const { data: contractLPLSRWABalance } = useBalanceOfRwa(chainId, RWA_LP_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
-  const { data: amountLSRWALPInVault } = useBalanceOfRwaLp(chainId, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { data: contractLPUSDTBalance } = useBalanceOfUsdt(chainId, RWA_LP_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
+  const { data: contractLPLSRWABalance } = useBalanceOfRwa(chainId, RWA_LP_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
+  const { data: amountLSRWALPInVault } = useBalanceOfRwaLp(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
   const { data: userBalance } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish] }
   const rwaTokenPrice = useGetRwaPrice(chainId) as BigNumberish
   const LSRWALPTotalSupply = useTotalSupplyOfRwaLp(chainId) as BigNumberish
   const { data: rewardsLSRWALP } = usePendingLand({ chainId, pendingLandId: 4, address }) as { data: BigNumberish }
-  const { data: LSRWALPAllowance } = useAllowanceOfRwaLp(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { data: LSRWALPAllowance } = useAllowanceOfRwaLp(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
   const { price } = useGetPrice(chainId)
 
   const [inputValue, setInputValue] = useState("");

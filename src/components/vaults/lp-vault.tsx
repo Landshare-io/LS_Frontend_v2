@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { BigNumberish, formatEther, parseEther } from "ethers";
 import Image from "next/image";
+import { bsc } from "viem/chains";
 import { useChainId, useAccount, useSwitchChain } from "wagmi";
 import Collapse from "../common/collapse";
 import ConnectWallet from "../connect-wallet";
@@ -55,13 +56,13 @@ export default function LpVault({
   const { theme, notifyError } = useGlobalContext();
 
   const { data: lpTokenV2Balance } = useBalanceOfLpTokenV2({ chainId, address }) as { data: BigNumberish }
-  const { data: totalLPInVault } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish }
-  const { data: totalLANDinLPContract } = useBalanceOfLandToken({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish }
+  const { data: totalLPInVault } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
+  const { data: totalLANDinLPContract } = useBalanceOfLandToken({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
   const { data: totalLPSupply } = useTotalSupplyOfLpTokenV2(chainId) as { data: BigNumberish }
-  const { data: totalBNBinLPContract } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish }
+  const { data: totalBNBinLPContract } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
   const { data: userInfo } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
   const { data: pendingLand } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
-  const { data: approvedLAND } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { data: approvedLAND } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
   const allocPoints = usePoolInfo(chainId, 1) as any[];
   const { bnbPrice, coinPrice: coin, price } = useGetPrice(chainId)
 

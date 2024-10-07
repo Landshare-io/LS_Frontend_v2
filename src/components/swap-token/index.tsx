@@ -3,6 +3,7 @@ import { BigNumberish, formatEther } from "ethers";
 import Image from "next/image";
 import Link from "next/link";
 import Modal from "react-modal"
+import { bsc } from "viem/chains";
 import { MdOutlineHelp, MdCancel } from "react-icons/md";
 import { useAccount, useBalance, useChainId } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -72,7 +73,7 @@ export default function SwapToken() {
 
   const { data: balance } = useBalance({
     address: address,
-    token: RWA_CONTRACT_ADDRESS[chainId],
+    token: RWA_CONTRACT_ADDRESS[bsc.id],
     chainId: chainId
   }) as { data: any }
 
@@ -83,7 +84,7 @@ export default function SwapToken() {
   }) as { data: any }
 
   const { data: poolBalance } = useBalance({
-    address: RWA_POOL_CONTRACT_ADDRESS[chainId],
+    address: RWA_POOL_CONTRACT_ADDRESS[bsc.id],
     token: USDC_ADDRESS[chainId],
     chainId: chainId
   }) as { data: any }

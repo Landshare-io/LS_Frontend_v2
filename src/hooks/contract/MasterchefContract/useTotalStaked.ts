@@ -1,10 +1,11 @@
 import { useReadContract } from "wagmi";
+import { bsc } from "viem/chains";
 import MasterchefAbi from '../../../abis/Masterchef.json';
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useTotalStaked(chainId: number) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: MASTERCHEF_CONTRACT_ADDRESS[chainId],
+    address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id],
     abi: MasterchefAbi,
     functionName: "totalStaked",
     chainId: chainId

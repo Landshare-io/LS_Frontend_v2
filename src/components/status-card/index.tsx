@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useChainId } from "wagmi";
 import Link from "next/link";
+import { bsc } from "viem/chains";
 import { FiExternalLink } from "react-icons/fi";
 import { BigNumberish, formatEther } from "ethers";
 import Counter from "../common/counter";
@@ -33,9 +34,9 @@ export default function StatusCard() {
   const { bnbPrice, coinPrice: coin } = useGetPrice(chainId)
   const allocPoints = usePoolInfo(chainId, 1) as any[];
   const totalPropertyValue = useGetTotalValue(chainId) as BigNumberish;
-  const { data: landAmountInLp } = useBalanceOf({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish };
-  const { data: totalBNBinLp } = useWBNBBalanceOf({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish };
-  const { data: totalLpInVault } = useLpTokenBalanceOf({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[chainId] }) as { data: BigNumberish };
+  const { data: landAmountInLp } = useBalanceOf({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish };
+  const { data: totalBNBinLp } = useWBNBBalanceOf({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish };
+  const { data: totalLpInVault } = useLpTokenBalanceOf({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish };
   const { data: totalLpSupply } = useTotalSupply(chainId) as { data: BigNumberish };
   const { data: totalDeposited } = useTotalStaked(chainId) as { data: BigNumberish };
 

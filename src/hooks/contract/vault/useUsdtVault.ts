@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useWaitForTransactionReceipt } from "wagmi";
 import { BigNumberish } from "ethers";
 import { Address } from "viem";
+import { bsc } from "viem/chains";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useDeposit from "../MasterchefContract/useDeposit";
 import useWithdraw from "../MasterchefContract/useWithdraw";
@@ -15,7 +16,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
   const { deposit, data: depositTx } = useDeposit(chainId)
   const { withdraw, data: withdrawTx } = useWithdraw(chainId)
   const { approve, data: approveTx } = useApprove()
-  const { data: rwaLpTokenBalance } = useBalanceOfRwaLp(address) as {
+  const { data: rwaLpTokenBalance } = useBalanceOfRwaLp(chainId, address) as {
     data: BigNumberish,
     refetch: Function
   }
@@ -116,7 +117,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(MASTERCHEF_CONTRACT_ADDRESS[chainId], "1000000000000000000000000000000")
+    approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id], "1000000000000000000000000000000")
   }
 
   return {

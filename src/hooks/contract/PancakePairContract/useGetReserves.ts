@@ -5,10 +5,10 @@ import { PANCAKE_PAIR_CONTRACT_ADDRESS } from "../../../config/constants/environ
 
 export default function useGetReserves(chainId: number) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: PANCAKE_PAIR_CONTRACT_ADDRESS[chainId],
+    address: PANCAKE_PAIR_CONTRACT_ADDRESS[bsc.id],
     abi: PancakePairAbi,
     functionName: "getReserves",
-    chainId: bsc.id
+    chainId: chainId
   })
 
   if (isLoading) return [0, 0]
