@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { useChainId } from "wagmi";
 import { useWaitForTransactionReceipt } from "wagmi";
 import { BigNumberish } from "ethers";
 import { bsc } from "viem/chains";
@@ -17,17 +18,18 @@ import { LP_TOKEN_V2_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../..
 
 export default function useLpVault(address: Address | undefined, updateStatus: Function, updateLPFarm: Function) {
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
+  const chainId = useChainId()
   const { deposit, data: depositTx } = useDeposit()
   const { withdraw, data: withdrawTx } = useWithdraw()
-  const { approve, data: approveTx } = useApprove()
-  const { data: lpTokenV2Balance, refetch: refetchLpTokenV2 } = useBalanceOfLpTokenV2({ address: MASTERCHEF_CONTRACT_ADDRESS }) as {
+  const { approve, data: approveTx } = useApprove(chainId)
+  const { data: lpTokenV2Balance, refetch: refetchLpTokenV2 } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[chainId] }) as {
     data: BigNumberish,
     refetch: Function
   }
   const { refetch: refetchUserInfo } = useUserInfo({ userInfoId: 0, address })
   const { refetch: refetchPendingLand } = usePendingLand({ pendingLandId: 0, address })
-  const { refetch: refetchTotalSupply } = useTotalSupply()
-  const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ address: LP_TOKEN_V2_CONTRACT_ADDRESS })
+  const { refetch: refetchTotalSupply } = useTotalSupply(chainId)
+  const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] })
   const { refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId: bsc.id, address })
 
   const { isSuccess: depositSuccess } = useWaitForTransactionReceipt({
@@ -154,7 +156,7 @@ export default function useLpVault(address: Address | undefined, updateStatus: F
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(MASTERCHEF_CONTRACT_ADDRESS, lpTokenV2Balance)
+    approve(MASTERCHEF_CONTRACT_ADDRESS[chainId], lpTokenV2Balance)
   }
 
   return {

@@ -1,7 +1,6 @@
 import { useEffect } from "react"
 import { useWaitForTransactionReceipt } from "wagmi";
 import { BigNumberish } from "ethers";
-import { bsc } from "viem/chains";
 import { Address } from "viem";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useDeposit from "../MasterchefContract/useDeposit";
@@ -11,27 +10,27 @@ import useApprove from "../RwaLpTokenContract/useApprove";
 import useUserInfo from "../MasterchefContract/useUserInfo";
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function useUsdtVault(address: Address | undefined) {
+export default function useUsdtVault(chainId: number, address: Address | undefined) {
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
-  const { deposit, data: depositTx } = useDeposit()
-  const { withdraw, data: withdrawTx } = useWithdraw()
+  const { deposit, data: depositTx } = useDeposit(chainId)
+  const { withdraw, data: withdrawTx } = useWithdraw(chainId)
   const { approve, data: approveTx } = useApprove()
   const { data: rwaLpTokenBalance } = useBalanceOfRwaLp(address) as {
     data: BigNumberish,
     refetch: Function
   }
-  const { data: vaultBalanceLsRwa } = useUserInfo({ userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish], refetch: Function }
+  const { data: vaultBalanceLsRwa } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish], refetch: Function }
   const { isSuccess: depositSuccess } = useWaitForTransactionReceipt({
     hash: depositTx,
-    chainId: bsc.id
+    chainId: chainId
   });
   const { isSuccess: withdrawSuccess } = useWaitForTransactionReceipt({
     hash: withdrawTx,
-    chainId: bsc.id
+    chainId: chainId
   });
   const { isSuccess: approveSuccess } = useWaitForTransactionReceipt({
     hash: approveTx,
-    chainId: bsc.id
+    chainId: chainId
   });
 
   useEffect(() => {
@@ -117,7 +116,7 @@ export default function useUsdtVault(address: Address | undefined) {
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(MASTERCHEF_CONTRACT_ADDRESS, "1000000000000000000000000000000")
+    approve(MASTERCHEF_CONTRACT_ADDRESS[chainId], "1000000000000000000000000000000")
   }
 
   return {

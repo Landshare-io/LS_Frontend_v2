@@ -5,15 +5,15 @@ import { WBNB_TOKEN_CONTRACT_ADDRESS } from "../../../config/constants/environme
 import { Address } from "viem";
 
 interface UseBalanceOfProps {
+  chainId: number
   address: Address | undefined;
 }
 
-export default function useBalanceOf({ address }: UseBalanceOfProps) {
+export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: WBNB_TOKEN_CONTRACT_ADDRESS,
+    address: WBNB_TOKEN_CONTRACT_ADDRESS[chainId],
     abi: WBNBAbi,
     functionName: "balanceOf",
-    chainId: bsc.id,
     args: [address]
   })
 

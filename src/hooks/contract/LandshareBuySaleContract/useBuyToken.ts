@@ -1,11 +1,10 @@
 import { useWriteContract } from 'wagmi'
-import { bsc } from 'viem/chains';
 import { Address } from 'viem';
 import { BigNumberish } from 'ethers';
 import LandshareBuySaleAbi from "../../../abis/LandshareBuySale.json"
 import { LANDSHARE_BUY_SALE_CONTRACT_ADDRESS } from '../../../config/constants/environments';
 
-export default function useBuyToken() {
+export default function useBuyToken(chainId: number) {
   const {
     data,
     isPending,
@@ -14,10 +13,10 @@ export default function useBuyToken() {
 
   async function buyToken(amount: number | BigNumberish, usdcAddress: Address) {
     await writeContract({
-      address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS,
+      address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
       abi: LandshareBuySaleAbi,
       functionName: "buyToken",
-      chainId: bsc.id,
+      chainId: chainId,
       args: [amount, usdcAddress]
     });
   }

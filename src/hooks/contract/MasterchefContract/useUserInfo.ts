@@ -1,21 +1,21 @@
 import { useReadContract } from "wagmi";
-import { bsc } from "viem/chains";
 import { Address } from "viem";
 import MasterchefAbi from '../../../abis/Masterchef.json';
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 interface UseUserInfoProps {
+  chainId: number
   userInfoId: number
   address: Address | undefined
 }
 
-export default function useUserInfo({ userInfoId, address }: UseUserInfoProps) {
+export default function useUserInfo({ chainId, userInfoId, address }: UseUserInfoProps) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: MASTERCHEF_CONTRACT_ADDRESS,
+    address: MASTERCHEF_CONTRACT_ADDRESS[chainId],
     abi: MasterchefAbi,
     functionName: "userInfo",
     args: [userInfoId, address],
-    chainId: bsc.id
+    chainId: chainId
   })
 
   if (typeof address == 'undefined') return { data: [0, 0], refetch, isLoading }

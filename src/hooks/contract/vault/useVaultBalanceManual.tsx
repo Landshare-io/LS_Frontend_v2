@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { useWaitForTransactionReceipt } from "wagmi";
 import { formatEther, BigNumberish } from "ethers";
-import { bsc } from "viem/chains";
 import { Address } from "viem";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useDeposit from "../AutoVaultV2Contract/useDeposit";
@@ -14,32 +13,32 @@ import useUserInfo from "../MasterchefContract/useUserInfo";
 import usePendingLand from "../MasterchefContract/usePendingLand";
 import { AUTO_VAULT_V3_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function useVaultBalanceManual(address: Address | undefined, updateStatus: Function) {
+export default function useVaultBalanceManual(chainId: number, address: Address | undefined, updateStatus: Function) {
   const { setScreenLoadingStatus } = useGlobalContext()
   const { deposit, data: depositTx } = useDeposit()
   const { withdraw, data: withdrawTx } = useWithdraw()
-  const { approve, data: approveTx } = useApprove()
-  const { data: lpTokenV2Balance, refetch: refetchLpTokenV2 } = useBalanceOfLpTokenV2({ address }) as {
+  const { approve, data: approveTx } = useApprove(chainId)
+  const { data: lpTokenV2Balance, refetch: refetchLpTokenV2 } = useBalanceOfLpTokenV2({ chainId, address }) as {
     data: BigNumberish,
     refetch: Function
   }
-  const { refetch: refetchAllowanceOfLpTokenV2OfVault } = useAllowanceOfLpTokenV2(address, AUTO_VAULT_V3_CONTRACT_ADDRESS)
-  const { refetch: refetchAllowanceOfLpTokenV2OfMasterChef } = useAllowanceOfLpTokenV2(address, MASTERCHEF_CONTRACT_ADDRESS)
-  const { refetch: refetchTotalStaked } = useTotalStaked()
-  const { refetch: refetchUserInfo } = useUserInfo({ userInfoId: 0, address })
-  const { refetch: refetchPendingLand } = usePendingLand({ pendingLandId: 0, address })
+  const { refetch: refetchAllowanceOfLpTokenV2OfVault } = useAllowanceOfLpTokenV2(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId])
+  const { refetch: refetchAllowanceOfLpTokenV2OfMasterChef } = useAllowanceOfLpTokenV2(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId])
+  const { refetch: refetchTotalStaked } = useTotalStaked(chainId)
+  const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 0, address })
+  const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 0, address })
 
   const { isSuccess: depositSuccess } = useWaitForTransactionReceipt({
     hash: depositTx,
-    chainId: bsc.id
+    chainId: chainId
   });
   const { isSuccess: withdrawSuccess } = useWaitForTransactionReceipt({
     hash: withdrawTx,
-    chainId: bsc.id
+    chainId: chainId
   });
   const { isSuccess: approveSuccess } = useWaitForTransactionReceipt({
     hash: approveTx,
-    chainId: bsc.id
+    chainId: chainId
   });
 
   useEffect(() => {
@@ -126,7 +125,7 @@ export default function useVaultBalanceManual(address: Address | undefined, upda
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(MASTERCHEF_CONTRACT_ADDRESS, "1000000000000000000000000000000")
+    approve(MASTERCHEF_CONTRACT_ADDRESS[chainId], "1000000000000000000000000000000")
     updateStatus()
   }
 

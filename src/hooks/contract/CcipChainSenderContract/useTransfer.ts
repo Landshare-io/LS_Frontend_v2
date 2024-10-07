@@ -1,7 +1,6 @@
 import { useWriteContract } from "wagmi";
 import { simulateContract } from "viem/actions";
-import { bsc } from "viem/chains";
-import { BigNumberish, parseEther } from "ethers";
+import { BigNumberish } from "ethers";
 import { config } from "../../../wagmi";
 import CrossChainSenderAbi from "../../../abis/CrossChainSender.json"
 import { 
@@ -11,7 +10,7 @@ import {
   CCIP_CHAIN_SENDER_CONTRACT_ADDRESS 
 } from "../../../config/constants/environments";
 
-export default function useTransfer() {
+export default function useTransfer(chainId: number) {
   const {
     data,
     isPending,
@@ -23,7 +22,7 @@ export default function useTransfer() {
       address: CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId],
       abi: CrossChainSenderAbi,
       functionName: "transfer",
-      chainId: bsc.id,
+      chainId: chainId,
       args: [
         CCIP_CHAIN_ID[56],
         CCIP_CHAIN_RECEIVER[56],

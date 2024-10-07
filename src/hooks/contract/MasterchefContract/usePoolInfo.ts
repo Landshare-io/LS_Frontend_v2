@@ -1,15 +1,14 @@
 import { useReadContract } from "wagmi";
-import { bsc } from "viem/chains";
 import MasterchefAbi from '../../../abis/Masterchef.json';
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function usePoolInfo(poolInfoArg: Number) {
+export default function usePoolInfo(chainId: number, poolInfoArg: number) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: MASTERCHEF_CONTRACT_ADDRESS,
+    address: MASTERCHEF_CONTRACT_ADDRESS[chainId],
     abi: MasterchefAbi,
     functionName: "poolInfo",
     args: [poolInfoArg],
-    chainId: bsc.id
+    chainId: chainId
   })
 
   if (isLoading) return [0, 0]

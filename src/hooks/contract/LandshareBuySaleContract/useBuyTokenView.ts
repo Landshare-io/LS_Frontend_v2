@@ -1,16 +1,15 @@
 import { useReadContract } from "wagmi";
-import { bsc } from "viem/chains";
 import LandshareBuySaleAbi from "../../../abis/LandshareBuySale.json"
 import { LANDSHARE_BUY_SALE_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { BigNumberish } from "ethers";
 import { Address } from "viem";
 
-export default function useBuyTokenView(amountOfSecurities: number | BigNumberish, stableCoinAddress: Address) {
+export default function useBuyTokenView(chainId: number, amountOfSecurities: number | BigNumberish, stableCoinAddress: Address) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS,
+    address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareBuySaleAbi,
     functionName: "buyTokenView",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [amountOfSecurities, stableCoinAddress]
   })
 

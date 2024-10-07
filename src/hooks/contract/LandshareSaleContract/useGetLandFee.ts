@@ -1,15 +1,14 @@
 import { useReadContract } from "wagmi";
-import { bsc } from "viem/chains";
 import LandshareSaleAbi from "../../../abis/LandshareSale.json";
 import { LANDSHARE_SALE_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { BigNumberish } from "ethers";
 
-export default function useGetLandFee(usdcAmount: BigNumberish) {
+export default function useGetLandFee(chainId: number, usdcAmount: BigNumberish) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: LANDSHARE_SALE_CONTRACT_ADDRESS,
+    address: LANDSHARE_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareSaleAbi,
     functionName: "getLANDFee",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [usdcAmount],
   })
 
