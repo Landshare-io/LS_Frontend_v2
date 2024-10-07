@@ -1,5 +1,4 @@
 import { useReadContract } from "wagmi";
-import { bsc } from "viem/chains";
 import UsdtAbi from "../../../abis/USDT.json";
 import { USDT_ADDRESS } from "../../../config/constants/environments";
 import { Address } from "viem";
@@ -9,7 +8,7 @@ export default function useBalanceOf(chainId: number, address: Address | undefin
     address: USDT_ADDRESS[chainId],
     abi: UsdtAbi,
     functionName: "balanceOf",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [address]
   })
 

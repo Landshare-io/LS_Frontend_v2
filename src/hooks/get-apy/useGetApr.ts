@@ -1,36 +1,35 @@
 import { useReadContracts } from "wagmi";
-import { bsc } from "viem/chains";
 import MasterchefAbi from '../../abis/Masterchef.json';
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../config/constants/environments";
 import { toBigInt } from "ethers";
 
-export default function useGetApr() {
+export default function useGetApr(chainId: number) {
   const { data, isError, isLoading, error } = useReadContracts({
     contracts: [
       {
-        address: MASTERCHEF_CONTRACT_ADDRESS,
+        address: MASTERCHEF_CONTRACT_ADDRESS[chainId],
         abi: MasterchefAbi,
         functionName: "landPerBlock",
-        chainId: bsc.id
+        chainId: chainId
       },
       {
-        address: MASTERCHEF_CONTRACT_ADDRESS,
+        address: MASTERCHEF_CONTRACT_ADDRESS[chainId],
         abi: MasterchefAbi,
         functionName: "poolInfo",
         args: [0],
-        chainId: bsc.id
+        chainId: chainId
       },
       {
-        address: MASTERCHEF_CONTRACT_ADDRESS,
+        address: MASTERCHEF_CONTRACT_ADDRESS[chainId],
         abi: MasterchefAbi,
         functionName: "totalAllocPoint",
-        chainId: bsc.id
+        chainId: chainId
       },
       {
-        address: MASTERCHEF_CONTRACT_ADDRESS,
+        address: MASTERCHEF_CONTRACT_ADDRESS[chainId],
         abi: MasterchefAbi,
         functionName: "totalStaked",
-        chainId: bsc.id
+        chainId: chainId
       }
     ]
   }) as { data: any[], isError: boolean, isLoading: boolean, error: any }

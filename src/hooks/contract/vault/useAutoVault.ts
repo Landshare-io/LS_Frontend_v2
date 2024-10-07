@@ -25,7 +25,6 @@ import {
   GAS_COSTS, 
   CCIP_CHAIN_ID, 
   LP_TOKEN_V2_CONTRACT_ADDRESS, 
-  MASTERCHEF_CONTRACT_ADDRESS, 
   AUTO_VAULT_V3_CONTRACT_ADDRESS
 } from "../../../config/constants/environments";
 
@@ -57,8 +56,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   const { autoLandV3 } = useAutoLandV3(address) as { autoLandV3: BigNumberish }
   const { refetch: refetchUserInfo } = useUserInfo({ userInfoId: 0, address })
   const { refetch: refetchPendingLand } = usePendingLand({ pendingLandId: 0, address })
-  const { refetch: refetchTotalSupply } = useTotalSupply()
-  const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ address: LP_TOKEN_V2_CONTRACT_ADDRESS })
+  const { refetch: refetchTotalSupply } = useTotalSupply(chainId)
+  const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId] })
   const { data: landTokenBalance, refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId: bsc.id, address }) as { data: BigNumberish, refetch: Function }
   const { transfer, data: transferTx } = useTransfer()
   const { isSuccess: transferSuccess, refetch: refetchTransferTx } = useWaitForTransactionReceipt({
@@ -282,7 +281,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approveLand(chainId, AUTO_VAULT_V3_CONTRACT_ADDRESS, "1000000000000000000000000000000")
+    approveLand(chainId, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId], "1000000000000000000000000000000")
   }
 
   const clainBounty = () => {

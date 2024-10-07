@@ -1,19 +1,18 @@
 import { useReadContract } from "wagmi";
-import { bsc } from "viem/chains";
 import { Address } from "viem";
 import LpTokenV2Abi from "../../../abis/LpTokenV2.json";
 import { LP_TOKEN_V2_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 interface UseBalanceOfProps {
+  chainId: number;
   address: Address | undefined;
 }
 
-export default function useBalanceOf({ address }: UseBalanceOfProps) {
+export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: LP_TOKEN_V2_CONTRACT_ADDRESS,
+    address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId],
     abi: LpTokenV2Abi,
     functionName: "balanceOf",
-    chainId: bsc.id,
     args: [address]
   })
 

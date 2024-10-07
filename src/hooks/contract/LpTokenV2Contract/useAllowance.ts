@@ -4,9 +4,9 @@ import { Address } from "viem";
 import LpTokenV2Abi from "../../../abis/LpTokenV2.json";
 import { LP_TOKEN_V2_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function useAllowance(approver: Address | undefined, to: Address) {
+export default function useAllowance(chainId: number, approver: Address | undefined, to: Address) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: LP_TOKEN_V2_CONTRACT_ADDRESS,
+    address: LP_TOKEN_V2_CONTRACT_ADDRESS[chainId],
     abi: LpTokenV2Abi,
     functionName: "allowance",
     chainId: bsc.id,

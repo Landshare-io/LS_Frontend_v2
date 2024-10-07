@@ -1,10 +1,8 @@
 import { useWriteContract } from "wagmi";
-import { bsc } from "viem/chains";
-import type { Address } from "viem";
 import AutoRedeemAbi from "../../../abis/AutoRedeem.json";
 import { AUTO_REDEEM_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function useOptOut() {
+export default function useOptOut(chainId: number) {
   const {
     data,
     isPending,
@@ -13,10 +11,10 @@ export default function useOptOut() {
 
   async function onOptOut() {
     await writeContract({
-      address: AUTO_REDEEM_CONTRACT_ADDRESS as Address,
+      address: AUTO_REDEEM_CONTRACT_ADDRESS[chainId],
       abi: AutoRedeemAbi,
       functionName: "optOut",
-      chainId: bsc.id
+      chainId: chainId
     });
   }
 

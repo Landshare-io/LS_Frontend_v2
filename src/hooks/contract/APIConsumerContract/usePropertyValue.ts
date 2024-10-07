@@ -1,14 +1,13 @@
 import { useReadContract } from "wagmi";
-import { bsc } from "viem/chains";
 import APIConsumerAbi from "../../../abis/APIConsumer.json";
 import { API_CONSUMER_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function usePropertyValue() {
+export default function usePropertyValue(chainId: number) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: API_CONSUMER_CONTRACT_ADDRESS,
+    address: API_CONSUMER_CONTRACT_ADDRESS[chainId],
     abi: APIConsumerAbi,
     functionName: "propertyValue",
-    chainId: bsc.id
+    chainId: chainId
   })
 
   if (isLoading) return 0
