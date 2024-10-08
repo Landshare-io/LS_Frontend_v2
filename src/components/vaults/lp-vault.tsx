@@ -165,7 +165,7 @@ export default function LpVault({
     const usdValueLPToken = Number(totalUSDValue) / (Number(formatEther(totalLPSupply)) == 0 ? 1 : Number(formatEther(totalLPSupply)))
     setUsdValueLP(usdValueLPToken)
 
-    const percentageOfLPInVault = BigInt(totalLPInVault) / BigInt(totalLPSupply == 0 ? 1 : totalLPSupply);
+    const percentageOfLPInVault = Number(totalLPInVault) / Number(totalLPSupply == 0 ? 1 : totalLPSupply);
     const USDValueinVault = Number(percentageOfLPInVault) * totalUSDValue;
     setTvl(USDValueinVault);
     const totalMoneyAnnual = 365 * Number(allocPoints[1]) * Number(price);
@@ -277,7 +277,7 @@ export default function LpVault({
                 </div>
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
-                    <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Tvl</span>
+                    <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{"$" + abbreviateNumber(Number(tvl.toString().substr(0, 8)))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
@@ -339,7 +339,7 @@ export default function LpVault({
 
                     />
                     <div className="flex jsutify-between items-center gap-[8px] mt-[12px]">
-                      <div className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</div>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
                       <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
                       <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
                       <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
@@ -427,7 +427,7 @@ export default function LpVault({
 
                         />
                         <div className="flex jsutify-between items-center gap-[8px] mt-[12px]">
-                          <div className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</div>
+                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
@@ -482,9 +482,16 @@ export default function LpVault({
                         </a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
-                        <span><a href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens">Vault Guide</a></span>
+                        <span>
+                          <a 
+                            className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`} 
+                            href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"
+                          >
+                            Vault Guide
+                          </a>
+                        </span>
                         <a
-                          className="inline"
+                          className={`${BOLD_INTER_TIGHT.className} text-[12px] leading-[20px] tracking-[0.24px] text-[#61CD81]`}
                           href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"
                         >
                           View Details
@@ -497,9 +504,16 @@ export default function LpVault({
                         <Image className="w-[32px] h-[32px] p-[6px]" src={pcsBunny} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
-                        <span><a href="https://pancakeswap.finance/v2/add/0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C/BNB">Get LAND-BNB LP</a></span>
+                        <span>
+                          <a 
+                            href="https://pancakeswap.finance/v2/add/0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C/BNB"
+                            className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`} 
+                          >
+                            Get LAND-BNB LP
+                          </a>
+                        </span>
                         <a
-                          className="inline"
+                          className={`${BOLD_INTER_TIGHT.className} text-[12px] leading-[20px] tracking-[0.24px] text-[#61CD81]`}
                           href="https://pancakeswap.finance/v2/add/0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C/BNB"
                         >
                           Pancakeswap
