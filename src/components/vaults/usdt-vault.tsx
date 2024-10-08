@@ -255,8 +255,8 @@ export default function Usdtvault({
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
                   <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
-                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px]" alt="token pair" />
-                    <Image src={smallicon} className="border-primary border-[6px]" alt="" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px]" alt="token pair" />
+                    <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px]" alt="" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
@@ -278,11 +278,11 @@ export default function Usdtvault({
 
                 </div>
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{"$" + abbreviateNumber(Number(TVL))}</span>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
                     <div className="calculator-container">
                       <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(APY?.toString() ?? 0)) + "%"}</span>
@@ -291,14 +291,14 @@ export default function Usdtvault({
                       </button>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
                     <div className="d-flex align-items-center">
                       <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{userBalance ? Number(userBalance[0]) > 0 ? Number(formatEther(userBalance[0])).toExponential(2) : 0.0 : "0.0"} </span>
                     </div>
 
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? abbreviateNumber(Number(formatEther(rewardsLSRWALP))) : "0.0"}</span>
                   </div>
@@ -347,7 +347,7 @@ export default function Usdtvault({
                 <div className="flex flex-col items-center p-0 gap-[24px] w-full">
                   <div className="flex gap-[12px] w-full flex-col md:flex-row">
                     {(typeof address == 'undefined') ? (
-                      <div className="d-flex flex-column align-items-center">
+                      <div className="flex flex-col items-center">
                         <ConnectWallet containerClassName="w-[300px]" />
                       </div>
                     ) : (

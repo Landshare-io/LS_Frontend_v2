@@ -20,10 +20,7 @@ export default function Button ({
 }: ButtonProps) {
   return (
     <button
-      className={`flex justify-center items-center disabled:cursor-not-allowed 
-        ${outlined ? ' bg-transparent border-[1px] border-[#61cd81] hover:bg-[#61cd81] hover:text-white ' : ' bg-[#61cd81] border-0 ' }
-        ${className}
-      `}
+      className={`flex justify-center items-center disabled:cursor-not-allowed ${outlined ? ' bg-transparent border-[1px] border-[#61cd81] hover:bg-[#61cd81] hover:text-white ' : ' bg-[#61cd81] border-0 ' } ${className}`}
       disabled={disabled}
       onClick={onClick}
     >

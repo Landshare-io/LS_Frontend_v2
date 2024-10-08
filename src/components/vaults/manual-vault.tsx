@@ -16,8 +16,8 @@ import useGetApr from "../../hooks/get-apy/useGetApr";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useAllowanceOfLandTokenContract from "../../hooks/contract/LandTokenContract/useAllowance";
 import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
-import Union from "../../assets/img/new/greenlogo.svg";
-import UnionDark from "../../assets/img/new/greenlogo.svg";
+import Union from "../../../public/green-logo.svg";
+import UnionDark from "../../../public/green-logo.svg";
 import book from "../../../public/icons/book.svg";
 import down from "../../../public/icons/down.svg";
 import up from "../../../public/icons/arrow-up.svg";
@@ -151,7 +151,7 @@ export default function ManualVault({
   return (
     <div className="w-full mlg:max-w-[880px]">
       <div className="w-full">
-        <div className={`p-[12px] md:p-[24px] flex felx-col w-full rounded-[24px] bg-third`}>
+        <div className={`p-[12px] md:p-[24px] flex flex-col w-full rounded-[24px] bg-third`}>
           {isVaultsLoading ? (
             <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
               <div className="flex justify-center items-center m-auto flex-col w-full">
@@ -190,7 +190,7 @@ export default function ManualVault({
           ) : (
             <>
               <div className="flex flex-col justify-start p-0 gap-[16px]">
-                <div className="flex gap-[8px]">
+                <div className="flex gap-[8px] hidden">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
                     <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
@@ -208,9 +208,8 @@ export default function ManualVault({
                   </button>
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                  <div className="w-[90px] h-[90px] rounded-[1000px] relative border-primary border-[6px]">
+                  <div className="w-[90px] h-[90px] rounded-[1000px] relative border-primary border-[6px] rounded-[1000px]">
                     <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
-                    {/*<img src={smallicon}/>*/}
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`text-[18px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
@@ -220,39 +219,36 @@ export default function ManualVault({
                       </button>
                     </div>
                     <div className="flex items-center p-0">
-                      <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
-                        <img src={book} alt="book" className="book mr-2" />
+                      <div className={`flex items-center justify-center py-[3px] px-[12px] text-[12px] gap-[4px] rounded-[1000px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
+                        <Image src={book} alt="book" className="book mr-2" />
                         <span>Manual</span>
                       </div>
                       <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
-                        <img
-                          src={bscIcon}
-                          className="w-8 h-8"
-                        />
+                        <Image src={bscIcon} className="w-8 h-8" alt="" />
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{
                       abbreviateNumber(Number(formatEther(totalStaked)))}</span>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
                     <div className={`flex items-center p-0 gap-[4px] text-[14px] leading-[22px] tracking-[0.02em] text-[#0A0A0A] ${BOLD_INTER_TIGHT.className}`}>
                       <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{apr.toString().substr(0, 4) + "%"}</span>
                       <button onClick={() => openCalcModal()}>
-                        <img src={calc} alt="" />
+                        <Image src={calc} alt="" />
                       </button>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(userInfo[0])))}</span>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                       {formatEther(pendingLand || 0).substr(0, 5)}

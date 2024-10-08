@@ -162,13 +162,13 @@ export default function LpVault({
       totalLANDValueinLPContract = 0;
     }
     const totalUSDValue = Number(totalLANDValueinLPContract) + Number(totalBNBValueinLPContract);
-    const usdValueLPToken = Number(totalUSDValue) / Number(formatEther(totalLPSupply))
+    const usdValueLPToken = Number(totalUSDValue) / (Number(formatEther(totalLPSupply)) == 0 ? 1 : Number(formatEther(totalLPSupply)))
     setUsdValueLP(usdValueLPToken)
 
-    const percentageOfLPInVault = BigInt(totalLPInVault) / BigInt(totalLPSupply);
+    const percentageOfLPInVault = BigInt(totalLPInVault) / BigInt(totalLPSupply == 0 ? 1 : totalLPSupply);
     const USDValueinVault = Number(percentageOfLPInVault) * totalUSDValue;
     setTvl(USDValueinVault);
-    const totalMoneyAnnual = 365 * allocPoints[1].toNumber() * Number(price);
+    const totalMoneyAnnual = 365 * Number(allocPoints[1]) * Number(price);
     const farmAPR = (totalMoneyAnnual / USDValueinVault) * 100;
 
     setAPR(farmAPR);
@@ -252,8 +252,8 @@ export default function LpVault({
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
                   <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
-                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px]" alt="token pair" />
-                    <Image src={smallicon} className="border-primary border-[6px]" alt="small-icon" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px]" alt="token pair" />
+                    <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px]" alt="small-icon" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
@@ -276,11 +276,11 @@ export default function LpVault({
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Tvl</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{"$" + abbreviateNumber(Number(tvl.toString().substr(0, 8)))}</span>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
                     <div className="calculator-container">
                       <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{isNaN(apr) ? "—" : abbreviateNumber(Number(Number(apr).toFixed(0))) + "%"}</span>
@@ -294,13 +294,13 @@ export default function LpVault({
                       </button>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                       {formatEther(depositBalanceLP.toString()).substr(0, 7)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{formatEther(rewardLP.toString()).substr(0, 5)}</span>
                   </div>
@@ -348,7 +348,7 @@ export default function LpVault({
                 <div className="flex flex-col items-center p-0 gap-[24px] w-full">
                   <div className="flex gap-[12px] w-full flex-col md:flex-row">
                     {typeof address == 'undefined' ? (
-                      <div className="d-flex flex-column align-items-center">
+                      <div className="flex flex-col items-center">
                         <ConnectWallet containerClassName="w-[300px]" />
                       </div>
                     ) : (
@@ -386,7 +386,7 @@ export default function LpVault({
                   </div>
                   <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] ml-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                     {details ? 'Hide' : 'Show'} Details
-                    <img src={details ? up : down} />
+                    <Image src={details ? up : down} alt="direction" />
                   </button>
                 </div>
               </div>
@@ -483,8 +483,8 @@ export default function LpVault({
                     </div>
                     <div className="flex w-full flex-col items-center justify-center p-[16px]">
                       <div className="w-8 h-8 rounded-full bg-third">
-                        <a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"><img className="w-[32px] h-[32px] p-[6px]" src={pcsBunny} alt="" /></a>
-
+                        <a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C">
+                        <Image className="w-[32px] h-[32px] p-[6px]" src={pcsBunny} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
                         <span><a href="https://pancakeswap.finance/v2/add/0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C/BNB">Get LAND-BNB LP</a></span>

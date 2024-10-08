@@ -41,3 +41,6 @@ export const config = getDefaultConfig({
   },
 });
 
+export const supportChainIds = [
+  bsc.id, polygon.id, arbitrum.id, ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [bscTestnet.id, sepolia.id, polygonAmoy.id] : []),
+]

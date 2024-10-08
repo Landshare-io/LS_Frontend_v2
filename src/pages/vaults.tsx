@@ -16,15 +16,15 @@ import { useGlobalContext } from "../context/GlobalContext";
 import { supportChainIds } from "../wagmi";
 import useGetPrice from "../hooks/get-apy/useGetPrice";
 import { BOLD_INTER_TIGHT } from "../config/constants/environments";
-import coinStack from "../../assets/img/new/coin-stack-sm.svg"
-import tabIcon3 from "../../assets/img/new/tab-icon3.svg"
-import tabIcon4 from "../../assets/img/new/tether.svg"
-import tabBook from "../../assets/img/new/tab-book.svg"
-import rotateBlue from "../../assets/img/new/rotate-blue.svg";
-import CloseIcon from "../../assets/img/icons/close.svg";
-import CloseIconDark from "../../assets/img/icons/close-dark.svg";
-import leftRight from "../../assets/img/new/left-right.svg";
-import IconArrowUpDown from "../../assets/img/new/arrow-up-down.svg";
+import coinStack from "../../public/icons/coin-stacked.svg"
+import tabIcon3 from "../../public/icons/tab-icon3.svg"
+import tabIcon4 from "../../public/icons/tether.svg"
+import tabBook from "../../public/icons/tab-book.svg"
+import rotateBlue from "../../public/icons/rotate-blue.svg";
+import CloseIcon from "../../public/icons/close.svg";
+import CloseIconDark from "../../public/icons/close-dark.svg";
+import leftRight from "../../public/icons/left-right.svg";
+import IconArrowUpDown from "../../public/icons/arrow-up-down.svg";
 import { MAJOR_WORK_CHAIN } from "../config/constants/environments";
 
 const breadcrumbItems = [
@@ -156,15 +156,15 @@ export default function StakingPage() {
         Chain not Supported
       </div>)}
       <div className="bg-primary py-[20px] px-[20px] md:py-[80px] md:px-[40px] lg:px-[120px] pt-0">
-        <div className="flex flex-col md:flex-row items-start md:justify-between md:items-center max-w-[1200px] m-auto">
+        <div className="flex flex-col items-start md:justify-between md:items-center max-w-[1200px] m-auto gap-[12px]">
           <div className="flex items-center m-auto py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-secondary">
             <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-primary">
               <Image src={coinStack} alt="" />
             </div>
-            <span className="text-[14px] leading-[22px] tracking-[0.02em] font-medium text-text-primary">LAND Staking</span>
+            <span className="text-[14px] leading-[22px] tracking-[0.02em] font-semibold text-text-primary">LAND Staking</span>
           </div>
           <h1 className={`text-[54px] leading-[68px] m-auto p-0 text-text-primary ${BOLD_INTER_TIGHT.className}`}>Vaults</h1>
-          <p className="text-center text-[18px] leading-[27px] tracking-[0.02em] text-[#7c7c80]">
+          <p className="text-center text-[16px] leading-[28px] tracking-[0.02em] text-[#7c7c80]">
             Earn Rewards for Staking in our DeFi Vaults
           </p>
         </div>
