@@ -69,7 +69,7 @@ export default function ManualVault({
   const [isWithdrawable, setIsWithdrawable] = useState(true);
   const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
-  const isVaultsLoading = totalStakedLoading || userInfoLoading || pendingLandLoading
+  const isVaultsLoading = false // totalStakedLoading || userInfoLoading || pendingLandLoading
 
   function handlePercents(percent: number) {
     if (depositing) {
@@ -258,22 +258,22 @@ export default function ManualVault({
                 <div className="block md:hidden">
                   <div className="flex w-full mt-[20px]">
                     <div 
-                      className={`w-full font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                       onClick={() => setDepositing(true)}
                     >
                       Deposit
                     </div>
                     <div 
-                      className={`w-full font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                       onClick={() => setDepositing(false)}
                     >
                       Withdraw
                     </div>
                   </div>
-                  <div className="flex flex-col justify-center items-end pt-[12px] pb-[24px] gap-[12px]">
+                  <div className="flex flex-col justify-center pt-[12px] pb-[24px]">
                     <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
                     <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
-                      <input className="placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
+                      <input className="w-full bg-[#f6f8f9] rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
                         value={inputValue}
                         onChange={(e) =>
                           setInputValue(
@@ -284,13 +284,15 @@ export default function ManualVault({
                               .replace(/(\..*)\./g, "$1")
                               .replace(/^(\d+\.\d{18})\d+$/g, "$1")
                           )
-                        } />
-                      <div className="flex w-full jsutify-between items-center gap-[8px] mt-[12px]">
-                        <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
+                        }
+
+                      />
+                      <div className="flex jsutify-between items-center gap-[8px] mt-[12px]">
+                        <div className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</div>
                         <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
                         <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
                         <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
-                        <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(100)} > 100%</button>
+                        <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(100)}>100%</button>
                       </div>
                     </div>
                   </div>
@@ -336,22 +338,22 @@ export default function ManualVault({
                   <div className="collapse-desktop">
                     <div className="flex w-full mt-[20px]">
                       <div 
-                        className={`w-full font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(true)}
                       >
                         Deposit
                       </div>
                       <div 
-                        className={`w-full font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(false)}
                       >
                         Withdraw
                       </div>
                     </div>
-                    <div className="flex flex-col justify-center items-end pt-[12px] pb-[24px] gap-[12px]">
-                      <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8]">Set Amount</span>
+                    <div className="flex flex-col justify-center pt-[12px] pb-[24px]">
+                      <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
                       <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
-                        <input className="flex items-center w-full py-[13px] px-[16px] font-medium text-[14px] leading-[22px] tracking-[0.02em] text-button-text-primary" placeholder="0.00 LAND" type="text"
+                        <input className="w-full bg-[#f6f8f9] rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
                           value={inputValue}
                           onChange={(e) =>
                             setInputValue(
@@ -362,13 +364,15 @@ export default function ManualVault({
                                 .replace(/(\..*)\./g, "$1")
                                 .replace(/^(\d+\.\d{18})\d+$/g, "$1")
                             )
-                          } />
-                        <div className="flex w-full justify-between items-center mt-[12px] gap-[8px]">
-                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
+                          }
+
+                        />
+                        <div className="flex jsutify-between items-center gap-[8px] mt-[12px]">
+                          <div className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</div>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
-                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(100)} > 100%</button>
+                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(100)}>100%</button>
                         </div>
                       </div>
                     </div>
