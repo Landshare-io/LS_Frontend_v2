@@ -52,7 +52,7 @@ export default function ConnectWallet({
                 if (!connected) {
                   return (
                     <Button
-                      className={`text-[#fff] px-[24px] py-[13px] w-full rounded-[100px] ${interTight.className} ${connectButtonClassName}`}
+                      className={`text-[#fff] px-[24px] py-[13px] w-full rounded-[100px] ${interTight.className} ${connectButtonClassName ?? ''}`}
                       textClassName="hover:dark:text-[#61CD81]"
                       onClick={openConnectModal}
                     >
