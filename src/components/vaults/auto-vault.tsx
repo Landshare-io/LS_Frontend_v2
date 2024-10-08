@@ -401,15 +401,15 @@ export default function AutoVault({
               </div>
 
               <div className="block md:hidden">
-                <div className="bg-[#61CD81] h-[1px] w-full mt-[20px]">
+                <div className="flex w-full mt-[20px]">
                   <div 
-                    className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                    className={`w-full font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                     onClick={() => setDepositing(true)}
                   >
                     Deposit
                   </div>
                   <div 
-                    className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                    className={`w-full font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                     onClick={() => setDepositing(false)}
                   >
                     Withdraw
@@ -489,15 +489,15 @@ export default function AutoVault({
               <div className="w-full">
                 <Collapse isOpen={details}>
                   <div className="collapse-desktop">
-                    <div className="bg-[#61CD81] h-[1px] w-full mt-[20px]">
+                    <div className="flex w-full mt-[20px]">
                       <div 
-                        className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                        className={`w-full font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(true)}
                       >
                         Deposit
                       </div>
                       <div 
-                        className="w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] normal-case border border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca]"
+                        className={`w-full font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(false)}
                       >
                         Withdraw
