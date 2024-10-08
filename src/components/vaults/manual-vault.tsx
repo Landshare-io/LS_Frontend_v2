@@ -288,7 +288,7 @@ export default function ManualVault({
 
                       />
                       <div className="flex jsutify-between items-center gap-[8px] mt-[12px]">
-                        <div className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</div>
+                        <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
                         <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
                         <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
                         <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
@@ -368,7 +368,7 @@ export default function ManualVault({
 
                         />
                         <div className="flex jsutify-between items-center gap-[8px] mt-[12px]">
-                          <div className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</div>
+                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
@@ -423,9 +423,16 @@ export default function ManualVault({
                         <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-landshare-token-land"><Image className="w-[32px] h-[32px] p-[6px]" src={viewContract} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
-                        <span><a href="https://docs.landshare.io/quickstart-guides/how-to-stake-landshare-token-land">Vault Guide</a></span>
+                        <span>
+                          <a 
+                            href="https://docs.landshare.io/quickstart-guides/how-to-stake-landshare-token-land"
+                            className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
+                          >
+                            Vault Guide
+                          </a>
+                        </span>
                         <a
-                          className="inline"
+                          className={`${BOLD_INTER_TIGHT.className} text-[12px] leading-[20px] tracking-[0.24px] text-[#61CD81]`}
                           href="https://docs.landshare.io/quickstart-guides/how-to-stake-landshare-token-land"
                         >
                           View Details
@@ -437,9 +444,16 @@ export default function ManualVault({
                         <a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"><Image className="w-[32px] h-[32px] p-[6px]" src={pcsBunny} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
-                        <span><a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C">Get LAND Token</a></span>
+                        <span>
+                          <a 
+                            href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
+                            className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
+                          >
+                            Get LAND Token
+                          </a>
+                        </span>
                         <a
-                          className="inline"
+                          className={`${BOLD_INTER_TIGHT.className} text-[12px] leading-[20px] tracking-[0.24px] text-[#61CD81]`}
                           href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
                         >
                           Pancakeswap

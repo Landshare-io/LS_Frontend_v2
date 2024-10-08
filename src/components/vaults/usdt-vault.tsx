@@ -86,8 +86,8 @@ export default function Usdtvault({
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
   const [depositing, setDepositing] = useState(true)
-  const [isWithdrawable, SetWithdrawable] = useState(true);
-  const [isDepositable, SetDepositable] = useState(true);
+  const [isWithdrawable, setIsWithdrawable] = useState(true);
+  const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const [TVL, setTVL] = useState(" —")
   const [APY, setAPY] = useState(" —")
@@ -113,8 +113,11 @@ export default function Usdtvault({
 
   useEffect(() => {
     calculateTVL()
-    calculateAPRLSRWA()
   }, [contractLPLSRWABalance])
+
+  useEffect(() => {
+    calculateAPRLSRWA()
+  }, [TVL, price])
 
   function handlePercents(percent: number) {
     if (depositing) {
@@ -164,13 +167,13 @@ export default function Usdtvault({
     }
 
     if (userBalance) {
-      SetWithdrawable(
+      setIsWithdrawable(
         Number(inputValue) <=
         Number(formatEther(userBalance ? userBalance[0].toString() : 0))
       );
     }
     if (balance) {
-      SetDepositable(
+      setIsDepositable(
         Number(formatEther(balance.toString())) >=
         Number(inputValue)
       );
@@ -338,7 +341,7 @@ export default function Usdtvault({
 
                     />
                     <div className="flex jsutify-between items-center gap-[8px] mt-[12px]">
-                      <div className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</div>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
                       <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
                       <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
                       <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
@@ -428,7 +431,7 @@ export default function Usdtvault({
 
                         />
                         <div className="flex jsutify-between items-center gap-[8px] mt-[12px]">
-                          <div className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</div>
+                          <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
                           <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
@@ -482,9 +485,18 @@ export default function Usdtvault({
                         <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-lsrwa-usdt-lp-tokens" target="_blank" rel="noopener noreferrer"><Image className="w-[32px] h-[32px] p-[6px]" src={viewContract} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
-                        <span><a href="https://docs.landshare.io/quickstart-guides/how-to-stake-lsrwa-usdt-lp-tokens" target="_blank" rel="noopener noreferrer">Vault Guide</a></span>
+                        <span>
+                          <a 
+                            className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
+                            href="https://docs.landshare.io/quickstart-guides/how-to-stake-lsrwa-usdt-lp-tokens" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            Vault Guide
+                          </a>
+                        </span>
                         <a
-                          className="inline"
+                          className={`${BOLD_INTER_TIGHT.className} text-[12px] leading-[20px] tracking-[0.24px] text-[#61CD81]`}
                           href="https://docs.landshare.io/quickstart-guides/how-to-stake-lsrwa-usdt-lp-tokens" target="_blank" rel="noopener noreferrer"
                         >
                           View Details
@@ -496,9 +508,18 @@ export default function Usdtvault({
                         <a href="https://app.landshare.io/rwa" target="_blank" rel="noopener noreferrer"><Image className="w-[32px] h-[32px] p-[6px]" src={theme == 'dark' ? UnionDark : Union} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
-                        <span><a href="https://app.landshare.io/rwa" target="_blank" rel="noopener noreferrer">Get LSRWA Token</a></span>
+                        <span>
+                          <a 
+                            href="https://app.landshare.io/rwa" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
+                          >
+                            Get LSRWA Token
+                          </a>
+                        </span>
                         <a
-                          className="inline"
+                          className={`${BOLD_INTER_TIGHT.className} text-[12px] leading-[20px] tracking-[0.24px] text-[#61CD81]`}
                           href="https://app.landshare.io/rwa" target="_blank" rel="noopener noreferrer"
                         >
                           RWA Portal
