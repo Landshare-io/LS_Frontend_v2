@@ -46,17 +46,19 @@ export default function useLpVault(chainId: number, address: Address | undefined
   useEffect(() => {
     (async () => {
       try {
-        if (depositSuccess) {
-          await refetchTotalSupply()
-          await refetchBalanceOfWBNB()
-          await refetchLpTokenV2()
-          await refetchUserInfo()
-          await refetchPendingLand()
-          await refetchBalanceOfLandToken()
-          await updateLPFarm()
-          setScreenLoadingStatus("Deposit Transaction success")
-        } else {
-          setScreenLoadingStatus("Transaction failed")
+        if (depositTx) {
+          if (depositSuccess) {
+            await refetchTotalSupply()
+            await refetchBalanceOfWBNB()
+            await refetchLpTokenV2()
+            await refetchUserInfo()
+            await refetchPendingLand()
+            await refetchBalanceOfLandToken()
+            await updateLPFarm()
+            setScreenLoadingStatus("Deposit Transaction success")
+          } else {
+            setScreenLoadingStatus("Transaction failed")
+          }
         }
       } catch (error) {
         setScreenLoadingStatus("Transaction failed")
@@ -69,22 +71,24 @@ export default function useLpVault(chainId: number, address: Address | undefined
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [depositSuccess])
+  }, [depositTx, depositSuccess])
 
   useEffect(() => {
     (async () => {
       try {
-        if (withdrawSuccess) {
-          await refetchTotalSupply()
-          await refetchBalanceOfWBNB()
-          await refetchLpTokenV2()
-          await refetchUserInfo()
-          await refetchPendingLand()
-          await refetchBalanceOfLandToken()
-          await updateLPFarm()
-          setScreenLoadingStatus("Withdraw Transaction success")
-        } else {
-          setScreenLoadingStatus("Transaction failed")
+        if (withdrawTx) {
+          if (withdrawSuccess) {
+            await refetchTotalSupply()
+            await refetchBalanceOfWBNB()
+            await refetchLpTokenV2()
+            await refetchUserInfo()
+            await refetchPendingLand()
+            await refetchBalanceOfLandToken()
+            await updateLPFarm()
+            setScreenLoadingStatus("Withdraw Transaction success")
+          } else {
+            setScreenLoadingStatus("Transaction failed")
+          }
         }
       } catch (error) {
         setScreenLoadingStatus("Transaction failed")
@@ -97,23 +101,25 @@ export default function useLpVault(chainId: number, address: Address | undefined
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [withdrawSuccess])
+  }, [withdrawTx, withdrawSuccess])
 
   useEffect(() => {
     (async () => {
       try {
-        if (approveSuccess) {
-          await refetchTotalSupply()
-          await refetchBalanceOfWBNB()
-          await refetchLpTokenV2()
-          await refetchUserInfo()
-          await refetchPendingLand()
-          await refetchBalanceOfLandToken()
-          await updateLPFarm()
-          await updateStatus()
-          setScreenLoadingStatus("Approve Transaction success")
-        } else {
-          setScreenLoadingStatus("Transaction failed")
+        if (approveTx) {
+          if (approveSuccess) {
+            await refetchTotalSupply()
+            await refetchBalanceOfWBNB()
+            await refetchLpTokenV2()
+            await refetchUserInfo()
+            await refetchPendingLand()
+            await refetchBalanceOfLandToken()
+            await updateLPFarm()
+            await updateStatus()
+            setScreenLoadingStatus("Approve Transaction success")
+          } else {
+            setScreenLoadingStatus("Transaction failed")
+          }
         }
       } catch (error) {
         setScreenLoadingStatus("Transaction failed")
@@ -126,7 +132,7 @@ export default function useLpVault(chainId: number, address: Address | undefined
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [approveSuccess])
+  }, [approveTx, approveSuccess])
 
   const depositVault = (amount: BigNumberish) => {
     if (amount > lpTokenV2Balance) {
