@@ -26,6 +26,8 @@ import CloseIconDark from "../../public/icons/close-dark.svg";
 import leftRight from "../../public/icons/left-right.svg";
 import IconArrowUpDown from "../../public/icons/arrow-up-down.svg";
 import { MAJOR_WORK_CHAIN } from "../config/constants/environments";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const breadcrumbItems = [
   {
@@ -86,6 +88,7 @@ export default function StakingPage() {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
+    arrows: false
   };
 
   const vaults = [
@@ -160,7 +163,7 @@ export default function StakingPage() {
         Chain not Supported
       </div>)}
       <div className="bg-primary py-[20px] px-[20px] md:py-[80px] md:px-[40px] lg:px-[120px] pt-0">
-        <div className="flex flex-col items-start md:justify-between md:items-center max-w-[1200px] m-auto gap-[12px]">
+        <div className="flex flex-col md:justify-between items-center max-w-[1200px] m-auto gap-[12px]">
           <div className="flex items-center m-auto py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-secondary">
             <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-primary">
               <Image src={coinStack} alt="" />
@@ -172,25 +175,27 @@ export default function StakingPage() {
             Earn Rewards for Staking in our DeFi Vaults
           </p>
         </div>
-        <div className="flex flex-col items-start md:justify-between md:items-center max-w-[1200px] m-auto w-full gap-[24px] mt-[32px] lg:grid lg:grid-cols-[minmax(378.66px,max-content),minmax(378.66px,max-content)] xl:flex xl:justify-center xl:gap-[32px] xl:gap-y-[32px]">
-            <div className="flex md:hidden justify-between p-0 h-[132px] w-full gap-[20px] mb-[20px]">
-              <Slider {...sliderSettings} centerPadding="10px" className="w-full">
-                {vaults.map((vault) => (
-                  <div key={vault.index}>
-                    <button
-                      className={selectedVault === vault.index ? 'active-tab' : 'bg-secondary inactive-tab'}
-                      onClick={() => handleClick(vault.index)}
-                    >
-                      <div className="w-7 h-7 p-[1px] bg-primary rounded-full">
-                        <Image src={vault.icon} className="w-full h-full" alt="" />
-                      </div>
-                      <span>{vault.label}</span>
-                    </button>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          <div className="flex md:hidden">
+        <div className="flex flex-col items-start md:justify-between md:items-center max-w-[1200px] m-auto w-full gap-[24px] mt-[32px] xl:gap-[32px]">
+          <div className="flex mlg:hidden justify-between p-0 h-[132px] w-full gap-[20px] mb-[20px]">
+            <Slider {...sliderSettings} centerPadding="10px" className="w-full">
+              {vaults.map((vault) => (
+                <div key={vault.index} className="px-[10px] bg-transparent">
+                  <button
+                    className={selectedVault === vault.index ? 
+                      `bg-[#0A1339] text-[#fff] text-[10px] leading-[16px] tracking-[0.02em] flex flex-col justify-center items-center py-[12px] px-[8px] gap-[4px] h-[112px] w-full rounded-[12px] ${BOLD_INTER_TIGHT.className}` : 
+                      `bg-secondary flex flex-col justify-center items-center leading-[16px] py-[12px] px-[8px] gap-[4px] h-[112px] rounded-[12px] text-[10px] text-[#9d9fa8] w-full tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}
+                    onClick={() => handleClick(vault.index)}
+                  >
+                    <div className="w-7 h-7 p-[1px] bg-primary rounded-full">
+                      <Image src={vault.icon} className="w-full h-full" alt="" />
+                    </div>
+                    <span>{vault.label}</span>
+                  </button>
+                </div>
+              ))}
+            </Slider>
+          </div>
+          <div className="flex mlg:hidden w-full">
             {(selectedVault === 0 ?
               <ManualVault
                 title="LAND Token Staking"
@@ -225,7 +230,8 @@ export default function StakingPage() {
                   />
             )}
           </div>
-              {(<>
+          <div className="hidden mlg:flex mlg:flex-col gap-[32px] w-full">
+            {(<>
                 {chainId == MAJOR_WORK_CHAIN.id ? (
                   <>
                     <ManualVault
@@ -281,6 +287,7 @@ export default function StakingPage() {
                 />
               </>
             )}
+          </div>
         </div>
       </div>
       <ReactModal
