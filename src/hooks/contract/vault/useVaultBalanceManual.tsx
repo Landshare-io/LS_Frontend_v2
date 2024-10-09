@@ -44,13 +44,15 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
 
   useEffect(() => {
     try {
-      if (depositSuccess) {
-        refetchLpTokenV2()
-        refetchAllowanceOfLpTokenV2OfVault()
-        refetchAllowanceOfLpTokenV2OfMasterChef()
-        setScreenLoadingStatus("Deposit Transaction success")
-      } else {
-        setScreenLoadingStatus("Transaction failed")
+      if (depositTx) {
+        if (depositSuccess) {
+          refetchLpTokenV2()
+          refetchAllowanceOfLpTokenV2OfVault()
+          refetchAllowanceOfLpTokenV2OfMasterChef()
+          setScreenLoadingStatus("Deposit Transaction success")
+        } else {
+          setScreenLoadingStatus("Transaction failed")
+        }
       }
     } catch (error) {
       setScreenLoadingStatus("Transaction failed")
@@ -62,18 +64,20 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [depositSuccess])
+  }, [depositTx, depositSuccess])
 
   useEffect(() => {
     try {
-      if (withdrawSuccess) {
-        refetchLpTokenV2()
-        refetchTotalStaked()
-        refetchUserInfo()
-        refetchPendingLand()
-        setScreenLoadingStatus("Withdraw Transaction success")
-      } else {
-        setScreenLoadingStatus("Transaction failed")
+      if (withdrawTx) {
+        if (withdrawSuccess) {
+          refetchLpTokenV2()
+          refetchTotalStaked()
+          refetchUserInfo()
+          refetchPendingLand()
+          setScreenLoadingStatus("Withdraw Transaction success")
+        } else {
+          setScreenLoadingStatus("Transaction failed")
+        }
       }
     } catch (error) {
       setScreenLoadingStatus("Transaction failed")
@@ -85,17 +89,19 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [withdrawSuccess])
+  }, [withdrawTx, withdrawSuccess])
 
   useEffect(() => {
     try {
-      if (approveSuccess) {
-        refetchAllowanceOfLpTokenV2OfVault()
-        refetchAllowanceOfLpTokenV2OfMasterChef()
-
-        setScreenLoadingStatus("Approve Transaction success")
-      } else {
-        setScreenLoadingStatus("Transaction failed")
+      if (approveTx) {
+        if (approveSuccess) {
+          refetchAllowanceOfLpTokenV2OfVault()
+          refetchAllowanceOfLpTokenV2OfMasterChef()
+  
+          setScreenLoadingStatus("Approve Transaction success")
+        } else {
+          setScreenLoadingStatus("Transaction failed")
+        }
       }
     } catch (error) {
       setScreenLoadingStatus("Transaction failed")
@@ -107,7 +113,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [approveSuccess])
+  }, [approveTx, approveSuccess])
 
   const depositVault = (amount: BigNumberish) => {
     if (Number(formatEther(amount)) > Number(formatEther(lpTokenV2Balance))) {
