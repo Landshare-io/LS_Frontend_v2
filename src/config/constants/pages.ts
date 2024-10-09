@@ -32,5 +32,5 @@ export const PAGES: PAGE[] = [
 ];
 
 export const VISIBLE_FOOTER_PAGES = [
-  '/', '/rwa', 'vaults'
+  '/', '/rwa', '/vaults'
 ];

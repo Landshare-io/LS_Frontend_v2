@@ -85,79 +85,33 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
   useEffect(() => {
     (async () => {
-      if (approveLandSuccess) {
-        setScreenLoadingStatus("Deposit Transaction in progress...")
-        transfer(chainId, depositAmount, 0, 0, 500000)
+      if (approveLandTx) {
+        if (approveLandSuccess) {
+          setScreenLoadingStatus("Deposit Transaction in progress...")
+          transfer(chainId, depositAmount, 0, 0, 500000)
+        }
       }
     })()
-  }, [approveLandSuccess])
+  }, [approveLandTx, approveLandSuccess])
 
   useEffect(() => {
-    if (harvestSuccess) {
-      setScreenLoadingStatus("Claim Harvest Transaction success")
-    } else {
-      setScreenLoadingStatus("Claim Harvest Transaction failed")
-    }
-  }, [harvestSuccess])
-
-  useEffect(() => {
-    (async () => {
-      if (withdrawAllSuccess) {
-        setScreenLoadingStatus("Deposit Transaction success")
+    if (harvestTx) {
+      if (harvestSuccess) {
+        setScreenLoadingStatus("Claim Harvest Transaction success")
       } else {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Claim Harvest Transaction failed")
       }
-    })()
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     }
-  }, [withdrawAllSuccess])
+  }, [harvestTx, harvestSuccess])
 
   useEffect(() => {
     (async () => {
-      if (transferSuccess) {
-        const receiptTx = await PROVIDERS[chainId].getTransactionReceipt(transferTx);
-        const messageId = receiptTx?.events.filter((item: any) => item.hasOwnProperty('args')).map((item: any) => item.args)[0][0]
-        dispatch(updateCcipTransaction({
-          walletAddress: address,
-          status: 'PENDING',
-          action: transferAction,
-          messageId,
-          sourceChain: CCIP_CHAIN_ID[chainId],
-          destinationChain: CCIP_CHAIN_ID[MAJOR_WORK_CHAIN.id]
-        }))
-        setScreenLoadingStatus(`${transferAction} Transaction success`)
-      } else {
-        setScreenLoadingStatus("Transaction failed")
-      }
-    })()
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
-    }
-  }, [transferSuccess])
-
-  useEffect(() => {
-    (async () => {
-      try {
-        if (depositSuccess) {
-          await refetchTotalSupply()
-          await refetchBalanceOfWBNB()
-          await refetchUserInfo()
-          await refetchPendingLand()
-          await refetchBalanceOfLandToken()
+      if (withdrawAllTx) {
+        if (withdrawAllSuccess) {
           setScreenLoadingStatus("Deposit Transaction success")
         } else {
           setScreenLoadingStatus("Transaction failed")
         }
-      } catch (error) {
-        setScreenLoadingStatus("Transaction failed")
-        console.log(error)
       }
     })()
 
@@ -166,20 +120,50 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [depositSuccess])
+  }, [withdrawAllTx, withdrawAllSuccess])
+
+  useEffect(() => {
+    (async () => {
+      if (transferTx) {
+        if (transferSuccess) {
+          const receiptTx = await PROVIDERS[chainId].getTransactionReceipt(transferTx);
+          const messageId = receiptTx?.events.filter((item: any) => item.hasOwnProperty('args')).map((item: any) => item.args)[0][0]
+          dispatch(updateCcipTransaction({
+            walletAddress: address,
+            status: 'PENDING',
+            action: transferAction,
+            messageId,
+            sourceChain: CCIP_CHAIN_ID[chainId],
+            destinationChain: CCIP_CHAIN_ID[MAJOR_WORK_CHAIN.id]
+          }))
+          setScreenLoadingStatus(`${transferAction} Transaction success`)
+        } else {
+          setScreenLoadingStatus("Transaction failed")
+        }
+      }
+    })()
+
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [transferTx, transferSuccess])
 
   useEffect(() => {
     (async () => {
       try {
-        if (withdrawSuccess) {
-          await refetchTotalSupply()
-          await refetchBalanceOfWBNB()
-          await refetchUserInfo()
-          await refetchPendingLand()
-          await refetchBalanceOfLandToken()
-          setScreenLoadingStatus("Withdraw Transaction success")
-        } else {
-          setScreenLoadingStatus("Transaction failed")
+        if (depositTx) {
+          if (depositSuccess) {
+            await refetchTotalSupply()
+            await refetchBalanceOfWBNB()
+            await refetchUserInfo()
+            await refetchPendingLand()
+            await refetchBalanceOfLandToken()
+            setScreenLoadingStatus("Deposit Transaction success")
+          } else {
+            setScreenLoadingStatus("Transaction failed")
+          }
         }
       } catch (error) {
         setScreenLoadingStatus("Transaction failed")
@@ -192,20 +176,22 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [withdrawSuccess])
+  }, [depositTx, depositSuccess])
 
   useEffect(() => {
     (async () => {
       try {
-        if (approveLandSuccess) {
-          await refetchTotalSupply()
-          await refetchBalanceOfWBNB()
-          await refetchUserInfo()
-          await refetchPendingLand()
-          await refetchBalanceOfLandToken()
-          setScreenLoadingStatus("Approve Transaction success")
-        } else {
-          setScreenLoadingStatus("Transaction failed")
+        if (withdrawTx) {
+          if (withdrawSuccess) {
+            await refetchTotalSupply()
+            await refetchBalanceOfWBNB()
+            await refetchUserInfo()
+            await refetchPendingLand()
+            await refetchBalanceOfLandToken()
+            setScreenLoadingStatus("Withdraw Transaction success")
+          } else {
+            setScreenLoadingStatus("Transaction failed")
+          }
         }
       } catch (error) {
         setScreenLoadingStatus("Transaction failed")
@@ -218,7 +204,35 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [approveLandSuccess])
+  }, [withdrawTx, withdrawSuccess])
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (approveLandTx) {
+          if (approveLandSuccess) {
+            await refetchTotalSupply()
+            await refetchBalanceOfWBNB()
+            await refetchUserInfo()
+            await refetchPendingLand()
+            await refetchBalanceOfLandToken()
+            setScreenLoadingStatus("Approve Transaction success")
+          } else {
+            setScreenLoadingStatus("Transaction failed")
+          }
+        }
+      } catch (error) {
+        setScreenLoadingStatus("Transaction failed")
+        console.log(error)
+      }
+    })()
+
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [approveLandTx, approveLandSuccess])
 
   const depositVault = (amount: BigNumberish) => {
     setDepositAmount(amount)
