@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Head from 'next/head';
-import { useChainId } from "wagmi"
+import { useChainId, useAccount } from "wagmi"
 import numeral from "numeral"
 import Image from "next/image";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
@@ -40,6 +40,7 @@ const breadcrumbItems = [
 
 export default function StakingPage() {
   const { theme } = useGlobalContext();
+  const { isConnected } = useAccount()
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
   const { price } = useGetPrice(chainId)
 
@@ -66,12 +67,15 @@ export default function StakingPage() {
       maxWidth: "400px",
       width: "90%",
       height: "fit-content",
-      borderRadius: "20px"
+      borderRadius: "20px",
+      padding: 0,
+      border: 0
     },
     overlay: {
       background: '#00000080'
     }
   };
+
 
   function handleClick(tab: number) {
     useSelectedVault(tab)
@@ -152,7 +156,7 @@ export default function StakingPage() {
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
-      {supportChainIds.includes(chainId) && (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
+      {isConnected && supportChainIds.includes(chainId) && (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
         Chain not Supported
       </div>)}
       <div className="bg-primary py-[20px] px-[20px] md:py-[80px] md:px-[40px] lg:px-[120px] pt-0">
@@ -284,14 +288,14 @@ export default function StakingPage() {
         onRequestClose={() => { setShowModal(false), document.body.classList.remove('modal-open'); }}
         style={customModalStyles}
       >
-        <div className={`flex items-center justify-between w-inherit pt-[24px] px-[24px] pb-[16px] rounded-r-[16px] text-[18px] leading-[28px] tracking-[0.36px] bg-primary text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+        <div className={`flex items-center justify-between w-inherit pt-[24px] px-[24px] pb-[16px] rounded-t-[16px] text-[18px] leading-[28px] tracking-[0.36px] bg-primary text-text-primary ${BOLD_INTER_TIGHT.className}`}>
           <span>ROI Calculator</span>
           <Image src={theme == 'dark' ? CloseIconDark : CloseIcon} alt="" className="close" onClick={() => setShowModal(false)} />
         </div>
         <div className="flex flex-col py-[16px] px-[24px] gap-[32px] w-full bg-secondary">
           <div className="flex flex-col gap-[16px]">
-            <div className="felx flex-col items-center p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
-              <span>Set Amount</span>
+            <div className="flex flex-col items-start p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
+              <span className="text-[12px] leading-[20px] tracking-[0.02em]">Set Amount</span>
               <div className="flex items-center justify-between py-[13px] px-[16px] gap-[8px] w-full rounded-[12px] outline-0 bg-primary">
                 <div className="flex">
                   <Image
@@ -318,7 +322,7 @@ export default function StakingPage() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col items-center p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
+            <div className="flex flex-col items-start p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
               <span>Staked for</span>
               <div className="flex items-start p-0 gap-[4px] w-full rounded-[100px] bg-primary">
                 <button
@@ -390,15 +394,12 @@ export default function StakingPage() {
               </div>
             </div>
             <Image src={IconArrowUpDown} style={{ width: 'auto', height: '18px' }} alt="" />
-            <div className="flex flex-col items-center p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
+            <div className="flex flex-col items-start p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
               <span>ROI at current rate</span>
-              <div className="roi-input-bar bg-primary">
-                <div className="roi-input-field-show-rate">
-
+              <div className="flex items-center justify-between py-[13px] px-[16px] gap-[8px] w-full rounded-[12px] outline-0 bg-primary">
+                <div className="text-[14px] font-medium leading-[22px] tracking-[0.28px] text-[#9d9fa8]">
                   {
-
                     rewardPercent / 100 * Number(numeral(usdAmount / price).format('0.[00000]'))
-
                   }
                   {" "} LAND
                 </div>
@@ -407,10 +408,10 @@ export default function StakingPage() {
             </div>
           </div>
           <Collapse isOpen={roiShowDetails}>
-            <div className="roi-apr-result">
-              <div className="roi-apr-section">
-                <span className="light-font">APR</span>
-                <span className="bold-font text-text-primary">{numeral(showModalApy).format('0.[00000]')} %</span>
+            <div className="flex flex-col gap-[12px]">
+              <div className="flex justify-between">
+                <span className="text-[14px] leading-[22px] text-[#9d9fa8] dark:text-[#cacaca]">APR</span>
+                <span className={`${BOLD_INTER_TIGHT.className} leading-[22px] text-[14px]`}>{numeral(showModalApy).format('0.[00000]')} %</span>
               </div>
               <ul className="text-[#545458] dark:text-[#bbbbc4]">
                 <li>Calculated Based On Current Rates.</li>
