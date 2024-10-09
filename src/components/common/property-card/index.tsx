@@ -28,7 +28,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
 
   return (
     <div className="pb-[10px] md:w-fit md:rounded-[24px] md:px-[20px] md:pb-[24px] max-w-[501px] relative cursor-pointer">
-      <div className="relative rounded-[24px] shadow shadow-lg z-[3]" onClick={() => router.push(`/tokenized-asset/${property?.id}`)}>
+      <div className="relative rounded-[24px] shadow shadow-lg z-[3] overflow-hidden" onClick={() => router.push(`/tokenized-asset/${property?.id}`)}>
         <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
           <div className="relative rounded-[24px] shadow shadow-lg z-[3] w-full md:w-[390px] md:h-[292px]">
             <img className="w-full h-full object-cover rounded-t-[24px]" src={property?.pictures[0]} alt="property image" />
@@ -55,7 +55,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                 {isLoading ? (<Skeleton className="rounded-lg" width={80} height={26} />) : (<span className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{((property.grossRent * (1 - property.management) * 12 - property.insurance - property.tax) / Number(formatEther(propertyValue)) * 100 + property.appreciation).toFixed(2)}%</span>)}
               </div>
             </div>
-            <div className="py-0 px-[10px] sm:p-0 mb-[15px] flex justify-between">
+            <div className="py-0 px-[10px] sm:p-0 flex justify-between">
               <span className="text-[12px] leading-[20px] md:text-[14px] md:leading-[22px] rounded-[20px] tracking-[0.02em] md:text-[14px] md:leading-[22px] text-[#61CD81] md:py-[4px] md:px-[16px] bg-primary">Single Family</span>
               <div className="flex gap-[10px] md:gap-[20px]">
                 {property?.bedrooms &&
@@ -72,6 +72,14 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                 }
               </div>
             </div>
+          </div>
+          <div className="flex justify-between py-[16px] px-[20px] sm:px-[24px] bg-[#61cd81]">
+            <span className={`text-[#fff] text-[16px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}>
+              LSRWA Holders Earn
+            </span>
+            <span className={`text-[#fff] text-[18px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}>
+            $ {Number((property?.grossRent - (property?.insurance + property?.tax + property?.management * property?.grossRent * 12) / 12) * 12).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+            </span>
           </div>
         </SkeletonTheme>
       </div>
