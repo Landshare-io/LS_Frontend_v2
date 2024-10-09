@@ -32,7 +32,7 @@ export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
         >
           {type}
         </div>
-        <div className="w-[300px] sm:w-[350px] rounded-[24px] md:w-[370px] border-[1px] border-[#e6e7eb] dark:border-[#6e6e6e] bg-secondary">
+        <div className="w-[300px] sm:w-[350px] rounded-[24px] md:w-[370px] border-[1px] border-[#e6e7eb] dark:border-[#6e6e6e] bg-secondary overflow-hidden">
           <div className="relative">
             <img
               src={asset?.pictures[0]}
@@ -75,6 +75,14 @@ export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
                   </div>
                 }
             </div>)}
+          </div>
+          <div className="flex justify-between py-[16px] px-[20px] sm:px-[24px] bg-[#61cd81]">
+            <span className={`text-[#fff] text-[16px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}>
+              LSRWA Holders Earn
+            </span>
+            <span className={`text-[#fff] text-[18px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}>
+             $ {Number((asset?.grossRent - (asset?.insurance + asset?.tax + asset?.management * asset?.grossRent * 12) / 12) * 12).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+            </span>
           </div>
         </div>
       </SkeletonTheme>
