@@ -45,15 +45,17 @@ export default function useSellTokens(chainId: number, address: Address | undefi
   useEffect(() => {
     try {
       (async () => {
-        await rwaAllowanceRefetch()
-        if (BigInt(rwaAllowance) < amount) {
-          return ''
-        }
-  
-        if (rwaApproveSuccess) {
-          if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
-            await approveLand(chainId, LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id], landFeeAmount)
-            await landAllowanceRefetch()
+        if (rwaApproveTx) {
+          await rwaAllowanceRefetch()
+          if (BigInt(rwaAllowance) < amount) {
+            return ''
+          }
+    
+          if (rwaApproveSuccess) {
+            if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
+              await approveLand(chainId, LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id], landFeeAmount)
+              await landAllowanceRefetch()
+            }
           }
         }
       })()
@@ -61,32 +63,38 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       setTransactionStatus("Transaction failed")
       console.log(error)
     }
-  }, [rwaApproveSuccess])
+  }, [rwaApproveTx, rwaApproveSuccess])
 
   useEffect(() => {
     try {
       (async () => {
-        await landAllowanceRefetch()
-        if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
-          window.alert("Please approve sufficient allowance.")
-          setTransactionStatus("Insufficient Allowance")
-        }
-  
-        if (landApproveSuccess) {
-          await sellRwa(amount)
+        if (landApproveTx) {
+          await landAllowanceRefetch()
+          if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
+            window.alert("Please approve sufficient allowance.")
+            setTransactionStatus("Insufficient Allowance")
+          }
+    
+          if (landApproveSuccess) {
+            await sellRwa(amount)
+          }
         }
       })()
     } catch (error) {
       setTransactionStatus("Transaction failed")
       console.log(error)
     }
-  }, [landApproveSuccess])
+  }, [landApproveTx, landApproveSuccess])
 
   useEffect(() => {
-    if (sellSuccess) {
-      setTransactionStatus("Transaction Successful")
+    if (sellTx) {
+      if (sellSuccess) {
+        setTransactionStatus("Transaction Successful")
+      } else {
+        setTransactionStatus("Transaction failed")
+      }
     }
-  }, [sellSuccess])
+  }, [sellTx, sellSuccess])
 
   const sellTokens = async () => {
     try {
