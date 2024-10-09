@@ -281,11 +281,11 @@ export default function Usdtvault({
 
                 </div>
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{"$" + abbreviateNumber(Number(TVL))}</span>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
                     <div className="flex items-center gap-[4px] text-bold text-[14px] leading-[22px] text-[#0A0A0A]">
                       <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(APY?.toString() ?? 0)) + "%"}</span>
@@ -294,14 +294,14 @@ export default function Usdtvault({
                       </button>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
                     <div className="d-flex align-items-center">
                       <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{userBalance ? Number(userBalance[0]) > 0 ? Number(formatEther(userBalance[0])).toExponential(2) : 0.0 : "0.0"} </span>
                     </div>
 
                   </div>
-                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-[#f6f8f9]">
+                  <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? abbreviateNumber(Number(formatEther(rewardsLSRWALP))) : "0.0"}</span>
                   </div>
@@ -326,7 +326,7 @@ export default function Usdtvault({
                 <div className="flex flex-col justify-center pt-[12px] pb-[24px]">
                   <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
                   <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
-                    <input className="w-full bg-[#f6f8f9] rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
+                    <input className="w-full bg-vault-input rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
                       value={inputValue}
                       onChange={(e) =>
                         setInputValue(
@@ -416,7 +416,7 @@ export default function Usdtvault({
                     <div className="flex flex-col justify-center pt-[12px] pb-[24px]">
                       <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
                       <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
-                        <input className="w-full bg-[#f6f8f9] rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
+                        <input className="w-full bg-vault-input rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
                           value={inputValue}
                           onChange={(e) =>
                             setInputValue(
