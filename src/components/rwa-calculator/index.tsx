@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BOLD_INTER_TIGHT } from '../../config/constants/environments';
 
 export default function RwaCalculator() {
   const [initialInvestment, setInitialInvestment] = useState(5500);
@@ -8,25 +9,23 @@ export default function RwaCalculator() {
   const projectedReturns = initialInvestment + monthlyInvestment * 5; // Just an example calculation
 
   return (
-    <div className="flex flex-col md:flex-row items-center bg-white rounded-lg shadow-md p-8">
+    <div className="flex gap-0 items-center p-0 max-w-[1200px] m-auto border-[2px] border-[#61CD81] rounded-[24px]">
       {/* Left Section */}
-      <div className="flex-1">
-        <h2 className="text-lg font-bold mb-4">Calculate returns effortlessly and make informed financial decisions for a brighter future.</h2>
+      <div className="flex flex-col flex-1 py-[24px] px-[30px] gap-[20px]">
+        <h2 className="text-[18px] leading-[24px]">Calculate returns effortlessly and make informed financial decisions for a brighter future.</h2>
         
         {/* Investment Sliders */}
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <span>Initial investment</span>
-            <span className="text-green-500">${initialInvestment}</span>
-          </div>
+        <div className="flex items-center justify-between">
+          <span className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>Initial investment</span>
           <input 
             type="range" 
             min="1000" 
             max="10000" 
             value={initialInvestment} 
             onChange={(e) => setInitialInvestment(Number(e.target.value))} 
-            className="w-full"
+            className="w-full max-w-[310px] "
           />
+          <span className="text-green-500">${initialInvestment}</span>
         </div>
 
         <div className="mb-4">
@@ -40,7 +39,7 @@ export default function RwaCalculator() {
             max="5000" 
             value={monthlyInvestment} 
             onChange={(e) => setMonthlyInvestment(Number(e.target.value))} 
-            className="w-full"
+            className="w-full max-w-[310px]"
           />
         </div>
 
@@ -62,7 +61,7 @@ export default function RwaCalculator() {
       </div>
 
       {/* Right Section */}
-      <div className="flex-1 bg-green-100 rounded-lg p-8 mt-6 md:mt-0 md:ml-8 text-center">
+      <div className="flex-1 bg-green-100 rounded-lg p-8 text-center">
         <p className="text-md mb-4">Projected returns in 5 years</p>
         <p className="text-3xl font-bold text-green-600">${projectedReturns.toLocaleString()}</p>
         <button className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg">Invest Now →</button>
