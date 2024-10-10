@@ -1,0 +1,111 @@
+.carouselContainer .carousel.carousel-slider {
+    overflow: unset !important;
+}
+
+.carouselContainer .carousel.carousel-slider .control-arrow:hover {
+    background: unset !important;
+}
+
+.carouselContainer .carousel .control-next.control-arrow:before {
+    /* background-color: white; */
+    background-color: #ffffff60;
+    transform: rotate(180deg);
+    height: 70px;
+    width: 40px;
+    background-repeat: no-repeat !important;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+    background-position: center;
+    background-size: 13px 20px !important;
+    background-image: url("../../../public/icons/arrow.png");
+    border-left: none;
+    /* border-radius: 50%; */
+}
+
+.carouselContainer .carousel .thumbs-wrapper .control-arrow {
+    display: none;
+}
+
+.carouselContainer .carousel .control-arrow,
+.carousel.carousel-slider .control-arrow {
+    opacity: unset !important;
+}
+
+.carouselContainer .carousel .control-next.control-arrow {
+    right: -10px;
+    top: 80px;
+}
+
+.carouselContainer .carousel .control-prev.control-arrow {
+    left: -10px;
+    top: 80px;
+}
+
+.carouselContainer .carousel .thumb img {
+    height: 70px;
+}
+
+.carouselContainer .carousel-status {
+    display: none;
+}
+
+.carouselContainer .carousel .thumb {
+    width: 85px !important;
+    border: transparent !important;
+}
+
+.carouselContainer .thumbs {
+    padding: 0px 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.carouselContainer .thumbs-wrapper {
+    margin: 20px 0px !important;
+}
+
+@media (max-width: 1024px) {
+    .carouselContainer .carousel .control-next.control-arrow {
+        right: -35px;
+        top: 125px;
+    }
+    .carouselContainer .carousel .control-prev.control-arrow {
+        left: -35px;
+        top: 125px;
+    }
+}
+
+@media (max-width: 565.98px) {
+    .carouselContainer .carousel .control-next.control-arrow {
+        right: -10px;
+        top: 0px;
+    }
+    .carouselContainer .carousel .control-prev.control-arrow {
+        left: -10px;
+        top: 0px;
+    }
+    .carouselContainer .carousel .control-next.control-arrow:before {
+        height: 70px;
+        width: 40px;
+    }
+    .carouselContainer .carousel .control-prev.control-arrow:before {
+        height: 70px;
+        width: 40px;
+    }
+    .carouselContainer .carousel .thumb {
+        width: 75px !important;
+        height: 75px !important;
+    }
+    .slider-main-heading {
+        font-weight: 600;
+        font-size: 18px;
+    }
+}
+
+.carouselContainer .carousel .thumb,
+.carousel .thumb:hover {
+    opacity: 0.2;
+}
+
+.carouselContainer .carousel .thumb.selected,
+.carousel .thumb:hover {
+    opacity: 10;
+}
