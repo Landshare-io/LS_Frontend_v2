@@ -20,7 +20,7 @@ export default function Footer() {
   const [email, setEmail] = useState('');
   const router = useRouter();
   const { pathname } = router;
-  const isFooterVisible = VISIBLE_FOOTER_PAGES.includes(pathname);
+  const isFooterVisible = VISIBLE_FOOTER_PAGES.map((allowedPath: string) => pathname.startsWith(allowedPath));
   if (!isFooterVisible) return null;
 
   function getSPKey(type: string, SPdata: any) {
