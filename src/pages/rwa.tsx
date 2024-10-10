@@ -6,6 +6,7 @@ import PriceGraph from '../components/price-line-chart';
 import FinancialSummary from '../components/financial-summary';
 import SwapToken from '../components/swap-token';
 import BeneficalAssets from '../components/benefical-assets';
+import InvestmentExplain from '../components/investment-explain';
 import styles from '../styles/Home.module.css';
 
 const breadcrumbItems: BREADCRUMB[] = [
@@ -53,6 +54,9 @@ const RwaPage: NextPage = () => {
       </div>
       <div className="bg-secondary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
         <BeneficalAssets />
+      </div>
+      <div className="bg-secondary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
+        <InvestmentExplain />
       </div>
     </div>
   );
