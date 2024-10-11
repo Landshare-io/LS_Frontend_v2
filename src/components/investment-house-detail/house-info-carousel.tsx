@@ -1,29 +1,16 @@
 import React, { useMemo } from "react";
 import { Carousel } from "react-responsive-carousel";
 import CircleLoader from "../common/circle-loader";
-import { 
-  getData,
-  selectIsLoading,
-  selectPropertyRentalData
-} from "../../lib/slices/firebase-slices/properties-rental-item";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import styles from "./investment-house-detail.module.css";
 
 interface HouseInfoCarouselComponentProps {
-  itemId: string
+  houseInfo: any
+  isLoading: boolean
 }
 
-export default function HouseInfoCarouselComponent({ itemId }: HouseInfoCarouselComponentProps) {
-  const dispatch = useAppDispatch();
-  const houseInfo = useAppSelector(selectPropertyRentalData) as any;
-  const isLoading = useAppSelector(selectIsLoading)
-
-  useMemo(async () => {
-    dispatch(getData(itemId))
-  }, [itemId]);
-
+export default function HouseInfoCarouselComponent({ houseInfo, isLoading }: HouseInfoCarouselComponentProps) {
   return (
     <>
       {houseInfo?.address ? (

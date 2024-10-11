@@ -1,18 +1,37 @@
-import React from "react";
+import { useMemo } from "react";
 import { useRouter } from 'next/router'
 import Link from "next/link";
+import { bsc } from "viem/chains";
+import { BigNumberish } from "ethers";
 import { BackIcon } from "../../components/common/icons";
 import { useGlobalContext } from "../../context/GlobalContext";
 import HouseInfoCarouselComponent from "../../components/investment-house-detail/house-info-carousel";
 import HouseTotalInvestMent from "../../components/investment-house-detail/house-total-investment";
-import HouseInfoDetails from "../../components/investment-house-detail/house-info-details";
+import HouseFaqs from "../../components/investment-house-detail/house-faqs";
 import HouseMap from "../../components/investment-house-detail/house-map";
+import { 
+  getData,
+  selectIsLoading,
+  selectPropertyRentalData
+} from "../../lib/slices/firebase-slices/properties-rental-item";
+import { useAppDispatch, useAppSelector } from "../../lib/hooks";
+import usePropertyValues from "../../hooks/contract/APIConsumerContract/useGetPropertyValues";
 
 
 const MarketPlace = () => {
   const router = useRouter()
   const { houseId } = router.query as { houseId: string };
   const { theme } = useGlobalContext();
+  const dispatch = useAppDispatch();
+  const houseInfo = useAppSelector(selectPropertyRentalData) as any;
+  const isLoading = useAppSelector(selectIsLoading)
+  const { data: propertyValue } = usePropertyValues(bsc.id, houseInfo?.coreLogicID) as { data: BigNumberish}
+
+  useMemo(async () => {
+    dispatch(getData(houseId))
+  }, [houseId]);
+
+
   return (
     <div className="bg-primary">
       <div className="max-w-[1200px] m-auto">
@@ -24,10 +43,10 @@ const MarketPlace = () => {
           <span className="ml-2 text-text-secondary"> Back to the List</span>
         </Link>
       </div>
-      <HouseInfoCarouselComponent itemId={houseId} />
-      <HouseTotalInvestMent itemId={houseId} />
-      <HouseInfoDetails itemId={houseId} />
-      <HouseMap itemId={houseId} />
+      <HouseInfoCarouselComponent houseInfo={houseInfo} isLoading={isLoading} />
+      <HouseTotalInvestMent houseInfo={houseInfo} isLoading={isLoading} propertyValue={propertyValue} />
+      <HouseFaqs />
+      <HouseMap houseInfo={houseInfo} />
     </div>
   );
 };
