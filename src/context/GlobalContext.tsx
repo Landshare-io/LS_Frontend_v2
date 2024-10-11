@@ -5,6 +5,7 @@ interface GlobalContextType {
   setTheme: (theme: 'light' | 'dark') => void;
   toggleTheme: () => void;
   alertModal: any,
+  setAlertModal: (updatedStatus: any) => void;
   notifySuccess: (message: string) => void;
   notifyError: (message: string) => void;
   notifyInfo:  (message: string) => void;
@@ -18,6 +19,7 @@ const GlobalContext = createContext<GlobalContextType>({
   setTheme: () => {},
   toggleTheme: () => {},
   alertModal: {},
+  setAlertModal: (updatedStatus: any) => {},
   notifySuccess: (message: string) => {},
   notifyError: (message: string) => {},
   notifyInfo: (message: string) => {},
@@ -65,6 +67,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     toggleTheme,
     setTheme,
     alertModal,
+    setAlertModal,
     notifySuccess,
     notifyError,
     notifyInfo,
