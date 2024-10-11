@@ -16,7 +16,7 @@ export default function useDeposit(chainId: number) {
       address: AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id],
       abi: AutoVaultV2Contract,
       functionName: "deposit",
-      chainId: chainId,
+      chainId: bsc.id,
       args: [amount]
     });
   }

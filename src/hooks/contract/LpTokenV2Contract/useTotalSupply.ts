@@ -7,7 +7,8 @@ export default function useTotalSupply(chainId: number) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
     address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id],
     abi: LpTokenV2Abi,
-    functionName: "totalSupply"
+    functionName: "totalSupply",
+    chainId: bsc.id
   })
 
   if (isLoading) return { data: 0, refetch }

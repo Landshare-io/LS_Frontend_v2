@@ -17,7 +17,7 @@ export default function useApprove(chainId: number) {
       address: RWA_CONTRACT_ADDRESS[bsc.id],
       abi: RwaContractAbi,
       functionName: "approve",
-      chainId: chainId,
+      chainId: bsc.id,
       args: [approveAddress, amount]
     });
   }

@@ -15,7 +15,7 @@ export default function useOptIn(chainId: number) {
       address: AUTO_REDEEM_CONTRACT_ADDRESS[bsc.id],
       abi: AutoRedeemAbi,
       functionName: "optIn",
-      chainId: chainId
+      chainId: bsc.id
     });
   }
 

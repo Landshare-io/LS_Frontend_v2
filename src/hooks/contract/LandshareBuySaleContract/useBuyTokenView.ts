@@ -10,7 +10,7 @@ export default function useBuyTokenView(chainId: number, amountOfSecurities: num
     address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id],
     abi: LandshareBuySaleAbi,
     functionName: "buyTokenView",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [amountOfSecurities, stableCoinAddress]
   })
 

@@ -8,7 +8,7 @@ export default function useTotalSupply(chainId: number) {
     address: RWA_LP_CONTRACT_ADDRESS[bsc.id],
     abi: RwaLpContractAbi,
     functionName: "totalSupply",
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return 0

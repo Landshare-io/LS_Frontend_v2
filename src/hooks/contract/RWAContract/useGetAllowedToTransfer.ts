@@ -9,7 +9,7 @@ export default function useGetAllowedToTransfer(chainId: number, address: Addres
     address: RWA_CONTRACT_ADDRESS[bsc.id],
     abi: RwaContractAbi,
     functionName: "getAllowedToTransfer",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [address]
   })
 

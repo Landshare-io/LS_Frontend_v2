@@ -9,7 +9,7 @@ export default function useGetLandFee(chainId: number, usdcAmount: BigNumberish)
     address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
     abi: LandshareSaleAbi,
     functionName: "getLANDFee",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [usdcAmount],
   })
 

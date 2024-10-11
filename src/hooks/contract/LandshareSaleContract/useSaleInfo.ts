@@ -9,7 +9,7 @@ export default function useSaleInfo(chainId: number, address: Address | undefine
     address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
     abi: LandshareSaleAbi,
     functionName: "saleInfo",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [address]
   })
 

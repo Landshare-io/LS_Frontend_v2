@@ -9,7 +9,7 @@ export default function useIsWhitelistedAddress(chainId: number, address: Addres
     address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
     abi: LandshareSaleAbi,
     functionName: "isWhitelistedAddress",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [address]
   })
 

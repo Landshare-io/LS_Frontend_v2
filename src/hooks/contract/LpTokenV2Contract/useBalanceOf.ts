@@ -14,7 +14,8 @@ export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
     address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id],
     abi: LpTokenV2Abi,
     functionName: "balanceOf",
-    args: [address]
+    args: [address],
+    chainId: bsc.id
   })
 
   if (typeof address == 'undefined') return { data: 0, refetch }

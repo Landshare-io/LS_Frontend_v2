@@ -9,7 +9,7 @@ export default function useCalculateHarvestCakeRewards(chainId: number) {
     abi: AutoVaultV2Contract,
     functionName: "calculateHarvestCakeRewards",
     args: [],
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return { data: 0, refetch, isLoading }

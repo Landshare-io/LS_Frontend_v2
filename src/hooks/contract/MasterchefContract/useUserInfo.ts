@@ -16,7 +16,7 @@ export default function useUserInfo({ chainId, userInfoId, address }: UseUserInf
     abi: MasterchefAbi,
     functionName: "userInfo",
     args: [userInfoId, address],
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (typeof address == 'undefined') return { data: [0, 0], refetch, isLoading }

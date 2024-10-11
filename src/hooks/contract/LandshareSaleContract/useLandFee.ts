@@ -8,7 +8,7 @@ export default function useLandFee(chainId: number) {
     address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
     abi: LandshareSaleAbi,
     functionName: "landFee",
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return false

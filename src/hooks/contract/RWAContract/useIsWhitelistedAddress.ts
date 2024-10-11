@@ -9,7 +9,7 @@ export default function useIsWhitelistedAddress(chainId: number, address: Addres
     address: RWA_CONTRACT_ADDRESS[bsc.id],
     abi: RwaContractAbi,
     functionName: "isWhitelistedAddress",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [address]
   })
 

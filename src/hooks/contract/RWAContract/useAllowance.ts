@@ -9,7 +9,7 @@ export default function useAllowance(chainId: number, address: Address | undefin
     address: RWA_CONTRACT_ADDRESS[bsc.id],
     abi: RwaContractAbi,
     functionName: "allowance",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [address, spender]
   })
 
