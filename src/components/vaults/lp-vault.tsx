@@ -251,7 +251,7 @@ export default function LpVault({
 
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                  <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
+                  <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] relative">
                     <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px] w-[90px] h-[90px] absolute left-0 top-0" alt="token pair" />
                     <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-white" alt="" />
                   </div>
