@@ -3,6 +3,7 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { APIConsumerCcipTransactionsSlice } from "./slices/contract-slices/APIConsumerCcipTransactions";
 import { apiConsumerContractSlice } from "./slices/contract-slices/APIConsumerContractSlice";
 import { firebasePropertiesRentalSlice } from "./slices/firebase-slices/properties-rental";
+import { firebasePropertyRentalSlice } from "./slices/firebase-slices/properties-rental-item";
 import { firebaseFinancialLogsSlice } from "./slices/firebase-slices/financial-logs";
 
 // `combineSlices` automatically combines the reducers using
@@ -10,6 +11,7 @@ import { firebaseFinancialLogsSlice } from "./slices/firebase-slices/financial-l
 const rootReducer = combineSlices(
   apiConsumerContractSlice,
   firebasePropertiesRentalSlice,
+  firebasePropertyRentalSlice,
   firebaseFinancialLogsSlice,
   APIConsumerCcipTransactionsSlice
 );
