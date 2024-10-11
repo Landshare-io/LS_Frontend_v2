@@ -8,7 +8,7 @@ const DAOPage = () => {
 
   return (
     <div className={`${theme == 'dark' ? "dark" : ""}`}>
-      <DAO />
+      {/* <DAO /> */}
     </div>
   );
 };
