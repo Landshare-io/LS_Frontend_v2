@@ -1,24 +1,11 @@
-import { useMemo } from "react";
-import { 
-  getData,
-  selectPropertyRentalData
-} from "../../lib/slices/firebase-slices/properties-rental-item";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 interface HouseMapProps {
-  itemId: string
+  houseInfo: any
 }
 
 
-export default function HouseMap({ itemId }: HouseMapProps) {
-  const dispatch = useAppDispatch();
-  const houseInfo = useAppSelector(selectPropertyRentalData) as any;
-
-  useMemo(async () => {
-    dispatch(getData(itemId))
-  }, [itemId]);
-
+export default function HouseMap({ houseInfo }: HouseMapProps) {
   return (
     <>
       <div className="bg-third py-[50px]">
