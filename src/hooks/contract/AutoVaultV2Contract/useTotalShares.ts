@@ -9,7 +9,7 @@ export default function useTotalShares(chainId: number) {
     abi: AutoVaultV2Contract,
     functionName: "totalShares",
     args: [],
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return { data: 0, refetch, isLoading }

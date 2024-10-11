@@ -11,26 +11,26 @@ export default function useGetApr(chainId: number) {
         address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id],
         abi: MasterchefAbi,
         functionName: "landPerBlock",
-        chainId: chainId
+        chainId: bsc.id
       },
       {
         address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id],
         abi: MasterchefAbi,
         functionName: "poolInfo",
         args: [0],
-        chainId: chainId
+        chainId: bsc.id
       },
       {
         address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id],
         abi: MasterchefAbi,
         functionName: "totalAllocPoint",
-        chainId: chainId
+        chainId: bsc.id
       },
       {
         address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id],
         abi: MasterchefAbi,
         functionName: "totalStaked",
-        chainId: chainId
+        chainId: bsc.id
       }
     ]
   }) as { data: any[], isError: boolean, isLoading: boolean, error: any }

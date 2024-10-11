@@ -14,7 +14,8 @@ export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
     address: WBNB_TOKEN_CONTRACT_ADDRESS[bsc.id],
     abi: WBNBAbi,
     functionName: "balanceOf",
-    args: [address]
+    args: [address],
+    chainId: bsc.id
   })
 
   if (isLoading) return { data: 0, refetch }

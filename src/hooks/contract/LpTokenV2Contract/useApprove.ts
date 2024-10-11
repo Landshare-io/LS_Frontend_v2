@@ -17,7 +17,8 @@ export default function useApprove(chainId: number) {
       address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id],
       abi: LpTokenV2Abi,
       functionName: "approve",
-      args: [approveAddress, amount]
+      args: [approveAddress, amount],
+      chainId: bsc.id
     });
   }
 

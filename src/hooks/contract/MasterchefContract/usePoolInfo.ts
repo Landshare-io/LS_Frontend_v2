@@ -9,7 +9,7 @@ export default function usePoolInfo(chainId: number, poolInfoArg: number) {
     abi: MasterchefAbi,
     functionName: "poolInfo",
     args: [poolInfoArg],
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return [0, 0]

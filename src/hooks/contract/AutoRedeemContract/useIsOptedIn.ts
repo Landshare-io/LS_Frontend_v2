@@ -10,7 +10,7 @@ export default function useIsOptedIn(chainId: number, address: Address | undefin
     abi: AutoRedeemAbi,
     functionName: "isOptedIn",
     args: [address],
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (typeof address == 'undefined') return false

@@ -8,7 +8,7 @@ export default function useGetReserves(chainId: number) {
     address: BNB_APE_PAIR_CONTRACT_ADDRESS[bsc.id],
     abi: BNBApePair,
     functionName: "getReserves",
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return [0, 0]

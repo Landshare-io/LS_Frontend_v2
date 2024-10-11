@@ -16,7 +16,7 @@ export default function useSellRwa(chainId: number) {
       address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id],
       abi: LandshareBuySaleAbi,
       functionName: "sellRwa",
-      chainId: chainId,
+      chainId: bsc.id,
       args: [amount]
     });
   }

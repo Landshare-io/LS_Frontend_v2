@@ -16,7 +16,7 @@ export default function useWithdrawAll(chainId: number) {
       address: AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id],
       abi: AutoVaultV2Contract,
       functionName: "withdrawAll",
-      chainId: chainId,
+      chainId: bsc.id,
       args: []
     });
   }

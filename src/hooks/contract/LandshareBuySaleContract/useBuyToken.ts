@@ -17,7 +17,7 @@ export default function useBuyToken(chainId: number) {
       address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id],
       abi: LandshareBuySaleAbi,
       functionName: "buyToken",
-      chainId: chainId,
+      chainId: bsc.id,
       args: [amount, usdcAddress]
     });
   }

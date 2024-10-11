@@ -8,7 +8,7 @@ export default function useGetReserves(chainId: number) {
     address: PANCAKE_PAIR_CONTRACT_ADDRESS[bsc.id],
     abi: PancakePairAbi,
     functionName: "getReserves",
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return [0, 0]

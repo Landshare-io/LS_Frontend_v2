@@ -577,7 +577,7 @@ export default function AutoVault({
                                 onClick={() => clainBounty()}
                                 disabled={typeof address == 'undefined'}
                               >
-                                {`Claim Bounty (${chainId == MAJOR_WORK_CHAIN.id ? (formatEther(bountyReward).substr(0, 6)) : (formatEther(ccipBountyReward).substr(0, 6))} LAND)`}
+                                {`Claim Bounty (${chainId == MAJOR_WORK_CHAIN.id ? (formatEther(bountyReward).substr(0, 6)) : (formatEther(ccipBountyReward ?? 0).substr(0, 6))} LAND)`}
                               </button>
                             </>
                           )

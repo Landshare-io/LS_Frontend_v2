@@ -8,7 +8,7 @@ export default function useLandPerBlock(chainId: number) {
     address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id],
     abi: MasterchefAbi,
     functionName: "landPerBlock",
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return 0

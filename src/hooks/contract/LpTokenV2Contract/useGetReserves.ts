@@ -7,7 +7,8 @@ export default function useGetReserves(chainId: number) {
   const { data, isError, isLoading, error } = useReadContract({
     address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id],
     abi: LpTokenV2Abi,
-    functionName: "getReserves"
+    functionName: "getReserves",
+    chainId: bsc.id
   })
 
   if (isLoading) return 0

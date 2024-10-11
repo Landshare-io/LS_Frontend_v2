@@ -9,7 +9,7 @@ export default function useGetSaleLimit(chainId: number, address: Address | unde
     address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
     abi: LandshareSaleAbi,
     functionName: "getSaleLimit",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [address]
   })
 

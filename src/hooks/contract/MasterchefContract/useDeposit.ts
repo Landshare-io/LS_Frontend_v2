@@ -17,7 +17,8 @@ export default function useDeposit(chainId: number) {
       address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] as Address,
       abi: MasterchefAbi,
       functionName: "deposit",
-      args: [depositId, amount]
+      args: [depositId, amount],
+      chainId: bsc.id
     });
   }
 

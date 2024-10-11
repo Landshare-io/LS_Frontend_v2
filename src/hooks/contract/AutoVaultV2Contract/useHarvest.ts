@@ -15,7 +15,7 @@ export default function useHarvest(chainId: number) {
       address: AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id],
       abi: AutoVaultV2Contract,
       functionName: "harvest",
-      chainId: chainId,
+      chainId: bsc.id,
       args: []
     });
   }

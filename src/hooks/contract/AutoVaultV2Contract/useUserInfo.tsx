@@ -15,7 +15,7 @@ export default function useUserInfo({ chainId, address }: UseUserInfoProps) {
     abi: AutoVaultV2Contract,
     functionName: "userInfo",
     args: [address],
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (typeof address == 'undefined') return { data: [0, 0, 0, 0], refetch, isLoading }

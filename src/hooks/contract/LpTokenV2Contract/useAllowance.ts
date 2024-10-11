@@ -9,7 +9,7 @@ export default function useAllowance(chainId: number, approver: Address | undefi
     address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id],
     abi: LpTokenV2Abi,
     functionName: "allowance",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [approver, to]
   })
 

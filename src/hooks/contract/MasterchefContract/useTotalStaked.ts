@@ -8,7 +8,7 @@ export default function useTotalStaked(chainId: number) {
     address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id],
     abi: MasterchefAbi,
     functionName: "totalStaked",
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (isLoading) return { data: 0, refetch, isLoading }

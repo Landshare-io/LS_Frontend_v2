@@ -16,7 +16,7 @@ export default function usePendingLand({ chainId, pendingLandId, address }: UseP
     abi: MasterchefAbi,
     functionName: "pendingLand",
     args: [pendingLandId, address],
-    chainId: chainId
+    chainId: bsc.id
   })
 
   if (typeof address == 'undefined') return { data: 0, refetch, isLoading }

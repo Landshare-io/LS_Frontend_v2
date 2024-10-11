@@ -9,7 +9,7 @@ export default function useBalanceOf(chainId: number, address: Address | undefin
     address: RWA_LP_CONTRACT_ADDRESS[bsc.id],
     abi: RwaLpContractAbi,
     functionName: "balanceOf",
-    chainId: chainId,
+    chainId: bsc.id,
     args: [address]
   })
 
