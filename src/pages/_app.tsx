@@ -12,6 +12,7 @@ import { StoreProvider } from '../lib/StoreProvider';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import LoadingStatus from '../components/common/loading-status';
+import AlertModal from '../components/common/modals/alert';
 import { config } from '../wagmi';
 
 const interTight = Inter_Tight({
@@ -57,6 +58,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <Component {...pageProps} />
                 <Footer />
                 <LoadingStatus />
+                <AlertModal />
               </StoreProvider>
             </GlobalProvider>
           </RainbowKitProvider>
