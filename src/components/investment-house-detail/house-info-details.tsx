@@ -1,35 +1,22 @@
-import React, { useMemo, useState } from "react";
-import { bsc } from "viem/chains";
+import React, { useState } from "react";
+
 import { SquareFootageIcon } from "../common/icons";
 import { BigNumberish, formatEther } from "ethers";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useGlobalContext } from "../../context/GlobalContext";
 import Collapse from "../common/collapse";
-import { 
-  getData,
-  selectIsLoading,
-  selectPropertyRentalData
-} from "../../lib/slices/firebase-slices/properties-rental-item";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { MonthlyExpenseIcon } from "../common/icons";
-import usePropertyValues from "../../hooks/contract/APIConsumerContract/useGetPropertyValues";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 interface HouseInfoDetailsProps {
-  itemId: string
+  houseInfo: any
+  isLoading: boolean
+  propertyValue: BigNumberish
 }
 
-export default function HouseInfoDetails({ itemId }: HouseInfoDetailsProps) {
+export default function HouseInfoDetails({ houseInfo, isLoading, propertyValue }: HouseInfoDetailsProps) {
   const { theme } = useGlobalContext();
-  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const houseInfo = useAppSelector(selectPropertyRentalData) as any;
-  const isLoading = useAppSelector(selectIsLoading)
-  const { data: propertyValue } = usePropertyValues(bsc.id, houseInfo?.coreLogicID) as { data: BigNumberish}
-
-  useMemo(async () => {
-    dispatch(getData(itemId))
-  }, [itemId]);
 
   return (
     <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>

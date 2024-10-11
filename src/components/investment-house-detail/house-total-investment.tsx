@@ -1,31 +1,15 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { formatEther } from "ethers";
-import { bsc } from "viem/chains";
+import { formatEther, BigNumberish } from "ethers";
 import ReactLoading from "react-loading";
-import { 
-  getData,
-  selectIsLoading,
-  selectPropertyRentalData
-} from "../../lib/slices/firebase-slices/properties-rental-item";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import usePropertyValues from "../../hooks/contract/APIConsumerContract/useGetPropertyValues";
-import { BigNumberish } from "ethers";
 
 interface HouseTotalInvestMentProps {
-  itemId: string
+  houseInfo: any
+  isLoading: boolean
+  propertyValue: BigNumberish
 }
 
-export default function HouseTotalInvestMent({ itemId }: HouseTotalInvestMentProps) {
-  const dispatch = useAppDispatch();
-  const houseInfo = useAppSelector(selectPropertyRentalData) as any;
-  const isLoading = useAppSelector(selectIsLoading)
-  const { data: propertyValue } = usePropertyValues(bsc.id, houseInfo?.coreLogicID) as { data: BigNumberish}
-
-  useMemo(async () => {
-    dispatch(getData(itemId))
-  }, [itemId]);
-
+export default function HouseTotalInvestMent({ houseInfo, isLoading, propertyValue }: HouseTotalInvestMentProps) {
   return (
     <>
       <div className="bg-third py-[40px] flex flex-col text-center justify-center">
