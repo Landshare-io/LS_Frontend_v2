@@ -269,7 +269,7 @@ export default function Usdtvault({
                       </button>
                     </div>
                     <div className="p-0 flex items-center">
-                      <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#3b98ee1f] text-[#3B98EE] max-w-[87px] ${BOLD_INTER_TIGHT.className}`}>
+                      <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] ${BOLD_INTER_TIGHT.className}`}>
                         <Image src={book} alt="book" className="book" />
                         <span>Manual</span>
                       </div>
