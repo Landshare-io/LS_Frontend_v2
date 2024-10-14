@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface PropertyItemProps {
   property: any;

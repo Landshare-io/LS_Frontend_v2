@@ -9,6 +9,7 @@ import useGetPropertyValues from "../../../hooks/contract/APIConsumerContract/us
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { BigNumberish, formatEther } from "ethers";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface PropertyCardProps {
   property: any;

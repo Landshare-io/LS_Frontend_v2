@@ -7,6 +7,7 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import Collapse from "../common/collapse";
 import { MonthlyExpenseIcon } from "../common/icons";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface HouseInfoDetailsProps {
   houseInfo: any

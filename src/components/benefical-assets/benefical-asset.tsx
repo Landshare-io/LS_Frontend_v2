@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useChainId } from "wagmi";
-import { formatEther } from "ethers";
+import { formatEther, BigNumberish } from "ethers";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useGlobalContext } from "../../context/GlobalContext";
 import usePropertyValues from "../../hooks/contract/APIConsumerContract/useGetPropertyValues";
@@ -9,7 +9,7 @@ import IconSofa from "../../../public/icons/sofa.svg";
 import IconBathroom from "../../../public/icons/bathroom.svg";
 import IconLocation from "../../../public/icons/location.svg";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
-import { BigNumberish } from "ethers";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface BeneficalAssetProps {
   asset: any;

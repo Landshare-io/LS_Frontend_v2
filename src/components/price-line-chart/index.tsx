@@ -15,6 +15,7 @@ import IconTokenPair from "../../../public/icons/token-pair.svg";
 import useFetchRwa from "../../hooks/apollo/useFetchRwa";
 import useFetchLandData from "../../hooks/axios/useFetchLandData";
 import useGetLandPrice from "../../hooks/axios/useGetLandPrice";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface PriceGraphProps {
   containerClassName?: string;
@@ -298,14 +299,14 @@ export default function PriceGraph({
       <div className="mr-[-22px] md:mr-0 md:ml-[-15px]" id="chart-timeline">
         <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
           {isLoading || isLandGraphDataLoading || isLandPriceDataLoading ?
-            <Skeleton className="rounded-lg ml-2" height={300} /> :
+            <Skeleton className="rounded-lg ml-2 w-full" height={300} /> :
               <ApexChart
                 options={options}
                 series={series}
                 type="area"
                 height={300}
               />}
-          </SkeletonTheme>
+        </SkeletonTheme>
       </div>
     </div>
   );

@@ -46,6 +46,7 @@ import { getDateStringFromTimestamp } from "../../utils/helpers/convert-date";
 import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";
 import useOptIn from "../../hooks/contract/AutoRedeemContract/useOptIn";
 import useBalanceOf from "../../hooks/contract/RWAContract/useBalanceOf";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function FinancialSummary() {
   const { theme } = useGlobalContext();
