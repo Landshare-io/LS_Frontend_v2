@@ -64,7 +64,7 @@ export default function LpVault({
   const { data: userInfo } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
   const { data: pendingLand } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
   const { data: approvedLAND } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
-  const allocPoints = usePoolInfo(chainId, 1) as any[];
+  const { data: allocPoints } = usePoolInfo(chainId, 1) as { data: any[] };
   const { bnbPrice, coinPrice: coin, price } = useGetPrice(chainId)
 
   
