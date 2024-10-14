@@ -3,15 +3,15 @@ import "./Input.css";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface InputProps {
-  labelClassName: string
-  containerClassName: string
+  labelClassName?: string
+  containerClassName?: string
   proposal: string
-  label: string
+  label?: string
   error: string
   setValue: Function
-  max: string
+  max?: string
   setError: Function
-  value: number
+  value: string
   unit?: number | null
 }
 
@@ -19,10 +19,10 @@ export default function Input({
   labelClassName,
   containerClassName,
   proposal,
-  label,
+  label = '',
   error,
   setValue,
-  max,
+  max = '0',
   setError,
   value,
   unit = null
