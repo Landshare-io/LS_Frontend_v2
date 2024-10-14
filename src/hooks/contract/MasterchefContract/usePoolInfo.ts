@@ -12,11 +12,11 @@ export default function usePoolInfo(chainId: number, poolInfoArg: number) {
     chainId: bsc.id
   })
 
-  if (isLoading) return [0, 0]
+  if (isLoading) return { data: ['', 0, 0, 0], isLoading, error }
   if (isError) {
     console.log('Fetching MasterchefContract poolInfo error', error)
-    return 0
+    return { data: ['', 0, 0, 0], isLoading, error }
   }
 
-  return data
+  return { data, isLoading, error }
 }
