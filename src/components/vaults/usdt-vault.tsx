@@ -42,6 +42,7 @@ import {
   RWA_LP_CONTRACT_ADDRESS, 
   MASTERCHEF_CONTRACT_ADDRESS 
 } from "../../config/constants/environments";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface UsdtVaultProps {
   title: string
@@ -269,11 +270,11 @@ export default function Usdtvault({
                       </button>
                     </div>
                     <div className="p-0 flex items-center">
-                      <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] ${BOLD_INTER_TIGHT.className}`}>
+                      <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
                         <Image src={book} alt="book" className="book" />
                         <span>Manual</span>
                       </div>
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                         <Image src={bscIcon} className="w-8 h-8" alt="" />
                       </div>
                     </div>

@@ -49,6 +49,7 @@ import arbitrumIcon from "../../../public/icons/arbitrum.svg";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import quickSwap from "../../../public/icons/quickswap-logo.svg"
 import smallicon from "../../../public/icons/rotate-black.svg"
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface AutoVaultProps {
   title: string
@@ -279,13 +280,13 @@ export default function AutoVault({
                       <Image src={rotateBlue} alt="book" className="rotate" />
                       <span>Auto</span>
                     </div>
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                       <Image src={bscIcon} className="w-8 h-8" alt="" />
                     </div>
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                       <Image src={polygonIcon} className="w-8 h-8" alt="" />
                     </div>
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                       <Image src={arbitrumIcon} className="w-8 h-8" alt="" />
                     </div>
                   </div>
@@ -315,13 +316,13 @@ export default function AutoVault({
                         <Image src={rotateBlue} alt="book" className="rotate" />
                         <span>Auto</span>
                       </div>
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                         <Image src={bscIcon} className="w-8 h-8" alt="" />
                       </div>
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                         <Image src={polygonIcon} className="w-8 h-8" alt="" />
                       </div>
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                         <Image src={arbitrumIcon} className="w-8 h-8" alt="" />
                       </div>
                     </div>

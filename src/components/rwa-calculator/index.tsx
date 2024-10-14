@@ -13,9 +13,9 @@ export default function RwaCalculator() {
   return (
     <div className="flex gap-0 items-center p-0 max-w-[1200px] m-auto border-[2px] border-[#61CD81] rounded-[24px] overflow-hidden ">
       <div className="flex flex-col flex-1 py-[24px] px-[30px] gap-[20px] h-[238px]">
-        <h2 className="text-[18px] leading-[24px]">Calculate returns effortlessly and make informed financial decisions for a brighter future.</h2>        
+        <h2 className="text-[18px] leading-[24px] text-text-primary">Calculate returns effortlessly and make informed financial decisions for a brighter future.</h2>        
         <div className='grid grid-cols-1 md:grid-cols-[minmax(200px,max-content),minmax(310px,max-content),minmax(50px,max-content)] gap-[20px] gap-y-[10px]'>
-          <span className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>Initial investment</span>
+          <span className={`text-[14px] leading-[22px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>Initial investment</span>
           <input 
             type="range" 
             min="1000" 
@@ -25,7 +25,7 @@ export default function RwaCalculator() {
             className="w-full max-w-[310px] accent-[#61CD81]"
           />
           <span className={`text-[18px] leading-[22px] text-[#61CD81] ${BOLD_INTER_TIGHT.className}`}>${initialInvestment.toLocaleString()}</span>
-          <span className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>Monthly recurring investment</span>
+          <span className={`text-[14px] leading-[22px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>Monthly recurring investment</span>
           <input 
             type="range" 
             min="100" 
@@ -36,7 +36,7 @@ export default function RwaCalculator() {
           />
           <span className={`text-[18px] leading-[22px] text-[#61CD81] ${BOLD_INTER_TIGHT.className}`}>${monthlyInvestment.toLocaleString()}</span>
         </div>
-        <div className="flex items-center gap-[20px]">
+        <div className="flex items-center gap-[20px] text-text-primary">
           <div className='flex flex-col items-center'>
             <p className="text-[12px] leading-[22px]">Annual rent return</p>
             <p className={`text-[18px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}>14.4%</p>

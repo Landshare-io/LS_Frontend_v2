@@ -10,6 +10,7 @@ import myRwa from "../../../public/icons/coin-stacked-small.svg";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { StringKeyStringValueObject } from "../../utils/type";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const iconUrl: StringKeyStringValueObject = {
   "Rental Yield": capRate,

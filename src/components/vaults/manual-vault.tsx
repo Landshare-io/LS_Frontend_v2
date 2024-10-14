@@ -25,6 +25,7 @@ import calc from "../../../public/icons/calculator.svg";
 import viewContract from "../../../public/icons/view-contract.png";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import bscIcon from "../../../public/icons/bsc.svg"
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface ManualVaultProps {
   title: string
@@ -223,7 +224,7 @@ export default function ManualVault({
                         <Image src={book} alt="book" className="book mr-2" />
                         <span>Manual</span>
                       </div>
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                         <Image src={bscIcon} className="w-8 h-8" alt="" />
                       </div>
                     </div>

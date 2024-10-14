@@ -50,6 +50,7 @@ import IconDashboard from "../../../public/icons/dashboard.svg";
 import IconInfo from "../../../public/icons/info.svg";
 import IconInfoGray from "../../../public/icons/info-gray.svg";
 import IconClose from "../../../public/icons/close.svg";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function SwapToken() {
   const { isConnected, address } = useAccount();

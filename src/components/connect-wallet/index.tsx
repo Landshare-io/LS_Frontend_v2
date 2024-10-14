@@ -85,7 +85,7 @@ export default function ConnectWallet({
                     <div className="flex items-center">
                       <div
                         onClick={openChainModal}
-                        className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-colors duration-200 mr-2"
+                        className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary hover:bg-gray-200 transition-colors duration-200 mr-2"
                       >
                         <img
                           src={chain.iconUrl}
