@@ -12,6 +12,7 @@ import { useBalance } from "wagmi";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { IoIosArrowDown } from "react-icons/io";
 import Carousel from "../common/carousel";
+import Tooltip from "../common/tooltip";
 import CarouselItem from "../common/carousel/carousel-item";
 import CarouselControl from "../common/carousel/carousel-control";
 import PropertyItem from "../financial-property-item";
@@ -131,7 +132,7 @@ export default function FinancialSummary() {
               <div className="flex flex-col gap-[10px]">
                 <span className="font-medium text-[14px] leading-[22px] text-text-secondary">My RWA Balance</span>
                 <div className="flex gap-[8px]">
-                  <div className="flex items-center jsutify-center w-[32px] h-[32px] py-[6.23px] px-[7px] bg-[#F6F7F9] rounded-full">
+                  <div className="bg-primary flex items-center jsutify-center w-[32px] h-[32px] py-[6.23px] px-[7px] rounded-full">
                     <Image src={myRwa} alt="refresh" className="w-[18px]" />
                   </div>
                   <span className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
@@ -218,12 +219,15 @@ export default function FinancialSummary() {
             <div className={`flex justify-between items-center text-[24px] leading-[30px] mb-[24px] ${BOLD_INTER_TIGHT.className}`}>
               <div className="flex gap-x-1">
                 <div>Financial Summary</div>
-                <div className="relative flex items-center">
+                <Tooltip 
+                  title="Financial information is provided for your information only. Expenses and property valuations are estimated and subject to change at any time. Maintenance costs, vacancies, and other factors can affect property returns."
+                  tooltipClassName="min-w-[400px]"
+                >
                   <BsInfoCircle id="tooltip-icon" className="w-4 h-4 cursor-pointer"></BsInfoCircle>
-                  <div id="tooltip-content" className="hidden md:block absolute -left-[1000px] z-40 bg-white top-5 w-[200px] md:w-[400px] opacity-0 hover:opacity-100 hover:left-5 transition delay-75 text-[15px] rounded-lg shadow-lg px-3 py-2 font-normal">
-                    Financial information is provided for your information only. Expenses and property valuations are estimated and subject to change at any time. Maintenance costs, vacancies, and other factors can affect property returns.
-                  </div>
-                </div>
+                </Tooltip>
+                {/* <div id="tooltip-content" className="hidden md:block absolute -left-[1000px] z-40 bg-white top-5 w-[200px] md:w-[400px] opacity-0 hover:opacity-100 hover:left-5 transition delay-75 text-[15px] rounded-lg shadow-lg px-3 py-2 font-normal">
+                  Financial information is provided for your information only. Expenses and property valuations are estimated and subject to change at any time. Maintenance costs, vacancies, and other factors can affect property returns.
+                </div> */}
               </div>
               <Image onClick={() => setIsModalOpen(true)} src={ModalOpenIcon} alt="modal open" className="w-5 h-5 cursor-pointer" />
             </div>

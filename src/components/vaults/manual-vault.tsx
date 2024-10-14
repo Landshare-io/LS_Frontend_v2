@@ -149,7 +149,7 @@ export default function ManualVault({
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-[880px] m-auto">
       <div className="w-full">
         <div className={`p-[12px] md:p-[24px] flex flex-col w-full rounded-[24px] bg-third`}>
           {isVaultsLoading ? (

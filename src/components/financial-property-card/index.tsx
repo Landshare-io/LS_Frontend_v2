@@ -45,7 +45,7 @@ export default function FinancialPropertyCard ({ title, value, loading = false, 
   }, [loading]);
 
   return (
-    <div className={`${page == "rwa" ? "bg-third" : "bg-third md:bg-secondary"} py-[32px] px-[24px] gap-[10px] rounded-[16px] min-w-max flex flex-col justify-center items-center md:items-start`}>
+    <div className={`${page == "rwa" ? "bg-third" : "bg-third md:bg-secondary"} w-full py-[32px] px-[24px] gap-[10px] rounded-[16px] min-w-max flex flex-col justify-center items-center md:items-start`}>
       <div className="flex flex-col gap-[10px] text-center">
         <span className="text-text-secondary justify-center font-medium text-[14px] leading-[22px] min-w-[180px] md:justify-start flex gap-1 items-center relative">
           {title}

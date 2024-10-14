@@ -38,7 +38,7 @@ const RwaPage: NextPage = () => {
         </div>
       </div>
       <div className="bg-primary pb-[60px] px-[10px] md:pb-[80px] md:px-[40px] lg:px-[120px]">
-        <div className="flex flex-col-reverse md:flex-row max-w-[1200px] m-auto justify-between gap-[20px]">
+        <div className="flex flex-col-reverse lg:flex-row max-w-[1200px] m-auto justify-between gap-[20px]">
           <div className="flex flex-col w-full gap-[24px]">
             <div className="hidden md:block">
               <PriceGraph

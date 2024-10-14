@@ -17,7 +17,7 @@ const Home: NextPage = () => {
         <link href="/favicon.ico" rel="icon" />
       </Head>
       <HomeRwaSection />
-      <DashboardFeautre />
+      {/* <DashboardFeautre /> */}
       <MoreInvestment />
     </div>
   );
