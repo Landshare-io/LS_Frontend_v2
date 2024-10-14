@@ -82,7 +82,6 @@ export default function PriceGraph({
           setRecentData({
             pair: "LAND / USD",
             price: landPrice,
-
             change_price: (landGraphData.prices[Number(landGraphData.prices.length) - Number(1)]
             [1]
               - landGraphData.prices[0][1]) /
@@ -92,19 +91,22 @@ export default function PriceGraph({
           setIsLoading(false);
           break;
         case 'rwa':
+          let change_price = 0
           if (rwaGraphData[0][0] > dueDate[selection]) {
             setSeries([{ data: [...rwaGraphData, [dueDate[selection], null]] }]);
+            change_price = rwaGraphData[1][1] != 0 ? (rwaGraphData[rwaGraphData.length - 1][1] - rwaGraphData[1][1]) / rwaGraphData[1][1] * 100 : 0
           } else {
             const filtered = rwaGraphData.filter((value) => Number(value[0]) > new Date(dueDate[selection]).getTime());
             const data = [[new Date(dueDate[selection]).getTime(), rwaGraphData[rwaGraphData.length - filtered.length - 1][1]]];
             setSeries([{
               data: data.concat(filtered)
             }]);
+            change_price = filtered[1][1] != 0 ? (filtered[filtered.length - 1][1] - filtered[1][1]) / filtered[1][1] * 100 : 0
           }
           setRecentData({
             pair: "LSRWA / USD",
             price: Number(rwaGraphData[rwaGraphData.length - 1][1]),
-            change_price: rwaGraphData[1][1] != 0 ? (rwaGraphData[rwaGraphData.length - 1][1] - rwaGraphData[1][1]) / rwaGraphData[1][1] * 100 : 0,
+            change_price: change_price,
             date: now
           });
           setIsLoading(false);
@@ -207,7 +209,7 @@ export default function PriceGraph({
               <span className={`text-text-primary ${BOLD_INTER_TIGHT.className} text-[24px] leading-[30px]`}>
                 ${type == "land" ? landPrice.toFixed(5) : recentData?.price?.toFixed(5)}
               </span>
-              <span className={`text-[14px] leading-[22px] tracking-[0.02em] text-[${recentData.change_price >= 0 ? "#74cc50" : "#e93838"}] ${BOLD_INTER_TIGHT.className}`}>
+              <span className={`text-[14px] leading-[22px] tracking-[0.02em] ${recentData.change_price >= 0 ? "text-[#74cc50]" : "text-[#e93838]"} ${BOLD_INTER_TIGHT.className}`}>
                 {recentData.change_price >= 0 ? "+ " : ""} {recentData.change_price.toFixed(2)} %
               </span>
             </div>
@@ -236,14 +238,24 @@ export default function PriceGraph({
                   1W
                 </ToggleButton>
                 {type == "rwa" ?
-                  <ToggleButton
-                    className="w-[60px] h-[30px] text-[14px]"
-                    onClick={() => setSelection("one_month")}
-                    active={selection === "one_month"}
-                    type="pricegraph"
-                  >
-                    1M
-                  </ToggleButton>
+                  <>
+                    <ToggleButton
+                      className="w-[60px] h-[30px] text-[14px]"
+                      onClick={() => setSelection("one_month")}
+                      active={selection === "one_month"}
+                      type="pricegraph"
+                    >
+                      1M
+                    </ToggleButton>
+                    <ToggleButton
+                      className="w-[60px] h-[30px] text-[14px]"
+                      onClick={() => setSelection("one_year")}
+                      active={selection === "one_year"}
+                      type="pricegraph"
+                    >
+                      1Y
+                    </ToggleButton>
+                  </>
                   : (<></>)
                 }
               </div>
@@ -261,14 +273,24 @@ export default function PriceGraph({
             1W
           </ToggleButton>
           {type == "rwa" ?
-            <ToggleButton
-              className="w-[60px] h-[30px] text-[14px]"
-              onClick={() => setSelection("one_month")}
-              active={selection === "one_month"}
-              type="pricegraph"
-            >
-              1M
-            </ToggleButton>
+            <>
+              <ToggleButton
+                className="w-[60px] h-[30px] text-[14px]"
+                onClick={() => setSelection("one_month")}
+                active={selection === "one_month"}
+                type="pricegraph"
+              >
+                1M
+              </ToggleButton>
+              <ToggleButton
+                className="w-[60px] h-[30px] text-[14px]"
+                onClick={() => setSelection("one_year")}
+                active={selection === "one_year"}
+                type="pricegraph"
+              >
+                1Y
+              </ToggleButton>
+            </>
             : (<></>)
           }
         </div>

@@ -179,7 +179,7 @@ export default function SwapToken() {
 
   return (
     <div>
-      <div className="flex flex-col w-full md:w-[371px] max-w-full md:max-w-[371px] items-start bg-third p-[18px] lg:p-[24px] rounded-[16px] gap-[16px] max-h-none">
+      <div className="flex flex-col w-full lg:w-[371px] max-w-full lg:max-w-[371px] items-start bg-third p-[18px] lg:p-[24px] rounded-[16px] gap-[16px] max-h-none">
         <div className="flex justify-between items-center w-full">
           <div>
             <div className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>

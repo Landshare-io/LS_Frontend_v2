@@ -159,9 +159,11 @@ export default function StakingPage() {
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
-      {isConnected && supportChainIds.includes(chainId) && (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
-        Chain not Supported
-      </div>)}
+      <div className="bg-primary">
+        {isConnected && !supportChainIds.includes(chainId) && (<div className="flex flex-col justify-center items-center text-center py-5 mx-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
+          Chain not Supported
+        </div>)}
+      </div>
       <div className="bg-primary py-[20px] px-[20px] md:py-[80px] md:px-[40px] lg:px-[120px] pt-0">
         <div className="flex flex-col md:justify-between items-center max-w-[1200px] m-auto gap-[12px]">
           <div className="flex items-center m-auto py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-secondary">
