@@ -3,8 +3,23 @@ import ReactLoading from "react-loading";
 import Input from "../common/input";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
-export default function BurnTokens(props) {
+interface BurnTokensProps {
+  error: string;
+  setError: Function;
+  amountToBurn: string;
+  setAmountToBurn: Function;
+  balance: string;
+}
+
+export default function BurnTokens({
+  error,
+  setError,
+  amountToBurn,
+  setAmountToBurn,
+  balance
+}: BurnTokensProps) {
   const [isLoading, setIsLoading] = useState(true);
+  const balanceValue = balance.match(/^-?\d+(?:\.\d{0,4})?/)
 
   useEffect(() => {
     setIsLoading(false);
@@ -20,18 +35,19 @@ export default function BurnTokens(props) {
       <div className="my-[10px] mx-[7px]">
         <Input
           proposal="Burn Tokens"
-          error={props.error}
-          setError={props.setError}
-          value={props.amountToBurn}
-          setValue={props.setAmountToBurn}
+          error={error}
+          setError={setError}
+          value={amountToBurn}
+          setValue={setAmountToBurn}
           labelClassName="my-3 text-text-secondary"
           containerClassName="w-full"
           label="Enter the amount of tokens to burn. All token burns are sent to the null address and lower the total supply cap."
-          max={props.balance}
+          max={balance}
         />
         <div className="text-[13px] text-right mr-[5px] mt-[2px] mb-[2px] text-text-secondary">
-          Available Balance:{" "}
-          <b>{props.balance.match(/^-?\d+(?:\.\d{0,4})?/)[0]} LAND</b>
+          Available Balance: <b>{
+            balanceValue ? balanceValue[0] : balance
+          } LAND</b>
         </div>
       </div>
     </div>
