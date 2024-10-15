@@ -53,24 +53,25 @@ export default function ChangeVaultAllocation ({
   const isLoading = isLoadingAllocBurn || isLoadingAllocStake || isLoadingAllocLp || isLoadingAllocLsr
 
   return isLoading ? (
-    <div className="col-12 d-flex justify-content-center my-auto">
+    <div className="w-full flex justify-center my-auto">
       <ReactLoading type="cylon" color="#61cd81" />
     </div>
   ) : (
     <div>
-      <table className="styled-table" cellSpacing="0" cellPadding="0">
-        <thead className="title-cva text-tw-button-text-secondary">
-          <tr>
-            <th>LAND/day</th>
-            <th>New</th>
-            <th>Current</th>
+      <table className="border-collapse my-[25px] mx-0 text-[0.9em] rounded-[10px] shadow-lg" cellSpacing="0" cellPadding="0">
+        <thead className="text-button-text-secondary">
+          <tr className="bg-[#61cd81] text-center">
+            <th className="py-[12px] px-[15px] text-center">LAND/day</th>
+            <th className="py-[12px] px-[15px] text-center">New</th>
+            <th className="py-[12px] px-[15px] text-center">Current</th>
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-tw-secondary text-tw-text-primary">
+          <tr className="bg-secondary text-text-primary text-center border-b-[1px] border-[#dddddd]">
             <td width="40% ">Unallocated</td>
             <td width="30%">
               <Input
+                containerClassName="w=full mb-[8px]"
                 proposal={"Change Vault Allocation"}
                 value={allocPointsBurn}
                 setValue={setAllocPointsBurn}
@@ -81,24 +82,27 @@ export default function ChangeVaultAllocation ({
             </td>
             <td width="30%">{allocBurn}</td>
           </tr>
-          <tr className="vault-allocation-bg bg-tw-primary dark:bg-tw-third text-tw-text-primary">
+          <tr className="vault-allocation-bg bg-primary dark:bg-third text-text-primary text-center border-b-[1px] border-[#dddddd]">
             <td width="40%">LAND Staking</td>
             <td width="30%">
               <Input
+                containerClassName="w=full mb-[8px]"
                 proposal={"Change Vault Allocation"}
                 value={allocPointsStake}
                 setValue={setAllocPointsStake}
                 error={errorStake}
                 setError={setErrorStake}
                 labelClassName="mb-2"
+
               />
             </td>
             <td width="30%">{allocStake}</td>
           </tr>
-          <tr className="bg-tw-secondary text-tw-text-primary">
+          <tr className="bg-secondary text-text-primary text-center border-b-[1px] border-[#dddddd]">
             <td width="40%">LP Staking</td>
             <td width="30%">
               <Input
+                containerClassName="w=full mb-[8px]"
                 proposal={"Change Vault Allocation"}
                 value={allocPointsLP}
                 setValue={setAllocPointsLP}
@@ -109,10 +113,11 @@ export default function ChangeVaultAllocation ({
             </td>
             <td width="30%">{allocLP}</td>
           </tr>
-          <tr className="bg-tw-secondary text-tw-text-primary">
+          <tr className="bg-secondary text-text-primary text-center border-b-[1px] border-[#dddddd]">
             <td width="40%">LSRWA-USDT</td>
             <td width="30%">
               <Input
+                containerClassName="w=full mb-[8px]"
                 proposal={"Change Vault Allocation"}
                 value={allocLSRWA}
                 setValue={setAllocLSRWA}
