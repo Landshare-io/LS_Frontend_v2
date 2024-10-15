@@ -6,13 +6,13 @@ interface InputProps {
   labelClassName?: string
   containerClassName?: string
   proposal: string
-  label?: string
+  label?: string | JSX.Element
   error: string
   setValue: Function
   max?: string
   setError: Function
   value: string
-  unit?: number | null
+  unit?: number | string | null
 }
 
 export default function Input({
