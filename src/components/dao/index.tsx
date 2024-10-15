@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
-import { Helmet } from "react-helmet";
-import { ethers } from "ethers";
+import Head from "next/head";
+import { BigNumberish, formatEther } from "ethers";
+import { bsc } from "viem/chains";
 import { useAccount, useChainId } from "wagmi";
-import { useGlobalContext } from "../../contexts/GlobalContext";
-import { useLandshareDAOContext } from "../../contexts/DAOContext";
-import { useVaultBgProvider } from "../../contexts/VaultBgProvider";
 import Breadcrumb from "../common/breadcrumb";
-import CreateProposal from "./CreateProposal";
-import ProposalsList from "./ProposalsList";
+import DaoCreateProposal from "../dao-create-proposal";
+import DaoProposalsList from "../dao-proposal-list";
 import Logo from "../../assets/img/icons/dao-land.svg";
 import Telegram from "../../assets/img/icons/dao-telegram.svg";
 import Gnosis from "../../assets/img/icons/dao-safe.svg";
 import Contract from "../../assets/img/icons/dao-contract.svg";
 import "./DAO.css";
+import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
+import { BOLD_INTER_TIGHT, DAO_TREASURY_ADDRESS, MARKETING_TREASURY_ADDRESS } from "../../config/constants/environments";
 
 const breadcrumbItems = [
   {
@@ -27,51 +27,25 @@ const breadcrumbItems = [
 ]
 
 export default function DAO() {
-  const { signer, bscLandTokenV2Contract } = useGlobalContext();
   const chainId = useChainId()
   const { address, isConnected } = useAccount();
-  const { isDAOLoading, setDAOLoading } = useLandshareDAOContext();
   const [isCreating, setIsCreating] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [isViewAll, setIsViewAll] = useState(false);
   const [refreshCount, setRefreshCount] = useState(0);
-  const [balanceGnosis, setBalanceGnosis] = useState("");
-  const [balanceMarketing, setBalanceMarketing] = useState("");
   const [initialLoad, setInitialLoad] = useState(true);
-  const { setBackgoundVault, setWithOverlayBg } = useVaultBgProvider();
 
   useEffect(() => {
-    setBackgoundVault(false);
-    setWithOverlayBg(false);
-  }, [setBackgoundVault]);
-
-  useEffect(() => {
-    setDAOLoading(true);
     setTimeout(() => {
       setInitialLoad(false);
     }, 1500);
   }, []);
 
-  useEffect(async () => {
-    try {
-      if (bscLandTokenV2Contract) {
-        const daoBalance = await bscLandTokenV2Contract.balanceOf(
-          process.env.REACT_APP_DAO_TREASURY
-        );
-        let balanceGnosisETH = ethers.utils.formatEther(daoBalance.toString());
-        setBalanceGnosis(balanceGnosisETH);
-        const marketingBalance = await bscLandTokenV2Contract.balanceOf(
-          process.env.REACT_APP_MARKETING_TREASURY
-        );
-        let balanceMarketingETH = ethers.utils.formatEther(
-          marketingBalance.toString()
-        );
-        setBalanceMarketing(balanceMarketingETH);
-        setDAOLoading(false);
-      }
-    } catch (e) { }
-  }, [bscLandTokenV2Contract]);
+  const { data: balanceGnosis, isLoading: isBalanceGnosisLoading } = useBalanceOf({ chainId: bsc.id, address: DAO_TREASURY_ADDRESS }) as { data: BigNumberish, isLoading: boolean }
+  const balanceGnosisValue = formatEther(balanceGnosis).match(/^-?\d+(?:\.\d{0,2})?/)
+  const { data: balanceMarketing, isLoading: isBalanceMarketingLoading } = useBalanceOf({ chainId: bsc.id, address: MARKETING_TREASURY_ADDRESS }) as { data: BigNumberish, isLoading: boolean }
+  const balanceMarketingValue = formatEther(balanceGnosis).match(/^-?\d+(?:\.\d{0,2})?/)
 
   const handleClickCreateProposal = async () => {
     if (typeof address == "undefined") {
@@ -94,19 +68,19 @@ export default function DAO() {
   };
   return (
     <div>
-      <Helmet>
+      <Head>
         <title>Landshare - DAO</title>
         <meta
           name="description"
           content="View and create proposal in the Landshare DAO."
-        ></meta>
-      </Helmet>
+        />
+      </Head>
       <div className="bg-primary pt-[41px] pb-[25px] px-[20px] lg:px-[120px]">
         <div className="max-w-[1200px] m-auto">
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
-      {/* {chain?.unsupported && (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
+      {/* {chain?.unsupported && (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
         Chain not Supported / Switch to BSC
       </div>)} */}
       {initialLoad ? (
@@ -114,9 +88,9 @@ export default function DAO() {
           <ReactLoading type="bars" color="#61cd81" />
         </div>
       ) : (
-        <div className="bg-primary dao-container" style={{ letterSpacing: "2%" }}>
+        <div className="bg-primary py-0 px-[20px] md:pt-[20px] md:pb-[100px] mlg:pt-[20px] mlg:pb-[10px] mlg:px-0 xl:pt-0 xl:pb-[25px] xl:px-0 tracking-[2%]">
           {isCreating && (
-            <CreateProposal
+            <DaoCreateProposal
               close={handleCloseDialog}
               title={title}
               body={body}
@@ -124,24 +98,30 @@ export default function DAO() {
               balance={balanceGnosis}
             />
           )}
-          <div className="flex gap-[40px] max-w-[1200px] w-full">
-            <div className="bg-secondary dao-treasury">
-              <div className="dao-treasury-box">
-                <img src={Logo} className="logo" />
-                <div className="title bg-primary">DAO Treasury</div>
+          <div className="flex flex-col mlg:flex-row gap-[40px] max-w-[1200px] w-full">
+            <div className="bg-secondary items-end justify-around p-[10px] mlg:2-[251px] max-h-[478px] rounded-[14px] md:items-center mlg:justify-between mlg:p-[20px]">
+              <div className="flex flex-col items-center">
+                <img src={Logo} className="w-[75px] sm:w-[100px] md:w-[130px] m-[5px]" />
+                <div 
+                  className={`text-[12px] leading-[14px] p-[5px] sm:text-[14px] sm:leading-[16px] md:px-[15px] md:text-[20px] text-[#61CD81] md:leading-[30px] rounded-[40px] w-full text-center bg-primary ${BOLD_INTER_TIGHT.className}`}
+                >
+                  DAO Treasury
+                </div>
               </div>
               <div className="divB">
-                <div className="property-container mb-md-2">
-                  <div className="property">
+                <div className="flex flex-row mlg:flex-col items-center mb-[12px] gap-[20px] mb-md-2">
+                  <div className="text-center">
                     <>
-                      {!isDAOLoading ? (
+                      {!(isBalanceGnosisLoading || isBalanceMarketingLoading) ? (
                         <>
-                          <div className="text-text-primary">
-                            {balanceGnosis != "" ? balanceGnosis?.match(/^-?\d+(?:\.\d{0,2})?/)[0] : balanceGnosis}
+                          <div className="text-text-primary font-bold text-[16px] leading-[20px] sm:text-[20px] sm:leading-[24px] md:text-[24px] md:leading-[36px]">
+                            {balanceGnosis ? (
+                              balanceGnosisValue ? balanceGnosisValue[0] : formatEther(balanceGnosis)) 
+                            : balanceGnosis}
                           </div>
                         </>
                       ) : (
-                        <div className="d-flex justify-content-center align-items-center ">
+                        <div className="flex justify-center items-center text-[10px] leading-[14px] sm:text-[12px] sm:leading-[14px] md:text-[15px] md:leading-[22px] text-[#838383]">
                           <ReactLoading
                             className="balance-loader"
                             type="cylon"
@@ -152,12 +132,14 @@ export default function DAO() {
                     </>
                     <div>Treasury</div>
                   </div>
-                  <div className="property">
+                  <div className="text-center">
                     <>
-                      {!isDAOLoading ? (
+                      {!(isBalanceGnosisLoading || isBalanceMarketingLoading) ? (
                         <>
-                          <div className="text-text-primary">
-                            {balanceMarketing != "" ? balanceMarketing?.match(/^-?\d+(?:\.\d{0,2})?/)[0] : balanceMarketing}
+                          <div className="text-text-primary font-bold text-[16px] leading-[20px] sm:text-[20px] sm:leading-[24px] md:text-[24px] md:leading-[36px]">
+                            {balanceMarketing ? (
+                              balanceMarketingValue ? balanceMarketingValue[0] : formatEther(balanceMarketing)) 
+                            : balanceMarketing}
                           </div>
                         </>
                       ) : (
@@ -170,53 +152,71 @@ export default function DAO() {
                         </div>
                       )}
                     </>
-                    <div>Marketing</div>
+                    <div className="text-[10px] leading-[14px] sm:text-[12px] sm:leading-[14px] md:text-[15px] md:leading-[22px] text-[#838383">Marketing</div>
                   </div>
                 </div>
-                <div className="links">
-                  <a href="http://t.me/landshare" target="_blank">
-                    <img src={Telegram} alt="telegram" />
-                    <span className="social-label text-[#484848] dark:text-[#d4d4d4]">Discuss</span>
+                <div className="flex flex-col items-start justify-end gap-[17px] md:w-auto md:justify-start mlg:w-full mlg:gap-[20px] items-center">
+                  <a 
+                    href="http://t.me/landshare" 
+                    target="_blank"
+                    className="flex flex-col items-center gap-[3px] cursor-pointer"
+                  >
+                    <img 
+                      src={Telegram} 
+                      alt="telegram" 
+                      className="w-[20px] sm:w-[22px] md:w-[30px]"
+                    />
+                    <span className="hidden md:flex text-[10px] leading-[14px] sm:text-[12px] sm:leading-[18px] text-[#484848] dark:text-[#d4d4d4]">Discuss</span>
                   </a>
                   <a
                     href="https://app.safe.global/home?safe=bnb:0x28454a7Ec0eD4b3aAAA350a1D87304355643107f"
                     target="_blank"
+                    className="flex flex-col items-center gap-[3px] cursor-pointer"
                   >
-                    <img src={Gnosis} alt="gnosis" />
-                    <span className="social-label text-[#484848] dark:text-[#d4d4d4]">View Safe</span>
+                    <img 
+                      src={Gnosis} 
+                      alt="gnosis" 
+                      className="w-[20px] sm:w-[22px] md:w-[30px]"
+                    />
+                    <span className="hidden md:flex text-[10px] leading-[14px] sm:text-[12px] sm:leading-[18px] text-[#484848] dark:text-[#d4d4d4]">View Safe</span>
                   </a>
                   <a
                     href="https://bscscan.com/address/0x28454a7Ec0eD4b3aAAA350a1D87304355643107f"
                     target="_blank"
+                    className="flex flex-col items-center gap-[3px] cursor-pointer"
                   >
-                    <img src={Contract} alt="contract" />
-                    <span className="social-label text-[#484848] dark:text-[#d4d4d4]">Contract</span>
+                    <img 
+                      src={Contract} 
+                      alt="contract"
+                      className="w-[20px] sm:w-[22px] md:w-[30px]"
+                    />
+                    <span className="hidden md:flex text-[10px] leading-[14px] sm:text-[12px] sm:leading-[18px] text-[#484848] dark:text-[#d4d4d4]">Contract</span>
                   </a>
                 </div>
               </div>
             </div>
             <div className="bg-secondary p-[10px] pt-[25px] md:p-[40px] shadow-lg  rounded-[14px]">
-              <div className="latest-proposals-heading">
-                <div className="text-text-primary pe-3 h1-text">
+              <div className={`flex justify-between pl-[10px] mlg:px-[35px] mlg:pb-[30px] items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
+                <div className="text-text-primary pr-3 font-bold text-[24px] leading-[36px]">
                   {isViewAll ? `All Proposals` : `Latest Proposals`}
                 </div>
-                <div className="btn-group">
-                  <button className="text-button-text-secondary"
+                <div className="flex gap-[15px]">
+                  <button className="text-button-text-secondary py-[5px] px-[10px] min-h-[32px] min-w-[32px] text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-bold md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
                     onClick={() => {
                       window.open("https://vote.landshare.io");
                     }}
                   >
                     View All
                   </button>
-                  <button className="text-button-text-secondary"
-                    disabled={isDAOLoading || chain?.id != 56}
+                  <button className="text-button-text-secondary py-[5px] px-[10px] min-h-[32px] min-w-[32px] text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-bold md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
+                    disabled={(isBalanceGnosisLoading || isBalanceMarketingLoading) || chainId != bsc.id}
                     onClick={handleClickCreateProposal}
                   >
                     Create
                   </button>
                 </div>
               </div>
-              <ProposalsList
+              <DaoProposalsList
                 count={isViewAll ? 1000 : 10}
                 refreshCount={refreshCount}
               />
