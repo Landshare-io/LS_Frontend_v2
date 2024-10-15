@@ -2,20 +2,31 @@ import React, { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import "./ProposalContent.css";
 import BurnTokens from "./burn-token";
-import ChangeVaultAllocation from "./proposals/ChangeVaultAllocation";
-import ChangeAutoLANDFee from "./proposals/ChangeAutoLANDFee";
-import FundBounty from "./proposals/FundBounty";
-import RequestGrant from "./proposals/RequestGrant";
-import NextButton from "./components/NextButton";
-import CustomProposal from "./proposals/CustomProposal";
-import ChangeLandRequirement from "./proposals/ChangeLandRequirement";
-import ChangeQuorum from "./proposals/ChangeQuorum";
-import CreateBounty from "./proposals/CreateBounty";
-import ChangeVotingPeriod from "./proposals/ChangeVotingPeriod";
+import ChangeVaultAllocation from "./change-vault-allocation";
+import ChangeAutoLANDFee from "./change-autoland-fee";
+import FundBounty from "./fund-bounty";
+import RequestGrant from "./request-grant";
+import NextButton from "./next-button";
+import CustomProposal from "./custom-proposal";
+import ChangeLandRequirement from "./change-land-requirement";
+import ChangeQuorum from "./change-quorum";
+import CreateBounty from "./create-bounty";
+import ChangeVotingPeriod from "./change-voting-period";
+import { useGlobalContext } from "../../context/GlobalContext";
 
-import { useLandshareFunctions } from "../../contexts/LandshareFunctionsProvider";
+interface DaoProposalContentProps {
+  setProposalValues: Function;
+  onNext: Function;
+  proposal: any;
+  balance: string
+}
 
-export default function DaoProposalContent(props) {
+export default function DaoProposalContent({
+  setProposalValues,
+  onNext,
+  proposal,
+  balance
+}: DaoProposalContentProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [amountToBurn, setAmountToBurn] = useState("");
   const [autoLandFee, setAutoLandFee] = useState("");
@@ -31,69 +42,69 @@ export default function DaoProposalContent(props) {
   const [errorAPLp, setErrorAPLp] = useState("");
   const [errorLSRWA, setErrorLSRWA] = useState("");
   const [numberHolder, setNumberHolder] = useState("");
-  const { notifyError } = useLandshareFunctions();
+  const { notifyError } = useGlobalContext();
 
   // Hardcoded because it won't be changed, which is from totalAllocPoint of MasterChef contract
   const totalAllocPoint = 3000;
 
   const handlNext = () => {
-    switch (props.proposal) {
+    switch (proposal) {
       case "Burn Tokens":
         if (amountToBurn == "") {
           setError("Required field");
-        } else if (amountToBurn == 0) {
+        } else if (Number(amountToBurn) == 0) {
           setError("Input number greater than 0");
         } else if (error == "") {
-          props.setProposalValues({ amountToBurn });
-          props.onNext();
+          setProposalValues({ amountToBurn });
+          onNext();
         }
         break;
 
       case "Change Auto LAND Fee":
         if (autoLandFee == "") {
           setError("Required field");
-        } else if (autoLandFee == 0) {
+        } else if (Number(autoLandFee) == 0) {
           setError("Input number greater than 0");
         } else if (error == "") {
-          props.setProposalValues({ autoLandFee });
-          props.onNext();
+          setProposalValues({ autoLandFee });
+          onNext();
         }
         break;
 
       case "Add to Marketing Fund":
         if (amountToMarketing == "") {
           setError("Required field");
-        } else if (amountToMarketing == 0) {
+        } else if (Number(amountToMarketing) == 0) {
           setError("Input number greater than 0");
         } else if (error == "") {
-          props.setProposalValues({ amountToMarketing });
-          props.onNext();
+          setProposalValues({ amountToMarketing });
+          onNext();
         }
         break;
 
       case "Request Grant":
         if (grantAmount == "") {
           setError("Required field");
-        } else if (grantAmount == 0) {
+        } else if (Number(grantAmount) == 0) {
           setError("Input number greater than 0");
         } else if (error == "") {
-          props.setProposalValues({ grantAmount });
-          props.onNext();
+          setProposalValues({ grantAmount });
+          onNext();
         }
         break;
 
       case "Create Bounty":
-        props.onNext();
+        onNext();
 
         break;
 
       case "Change Voting Period":
         if (numberHolder == "") {
           setError("Required field");
-        } else if (numberHolder == 0) {
+        } else if (Number(numberHolder) == 0) {
           setError("Input number greater than 0");
         } else if (error == "") {
-          props.onNext();
+          onNext();
         }
 
         break;
@@ -101,10 +112,10 @@ export default function DaoProposalContent(props) {
       case "Change LAND Requirement":
         if (numberHolder == "") {
           setError("Required field");
-        } else if (numberHolder == 0) {
+        } else if (Number(numberHolder) == 0) {
           setError("Input number greater than 0");
         } else if (error == "") {
-          props.onNext();
+          onNext();
         }
 
         break;
@@ -112,16 +123,16 @@ export default function DaoProposalContent(props) {
       case "Change Quorum":
         if (numberHolder == "") {
           setError("Required field");
-        } else if (numberHolder == 0) {
+        } else if (Number(numberHolder) == 0) {
           setError("Input number greater than 0");
         } else if (error == "") {
-          props.onNext();
+          onNext();
         }
 
         break;
 
       case "Custom Proposal":
-        props.onNext();
+        onNext();
 
         break;
 
@@ -138,13 +149,13 @@ export default function DaoProposalContent(props) {
             break;
           }
 
-          props.setProposalValues({
+          setProposalValues({
             allocPointsBurn,
             allocPointsStake,
             allocPointsLP,
             allocLSRWA
           });
-          props.onNext();
+          onNext();
         }
         break;
 
@@ -156,25 +167,25 @@ export default function DaoProposalContent(props) {
   useEffect(() => {
     setError("");
     setIsLoading(false);
-  }, [props.proposal]);
+  }, [proposal]);
 
   return isLoading ? (
-    <div className="col-12 d-flex justify-content-center my-auto">
+    <div className="flex w-full justify-center my-auto">
       <ReactLoading type="cylon" color="#61cd81" />
     </div>
   ) : (
     <>
-      <div className="proposal-content-container">
-        {props.proposal === "Burn Tokens" && (
+      <div className="relative rounded-[10px] flex flex-col justify-center my-auto">
+        {proposal === "Burn Tokens" && (
           <BurnTokens
             error={error}
             setError={setError}
             amountToBurn={amountToBurn}
             setAmountToBurn={setAmountToBurn}
-            balance={props.balance}
+            balance={balance}
           />
         )}
-        {props.proposal === "Change Vault Allocation" && (
+        {proposal === "Change Vault Allocation" && (
           <ChangeVaultAllocation
             errorBurn={errorAPBurn}
             setErrorBurn={setErrorAPBurn}
@@ -194,7 +205,7 @@ export default function DaoProposalContent(props) {
             setAllocLSRWA={setAllocLSRWA}
           />
         )}
-        {props.proposal === "Change Auto LAND Fee" && (
+        {proposal === "Change Auto LAND Fee" && (
           <ChangeAutoLANDFee
             error={error}
             setError={setError}
@@ -203,56 +214,47 @@ export default function DaoProposalContent(props) {
           />
         )}
 
-        {props.proposal === "Add to Marketing Fund" && (
+        {proposal === "Add to Marketing Fund" && (
           <FundBounty
             amountToMarketing={amountToMarketing}
             setAmountToMarketing={setAmountToMarketing}
             error={error}
             setError={setError}
-            balance={props.balance}
+            balance={balance}
           />
         )}
 
-        {props.proposal === "Request Grant" && (
+        {proposal === "Request Grant" && (
           <RequestGrant
             grantAmount={grantAmount}
             setGrantAmount={setGrantAmount}
             error={error}
             setError={setError}
-            balance={props.balance}
+            balance={balance}
           />
         )}
 
-        {props.proposal === "Create Bounty" && <CreateBounty />}
+        {proposal === "Create Bounty" && <CreateBounty />}
 
-        {props.proposal === "Change LAND Requirement" && (
-          <ChangeLandRequirement
-            numberHolder={numberHolder}
-            setNumberHolder={setNumberHolder}
-            error={error}
-            setError={setError}
-          />
+        {proposal === "Change LAND Requirement" && (
+          <ChangeLandRequirement />
         )}
-        {props.proposal === "Change Quorum" && (
+        {proposal === "Change Quorum" && (
           <ChangeQuorum
             numberHolder={numberHolder}
             setNumberHolder={setNumberHolder}
             error={error}
             setError={setError}
+            balance={balance}
           />
         )}
-        {props.proposal === "Change Voting Period" && (
-          <ChangeVotingPeriod
-            numberHolder={numberHolder}
-            setNumberHolder={setNumberHolder}
-            error={error}
-            setError={setError}
-          />
+        {proposal === "Change Voting Period" && (
+          <ChangeVotingPeriod />
         )}
 
-        {props.proposal === "Custom Proposal" && <CustomProposal />}
+        {proposal === "Custom Proposal" && <CustomProposal />}
       </div>
-      <div className="proposal-content-container-btn">
+      <div className="relative min-h-[40px] flex flex-col">
         <NextButton onClick={handlNext} />
       </div>
     </>
