@@ -5,9 +5,11 @@ import {
   useWalletClient,
   useAccount
 } from "wagmi";
+import { useBlockNumber } from 'wagmi'
+import { useGlobalContext } from "../../context/GlobalContext";
+
 const client = new snapshotjs.Client712("https://hub.snapshot.org");
-import { useLandshareFunctions } from "../contexts/LandshareFunctionsProvider";
-import { useGlobalContext } from "../contexts/GlobalContext";
+
 
 interface SnapshotParams {
   title: string;
@@ -19,16 +21,15 @@ interface SnapshotParams {
 type SnapshotCallback = () => void;
 
 export default function useSnapshot({ title, body, proposalJSON, proposal }: SnapshotParams) {
-  const { startTransaction, endTransaction, transactionResult, notifyError } = useLandshareFunctions();
+  const { setScreenLoadingStatus } = useGlobalContext()
   const { data: signer } = useWalletClient();
   const { address } = useAccount()
-  const { provider } = useGlobalContext();
   const account = address ?? ''
+  const { data: blockNumber } = useBlockNumber()
 
   async function snapshot(onSuccess?: SnapshotCallback, onError?: (error: Error) => void): Promise<void> {
     const startTime = Math.round(Date.now() / 1000);
     const endTime = startTime + 604800;
-    const block = await provider.getBlockNumber();
     const space = "landsharetest.eth";
     const strategies = [
       {
@@ -77,7 +78,6 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
     ];
     const network = "56";
     const voters = [account];
-    const blockNumber = block;
 
     console.log(proposal);
     console.log(proposalJSON);
@@ -92,11 +92,11 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
       );
     }
 
-    startTransaction();
+    setScreenLoadingStatus('Transaction Start');
 
     let score: number = 0;
     try {
-      const scores = await snapshotjs.utils.getScores(space, strategies, network, voters, blockNumber);
+      const scores = await snapshotjs.utils.getScores(space, strategies, network, voters, Number(blockNumber));
       console.log("Scores", scores);
 
       score = scores.reduce((sum: number, strategy: any) => {
@@ -115,12 +115,16 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
 
     if (score < 100) {
       window.alert("Not enough voting power.");
-      transactionResult("Transaction Failed.");
+      setScreenLoadingStatus("Transaction Failed.");
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000)
       return;
     }
 
     try {
-      await client.proposal((signer as Web3Provider | Wallet), account, {
+      const proposalSinger = signer as unknown as Web3Provider | Wallet
+      await client.proposal((proposalSinger), account, {
         space: "landshare.eth",
         type: "single-choice",
         title: `[${proposal}] ${title}`,
@@ -128,20 +132,27 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
         choices: ["Yes", "No"],
         start: startTime,
         end: endTime,
-        snapshot: block,
-        network: "56",
+        snapshot: Number(blockNumber),
         plugins: noTX(proposal) ? JSON.stringify({}) : proposalJSON,
         app: "snapshot",
+        discussion: ''
       });
 
       if (onSuccess) onSuccess();
     } catch (e) {
       console.log(e);
-      transactionResult("Transaction Failed.");
+      setScreenLoadingStatus("Transaction Failed.");
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000)
       if (onError) onError(e as Error);
     }
 
-    endTransaction();
+    setScreenLoadingStatus("Transaction Success.");
+
+    setTimeout(() => {
+      setScreenLoadingStatus("")
+    }, 1000)
   }
 
   return {
