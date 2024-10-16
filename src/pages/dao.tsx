@@ -1,15 +1,30 @@
 import React from "react";
-import "./DAO.css";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { Inter_Tight } from 'next/font/google';
 import DAO from "../components/dao";
 import { useGlobalContext } from "../context/GlobalContext";
+
+const client = new ApolloClient({
+  uri: "https://hub.snapshot.org/graphql",
+  cache: new InMemoryCache(),
+});
+
+const interTight = Inter_Tight({
+  weight: "400",
+  style: "normal",
+  preload: false,
+  variable: '--font-inter'
+});
 
 const DAOPage = () => {
   const { theme } = useGlobalContext();
 
   return (
-    <div className={`${theme == 'dark' ? "dark" : ""}`}>
-      {/* <DAO /> */}
-    </div>
+    <ApolloProvider client={client}>
+      <div className={`${interTight.variable} font-inter`}>
+        <DAO />
+      </div>
+    </ApolloProvider>
   );
 };
 
