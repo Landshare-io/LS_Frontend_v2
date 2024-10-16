@@ -1,4 +1,5 @@
 import React from "react";
+import type { NextPage } from 'next';
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import { Inter_Tight } from 'next/font/google';
 import DAO from "../components/dao";
@@ -16,7 +17,7 @@ const interTight = Inter_Tight({
   variable: '--font-inter'
 });
 
-const DAOPage = () => {
+const DAOPage: NextPage = () => {
   const { theme } = useGlobalContext();
 
   return (
