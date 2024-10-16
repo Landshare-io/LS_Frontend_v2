@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
+import { formatEther } from "viem";
 import Input from "../common/input";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
@@ -19,7 +20,7 @@ export default function BurnTokens({
   balance
 }: BurnTokensProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const balanceValue = balance.match(/^-?\d+(?:\.\d{0,4})?/)
+  const balanceValue = formatEther(BigInt(balance)).match(/^-?\d+(?:\.\d{0,4})?/)
 
   useEffect(() => {
     setIsLoading(false);
@@ -30,8 +31,8 @@ export default function BurnTokens({
       <ReactLoading type="cylon" color="#61cd81" />
     </div>
   ) : (
-    <div className="text-[16px] shadow-lg shadow-[#0003] bg-third">
-      <div className={`p-[10px] text-[18px] bg-[#87D99F] text-white text-button-text-secondary ${BOLD_INTER_TIGHT.className}`}>Burn DAO Treasury Tokens</div>
+    <div className="my-[25px] text-[16px] shadow-lg shadow-[#0003] bg-third">
+      <div className={`p-[10px] text-[18px] bg-[#61cd81] text-white text-button-text-secondary ${BOLD_INTER_TIGHT.className}`}>Burn DAO Treasury Tokens</div>
       <div className="my-[10px] mx-[7px]">
         <Input
           proposal="Burn Tokens"
@@ -44,7 +45,7 @@ export default function BurnTokens({
           label="Enter the amount of tokens to burn. All token burns are sent to the null address and lower the total supply cap."
           max={balance}
         />
-        <div className="text-[13px] text-right mr-[5px] mt-[2px] mb-[2px] text-text-secondary">
+        <div className="text-[13px] text-right mt-[10px] mb-[2px] mx-[5px] text-text-secondary">
           Available Balance: <b>{
             balanceValue ? balanceValue[0] : balance
           } LAND</b>
