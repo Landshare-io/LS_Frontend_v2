@@ -3,6 +3,14 @@ import { hexDataLength } from "@ethersproject/bytes";
 import { ethers } from "ethers";
 import { keccak256 } from "@ethersproject/keccak256";
 import stringPadder from "./string-padder";
+import { 
+  MULTISEND_ADDRESS,
+  MAJOR_WORK_CHAIN,
+  REALITY_MODULE_ADDRESS,
+  LAND_TOKEN_CONTRACT_ADDRESS,
+  MASTERCHEF_CONTRACT_ADDRESS,
+  AUTO_VAULT_V3_CONTRACT_ADDRESS
+} from "../../config/constants/environments";
 
 interface TxHashBuilderProps {
   setHash: (hash: string) => void;
@@ -29,8 +37,8 @@ export default async function txHashBuilder(
     const burnAmount = stringPadder(proposalValue.amountToBurn || "", proposalType);
     try {
       const domain = {
-        chainId: process.env.REACT_APP_NET_ID,
-        verifyingContract: process.env.REACT_APP_REALITY_MODULE,
+        chainId: MAJOR_WORK_CHAIN.id,
+        verifyingContract: REALITY_MODULE_ADDRESS,
       };
 
       const types = {
@@ -44,7 +52,7 @@ export default async function txHashBuilder(
       };
 
       const value = {
-        to: process.env.REACT_APP_LAND_TOKEN_V2_ADDR,
+        to: LAND_TOKEN_CONTRACT_ADDRESS[56],
         value: 0,
         data:
           "0xa9059cbb000000000000000000000000000000000000000000000000000000000000dead" +
@@ -69,8 +77,8 @@ export default async function txHashBuilder(
     const newFee = stringPadder(proposalValue.autoLandFee || "", proposalType);
 
     const domain = {
-      chainId: process.env.REACT_APP_NET_ID,
-      verifyingContract: process.env.REACT_APP_REALITY_MODULE,
+      chainId: MAJOR_WORK_CHAIN.id,
+      verifyingContract: REALITY_MODULE_ADDRESS,
     };
 
     const types = {
@@ -84,7 +92,7 @@ export default async function txHashBuilder(
     };
 
     const value = {
-      to: process.env.REACT_APP_AUTOLANDV3,
+      to: AUTO_VAULT_V3_CONTRACT_ADDRESS[56],
       value: 0,
       data: "0x70897b23" + newFee,
       operation: 0,
@@ -104,8 +112,8 @@ export default async function txHashBuilder(
     const bountyAmount = stringPadder(proposalValue.amountToMarketing || "", proposalType);
 
     const domain = {
-      chainId: process.env.REACT_APP_NET_ID,
-      verifyingContract: process.env.REACT_APP_REALITY_MODULE,
+      chainId: MAJOR_WORK_CHAIN.id,
+      verifyingContract: REALITY_MODULE_ADDRESS,
     };
 
     const types = {
@@ -119,7 +127,7 @@ export default async function txHashBuilder(
     };
 
     const value = {
-      to: process.env.REACT_APP_LAND_TOKEN_V2_ADDR,
+      to: LAND_TOKEN_CONTRACT_ADDRESS[56],
       value: 0,
       data:
         "0xa9059cbb000000000000000000000000ee39392eCAc26a321D22bAfAE79b6e923a3ad413" +
@@ -147,8 +155,8 @@ export default async function txHashBuilder(
     ]);
 
     const domain = {
-      chainId: process.env.REACT_APP_NET_ID,
-      verifyingContract: process.env.REACT_APP_REALITY_MODULE,
+      chainId: MAJOR_WORK_CHAIN.id,
+      verifyingContract: REALITY_MODULE_ADDRESS,
     };
 
     const types = {
@@ -163,7 +171,7 @@ export default async function txHashBuilder(
 
     const values = [
       {
-        to: process.env.REACT_APP_MASTERCHEF,
+        to: MASTERCHEF_CONTRACT_ADDRESS,
         value: 0,
         data:
           "0x64482f790000000000000000000000000000000000000000000000000000000000000000" +
@@ -173,7 +181,7 @@ export default async function txHashBuilder(
         nonce: 0,
       },
       {
-        to: process.env.REACT_APP_MASTERCHEF,
+        to: MASTERCHEF_CONTRACT_ADDRESS,
         value: 0,
         data:
           "0x64482f790000000000000000000000000000000000000000000000000000000000000001" +
@@ -183,7 +191,7 @@ export default async function txHashBuilder(
         nonce: 0,
       },
       {
-        to: process.env.REACT_APP_MASTERCHEF,
+        to: MASTERCHEF_CONTRACT_ADDRESS,
         value: 0,
         data:
           "0x64482f790000000000000000000000000000000000000000000000000000000000000002" +
@@ -209,7 +217,7 @@ export default async function txHashBuilder(
     const data = multiSendContract.encodeFunctionData("multiSend", [packed]);
 
     const valueBatch = {
-      to: process.env.REACT_APP_MULTISEND_ADDRESS,
+      to: MULTISEND_ADDRESS,
       value: "0",
       data: data,
       operation: 1,
@@ -230,8 +238,8 @@ export default async function txHashBuilder(
     const grantAmount = stringPadder(proposalValue.grantAmount || "", proposalType);
 
     const domain = {
-      chainId: process.env.REACT_APP_NET_ID,
-      verifyingContract: process.env.REACT_APP_REALITY_MODULE,
+      chainId: MAJOR_WORK_CHAIN.id,
+      verifyingContract: REALITY_MODULE_ADDRESS,
     };
 
     const types = {
@@ -245,7 +253,7 @@ export default async function txHashBuilder(
     };
 
     const value = {
-      to: process.env.REACT_APP_LAND_TOKEN_V2_ADDR,
+      to: LAND_TOKEN_CONTRACT_ADDRESS[56],
       value: 0,
       data:
         "0xa9059cbb0000000000000000000000009c28db9FAA2ae0fF5985d12067b83C7FaC43907B" +
