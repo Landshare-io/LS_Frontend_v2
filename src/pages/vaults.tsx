@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Head from 'next/head';
+import type { NextPage } from 'next';
 import { useChainId, useAccount } from "wagmi"
 import numeral from "numeral"
 import Image from "next/image";
@@ -40,7 +41,7 @@ const breadcrumbItems = [
   }
 ]
 
-export default function StakingPage() {
+const StakingPage: NextPage = () => {
   const { theme } = useGlobalContext();
   const { isConnected } = useAccount()
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
@@ -433,3 +434,5 @@ export default function StakingPage() {
     </div>
   )
 }
+
+export default StakingPage
