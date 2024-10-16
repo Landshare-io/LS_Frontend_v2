@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { formatEther } from "ethers";
 import DaoSelectProposal from "../dao-select-proposal";
 import DaoProposalContent from "../dao-proposal-content";
-import CloseIcon from "../../assets/img/icons/close.svg";
 import ProposalBuilder from "./proposal-builder";
 import useSnapshot from "../../hooks/contract/useSnapshot";
 import { useGlobalContext } from "../../context/GlobalContext";
 import txHashBuilder from "./tx-hash-builder";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import closeIcon from "../../../public/icons/close.svg";
 
 interface DaoCreateProposalProps {
   refreshProposalList: Function
@@ -30,7 +32,7 @@ export default function DaoCreateProposal({
   const [hash, setHash] = useState("");
   const [completeHash, setCompleteHash] = useState("");
   const [isRequired, setIsRequired] = useState(true);
-  const balanceData = balance?.match(/^-?\d+(?:\.\d{0,4})?/);
+  const balanceData = formatEther(balance)?.match(/^-?\d+(?:\.\d{0,4})?/);
 
   const { snapshot } = useSnapshot({
     title,
@@ -89,9 +91,9 @@ export default function DaoCreateProposal({
 
   return (
     <div>
-      <div className="flex flex-col mlg:flex-row w-full h-full fixed blur-[5px] z-[21] top-0 left-0 overflow-hidden">
+      <div className="flex flex-col mlg:flex-row w-full h-full fixed z-[21] top-0 left-0 overflow-hidden">
         <div className="fixed z-[3] top-[50%] left-[50%] w-[calc(100vw-20px)] h-[85vh] md:w-[400px] md:h-[515px] border-[1px] border-[#fff] rounded-[10px] p-[20px] flex-col translate-x-[-50%] translate-y-[-50%] bg-secondary">
-          <img src={CloseIcon} alt="close icon" onClick={close()} className="absolute top-[10px] right-[10px] w-[20px] hover:scale-x-110 hover:scale-y-110 hover:duration-300 hover:cursor-pointer" />
+          <Image src={closeIcon} alt="close icon" onClick={() => close()} className="absolute top-[10px] right-[10px] w-[20px] hover:scale-x-110 hover:scale-y-110 hover:duration-300 hover:cursor-pointer" />
           <h1 className={`text-[28px] leading-[42px] mb-[2px] tracking-normal capitalize text-text-primary ${BOLD_INTER_TIGHT.className}`}>Create Proposal</h1>
           {submit ? (
             <>
