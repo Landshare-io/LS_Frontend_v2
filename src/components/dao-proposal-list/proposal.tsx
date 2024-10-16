@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import Moment from "react-moment";
-import "./Proposal.css";
 
 export default function Proposal({ proposal }: { proposal: any }) {
   const PROPOSAL_QUERY = gql`
@@ -61,49 +60,42 @@ export default function Proposal({ proposal }: { proposal: any }) {
 
   return (
     <>
-      <div className="proposal-card border-2 border-[#e5e7eb] dark:border-[#494949] dark:hover:border-[#e5e7eb]" key={proposal.id}>
-        <div className="header mb-3">
-          <div className="user">
+      <div className="proposal-card border-[2px] border-[#e5e7eb]  dark:border-[#494949] hover:border-[#6e6e6e] cursor-pointer duration-500 rounded-[14px] p-[24px]" key={proposal.id}>
+        <div className="flex justify-between mb-[0.75rem]">
+          <div className="flex items-center">
             <img
               src={`https://cdn.stamp.fyi/avatar/eth:${proposal.author}?s=3`}
               alt="avatar"
+              className="w-[18px] h-[18px] rounded-full"
             />
-            <div className="address text-tw-text-primary">
+            <div className="overflow-hidden text-ellipsis whitespace-nowrap px-[5px] text-text-primary">
               {proposal.author.toString().substr(0, 6) +
                 "..." +
                 proposal.author.toString().substr(38, 40)}
             </div>
 
           </div>
-          <div
-            className="status-badge"
-            style={{
-              backgroundColor:
-                proposal.state == "closed" ? "#803AED" : "#0FAB3B",
-              textTransform: "capitalize",
-            }}
-          >
-            {/* {proposal.state.charAt(0).toUpperCase() + proposal.state.slice(1)} */}
+          <div className="bg-[#803aed] capitalize flex items-center text-[#fff] text-[14px] py-[2px] px-[10px] rounded-[14px] font-normal">
             {proposal.state}
           </div>
         </div>
-        <div className="title">{proposal.title}</div>
-        <div className="content text-tw-text-secondary">{proposal.body}</div>
-        <div className="choices">
+        <div className="my-[8px] text-[22px] leading-[32px] font-semibold text-[#61cd81] tracking-wide">{proposal.title}</div>
+        <div className="text-[17px] leading-[28px] font-normal break-words mb-[8px] line-clamp-2 text-text-secondary">{proposal.body}</div>
+        <div className="flex flex-col gap-[5px]">
           {sumScores ? (
             proposal.choices.map((choice: string, index: number) => (
-              <div className="choice" key={choice}>
+              <div className="relative flex justify-between py-[7px] px-[15px]" key={choice}>
                 <div
-                  className="percentage bg-tw-primary"
+                  className="absolute z-0 h-full top-0 left-0 rounded-[5px] bg-primary"
                   style={{
                     width: (scores[index]?.value / sumScores) * 100 + "%",
                   }}
                 />
-                <div className="label">
+                <div className="flex relative z-[1] gap-[10px]">
                   <div className="text-[#111111] dark:text-[#ebebeb]">{choice}</div>
-                  <div className="text-tw-text-secondary">{scores[index]?.abbr} LAND</div>
+                  <div className="text-text-secondary">{scores[index]?.abbr} LAND</div>
                 </div>
-                <div className="value text-[#111111] dark:text-[#ebebeb]">
+                <div className="relative z-[1] text-[#111111] dark:text-[#ebebeb]">
                   {isNaN(scores[index]?.value)
                     ? 0
                     : ((scores[index]?.value / sumScores) * 100).toFixed(2)}
@@ -112,7 +104,7 @@ export default function Proposal({ proposal }: { proposal: any }) {
               </div>
             ))
           ) : (
-            <div className="end">
+            <div className="pt-[8px] text-[#586069] text-[16px]">
               <Moment
                 interval={1000}
                 date={new Date(proposal.end * 1000)}
