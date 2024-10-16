@@ -1,5 +1,4 @@
 import { pack } from "@ethersproject/solidity";
-import { _TypedDataEncoder } from "ethers";
 import { hexDataLength } from "@ethersproject/bytes";
 import { ethers } from "ethers";
 import { keccak256 } from "@ethersproject/keccak256";
@@ -54,7 +53,7 @@ export default async function txHashBuilder(
         nonce: 0,
       };
 
-      const structHash = ethers.utils._TypedDataEncoder.hash(domain, types, value);
+      const structHash = ethers.TypedDataEncoder.hash(domain, types, value);
       const completeHash = keccak256(structHash);
 
       setHash(structHash);
@@ -92,7 +91,7 @@ export default async function txHashBuilder(
       nonce: 0,
     };
 
-    const structHash = ethers.utils._TypedDataEncoder.hash(domain, types, value);
+    const structHash = ethers.TypedDataEncoder.hash(domain, types, value);
     const completeHash = keccak256(structHash);
 
     setHash(structHash);
@@ -129,7 +128,7 @@ export default async function txHashBuilder(
       nonce: 0,
     };
 
-    const structHash = ethers.utils._TypedDataEncoder.hash(domain, types, value);
+    const structHash = ethers.TypedDataEncoder.hash(domain, types, value);
     const completeHash = keccak256(structHash);
 
     setHash(structHash);
@@ -143,7 +142,7 @@ export default async function txHashBuilder(
     const stakePoolAmount = stringPadder(proposalValue.allocPointsStake || "", proposalType);
     const LPPoolAmount = stringPadder(proposalValue.allocPointsLP || "", proposalType);
 
-    const multiSendContract = new ethers.utils.Interface([
+    const multiSendContract = new ethers.Interface([
       "function multiSend(bytes transactions) payable",
     ]);
 
@@ -217,7 +216,7 @@ export default async function txHashBuilder(
       nonce: "0",
     };
 
-    const structHash = ethers.utils._TypedDataEncoder.hash(domain, types, valueBatch);
+    const structHash = ethers.TypedDataEncoder.hash(domain, types, valueBatch);
     const completeHash = keccak256(structHash);
 
     setBatchData(data);
@@ -255,7 +254,7 @@ export default async function txHashBuilder(
       nonce: 0,
     };
 
-    const structHash = ethers.utils._TypedDataEncoder.hash(domain, types, value);
+    const structHash = ethers.TypedDataEncoder.hash(domain, types, value);
     const completeHash = keccak256(structHash);
 
     setHash(structHash);
