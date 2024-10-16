@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import ReactLoading from "react-loading";
 import { useQuery, gql } from "@apollo/client";
-import Proposal from "./components/Proposal";
+import Proposal from "./proposal";
 import "./ProposalsList.css";
 
 const PROPOSALS_QUERY = gql`
