@@ -80,7 +80,7 @@ export default function ChangeVaultAllocation ({
                 labelClassName="mb-2"
               />
             </td>
-            <td width="30%">{allocBurn}</td>
+            <td width="30%">{allocBurn.toString()}</td>
           </tr>
           <tr className="vault-allocation-bg bg-primary dark:bg-third text-text-primary text-center border-b-[1px] border-[#dddddd]">
             <td width="40%">LAND Staking</td>
@@ -93,10 +93,9 @@ export default function ChangeVaultAllocation ({
                 error={errorStake}
                 setError={setErrorStake}
                 labelClassName="mb-2"
-
               />
             </td>
-            <td width="30%">{allocStake}</td>
+            <td width="30%">{allocStake.toString()}</td>
           </tr>
           <tr className="bg-secondary text-text-primary text-center border-b-[1px] border-[#dddddd]">
             <td width="40%">LP Staking</td>
@@ -111,7 +110,7 @@ export default function ChangeVaultAllocation ({
                 labelClassName="mb-2"
               />
             </td>
-            <td width="30%">{allocLP}</td>
+            <td width="30%">{allocLP.toString()}</td>
           </tr>
           <tr className="bg-secondary text-text-primary text-center border-b-[1px] border-[#dddddd]">
             <td width="40%">LSRWA-USDT</td>
@@ -126,7 +125,7 @@ export default function ChangeVaultAllocation ({
                 labelClassName="mb-2"
               />
             </td>
-            <td width="30%">{allocUsdt}</td>
+            <td width="30%">{allocUsdt.toString()}</td>
           </tr>
         </tbody>
       </table>
