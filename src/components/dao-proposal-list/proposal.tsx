@@ -36,7 +36,7 @@ export default function Proposal({ proposal }: { proposal: any }) {
     }
   `;
   const { data, loading, error } = useQuery(PROPOSAL_QUERY);
-  const [scores, setScores] = useState([]);
+  const [scores, setScores] = useState<any[]>([]);
   const [sumScores, setSumScores] = useState(0);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function Proposal({ proposal }: { proposal: any }) {
         <div className="content text-tw-text-secondary">{proposal.body}</div>
         <div className="choices">
           {sumScores ? (
-            proposal.choices.map((choice, index) => (
+            proposal.choices.map((choice: string, index: number) => (
               <div className="choice" key={choice}>
                 <div
                   className="percentage bg-tw-primary"
