@@ -92,10 +92,8 @@ export default function DAO() {
           {isCreating && (
             <DaoCreateProposal
               close={handleCloseDialog}
-              title={title}
-              body={body}
               refreshProposalList={refreshProposalList}
-              balance={balanceGnosis}
+              balance={balanceGnosis.toString()}
             />
           )}
           <div className="flex flex-col mlg:flex-row gap-[40px] max-w-[1200px] w-full">
