@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
-import "./ProposalContent.css";
 import BurnTokens from "./burn-token";
 import ChangeVaultAllocation from "./change-vault-allocation";
 import ChangeAutoLANDFee from "./change-autoland-fee";

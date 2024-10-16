@@ -1,5 +1,4 @@
 import Input from "../common/input";
-import "./RequestGrant.css";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 interface RequestGrantProps {
