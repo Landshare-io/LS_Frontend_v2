@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import Head from "next/head";
+import Image from "next/image";
 import { BigNumberish, formatEther } from "ethers";
 import { bsc } from "viem/chains";
 import { useAccount, useChainId } from "wagmi";
 import Breadcrumb from "../common/breadcrumb";
 import DaoCreateProposal from "../dao-create-proposal";
 import DaoProposalsList from "../dao-proposal-list";
-import Logo from "../../assets/img/icons/dao-land.svg";
-import Telegram from "../../assets/img/icons/dao-telegram.svg";
-import Gnosis from "../../assets/img/icons/dao-safe.svg";
-import Contract from "../../assets/img/icons/dao-contract.svg";
-import "./DAO.css";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
-import { BOLD_INTER_TIGHT, DAO_TREASURY_ADDRESS, MARKETING_TREASURY_ADDRESS } from "../../config/constants/environments";
+import { 
+  BOLD_INTER_TIGHT, 
+  DAO_TREASURY_ADDRESS, 
+  MARKETING_TREASURY_ADDRESS,
+  MAJOR_WORK_CHAIN
+} from "../../config/constants/environments";
+import Logo from "../../../public/icons/dao-land.svg";
+import Telegram from "../../../public/icons/dao-telegram.svg";
+import Gnosis from "../../../public/icons/dao-safe.svg";
+import Contract from "../../../public/icons/dao-contract.svg";
 
 const breadcrumbItems = [
   {
@@ -28,10 +33,8 @@ const breadcrumbItems = [
 
 export default function DAO() {
   const chainId = useChainId()
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const [isCreating, setIsCreating] = useState(false);
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
   const [isViewAll, setIsViewAll] = useState(false);
   const [refreshCount, setRefreshCount] = useState(0);
   const [initialLoad, setInitialLoad] = useState(true);
@@ -45,22 +48,18 @@ export default function DAO() {
   const { data: balanceGnosis, isLoading: isBalanceGnosisLoading } = useBalanceOf({ chainId: bsc.id, address: DAO_TREASURY_ADDRESS }) as { data: BigNumberish, isLoading: boolean }
   const balanceGnosisValue = formatEther(balanceGnosis).match(/^-?\d+(?:\.\d{0,2})?/)
   const { data: balanceMarketing, isLoading: isBalanceMarketingLoading } = useBalanceOf({ chainId: bsc.id, address: MARKETING_TREASURY_ADDRESS }) as { data: BigNumberish, isLoading: boolean }
-  const balanceMarketingValue = formatEther(balanceGnosis).match(/^-?\d+(?:\.\d{0,2})?/)
+  const balanceMarketingValue = formatEther(balanceMarketing).match(/^-?\d+(?:\.\d{0,2})?/)
 
   const handleClickCreateProposal = async () => {
     if (typeof address == "undefined") {
       alert("Please connect your wallet.");
     } else if (
-      chainId !== Number(process.env.REACT_APP_NET_ID)
+      chainId !== Number(MAJOR_WORK_CHAIN.id)
     ) {
       alert("Please connect to the Binance Smart Chain.");
     } else {
       setIsCreating(true);
     }
-  };
-
-  const handleCloseDialog = () => {
-    setIsCreating(false);
   };
 
   const refreshProposalList = () => {
@@ -91,22 +90,22 @@ export default function DAO() {
         <div className="bg-primary py-0 px-[20px] md:pt-[20px] md:pb-[100px] mlg:pt-[20px] mlg:pb-[10px] mlg:px-0 xl:pt-0 xl:pb-[25px] xl:px-0 tracking-[2%]">
           {isCreating && (
             <DaoCreateProposal
-              close={handleCloseDialog}
+              close={() => setIsCreating(false)}
               refreshProposalList={refreshProposalList}
               balance={balanceGnosis.toString()}
             />
           )}
-          <div className="flex flex-col mlg:flex-row gap-[40px] max-w-[1200px] w-full">
-            <div className="bg-secondary items-end justify-around p-[10px] mlg:2-[251px] max-h-[478px] rounded-[14px] md:items-center mlg:justify-between mlg:p-[20px]">
+          <div className="flex flex-col mlg:flex-row gap-[40px] max-w-[1200px] w-full m-auto">
+            <div className="bg-secondary flex flex-col items-end justify-around p-[10px] mlg:min-w-[251px] h-[478px] rounded-[14px] shadow shadow-lg md:items-center mlg:justify-between mlg:p-[20px]">
               <div className="flex flex-col items-center">
-                <img src={Logo} className="w-[75px] sm:w-[100px] md:w-[130px] m-[5px]" />
+                <Image alt="logo" src={Logo} className="w-[75px] sm:w-[100px] md:w-[130px] m-[5px]" />
                 <div 
                   className={`text-[12px] leading-[14px] p-[5px] sm:text-[14px] sm:leading-[16px] md:px-[15px] md:text-[20px] text-[#61CD81] md:leading-[30px] rounded-[40px] w-full text-center bg-primary ${BOLD_INTER_TIGHT.className}`}
                 >
                   DAO Treasury
                 </div>
               </div>
-              <div className="divB">
+              <div className="flex flex-col items-center gap-[40px]">
                 <div className="flex flex-row mlg:flex-col items-center mb-[12px] gap-[20px] mb-md-2">
                   <div className="text-center">
                     <>
@@ -128,7 +127,7 @@ export default function DAO() {
                         </div>
                       )}
                     </>
-                    <div>Treasury</div>
+                    <div className="text-[10px] leading-[14px] sm:text-[12px] sm:leading-[14px] md:text-[15px] md:leading-[22px] text-[#838383]">Treasury</div>
                   </div>
                   <div className="text-center">
                     <>
@@ -150,16 +149,16 @@ export default function DAO() {
                         </div>
                       )}
                     </>
-                    <div className="text-[10px] leading-[14px] sm:text-[12px] sm:leading-[14px] md:text-[15px] md:leading-[22px] text-[#838383">Marketing</div>
+                    <div className="text-[10px] leading-[14px] sm:text-[12px] sm:leading-[14px] md:text-[15px] md:leading-[22px] text-[#838383]">Marketing</div>
                   </div>
                 </div>
-                <div className="flex flex-col items-start justify-end gap-[17px] md:w-auto md:justify-start mlg:w-full mlg:gap-[20px] items-center">
+                <div className="flex items-start justify-end gap-[17px] md:w-auto md:justify-start mlg:w-full mlg:gap-[20px] items-center">
                   <a 
                     href="http://t.me/landshare" 
                     target="_blank"
                     className="flex flex-col items-center gap-[3px] cursor-pointer"
                   >
-                    <img 
+                    <Image 
                       src={Telegram} 
                       alt="telegram" 
                       className="w-[20px] sm:w-[22px] md:w-[30px]"
@@ -171,7 +170,7 @@ export default function DAO() {
                     target="_blank"
                     className="flex flex-col items-center gap-[3px] cursor-pointer"
                   >
-                    <img 
+                    <Image 
                       src={Gnosis} 
                       alt="gnosis" 
                       className="w-[20px] sm:w-[22px] md:w-[30px]"
@@ -183,7 +182,7 @@ export default function DAO() {
                     target="_blank"
                     className="flex flex-col items-center gap-[3px] cursor-pointer"
                   >
-                    <img 
+                    <Image 
                       src={Contract} 
                       alt="contract"
                       className="w-[20px] sm:w-[22px] md:w-[30px]"
@@ -193,20 +192,20 @@ export default function DAO() {
                 </div>
               </div>
             </div>
-            <div className="bg-secondary p-[10px] pt-[25px] md:p-[40px] shadow-lg  rounded-[14px]">
+            <div className="bg-secondary p-[10px] pt-[25px] md:p-[40px] shadow-lg rounded-[14px]">
               <div className={`flex justify-between pl-[10px] mlg:px-[35px] mlg:pb-[30px] items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
                 <div className="text-text-primary pr-3 font-bold text-[24px] leading-[36px]">
                   {isViewAll ? `All Proposals` : `Latest Proposals`}
                 </div>
                 <div className="flex gap-[15px]">
-                  <button className="text-button-text-secondary py-[5px] px-[10px] min-h-[32px] min-w-[32px] text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-bold md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
+                  <button className="text-button-text-secondary py-[5px] px-[10px] min-h-[32px] min-w-[32px] text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
                     onClick={() => {
                       window.open("https://vote.landshare.io");
                     }}
                   >
                     View All
                   </button>
-                  <button className="text-button-text-secondary py-[5px] px-[10px] min-h-[32px] min-w-[32px] text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-bold md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
+                  <button className="text-button-text-secondary py-[5px] px-[10px] min-h-[32px] min-w-[32px] text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
                     disabled={(isBalanceGnosisLoading || isBalanceMarketingLoading) || chainId != bsc.id}
                     onClick={handleClickCreateProposal}
                   >
