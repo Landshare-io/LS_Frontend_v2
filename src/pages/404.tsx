@@ -1,7 +1,8 @@
+import type { NextPage } from 'next';
 import { BOLD_INTER_TIGHT } from "../config/constants/environments";
 import Logo from "../components/common/logo";
 
-export default function Custom404() {
+const Custom404: NextPage = () => {
   return (
     <div
       className="flex flex-col bg-primary items-center h-[calc(100vh-132px)] xl:h-[calc(100vh-144px)] justify-center"
@@ -12,3 +13,5 @@ export default function Custom404() {
     </div>
   );
 }
+
+export default Custom404
