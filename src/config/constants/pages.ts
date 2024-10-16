@@ -13,10 +13,10 @@ export const PAGES: PAGE[] = [
     name: "Real World Assets",
     path: "/rwa",
   },
-  {
-    name: "DAO",
-    path: "/dao",
-  },
+  // {
+  //   name: "DAO",
+  //   path: "/dao",
+  // },
   // {
   //   name: "Migration",
   //   path: "/migration",
@@ -32,5 +32,5 @@ export const PAGES: PAGE[] = [
 ];
 
 export const VISIBLE_FOOTER_PAGES = [
-  '/', '/rwa', '/vaults', '/tokenized-asset', '/dao'
+  '/', '/rwa', '/vaults', '/tokenized-asset', '/dao', '/migration'
 ];
