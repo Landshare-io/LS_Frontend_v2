@@ -1,5 +1,4 @@
 import React from "react";
-import "./Input.css";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface InputProps {
