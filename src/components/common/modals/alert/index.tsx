@@ -1,4 +1,5 @@
 import ReactModal from 'react-modal';
+import Image from 'next/image';
 import { useGlobalContext } from '../../../../context/GlobalContext';
 import Vector from '../../../../../public/icons/vector.svg';
 import Ok from '../../../../../public/icons/ok.svg';
@@ -31,7 +32,7 @@ export default function AlertModal() {
       style={customModalStyles}
     >
       <div className={`py-[10px] flex justify-center items-center gap-[20px] w-100 ${alertModal.type == 'success' ? 'bg-[#61CD81]' : (alertModal.type == 'info' ? 'bg-[#447CB0]' : 'bg-[#B43f37]')}`}>
-        <img 
+        <Image 
           className=""
           src={alertModal.type == 'error' ? Vector : (alertModal.type == 'success' ? Ok : (alertModal.type == 'info' ? Ok : null))} 
           alt="Status" 
