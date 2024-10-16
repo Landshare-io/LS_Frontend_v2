@@ -13,10 +13,10 @@ export const PAGES: PAGE[] = [
     name: "Real World Assets",
     path: "/rwa",
   },
-  // {
-  //   name: "DAO",
-  //   path: "/dao",
-  // },
+  {
+    name: "DAO",
+    path: "/dao",
+  },
   // {
   //   name: "Migration",
   //   path: "/migration",
