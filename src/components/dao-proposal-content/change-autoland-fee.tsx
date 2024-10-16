@@ -18,14 +18,15 @@ export default function ChangeAutoLANDFee ({
   setAutoLandFee
 }: ChangeAutoLANDFeeProps) {
   const { data: fee, isLoading } = usePerformanceFee(bsc.id) as { data: number, isLoading: boolean }
-  const currentFee = Math.round(fee / 100.0 * 1000) / 1000
+  console.log(fee)
+  const currentFee = Math.round(Number(fee) / 100.0 * 1000) / 1000
 
   return isLoading ? (
     <div className="flex w-full justify-center my-auto">
       <ReactLoading type="cylon" color="#61cd81" />
     </div>
   ) : (
-    <div className="text-[16px] shadow-lg shadow-[#0003] bg-third">
+    <div className="text-[16px] shadow-lg shadow-[#0003] bg-third my-[25px]">
       <div className={`p-[10px] text-[18px] bg-[#61CD81] text-button-text-secondary ${BOLD_INTER_TIGHT.className}`}>Change Auto LAND Fee</div>
       <div className="my-[10px] mx-[7px]">
         <Input
