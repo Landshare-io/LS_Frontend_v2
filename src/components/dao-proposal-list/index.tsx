@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from "react";
 import ReactLoading from "react-loading";
 import { useQuery, gql } from "@apollo/client";
 import Proposal from "./proposal";
-import "./ProposalsList.css";
 
 const PROPOSALS_QUERY = gql`
   query Proposals($count: Int, $state: String) {
@@ -94,9 +93,9 @@ export default function DaoProposalsList({ count, refreshCount }: DaoProposalsLi
 
   return (
     <>
-      <div className="latest-proposals">
+      <div className="flex w-[800px] flex-col px-[24px] gap-[10px]">
         {loading ? (
-          <div className="loading-spinner">
+          <div className="flex w-full justify-center">
             <ReactLoading type="cylon" color="#61cd81" />
           </div>
         ) : (

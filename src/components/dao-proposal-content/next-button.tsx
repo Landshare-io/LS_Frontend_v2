@@ -1,4 +1,4 @@
-import "./NextButton.css";
+import React from "react";
 
 interface NextButtonProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;

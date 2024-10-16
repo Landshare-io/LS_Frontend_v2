@@ -1,6 +1,5 @@
 import Input from "../common/input";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
-import "./BurnTokens.css";
 
 interface ChangeQuorumProps {
   error: string;
