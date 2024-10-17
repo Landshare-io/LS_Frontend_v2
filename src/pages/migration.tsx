@@ -1,84 +1,25 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { Head } from "next/document";
-import { formatEther, parseEther } from "ethers";
+import { BigNumberish, formatEther, parseEther } from "ethers";
 import { useAccount, useChainId } from "wagmi";
-import { useGlobalContext } from "../../contexts/GlobalContext";
-import { useLandshareFunctions } from "../../contexts/LandshareFunctionsProvider";
-import { useLandshareV1Context } from "../../contexts/LandshareV1Context";
-import { useLandshareNftContext } from "../../contexts/LandshareNftContext";
-import { useVaultBgProvider } from "../../contexts/VaultBgProvider";
-import useTokenMigrate from "../../hooks/useTokenMigrate";
-import SelectVault from "./SelectVault";
+import useBalanceOf from "../hooks/contract/LandTokenV1Contract/useBalanceOf";
+import useTokenMigrate from "../hooks/contract/migrations/useTokenMigrate";
+import SelectVault from "../components/migrations/select-vault";
 import VaultCard from "./VaultCard";
-import ConnectWallet from "../ConnectWallet";
-import "./Migration.css";
+import ConnectWallet from "../components/connect-wallet";
+import { BOLD_INTER_TIGHT } from "../config/constants/environments";
 
 const Migration: NextPage = () => {
   const { isConnected, address } = useAccount();
-  const {
-    signer,
-    account,
-    userResource,
-    notifyError,
-    notifySuccess,
-    updateUserResources,
-    isLoginLoading,
-    isDarkMode
-  } = useGlobalContext();
-  const {
-    contract: {
-      houseNFTContract,
-      houseBNFTContract,
-      NFTStakeContract,
-      NFTBStakeContract
-    },
-    address: {
-      houseNFTAddress,
-      houseBNFTAddress
-    }
-  } = useLandshareNftContext();
   const chainId = useChainId()
-  const router = useRouter();
   const [vaultName, setVaultName] = useState("Select A Vault");
   const [onlyMigration, setOnlyMigration] = useState(false);
-  const [balance, setBalance] = useState(0);
-  const { setBackgoundVault, setWithOverlayBg } = useVaultBgProvider();
-  const {
-    state,
-    startTransactionRefresh,
-    endTransaction,
-    transactionResult,
+  const { data: balanceData } = useBalanceOf({ address }) as { data: BigNumberish }
+  const balance = formatEther(balanceData.toString())
+  const displayedBalance = balance.toString().match(/^-?\d+(?:\.\d{0,4})?/)
 
-  } = useLandshareFunctions();
-  const {
-    contract: { landTokenContract },
-  } = useLandshareV1Context();
-  const [v1AssetDepositedHouses, setV1AssetDepositedHouses] = useState([]);
-  const [v1TransferableHouses, setV1TransferableHouses] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-
-
-
-
-  const { tokenMigrate } = useTokenMigrate({
-    state,
-    startTransactionRefresh,
-    endTransaction,
-    transactionResult,
-
-  });
-
-  useEffect(() => {
-    setBackgoundVault(false);
-    setWithOverlayBg(false);
-  }, [setBackgoundVault]);
-
-  useEffect(() => {
-    if (landTokenContract) getBalance();
-  }, [landTokenContract]);
+  const { tokenMigrate } = useTokenMigrate({ address });
 
   const handleClickMigrationOption = (e: any) => {
     setVaultName("Select A Vault");
@@ -87,7 +28,7 @@ const Migration: NextPage = () => {
 
   const processMigration = async () => {
     try {
-      if (balance == 0) {
+      if (Number(balance) == 0) {
         alert("No balance to migrate");
       } else {
         const amountLS = parseEther(balance.toString()).toString();
@@ -96,34 +37,26 @@ const Migration: NextPage = () => {
     } catch (e) { }
   };
 
-  const getBalance = async () => {
-    try {
-      let value = await landTokenContract.balanceOf(address);
-      value = formatEther(value.toString());
-      setBalance(value);
-    } catch (e) { }
-  };
-
   return (
     <div>
-      <div className={`page-container  bg-tw-primary ${!isConnected ? "no-padding-top" : ""}`}>
+      <div className={`flex justify-center pt-[40px] px-[10px] pb-[10px] bg-primary ${!isConnected ? "p-0" : ""}`}>
         <Head>
           <title>Landshare - Migration</title>
         </Head>
-        <div className={`migration-container ${!isConnected ? "no-padding-top" : ""}`}>
+        <div className={`p-0 flex justify-center mlg:pt-[40px] max-w-[664.14px] ${!isConnected ? "p-0" : ""}`}>
           {!isConnected ? (
-            <div className="text-center d-flex flex-column justify-content-center align-items-center">
+            <div className="text-center flex flex-col justify-center items-center">
               <ConnectWallet />
             </div>
           ) : (
             <div>
               {chainId != 56 ?
-                (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
+                (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
                   Chain not Supported / Switch to BSC
                 </div>) : (
                   <>
-                    <h1 className="text-tw-text-primary">Landshare Token Migration</h1>
-                    <p className="text-tw-text-primary">
+                    <h1 className={`text-text-primary text-[48px] text-capitalize ${BOLD_INTER_TIGHT.className}`}>Landshare Token Migration</h1>
+                    <p className="text-[18px] mb-[30px] mt-[15px] text-text-primary">
                       To migrate with us, simply select your vault below and follow
                       the steps. Need help? Check out our detailed guides{" "}
                       <a
@@ -134,32 +67,33 @@ const Migration: NextPage = () => {
                       </a>
                       .
                     </p>
-                    <div className="migration-option ms-1">
+                    <div className="flex items-center gap-[6px] text-[14px] ml-1">
                       <input
                         type="checkbox"
                         name="only-migration"
                         id="only-migration"
+                        className="accent-[#61cd81] text-white cursor-pointer"
                         onChange={handleClickMigrationOption}
                       />
-                      <label htmlFor="only-migration" className="text-tw-text-primary">
+                      <label htmlFor="only-migration" className="text-text-primary">
                         Migrate unstaked tokens from wallet
                       </label>
                     </div>
                     {onlyMigration ? (
                       <>
-                        <div className="only-migration-container mt-4">
-                          <div className="amount-input">
+                        <div className="bg-[#f2f4f5] p-[20px] rounded-[5px] flex gap-[10px] mt-4">
+                          <div className="relative w-full">
                             <input
                               type="text"
                               disabled
-                              className="disabled"
+                              className={`w-full border-0 bg-[#fff] rounded-[12px] py-[10px] px-[20px] text-[20px] leading-[30px] text-capitalize text-[#000] disabled ${BOLD_INTER_TIGHT.className}`}
                               value={
-                                balance.toString().match(/^-?\d+(?:\.\d{0,4})?/)[0]
+                                displayedBalance ? displayedBalance[0] : 0
                               }
                             />
                           </div>
                           <button
-                            className="migrate-button"
+                            className="w-[174px] h-[50px] bg-[#61cd81] border-0 rounded-[12px] font-semibold text-[18px] leading-[22px] duration-500 hover:bg-[#87D99F] active:bg-[06B844] disable:bg-[#3c3c3b33] text-button-text-secondary"
                             onClick={processMigration}
                           >
                             Migrate
@@ -167,8 +101,8 @@ const Migration: NextPage = () => {
                         </div>
                       </>
                     ) : (
-                      <div className="migration-card bg-tw-secondary">
-                        <div>
+                      <div className="mt-[20px] bg-secondary">
+                        <div className="p-[16px]">
                           <SelectVault value={vaultName} setValue={setVaultName} />
                         </div>
                         {vaultName === "Select A Vault" ? (
