@@ -1,56 +1,81 @@
-import React from "react";
-import { useAccount } from "wagmi";
-import { useGlobalContext } from "../contexts/GlobalContext";
-import { useLandshareV1Context } from "../contexts/LandshareV1Context";
-import { useLandshareV2Context } from "../contexts/LandshareV2Context";
+import { useEffect, useState } from "react";
+import { bsc } from "viem/chains";
+import { Address } from "viem";
+import { 
+  useAccount,
+  useWaitForTransactionReceipt
+} from "wagmi";
+import { useGlobalContext } from "../../../context/GlobalContext";
+import { BigNumberish } from "ethers";
+import useBalanceOf from "../LandTokenContract/useBalanceOf";
+import useApprove from "../LandTokenV1Contract/useApprove";
+import useSwap from "../TokenMigrateContract/useSwap";
 
+interface useTokenMigrateProps {
+  address: Address | undefined;
+}
 
-export default function useTokenMigrate({
-  startTransactionRefresh,
-  transactionResult,
- 
-}) {
-  const [isSuccessMigrate, setIsSuccessMigrate] = React.useState(false);
+export default function useTokenMigrate({ address }: useTokenMigrateProps) {
+  const [isSuccessMigrate, setIsSuccessMigrate] = useState(false);
   const { isConnected } = useAccount()
-  const { updateLandTokenV2Balance } = useGlobalContext();
-  const {
-    contract: { landTokenContract },
-  } = useLandshareV1Context();
-  const {
-    contract: { tokenMigrateContract },
-  } = useLandshareV2Context();
+  const { refetch: updateLandTokenV2Balance } = useBalanceOf({ chainId: bsc.id, address })
+  const { approve: landTokenApprove, data: landTokenApproveTx } = useApprove()
+  const { swap, data: swapTx } = useSwap()
+  const { setScreenLoadingStatus } = useGlobalContext()
 
-  async function tokenMigrate(amount) {
-    if (isConnected == true) {
-      startTransactionRefresh(1, 2);
-      try {
-        const txApprove = await landTokenContract.approve(
-          process.env.REACT_APP_TOKEN_MIGRATE_ADDR,
-          amount
-        );
-        txApprove.wait().then(async () => {
-          startTransactionRefresh(2, 2);
-          try {
-            const txSwap = await tokenMigrateContract.swap();
-            txSwap.wait().then(() => {
-              transactionResult("Transaction Completed.", true);
-              setIsSuccessMigrate(true);
-              updateLandTokenV2Balance()
-            });
-          } catch (e) {
-            transactionResult("Transaction Failed.", false);
-            setIsSuccessMigrate(false);
-            console.log("Error, withdraw: ", e);
+  const { isSuccess: landTokenApproveSuccess } = useWaitForTransactionReceipt({
+    hash: landTokenApproveTx,
+    chainId: bsc.id
+  });
+
+  const { isSuccess: swapSuccess } = useWaitForTransactionReceipt({
+    hash: swapTx,
+    chainId: bsc.id
+  });
+  
+  useEffect(() => {
+    if (landTokenApproveTx) {
+      if (landTokenApproveSuccess) {
+        try {
+          setScreenLoadingStatus("Transaction 2 of 2 Pending...")
+          swap()
+        } catch (error) {
+          console.log("swap error", error)
+          setScreenLoadingStatus("Transaction Failed.")
+
+          return () => {
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
-         
-        });
-       
-      } catch (e) {
-        transactionResult("Transaction Failed.", false);
-        setIsSuccessMigrate(false);
-        console.log("Error, withdraw: ", e);
+        }
       }
-    
+    }
+  }, [landTokenApproveTx, landTokenApproveSuccess])
+
+  useEffect(() => {
+    if (swapTx) {
+      if (swapSuccess) {
+        try {
+          updateLandTokenV2Balance()
+          setScreenLoadingStatus("Transaction Completed.")
+        } catch (error) {
+          setScreenLoadingStatus("Transaction Failed.")
+        }
+
+        return () => {
+          setTimeout(() => {
+            setScreenLoadingStatus("")
+          }, 1000);
+        }
+      }
+    }
+  }, [swapTx, swapSuccess])
+
+  async function tokenMigrate(amount: BigNumberish) {
+    if (isConnected == true) {
+      setScreenLoadingStatus("Transaction 1 of 2 Pending...")
+      landTokenApprove(address, amount)
     }
   }
   return { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate };
