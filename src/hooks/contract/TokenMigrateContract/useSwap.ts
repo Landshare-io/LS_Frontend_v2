@@ -1,11 +1,9 @@
 import { useWriteContract } from 'wagmi'
-import { Address } from 'viem';
-import { BigNumberish } from 'ethers';
 import { bsc } from 'viem/chains';
 import TokenMigrateAbi from "../../../abis/TokenMigrate.json";
 import { TOKEN_MIGRATE_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function useApprove() {
+export default function useSwap() {
   const {
     data,
     isPending,
