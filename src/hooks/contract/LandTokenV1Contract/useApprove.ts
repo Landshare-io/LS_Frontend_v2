@@ -12,7 +12,7 @@ export default function useApprove() {
     writeContract
   } = useWriteContract();
 
-  async function approve(approveAddress: Address, amount: number | BigNumberish) {
+  async function approve(approveAddress: Address | undefined, amount: number | BigNumberish) {
     await writeContract({
       address: LAND_TOKEN_V1_CONTRACT_ADDRESS,
       abi: LandTokenAbi,
