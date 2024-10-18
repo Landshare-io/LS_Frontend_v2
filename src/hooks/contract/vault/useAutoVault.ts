@@ -4,7 +4,7 @@ import { BigNumberish } from "ethers";
 import { bsc } from "viem/chains";
 import { Address, formatEther } from "viem";
 import { useGlobalContext } from "../../../context/GlobalContext";
-import useDeposit from "../AutoVaultV2Contract/useDeposit";
+import useDeposit from "../AutoVaultV3Contract/useDeposit";
 import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
 import useUserInfo from "../MasterchefContract/useUserInfo";
 import usePendingLand from "../MasterchefContract/usePendingLand";
@@ -13,13 +13,13 @@ import useBalanceOfWBNB from "../WBNBTokenContract/useBalanceOf";
 import { updateCcipTransaction } from "../../../lib/slices/contract-slices/APIConsumerCcipTransactions";
 import { useAppDispatch } from "../../../lib/hooks";
 import useCcipVaultBalance from "../CrossChainVault/useCcipVaultBalance";
-import useAutoLandV3 from "../AutoVaultV2Contract/useAutoLandV3";
+import useAutoLandV3 from "../AutoVaultV3Contract/useAutoLandV3";
 import useAllowanceOfLandToken from "../LandTokenContract/useAllowance";
 import useApproveLandToken from "../LandTokenContract/useApprove";
 import useTransfer from "../CcipChainSenderContract/useTransfer";
-import useWithdrawAll from "../AutoVaultV2Contract/useWithdrawAll";
-import useWithdraw from "../AutoVaultV2Contract/useWithdraw";
-import useHarvest from "../AutoVaultV2Contract/useHarvest";
+import useWithdrawAll from "../AutoVaultV3Contract/useWithdrawAll";
+import useWithdraw from "../AutoVaultV3Contract/useWithdraw";
+import useHarvest from "../AutoVaultV3Contract/useHarvest";
 import { 
   PROVIDERS,
   MAJOR_WORK_CHAIN,

@@ -1,12 +1,12 @@
 import { useReadContract } from "wagmi";
 import { Address } from "viem";
-import AutoVaultV2Contract from "../../../abis/AutoVaultV2.json"
+import AutoVaultV3Contract from "../../../abis/AutoVaultV3.json"
 import { CCIP_CHAIN_VAULT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useUserInfo(chainId: number, address: Address | undefined) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
     address: CCIP_CHAIN_VAULT_ADDRESS[chainId],
-    abi: AutoVaultV2Contract,
+    abi: AutoVaultV3Contract,
     functionName: "userInfo",
     args: [address],
     chainId: chainId
