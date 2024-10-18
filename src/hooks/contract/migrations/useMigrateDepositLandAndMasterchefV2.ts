@@ -1,0 +1,123 @@
+import { useState, useEffect } from "react";
+import { bsc } from "viem/chains";
+import { useAccount } from "wagmi";
+import { Address } from "viem";
+import { useWaitForTransactionReceipt } from "wagmi";
+import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
+import useBalanceOfLpTokenV2 from "../LpTokenV2Contract/useBalanceOf";
+import useDepositAutoVaultV3 from "../AutoVaultV3Contract/useDeposit";
+import useDepositMastchef from "../MasterchefContract/useDeposit";
+import { useGlobalContext } from "../../../context/GlobalContext";
+
+interface useMigrateDepositLandAndLpV2Props {
+  address: Address | undefined
+}
+
+export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepositLandAndLpV2Props) {
+  const { isConnected } = useAccount()
+  const [isSuccessDeposit, setIsSuccessDeposit] = useState(false);
+  const {  setScreenLoadingStatus } = useGlobalContext();
+  const { data: balanceOfLandToken, refetch: refetchLandTokenBalance } = useBalanceOfLandToken({ chainId: bsc.id, address });
+  const { data: balanceOfLpToken, refetch: refetchLpTokenBalance } = useBalanceOfLpTokenV2({ chainId: bsc.id, address });
+  
+  const { deposit: autoVaultV3Deposit, data: autoVaultV3DepositTx } = useDepositAutoVaultV3(bsc.id)
+  const { isSuccess: autoVaultV3DepositSuccess } = useWaitForTransactionReceipt({   
+    hash: autoVaultV3DepositTx,
+    chainId: bsc.id
+  });
+
+  const { deposit: masterchefDeposit, data: masterchefDepositTx } = useDepositMastchef(bsc.id)
+  const { isSuccess: masterchefDepositSuccess } = useWaitForTransactionReceipt({   
+    hash: masterchefDepositTx,
+    chainId: bsc.id
+  });
+
+  useEffect(() => {
+    if (autoVaultV3DepositTx) {
+      if (autoVaultV3DepositSuccess) {
+        try {
+          refetchLandTokenBalance()
+          setScreenLoadingStatus("Transaction Completed.")
+          setIsSuccessDeposit(true);
+        } catch (error) {
+          console.log("deposit error", error)
+          setIsSuccessDeposit(false);
+          setScreenLoadingStatus("Transaction Failed.")
+        }
+      }
+    }
+  }, [autoVaultV3DepositTx, autoVaultV3DepositSuccess])
+
+  useEffect(() => {
+    if (masterchefDepositTx) {
+      if (masterchefDepositSuccess) {
+        try {
+          refetchLandTokenBalance()
+          refetchLpTokenBalance()
+          setScreenLoadingStatus("Transaction Completed.")
+          setIsSuccessDeposit(true);
+        } catch (error) {
+          console.log("deposit error", error)
+          setIsSuccessDeposit(false);
+          setScreenLoadingStatus("Transaction Failed.")
+        }
+      }
+    }
+  }, [masterchefDepositTx, masterchefDepositSuccess])
+
+  async function depositAutoLandv2(amount: number) {
+    if (isConnected == true) {
+      if (Number(amount) > Number(balanceOfLandToken)) {
+        window.alert("Insufficient Balance");
+        return;
+      }
+      try {
+        setScreenLoadingStatus("Transaction is Pending...")
+        autoVaultV3Deposit(amount);
+      } catch (e) {
+        setScreenLoadingStatus("Transaction Failed.");
+        setIsSuccessDeposit(false);
+      }
+    }
+  }
+
+  async function depositLandv2(amount: number) {
+    if (isConnected == true) {
+      if (Number(amount) > Number(balanceOfLandToken)) {
+        window.alert("Insufficient Balance");
+        return;
+      }
+      try {
+        setScreenLoadingStatus("Transaction is Pending...")
+        masterchefDeposit(0, amount)
+      } catch (e) {
+        setScreenLoadingStatus("Transaction Failed.");
+        setIsSuccessDeposit(false);
+      }
+    }
+  }
+
+  async function depositLP(amount: number) {
+    if (isConnected == true) {
+      if (Number(amount) > Number(balanceOfLpToken)) {
+        window.alert("Insufficient Balance");
+        return;
+      }
+      try {
+        setScreenLoadingStatus("Transaction is Pending...")
+        masterchefDeposit(1, amount);
+      } catch (e) {
+        setScreenLoadingStatus("Transaction Failed.");
+        setIsSuccessDeposit(false);
+      }
+    }
+  }
+
+  return {
+    depositAutoLandv2,
+    depositLandv2,
+    depositLP,
+    isSuccessDeposit,
+    setIsSuccessDeposit,
+  };
+}
