@@ -12,7 +12,7 @@ export default function useRemoveLiquidityETH() {
     writeContract
   } = useWriteContract();
 
-  async function removeLiquidityETH(tokenAddress: Address, liquidity: number | BigNumberish, amountTokenMin: number | BigNumberish, amountETHMin: number | BigNumberish, to: Address, deadline: number | BigNumberish) {
+  async function removeLiquidityETH(tokenAddress: Address, liquidity: number | BigNumberish, amountTokenMin: number | BigNumberish, amountETHMin: number | BigNumberish, to: Address | undefined, deadline: number | BigNumberish) {
     await writeContract({
       address: PSC_ROUTER_CONTRACT_ADDRESS,
       abi: PscRouter,
