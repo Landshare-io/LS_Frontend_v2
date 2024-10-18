@@ -1,36 +1,38 @@
-import React from "react";
+import { useState } from "react";
 import { useAccount } from "wagmi";
+import { Address } from "viem";
 import useBalanceOf from "../LpTokenV1Contract/useBalanceOf";
+import useApprove from "../LpTokenV1Contract/useApprove";
+import useRemoveLiquidityETH from "../PCSRouterContract/useRemoveLiquidityETH";
 import { useLandshareV1Context } from "../contexts/LandshareV1Context";
 import { useMigrationContext } from "../contexts/MigrationContext";
-import { useGlobalContext } from "../contexts/GlobalContext";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import { LP_TOKEN_V1_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
-export default function useSplitLP({
-  state,
-  startTransactionRefresh,
-  endTransaction,
-  transactionResult,
+interface useSplitLPProps {
+  address: Address | undefined
+}
 
-}) {
-  const [isSuccessSplit, setIsSuccessSplit] = React.useState(false);
-  const [amountSplitedTokens, setAmountSplitedTokens] = React.useState({
+export default function useSplitLP({
+  address
+}: useSplitLPProps) {
+  const [isSuccessSplit, setIsSuccessSplit] = useState(false);
+  const [amountSplitedTokens, setAmountSplitedTokens] = useState({
     bnb: 0,
     land: 0,
   });
-  const { isConnected } = useGlobalContext();
+  const {setScreenLoadingStatus} = useGlobalContext()
+  const { isConnected } = useAccount();
   const {
     contract: { lpTokenContract },
   } = useLandshareV1Context();
   const { PCSRouterContract } = useMigrationContext();
-  const { address } = useAccount();
-  async function splitLP(amount: string | number, minLand: string | number | bigint, minEth: string | number | bigint) {
-    startTransactionRefresh(1, 2);
-    const balance = await lpTokenContract.balanceOf(address);
+  const { data: balance } = useBalanceOf({ address })
+  const { approve } = useApprove()
 
+  async function splitLP(amount: string | number, minLand: string | number | bigint, minEth: string | number | bigint) {
     if (isConnected == true) {
       if (Number(amount) > Number(balance)) {
-        endTransaction();
         window.alert("Insufficient Balance");
         return;
       }
@@ -40,7 +42,7 @@ export default function useSplitLP({
           amount
         );
         txApprove.wait().then(async () => {
-          startTransactionRefresh(2, 2);
+          
           try {
             const txRemoveLiquidity = await PCSRouterContract.removeLiquidityETH(
               process.env.REACT_APP_LAND_TOKEN_ADDR,
