@@ -17,10 +17,10 @@ import {
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
-import useAutoLandV3 from "../../hooks/contract/AutoVaultV2Contract/useAutoLandV3";
+import useAutoLandV3 from "../../hooks/contract/AutoVaultV3Contract/useAutoLandV3";
 import useCcipVaultBalance from "../../hooks/contract/CrossChainVault/useCcipVaultBalance";
 import useCalculateHarvestCakeRewards from "../../hooks/contract/CrossChainVault/useCalculateHarvestCakeRewards";
-import useCalculateHarvestCakeRewardsOfAutoVault from "../../hooks/contract/AutoVaultV2Contract/useCalculateHarvestCakeRewards";
+import useCalculateHarvestCakeRewardsOfAutoVault from "../../hooks/contract/AutoVaultV3Contract/useCalculateHarvestCakeRewards";
 import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useAutoVault from "../../hooks/contract/vault/useAutoVault";
 import useMinTransferAmount from "../../hooks/contract/CcipChainSenderContract/useMinTransferAmount";

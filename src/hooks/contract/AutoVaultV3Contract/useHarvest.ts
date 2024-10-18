@@ -1,6 +1,6 @@
 import { useWriteContract } from "wagmi";
 import { bsc } from "viem/chains";
-import AutoVaultV2Contract from "../../../abis/AutoVaultV2.json"
+import AutoVaultV3Contract from "../../../abis/AutoVaultV3.json"
 import { AUTO_VAULT_V3_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useHarvest(chainId: number) {
@@ -13,7 +13,7 @@ export default function useHarvest(chainId: number) {
   async function harvest() {
     await writeContract({
       address: AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id],
-      abi: AutoVaultV2Contract,
+      abi: AutoVaultV3Contract,
       functionName: "harvest",
       chainId: bsc.id,
       args: []

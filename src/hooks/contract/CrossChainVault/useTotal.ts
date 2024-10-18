@@ -1,11 +1,11 @@
 import { useReadContract } from "wagmi";
-import AutoVaultV2Contract from "../../../abis/AutoVaultV2.json"
+import AutoVaultV3Contract from "../../../abis/AutoVaultV3.json"
 import { CCIP_CHAIN_VAULT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useTotal(chainId: number) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
     address: CCIP_CHAIN_VAULT_ADDRESS[chainId],
-    abi: AutoVaultV2Contract,
+    abi: AutoVaultV3Contract,
     functionName: "balanceOf",
     args: [],
     chainId: chainId

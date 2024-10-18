@@ -1,7 +1,7 @@
 import ReactLoading from "react-loading";
 import { bsc } from "viem/chains";
 import Input from "../common/input";
-import usePerformanceFee from "../../hooks/contract/AutoVaultV2Contract/usePerformanceFee";
+import usePerformanceFee from "../../hooks/contract/AutoVaultV3Contract/usePerformanceFee";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 interface ChangeAutoLANDFeeProps {
