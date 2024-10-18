@@ -6,13 +6,15 @@ import { useLandshareV1Context } from "../../contexts/LandshareV1Context";
 import { useLandshareV2Context } from "../../contexts/LandshareV2Context";
 import { useLandshareFunctions } from "../../contexts/LandshareFunctionsProvider";
 import { useMigrationContext } from "../../contexts/MigrationContext";
-import useMigrateWithDrawLandv1 from "../../hooks/useMigrateWithDrawLandv1";
-import useTokenMigrate from "../../hooks/useTokenMigrate";
+import useMigrateWithDrawLandv1 from "../../hooks/contract/migrations/useMigrateWithDrawLandV1";
+import useTokenMigrate from "../../hooks/contract/migrations/useTokenMigrate";
 import useMigrateApproveLandv2 from "../../hooks/useMigrateApproveLandv2";
+import useMigrateApproveLandAndLpV2 from "../../hooks/contract/migrations/useMigrateApproveLandAndLpV2";
 import useMigrateDepositLandv2 from "../../hooks/useMigrateDepositLandv2";
-import useSplitLP from "../../hooks/useSplitLP";
+import useMigrateDepositLandAndLpV2 from "../../hooks/contract/migrations/useMigrateDepositLandAndMasterchefV2";
+import useSplitLP from "../../hooks/contract/migrations/useSplitLp";
 import useRecombine from "../../hooks/useRecombine";
-import abbreviateNumber from "../../utils/numberAbbreviator";
+import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import DetailsIcon from "../../assets/img/icons/details.svg";
 import DetailsIconDark from "../../assets/img/icons/details-dark.svg";
 import CloseIcon from "../../assets/img/icons/close.svg";
@@ -154,19 +156,10 @@ const VaultCard = (props) => {
     isSuccessWithdraw,
     setIsSuccessWithdraw,
   } = useMigrateWithDrawLandv1({
-    state,
-    startTransaction,
-    endTransaction,
-    transactionResult,
     oldAutoBalance,
+    address: account
   });
-  const { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate } =
-    useTokenMigrate({
-      state,
-      startTransactionRefresh,
-      endTransaction,
-      transactionResult,
-    });
+  const { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate } = useTokenMigrate({ address: account });
   const {
     checkAllowance,
     approveLandv2Auto,
