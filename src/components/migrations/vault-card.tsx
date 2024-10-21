@@ -7,7 +7,7 @@ import { useGlobalContext } from "../../contexts/GlobalContext";
 import { useLandshareV1Context } from "../../contexts/LandshareV1Context";
 import { useLandshareV2Context } from "../../contexts/LandshareV2Context";
 import { useLandshareFunctions } from "../../contexts/LandshareFunctionsProvider";
-import { useMigrationContext } from "../../contexts/MigrationContext";
+
 import useMigrateWithDrawLandv1 from "../../hooks/contract/migrations/useMigrateWithDrawLandV1";
 import useTokenMigrate from "../../hooks/contract/migrations/useTokenMigrate";
 import useMigrateApproveLandv2 from "../../hooks/useMigrateApproveLandv2";
@@ -15,6 +15,7 @@ import useMigrateApproveLandAndLpV2 from "../../hooks/contract/migrations/useMig
 import useMigrateDepositLandv2 from "../../hooks/useMigrateDepositLandv2";
 import useMigrateDepositLandAndLpV2 from "../../hooks/contract/migrations/useMigrateDepositLandAndMasterchefV2";
 import useSplitLP from "../../hooks/contract/migrations/useSplitLp";
+import useMigrationBalance from "../../hooks/contract/migrations/useMigrationBalance";
 import useRecombine from "../../hooks/contract/migrations/useRecombine";
 // import useRecombine from "../../hooks/useRecombine";
 
@@ -49,6 +50,9 @@ import useGetReservesLpTokenV2 from "../../hooks/contract/PancakePairContract/us
 import useTotalAllocPoint from "../../hooks/contract/MasterchefContract/useTotalAllocPoint";
 
 import useGetReservesOfBNBApePair from "../../hooks/contract/BNBApePairContract/useGetReserves";
+
+import useBalanceOfAutoVaultV3 from "../../hooks/contract/AutoVaultV3Contract/useBalanceOf";
+import useBalanceOfMasterchef from "../../hooks/contract/MasterchefContract/useBalanceOf";
 
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import DetailsIcon from "../../assets/img/icons/details.svg";
@@ -108,6 +112,9 @@ export default function VaultCard({
   }) as { data: BigNumberish, refetch: Function }
 
   const { data: landInLP } = useBalanceOfLandToken({ chainId: bsc.id, address: LP_TOKEN_V1_CONTRACT_ADDRESS }) as { data: BigNumberish, refetch: Function }
+  const balanceMigration = useMigrationBalance({ address }) as any
+  const { data: landTokenStakeCurrentDepositTotal } = useBalanceOfAutoVaultV3() as { data: BigNumberish }
+  const { data: landTokenStakeCurrentDepositTotal2 } = useBalanceOfMasterchef() as { data: BigNumberish }
 
   const updateUserBalance = async () => {
     await refetchBalanceOfLandV1()
@@ -130,11 +137,17 @@ export default function VaultCard({
   const { data: lpTokenV2Reserves } = useGetReservesLpTokenV2(bsc.id) as { data: [BigNumberish, BigNumberish, BigNumberish] }
 
   // AutoLAND v1 info
-  const { data: autoBalanceV1 } = useUserInfoOfAutoLandV1({ address }) as { data: [BigNumberish, BigNumberish, BigNumberish, BigNumberish] };
+  const { data: autoBalanceV1, refetch: refetchAutoBalanceV1 } = useUserInfoOfAutoLandV1({ address }) as { data: [BigNumberish, BigNumberish, BigNumberish, BigNumberish], refetch: Function };
   const oldAutoBalance = autoBalanceV1[0]
-  const { data: totalSharesAutoOld } = useTotalSharesOfAutoLandV1() as { data: BigNumberish };
-  const { data: totalDepositAutoOld } = useBalanceOfAutoLandV1() as { data: BigNumberish }
+  const { data: totalSharesAutoOld, refetch: refetchTotalSharesAutoOld } = useTotalSharesOfAutoLandV1() as { data: BigNumberish, refetch: Function };
+  const { data: totalDepositAutoOld, refetch: refetchTotalDepositAutoOld } = useBalanceOfAutoLandV1() as { data: BigNumberish, refetch: Function }
   const lastRewardOld = BigInt(oldAutoBalance) * BigInt(totalDepositAutoOld) / (BigInt(totalSharesAutoOld) - BigInt(autoBalanceV1[2])) 
+
+  const updateV1Data = async () => {
+    await refetchAutoBalanceV1()
+    await refetchTotalSharesAutoOld()
+    await refetchTotalDepositAutoOld()
+  }
 
   // AutoLAND V2 info
   const { data: totalSharesAutoV2 } = useTotalSharesOfAutoLandV2() as { data: BigNumberish };
@@ -167,14 +180,7 @@ export default function VaultCard({
     lpTokenV2Contract,
     price,
   } = useGlobalContext();
-  const {
-    balanceMigration,
-    landTokenStakeCurrentDepositTotal,
-    landTokenStakeCurrentDepositTotal2,
-    AutoLandV1Contract,
-    landStakeContractV2,
-    landStakeContractV3,
-  } = useMigrationContext();
+
   const {
     contract: {
       landTokenContract,
@@ -268,22 +274,9 @@ export default function VaultCard({
     transactionResult,
   });
 
-  const { splitLP, isSuccessSplit, amountSplitedTokens, setIsSuccessSplit } =
-    useSplitLP({
-      state,
-      startTransactionRefresh,
-      endTransaction,
-      transactionResult,
-    });
+  const { splitLP, isSuccessSplit, amountSplitedTokens, setIsSuccessSplit } = useSplitLP({ address });
 
-  const { recombine, isSuccessRecombine, setIsSuccessRecombine } = useRecombine(
-    {
-      state,
-      startTransactionRefresh,
-      endTransaction,
-      transactionResult,
-    }
-  );
+  const { recombine, isSuccessRecombine, setIsSuccessRecombine } = useRecombine({ address });
 
   function isLP() {
     return vaultName == "LP Farm";
@@ -521,20 +514,20 @@ export default function VaultCard({
               />
             </div>
           </div>
-          <div>{abbreviateNumber(isLP() ? APR.toString() : getAPY()) + "%"}</div>
+          <div>{abbreviateNumber(Number(isLP() ? APR : getAPY())) + "%"}</div>
         </div>
         <div className="flex justify-between items-center w-full">
           <div>TVL</div>
           <div>
             {isLP()
-              ? "$" + abbreviateNumber(TVL?.toString().substr(0, 8))
+              ? "$" + abbreviateNumber(Number(TVL?.toString().substr(0, 8)))
               : abbreviateNumber(
-                  formatEther(
+                  Number(formatEther(
                     (isStakingAutoV2() || isStakingAutoV3()
                       ? landTokenStakeCurrentDepositTotal
                       : landTokenStakeCurrentDepositTotal2
                     ).toString()
-                  )
+                  ))
                 )}
           </div>
         </div>
@@ -664,11 +657,11 @@ export default function VaultCard({
         withdrawLP(amountLS);
       } else if (isStakingAutoV2()) {
         await withdrawStakingAutoV2(amountLS).then(() => {
-          createOldContracts();
+          updateV1Data();
         });
       } else if (isStakingAutoV3()) {
         await withdrawStakingAutoV3(amountLS).then(() => {
-          createOldContracts();
+          updateV1Data();
         });
       } else if (isStakingV2()) {
         await withdrawStakingV2(amountLS);
@@ -729,7 +722,7 @@ export default function VaultCard({
       alert("Input amount to migrate");
     } else {
       let amountLS = amount;
-      amountLS = parseEther(amountLS).toString();
+      amountLS = parseEther((amountLS).toString()).toString();
       await tokenMigrate(amountLS);
       updateUserBalance()
       getBalance();
@@ -781,7 +774,7 @@ export default function VaultCard({
     await recombine(
       ethAmount,
       amountSplitedTokens.land,
-      expectedLandV2,
+      // expectedLandV2,
       expectedEthV2
     );
   };
