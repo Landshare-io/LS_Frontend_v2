@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useAccount, useBalance } from "wagmi";
+import { bsc } from "viem/chains";
 import ReactLoading from "react-loading";
-import { parseEther, formatEther } from "ethers";
+import { parseEther, formatEther, BigNumberish } from "ethers";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 import { useLandshareV1Context } from "../../contexts/LandshareV1Context";
 import { useLandshareV2Context } from "../../contexts/LandshareV2Context";
@@ -13,77 +15,156 @@ import useMigrateApproveLandAndLpV2 from "../../hooks/contract/migrations/useMig
 import useMigrateDepositLandv2 from "../../hooks/useMigrateDepositLandv2";
 import useMigrateDepositLandAndLpV2 from "../../hooks/contract/migrations/useMigrateDepositLandAndMasterchefV2";
 import useSplitLP from "../../hooks/contract/migrations/useSplitLp";
-import useRecombine from "../../hooks/useRecombine";
+import useRecombine from "../../hooks/contract/migrations/useRecombine";
+// import useRecombine from "../../hooks/useRecombine";
+
+import useGetReservesOfLpV1 from "../../hooks/contract/LpTokenV1Contract/useGetReserves";
+
+import useUserInfoOfAutoLandV1 from "../../hooks/contract/AutoLandV1Contract/useUserInfo";
+import useTotalSharesOfAutoLandV1 from "../../hooks/contract/AutoLandV1Contract/useTotalShares";
+import useBalanceOfAutoLandV1 from "../../hooks/contract/AutoLandV1Contract/useBalanceOf";
+
+import useTotalSharesOfAutoLandV2 from "../../hooks/contract/AutoLandV2Contract/useTotalShares";
+import useBalanceOfAutoLandV2 from "../../hooks/contract/AutoLandV2Contract/useBalanceOf";
+import useUserInfoOfAutoLandV2 from "../../hooks/contract/AutoLandV2Contract/useUserInfo";
+
+import usePendingRewardOfLandTokenStakeV2 from "../../hooks/contract/LandTokenStakeV2/usePendingReward";
+import usePendingRewardOfLandTokenStakeV3 from "../../hooks/contract/LandTokenStakeV3/usePendingReward";
+import usePendingRewardOfLandLPFarm from "../../hooks/contract/LandLPFarmContract/usePendingReward";
+import usePendingLandOfMasterchef from "../../hooks/contract/MasterchefContract/usePendingLand";
+
+import useBalanceOfWBNB from "../../hooks/contract/WBNBTokenContract/useBalanceOf";
+import usePoolInfo from "../../hooks/contract/MasterchefContract/usePoolInfo";
+import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
+import useTotalSupplyOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useTotalSupply";
+import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
+
+import useTotalSupplyOfLpTokenV1 from "../../hooks/contract/LpTokenV1Contract/useTotalSupply";
+
+import useBalanceOfLandTokenV1 from "../../hooks/contract/LandTokenV1Contract/useBalanceOf";
+import useBalanceOfLpTokenV1 from "../../hooks/contract/LpTokenV1Contract/useBalanceOf";
+
+import useGetReservesLpTokenV2 from "../../hooks/contract/PancakePairContract/useGetReserves";
+
+import useTotalAllocPoint from "../../hooks/contract/MasterchefContract/useTotalAllocPoint";
+
+import useGetReservesOfBNBApePair from "../../hooks/contract/BNBApePairContract/useGetReserves";
+
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import DetailsIcon from "../../assets/img/icons/details.svg";
 import DetailsIconDark from "../../assets/img/icons/details-dark.svg";
 import CloseIcon from "../../assets/img/icons/close.svg";
 import "./VaultCard.css";
 
-const VaultCard = (props) => {
-  const { isDarkMode } = useGlobalContext();
+import { LP_TOKEN_V2_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS, LP_TOKEN_V1_CONTRACT_ADDRESS } from "../../config/constants/environments";
 
-  function useOutsideAlerter(ref) {
-    React.useEffect(() => {
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-          setDetails(0);
-        }
+function useOutsideAlerter(ref: any, setDetails: Function) {
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setDetails(0);
       }
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref]);
+}
+
+interface VaultCardProps {
+  vaultName: string;
+  initVault: Function;
+}
+
+export default function VaultCard({
+  vaultName,
+  initVault
+}: VaultCardProps) {
+  const { isDarkMode } = useGlobalContext();
+  const { address } = useAccount()
+
+  
+
+  const wrapperRef = useRef(null);
+  const [details, setDetails] = useState<number | string>(0);
+  useOutsideAlerter(wrapperRef, setDetails);
+  const [amount, setAmount] = useState<number | string>(0);
+  const [currentStep, setCurrentStep] = useState<number | string>(1);
+  const [APR, setAPR] = useState<number | BigNumberish>();
+  const [TVL, setTVL] = useState<number | BigNumberish>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [landBalance, setLandBalance] = useState<any>({ v1: 0, v2: 0, lp: 0, lp2: 0, bnb: 0 });
+  const [balance, setBalance] = useState("Loading...");
+  const [totalLandPerYear, setTotalLandPerYear] = useState<number | BigNumberish>(0);
+
+  const { data: balanceOfLandV1, refetch: refetchBalanceOfLandV1 } = useBalanceOfLandTokenV1({ address }) as { data: BigNumberish, refetch: Function }
+  const { data: balanceOfLandV2, refetch: refetchBalanceOfLandV2 } = useBalanceOfLandToken({ chainId: bsc.id, address }) as { data: BigNumberish, refetch: Function }
+  const { data: balanceOfLpToken, refetch: refetchBalanceOfLpToken } = useBalanceOfLpTokenV1({ address }) as { data: BigNumberish, refetch: Function }
+  const { data: balanceOfLpTokenV2, refetch: refetchBalanceOfLpTokenV2 } = useBalanceOfLpTokenV2({ chainId: bsc.id, address }) as { data: BigNumberish, refetch: Function }
+  const { data: bnbBalance, refetch: refetchBnbBalance } = useBalance({
+    chainId: bsc.id,
+    address
+  }) as { data: BigNumberish, refetch: Function }
+
+  const { data: landInLP } = useBalanceOfLandToken({ chainId: bsc.id, address: LP_TOKEN_V1_CONTRACT_ADDRESS }) as { data: BigNumberish, refetch: Function }
+
+  const updateUserBalance = async () => {
+    await refetchBalanceOfLandV1()
+    await refetchBalanceOfLandV2()
+    await refetchBalanceOfLpToken()
+    await refetchBalanceOfLpTokenV2()
+    await refetchBnbBalance()
   }
 
-  const wrapperRef = React.useRef(null);
-  useOutsideAlerter(wrapperRef);
+  const { data: totalBNBinLPContract } = useBalanceOfWBNB({ chainId: bsc.id, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
+  const { data: totalLANDinLPContract } = useBalanceOfLandToken({ chainId: bsc.id, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
+  const { data: totalLPInVault } = useBalanceOfLpTokenV2({ chainId: bsc.id, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
+  const { data: totalLPV2Supply } = useTotalSupplyOfLpTokenV2(bsc.id) as { data: BigNumberish }
+  const { data: allocPoints } = usePoolInfo(bsc.id, 1) as { data: any[] };
+  const { data: totalAllocPoint } = useTotalAllocPoint() as { data: BigNumberish }
 
-  const [details, setDetails] = React.useState(0);
-  const [amount, setAmount] = React.useState(0);
-  const [currentStep, setCurrentStep] = React.useState(1);
-  const [APR, setAPR] = React.useState();
-  const [TVL, setTVL] = React.useState();
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [landBalance, setLandBalance] = React.useState({ v1: 0, v2: 0, lp: 0 });
-  const [balance, setBalance] = React.useState("Loading...");
-  const [totalLandPerYear, setTotalLandPerYear] = React.useState("");
+  const { data: totalLPV1Supply } = useTotalSupplyOfLpTokenV1() as { data: BigNumberish }
+
+  const { data: lpTokenV1Reserves } = useGetReservesOfLpV1() as { data: [BigNumberish, BigNumberish, BigNumberish] }
+  const { data: lpTokenV2Reserves } = useGetReservesLpTokenV2(bsc.id) as { data: [BigNumberish, BigNumberish, BigNumberish] }
 
   // AutoLAND v1 info
-  const [oldAutoBalance, setOldAutoBalance] = React.useState(0);
-  const [totalSharesAutoOld, setTotalSharesAutoOld] = React.useState(0);
-  const [totalDepositAutoOld, setTotalDepositAutoOld] = React.useState(0);
-  const [lastRewardOld, setLastRewardOld] = React.useState(0);
+  const { data: autoBalanceV1 } = useUserInfoOfAutoLandV1({ address }) as { data: [BigNumberish, BigNumberish, BigNumberish, BigNumberish] };
+  const oldAutoBalance = autoBalanceV1[0]
+  const { data: totalSharesAutoOld } = useTotalSharesOfAutoLandV1() as { data: BigNumberish };
+  const { data: totalDepositAutoOld } = useBalanceOfAutoLandV1() as { data: BigNumberish }
+  const lastRewardOld = BigInt(oldAutoBalance) * BigInt(totalDepositAutoOld) / (BigInt(totalSharesAutoOld) - BigInt(autoBalanceV1[2])) 
 
   // AutoLAND V2 info
-  const [totalSharesAutoV2, setTotalSharesAutoV2] = React.useState(0);
-  const [totalDepositAutoV2, setTotalDepositAutoV2] = React.useState(0);
-  const [lastRewardV2, setLastRewardV2] = React.useState(0);
+  const { data: totalSharesAutoV2 } = useTotalSharesOfAutoLandV2() as { data: BigNumberish };
+  const { data: totalDepositAutoV2 } = useBalanceOfAutoLandV2() as { data: BigNumberish }
+  const { data: useInfoAutoV2 } = useUserInfoOfAutoLandV2({ address }) as { data: [BigNumberish, BigNumberish, BigNumberish, BigNumberish] };
+  const lastRewardV2 = BigInt(useInfoAutoV2[0]) * BigInt(totalDepositAutoV2) / (BigInt(totalSharesAutoV2) - BigInt(useInfoAutoV2[2]))
 
   // LAND Staking V2 info
-  const [rewardLandV2, setRewardLandV2] = React.useState(0);
+  const { data: rewardLandV2 } = usePendingRewardOfLandTokenStakeV2({ address }) as { data: BigNumberish };
 
   // LAND Staking V3 info
-  const [rewardLandV3, setRewardLandV3] = React.useState(0);
+  const { data: rewardLandV3 } = usePendingRewardOfLandTokenStakeV3({ address }) as { data: BigNumberish };
 
   // LP Farm
-  const [lpFarmReward, setLPFarmReward] = React.useState(0);
-  const [lpFarmReward2, setLPFarmReward2] = React.useState(0);
-  const [expectedLand, setExpectedLand] = React.useState(0);
-  const [expectedEth, setExpectedEth] = React.useState(0);
+  const { data: lpFarmReward } = usePendingRewardOfLandLPFarm({ address }) as { data: BigNumberish };
+  const { data: lpFarmReward2 } = usePendingLandOfMasterchef({ chainId: bsc.id, pendingLandId: 1, address }) as { data: BigNumberish };
 
-  const [expectedLandV2, setExpectedLandV2] = React.useState(0);
-  const [expectedEthV2, setExpectedEthV2] = React.useState(0);
-  const [ethAmount, setEthAmount] = React.useState(0);
+  const [expectedLand, setExpectedLand] = useState<number | BigNumberish>(0);
+  const [expectedEth, setExpectedEth] = useState<number | BigNumberish>(0);
+
+  const [expectedLandV2, setExpectedLandV2] = useState<number | BigNumberish>(0);
+  const [expectedEthV2, setExpectedEthV2] = useState<number | BigNumberish>(0);
+  const [ethAmount, setEthAmount] = useState<number | BigNumberish>(0);
+
+  const reservesBNB = useGetReservesOfBNBApePair(bsc.id) as [BigNumberish, BigNumberish]
+  const bnbPrice = Number(BigInt(reservesBNB[1]) / BigInt(reservesBNB[0]))
 
   const {
-    account,
-    provider,
-    bnbPrice,
     landTokenV2Contract,
     lpTokenV2Contract,
-    WBNBContract,
     price,
   } = useGlobalContext();
   const {
@@ -118,7 +199,6 @@ const VaultCard = (props) => {
 
   useEffect(() => {
     updateLPFarm();
-    createOldContracts();
     landPerYear();
   }, []);
 
@@ -132,14 +212,14 @@ const VaultCard = (props) => {
     setDetails(0);
     setAmount(0);
     setCurrentStep(1);
-    setAPR(null);
-    setTVL(null);
+    setAPR(0);
+    setTVL(0);
     setIsLoading(true);
     updateLPFarm();
-    createOldContracts();
-  }, [props.vaultName]);
+  }, [vaultName]);
 
   useEffect(() => {
+    updateUserBalance();
     getBalance();
     getRewards();
     if (currentStep === 2) {
@@ -157,9 +237,9 @@ const VaultCard = (props) => {
     setIsSuccessWithdraw,
   } = useMigrateWithDrawLandv1({
     oldAutoBalance,
-    address: account
+    address
   });
-  const { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate } = useTokenMigrate({ address: account });
+  const { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate } = useTokenMigrate({ address });
   const {
     checkAllowance,
     approveLandv2Auto,
@@ -206,101 +286,29 @@ const VaultCard = (props) => {
   );
 
   function isLP() {
-    return props.vaultName == "LP Farm";
+    return vaultName == "LP Farm";
   }
 
   function isStakingAutoV2() {
-    return props.vaultName == "V2 Auto Staking Vault";
+    return vaultName == "V2 Auto Staking Vault";
   }
 
   function isStakingAutoV3() {
-    return props.vaultName == "V3 Auto Staking Vault";
+    return vaultName == "V3 Auto Staking Vault";
   }
 
   function isStakingV2() {
-    return props.vaultName == "V2 Staking Vault";
+    return vaultName == "V2 Staking Vault";
   }
 
   function isStakingV3() {
-    return props.vaultName == "V3 Staking Vault";
+    return vaultName == "V3 Staking Vault";
   }
 
-  async function createOldContracts() {
-    //AUTO V1
-
-    try {
-      const oldAutoBal = await AutoLandV1Contract.userInfo(account).then(
-        (data: any[]) => {
-          return data[0];
-        }
-      );
-      const totalSharesAuto = await AutoLandV1Contract.totalShares();
-      const totalDepositAuto = await AutoLandV1Contract.balanceOf();
-      const lastReward = await AutoLandV1Contract.userInfo(account).then(
-        (data: any[]) => {
-          return data[2];
-        }
-      );
-
-      const reward =
-        parseInt(totalDepositAuto) == 0
-          ? 0
-          : Number(BigInt(oldAutoBal) * (BigInt(totalDepositAuto)) / (BigInt(totalSharesAuto)) - (BigInt(lastReward)))
-
-      setOldAutoBalance(oldAutoBal);
-      setTotalSharesAutoOld(totalSharesAuto);
-      setTotalDepositAutoOld(totalDepositAuto);
-      setLastRewardOld(reward);
-    } catch (e) {
-      console.log(e);
-    }
-
-    //Auto LAND V2
-
-    const totalSharesAutoV2 = await landStakeAutoContract.totalShares();
-    const totalDepositAutoV2 = await landStakeAutoContract.balanceOf();
-    const lastRewardV2 = await landStakeAutoContract
-      .userInfo(account)
-      .then((data: any[]) => {
-        return data[2];
-      });
-
-    let rewardV2 = 0;
-    if (
-      balanceMigration.depositAuto &&
-      totalDepositAutoV2 &&
-      totalSharesAutoV2 &&
-      lastRewardV2
-    ) {
-      rewardV2 = Number(BigInt(balanceMigration.depositAuto) * (BigInt(totalDepositAutoV2)) / (BigInt(totalSharesAutoV2)) - (BigInt(lastRewardV2)));
-    }
-
-    setTotalSharesAutoV2(totalSharesAutoV2);
-    setTotalDepositAutoV2(totalDepositAutoV2);
-    setLastRewardV2(rewardV2);
-
-    const stakeRewardV2 = await landStakeContractV2.pendingReward(account);
-    const stakeRewardV3 = await landStakeContractV3.pendingReward(account);
-
-    setRewardLandV2(stakeRewardV2);
-    setRewardLandV3(stakeRewardV3);
-
-    const lpReward = await landStakeContractLP.pendingReward(account);
-    const lpReward2 = await masterchefContract.pendingLand(1, account);
-
-    setLPFarmReward(lpReward);
-    setLPFarmReward2(lpReward2);
-  }
-
-  async function setMinValues(amount) {
-    const lpTokenV1Reserves = await lpTokenContract.getReserves();
-    const coinPriceBNB = lpTokenV1Reserves[1] / lpTokenV1Reserves[0];
-    const totalLP = await lpTokenContract.totalSupply();
-    const landInLP = await landTokenContract.balanceOf(
-      process.env.REACT_APP_LP_TOKEN
-    );
-    amount = BigInt(parseEther(amount));
-    const percentage = BigInt(amount.mul(BigInt((1e18).toString()))) / (BigInt(totalLP));
+  async function setMinValues(amount: BigNumberish | string | number) {
+    const coinPriceBNB = BigInt(lpTokenV1Reserves[1]) / BigInt(lpTokenV1Reserves[0]);
+    amount = BigInt(parseEther(amount.toString()));
+    const percentage = BigInt(amount * (BigInt((1e18).toString()))) / (BigInt(totalLPV1Supply));
     console.log(percentage.toString());
     const minLand = BigInt(landInLP) * (percentage) / (BigInt((1e18).toString())) * (BigInt(99)) / (BigInt(100));
     console.log(minLand.toString());
@@ -311,16 +319,16 @@ const VaultCard = (props) => {
     setExpectedEth(minEth);
   }
 
-  async function setMinValuesV2(amount) {
-    const reservesToken = await lpTokenV2Contract.getReserves();
-    const coinPriceBNB = reservesToken[1] / reservesToken[0];
+
+  async function setMinValuesV2(amount: number) {
+    const coinPriceBNB = BigInt(lpTokenV2Reserves[1]) / BigInt(lpTokenV2Reserves[0]);
     const minLand = BigInt(Math.trunc(amount * 0.95).toString());
     console.log(minLand.toString());
     const ethAmount = BigInt(
-      Math.trunc(amount * coinPriceBNB).toString()
+      Math.trunc(Number(BigInt(amount) * coinPriceBNB)).toString()
     );
     const minEth = BigInt(
-      Math.trunc(ethAmount * 0.95).toString()
+      Math.trunc(Number(ethAmount * BigInt(0.95))).toString()
     );
     console.log(minEth.toString());
     console.log(minLand + " " + minEth);
@@ -331,41 +339,39 @@ const VaultCard = (props) => {
 
   function getDepositBalance() {
     if (isStakingV2()) {
-      if (currentStep < 3 && balanceMigration.depositV2) {
+      if (Number(currentStep) < 3 && balanceMigration.depositV2) {
         return balanceMigration.depositV2;
-      } else if (currentStep > 3 && masterChefDepositBalance) {
+      } else if (Number(currentStep) > 3 && masterChefDepositBalance) {
         return masterChefDepositBalance;
       } else {
         return 0;
       }
     } else if (isStakingV3()) {
-      if (currentStep < 3 && balanceMigration.depositV3) {
+      if (Number(currentStep) < 3 && balanceMigration.depositV3) {
         return balanceMigration.depositV3;
-      } else if (currentStep > 3 && masterChefDepositBalance) {
+      } else if (Number(currentStep) > 3 && masterChefDepositBalance) {
         return masterChefDepositBalance;
       } else {
         return 0;
       }
     } else if (isStakingAutoV2()) {
       console.log("Auto V2");
-      if (currentStep > 2 && balanceMigration.depositAutoV3) {
+      if (Number(currentStep) > 2 && balanceMigration.depositAutoV3) {
         return balanceMigration.depositAutoV3;
       } else if (
-        currentStep < 2 &&
+        Number(currentStep) < 2 &&
         oldAutoBalance &&
         totalDepositAutoOld &&
         totalSharesAutoOld
       ) {
         if (
-          parseInt(totalDepositAutoOld) == 0 ||
-          parseInt(oldAutoBalance) == 0 ||
-          parseInt(totalSharesAutoOld) == 0
+          parseInt(totalDepositAutoOld.toString()) == 0 ||
+          parseInt(oldAutoBalance.toString()) == 0 ||
+          parseInt(totalSharesAutoOld.toString()) == 0
         ) {
           return 0;
         } else {
-          return BigInt(oldAutoBalance)
-            .mul(BigInt(totalDepositAutoOld))
-            .div(BigInt(totalSharesAutoOld));
+          return BigInt(oldAutoBalance) * (BigInt(totalDepositAutoOld)) / (BigInt(totalSharesAutoOld));
         }
       } else {
         console.log("none found");
@@ -373,25 +379,23 @@ const VaultCard = (props) => {
       }
     } else if (isStakingAutoV3()) {
       console.log("Auto V3");
-      if (currentStep > 2 && balanceMigration.depositAutoV3) {
+      if (Number(currentStep) > 2 && balanceMigration.depositAutoV3) {
         return balanceMigration.depositAutoV3;
       } else if (
-        currentStep < 2 &&
+        Number(currentStep) < 2 &&
         balanceMigration.depositAuto &&
         totalDepositAutoV2 &&
         totalSharesAutoV2
       ) {
         if (
-          parseInt(totalDepositAutoV2) == 0 ||
+          parseInt(totalDepositAutoV2.toString()) == 0 ||
           parseInt(balanceMigration.depositAuto) == 0 ||
-          parseInt(totalSharesAutoV2) == 0
+          parseInt(totalSharesAutoV2.toString()) == 0
         ) {
           return 0;
         } else {
           console.log("auto v2");
-          return BigInt(balanceMigration.depositAuto)
-            .mul(BigInt(totalDepositAutoV2))
-            .div(BigInt(totalSharesAutoV2));
+          return BigInt(balanceMigration.depositAuto) * (BigInt(totalDepositAutoV2)) / (BigInt(totalSharesAutoV2));
         }
       } else {
         console.log("none found");
@@ -407,9 +411,9 @@ const VaultCard = (props) => {
 
   function getRewards() {
     if (isStakingV2()) {
-      return currentStep < 3 ? rewardLandV2 : rewardPool2;
+      return Number(currentStep) < 3 ? rewardLandV2 : rewardPool2;
     } else if (isStakingV3()) {
-      return currentStep < 3 ? rewardLandV3 : rewardPool2;
+      return Number(currentStep) < 3 ? rewardLandV3 : rewardPool2;
     } else if (isStakingAutoV2()) {
       return lastRewardOld;
     } else if (isStakingAutoV3()) {
@@ -418,7 +422,7 @@ const VaultCard = (props) => {
       return currentStep == 1 ||
         currentStep == 2 ||
         currentStep !== "lp-2" ||
-        currentStep == 3
+        Number(currentStep) == 3
         ? lpFarmReward
         : lpFarmReward2;
     } else {
@@ -429,39 +433,23 @@ const VaultCard = (props) => {
   async function updateLPFarm() {
     try {
       setIsLoading(true);
+      updateUserBalance();
       getBalance();
-      const totalLPSupply = await lpTokenV2Contract.totalSupply();
 
-      const totalBNBinLPContract = await WBNBContract.balanceOf(
-        process.env.REACT_APP_LP2_TOKEN
-      );
-      const totalBNBValueinLPContract =
-        Number(formatEther(totalBNBinLPContract)) *
-        Number(bnbPrice);
-      const totalLANDinLPContract = await landTokenV2Contract.balanceOf(
-        process.env.REACT_APP_LP2_TOKEN
-      );
-      const totalLANDValueinLPContract =
-        Number(formatEther(totalLANDinLPContract)) * Number(price);
-      const totalUSDValue =
-        Number(totalLANDValueinLPContract) + Number(totalBNBValueinLPContract);
+      const totalBNBValueinLPContract = Number(formatEther(totalBNBinLPContract)) * Number(bnbPrice);
+      let totalLANDValueinLPContract = 0;
+      try {
+        totalLANDValueinLPContract = Number(formatEther(totalLANDinLPContract?.toString() || '0')) * Number(price);
+      } catch (error: any) {
+        console.warn('Error calculating LAND value, defaulting to 0:', error.message);
+        totalLANDValueinLPContract = 0;
+      }
+      const totalUSDValue = Number(totalLANDValueinLPContract) + Number(totalBNBValueinLPContract);
 
-      const allocPoints = await masterchefContract.poolInfo(1).then((data) => {
-        return data[1];
-      });
-
-      const totalLPInVault = await lpTokenV2Contract.balanceOf(
-        process.env.REACT_APP_MASTERCHEF
-      );
-
-      const percentageOfLPInVault = totalLPInVault / totalLPSupply;
-
-      const USDValueinVault = percentageOfLPInVault * totalUSDValue;
-
+      const percentageOfLPInVault = Number(totalLPInVault) / Number(totalLPV2Supply == 0 ? 1 : totalLPV2Supply);
+      const USDValueinVault = Number(percentageOfLPInVault) * totalUSDValue;
       setTVL(USDValueinVault);
-
-      const totalMoneyAnnual = 365 * allocPoints * Number(price);
-
+      const totalMoneyAnnual = 365 * Number(allocPoints[1]) * Number(price);
       const farmAPR = (totalMoneyAnnual / USDValueinVault) * 100;
 
       setAPR(farmAPR);
@@ -474,20 +462,9 @@ const VaultCard = (props) => {
   async function landPerYear() {
     const landPerBlock = await masterchefContract.landPerBlock();
 
-    const annualLand = BigInt(landPerBlock)
-      .mul(BigInt("10512000"))
-      .toString();
+    const annualLand = BigInt(landPerBlock) * (BigInt("10512000"))
 
-    const allocPoints = await masterchefContract.poolInfo(0).then((data) => {
-      return data[1];
-    });
-
-    const totalAllocPoints = await masterchefContract.totalAllocPoint();
-
-    const totalLandPerYear = BigInt(annualLand)
-      .mul(BigInt(allocPoints))
-      .div(BigInt(totalAllocPoints))
-      .toString();
+    const totalLandPerYear = BigInt(annualLand) * (BigInt(allocPoints[1])) / (BigInt(totalAllocPoint));
 
     setTotalLandPerYear(totalLandPerYear);
   }
@@ -501,7 +478,7 @@ const VaultCard = (props) => {
     return isStakingAutoV3() || isStakingAutoV2() ? autoAPR : apr;
   }
 
-  const handleChangeAmount = (e) => {
+  const handleChangeAmount = (e: any) => {
     setAmount(e.target.value);
   };
 
@@ -623,15 +600,15 @@ const VaultCard = (props) => {
     if (currentStep == 1) {
       setAmount(getDepositBalance());
     } else if (currentStep == 2) {
-      let value = await landTokenContract.balanceOf(account);
+      let value = await landTokenContract.balanceOf(address);
       value = formatEther(value.toString());
       setAmount(value);
     } else if (currentStep == 4) {
       let balance;
       if (isLP()) {
-        balance = await lpTokenV2Contract.balanceOf(account);
+        balance = balanceOfLpTokenV2;
       } else {
-        balance = await landTokenV2Contract.balanceOf(account);
+        balance = balanceOfLandV2
       }
       balance = formatEther(balance.toString());
       setAmount(balance);
@@ -642,23 +619,19 @@ const VaultCard = (props) => {
   };
 
   const getBalance = async () => {
-    const balance1 = await landTokenContract.balanceOf(account);
-    const balance2 = await landTokenV2Contract.balanceOf(account);
-    const lpBalance = await lpTokenContract.balanceOf(account);
-    const lp2Balance = await lpTokenV2Contract.balanceOf(account);
-    const bnbBalance = await provider.getBalance(account);
     setLandBalance({
-      v1: balance1,
-      v2: balance2,
-      lp: lpBalance,
-      lp2: lp2Balance,
+      v1: balanceOfLandV1,
+      v2: balanceOfLandV2,
+      lp: balanceOfLpToken,
+      lp2: balanceOfLpTokenV2,
+      bnb: bnbBalance
     });
 
-    let balance1ETH = formatEther(balance1.toString());
-    let balance2ETH = formatEther(balance2.toString());
-    let balancelp1ETH = formatEther(lpBalance.toString());
-    let balancelp2ETH = formatEther(lp2Balance.toString());
-    let bnbBalanceETH = formatEther(bnbBalance.toString());
+    let balance1ETH = formatEther(balanceOfLandV1);
+    let balance2ETH = formatEther(balanceOfLandV2);
+    let balancelp1ETH = formatEther(balanceOfLpToken);
+    let balancelp2ETH = formatEther(balanceOfLpTokenV2);
+    let bnbBalanceETH = formatEther(bnbBalance);
     balance1ETH = balance1ETH;
     balance2ETH = balance2ETH;
     balancelp1ETH = balancelp1ETH;
@@ -702,6 +675,7 @@ const VaultCard = (props) => {
       } else if (isStakingV3()) {
         await withdrawStakingV3(amountLS);
       }
+      updateUserBalance();
       getBalance();
     }
   };
@@ -757,6 +731,7 @@ const VaultCard = (props) => {
       let amountLS = amount;
       amountLS = parseEther(amountLS).toString();
       await tokenMigrate(amountLS);
+      updateUserBalance()
       getBalance();
     }
   };
@@ -771,6 +746,7 @@ const VaultCard = (props) => {
           amountSplitedTokens.bnb.toString()
         );
         setAmount(`${bnbToRecombine} BNB, ${landToRecombine} LAND`);
+        updateUserBalance()
         getBalance();
         setCurrentStep("lp-4");
       } else {
@@ -818,6 +794,7 @@ const VaultCard = (props) => {
 
   useEffect(async () => {
     if (isSuccessRecombine) {
+      updateUserBalance()
       getBalance();
       setAmount(0);
 
@@ -871,14 +848,17 @@ const VaultCard = (props) => {
       amountLS = parseEther(`${amountLS}`).toString();
       if (isStakingAutoV2() || isStakingAutoV3()) {
         await depositAutoLandv2(amountLS).then(async () => {
+          updateUserBalance()
           await getBalance();
         });
       } else if (isStakingV2() || isStakingV3()) {
         await depositLandv2(amountLS).then(async () => {
+          updateUserBalance()
           await getBalance();
         });
       } else if (isLP()) {
         await depositLP(amountLS).then(async () => {
+          updateUserBalance()
           await getBalance();
         });
       }
@@ -894,7 +874,7 @@ const VaultCard = (props) => {
       setIsSuccessMigrate(false);
       setIsSuccessSplit(false);
       setIsSuccessDeposit(false);
-      props.initVault();
+      initVault();
     }
   }, [isSuccessDeposit]);
 
@@ -1190,7 +1170,7 @@ const VaultCard = (props) => {
         </div>
         <div className="flex flex-col w-full gap-5 p-5">
           <div className="font-bold text-2xl lg:text-3xl text-center capitalize">
-            {props.vaultName === "LP Farm" ? "LAND-BNB LP" : props.vaultName}
+            {vaultName === "LP Farm" ? "LAND-BNB LP" : vaultName}
           </div>
           <div className="flex flex-col w-full gap-5">
             <div className="flex flex-col w-full gap-5">
@@ -1215,7 +1195,7 @@ const VaultCard = (props) => {
                 Balance: <b>{balance}</b>
               </div>
             </div>
-            {currentStep >= 3 && (
+            {Number(currentStep) >= 3 && (
               <div className="flex justify-between items-center">{depositInfo()}</div>
             )}
             <div className="flex justify-between items-center">{withdrawInfo()}</div>
@@ -1233,5 +1213,3 @@ const VaultCard = (props) => {
     </>
   );
 };
-
-export default VaultCard;
