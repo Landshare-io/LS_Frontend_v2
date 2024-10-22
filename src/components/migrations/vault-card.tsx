@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useAccount, useBalance } from "wagmi";
 import { bsc } from "viem/chains";
+import Image from "next/image";
 import ReactLoading from "react-loading";
 import { parseEther, formatEther, BigNumberish } from "ethers";
 import { useGlobalContext } from "../../context/GlobalContext";
@@ -44,7 +45,8 @@ import {
   LP_TOKEN_V2_CONTRACT_ADDRESS, 
   MASTERCHEF_CONTRACT_ADDRESS, 
   LP_TOKEN_V1_CONTRACT_ADDRESS,
-  AUTO_LAND_V3_CONTRACT_ADDRESS
+  AUTO_LAND_V3_CONTRACT_ADDRESS,
+  BOLD_INTER_TIGHT
 } from "../../config/constants/environments";
 import DetailsIcon from "../../../public/icons/details.svg";
 import DetailsIconDark from "../../../public/icons/details-dark.svg";
@@ -94,7 +96,7 @@ export default function VaultCard({
   const { data: bnbBalance, refetch: refetchBnbBalance } = useBalance({
     chainId: bsc.id,
     address
-  }) as { data: BigNumberish, refetch: Function }
+  })
   const { data: landInLP } = useBalanceOfLandToken({ chainId: bsc.id, address: LP_TOKEN_V1_CONTRACT_ADDRESS }) as { data: BigNumberish, refetch: Function }
   const balanceMigration = useMigrationBalance({ address }) as any
   const { data: landTokenStakeCurrentDepositTotal } = useBalanceOfAutoVaultV3() as { data: BigNumberish }
@@ -123,7 +125,7 @@ export default function VaultCard({
   const oldAutoBalance = autoBalanceV1[0]
   const { data: totalSharesAutoOld, refetch: refetchTotalSharesAutoOld } = useTotalSharesOfAutoLandV1() as { data: BigNumberish, refetch: Function };
   const { data: totalDepositAutoOld, refetch: refetchTotalDepositAutoOld } = useBalanceOfAutoLandV1() as { data: BigNumberish, refetch: Function }
-  const lastRewardOld = BigInt(oldAutoBalance) * BigInt(totalDepositAutoOld) / (BigInt(totalSharesAutoOld) - BigInt(autoBalanceV1[2])) 
+  const lastRewardOld = BigInt(oldAutoBalance) * BigInt(totalDepositAutoOld) / (Number(BigInt(totalSharesAutoOld) - BigInt(autoBalanceV1[2])) == 0 ? BigInt(1) : (BigInt(totalSharesAutoOld) - BigInt(autoBalanceV1[2])))
 
   const updateV1Data = async () => {
     await refetchAutoBalanceV1()
@@ -135,7 +137,7 @@ export default function VaultCard({
   const { data: totalSharesAutoV2 } = useTotalSharesOfAutoLandV2() as { data: BigNumberish };
   const { data: totalDepositAutoV2 } = useBalanceOfAutoLandV2() as { data: BigNumberish }
   const { data: useInfoAutoV2 } = useUserInfoOfAutoLandV2({ address }) as { data: [BigNumberish, BigNumberish, BigNumberish, BigNumberish] };
-  const lastRewardV2 = BigInt(useInfoAutoV2[0]) * BigInt(totalDepositAutoV2) / (BigInt(totalSharesAutoV2) - BigInt(useInfoAutoV2[2]))
+  const lastRewardV2 = BigInt(useInfoAutoV2[0]) * BigInt(totalDepositAutoV2) / (Number(BigInt(totalSharesAutoV2) - BigInt(useInfoAutoV2[2])) == 0 ? BigInt(1) : (BigInt(totalSharesAutoV2) - BigInt(useInfoAutoV2[2])))
   // LAND Staking V2 info
   const { data: rewardLandV2 } = usePendingRewardOfLandTokenStakeV2({ address }) as { data: BigNumberish };
   // LAND Staking V3 info
@@ -390,9 +392,9 @@ export default function VaultCard({
   }
 
   async function landPerYear() {
-    const annualLand = BigInt(landPerBlock) * (BigInt("10512000"))
+    const annualLand = BigInt(landPerBlock ?? 0) * (BigInt("10512000"))
 
-    const totalLandPerYear = BigInt(annualLand) * (BigInt(allocPoints[1])) / (BigInt(totalAllocPoint));
+    const totalLandPerYear = BigInt(annualLand) * (BigInt(allocPoints[1])) / (Number(BigInt(totalAllocPoint)) == 0 ? BigInt(1) : (BigInt(totalAllocPoint)));
 
     setTotalLandPerYear(totalLandPerYear);
   }
@@ -413,14 +415,14 @@ export default function VaultCard({
   function depositInfo() {
     return (
       <>
-        <div className="flex justify-center w-full font-bold text-gray-800">
+        <div className="flex flex-1">
           Deposit
         </div>
-        <div className="flex justify-between items-center w-full">
-          <div className="flex items-center gap-1">
+        <div className="flex flex-1">
+          <div className="text-[12px] leading-[18px] relative font-normal">
             {isStakingAutoV2() || isStakingAutoV3() ? "APY" : "APR"}
-            <img
-              className="cursor-pointer"
+            <Image
+              className="pl-[5px] cursor-pointer"
               onClick={() => {
                 setDetails("APY");
               }}
@@ -429,18 +431,18 @@ export default function VaultCard({
             />
             <div
               ref={wrapperRef}
-              className={`absolute z-10 bg-white p-4 rounded-lg shadow-lg ${
+              className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
                 details === "APY" ? "block" : "hidden"
               }`}
             >
-              <div className="relative text-gray-800 text-sm">
+              <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
                 The Auto LAND Vault automatically redeposits accrued LAND
                 rewards. APY is estimated based on daily compounding with a 2%
                 performance fee. All figures are estimated and by no means
                 represent guaranteed returns.
               </div>
-              <img
-                className="absolute top-2 right-2 cursor-pointer"
+              <Image
+                className="absolute top-[5px] right-[5px] cursor-pointer"
                 onClick={() => {
                   setDetails(0);
                 }}
@@ -449,11 +451,13 @@ export default function VaultCard({
               />
             </div>
           </div>
-          <div>{abbreviateNumber(Number(isLP() ? APR : getAPY())) + "%"}</div>
+          <div className="text-[18px] leading-[27px] relative font-semibold">
+            {abbreviateNumber(Number(isLP() ? APR : getAPY())) + "%"}
+          </div>
         </div>
-        <div className="flex justify-between items-center w-full">
-          <div>TVL</div>
-          <div>
+        <div className="flex flex-1">
+          <div className="text-[12px] leading-[18px] relative font-normal">TVL</div>
+          <div className="text-[18px] leading-[27px] relative font-semibold">
             {isLP()
               ? "$" + abbreviateNumber(Number(TVL?.toString().substr(0, 8)))
               : abbreviateNumber(
@@ -473,19 +477,19 @@ export default function VaultCard({
   function withdrawInfo() {
     return (
       <>
-        <div className="flex justify-center w-full font-bold text-gray-800"></div>
-        <div className="flex justify-between items-center w-full">
-          <div>Deposit</div>
-          <div>
+        <div className="flex flex-1"></div>
+        <div className="flex flex-1">
+          <div className="text-[12px] leading-[18px] relative font-normal">Deposit</div>
+          <div className="text-[18px] leading-[27px] relative font-semibold">
             {formatEther(getDepositBalance().toString())
               .substr(0, 8)}
           </div>
         </div>
-        <div className="flex justify-between items-center w-full">
-          <div className="flex items-center gap-1">
+        <div className="flex flex-1">
+          <div className="text-[12px] leading-[18px] relative font-normal">
             Reward
-            <img
-              className="cursor-pointer"
+            <Image
+              className="pl-[5px] cursor-pointer"
               onClick={() => {
                 setDetails("Reward");
               }}
@@ -494,17 +498,17 @@ export default function VaultCard({
             />
             <div
               ref={wrapperRef}
-              className={`absolute z-10 bg-white p-4 rounded-lg shadow-lg ${
+              className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
                 details === "Reward" ? "block" : "hidden"
               }`}
             >
-              <div className="relative text-gray-800 text-sm">
+              <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
                 The Auto LAND Vault automatically redeposits accrued LAND
                 rewards. APY is estimated based on daily compounding with a 2%
                 performance fee. All figures are estimated and by no means
                 represent guaranteed returns.
               </div>
-              <img
+              <Image
                 className="absolute top-2 right-2 cursor-pointer"
                 onClick={() => {
                   setDetails(0);
@@ -514,7 +518,7 @@ export default function VaultCard({
               />
             </div>
           </div>
-          <div>
+          <div className="text-[18px] leading-[27px] relative font-semibold">
             {formatEther(getRewards().toString())
               .toString()
               .substr(0, 6)}
@@ -552,14 +556,14 @@ export default function VaultCard({
       v2: balanceOfLandV2,
       lp: balanceOfLpToken,
       lp2: balanceOfLpTokenV2,
-      bnb: bnbBalance
+      bnb: bnbBalance?.value ?? 0
     });
 
     let balance1ETH = formatEther(balanceOfLandV1);
     let balance2ETH = formatEther(balanceOfLandV2);
     let balancelp1ETH = formatEther(balanceOfLpToken);
     let balancelp2ETH = formatEther(balanceOfLpTokenV2);
-    let bnbBalanceETH = formatEther(bnbBalance);
+    let bnbBalanceETH = formatEther(bnbBalance?.value ?? 0);
     balance1ETH = balance1ETH;
     balance2ETH = balance2ETH;
     balancelp1ETH = balancelp1ETH;
@@ -782,13 +786,13 @@ export default function VaultCard({
 
   function step_1() {
     return (
-      <div className={`flex justify-between p-2 px-4 rounded-md ${
-        currentStep == 1 ? "bg-white/30" : ""
+      <div className={`flex justify-between p-[5px] pl-[10px] relative rounded-[12px] ${
+        currentStep == 1 ? "bg-[#ffffff4d]" : ""
       }`}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center font-normal text-[16px] leading-[24px]">
           Step-1
-          <img
-            className="cursor-pointer"
+          <Image
+            className="pl-[5px] cursor-pointer"
             onClick={() => {
               setDetails(1);
             }}
@@ -798,22 +802,24 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep1}
-          className="bg-[#61cd81] hover:bg-[#1ee155] active:bg-[#06b844] text-white font-semibold text-sm py-2 px-4 rounded-md transition-colors"
+          className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 1 || (getDepositBalance() == 0 && !isSkippable())}
         >
           {isSkippable() ? "Skip" : "Withdraw"}
         </button>
         <div
           ref={wrapperRef}
-          className={`absolute z-10 bg-white p-4 rounded-lg shadow-lg ${
+          className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-80px] left-[-10px] xl:top-0 xl:left-[100px] ${
             details === 1 ? "block" : "hidden"
           }`}
         >
-          <div className="relative text-gray-800 text-sm">
+          <div className="relative text-[#000] font-normal text-[14px] leading-[21px] w-[300px] text-left min-h-[40px]">
+            <div className="absolute z-[3] left-auto right-[-30px] border-r-0 border-l-[10px] border-l-[#ffffffe6] xl:border-l-[#ffffffb3] xl:border-l-[10px] xl:top-0 xl:left-[-30px] xl:w-0 xl:h-0" />
+            <div className="block xl:hidden absolute z-[3] bottom-[-30px] left-[53px] w-0 h-0 border-t-[10px] border-t-[#ffffffb3]" />
             {isLP() ? "Withdraw LP Tokens" : "Withdraw old token from old vault."}
           </div>
-          <img
-            className="absolute top-2 right-2 cursor-pointer"
+          <Image
+            className="absolute top-[5px] right-[5px] cursor-pointer"
             onClick={() => {
               setDetails(0);
             }}
@@ -825,15 +831,16 @@ export default function VaultCard({
     );
   }
 
+
   function step_lp_2() {
     return (
-      <div className={`flex justify-between p-2 px-4 rounded-md ${
-        currentStep == "lp-2" ? "bg-white/30" : ""
+      <div className={`flex justify-between p-[5px] pl-[10px] relative rounded-[12px] ${
+        currentStep == "lp-2" ? "bg-[#ffffff4d]" : ""
       }`}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center font-normal text-[16px] leading-[24px]">
           Step-2
-          <img
-            className="cursor-pointer"
+          <Image
+            className="pl-[5px] cursor-pointer"
             onClick={() => {
               setDetails("lp-2");
             }}
@@ -844,7 +851,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={() => setMinValues(amount)}
-            className="bg-[#61cd81] hover:bg-[#1ee155] active:bg-[#06b844] text-white font-semibold text-sm py-2 px-4 rounded-md transition-colors"
+            className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != "lp-2"}
           >
             Unpair
@@ -852,15 +859,17 @@ export default function VaultCard({
         </div>
         <div
           ref={wrapperRef}
-          className={`absolute z-10 bg-white p-4 rounded-lg shadow-lg ${
+          className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-80px] left-[-10px] xl:top-0 xl:left-[100px] ${
             details === "lp-2" ? "block" : "hidden"
           }`}
         >
-          <div className="relative text-gray-800 text-sm">
+          <div className="relative text-[#000] font-normal text-[14px] leading-[21px] w-[300px] text-left min-h-[40px]">
+            <div className="absolute z-[3] left-auto right-[-30px] border-r-0 border-l-[10px] border-l-[#ffffffe6] xl:border-l-[#ffffffb3] xl:border-l-[10px] xl:top-0 xl:left-[-30px] xl:w-0 xl:h-0" />
+            <div className="block xl:hidden absolute z-[3] bottom-[-30px] left-[53px] w-0 h-0 border-t-[10px] border-t-[#ffffffb3]" />
             Split LP tokens back to LAND and BNB.
           </div>
-          <img
-            className="absolute top-2 right-2 cursor-pointer"
+          <Image
+            className="absolute top-[5px] right-[5px] cursor-pointer"
             onClick={() => {
               setDetails(0);
             }}
@@ -874,13 +883,13 @@ export default function VaultCard({
 
   function step_2() {
     return (
-      <div className={`flex justify-between p-2 px-4 rounded-md ${
-        currentStep == 2 ? "bg-white/30" : ""
+      <div className={`flex justify-between p-[5px] pl-[10px] relative rounded-[12px] ${
+        currentStep == 2 ? "bg-[#ffffff4d]" : ""
       }`}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center font-normal text-[16px] leading-[24px]">
           {isLP() ? "Step-3" : "Step-2"}
-          <img
-            className="cursor-pointer"
+          <Image
+            className="pl-[5px] cursor-pointer"
             onClick={() => {
               setDetails(2);
             }}
@@ -891,7 +900,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={processStep2}
-            className="bg-[#61cd81] hover:bg-[#1ee155] active:bg-[#06b844] text-white font-semibold text-sm py-2 px-4 rounded-md transition-colors"
+            className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != 2}
           >
             Migrate
@@ -899,15 +908,17 @@ export default function VaultCard({
         </div>
         <div
           ref={wrapperRef}
-          className={`absolute z-10 bg-white p-4 rounded-lg shadow-lg ${
+          className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-80px] left-[-10px] xl:top-0 xl:left-[100px] ${
             details === 2 ? "block" : "hidden"
           }`}
         >
-          <div className="relative text-gray-800 text-sm">
+          <div className="relative text-[#000] font-normal text-[14px] leading-[21px] w-[300px] text-left min-h-[40px]">
+            <div className="absolute z-[3] left-auto right-[-30px] border-r-0 border-l-[10px] border-l-[#ffffffe6] xl:border-l-[#ffffffb3] xl:border-l-[10px] xl:top-0 xl:left-[-30px] xl:w-0 xl:h-0" />
+            <div className="block xl:hidden absolute z-[3] bottom-[-30px] left-[53px] w-0 h-0 border-t-[10px] border-t-[#ffffffb3]" />
             Migrate old tokens to new tokens.
           </div>
-          <img
-            className="absolute top-2 right-2 cursor-pointer"
+          <Image
+            className="absolute top-[5px] right-[5px] cursor-pointer"
             onClick={() => {
               setDetails(0);
             }}
@@ -921,13 +932,13 @@ export default function VaultCard({
 
   function step_lp_4() {
     return (
-      <div className={`flex justify-between p-2 px-4 rounded-md ${
-        currentStep == "lp-4" ? "bg-white/30" : ""
+      <div className={`flex justify-between p-[5px] pl-[10px] relative rounded-[12px] ${
+        currentStep == "lp-4" ? "bg-[#ffffff4d]" : ""
       }`}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center font-normal text-[16px] leading-[24px]">
           Step-4
-          <img
-            className="cursor-pointer"
+          <Image
+            className="pl-[5px] cursor-pointer"
             onClick={() => {
               setDetails("lp-4");
             }}
@@ -938,7 +949,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={() => setMinValuesV2(amountSplitedTokens.land)}
-            className="bg-[#61cd81] hover:bg-[#1ee155] active:bg-[#06b844] text-white font-semibold text-sm py-2 px-4 rounded-md transition-colors"
+            className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != "lp-4"}
           >
             Combine
@@ -946,15 +957,17 @@ export default function VaultCard({
         </div>
         <div
           ref={wrapperRef}
-          className={`absolute z-10 bg-white p-4 rounded-lg shadow-lg ${
+          className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-80px] left-[-10px] xl:top-0 xl:left-[100px] ${
             details === "lp-4" ? "block" : "hidden"
           }`}
         >
-          <div className="relative text-gray-800 text-sm">
+          <div className="relative text-[#000] font-normal text-[14px] leading-[21px] w-[300px] text-left min-h-[40px]">
+            <div className="absolute z-[3] left-auto right-[-30px] border-r-0 border-l-[10px] border-l-[#ffffffe6] xl:border-l-[#ffffffb3] xl:border-l-[10px] xl:top-0 xl:left-[-30px] xl:w-0 xl:h-0" />
+            <div className="block xl:hidden absolute z-[3] bottom-[-30px] left-[53px] w-0 h-0 border-t-[10px] border-t-[#ffffffb3]" />
             Recombine BNB and new LAND in LP pair.
           </div>
-          <img
-            className="absolute top-2 right-2 cursor-pointer"
+          <Image
+            className="absolute top-[5px] right-[5px] cursor-pointer"
             onClick={() => {
               setDetails(0);
             }}
@@ -968,13 +981,13 @@ export default function VaultCard({
 
   function step_3() {
     return (
-      <div className={`flex justify-between p-2 px-4 rounded-md ${
-        currentStep == 3 ? "bg-white/30" : ""
+      <div className={`flex justify-between p-[5px] pl-[10px] relative rounded-[12px] ${
+        currentStep == 3 ? "bg-[#ffffff4d]" : ""
       }`}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center font-normal text-[16px] leading-[24px]">
           {isLP() ? "Step-5" : "Step-3"}
-          <img
-            className="cursor-pointer"
+          <Image
+            className="pl-[5px] cursor-pointer"
             onClick={() => {
               setDetails(3);
             }}
@@ -984,22 +997,24 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep3}
-          className="bg-[#61cd81] hover:bg-[#1ee155] active:bg-[#06b844] text-white font-semibold text-sm py-2 px-4 rounded-md transition-colors"
+          className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 3}
         >
           Approve
         </button>
         <div
           ref={wrapperRef}
-          className={`absolute z-10 bg-white p-4 rounded-lg shadow-lg ${
+          className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-80px] left-[-10px] xl:top-0 xl:left-[100px] ${
             details === 3 ? "block" : "hidden"
           }`}
         >
-          <div className="relative text-gray-800 text-sm">
+          <div className="relative text-[#000] font-normal text-[14px] leading-[21px] w-[300px] text-left min-h-[40px]">
+            <div className="absolute z-[3] left-auto right-[-30px] border-r-0 border-l-[10px] border-l-[#ffffffe6] xl:border-l-[#ffffffb3] xl:border-l-[10px] xl:top-0 xl:left-[-30px] xl:w-0 xl:h-0" />
+            <div className="block xl:hidden absolute z-[3] bottom-[-30px] left-[53px] w-0 h-0 border-t-[10px] border-t-[#ffffffb3]" />
             Approve new vault.
           </div>
-          <img
-            className="absolute top-2 right-2 cursor-pointer"
+          <Image
+            className="absolute top-[5px] right-[5px] cursor-pointer"
             onClick={() => {
               setDetails(0);
             }}
@@ -1013,13 +1028,13 @@ export default function VaultCard({
 
   function step_4() {
     return (
-      <div className={`flex justify-between p-2 px-4 rounded-md ${
-        currentStep == 4 ? "bg-white/30" : ""
+      <div className={`flex justify-between p-[5px] pl-[10px] relative rounded-[12px] ${
+        currentStep == 4 ? "bg-[#ffffff4d]" : ""
       }`}>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center font-normal text-[16px] leading-[24px]">
           {isLP() ? "Step-6" : "Step-4"}
-          <img
-            className="cursor-pointer"
+          <Image
+            className="pl-[5px] cursor-pointer"
             onClick={() => {
               setDetails(4);
             }}
@@ -1029,22 +1044,24 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep4}
-          className="bg-[#61cd81] hover:bg-[#1ee155] active:bg-[#06b844] text-white font-semibold text-sm py-2 px-4 rounded-md transition-colors"
+          className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 4}
         >
           Deposit
         </button>
         <div
           ref={wrapperRef}
-          className={`absolute z-10 bg-white p-4 rounded-lg shadow-lg ${
+          className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-80px] left-[-10px] xl:top-0 xl:left-[100px] ${
             details === 4 ? "block" : "hidden"
           }`}
         >
-          <div className="relative text-gray-800 text-sm">
+          <div className="relative text-[#000] font-normal text-[14px] leading-[21px] w-[300px] text-left min-h-[40px]">
+            <div className="absolute z-[3] left-auto right-[-30px] border-r-0 border-l-[10px] border-l-[#ffffffe6] xl:border-l-[#ffffffb3] xl:border-l-[10px] xl:top-0 xl:left-[-30px] xl:w-0 xl:h-0" />
+            <div className="block xl:hidden absolute z-[3] bottom-[-30px] left-[53px] w-0 h-0 border-t-[10px] border-t-[#ffffffb3]" />
             Deposit in new vault.
           </div>
-          <img
-            className="absolute top-2 right-2 cursor-pointer"
+          <Image
+            className="absolute top-[5px] right-[5px] cursor-pointer"
             onClick={() => {
               setDetails(0);
             }}
@@ -1062,39 +1079,39 @@ export default function VaultCard({
     </div>
   ) : (
     <>
-      <div className="flex flex-col lg:flex-row rounded-xl">
-        <div className="flex flex-col w-full gap-5 p-5">
-          <div className="font-bold text-2xl lg:text-3xl text-center capitalize">
+      <div className="flex flex-col items-center md:flex-row rounded-[12px]">
+        <div className="flex flex-col items-center w-full gap-[20px] p-[20px]">
+          <div className={`py-[10px] text-[28px] leading-[42px] capitalize text-center md:pt-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
             {vaultName === "LP Farm" ? "LAND-BNB LP" : vaultName}
           </div>
-          <div className="flex flex-col w-full gap-5">
-            <div className="flex flex-col w-full gap-5">
-              <div className={`flex w-full justify-between p-4 bg-gray-100 rounded-xl ${
-                currentStep === 1 || currentStep === 2 || currentStep === 3 || currentStep === "lp-4" ? "disabled" : ""
+          <div className="flex flex-col w-full gap-[20px]">
+            <div className="relative text-right">
+              <div className={`flex w-full justify-around py-[10px] px-[20px] rounded-[12px] bg-secondary ${
+                currentStep === 1 || currentStep === 2 || currentStep === 3 || currentStep === "lp-4" ? "bg-[#cccccc] text-[#888888]" : ""
               }`}>
                 <input
                   onChange={handleChangeAmount}
                   value={amount}
                   disabled={currentStep === 1 || currentStep === 3 || currentStep === 2 || currentStep === "lp-4"}
-                  className="w-full font-bold text-lg capitalize text-black"
+                  className={`border-0 w-full text-[20px] leading-[30px] capitalize text-[#000] disabled:bg-[#cccccc] disabled:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
                 />
                 <button
                   onClick={setMaxAmount}
-                  className="font-bold text-lg text-[#61cd81] hover:text-[#1ee155] active:text-[#06b844] transition-colors"
+                  className={`cursor-pointer text-[#61cd81] pl-[4px] text-[20px] leading-[30px] text-right capitalize disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
                   disabled={currentStep === 1 || currentStep === 2 || currentStep === 3 || currentStep === "lp-4"}
                 >
                   MAX
                 </button>
               </div>
-              <div className="text-right text-gray-800">
+              <div className="w-full pr-[10px] text-right text-text-primary">
                 Balance: <b>{balance}</b>
               </div>
             </div>
             {Number(currentStep) >= 3 && (
-              <div className="flex justify-between items-center">{depositInfo()}</div>
+              <div className="flex justify-between items-center text-text-primary">{depositInfo()}</div>
             )}
-            <div className="flex justify-between items-center">{withdrawInfo()}</div>
-            <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center text-text-primary">{withdrawInfo()}</div>
+            <div className="flex flex-col gap-[10px] text-text-primary">
               {step_1()}
               {isLP() && step_lp_2()}
               {step_2()}
