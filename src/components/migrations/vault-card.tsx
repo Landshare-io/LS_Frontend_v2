@@ -422,7 +422,7 @@ export default function VaultCard({
           <div className="text-[12px] leading-[18px] relative font-normal">
             {isStakingAutoV2() || isStakingAutoV3() ? "APY" : "APR"}
             <Image
-              className="pl-[5px] cursor-pointer"
+              className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
               onClick={() => {
                 setDetails("APY");
               }}
@@ -478,18 +478,18 @@ export default function VaultCard({
     return (
       <>
         <div className="flex flex-1"></div>
-        <div className="flex flex-1">
+        <div className="flex flex-1 flex-col items-center">
           <div className="text-[12px] leading-[18px] relative font-normal">Deposit</div>
           <div className="text-[18px] leading-[27px] relative font-semibold">
             {formatEther(getDepositBalance().toString())
               .substr(0, 8)}
           </div>
         </div>
-        <div className="flex flex-1">
-          <div className="text-[12px] leading-[18px] relative font-normal">
+        <div className="flex flex-1 flex-col items-center">
+          <div className="flex text-[12px] leading-[18px] relative font-normal">
             Reward
             <Image
-              className="pl-[5px] cursor-pointer"
+              className="ml-[5px] cursor-pointer w-[18px] h-[18px]"
               onClick={() => {
                 setDetails("Reward");
               }}
@@ -792,7 +792,7 @@ export default function VaultCard({
         <div className="flex items-center font-normal text-[16px] leading-[24px]">
           Step-1
           <Image
-            className="pl-[5px] cursor-pointer"
+            className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
             onClick={() => {
               setDetails(1);
             }}
@@ -802,7 +802,7 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep1}
-          className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+          className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] disabled:bg-transparent text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 1 || (getDepositBalance() == 0 && !isSkippable())}
         >
           {isSkippable() ? "Skip" : "Withdraw"}
@@ -840,7 +840,7 @@ export default function VaultCard({
         <div className="flex items-center font-normal text-[16px] leading-[24px]">
           Step-2
           <Image
-            className="pl-[5px] cursor-pointer"
+            className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
             onClick={() => {
               setDetails("lp-2");
             }}
@@ -851,7 +851,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={() => setMinValues(amount)}
-            className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+            className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != "lp-2"}
           >
             Unpair
@@ -889,7 +889,7 @@ export default function VaultCard({
         <div className="flex items-center font-normal text-[16px] leading-[24px]">
           {isLP() ? "Step-3" : "Step-2"}
           <Image
-            className="pl-[5px] cursor-pointer"
+            className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
             onClick={() => {
               setDetails(2);
             }}
@@ -900,7 +900,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={processStep2}
-            className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+            className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] text-center capitalize text-[#61cd81] disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != 2}
           >
             Migrate
@@ -938,7 +938,7 @@ export default function VaultCard({
         <div className="flex items-center font-normal text-[16px] leading-[24px]">
           Step-4
           <Image
-            className="pl-[5px] cursor-pointer"
+            className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
             onClick={() => {
               setDetails("lp-4");
             }}
@@ -949,7 +949,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={() => setMinValuesV2(amountSplitedTokens.land)}
-            className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+            className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != "lp-4"}
           >
             Combine
@@ -987,7 +987,7 @@ export default function VaultCard({
         <div className="flex items-center font-normal text-[16px] leading-[24px]">
           {isLP() ? "Step-5" : "Step-3"}
           <Image
-            className="pl-[5px] cursor-pointer"
+            className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
             onClick={() => {
               setDetails(3);
             }}
@@ -997,7 +997,7 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep3}
-          className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+          className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 3}
         >
           Approve
@@ -1034,7 +1034,7 @@ export default function VaultCard({
         <div className="flex items-center font-normal text-[16px] leading-[24px]">
           {isLP() ? "Step-6" : "Step-4"}
           <Image
-            className="pl-[5px] cursor-pointer"
+            className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
             onClick={() => {
               setDetails(4);
             }}
@@ -1044,7 +1044,7 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep4}
-          className={`cursor-pointer pl-[4px] text-[20px] leading-[30px] text-right capitalize text-[#61cd81] disabled:bg-transparent disabled:text-[#888888] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+          className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 4}
         >
           Deposit
@@ -1079,7 +1079,7 @@ export default function VaultCard({
     </div>
   ) : (
     <>
-      <div className="flex flex-col items-center md:flex-row rounded-[12px]">
+      <div className="flex flex-col items-center md:flex-row rounded-[12px] mb-[50px]">
         <div className="flex flex-col items-center w-full gap-[20px] p-[20px]">
           <div className={`py-[10px] text-[28px] leading-[42px] capitalize text-center md:pt-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
             {vaultName === "LP Farm" ? "LAND-BNB LP" : vaultName}
