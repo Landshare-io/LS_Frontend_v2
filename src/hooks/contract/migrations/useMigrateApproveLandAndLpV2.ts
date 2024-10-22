@@ -90,7 +90,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
     }
   }
 
-  async function approveLpToken(approveAddress: Address) {
+  async function approveLpTokenV2(approveAddress: Address) {
     if (isConnected == true) {
       try {
         setScreenLoadingStatus("Transaction is in progress...")
@@ -104,7 +104,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
 
   return {
     approveLandV2,
-    approveLpToken,
+    approveLpTokenV2,
     isSuccessApprove,
     setIsSuccessApprove,
   };

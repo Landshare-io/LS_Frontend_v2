@@ -11,7 +11,7 @@ import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
 import useAllowanceOfLandToken from "../LandTokenContract/useAllowance";
 import useApproveLandToken from "../LandTokenContract/useApprove";
 import useAddLiquidityETH from "../PCSRouterContract/useAddLiquidityETH";
-import { PROVIDERS, PSC_ROUTER_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { PSC_ROUTER_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { BigNumberish } from "ethers";
 
 interface useRecombineProps {
@@ -23,7 +23,6 @@ export default function useRecombine({
 }: useRecombineProps) {
   const { setScreenLoadingStatus } = useGlobalContext()
   const { isConnected } = useAccount();
-  const provider = PROVIDERS[bsc.id]
   const [isSuccessRecombine, setIsSuccessRecombine] = useState(false);
   const [LandAmount, setLandAmount] = useState<number | string | BigNumberish>(0)
   const [minGas, setMinGas] = useState<number | string | BigNumberish>(0)
