@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useAccount } from "wagmi";
 import numeral from "numeral";
-import { useHistory } from "react-router-dom";
+import { formatEther } from "ethers";
+import { useRouter } from "next/router";
 import {
   LogoIcon,
   EnergyIcon,
@@ -9,43 +11,35 @@ import {
   Concrete,
   Steel,
   Credit
-} from "./NftIcon";
-import { useGlobalContext } from "../../contexts/GlobalContext";
+} from "../icons/nft";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md"
-import { ethers } from "ethers";
-import { useMediaQuery } from "react-responsive"
-import "./YouOwn.css"
-import LandshareLogo_Dark from "../../assets/img/new/logo-dark.svg"
-import SwitchTheme from "../../components/Footer/SwitchTheme";
+import LandshareLogo_Dark from "../../../../public/logo-dark.svg"
+import SwitchTheme from "../switch-theme";
+import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 export default function YouOwn(){
-  const { isDarkMode, setIsDarkMode } = useGlobalContext();
+  const { theme } = useGlobalContext();
   const [show, setShow] = useState(false)
-  const [youOwnShow, setYouOwnShow] = useState(false)
+  const { isConnected } = useAccount()
   const {
-    signer,
     userResource,
     updateUserResources,
     nftCredits
   } = useGlobalContext();
-  const isMobile = useMediaQuery({ maxWidth: 768 });
   if (!userResource.resource) return null;
-  let history = useHistory();
+  const router = useRouter();
 
   useEffect(() => {
-    if (!signer) return
+    if (!isConnected) return
 
     const intervalUpdateUserResource = setInterval(() => updateUserResources(), 60000) // One minute
 
     return () => clearInterval(intervalUpdateUserResource)
-  }, [signer])
+  }, [isConnected])
   const styleObject = {
     minWidth: "180px"
   };
-
-  useEffect(() => {
-    setYouOwnShow(isMobile ? show : true)
-  }, [show, isMobile])
 
   return (
     <section className="bottom-[73px] md:bottom-0 bg-[#bce4fa] duration-500 sticky z-[999] opacity-90 shadow-lg py-3 dark:bg-third">
@@ -59,103 +53,100 @@ export default function YouOwn(){
               >
                 You own:
               </span>
-              {isMobile && (
-                <span className="cursor-pointer" onClick={() => setShow(!show)}>
-                  {show ? (
-                    <MdKeyboardArrowDown className="text-grey-800" />
-                  ) : (
-                    <MdKeyboardArrowUp className="text-grey-800" />
-                  )}
-                </span>
-              )}
+              <span className="block md:hidden cursor-pointer" onClick={() => setShow(!show)}>
+                {show ? (
+                  <MdKeyboardArrowDown className="text-grey-800" />
+                ) : (
+                  <MdKeyboardArrowUp className="text-grey-800" />
+                )}
+              </span>
             </div>
-            {youOwnShow && (
-              <div className="mobile-youown">
-                <div className="d-flex align-items-center">
+            {show && (
+              <div className="hidden md:grid grid-cols-[minmax(200px,max-content)] sm:grid-cols-[minmax(200px,max-content),minmax(200px,max-content)] md:grid-cols-[minmax(250px,max-content),minmax(250px,max-content)] lg:grid-cols-[minmax(250px,max-content),minmax(250px,max-content),minmax(250px,max-content)] xl:grid-cols-[minmax(250px,max-content),minmax(250px,max-content),minmax(250px,max-content),minmax(250px,max-content)] w-full overflow-hidden">
+                <div className="flex items-center">
                   <div className="w-8 h-8">
-                    {isDarkMode ? <img src={LandshareLogo_Dark}></img> : <LogoIcon />}
+                    {theme == 'dark' ? <img src={LandshareLogo_Dark}></img> : <LogoIcon />}
                   </div>
                   <span
                     style={{ minWidth: "133px" }}
-                    className="d-inline-block ps-2 pe-3 fw-bold fs-sm text-text-primary"
+                    className={`inline-block pl-2 pr-3 text-[16px] text-text-primary ${BOLD_INTER_TIGHT.className}`}
                   >
                     {userResource.landTokenBalance > 999999999999
                       ? numeral(
-                        ethers.utils.formatEther(userResource.landTokenBalance.toString())
+                        formatEther(userResource.landTokenBalance.toString())
                       )
                         .format("0.[00]")
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       : "0"}{" "}
-                    <span className="fs-xs text-text-primary">LAND</span>
+                    <span className="text-[14px] text-text-primary">LAND</span>
                   </span>
                   <span
-                    className="cursor-pointer btn-buy-resources dark:bg-primary dark:text-text-primary"
-                    onClick={() => history.push("/nft/resources")}
+                    className="cursor-pointer hidden hover:shadow-md sm:block text-[#bce4fa] font-normal w-[20px] h-[20px] text-center rounded-full text-[18px] bg-[#000000ba] duration-300 dark:bg-primary dark:text-text-primary"
+                    onClick={() => router.push("/nft/resources")}
                   >
                     +
                   </span>
                 </div>
-                <div className="d-flex align-items-center">
+                <div className="flex items-center">
                   <Lumber />
-                  <span className="d-inline-block ps-2 pe-3 fw-bold fs-sm text-text-primary">
+                  <span className={`inline-block pl-2 pr-3 text-[16px] text-text-primary ${BOLD_INTER_TIGHT.className}}`}>
                     {numeral(userResource.resource[1]).format("0.[00]")}
-                    <span className="fs-xs text-text-primary"> Lumber</span>
+                    <span className="text-[14px] text-text-primary"> Lumber</span>
                   </span>
                 </div>
-                <div className="d-flex align-items-center">
+                <div className="flex items-center">
                   <Concrete />
-                  <span className="d-inline-block ps-2 pe-3 fw-bold fs-sm text-text-primary">
+                  <span className={`inline-block pl-2 pr-3 text-[16px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                     {numeral(userResource.resource[3]).format("0.[00]")}
-                    <span className="fs-xs text-text-primary"> Concrete</span>
+                    <span className="text-[14px] text-text-primary"> Concrete</span>
                   </span>
                 </div>
                 <div className="d-flex align-items-center">
                   <span className="">
                     <Steel />
                   </span>
-                  <span className="d-inline-block ps-2 pe-3 fw-bold fs-sm text-text-primary">
+                  <span className={`inline-block pl-2 pr-3 text-[16px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                     {numeral(userResource.resource[4]).format("0.[00]")}
                     <span className="fs-xs text-text-primary"> Steel</span>
                   </span>
                 </div>
-                <div className="d-flex align-items-center">
+                <div className="flex items-center">
                   <span className="">
                     <EnergyIcon />
                   </span>
                   <span
                     style={{ minWidth: "133px" }}
-                    className="d-inline-block ps-2 pe-3 fw-bold fs-sm text-text-primary"
+                    className={`inline-block pl-2 pr-3 text-[16px] text-text-primary ${BOLD_INTER_TIGHT.className}`}
                   >
                     {numeral(userResource.resource[0]).format("0.[00]")} / {userResource.maxPowerLimit}
                     <span className="fs-xs text-text-primary"> Power</span>
                   </span>
                   <span
-                    className="cursor-pointer btn-buy-resources dark:bg-primary dark:text-text-primary"
-                    onClick={() => history.push("/nft/resources")}
+                    className="cursor-pointer hidden hover:shadow-md sm:block text-[#bce4fa] font-normal w-[20px] h-[20px] text-center rounded-full text-[18px] bg-[#000000ba] duration-300 dark:bg-primary dark:text-text-primary"
+                    onClick={() => router.push("/nft/resources")}
                   >
                     +
                   </span>
                 </div>
-                <div className="d-flex align-items-center">
+                <div className="flex items-center">
                   <span className="">
                     <Brick />
                   </span>
-                  <span className="d-inline-block ps-2 pe-3 fw-bold fs-sm text-text-primary">
+                  <span className={`inline-block pl-2 pr-3 text-[16px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                     {numeral(userResource.resource[2]).format("0.[00]")}
                     <span className="fs-xs text-text-primary"> Brick</span>
                   </span>
                 </div>
-                <div className="d-flex align-items-center">
+                <div className="flex items-center">
                   <Credit />
-                  <span className="d-inline-block ps-2 pe-3 fw-bold fs-sm text-text-primary">
+                  <span className={`inline-block pl-2 pr-3 text-[16px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                   {numeral(Number(nftCredits)).format("0.[00]")}
                     <span className="fs-xs text-text-primary"> Credits</span>
                   </span>
                 </div>
-               <SwitchTheme isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} /> 
+               <SwitchTheme /> 
               </div>
-
             )}
           </div>
         </div>
