@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import { useGlobalContext } from '../../context/GlobalContext'
 import ArrowDownIcon from '../../../public/icons/arrow-down.svg'
 import ArrowDownIconDark from '../../../public/icons/arrow-down-dark.svg'
@@ -38,9 +39,9 @@ export default function SelectVault({ value, setValue }: SelectVaultProps) {
         <div className="font-semibold text-[18px] leading-[27px] text-text-primary">{value}</div>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="outline-0 border-0 rounded-[12px] w-[60px] h-[60px] bg-secondary"
+          className="flex justify-center items-center outline-0 border-0 rounded-[12px] w-[60px] h-[60px] bg-secondary"
         >
-          <img src={theme == 'dark' ? ArrowDownIconDark : ArrowDownIcon} alt="arrow-down" />
+          <Image src={theme == 'dark' ? ArrowDownIconDark : ArrowDownIcon} alt="arrow-down" />
         </button>
         <div className={`shadow shadow-lg rounded-[12px] absolute z-[2] top-[80px] left-0 w-full bg-secondary text-text-primary ${!isOpen && 'hidden'}`}>
           <div 
