@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import type { NextPage } from 'next';
-import { Head } from "next/document";
+import Head from "next/head";
 import { BigNumberish, formatEther, parseEther } from "ethers";
 import { useAccount, useChainId } from "wagmi";
 import useBalanceOf from "../hooks/contract/LandTokenV1Contract/useBalanceOf";
 import useTokenMigrate from "../hooks/contract/migrations/useTokenMigrate";
 import SelectVault from "../components/migrations/select-vault";
-import VaultCard from "./VaultCard";
+import VaultCard from "../components/migrations/vault-card";
 import ConnectWallet from "../components/connect-wallet";
 import { BOLD_INTER_TIGHT } from "../config/constants/environments";
 
@@ -39,7 +39,7 @@ const Migration: NextPage = () => {
 
   return (
     <div>
-      <div className={`flex justify-center pt-[40px] px-[10px] pb-[10px] bg-primary ${!isConnected ? "p-0" : ""}`}>
+      <div className={`flex justify-center pt-[40px] px-[10px] pb-[10px] bg-primary min-h-[70vh] ${!isConnected ? "p-0" : ""}`}>
         <Head>
           <title>Landshare - Migration</title>
         </Head>
