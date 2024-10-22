@@ -86,7 +86,7 @@ const Migration: NextPage = () => {
                             <input
                               type="text"
                               disabled
-                              className={`w-full border-0 bg-[#fff] rounded-[12px] py-[10px] px-[20px] text-[20px] leading-[30px] text-capitalize text-[#000] disabled ${BOLD_INTER_TIGHT.className}`}
+                              className={`w-full border-0 bg-[#fff] rounded-[12px] py-[10px] px-[20px] text-[20px] leading-[30px] text-capitalize text-[#000] disabled:bg-[#cccccc] disabled:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
                               value={
                                 displayedBalance ? displayedBalance[0] : 0
                               }
