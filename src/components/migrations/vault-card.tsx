@@ -3,64 +3,52 @@ import { useAccount, useBalance } from "wagmi";
 import { bsc } from "viem/chains";
 import ReactLoading from "react-loading";
 import { parseEther, formatEther, BigNumberish } from "ethers";
-import { useGlobalContext } from "../../contexts/GlobalContext";
-import { useLandshareV1Context } from "../../contexts/LandshareV1Context";
-import { useLandshareV2Context } from "../../contexts/LandshareV2Context";
-import { useLandshareFunctions } from "../../contexts/LandshareFunctionsProvider";
-
+import { useGlobalContext } from "../../context/GlobalContext";
 import useMigrateWithDrawLandv1 from "../../hooks/contract/migrations/useMigrateWithDrawLandV1";
 import useTokenMigrate from "../../hooks/contract/migrations/useTokenMigrate";
-import useMigrateApproveLandv2 from "../../hooks/useMigrateApproveLandv2";
 import useMigrateApproveLandAndLpV2 from "../../hooks/contract/migrations/useMigrateApproveLandAndLpV2";
-import useMigrateDepositLandv2 from "../../hooks/useMigrateDepositLandv2";
 import useMigrateDepositLandAndLpV2 from "../../hooks/contract/migrations/useMigrateDepositLandAndMasterchefV2";
 import useSplitLP from "../../hooks/contract/migrations/useSplitLp";
 import useMigrationBalance from "../../hooks/contract/migrations/useMigrationBalance";
 import useRecombine from "../../hooks/contract/migrations/useRecombine";
-// import useRecombine from "../../hooks/useRecombine";
-
+import useGetPrice from "../../hooks/get-apy/useGetPrice";
 import useGetReservesOfLpV1 from "../../hooks/contract/LpTokenV1Contract/useGetReserves";
-
 import useUserInfoOfAutoLandV1 from "../../hooks/contract/AutoLandV1Contract/useUserInfo";
 import useTotalSharesOfAutoLandV1 from "../../hooks/contract/AutoLandV1Contract/useTotalShares";
 import useBalanceOfAutoLandV1 from "../../hooks/contract/AutoLandV1Contract/useBalanceOf";
-
 import useTotalSharesOfAutoLandV2 from "../../hooks/contract/AutoLandV2Contract/useTotalShares";
 import useBalanceOfAutoLandV2 from "../../hooks/contract/AutoLandV2Contract/useBalanceOf";
 import useUserInfoOfAutoLandV2 from "../../hooks/contract/AutoLandV2Contract/useUserInfo";
-
 import usePendingRewardOfLandTokenStakeV2 from "../../hooks/contract/LandTokenStakeV2/usePendingReward";
 import usePendingRewardOfLandTokenStakeV3 from "../../hooks/contract/LandTokenStakeV3/usePendingReward";
 import usePendingRewardOfLandLPFarm from "../../hooks/contract/LandLPFarmContract/usePendingReward";
 import usePendingLandOfMasterchef from "../../hooks/contract/MasterchefContract/usePendingLand";
-
 import useBalanceOfWBNB from "../../hooks/contract/WBNBTokenContract/useBalanceOf";
 import usePoolInfo from "../../hooks/contract/MasterchefContract/usePoolInfo";
+import useUserInfoOfMasterchef from "../../hooks/contract/MasterchefContract/useUserInfo";
 import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
 import useTotalSupplyOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useTotalSupply";
 import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
-
 import useTotalSupplyOfLpTokenV1 from "../../hooks/contract/LpTokenV1Contract/useTotalSupply";
-
 import useBalanceOfLandTokenV1 from "../../hooks/contract/LandTokenV1Contract/useBalanceOf";
 import useBalanceOfLpTokenV1 from "../../hooks/contract/LpTokenV1Contract/useBalanceOf";
-
 import useGetReservesLpTokenV2 from "../../hooks/contract/PancakePairContract/useGetReserves";
-
 import useTotalAllocPoint from "../../hooks/contract/MasterchefContract/useTotalAllocPoint";
-
-import useGetReservesOfBNBApePair from "../../hooks/contract/BNBApePairContract/useGetReserves";
-
+import useLandPerBlock from "../../hooks/contract/MasterchefContract/useLandPerBlock";
+import useCheckAllowance from "../../hooks/contract/useCheckAllowance";
 import useBalanceOfAutoVaultV3 from "../../hooks/contract/AutoVaultV3Contract/useBalanceOf";
 import useBalanceOfMasterchef from "../../hooks/contract/MasterchefContract/useBalanceOf";
-
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
-import DetailsIcon from "../../assets/img/icons/details.svg";
-import DetailsIconDark from "../../assets/img/icons/details-dark.svg";
-import CloseIcon from "../../assets/img/icons/close.svg";
-import "./VaultCard.css";
-
-import { LP_TOKEN_V2_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS, LP_TOKEN_V1_CONTRACT_ADDRESS } from "../../config/constants/environments";
+import { 
+  LAND_TOKEN_CONTRACT_ADDRESS,
+  LP_TOKEN_V2_CONTRACT_ADDRESS, 
+  MASTERCHEF_CONTRACT_ADDRESS, 
+  LP_TOKEN_V1_CONTRACT_ADDRESS,
+  AUTO_LAND_V3_CONTRACT_ADDRESS
+} from "../../config/constants/environments";
+import DetailsIcon from "../../../public/icons/details.svg";
+import DetailsIconDark from "../../../public/icons/details-dark.svg";
+import CloseIcon from "../../../public/icons/close.svg";
 
 function useOutsideAlerter(ref: any, setDetails: Function) {
   useEffect(() => {
@@ -85,11 +73,8 @@ export default function VaultCard({
   vaultName,
   initVault
 }: VaultCardProps) {
-  const { isDarkMode } = useGlobalContext();
+  const { theme } = useGlobalContext();
   const { address } = useAccount()
-
-  
-
   const wrapperRef = useRef(null);
   const [details, setDetails] = useState<number | string>(0);
   useOutsideAlerter(wrapperRef, setDetails);
@@ -110,7 +95,6 @@ export default function VaultCard({
     chainId: bsc.id,
     address
   }) as { data: BigNumberish, refetch: Function }
-
   const { data: landInLP } = useBalanceOfLandToken({ chainId: bsc.id, address: LP_TOKEN_V1_CONTRACT_ADDRESS }) as { data: BigNumberish, refetch: Function }
   const balanceMigration = useMigrationBalance({ address }) as any
   const { data: landTokenStakeCurrentDepositTotal } = useBalanceOfAutoVaultV3() as { data: BigNumberish }
@@ -130,9 +114,7 @@ export default function VaultCard({
   const { data: totalLPV2Supply } = useTotalSupplyOfLpTokenV2(bsc.id) as { data: BigNumberish }
   const { data: allocPoints } = usePoolInfo(bsc.id, 1) as { data: any[] };
   const { data: totalAllocPoint } = useTotalAllocPoint() as { data: BigNumberish }
-
   const { data: totalLPV1Supply } = useTotalSupplyOfLpTokenV1() as { data: BigNumberish }
-
   const { data: lpTokenV1Reserves } = useGetReservesOfLpV1() as { data: [BigNumberish, BigNumberish, BigNumberish] }
   const { data: lpTokenV2Reserves } = useGetReservesLpTokenV2(bsc.id) as { data: [BigNumberish, BigNumberish, BigNumberish] }
 
@@ -154,54 +136,24 @@ export default function VaultCard({
   const { data: totalDepositAutoV2 } = useBalanceOfAutoLandV2() as { data: BigNumberish }
   const { data: useInfoAutoV2 } = useUserInfoOfAutoLandV2({ address }) as { data: [BigNumberish, BigNumberish, BigNumberish, BigNumberish] };
   const lastRewardV2 = BigInt(useInfoAutoV2[0]) * BigInt(totalDepositAutoV2) / (BigInt(totalSharesAutoV2) - BigInt(useInfoAutoV2[2]))
-
   // LAND Staking V2 info
   const { data: rewardLandV2 } = usePendingRewardOfLandTokenStakeV2({ address }) as { data: BigNumberish };
-
   // LAND Staking V3 info
   const { data: rewardLandV3 } = usePendingRewardOfLandTokenStakeV3({ address }) as { data: BigNumberish };
-
   // LP Farm
   const { data: lpFarmReward } = usePendingRewardOfLandLPFarm({ address }) as { data: BigNumberish };
   const { data: lpFarmReward2 } = usePendingLandOfMasterchef({ chainId: bsc.id, pendingLandId: 1, address }) as { data: BigNumberish };
-
   const [expectedLand, setExpectedLand] = useState<number | BigNumberish>(0);
   const [expectedEth, setExpectedEth] = useState<number | BigNumberish>(0);
-
   const [expectedLandV2, setExpectedLandV2] = useState<number | BigNumberish>(0);
   const [expectedEthV2, setExpectedEthV2] = useState<number | BigNumberish>(0);
   const [ethAmount, setEthAmount] = useState<number | BigNumberish>(0);
-
-  const reservesBNB = useGetReservesOfBNBApePair(bsc.id) as [BigNumberish, BigNumberish]
-  const bnbPrice = Number(BigInt(reservesBNB[1]) / BigInt(reservesBNB[0]))
-
-  const {
-    landTokenV2Contract,
-    lpTokenV2Contract,
-    price,
-  } = useGlobalContext();
-
-  const {
-    contract: {
-      landTokenContract,
-      lpTokenContract,
-      landStakeAutoContract,
-      landStakeContractLP,
-    },
-  } = useLandshareV1Context();
-  const {
-    contract: { masterchefContract },
-    balance: { masterChefDepositBalance },
-    value: { rewardPool2 },
-  } = useLandshareV2Context();
-
-  const {
-    startTransaction,
-    startTransactionRefresh,
-    endTransaction,
-    transactionResult,
-    state,
-  } = useLandshareFunctions();
+  const { data: landPerBlock } = useLandPerBlock(bsc.id) as { data: BigNumberish }
+  const { data: approveAutoLandV3OfLandV2, refetch: refetchApproveAutoLandV3OfLandV2 } = useCheckAllowance(address, LAND_TOKEN_CONTRACT_ADDRESS[bsc.id], AUTO_LAND_V3_CONTRACT_ADDRESS)
+  const { data: approveMasterchefOfLandV2, refetch: refetchApproveMasterchefOfLandV2 } = useCheckAllowance(address, LAND_TOKEN_CONTRACT_ADDRESS[bsc.id], MASTERCHEF_CONTRACT_ADDRESS[bsc.id])
+  const { data: approveMasterchefOfLpV2, refetch: refetchApproveMasterchefOfLpV2 } = useCheckAllowance(address, LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id], MASTERCHEF_CONTRACT_ADDRESS[bsc.id])
+  const { data: userInfoOfMasterchef } = useUserInfoOfMasterchef({ chainId: bsc.id, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish] };
+  const prices = useGetPrice(bsc.id)
 
   useEffect(() => {
     updateLPFarm();
@@ -209,10 +161,8 @@ export default function VaultCard({
   }, []);
 
   useEffect(() => {
-    if (masterchefContract) {
-      getAPY();
-    }
-  }, [masterchefContract]);
+    getAPY();
+  }, [totalLandPerYear, landTokenStakeCurrentDepositTotal2]);
 
   useEffect(() => {
     setDetails(0);
@@ -247,19 +197,11 @@ export default function VaultCard({
   });
   const { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate } = useTokenMigrate({ address });
   const {
-    checkAllowance,
-    approveLandv2Auto,
-    approveLandv2Masterchief,
-    approveLPMasterchief,
+    approveLandV2,
+    approveLpTokenV2,
     isSuccessApprove,
     setIsSuccessApprove,
-  } = useMigrateApproveLandv2({
-    state,
-    startTransaction,
-    endTransaction,
-    transactionResult,
-    amount,
-  });
+  } = useMigrateApproveLandAndLpV2({ address });
 
   const {
     depositAutoLandv2,
@@ -267,12 +209,7 @@ export default function VaultCard({
     depositLP,
     isSuccessDeposit,
     setIsSuccessDeposit,
-  } = useMigrateDepositLandv2({
-    state,
-    startTransaction,
-    endTransaction,
-    transactionResult,
-  });
+  } = useMigrateDepositLandAndLpV2({ address });
 
   const { splitLP, isSuccessSplit, amountSplitedTokens, setIsSuccessSplit } = useSplitLP({ address });
 
@@ -334,16 +271,16 @@ export default function VaultCard({
     if (isStakingV2()) {
       if (Number(currentStep) < 3 && balanceMigration.depositV2) {
         return balanceMigration.depositV2;
-      } else if (Number(currentStep) > 3 && masterChefDepositBalance) {
-        return masterChefDepositBalance;
+      } else if (Number(currentStep) > 3 && userInfoOfMasterchef) {
+        return userInfoOfMasterchef;
       } else {
         return 0;
       }
     } else if (isStakingV3()) {
       if (Number(currentStep) < 3 && balanceMigration.depositV3) {
         return balanceMigration.depositV3;
-      } else if (Number(currentStep) > 3 && masterChefDepositBalance) {
-        return masterChefDepositBalance;
+      } else if (Number(currentStep) > 3 && userInfoOfMasterchef) {
+        return userInfoOfMasterchef;
       } else {
         return 0;
       }
@@ -404,9 +341,9 @@ export default function VaultCard({
 
   function getRewards() {
     if (isStakingV2()) {
-      return Number(currentStep) < 3 ? rewardLandV2 : rewardPool2;
+      return Number(currentStep) < 3 ? rewardLandV2 : lpFarmReward2;
     } else if (isStakingV3()) {
-      return Number(currentStep) < 3 ? rewardLandV3 : rewardPool2;
+      return Number(currentStep) < 3 ? rewardLandV3 : lpFarmReward2;
     } else if (isStakingAutoV2()) {
       return lastRewardOld;
     } else if (isStakingAutoV3()) {
@@ -429,10 +366,10 @@ export default function VaultCard({
       updateUserBalance();
       getBalance();
 
-      const totalBNBValueinLPContract = Number(formatEther(totalBNBinLPContract)) * Number(bnbPrice);
+      const totalBNBValueinLPContract = Number(formatEther(totalBNBinLPContract)) * Number(prices.bnbPrice);
       let totalLANDValueinLPContract = 0;
       try {
-        totalLANDValueinLPContract = Number(formatEther(totalLANDinLPContract?.toString() || '0')) * Number(price);
+        totalLANDValueinLPContract = Number(formatEther(totalLANDinLPContract?.toString() || '0')) * Number(prices.price);
       } catch (error: any) {
         console.warn('Error calculating LAND value, defaulting to 0:', error.message);
         totalLANDValueinLPContract = 0;
@@ -442,7 +379,7 @@ export default function VaultCard({
       const percentageOfLPInVault = Number(totalLPInVault) / Number(totalLPV2Supply == 0 ? 1 : totalLPV2Supply);
       const USDValueinVault = Number(percentageOfLPInVault) * totalUSDValue;
       setTVL(USDValueinVault);
-      const totalMoneyAnnual = 365 * Number(allocPoints[1]) * Number(price);
+      const totalMoneyAnnual = 365 * Number(allocPoints[1]) * Number(prices.price);
       const farmAPR = (totalMoneyAnnual / USDValueinVault) * 100;
 
       setAPR(farmAPR);
@@ -453,8 +390,6 @@ export default function VaultCard({
   }
 
   async function landPerYear() {
-    const landPerBlock = await masterchefContract.landPerBlock();
-
     const annualLand = BigInt(landPerBlock) * (BigInt("10512000"))
 
     const totalLandPerYear = BigInt(annualLand) * (BigInt(allocPoints[1])) / (BigInt(totalAllocPoint));
@@ -489,7 +424,7 @@ export default function VaultCard({
               onClick={() => {
                 setDetails("APY");
               }}
-              src={isDarkMode ? DetailsIconDark : DetailsIcon}
+              src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
               alt="details"
             />
             <div
@@ -554,7 +489,7 @@ export default function VaultCard({
               onClick={() => {
                 setDetails("Reward");
               }}
-              src={isDarkMode ? DetailsIconDark : DetailsIcon}
+              src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
               alt="details"
             />
             <div
@@ -593,7 +528,7 @@ export default function VaultCard({
     if (currentStep == 1) {
       setAmount(getDepositBalance());
     } else if (currentStep == 2) {
-      let value = await landTokenContract.balanceOf(address);
+      let value = balanceOfLandV1;
       value = formatEther(value.toString());
       setAmount(value);
     } else if (currentStep == 4) {
@@ -729,7 +664,7 @@ export default function VaultCard({
     }
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     if (isSuccessMigrate) {
       if (isLP()) {
         const landToRecombine = formatEther(
@@ -745,23 +680,11 @@ export default function VaultCard({
       } else {
         let approved = false;
         if (isStakingAutoV2() || isStakingAutoV3()) {
-          approved = await checkAllowance(
-            landTokenV2Contract,
-            landTokenV2Contract,
-            process.env.REACT_APP_AUTOLANDV3
-          );
+          approved = approveAutoLandV3OfLandV2;
         } else if (isStakingV2() || isStakingV3()) {
-          approved = await checkAllowance(
-            landTokenV2Contract,
-            landTokenV2Contract,
-            process.env.REACT_APP_MASTERCHEF
-          );
+          approved = approveMasterchefOfLandV2;
         } else if (isLP()) {
-          approved = await checkAllowance(
-            lpTokenV2Contract,
-            lpTokenV2Contract,
-            process.env.REACT_APP_MASTERCHEF
-          );
+          approved = approveMasterchefOfLpV2;
         }
 
         if (approved) setIsSuccessApprove(true);
@@ -785,7 +708,7 @@ export default function VaultCard({
     }
   }, [expectedEthV2]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (isSuccessRecombine) {
       updateUserBalance()
       getBalance();
@@ -793,23 +716,11 @@ export default function VaultCard({
 
       let approved = false;
       if (isStakingAutoV2() || isStakingAutoV3()) {
-        approved = await checkAllowance(
-          landTokenV2Contract,
-          landTokenV2Contract,
-          process.env.REACT_APP_AUTOLANDV3
-        );
+        approved = approveAutoLandV3OfLandV2;
       } else if (isStakingV2() || isStakingV3()) {
-        approved = await checkAllowance(
-          landTokenV2Contract,
-          landTokenV2Contract,
-          process.env.REACT_APP_MASTERCHEF
-        );
+        approved = approveMasterchefOfLandV2;
       } else if (isLP()) {
-        approved = await checkAllowance(
-          lpTokenV2Contract,
-          lpTokenV2Contract,
-          process.env.REACT_APP_MASTERCHEF
-        );
+        approved = approveMasterchefOfLpV2;
       }
       console.log(approved);
       if (approved) setIsSuccessApprove(true);
@@ -819,11 +730,11 @@ export default function VaultCard({
 
   const processStep3 = async () => {
     if (isStakingAutoV2() || isStakingAutoV3()) {
-      await approveLandv2Auto();
+      await approveLandV2(AUTO_LAND_V3_CONTRACT_ADDRESS)
     } else if (isStakingV2() || isStakingV3()) {
-      await approveLandv2Masterchief();
+      await approveLandV2(MASTERCHEF_CONTRACT_ADDRESS[bsc.id])
     } else if (isLP()) {
-      approveLPMasterchief();
+      await approveLpTokenV2(MASTERCHEF_CONTRACT_ADDRESS[bsc.id])
     }
   };
 
@@ -840,20 +751,18 @@ export default function VaultCard({
       let amountLS = amount;
       amountLS = parseEther(`${amountLS}`).toString();
       if (isStakingAutoV2() || isStakingAutoV3()) {
-        await depositAutoLandv2(amountLS).then(async () => {
-          updateUserBalance()
-          await getBalance();
-        });
+        await depositAutoLandv2(Number(amountLS))
+        await updateUserBalance()
+        await getBalance();
+        
       } else if (isStakingV2() || isStakingV3()) {
-        await depositLandv2(amountLS).then(async () => {
-          updateUserBalance()
-          await getBalance();
-        });
+        await depositLandv2(Number(amountLS))
+        await updateUserBalance()
+        await getBalance();
       } else if (isLP()) {
-        await depositLP(amountLS).then(async () => {
-          updateUserBalance()
-          await getBalance();
-        });
+        await depositLP(Number(amountLS))
+        await updateUserBalance()
+        await getBalance();
       }
     }
   };
@@ -883,7 +792,7 @@ export default function VaultCard({
             onClick={() => {
               setDetails(1);
             }}
-            src={isDarkMode ? DetailsIconDark : DetailsIcon}
+            src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
             alt="details"
           />
         </div>
@@ -928,7 +837,7 @@ export default function VaultCard({
             onClick={() => {
               setDetails("lp-2");
             }}
-            src={isDarkMode ? DetailsIconDark : DetailsIcon}
+            src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
             alt="details"
           />
         </div>
@@ -975,7 +884,7 @@ export default function VaultCard({
             onClick={() => {
               setDetails(2);
             }}
-            src={isDarkMode ? DetailsIconDark : DetailsIcon}
+            src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
             alt="details"
           />
         </div>
@@ -1022,7 +931,7 @@ export default function VaultCard({
             onClick={() => {
               setDetails("lp-4");
             }}
-            src={isDarkMode ? DetailsIconDark : DetailsIcon}
+            src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
             alt="details"
           />
         </div>
@@ -1069,7 +978,7 @@ export default function VaultCard({
             onClick={() => {
               setDetails(3);
             }}
-            src={isDarkMode ? DetailsIconDark : DetailsIcon}
+            src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
             alt="details"
           />
         </div>
@@ -1114,7 +1023,7 @@ export default function VaultCard({
             onClick={() => {
               setDetails(4);
             }}
-            src={isDarkMode ? DetailsIconDark : DetailsIcon}
+            src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
             alt="details"
           />
         </div>
@@ -1154,13 +1063,6 @@ export default function VaultCard({
   ) : (
     <>
       <div className="flex flex-col lg:flex-row rounded-xl">
-        <div className="p-5 lg:px-10">
-          <img
-            src={isLP() ? LPLogo : isStakingAutoV3() || isStakingAutoV2() ? AutoLANDIcon : LandsharLogo}
-            alt="landshare"
-            className="w-40 lg:w-52"
-          />
-        </div>
         <div className="flex flex-col w-full gap-5 p-5">
           <div className="font-bold text-2xl lg:text-3xl text-center capitalize">
             {vaultName === "LP Farm" ? "LAND-BNB LP" : vaultName}
