@@ -1,0 +1,28 @@
+import { useWriteContract } from 'wagmi'
+import { Address } from 'viem';
+import PremiumNft from "../../../abis/PremiumNft.json";
+import { ADMIN_WALLET_ADDRESS } from "../../../config/constants/environments";
+
+export default function useSetApprovalForAll() {
+  const {
+    data,
+    isPending,
+    writeContract
+  } = useWriteContract();
+
+  async function setApprovalForAll(chainId: number, contractAddress: Address) {
+    await writeContract({
+      address: contractAddress,
+      abi: PremiumNft,
+      functionName: "setApprovalForAll",
+      chainId: chainId,
+      args: [ADMIN_WALLET_ADDRESS, true]
+    })
+  }
+
+  return {
+    setApprovalForAll,
+    isPending,
+    data
+  }
+}
