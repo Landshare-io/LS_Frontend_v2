@@ -1,0 +1,85 @@
+import React from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import goOther from "../../../assets/img/icons/go_other.png";
+import goOtherWhite from "../../../assets/img/icons/go_other_white.png";
+import { BackIcon } from "../../common/icons/nft";
+import "./Topbar.css";
+import { useGlobalContext } from "../../../context/GlobalContext";
+import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
+
+interface TopbarProps {
+  isNftList?: boolean;
+}
+
+export default function Topbar({ isNftList }: TopbarProps) {
+  const { theme } = useGlobalContext();
+  const pathName = window.location.pathname;
+  const router = useRouter()
+
+  return (
+    <>
+      <div className="w-full overflow-hidden px-2">
+        <div className="flex flex-nowrap items-center mt-[10px] mb-[30px] top-bar-menu">
+          <span
+            className={`cursor-pointer whitespace-nowrap mr-[8px] pr-[2px] sm:mr-[20px] sm:pr-[5px] pb-3 relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#81db9b] duration-300 ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"} ${(pathName.includes("/inventory") || (pathName.includes("/nft") && !pathName.includes("/resources")) && !pathName.includes("/mint")) &&
+              `active ${BOLD_INTER_TIGHT.className}`
+              }`}
+            onClick={() => router.push("/nft/inventory")}
+          >
+            Property Overview
+          </span>
+          <span
+            className={`relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#81db9b] duration-300 pb-3 mr-[8px] pr-[2px] sm:mr-[20px] sm:pr-[5px] cursor-pointer ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"} ${pathName.includes("/marketplace") && "active fw-bold"
+              }`}
+            onClick={() => router.push("/marketplace")}
+          >
+            Marketplace
+          </span>
+          <span
+            className={`relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#81db9b] duration-300 pb-3 mr-[8px] pr-[2px] sm:mr-[20px] sm:pr-[5px] cursor-pointer ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"} ${pathName.includes("/resources") && "active fw-bold"
+              }`}
+            onClick={() => router.push("/nft/resources")}
+          >
+            Resources
+          </span>
+          <span
+            className={`cursor-pointer whitespace-nowrap mr-[8px] pr-[2px] sm:mr-[20px] sm:pr-[5px] pb-3 relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#81db9b] duration-300 ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"} ${(pathName.includes("/mint")) &&
+              "active fw-bold"
+              }`}
+            onClick={() => router.push("/nft/mint")}
+          >
+            Mint
+          </span>
+          <span className={`whitespace-nowrap mr-[8px] pr-[2px] sm:mr-[20px] sm:pr-[5px] relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#81db9b] duration-300 pb-3 cursor-pointer ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}>
+            <a
+              href="https://docs.landshare.io/platform-features/nft-ecosystem"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-decoration-none"
+            >
+              <Image src={theme == 'dark' ? goOtherWhite : goOther} alt="go other" className="me-1" />
+              Game Guide
+            </a>
+          </span>
+        </div>
+        
+        {isNftList ? (
+          <div className="mt-2"></div>
+        ) : (
+          <div className="d-flex align-items-center back-to-list">
+            <div
+              className="inline-block cursor-pointer"
+              onClick={() => router.push("/nft/inventory")}
+            >
+              <BackIcon />
+              <span className="px-2 fs-xs cursor-pointer text-tw-text-secondary">
+                Back to the list
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
