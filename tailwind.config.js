@@ -39,9 +39,14 @@ module.exports = {
           '0%, 100%': { filter: 'opacity(0.5)' },
           '50%': { filter: 'opacity(1.1)' },
         },
+        fadeIn: {
+          '0%': { opacity: 0.3 },
+          '100%': { opacity: 1 },
+        }
       },
       animation: {
         sparkling: 'sparkling 3s infinite',
+        fadeIn: "fadeIn 1.2s"
       },
     },
   },
