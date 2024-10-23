@@ -66,7 +66,10 @@ export const LAND_TOKEN_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
 export const SWIPELUX_SETTING = {
   apiKey: '1d1fe8ad-a154-4dc0-a6bd-3fe8939ba7d0'
 };
-export const CCIP_BACKEND_URL= 'http://localhost:3001'
+export const NFT_GAME_BACKEND_URL = 'http://localhost:3001'
+export const CCIP_BACKEND_URL = 'http://localhost:3002'
+export const APOLLO_RWA_BUY_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa-buy/v0.1.0"
+export const APOLLO_RWA_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa/v0.1.0"
 export const LAND_PRICE_SUBGRAPH_URL = 'https://api.studio.thegraph.com/query/81176/landshare-price/v0.1.0'
 export const LANDSHARE_COST_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=landshare&vs_currencies=usd'
 export const LANDPRICE_URL = 'http://159.203.181.148:5000/land_pricedata/'
