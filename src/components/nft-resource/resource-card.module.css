@@ -1,0 +1,7 @@
+.infoIcon svg path {
+    transition: all 0.2s ease-in-out;
+}
+  
+.infoIcon:hover svg path {
+    fill-opacity: 1 !important;
+}
