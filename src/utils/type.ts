@@ -41,3 +41,5 @@ export type TOKEN_TYPE = {
   icon: any
   symbol: string
 }
+
+export type PremiumNftType = "Porcelain Tile" | "Pool Table" | "Marble Countertops"
