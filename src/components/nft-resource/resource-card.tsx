@@ -43,7 +43,7 @@ export default function ResourceCard({
 }: ResourceCardProps) {
   const [openModal, setOpenModal] = useState(false);
   return (
-    <div className="flex flex-col duration-300 hover:shadow-lg animate-fadeIn w-[251px] rounded-[10px] overflow-hidden">
+    <div className="flex flex-col duration-300 hover:shadow-lg animate-[fadeIn] w-[251px] rounded-[10px] overflow-hidden">
       <div
         className="flex flex-col h-[251px]"
         style={{ background: background }}
