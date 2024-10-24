@@ -30,7 +30,7 @@ interface ResourceCardProps {
     value: string;
     description: string;
   };
-  background: string;
+  cardClassName?: string;
 }
 
 export default function ResourceCard({
@@ -39,15 +39,12 @@ export default function ResourceCard({
   subTitle,
   imgSrc,
   cost,
-  background,
+  cardClassName
 }: ResourceCardProps) {
   const [openModal, setOpenModal] = useState(false);
   return (
     <div className="flex flex-col duration-300 hover:shadow-lg animate-[fadeIn] w-[251px] rounded-[10px] overflow-hidden">
-      <div
-        className="flex flex-col h-[251px]"
-        style={{ background: background }}
-      >
+      <div className={`flex flex-col h-[251px] ${cardClassName}`}>
         <div className="text-[16px] font-semibold text-white bg-[#00000033] rounded-[10px] text-center py-2">
           {title}
         </div>
