@@ -11,6 +11,8 @@ interface GlobalContextType {
   notifyInfo:  (message: string) => void;
   screenLoadingStatus: string;
   setScreenLoadingStatus: Function;
+  isAuthenticated: boolean;
+  setIsAuthenticated: Function;
 }
 
 // Create the context with a default value of undefined
@@ -24,7 +26,9 @@ const GlobalContext = createContext<GlobalContextType>({
   notifyError: (message: string) => {},
   notifyInfo: (message: string) => {},
   screenLoadingStatus: '',
-  setScreenLoadingStatus: () => {}
+  setScreenLoadingStatus: () => {},
+  isAuthenticated: false,
+  setIsAuthenticated: () => {},
 });
 
 // Define the props for the provider
@@ -41,6 +45,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     message: '',
   });
   const [screenLoadingStatus, setScreenLoadingStatus] = useState('')
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('land-v2-theme') as 'light' | 'dark' || 'light';
@@ -72,7 +77,9 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     notifyError,
     notifyInfo,
     screenLoadingStatus,
-    setScreenLoadingStatus
+    setScreenLoadingStatus,
+    isAuthenticated,
+    setIsAuthenticated
   };
 
   return (
