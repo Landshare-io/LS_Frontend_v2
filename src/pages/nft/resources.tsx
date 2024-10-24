@@ -2,6 +2,7 @@ import React from "react";
 import type { NextPage } from 'next';
 import Head from "next/head";
 import { useChainId } from "wagmi";
+import NftResource from "../../components/nft-resource";
 import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 
 const NftResources: NextPage = () => {
@@ -17,7 +18,7 @@ const NftResources: NextPage = () => {
           Chain not Supported / Switch to BSC
         </div>
       ) : (
-        <></>
+        <NftResource />
       )}
     </div>
   );
