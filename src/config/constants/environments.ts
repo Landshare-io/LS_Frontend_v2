@@ -79,6 +79,21 @@ export const LIVE_COIN_API_KEY= '95ce49d3-3e89-475d-b61e-6638a002b1fe'
 export const ZERO_ID_WIDGET_API_KEY = '10000000-0000-0000-0000-7f9a2af16a1c'
 export const ZERO_ID_WIDGET_VERIFIER_URL = 'https://landshare-zeroid-verdict.onrender.com/verdict'
 export const ZERO_ID_WIDGET_ENV = 'zeroid'
+export const ADMIN_WALLET_ADDRESS = ""
+export const PREMIUM_NFT_CONTRACT_ADDRESS: Record<string, MULTI_CHAIN_CONTRACT_TYPE> = {
+  "Porcelain Tile": {
+    56: '0x7E96B1A21Cc702D495eD9c430A4B87CB1e163ab3' as Address,
+    97: '' as Address
+  },
+  "Pool Table": {
+    56: '0x422FCBc638E3f45E8b5555537A83AB59D9903716' as Address,
+    97: '' as Address
+  },
+  "Marble Countertops": {
+    56: '0x345E80D12b38E85E0CB205e54FA1A5853c1B91b7' as Address,
+    97: '' as Address
+  }
+}
 export const PORCELAIN_TILE_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x7E96B1A21Cc702D495eD9c430A4B87CB1e163ab3' as Address,
   97: '' as Address
