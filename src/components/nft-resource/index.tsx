@@ -2,83 +2,58 @@ import numeral from "numeral";
 import React, { useEffect, useState } from "react";
 import { useChainId } from "wagmi";
 import ReactLoading from "react-loading";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount } from "wagmi";
+import { bsc } from "viem/chains";
 import backendAxios from "../../hooks/nft-game/axios/nft-game-axios";
-import ResourceLandshare from "../../assets/img/icons/resource-landshare.png";
-import ResourceLumber from "../../assets/img/icons/resource-lumber.png";
-import ResourcePower from "../../assets/img/icons/resource-power.png";
-
-import { useGlobalContext } from "../../contexts/GlobalContext";
-import { useLandshareNftContext } from "../../contexts/LandshareNftContext";
-import { useScreenFixedProvider } from "../../contexts/ScreenFixedProvider";
 import { ChargeIcon, LumberIcon } from "../common/icons/nft";
 import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
-import useGetItemsByOwner from "../../hooks/contract/PremiumNftContract/useGetItemsByOwner";
-
+import useSetPremiumNftSaleHandler from "../../hooks/nft-game/nft-resource/useSetPremiumNftSaleHandler";
+import { useGlobalContext } from "../../context/GlobalContext";
 import Topbar from "../common/topbar";
 import YouOwn from "../common/you-own";
 import "./NftResource.css";
 import ResourceCard from "./resource-card";
-import { BigNumberish, ethers } from "ethers";
+import { BigNumberish, formatEther } from "ethers";
 import ConnectWallet from "../connect-wallet";
-import marble from "../../assets/img/marketplace-property/marble.png";
-import pool from "../../assets/img/marketplace-property/pool.png";
-import tile from "../../assets/img/marketplace-property/tile.png";
-import {
-  validateItemOneDay,
-  getMaxItemDate,
-  getRemainingTime,
-  validateResource,
-  getHasPremiumNftIds,
-  getPremiumNftAbleItems
-} from "../../utils/helpers/validator";
+import { validateResource } from "../../utils/helpers/validator";
 import PremiumNft from "../premium-nft";
 import { QuestionIcon } from "../common/icons";
 import sadEmoji from "../../assets/img/icons/sad_emoji.png";
 import sadEmojiWhite from "../../assets/img/icons/sad_emoji_white.png";
-import { PORCELAIN_TILE_CONTRACT_ADDRESS, POOL_TALBE_CONTRACT_ADDRESS, MARBLE_COUNTEROPS_CONTRACT_ADDRESS } from "../../config/constants/environments";
+import useGetPremiumNfts from "../../hooks/nft-game/premium-nfts/useGetPremiumNfts";
+import useGetSetting from "../../hooks/nft-game/axios/useGetSetting";
+import useGetLumberGatherStatus from "../../hooks/nft-game/axios/useGetLumberGatherStatus";
+import useGetResource from "../../hooks/nft-game/axios/useGetResource";
+import useGetPrice from "../../hooks/get-apy/useGetPrice";
+import useBuyPowerWithLandToken from "../../hooks/nft-game/nft-resource/useBuyPowerWIthLandToken";
+import { BOLD_INTER_TIGHT, PREMIUM_NFT_CONTRACT_ADDRESS } from "../../config/constants/environments";
+
+import ResourceLandshare from "../../assets/img/icons/resource-landshare.png";
+import ResourceLumber from "../../assets/img/icons/resource-lumber.png";
+import ResourcePower from "../../assets/img/icons/resource-power.png";
+import marble from "../../assets/img/marketplace-property/marble.png";
+import pool from "../../assets/img/marketplace-property/pool.png";
+import tile from "../../assets/img/marketplace-property/tile.png";
 
 export const NftResource = () => {
   const { isConnected, address } = useAccount();
   const chainId = useChainId()
-  const { setNftRoute, setShowNftFooter } = useScreenFixedProvider();
   const {
-    settingContract,
-    resourceContract,
     notifySuccess,
     notifyError,
-    signer,
-    userResource,
-    setUserResource,
-    provider,
-    oneDayTime,
-    premiumUpgradesList,
-    premiumAbleTime,
-    price,
-    isDarkMode
+    theme,
+    isAuthenticated
   } = useGlobalContext();
-  const {
-    contract: {
-      porcelainTileNewContract,
-      poolTableNewContract,
-      marbleCounteropsListNewContract
-    }
-  } = useLandshareNftContext();
-  const { data: landTokenV2Balance } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish }
 
-  const itemsByOwnerOfPorcelain = useGetItemsByOwner(chainId, PORCELAIN_TILE_CONTRACT_ADDRESS[chainId], address)
-  const itemsByOwnerOfPool = useGetItemsByOwner(chainId, POOL_TALBE_CONTRACT_ADDRESS[chainId], address)
-  const itemsByOwnerOfMarble = useGetItemsByOwner(chainId, MARBLE_COUNTEROPS_CONTRACT_ADDRESS[chainId], address)
+  const { data: landTokenBalance, refetch: refetchBalance } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish, refetch: Function }
+  const { premiumNfts } = useGetPremiumNfts(chainId, address)
+  const { powerPerLumber, oneDayTime, powerPerLandtoken } = useGetSetting()
+  const { gatheringLumberStatus, todayLumber, isHavingTree, getHavingTreeData, setGatherStatus } = useGetLumberGatherStatus(oneDayTime)
+  const { setPremiumNftsOnSale, isLoading: loader, setPremiumNftsOffSale } = useSetPremiumNftSaleHandler(chainId, address)
+  const { resource, maxPowerLimit, setResource } = useGetResource()
+  const { price } = useGetPrice(bsc.id)
+  const landtokenPrice = numeral(Number(price)).format("0.[000]")
 
-  const itemsByOwnerOfPremiumNft: Record<any, any> = {
-    "Porcelain Tile": itemsByOwnerOfPorcelain,
-    "Pool Table": itemsByOwnerOfPool,
-    "Marble Countertops": itemsByOwnerOfMarble
-  }
-  const [gatheringLumberStatus, setGatheringLumberStatus] = useState({
-    canGather: true,
-    remainingTime: 0,
-  });
   const images: Record<any, any> = {
     "Porcelain Tile": tile,
     "Pool Table": pool,
@@ -88,25 +63,8 @@ export const NftResource = () => {
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [powerToBuy, setPowerToBuy] = useState("5");
   const [gatheringLumber, setGatheringLumber] = useState("1");
-  const [landtokenPrice, setLandtokenPrice] = useState("");
-  const [isHavingTree, setIsHavingTree] = useState(false);
-  const [powerPerLandtoken, setPowerPerLandtoken] = useState(
-    50
-  );
-  const [powerPerLumber, setPowerPerLumber] = useState(
-    15
-  );
-  const [todayLumber, setTodayLumber] = useState(0);
-  const [premiumNfts, setPremiumNfts] = useState([]);
-  const [loader, setLoader] = useState('')
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await backendAxios.get('/user/buy-power-cost')
-
-      setPowerPerLandtoken(data)
-    })()
-  }, [])
+  const { buyPowerWithLandtoken } = useBuyPowerWithLandToken(chainId, refetchBalance, setIsLoading)
 
   useEffect(() => {
     setTimeout(() => {
@@ -115,60 +73,11 @@ export const NftResource = () => {
   }, []);
 
   useEffect(() => {
-    setNftRoute(true);
-    setShowNftFooter(true);
-    loadSetting();
     setGatherStatus();
-    return () => {
-      setShowNftFooter(false);
-      setNftRoute(false);
-    };
   }, []);
-
-  const gettingPremiumItems = async () => {
-    const premiumUpgrades = []
-    for (let premiumUpgrade of premiumUpgradesList) {
-      const { data: backendItems } = await backendAxios.get(`/has-premium-nft/get-user-premium-nfts/${premiumUpgrade.id}`)
-      const { data: marketplaceItems } = await backendAxios.get(`/premium-nft-marketplace/${premiumUpgrade.id}`)
-      const onChainItemsData = itemsByOwnerOfPremiumNft[premiumUpgrade.name]
-
-      const hasNftIds = getHasPremiumNftIds(backendItems, premiumAbleTime)
-      const ableNftIds = getPremiumNftAbleItems(onChainItemsData, hasNftIds)
-
-      for (let i = 0; i < ableNftIds.length; i++) {
-        premiumUpgrades.push({
-          ...premiumUpgrade,
-          name: premiumUpgrade.name,
-          multiplier: premiumUpgrade.buyReward[9],
-          imgSrc: images[premiumUpgrade.name],
-          price: premiumUpgrade.buy[1],
-          onChainId: ableNftIds[i].toString(),
-          marketplaceItem:
-            marketplaceItems.filter(item => item.type == premiumUpgrade.id && item.nftId == ableNftIds[i].toString()).length > 0 ?
-              marketplaceItems.filter(item => item.type == premiumUpgrade.id && item.nftId == ableNftIds[i].toString())[0].id :
-              -1
-        })
-      }
-    }
-    setPremiumNfts(premiumUpgrades)
-  }
-
-  useEffect(() => {
-    if (!signer) return;
-    getLandtokenPrice();
-    getHavingTreeData();
-    setGatherStatus();
-  }, [signer]);
-
-  useEffect(() => {
-    if (!signer) return;
-
-    gettingPremiumItems();
-  }, [signer, premiumUpgradesList])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getLandtokenPrice();
       getHavingTreeData();
       setGatherStatus();
     }, 300000);
@@ -176,137 +85,49 @@ export const NftResource = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const loadSetting = async () => {
-    try {
-      const { data } = await backendAxios.get('/setting/get-gather-power-cost');
-
-      setPowerPerLumber(Number(data.value));
-    } catch (error) {
-      console.log(error.response.data.message, error)
-    }
-  };
-
-  const getHavingTreeData = async () => {
-    try {
-      const { data } = await backendAxios.get('/has-item/having-tree');
-
-      setIsHavingTree(data);
-    } catch (error) {
-      console.log(error.response.data.message, error)
-    }
-  };
-
-  async function setGatherStatus() {
-    try {
-      const { data: gatherItems } = await backendAxios.get('/has-item/gather-status')
-      const maxCountToGather = isHavingTree ? 3 : 2;
-      let countGatheredToday = 0;
-
-      for (const gatherItem of gatherItems) {
-        if (validateItemOneDay(gatherItem, oneDayTime)) {
-          countGatheredToday++
-        }
-      }
-      if (countGatheredToday >= maxCountToGather) {
-        setGatheringLumberStatus({
-          canGather: false,
-          remainingTime: getRemainingTime(getMaxItemDate(gatherItems), oneDayTime)
-        })
-      } else {
-        setGatheringLumberStatus({
-          canGather: true,
-          remainingTime: 0
-        })
-      }
-      setTodayLumber(countGatheredToday);
-    } catch (error) {
-      console.log(error.response.data.message, error)
-    }
-  }
-
-  const buyPowerWithLandtoken = async () => {
-    try {
-      const requiredLandToken = numeral(powerToBuy / powerPerLandtoken).format('0.[00]')
-      const { data: transactionData } = await backendAxios.post('/has-item/get-buy-power-transaction', {
-        requiredLandToken: requiredLandToken
-      })
-
-      const sendedTransaction = await signer.sendTransaction(transactionData.transaction)
-      sendedTransaction.wait().then(async (receipt) => {
-        if (receipt.status) {
-          const { data } = await backendAxios.post('/has-item/buy-power-with-land', {
-            txHash: receipt.transactionHash,
-            blockNumber: receipt.blockNumber,
-            requiredLandToken: requiredLandToken,
-            nonce: transactionData.nonce
-          })
-
-          setUserResource((prevState) => ({
-            ...prevState,
-            landTokenV2: landTokenV2Balance,
-            resource: [data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel],
-          }))
-
-          setIsLoading([false, false]);
-          notifySuccess(`Bought ${powerToBuy} Power successfully!`)
-        } else {
-          setIsLoading([false, false]);
-          notifyError("Buy Power Error");
-        }
-      })
-    } catch (error: any) {
-      console.log("Buy Power Error: ", error);
-      setIsLoading([false, false]);
-      notifyError(error.response.data.message);
-    }
-  };
-
   const buyPower = async () => {
     setIsLoading([true, false]);
-    if (!localStorage.getItem("jwtToken-v2")) {
+    if (!isAuthenticated) {
       setIsLoading([false, false]);
       return notifyError("Please login!");
     }
 
-    if (Number(userResource.resource[0]) + Number(powerToBuy) >= Number(userResource.maxPowerLimit)) {
+    if (Number(resource[0]) + Number(powerToBuy) >= Number(maxPowerLimit)) {
       setIsLoading([false, false]);
       return notifyError("Couldn't buy power more than max limit");
     }
 
-    const requiredLandToken = numeral(powerToBuy / powerPerLandtoken).format('0.[00]')
+    const requiredLandToken = numeral(Number(powerToBuy) / powerPerLandtoken).format('0.[00]')
 
-    if (Number(requiredLandToken) > userResource.landTokenBalance) {
-      setIsLoading({ type: -1, loading: false });
+    if (Number(requiredLandToken) > Number(landTokenBalance)) {
+      setIsLoading([false, false]);
       return notifyError("Not enough LAND tokens");
     } else {
-      await buyPowerWithLandtoken();
+      await buyPowerWithLandtoken(powerToBuy, powerPerLandtoken);
     }
   };
 
   const gatherLumber = async () => {
     setIsLoading([false, true]);
-    if (!localStorage.getItem("jwtToken-v2")) {
+    if (!isAuthenticated) {
       setIsLoading([false, false]);
       return notifyError("Please login!");
     }
 
-    if ((gatheringLumber >= 1) && (gatheringLumber <= 3)) {
+    if ((Number(gatheringLumber) >= 1) && (Number(gatheringLumber) <= 3)) {
       const maxCountToGather = isHavingTree ? 3 : 2;
       if (Number(todayLumber) + Number(gatheringLumber) <= maxCountToGather) {
-        if (await validateResource(userResource, [Number(powerPerLumber) * gatheringLumber, 0, 0, 0, 0])) {
+        if (await validateResource(resource, [Number(powerPerLumber) * Number(gatheringLumber), 0, 0, 0, 0])) {
           try {
             const { data } = await backendAxios.post('/has-item/gather-lumber', {
               gatheringLumber: gatheringLumber
             })
 
-            setUserResource((prevState) => ({
-              ...prevState,
-              resource: [data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel],
-            }))
+            setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
             await setGatherStatus()
             notifySuccess(`Gather ${gatheringLumber} Lumber successfully`)
             setIsLoading([false, false]);
-          } catch (error) {
+          } catch (error: any) {
             console.log(error)
             setIsLoading([false, false]);
             return notifyError(error.response.data.message);
@@ -325,113 +146,30 @@ export const NftResource = () => {
     }
   };
 
-  const setPremiumNftsOnSale = async (item, price) => {
-    setLoader(`${item.id}-${item.onChainId}`) // type-onChainId
-    try {
-      const isApprovedForAll = await contracts[item.name].isApprovedForAll(
-        address,
-        process.env.REACT_APP_ADMIN_WALLET_ADDRESS
-      );
-
-      if (!isApprovedForAll) {
-        const transaction = await contracts[item.name].setApprovalForAll(process.env.REACT_APP_ADMIN_WALLET_ADDRESS, true);
-        const receipt = await transaction.wait()
-        if (receipt.status) {
-          await setPremiumNftToOnSale(item, price);
-        } else {
-          setLoader('');
-          notifyError("Approve error");
-        }
-      } else {
-        await setPremiumNftToOnSale(item, price);
-      }
-    } catch (error) {
-      setLoader('');
-      return notifyError(`Set on-sale ${item.name} #${item.onChainId} was failed`);
-    }
-  }
-
-  const setPremiumNftToOnSale = async (item, price) => {
-    try {
-      const approveTransaction = await contracts[item.name].approve(process.env.REACT_APP_ADMIN_WALLET_ADDRESS, item.onChainId);
-      const approveReceipt = await approveTransaction.wait()
-      if (approveReceipt.status) {
-        const { data } = await backendAxios.post('/premium-nft-marketplace', {
-          type: item.id,
-          nftId: item.onChainId,
-          price: price
-        })
-
-        await gettingPremiumItems()
-        notifySuccess(`Set on-sale ${item.name} #${item.onChainId} successfully`)
-        setLoader('')
-      } else {
-        setLoader('');
-        notifyError("Approve error");
-      }
-    } catch (error) {
-      console.log(error)
-      setLoader('');
-      return notifyError(error.response.data.message);
-    }
-  }
-
-  const setPremiumNftsOffSale = async (item) => {
-    setLoader(`${item.id}-${item.onChainId}`) // type-onChainId
-    try {
-      const { data } = await backendAxios.delete(`/premium-nft-marketplace?type=${item.id}&nftId=${item.onChainId}`)
-
-      await gettingPremiumItems()
-      notifySuccess(`Set off-sale ${item.name} #${item.onChainId} successfully`)
-      setLoader('')
-    } catch (error) {
-      setLoader('');
-      return notifyError(error.response.data.message);
-    }
-  }
-
-  const getLandtokenPrice = async () => {
-    // const tokenPriceData = await axios.get(gameSetting.landshareCostApi);
-    // let tokenPriceUSD = numeral(
-    //   Number(tokenPriceData.data.landshare.usd)
-    // ).format("0.[000]");
-    // setLandtokenPrice(tokenPriceUSD);
-    setLandtokenPrice(numeral(
-      Number(price)).format("0.[000]"))
-  };
-
   return (
     <>
-      <section className={`${isDarkMode ? "dark" : ""} bg-tw-primary text-tw-text-primary`}>
-        <div className="nft-game-container d-flex flex-column pt-0">
-          {(typeof signer === "undefined" || !isConnected) ? (
-            <div className="text-center min-h-60vh d-flex flex-column justify-content-center align-items-center">
+      <section className="bg-primary text-text-primary">
+        <div className="max-w-[1200px] px-0 m-auto flex flex-col pt-0">
+          {(!isConnected) ? (
+            <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
               <ConnectWallet />
             </div>
           ) : (
             <>
               <Topbar isNftList />
-              <span className="fw-bold fs-md">Resources</span>
-              <div className={`h-0 border-b ${isDarkMode ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} d-block w-100 mb-5 mt-3`}></div>
+              <span className={`text-[16px] ${BOLD_INTER_TIGHT.className}`}>Resources</span>
+              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-5 mt-3`}></div>
               <div
-                className={`d-flex w-100 min-h-60vh h-100 align-items-center justify-content-center ${isPageLoading ? "page-loading" : "page-loading-disable"
-                  }`}
+                className={`flex w-full min-h-[60vh] h-full items-center justify-center ${isPageLoading ? "grid" : "hidden"}`}
               >
                 <ReactLoading type="bars" color="#61cd81" />
               </div>
               <div
-                className={`resources-section mb-5 ${!isPageLoading ? "page-loading" : "page-loading-disable"
-                  }`}
+                className={`flex pb-[20px] mlg:grid mlg:grid-cols-[minmax(251px, max-content),minmax(251px, max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(251px, max-content),minmax(251px, max-content),minmax(251px, max-content)] xl:grid-cols-[minmax(251px, max-content),minmax(251px, max-content),minmax(251px, max-content),minmax(251px, max-content)] mb-5 ${!isPageLoading ? "grid" : "hidden"}`}
               >
                 <ResourceCard
                   title="LAND TOKENS"
-                  subTitle={`Your Balance: ${numeral(
-                    Number(
-                      ethers.utils.formatEther(
-                        userResource.landTokenBalance.toString()
-                      )
-                    )
-                  )
+                  subTitle={`Your Balance: ${numeral(Number(formatEther(landTokenBalance.toString())))
                     .format("0.[00]")
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} LAND`}
@@ -444,7 +182,7 @@ export const NftResource = () => {
                 >
                   <div className="d-flex flex-column resource-body justify-content-between">
                     <div className="position-relative d-flex flex-column align-items-center  h-100">
-                      <span className={`fs-14 fw-500 ${isDarkMode ? "#bdbdbd" : "#545454"} text-center`}>
+                      <span className={`fs-14 fw-500 ${theme == 'dark' ? "#bdbdbd" : "#545454"} text-center`}>
                         Use LAND Tokens to purchase additional power or repair
                         your house.
                       </span>
@@ -453,7 +191,7 @@ export const NftResource = () => {
                           href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
                           target="_blank"
                         >
-                          <button className="btn nav-btn fs-16 fw-600 text-tw-button-text-secondary">
+                          <button className="btn nav-btn fs-16 fw-600 text-button-text-secondary">
                             BUY
                           </button>
                         </a>
@@ -463,8 +201,8 @@ export const NftResource = () => {
                 </ResourceCard>
                 <ResourceCard
                   title="Power"
-                  subTitle={`${numeral(userResource.resource[0].toString()).format("0.[00]")} / 
-                  ${userResource.maxPowerLimit.toString()}`}
+                  subTitle={`${numeral(resource[0].toString()).format("0.[00]")} / 
+                  ${maxPowerLimit.toString()}`}
                   imgSrc={ResourcePower}
                   cost={{
                     value: Number(numeral(powerPerLandtoken).format('0.[00]')),
@@ -473,31 +211,31 @@ export const NftResource = () => {
                   background="linear-gradient(180deg, #4896F1 0%, rgba(119, 161, 210, 0.55) 100%)"
                 >
                   <div className="d-flex flex-column resource-body justify-content-between">
-                    <div className="d-flex flex-column gather-power-resource bg-tw-secondary position-relative resource-body-content">
+                    <div className="d-flex flex-column gather-power-resource bg-secondary position-relative resource-body-content">
                       <div className="gather-resource-content">
                         <div className="d-flex justify-content-start align-items-center">
-                          <span className="status-label me-2 text-tw-text-secondary">POWER: </span>
+                          <span className="status-label me-2 text-text-secondary">POWER: </span>
                           <input
-                            className={`lumber-count me-1 ${isDarkMode ? "bg-gray-600" : ""}`}
+                            className={`lumber-count me-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
                             type="number"
                             step="1"
                             value={powerToBuy}
                             onChange={(e) => setPowerToBuy(e.target.value)}
                           />
-                          <ChargeIcon iconColor={isDarkMode && "#cec9c9"} />
+                          <ChargeIcon iconColor={theme == 'dark' && "#cec9c9"} />
                         </div>
                         <div className="divider w-100"></div>
                         <div className="d-flex justify-content-start">
                           <div>
-                            <span className="status-label me-2 text-tw-text-secondary">Cost: </span>
-                            <span className={`${isDarkMode ? "text-[#cec9c9]" : "text-[#323131]"} text-[14px] font-[600] mr-[4px]`}>{`${numeral(
+                            <span className="status-label me-2 text-text-secondary">Cost: </span>
+                            <span className={`${theme == 'dark' ? "text-[#cec9c9]" : "text-[#323131]"} text-[14px] font-[600] mr-[4px]`}>{`${numeral(
                               Number(powerToBuy) / Number(powerPerLandtoken)
                             ).format("0.[0000]")} LAND`}</span>
                           </div>
                         </div>
                       </div>
                       <button
-                        className={`btn nav-btn w-100 buy-or-upgrade-btn position-absolute green text-tw-button-text-secondary ${isLoading[0]
+                        className={`btn nav-btn w-100 buy-or-upgrade-btn position-absolute green text-button-text-secondary ${isLoading[0]
                           ? "d-flex justify-content-center align-items-center"
                           : ""
                           }`}
@@ -563,12 +301,12 @@ export const NftResource = () => {
                   background="linear-gradient(180deg, #A27E23 0%, rgba(167, 148, 83, 0.55) 100%)"
                 >
                   <div className="d-flex flex-column resource-body justify-content-between">
-                    <div className="d-flex flex-column gather-lumber-resource bg-tw-secondary position-relative resource-body-content">
+                    <div className="d-flex flex-column gather-lumber-resource bg-secondary position-relative resource-body-content">
                       <div className="gather-resource-content">
                         <div className="d-flex justify-content-start align-items-center">
-                          <span className="status-label me-2 text-tw-text-secondary">Gather: </span>
+                          <span className="status-label me-2 text-text-secondary">Gather: </span>
                           <input
-                            className={`lumber-count me-1 ${isDarkMode ? "bg-gray-600" : ""}`}
+                            className={`lumber-count me-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
                             type="number"
                             step="1"
                             max={isHavingTree ? "3" : "2"}
@@ -576,21 +314,21 @@ export const NftResource = () => {
                             value={gatheringLumber}
                             onChange={(e) => setGatheringLumber(e.target.value)}
                           />
-                          <LumberIcon iconColor={isDarkMode && "#cec9c9"} />
+                          <LumberIcon iconColor={theme == 'dark' && "#cec9c9"} />
                         </div>
                         <div className="divider w-100"></div>
                         <div className="d-flex justify-content-start">
                           <div>
-                            <span className="status-label me-2 text-tw-text-secondary">Cost: </span>
-                            <span className={`${isDarkMode ? "text-[#cec9c9]" : "text-[#323131]"} text-[14px] font-[600]`}>
+                            <span className="status-label me-2 text-text-secondary">Cost: </span>
+                            <span className={`${theme == 'dark' ? "text-[#cec9c9]" : "text-[#323131]"} text-[14px] font-[600]`}>
                               {Number(gatheringLumber) * Number(powerPerLumber)}{" "}
-                              <ChargeIcon iconColor={isDarkMode && "#cec9c9"} />
+                              <ChargeIcon iconColor={theme == 'dark' && "#cec9c9"} />
                             </span>
                           </div>
                         </div>
                       </div>
                       <button
-                        className={`btn nav-btn w-100 buy-or-upgrade-btn position-absolute yellow text-tw-button-text-secondary ${isLoading[1]
+                        className={`btn nav-btn w-100 buy-or-upgrade-btn position-absolute yellow text-button-text-secondary ${isLoading[1]
                           ? "d-flex justify-content-center align-items-center"
                           : ""
                           }`}
@@ -619,7 +357,7 @@ export const NftResource = () => {
                 {/* <TokenCard /> */}
               </div>
               <span className="fw-bold fs-md">Premium Upgrades</span>
-              <div className={`h-0 border-b ${isDarkMode ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} d-block w-100 mb-5 mt-3`}></div>
+              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} d-block w-100 mb-5 mt-3`}></div>
               {premiumNfts.length > 0 ? (
                 <div className="premium-items-section my-2">
                   {premiumNfts.map((item, index) => (
@@ -627,9 +365,9 @@ export const NftResource = () => {
                       key={`premium-item-${index}`}
                       premiumNft={item}
                       loader={loader}
-                      onSubmit={(item, price) =>
+                      onSubmit={(item: any, price: number) =>
                         item.marketplaceItem !== -1 ?
-                          setPremiumNftsOffSale(item) : setPremiumNftsOnSale(item, price)
+                          setPremiumNftsOffSale(item) : setPremiumNftsOnSale(PREMIUM_NFT_CONTRACT_ADDRESS[item.name][chainId], item, price)
                       }
                     />
                   ))}
@@ -637,12 +375,12 @@ export const NftResource = () => {
               ) : (
                 <div className="d-flex w-100 h-100 align-items-center justify-content-center no-item-ui">
                   <div className="no-item-text text-gray-500">No NFTs Found</div>
-                  <img src={isDarkMode ? sadEmojiWhite : sadEmoji} alt="Sad Emoji" />
+                  <img src={theme == 'dark' ? sadEmojiWhite : sadEmoji} alt="Sad Emoji" />
                   <div className="no-item-link">
                     <a
                       href="https://docs.landshare.io/"
                       target="_blank"
-                      className={`no-item-hyper text-tw-text-secondary"}`}
+                      className={`no-item-hyper text-text-secondary"}`}
                     >
                       Learn More
                     </a>{" "}
@@ -654,12 +392,8 @@ export const NftResource = () => {
           )}
         </div>
       </section>
-      {signer !== "undefined" && isConnected && (
-        <YouOwn
-          resource={userResource.resource}
-          maxPowerLimit={userResource.maxPowerLimit}
-          landTokenBalance={userResource.landTokenBalance}
-        />
+      {isConnected && (
+        <YouOwn />
       )}
     </>
   );
