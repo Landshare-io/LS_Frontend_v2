@@ -5,9 +5,10 @@ import axios from "../axios/nft-game-axios"
 import useSetApprovalForAll from "../../contract/PremiumNftContract/useSetApprovalForAll";
 import useIsApprovedForAll from "../../contract/PremiumNftContract/useIsApproveForAll";
 import useApprove from "../../contract/PremiumNftContract/useApprove";
+import useGetPremiumNfts from "../premium-nfts/useGetPremiumNfts";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
-export default function useSetPremiumNftOnSale(chainId: number, address: Address | undefined) {
+export default function useSetPremiumNftSaleHandler(chainId: number, address: Address | undefined) {
   const { notifyError, notifySuccess, isAuthenticated } = useGlobalContext()
   const [isLoading, setIsLoading] = useState('')
   const [premiumNftAddress, setPremiumNftAddress] = useState<Address>("0x")
@@ -16,6 +17,7 @@ export default function useSetPremiumNftOnSale(chainId: number, address: Address
   const { isApprovedForAll, data: isApprovedForAllTx } = useIsApprovedForAll()
   const { setApprovalForAll, data: setApprovalForAllTx } = useSetApprovalForAll()
   const { approve, data: approveTx } = useApprove()
+  const { getPremiumNfts } = useGetPremiumNfts(chainId, address)
 
   const { isSuccess: isApprovedForAllSuccess, isLoading: isApprovedForAllLoading } = useWaitForTransactionReceipt({
     hash: isApprovedForAllTx,
@@ -87,7 +89,22 @@ export default function useSetPremiumNftOnSale(chainId: number, address: Address
     isApprovedForAll(chainId, contractAddress, address)
   }
 
+  const setPremiumNftsOffSale = async (item: any) => {
+    try {
+      setIsLoading(`${item.id}-${item.onChainId}`)
+      const { data } = await axios.delete(`/premium-nft-marketplace?type=${item.id}&nftId=${item.onChainId}`)
+
+      await getPremiumNfts()
+      notifySuccess(`Set off-sale ${item.name} #${item.onChainId} successfully`)
+      setIsLoading('')
+    } catch (error: any) {
+      setIsLoading('');
+      return notifyError(error.response.data.message);
+    }
+  }
+
   return {
+    setPremiumNftsOffSale,
     setPremiumNftsOnSale,
     isLoading
   }
