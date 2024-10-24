@@ -1,5 +1,6 @@
 import numeral from "numeral";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useChainId } from "wagmi";
 import ReactLoading from "react-loading";
 import { useAccount } from "wagmi";
@@ -17,6 +18,7 @@ import { BigNumberish, formatEther } from "ethers";
 import ConnectWallet from "../connect-wallet";
 import { validateResource } from "../../utils/helpers/validator";
 import PremiumNft from "../premium-nft";
+import Button from "../common/button";
 import { QuestionIcon } from "../common/icons";
 import sadEmoji from "../../assets/img/icons/sad_emoji.png";
 import sadEmojiWhite from "../../assets/img/icons/sad_emoji_white.png";
@@ -27,15 +29,14 @@ import useGetResource from "../../hooks/nft-game/axios/useGetResource";
 import useGetPrice from "../../hooks/get-apy/useGetPrice";
 import useBuyPowerWithLandToken from "../../hooks/nft-game/nft-resource/useBuyPowerWIthLandToken";
 import { BOLD_INTER_TIGHT, PREMIUM_NFT_CONTRACT_ADDRESS } from "../../config/constants/environments";
+import ResourceLandshare from "../../../public/icons/resource-landshare.png";
+import ResourceLumber from ".../../../public/icons/resource-lumber.png";
+import ResourcePower from ".../../../public/icons/resource-power.png";
+import marble from ".../../../public/img/marketplace-property/marble.png";
+import pool from ".../../../public/img/marketplace-property/pool.png";
+import tile from ".../../../public/img/marketplace-property/tile.png";
 
-import ResourceLandshare from "../../assets/img/icons/resource-landshare.png";
-import ResourceLumber from "../../assets/img/icons/resource-lumber.png";
-import ResourcePower from "../../assets/img/icons/resource-power.png";
-import marble from "../../assets/img/marketplace-property/marble.png";
-import pool from "../../assets/img/marketplace-property/pool.png";
-import tile from "../../assets/img/marketplace-property/tile.png";
-
-export const NftResource = () => {
+export default function NftResource() {
   const { isConnected, address } = useAccount();
   const chainId = useChainId()
   const {
@@ -165,7 +166,7 @@ export const NftResource = () => {
                 <ReactLoading type="bars" color="#61cd81" />
               </div>
               <div
-                className={`flex pb-[20px] mlg:grid mlg:grid-cols-[minmax(251px, max-content),minmax(251px, max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(251px, max-content),minmax(251px, max-content),minmax(251px, max-content)] xl:grid-cols-[minmax(251px, max-content),minmax(251px, max-content),minmax(251px, max-content),minmax(251px, max-content)] mb-5 ${!isPageLoading ? "grid" : "hidden"}`}
+                className={`flex pb-[20px] mlg:grid mlg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] xl:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] mb-5 ${!isPageLoading ? "grid" : "hidden"}`}
               >
                 <ResourceCard
                   title="LAND TOKENS"
@@ -178,22 +179,22 @@ export const NftResource = () => {
                     value: numeral(Number(landtokenPrice)).format("0.[00]"),
                     description: "USD/LAND",
                   }}
-                  background="linear-gradient(180deg, #31AF52 0%, #80CED9 100%)"
+                  cardClassName="bg-gradient-to-b from-[#31AF52] to-[#80CED9]"
                 >
-                  <div className="d-flex flex-column resource-body justify-content-between">
-                    <div className="position-relative d-flex flex-column align-items-center  h-100">
-                      <span className={`fs-14 fw-500 ${theme == 'dark' ? "#bdbdbd" : "#545454"} text-center`}>
-                        Use LAND Tokens to purchase additional power or repair
-                        your house.
+                  <div className="flex flex-col bg-[#6f8e9d66] h-[160px] justify-between">
+                    <div className="relative flex flex-col items-center h-full">
+                      <span className="text-[14px] font-normal text-center">
+                        Use LAND Tokens to purchase additional power or repair your house.
                       </span>
-                      <div className="resource-selectable d-flex justify-content-center align-items-center position-absolute">
+                      <div className="bottom-0 left-[50%] translate-x-[-50%] flex justify-center items-center absolute">
                         <a
+                          className="text-[#fff] no-underline"
                           href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
                           target="_blank"
                         >
-                          <button className="btn nav-btn fs-16 fw-600 text-button-text-secondary">
+                          <Button className="text-[16px] font-semibold w-[171px] h-[40px] text-button-text-secondary">
                             BUY
-                          </button>
+                          </Button>
                         </a>
                       </div>
                     </div>
@@ -205,38 +206,38 @@ export const NftResource = () => {
                   ${maxPowerLimit.toString()}`}
                   imgSrc={ResourcePower}
                   cost={{
-                    value: Number(numeral(powerPerLandtoken).format('0.[00]')),
+                    value: numeral(powerPerLandtoken).format('0.[00]'),
                     description: "Power/LAND",
                   }}
-                  background="linear-gradient(180deg, #4896F1 0%, rgba(119, 161, 210, 0.55) 100%)"
+                  cardClassName="bg-gradient-to-b from-[#4896F1] to-[#77a1d28c]"
                 >
-                  <div className="d-flex flex-column resource-body justify-content-between">
-                    <div className="d-flex flex-column gather-power-resource bg-secondary position-relative resource-body-content">
-                      <div className="gather-resource-content">
-                        <div className="d-flex justify-content-start align-items-center">
-                          <span className="status-label me-2 text-text-secondary">POWER: </span>
+                  <div className="flex flex-col resource-body bg-[#6f8e9d66] h-[160px] justify-between">
+                    <div className="flex flex-col border-b-[2px] border-[#61cd81] rounded-[25px] pt-[10px] bg-secondary relative h-[125px]">
+                      <div className="px-[13px]">
+                        <div className="flex justify-start items-center">
+                          <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-2 text-text-secondary">POWER: </span>
                           <input
-                            className={`lumber-count me-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
+                            className={`px-[5px] max-w-[50px] border-[1px] border-[#8d8d8d] rounded-[5px] text-[0.8rem] px-[5px] focus-visible:outline-0 focus-visible:shadow-md mr-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
                             type="number"
                             step="1"
                             value={powerToBuy}
                             onChange={(e) => setPowerToBuy(e.target.value)}
                           />
-                          <ChargeIcon iconColor={theme == 'dark' && "#cec9c9"} />
+                          <ChargeIcon iconColor={theme == 'dark' ? "#cec9c9" : ''} />
                         </div>
-                        <div className="divider w-100"></div>
-                        <div className="d-flex justify-content-start">
+                        <div className="border-b-[1px] border-[#00000050] w-full"></div>
+                        <div className="flex justify-start">
                           <div>
-                            <span className="status-label me-2 text-text-secondary">Cost: </span>
-                            <span className={`${theme == 'dark' ? "text-[#cec9c9]" : "text-[#323131]"} text-[14px] font-[600] mr-[4px]`}>{`${numeral(
-                              Number(powerToBuy) / Number(powerPerLandtoken)
-                            ).format("0.[0000]")} LAND`}</span>
+                            <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-2 text-text-secondary">Cost: </span>
+                            <span className={`${theme == 'dark' ? "text-[#cec9c9]" : "text-[#323131]"} text-[14px] font-[600] mr-[4px]`}>
+                              {`${numeral(Number(powerToBuy) / Number(powerPerLandtoken)).format("0.[0000]")} LAND`}
+                            </span>
                           </div>
                         </div>
                       </div>
-                      <button
-                        className={`btn nav-btn w-100 buy-or-upgrade-btn position-absolute green text-button-text-secondary ${isLoading[0]
-                          ? "d-flex justify-content-center align-items-center"
+                      <Button
+                        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute bg-[#61cd81] border-[2px] border-[#61cd81] text-button-text-secondary ${isLoading[0]
+                          ? "flex justify-center items-center"
                           : ""
                           }`}
                         onClick={buyPower}
@@ -246,16 +247,16 @@ export const NftResource = () => {
                           <>
                             <ReactLoading
                               type="spin"
-                              className="me-2 button-spinner"
+                              className="mr-2 mb-[4px]"
                               width="24px"
                               height="24px"
                             />
-                            <span className="upgrade-status">Loading</span>
+                            <span className="font-semibold">Loading</span>
                           </>
                         ) : (
                           "BUY"
                         )}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </ResourceCard>
@@ -265,48 +266,27 @@ export const NftResource = () => {
                     gatheringLumberStatus.canGather
                       ? `Available: ${isHavingTree ? 3 - todayLumber : 2 - todayLumber
                       } Lumber`
-                      : `Cooldown: ${parseInt(
-                        (gatheringLumberStatus.remainingTime /
-                          oneDayTime) *
-                        24
-                      )} : ${((gatheringLumberStatus.remainingTime /
-                        oneDayTime) *
-                        24 -
-                        parseInt(
-                          (gatheringLumberStatus.remainingTime /
-                            oneDayTime) *
-                          24
-                        )) *
-                        60 >=
-                        10
+                      : `Cooldown: 
+                        ${parseInt(((Number(gatheringLumberStatus.remainingTime) / Number(oneDayTime)) * 24).toString())} : 
+                        ${((Number(gatheringLumberStatus.remainingTime) / oneDayTime) * 24 - parseInt(((Number(gatheringLumberStatus.remainingTime) / Number(oneDayTime)) * 24).toString())) * 60 >= 10
                         ? ""
                         : "0"
-                      }${parseInt(
-                        ((gatheringLumberStatus.remainingTime /
-                          oneDayTime) *
-                          24 -
-                          parseInt(
-                            (gatheringLumberStatus.remainingTime /
-                              oneDayTime) *
-                            24
-                          )) *
-                        60
-                      )}`
+                      }${(((Number(gatheringLumberStatus.remainingTime) / Number(oneDayTime)) * 24 - Number(parseInt(((Number(gatheringLumberStatus.remainingTime) / Number(oneDayTime)) * 24).toString()))) * 60)}`
                   }
                   imgSrc={ResourceLumber}
                   cost={{
                     value: `1 Lumber/${powerPerLumber} Power`,
                     description: "",
                   }}
-                  background="linear-gradient(180deg, #A27E23 0%, rgba(167, 148, 83, 0.55) 100%)"
+                  cardClassName="bg-gradient-to-b from-[#A27E23] to-[#a794538c]"
                 >
-                  <div className="d-flex flex-column resource-body justify-content-between">
-                    <div className="d-flex flex-column gather-lumber-resource bg-secondary position-relative resource-body-content">
-                      <div className="gather-resource-content">
-                        <div className="d-flex justify-content-start align-items-center">
-                          <span className="status-label me-2 text-text-secondary">Gather: </span>
+                  <div className="flex flex-col bg-[#6f8e9d66] h-[160px] justify-between">
+                    <div className="flex flex-col border-[2px] border-[#ec9821] pt-[10px] bg-secondary relative h-[125px]">
+                      <div className="px-[13px]">
+                        <div className="flex justify-start items-center">
+                          <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-2 text-text-secondary">Gather: </span>
                           <input
-                            className={`lumber-count me-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
+                            className={`px-[5px] max-w-[50px] border-[1px] border-[#8d8d8d] rounded-[5px] text-[0.8rem] px-[5px] focus-visible:outline-0 focus-visible:shadow-md mr-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
                             type="number"
                             step="1"
                             max={isHavingTree ? "3" : "2"}
@@ -314,21 +294,21 @@ export const NftResource = () => {
                             value={gatheringLumber}
                             onChange={(e) => setGatheringLumber(e.target.value)}
                           />
-                          <LumberIcon iconColor={theme == 'dark' && "#cec9c9"} />
+                          <LumberIcon iconColor={theme == 'dark' ? "#cec9c9" : ''} />
                         </div>
-                        <div className="divider w-100"></div>
-                        <div className="d-flex justify-content-start">
+                        <div className="border-b-[1px] border-[#00000050] w-full"></div>
+                        <div className="flex justify-start">
                           <div>
-                            <span className="status-label me-2 text-text-secondary">Cost: </span>
+                            <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-2 text-text-secondary">Cost: </span>
                             <span className={`${theme == 'dark' ? "text-[#cec9c9]" : "text-[#323131]"} text-[14px] font-[600]`}>
                               {Number(gatheringLumber) * Number(powerPerLumber)}{" "}
-                              <ChargeIcon iconColor={theme == 'dark' && "#cec9c9"} />
+                              <ChargeIcon iconColor={theme == 'dark' ? "#cec9c9" : ''} />
                             </span>
                           </div>
                         </div>
                       </div>
-                      <button
-                        className={`btn nav-btn w-100 buy-or-upgrade-btn position-absolute yellow text-button-text-secondary ${isLoading[1]
+                      <Button
+                        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute bg-[#61cd81] border-[2px] border-[#61cd81] text-button-text-secondary ${isLoading[1]
                           ? "d-flex justify-content-center align-items-center"
                           : ""
                           }`}
@@ -341,25 +321,25 @@ export const NftResource = () => {
                           <>
                             <ReactLoading
                               type="spin"
-                              className="me-2 button-spinner"
+                              className="mr-2 mb-[4px]"
                               width="24px"
                               height="24px"
                             />
-                            <span className="upgrade-status">Loading</span>
+                            <span className="font-semibold">Loading</span>
                           </>
                         ) : (
                           "Gather"
                         )}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </ResourceCard>
                 {/* <TokenCard /> */}
               </div>
-              <span className="fw-bold fs-md">Premium Upgrades</span>
-              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} d-block w-100 mb-5 mt-3`}></div>
+              <span className={`text-[16px] ${BOLD_INTER_TIGHT.className}`}>Premium Upgrades</span>
+              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-5 mt-3`}></div>
               {premiumNfts.length > 0 ? (
-                <div className="premium-items-section my-2">
+                <div className="flex pb-[20px] mlg:grid mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] xl:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] my-2">
                   {premiumNfts.map((item, index) => (
                     <PremiumNft
                       key={`premium-item-${index}`}
@@ -373,14 +353,14 @@ export const NftResource = () => {
                   ))}
                 </div>
               ) : (
-                <div className="d-flex w-100 h-100 align-items-center justify-content-center no-item-ui">
-                  <div className="no-item-text text-gray-500">No NFTs Found</div>
-                  <img src={theme == 'dark' ? sadEmojiWhite : sadEmoji} alt="Sad Emoji" />
-                  <div className="no-item-link">
+                <div className="flex w-full h-full items-center justify-center flex flex-col min-h-[40vh]">
+                  <div className={`text-[20px] mb-[20px] text-gray-500 ${BOLD_INTER_TIGHT.className}`}>No NFTs Found</div>
+                  <Image src={theme == 'dark' ? sadEmojiWhite : sadEmoji} alt="Sad Emoji" />
+                  <div className="flex justify-center items-center mt-[20px]">
                     <a
                       href="https://docs.landshare.io/"
                       target="_blank"
-                      className={`no-item-hyper text-text-secondary"}`}
+                      className="text-center text-[16px] mr-[5px] text-text-secondary"
                     >
                       Learn More
                     </a>{" "}
