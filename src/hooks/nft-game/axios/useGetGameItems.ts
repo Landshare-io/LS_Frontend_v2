@@ -17,6 +17,7 @@ export default function useGetGameItems() {
   
   const getItems = async () => {
     try {
+      if (!isAuthenticated) return
       const { data: itemTypeData } = await axios.get('/item-type')
 
       for (const itemType of itemTypeData) {

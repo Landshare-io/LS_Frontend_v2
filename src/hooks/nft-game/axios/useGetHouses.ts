@@ -13,6 +13,7 @@ export default function useGetHouses() {
   }, [isAuthenticated])
 
   const getHouses = async () => {
+    if (!isAuthenticated) return
     const { data: houseData } = await axios.get('/house/find-by-user');
 
     setHouses(houseData)

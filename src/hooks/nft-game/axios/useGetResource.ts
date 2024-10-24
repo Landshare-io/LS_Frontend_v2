@@ -14,6 +14,7 @@ export default function useGetResource() {
   }, [isAuthenticated])
 
   const getResources = async () => {
+    if (!isAuthenticated) return
     const { data: resourceData } = await axios.get('/resource/user');
 
     setResource([
@@ -28,6 +29,7 @@ export default function useGetResource() {
 
   return {
     resource,
+    setResource,
     maxPowerLimit,
     getResources
   }
