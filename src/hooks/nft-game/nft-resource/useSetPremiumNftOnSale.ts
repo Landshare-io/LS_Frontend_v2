@@ -8,8 +8,8 @@ import useApprove from "../../contract/PremiumNftContract/useApprove";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
 export default function useSetPremiumNftOnSale(chainId: number, address: Address | undefined) {
-  const { notifyError, notifySuccess } = useGlobalContext()
-  const [isLoading, setIsLoading] = useState(false)
+  const { notifyError, notifySuccess, isAuthenticated } = useGlobalContext()
+  const [isLoading, setIsLoading] = useState('')
   const [premiumNftAddress, setPremiumNftAddress] = useState<Address>("0x")
   const [premiumNftData, setPremiumNftData] = useState<any>({})
   const [premiumNftPrice, setPremiumNftPrice] = useState(0)
@@ -35,7 +35,7 @@ export default function useSetPremiumNftOnSale(chainId: number, address: Address
       if (isApprovedForAllSuccess) {
         setApprovalForAll(chainId, premiumNftAddress)
       } else {
-        setIsLoading(false)
+        setIsLoading('')
         notifyError("Transaction Failed")
       }
     }
@@ -46,7 +46,7 @@ export default function useSetPremiumNftOnSale(chainId: number, address: Address
       if (setApprovalForAllSuccess) {
         approve(chainId, premiumNftAddress, premiumNftData.onChainId)
       } else {
-        setIsLoading(false)
+        setIsLoading('')
         notifyError("Transaction Failed")
       }
     }
@@ -63,15 +63,15 @@ export default function useSetPremiumNftOnSale(chainId: number, address: Address
               price: premiumNftPrice
             })
 
-            setIsLoading(false)
+            setIsLoading('')
             notifySuccess(`Set on-sale ${premiumNftData.name} #${premiumNftData.onChainId} successfully`)
           } catch (error: any) {
             console.log(error)
-            setIsLoading(false)
+            setIsLoading('')
             notifyError(error.response.data.message);
           }
         } else {
-          setIsLoading(false)
+          setIsLoading('')
           notifyError("Transaction Failed")
         }
       }
@@ -79,7 +79,8 @@ export default function useSetPremiumNftOnSale(chainId: number, address: Address
   }, [approveTx, approveSuccess])
 
   const setPremiumNftsOnSale = (contractAddress: Address, item: any, price: number) => {
-    setIsLoading(true)
+    if (!isAuthenticated) return notifyError("Please login")
+    setIsLoading(`${item.id}-${item.onChainId}`)
     setPremiumNftData(item)
     setPremiumNftPrice(price)
     setPremiumNftAddress(contractAddress)
