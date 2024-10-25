@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useChainId } from "wagmi";
+import { bsc } from "viem/chains";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import FeatureBadge from "../common/feature-badge";
 import ToggleButton from "../common/toggle-button";
@@ -12,6 +13,7 @@ import FinancialPropertyCard from "../financial-property-card";
 import { PROPERTIES } from "../../config/constants/page-data";
 import PriceGraph from "../price-line-chart";
 import useGetTotalValue from "../../hooks/contract/APIConsumerContract/useGetTotalValue";
+import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import { 
   getData,
   selectLoadingStatus,
@@ -24,7 +26,7 @@ import useGetLandPrice from "../../hooks/axios/useGetLandPrice";
 
 export default function HomeRwaAssetsSummary() {
   const chainId = useChainId();
-  const [selectedGraph, setSelectedGraph] = useState('rwa')
+  const [selectedGraph, setSelectedGraph] = useState('land')
   const dispatch = useAppDispatch();
   const isRwaLoading = useAppSelector(selectLoadingStatus);
   const propertiesRentalData = useAppSelector(selectPropertiesRentalData);
@@ -34,6 +36,7 @@ export default function HomeRwaAssetsSummary() {
   const [paused, setPaused] = useState(false);
   const totalPropertyValue = useGetTotalValue(chainId) as BigNumberish;
   const { price: landPrice, isLoading, circulatingSupply } = useGetLandPrice();
+  const { data: burnedAmount } = useBalanceOfLandToken({ chainId: bsc.id, address: '0x000000000000000000000000000000000000dEaD' }) as { data: BigNumberish }
 
   useEffect(() => {
     dispatch(getData())
@@ -142,8 +145,8 @@ export default function HomeRwaAssetsSummary() {
                     containerClassName="w-fit"
                   >
                     <FinancialPropertyCard
-                      title={selectedGraph == 'land' ? "Current Price" : "Ann. Return"}
-                      value={selectedGraph == 'land' ? "$" + Number.parseFloat(landPrice.toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
+                      title={selectedGraph == 'land' ? "Burned Amount" : "Ann. Return"}
+                      value={selectedGraph == 'land' ? Number.parseFloat(formatEther(burnedAmount).toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
                       loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
                     />
                   </CarouselItem>
@@ -170,8 +173,8 @@ export default function HomeRwaAssetsSummary() {
               loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
             />
             <FinancialPropertyCard
-              title={selectedGraph == 'land' ? "Current Price" : "Ann. Return"}
-              value={selectedGraph == 'land' ? "$" + Number.parseFloat(landPrice.toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
+              title={selectedGraph == 'land' ? "Burned Amount" : "Ann. Return"}
+              value={selectedGraph == 'land' ? Number.parseFloat(formatEther(burnedAmount).toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
               loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
             />
           </div>
