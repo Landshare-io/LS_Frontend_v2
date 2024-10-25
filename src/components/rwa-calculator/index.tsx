@@ -46,10 +46,10 @@ export default function RwaCalculator() {
       <div className="flex flex-col w-full lg:flex-row gap-0 items-center p-0 max-w-[1200px] m-auto border-[2px] border-[#61CD81] rounded-[24px] overflow-hidden">
         <div className="flex flex-col flex-1 py-[34px] gap-[20px] justify-between px-[30px] h-[238px]">
           <div className="flex flex-col gap-[10px]">
-            <h2 className="text-[28px] mlg:text-[32px] leading-[24px] text-tw-text-primary font-bold">
+            <h2 className="text-[28px] mlg:text-[32px] leading-[24px] text-text-primary font-bold">
               Calculate returns
             </h2>
-            <h2 className="text-[14px] leading-[22px] text-[#0A1339]">
+            <h2 className="text-[14px] leading-[22px] text-text-primary">
               Calculate returns effortlessly and make informed financial decisions
               for a brighter future.
             </h2>

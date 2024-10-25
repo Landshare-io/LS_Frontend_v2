@@ -12,7 +12,6 @@ import useSetPremiumNftSaleHandler from "../../hooks/nft-game/nft-resource/useSe
 import { useGlobalContext } from "../../context/GlobalContext";
 import Topbar from "../common/topbar";
 import YouOwn from "../common/you-own";
-import "./NftResource.css";
 import ResourceCard from "./resource-card";
 import { BigNumberish, formatEther } from "ethers";
 import ConnectWallet from "../connect-wallet";
@@ -20,18 +19,18 @@ import { validateResource } from "../../utils/helpers/validator";
 import PremiumNft from "../premium-nft";
 import Button from "../common/button";
 import { QuestionIcon } from "../common/icons";
-import sadEmoji from "../../assets/img/icons/sad_emoji.png";
-import sadEmojiWhite from "../../assets/img/icons/sad_emoji_white.png";
 import useGetPremiumNfts from "../../hooks/nft-game/premium-nfts/useGetPremiumNfts";
 import useGetSetting from "../../hooks/nft-game/axios/useGetSetting";
 import useGetLumberGatherStatus from "../../hooks/nft-game/axios/useGetLumberGatherStatus";
 import useGetResource from "../../hooks/nft-game/axios/useGetResource";
 import useGetPrice from "../../hooks/get-apy/useGetPrice";
-import useBuyPowerWithLandToken from "../../hooks/nft-game/nft-resource/useBuyPowerWIthLandToken";
+import useBuyPowerWithLandToken from "../../hooks/nft-game/nft-resource/useBuyPowerWithLandToken";
 import { BOLD_INTER_TIGHT, PREMIUM_NFT_CONTRACT_ADDRESS } from "../../config/constants/environments";
-import ResourceLandshare from "../../../public/icons/resource-landshare.png";
-import ResourceLumber from ".../../../public/icons/resource-lumber.png";
-import ResourcePower from ".../../../public/icons/resource-power.png";
+import sadEmoji from "../../../public/icons/sad_emoji.png";
+import sadEmojiWhite from "../../../public/icons/sad_emoji_white.png";
+import resourceLandshare from "../../../public/icons/resource-landshare.png";
+import resourceLumber from ".../../../public/icons/resource-lumber.png";
+import resourcePower from ".../../../public/icons/resource-power.png";
 import marble from ".../../../public/img/marketplace-property/marble.png";
 import pool from ".../../../public/img/marketplace-property/pool.png";
 import tile from ".../../../public/img/marketplace-property/tile.png";
@@ -174,7 +173,7 @@ export default function NftResource() {
                     .format("0.[00]")
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} LAND`}
-                  imgSrc={ResourceLandshare}
+                  imgSrc={resourceLandshare}
                   cost={{
                     value: numeral(Number(landtokenPrice)).format("0.[00]"),
                     description: "USD/LAND",
@@ -204,7 +203,7 @@ export default function NftResource() {
                   title="Power"
                   subTitle={`${numeral(resource[0].toString()).format("0.[00]")} / 
                   ${maxPowerLimit.toString()}`}
-                  imgSrc={ResourcePower}
+                  imgSrc={resourcePower}
                   cost={{
                     value: numeral(powerPerLandtoken).format('0.[00]'),
                     description: "Power/LAND",
@@ -273,7 +272,7 @@ export default function NftResource() {
                         : "0"
                       }${(((Number(gatheringLumberStatus.remainingTime) / Number(oneDayTime)) * 24 - Number(parseInt(((Number(gatheringLumberStatus.remainingTime) / Number(oneDayTime)) * 24).toString()))) * 60)}`
                   }
-                  imgSrc={ResourceLumber}
+                  imgSrc={resourceLumber}
                   cost={{
                     value: `1 Lumber/${powerPerLumber} Power`,
                     description: "",

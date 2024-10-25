@@ -1,10 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import goOther from "../../../assets/img/icons/go_other.png";
-import goOtherWhite from "../../../assets/img/icons/go_other_white.png";
+import goOther from "../../../../public/icons/go_other.png";
+import goOtherWhite from "../../../../public/icons/go_other_white.png";
 import { BackIcon } from "../../common/icons/nft";
-import "./Topbar.css";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
@@ -73,7 +72,7 @@ export default function Topbar({ isNftList }: TopbarProps) {
               onClick={() => router.push("/nft/inventory")}
             >
               <BackIcon />
-              <span className="px-2 fs-xs cursor-pointer text-tw-text-secondary">
+              <span className="px-2 fs-xs cursor-pointer text-text-secondary">
                 Back to the list
               </span>
             </div>
