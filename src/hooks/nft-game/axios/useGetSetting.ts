@@ -15,6 +15,11 @@ export default function useGetSetting() {
   const [withdrawStakedCost, setWithdrawStakedCost] = useState('25,0,0,0,0')
   const [powerPerLumber, setPowerPerLumber] = useState(15);
   const [powerPerLandtoken, setPowerPerLandtoken] = useState(50);
+  const [premiumMintCap, setPremiumMintCap] = useState({
+    "Porcelain Tile": 25,
+    "Pool Table": 25,
+    "Marble Countertops": 25,
+  });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -36,6 +41,9 @@ export default function useGetSetting() {
       const { data: getMinAssetAmount } = await axios.get('/setting/minium-asset-amount')
       const { data: getWithdrawStakedCost } = await axios.get('/setting/withdraw-asset-token-cost')
       const { data: gatherPowerCost } = await axios.get('/setting/get-gather-power-cost');
+      const { data: prCap } = await axios.get('/setting/porcelain-tile-cap');
+      const { data: mcCap } = await axios.get('/setting/marble-counterops-cap');
+      const { data: ptCap } = await axios.get('/setting/pool-table-cap');
 
       setOneDayTime(data.value)
       setHarvestCost(Number(harvestData))
@@ -48,6 +56,11 @@ export default function useGetSetting() {
       setWithdrawStakedCost(getWithdrawStakedCost)
       setPowerPerLumber(Number(gatherPowerCost.value))
       setPowerPerLandtoken(powerLand)
+      setPremiumMintCap({
+        "Porcelain Tile": prCap,
+        "Pool Table": ptCap,
+        "Marble Countertops": mcCap,
+      })
     } catch (error: any) {
       console.log(error.response.data.message, error)
     }
@@ -65,6 +78,7 @@ export default function useGetSetting() {
     withdrawStakedCost,
     powerPerLumber,
     powerPerLandtoken,
+    premiumMintCap,
     getGameSetting
   }
 }
