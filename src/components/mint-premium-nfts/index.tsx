@@ -1,56 +1,51 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../../../helper/axios";
-import { PremiumNft } from "./PremiumNft";
+import { useChainId, useAccount } from "wagmi";
+import { BigNumberish, formatEther } from "ethers";
+import PremiumNft from "./premium-nft";
 import marble from "../../../../assets/img/marketplace-property/marble.png";
 import pool from "../../../../assets/img/marketplace-property/pool.png";
 import windfarm from "../../../../assets/img/marketplace-property/tile.png";
-import { useGlobalContext } from "../../../../contexts/GlobalContext";
-import { useLandshareNftContext } from "../../../../contexts/LandshareNftContext";
-import { getDependencyItemInstances } from "../../../../helper/validator";
+import { useGlobalContext } from "../../context/GlobalContext";
+import { getDependencyItemInstances } from "../../utils/helpers/validator";
+import useGetGameItems from "../../hooks/nft-game/axios/useGetGameItems";
+import useTotalSupply from "../../hooks/contract/PremiumNftContract/useTotalSupply";
+import useGetSetting from "../../hooks/nft-game/axios/useGetSetting";
+import useMintPremiumNft from "../../hooks/nft-game/premium-nfts/useMintPremiumNft";
+import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
+import { PREMIUM_NFT_CONTRACT_ADDRESS } from "../../config/constants/environments";
 import "./PremiumNfts.css";
-import { ethers } from "ethers";
 
-export const PremiumNfts = () => {
+export default function PremiumNfts() {
+  const { address } = useAccount()
+  const chainId = useChainId();
   const {
-    oneDayTime,
-    signer,
-    account,
-    provider,
-    userResource,
-    setUserResource,
-    notifySuccess,
-    notifyError,
-    landTokenV2Contract,
+    notifyError
+  } = useGlobalContext();
+  const { 
     yieldUpgradesList,
     productionUpgradesList,
     boostItemsList,
     premiumUpgradesList
-  } = useGlobalContext();
-  const images = {
+  } = useGetGameItems()
+  const [premiumNfts, setPremiumNfts] = useState<any[]>([]);
+  const [loader, setLoader] = useState("");
+  const { oneDayTime, premiumMintCap } = useGetSetting() as { oneDayTime: number, premiumMintCap: Record<string, number> }
+  const { data: porcelainItems } = useTotalSupply(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Porcelain Tile"][chainId]) as { data: number }
+  const { data: poolTableItems } = useTotalSupply(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Pool Table"][chainId]) as { data: number }
+  const { data: marbleItems } = useTotalSupply(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Marble Countertops"][chainId]) as { data: number }
+  const { data: landTokenBalance } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish }
+  const { mint } = useMintPremiumNft(chainId, address, setLoader)
+  const amountMinted: Record<string, number> = {
+    "Porcelain Tile": porcelainItems,
+    "Pool Table": poolTableItems,
+    "Marble Countertops": marbleItems
+  }
+
+  const images: Record<string, any> = {
     "Porcelain Tile": windfarm,
     "Pool Table": pool,
     "Marble Countertops": marble
   }
-  const {
-    contract: {
-      porcelainTileNewContract,
-      poolTableNewContract,
-      marbleCounteropsListNewContract,
-    },
-    address: { marketplaceAddress }
-  } = useLandshareNftContext();
-  const [premiumNfts, setPremiumNfts] = useState([]);
-  const [loader, setLoader] = useState("");
-  const [amountMinted, setAmountMinted] = useState({
-    "Porcelain Tile": 0,
-    "Pool Table": 0,
-    "Marble Countertops": 0
-  });
-  const [mintCap, setMintCap] = useState({
-    "Porcelain Tile": 25,
-    "Pool Table": 25,
-    "Marble Countertops": 25,
-  });
 
   useEffect(() => {
     const premiumUpgrades = []
@@ -60,7 +55,7 @@ export const PremiumNfts = () => {
         ...productionUpgradesList,
         ...boostItemsList,
         ...premiumUpgradesList,
-      ], premiumUpgrade.id, oneDayTime)
+      ], premiumUpgrade.id)
       premiumUpgrades.push({
         ...premiumUpgrade,
         name: premiumUpgrade.name,
@@ -75,80 +70,20 @@ export const PremiumNfts = () => {
     setPremiumNfts(premiumUpgrades)
   }, [premiumUpgradesList])
 
-  useEffect(() => {
-    (async () => {
-      if (!account) return
-      try {
-        const { data: prCap } = await axios.get('/setting/porcelain-tile-cap');
-        const { data: mcCap } = await axios.get('/setting/marble-counterops-cap');
-        const { data: ptCap } = await axios.get('/setting/pool-table-cap');
-        
-        setMintCap({
-          "Porcelain Tile": Number(prCap),
-          "Pool Table": Number(ptCap),
-          "Marble Countertops": Number(mcCap),
-        })
-      } catch (error) {
-        console.log('error', error)
-      }
-    })()
-  }, [account])
-
-  const mintPremiumNFT = async (item) => {
-    try {
-      if (amountMinted[item.name] >= mintCap[item.name]) {
-        setLoader("");
-        notifyError(`${item.name} Nft minted as a max value.`)
-      }
-
-      const { data: transactionData } = await axios.post('/has-item/get-item-transaction', {
-        itemId: item.id
-      })
-
-      const sendedTransaction = await signer.sendTransaction(transactionData.transaction)
-      sendedTransaction.wait().then(async (receipt) => {
-        if (receipt.status) {
-          const { data } = await axios.post('/has-item/mint-premium-nft', {
-            itemId: item.id,
-            txHash: receipt.transactionHash,
-            blockNumber: receipt.blockNumber,
-            nonce: transactionData.nonce
-          })
-
-          if (data) {
-            const landTokenV2Balance = await landTokenV2Contract.balanceOf(account);
-  
-            setUserResource((prevState) => ({
-              ...prevState,
-              landTokenV2: landTokenV2Balance,
-            }))
-  
-            await getAmountMintedValue();
-            setLoader("");
-            notifySuccess(`Mint ${item.name} successfully`)
-          }
-        } else {
-          setLoader("");
-          notifyError(`Mint ${item.name} Error`);
-        }
-      })
-    } catch (error) {
-      console.log(error)
-      setLoader("");
-      notifyError(error.response.data.message);
-    }
-  }
-
-  const mintPremiumNFTHandler = async (item) => {
+  const mintPremiumNFTHandler = async (item: any) => {
     try {
       setLoader(item.name);
       const amount = item.buy[1]
 
-      if (Number(amount) > ethers.utils.formatEther(userResource.landTokenBalance)) {
+      if (Number(amount) > Number(formatEther(landTokenBalance))) {
         setLoader("")
         return notifyError("Not enough LAND tokens");
       } else {
-        await mintPremiumNFT(item);
+        if (amountMinted[item.name] >= premiumMintCap[item.name]) {
+          setLoader("");
+          notifyError(`${item.name} Nft minted as a max value.`)
+        }
+        await mint(item);
       }
     } catch (error) {
       console.log(error)
@@ -157,32 +92,13 @@ export const PremiumNfts = () => {
     }
   }
 
-  const getAmountMintedValue = async () => {
-    const prAmountMinted = await porcelainTileNewContract.totalSupply();
-    const ptAmountMinted = await poolTableNewContract.totalSupply();
-    const mcAmountMinted = await marbleCounteropsListNewContract.totalSupply();
-
-    setAmountMinted(((prevState) => ({
-      ...prevState,
-      "Porcelain Tile": prAmountMinted.toString(),
-      "Pool Table": ptAmountMinted.toString(),
-      "Marble Countertops": mcAmountMinted.toString()
-    })));
-  };
-
-  useEffect(() => {
-    if (!signer) return;
-
-    getAmountMintedValue();
-  }, [signer]);
-
   return (
-    <div className="mpremium-items-section my-5">
+    <div className="flex overflow-x-scroll pb-[20px] mlg:grid mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] xl:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] my-5">
       {premiumNfts.map((item, index) => (
         <PremiumNft
           key={`mpremium-item-${index}`}
           amountMinted={amountMinted[item.name]}
-          mintCap={mintCap[item.name]}
+          mintCap={premiumMintCap[item.name]}
           premiumNft={item}
           loader={loader}
           onSubmit={() => mintPremiumNFTHandler(item)}

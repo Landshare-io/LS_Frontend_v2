@@ -19,11 +19,11 @@ export default function InvestmentExplain() {
       <div className="flex flex-col gap-[10px] mb-[20px] items-center">
         <h2
           id="target-element"
-          className={`text-[46px] text-tw-text-primary text-center leading-[59px] font-bold`}
+          className={`text-[46px] text-text-primary text-center leading-[59px] font-bold`}
         >
           Effortless Property Investment in 3 Steps
         </h2>
-        <p className="text-[14px] leading-[17px] max-w-[719px] text-center">
+        <p className="text-[14px] leading-[17px] text-text-primary max-w-[719px] text-center">
           Unlock the world of property investment with ease through Landshare and RWA tokens. Our simple, 3-step process lets you invest in real estate without the complexities of traditional methods.
         </p>
       </div>
