@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import ReactLoading from "react-loading";
 import { useAccount } from "wagmi";
 import { useGlobalContext } from '../../context/GlobalContext';
@@ -6,7 +5,7 @@ import ConnectWallet from '../connect-wallet';
 import useLogin from '../../hooks/nft-game/axios/useLogin';
 import PremiumNfts from '../mint-premium-nfts';
 import Topbar from '../common/topbar';
-import HouseMintItem from './houseMintItem/houseMintItem';
+import HouseMintItem from './house-mint';
 import YouOwn from '../common/you-own';
 import './mint.css';
 
@@ -68,7 +67,7 @@ export default function NftMint() {
           )}
         </div>
       )}
-      {signer !== "undefined" && isConnected && (
+      {isConnected && (
         <YouOwn />
       )}
     </div>
