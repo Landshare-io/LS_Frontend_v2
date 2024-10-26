@@ -25,10 +25,10 @@ import useBankBalance from "../../hooks/contract/APIConsumerContract/useBankBala
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useReserveRwa from "../../hooks/contract/APIConsumerContract/useReserveRwa";
 import useTotalSupply from "../../hooks/contract/RWAContract/useTotalSupply";
-import { 
+import {
   getData as getFinancialLogsData,
   selectFinancialLogs,
-} from '../../lib/slices/firebase-slices/financial-logs';
+} from "../../lib/slices/firebase-slices/financial-logs";
 import {
   getData,
   selectLoadingStatus,
@@ -37,21 +37,25 @@ import {
   selectInsurance,
   selectManagement,
   selectAppreciation,
-  selectNetRentalPerMonth
-} from '../../lib/slices/firebase-slices/properties-rental';
+  selectNetRentalPerMonth,
+} from "../../lib/slices/firebase-slices/properties-rental";
 import useIsOptedIn from "../../hooks/contract/AutoRedeemContract/useIsOptedIn";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { BOLD_INTER_TIGHT, RWA_CONTRACT_ADDRESS, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import {
+  BOLD_INTER_TIGHT,
+  RWA_CONTRACT_ADDRESS,
+  MAJOR_WORK_CHAIN,
+} from "../../config/constants/environments";
 import { getDateStringFromTimestamp } from "../../utils/helpers/convert-date";
 import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";
 import useOptIn from "../../hooks/contract/AutoRedeemContract/useOptIn";
 import useBalanceOf from "../../hooks/contract/RWAContract/useBalanceOf";
-import 'react-loading-skeleton/dist/skeleton.css';
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function FinancialSummary() {
   const { theme } = useGlobalContext();
   const chainId = useChainId();
-  const [openMonthlyExpences, setOpenMonthlyExpences] = useState(false)
+  const [openMonthlyExpences, setOpenMonthlyExpences] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useAppDispatch();
@@ -60,55 +64,65 @@ export default function FinancialSummary() {
   const bankBalance = useBankBalance(chainId) as BigNumberish;
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
   const rwaValue = useTotalSupply(chainId) as BigNumberish;
-  const totalRWATokenBalanceOfReserveWallets = useReserveRwa(chainId) as BigNumberish;
-  let isAutoRedeem = useIsOptedIn(chainId, address) as boolean
-  const { data: rwaBalance } = useBalanceOf(chainId, address) as { data: number }
-  const { data: optOutData, isPending: isOptOutPending, onOptOut } = useOptOut(chainId)
-  const { data: optInData, isPending: isOptInPending, onOptIn } = useOptIn(chainId)
+  const totalRWATokenBalanceOfReserveWallets = useReserveRwa(
+    chainId
+  ) as BigNumberish;
+  let isAutoRedeem = useIsOptedIn(chainId, address) as boolean;
+  const { data: rwaBalance } = useBalanceOf(chainId, address) as {
+    data: number;
+  };
+  const {
+    data: optOutData,
+    isPending: isOptOutPending,
+    onOptOut,
+  } = useOptOut(chainId);
+  const {
+    data: optInData,
+    isPending: isOptInPending,
+    onOptIn,
+  } = useOptIn(chainId);
   const financeLogs = useAppSelector(selectFinancialLogs);
   const isSummaryLoading = useAppSelector(selectLoadingStatus);
-  const grossRentPerMonth = useAppSelector(selectGrossRentPerMonth)
-  const taxes = useAppSelector(selectTaxes)
-  const insurance = useAppSelector(selectInsurance)
-  const management = useAppSelector(selectManagement)
-  const appreciation = useAppSelector(selectAppreciation)
-  const netRentalPerMonth = useAppSelector(selectNetRentalPerMonth)
+  const grossRentPerMonth = useAppSelector(selectGrossRentPerMonth);
+  const taxes = useAppSelector(selectTaxes);
+  const insurance = useAppSelector(selectInsurance);
+  const management = useAppSelector(selectManagement);
+  const appreciation = useAppSelector(selectAppreciation);
+  const netRentalPerMonth = useAppSelector(selectNetRentalPerMonth);
 
   const { data: balance } = useBalance({
     address: address,
     token: RWA_CONTRACT_ADDRESS[bsc.id],
     chainId: MAJOR_WORK_CHAIN.id,
-  }) as { data: any }
-
+  }) as { data: any };
 
   useEffect(() => {
     if (optOutData && isOptOutPending) {
-      isAutoRedeem = !isAutoRedeem
+      isAutoRedeem = !isAutoRedeem;
     }
-  
+
     if (optInData && isOptInPending) {
-      isAutoRedeem = !isAutoRedeem
+      isAutoRedeem = !isAutoRedeem;
     }
-  }, [optOutData, isOptOutPending, optInData, isOptInPending])
+  }, [optOutData, isOptOutPending, optInData, isOptInPending]);
 
   useEffect(() => {
-    dispatch(getFinancialLogsData())
-    dispatch(getData())
-  }, [dispatch])
+    dispatch(getFinancialLogsData());
+    dispatch(getData());
+  }, [dispatch]);
 
   async function onAutoRedeem() {
     if (isAutoRedeem) {
-      onOptOut()
-    }
-    else {
+      onOptOut();
+    } else {
       if (rwaBalance < 1000) {
-        window.alert("Must hold 1,000 RWA Tokens to opt into Auto Redemption")
-        return
+        window.alert("Must hold 1,000 RWA Tokens to opt into Auto Redemption");
+        return;
       }
-      onOptIn()
+      onOptIn();
     }
   }
-  
+
   const customModalStyles = {
     content: {
       top: "50%",
@@ -116,12 +130,12 @@ export default function FinancialSummary() {
       bottom: "auto",
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
-      backgroundColor: theme == 'dark' ? "#31333b" : "#f6f7f9",
-      maxHeight: '90%'
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
+      maxHeight: "90%",
     },
     overlay: {
-      background: '#00000080'
-    }
+      background: "#00000080",
+    },
   };
 
   return (
@@ -131,13 +145,20 @@ export default function FinancialSummary() {
           <div className="flex flex-col items-start w-full max-w-[371px] px-[24px] pt-[24px] pb-[8px] bg-third rounded-[16px] gap-[8px]">
             <div className="flex justify-start flex-row gap-8 w-full">
               <div className="flex flex-col gap-[10px]">
-                <span className="font-medium text-[14px] leading-[22px] text-text-secondary">My RWA Balance</span>
+                <span className="font-medium text-[14px] leading-[22px] text-text-secondary">
+                  My RWA Balance
+                </span>
                 <div className="flex gap-[8px]">
                   <div className="bg-primary flex items-center jsutify-center w-[32px] h-[32px] py-[6.23px] px-[7px] rounded-full">
                     <Image src={myRwa} alt="refresh" className="w-[18px]" />
                   </div>
-                  <span className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                    {(Number(formatEther(rwaPrice)) === undefined || isConnected === false) ? "0" : `${parseFloat(balance?.formatted ?? 0)}`}
+                  <span
+                    className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}
+                  >
+                    {Number(formatEther(rwaPrice)) === undefined ||
+                    isConnected === false
+                      ? "0"
+                      : `${parseFloat(balance?.formatted ?? 0)}`}
                   </span>
                 </div>
               </div>
@@ -152,14 +173,38 @@ export default function FinancialSummary() {
               />
               <span className="font-medium text-[14px] leading-[22px] ml-1 text-text-secondary flex items-center">
                 Auto Redeem
-                <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/auto-redeem" target="_blank">
+                <Link
+                  href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/auto-redeem"
+                  target="_blank"
+                >
                   <BsLink45Deg className="w-5 h-5"></BsLink45Deg>
                 </Link>
               </span>
             </div>
           </div>
-          <FinancialPropertyCard page="rwa" title="Rental Yield" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"} />
-          <FinancialPropertyCard page="rwa" title="Ann. Return" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"} />
+          <FinancialPropertyCard
+            page="rwa"
+            title="Rental Yield"
+            value={
+              (
+                ((netRentalPerMonth * 12) /
+                  Number(formatEther(totalPropertyValue))) *
+                100
+              ).toFixed(3) + "%"
+            }
+          />
+          <FinancialPropertyCard
+            page="rwa"
+            title="Ann. Return"
+            value={
+              (
+                ((netRentalPerMonth * 12) /
+                  Number(formatEther(totalPropertyValue))) *
+                  100 +
+                appreciation / Number(formatEther(totalPropertyValue))
+              ).toFixed(3) + "%"
+            }
+          />
         </div>
         <div className="block md:hidden">
           <div className="flex gap-[24px]">
@@ -169,16 +214,27 @@ export default function FinancialSummary() {
               containerClassName="w-full m-0 items-center"
             >
               <CarouselItem activeIndex={activeIndex}>
-                <div className="bg-third md:bg-secondary flex flex-col justify-center items-center md:items-start w-full gap-[10px] rounded-[16px] min-w-max py-[32px] px-[24px]">
+                <div className="bg-third md:bg-secondary h-[160px] -mt-8 flex flex-col justify-center items-center md:items-start w-full gap-[10px] rounded-[16px] min-w-max py-[32px] px-[24px]">
                   <div className="flex justify-center flex-row gap-8 w-full">
                     <div className="flex flex-col gap-[10px]">
-                      <span className="font-medium text-[14px] leading-[22px] dark:text-[#bec8f399] text-[#0a133999]">My RWA Balance</span>
+                      <span className="font-medium text-[14px] leading-[22px] dark:text-[#bec8f399] text-[#0a133999]">
+                        My RWA Balance
+                      </span>
                       <div className="flex gap-[8px]">
-                        <div className="w-[32px] h-[32px] py-[6.23px] px-[7px] rounded-[30px] flex justify-center items-center bg-[#F6F7F9]" >
-                          <Image src={myRwa} alt="refresh" className="w-[18px]" />
+                        <div className="w-[32px] h-[32px] py-[6.23px] px-[7px] rounded-[30px] flex justify-center items-center bg-[#F6F7F9]">
+                          <Image
+                            src={myRwa}
+                            alt="refresh"
+                            className="w-[18px]"
+                          />
                         </div>
-                        <span className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                          {(Number(formatEther(rwaPrice)) === undefined || isConnected === false) ? "0" : `${parseFloat(balance?.data?.formatted)}`}
+                        <span
+                          className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}
+                        >
+                          {Number(formatEther(rwaPrice)) === undefined ||
+                          isConnected === false
+                            ? "0"
+                            : `${parseFloat(balance?.data?.formatted)}`}
                         </span>
                       </div>
                     </div>
@@ -193,7 +249,10 @@ export default function FinancialSummary() {
                     />
                     <span className="flex items-center font-medium text-[12px] leading-[22px] ml-1 dark:text-[#bec8f399] text-[#0a133999]">
                       <span>Auto Redeem</span>
-                      <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/auto-redeem" target="_blank">
+                      <Link
+                        href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/auto-redeem"
+                        target="_blank"
+                      >
                         <BsLink45Deg className="w-5 h-5"></BsLink45Deg>
                       </Link>
                     </span>
@@ -201,10 +260,29 @@ export default function FinancialSummary() {
                 </div>
               </CarouselItem>
               <CarouselItem activeIndex={activeIndex}>
-                <FinancialPropertyCard title="Rental Yield" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"} />
+                <FinancialPropertyCard
+                  title="Rental Yield"
+                  value={
+                    (
+                      ((netRentalPerMonth * 12) /
+                        Number(formatEther(totalPropertyValue))) *
+                      100
+                    ).toFixed(3) + "%"
+                  }
+                />
               </CarouselItem>
               <CarouselItem activeIndex={activeIndex}>
-                <FinancialPropertyCard title="Ann. Return" value={(netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"} />
+                <FinancialPropertyCard
+                  title="Ann. Return"
+                  value={
+                    (
+                      ((netRentalPerMonth * 12) /
+                        Number(formatEther(totalPropertyValue))) *
+                        100 +
+                      appreciation / Number(formatEther(totalPropertyValue))
+                    ).toFixed(3) + "%"
+                  }
+                />
               </CarouselItem>
             </Carousel>
           </div>
@@ -215,46 +293,87 @@ export default function FinancialSummary() {
             carouselControlClass="px-[10px] md:px-[20px] mb-[20px] mt-[20px]"
           />
         </div>
-        <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
+        <SkeletonTheme
+          baseColor={`${theme == "dark" ? "#31333b" : "#dbdde0"}`}
+          highlightColor={`${theme == "dark" ? "#52545e" : "#f6f7f9"}`}
+        >
           <div className="flex flex-col w-full py-[24px] px-[15px] rounded-[16px] bg-third text-text-primary">
-            <div className={`flex justify-between items-center text-[24px] leading-[30px] mb-[24px] ${BOLD_INTER_TIGHT.className}`}>
+            <div
+              className={`flex justify-between items-center text-[24px] leading-[30px] mb-[24px] ${BOLD_INTER_TIGHT.className}`}
+            >
               <div className="flex gap-x-1">
                 <div>Financial Summary</div>
-                <Tooltip 
+                <Tooltip
                   title="Financial information is provided for your information only. Expenses and property valuations are estimated and subject to change at any time. Maintenance costs, vacancies, and other factors can affect property returns."
                   tooltipClassName="min-w-[400px]"
                 >
-                  <BsInfoCircle id="tooltip-icon" className="w-4 h-4 cursor-pointer"></BsInfoCircle>
+                  <BsInfoCircle
+                    id="tooltip-icon"
+                    className="w-4 h-4 cursor-pointer"
+                  ></BsInfoCircle>
                 </Tooltip>
                 {/* <div id="tooltip-content" className="hidden md:block absolute -left-[1000px] z-40 bg-white top-5 w-[200px] md:w-[400px] opacity-0 hover:opacity-100 hover:left-5 transition delay-75 text-[15px] rounded-lg shadow-lg px-3 py-2 font-normal">
                   Financial information is provided for your information only. Expenses and property valuations are estimated and subject to change at any time. Maintenance costs, vacancies, and other factors can affect property returns.
                 </div> */}
               </div>
-              <Image onClick={() => setIsModalOpen(true)} src={ModalOpenIcon} alt="modal open" className="w-5 h-5 cursor-pointer" />
+              <Image
+                onClick={() => setIsModalOpen(true)}
+                src={ModalOpenIcon}
+                alt="modal open"
+                className="w-5 h-5 cursor-pointer"
+              />
             </div>
             <div className="flex flex-col">
-              <PropertyItem property={
-                { title: "Gross Rent per Year", value: Number(grossRentPerMonth * 12).toLocaleString(undefined, { maximumFractionDigits: 2 }) }
-              } isLoaded={isSummaryLoading} />
-              <PropertyItem property={
-                { title: "Gross Rent per Month", value: Number(grossRentPerMonth).toLocaleString(undefined, { maximumFractionDigits: 2 }) }
-              } isLoaded={isSummaryLoading} />
-              <div className="flex w-full justify-between py-[13px]" onClick={() => setOpenMonthlyExpences(!openMonthlyExpences)}>
-                <div className={`text-[14px] leading-[22px] tracking-[0.02em] flex items-center gap-[10px] cursor-pointer ${BOLD_INTER_TIGHT.className}`}>
+              <PropertyItem
+                property={{
+                  title: "Gross Rent per Year",
+                  value: Number(grossRentPerMonth * 12).toLocaleString(
+                    undefined,
+                    { maximumFractionDigits: 2 }
+                  ),
+                }}
+                isLoaded={isSummaryLoading}
+              />
+              <PropertyItem
+                property={{
+                  title: "Gross Rent per Month",
+                  value: Number(grossRentPerMonth).toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  }),
+                }}
+                isLoaded={isSummaryLoading}
+              />
+              <div
+                className="flex w-full justify-between py-[13px]"
+                onClick={() => setOpenMonthlyExpences(!openMonthlyExpences)}
+              >
+                <div
+                  className={`text-[14px] leading-[22px] tracking-[0.02em] flex items-center gap-[10px] cursor-pointer ${BOLD_INTER_TIGHT.className}`}
+                >
                   <span>Annual Expenses</span>
                   <IoIosArrowDown className="text-[15px]" />
                 </div>
-                <div className="text-[14px] leading-[22px] tracking-[0.02em]"> {isSummaryLoading == true ? (<Skeleton className="rounded-lg" width={100} height={18} />) : ("-$" + ((taxes) + (insurance) + management).toLocaleString(undefined, { maximumFractionDigits: 2 }))}</div>
+                <div className="text-[14px] leading-[22px] tracking-[0.02em]">
+                  {" "}
+                  {isSummaryLoading == true ? (
+                    <Skeleton className="rounded-lg" width={100} height={18} />
+                  ) : (
+                    "-$" +
+                    (taxes + insurance + management).toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })
+                  )}
+                </div>
               </div>
               <Collapse isOpen={openMonthlyExpences}>
                 <div className="w-full rounded-[12px] px-[16px] pb-[24px] bg-secondary text-text-primary">
                   <div className="py-[13px] w-full flex justify-between font-medium text-[12px] leading-[20px] text-center tracking-[0.02em]">
                     <div>Property Taxes</div>
-                    <div>${(taxes).toFixed(2)}</div>
+                    <div>${taxes.toFixed(2)}</div>
                   </div>
                   <div className="py-[13px] w-full flex justify-between font-medium text-[12px] leading-[20px] text-center tracking-[0.02em]">
                     <div>Insurance</div>
-                    <div>${(insurance).toFixed(2)}</div>
+                    <div>${insurance.toFixed(2)}</div>
                   </div>
                   <div className="py-[13px] w-full flex justify-between font-medium text-[12px] leading-[20px] text-center tracking-[0.02em]">
                     <div>Property Management</div>
@@ -263,43 +382,118 @@ export default function FinancialSummary() {
                 </div>
               </Collapse>
               <div className="w-full flex justify-between py-[13px]">
-                <div className={`text-[14px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}>Total Property Value</div>
-                <div className="text-[14px] leading-[22px] tracking-[0.02em]"> {isSummaryLoading == true ? (<Skeleton className="rounded-lg" width={100} height={18} />) : ("$" + (Number(formatEther(totalPropertyValue)) - Number(formatEther(bankBalance))).toLocaleString())}</div>
+                <div
+                  className={`text-[14px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}
+                >
+                  Total Property Value
+                </div>
+                <div className="text-[14px] leading-[22px] tracking-[0.02em]">
+                  {" "}
+                  {isSummaryLoading == true ? (
+                    <Skeleton className="rounded-lg" width={100} height={18} />
+                  ) : (
+                    "$" +
+                    (
+                      Number(formatEther(totalPropertyValue)) -
+                      Number(formatEther(bankBalance))
+                    ).toLocaleString()
+                  )}
+                </div>
               </div>
               <div className="w-full flex justify-between py-[13px]">
-                <div className={`text-[14px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}>Cash Assets</div>
-                <div className="text-[14px] leading-[22px] tracking-[0.02em]"> {isSummaryLoading == true ? (<Skeleton className="rounded-lg" width={100} height={18} />) : "$" + Number(formatEther(bankBalance)).toLocaleString()}</div>
+                <div
+                  className={`text-[14px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}
+                >
+                  Cash Assets
+                </div>
+                <div className="text-[14px] leading-[22px] tracking-[0.02em]">
+                  {" "}
+                  {isSummaryLoading == true ? (
+                    <Skeleton className="rounded-lg" width={100} height={18} />
+                  ) : (
+                    "$" + Number(formatEther(bankBalance)).toLocaleString()
+                  )}
+                </div>
               </div>
-              <PropertyItem property={
-                { title: "Net Rent Per Month", value: Number(netRentalPerMonth).toLocaleString(undefined, { maximumFractionDigits: 2 }) }
-              } isLoaded={isSummaryLoading} />
-              <PropertyItem property={
-                { title: "Net Rent Per Year", value: Number(netRentalPerMonth * 12).toLocaleString(undefined, { maximumFractionDigits: 2 }) }
-              } isLoaded={isSummaryLoading} />
-              <PropertyItem property={
-                { title: "Token Price", value: Number(formatEther(rwaPrice)).toLocaleString(undefined, { maximumFractionDigits: 4 }) }
-              } isLoaded={isSummaryLoading} />
+              <PropertyItem
+                property={{
+                  title: "Net Rent Per Month",
+                  value: Number(netRentalPerMonth).toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  }),
+                }}
+                isLoaded={isSummaryLoading}
+              />
+              <PropertyItem
+                property={{
+                  title: "Net Rent Per Year",
+                  value: Number(netRentalPerMonth * 12).toLocaleString(
+                    undefined,
+                    { maximumFractionDigits: 2 }
+                  ),
+                }}
+                isLoaded={isSummaryLoading}
+              />
+              <PropertyItem
+                property={{
+                  title: "Token Price",
+                  value: Number(formatEther(rwaPrice)).toLocaleString(
+                    undefined,
+                    { maximumFractionDigits: 4 }
+                  ),
+                }}
+                isLoaded={isSummaryLoading}
+              />
               <div className="w-full flex justify-between py-[13px]">
-                <div className={`text-[14px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}>Total Tokens</div>
-                <div className="text-[14px] leading-[22px] tracking-[0.02em]"> {isSummaryLoading == true ? (<Skeleton className="rounded-lg" width={100} height={18} />) : Number(BigInt(rwaValue) - BigInt(totalRWATokenBalanceOfReserveWallets)).toLocaleString()}</div>
+                <div
+                  className={`text-[14px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}
+                >
+                  Total Tokens
+                </div>
+                <div className="text-[14px] leading-[22px] tracking-[0.02em]">
+                  {" "}
+                  {isSummaryLoading == true ? (
+                    <Skeleton className="rounded-lg" width={100} height={18} />
+                  ) : (
+                    Number(
+                      BigInt(rwaValue) -
+                        BigInt(totalRWATokenBalanceOfReserveWallets)
+                    ).toLocaleString()
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </SkeletonTheme>
       </div>
-      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} style={customModalStyles}>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        style={customModalStyles}
+      >
         <div>
-          <div className="font-bold text-[22px] mb-2 text-text-primary">Finance Log</div>
+          <div className="font-bold text-[22px] mb-2 text-text-primary">
+            Finance Log
+          </div>
           {financeLogs.map((log: any) => {
-            return <div className="border-b pt-2 pb-1" key={log.id}>
-              <div className="text-[#777] text-[14px]">{getDateStringFromTimestamp(log.datetime)}</div>
-              <div className="flex justify-between text-text-primary">
-                <div>{log.action}</div>
-                <div className={`${log.value > 0 ? "text-[#30ba00]" : "text-[#ce1313]"}`}>
-                  {log.value < 0 ? "-" : "+"}${log.value < 0 ? log.value * -1 : log.value}
+            return (
+              <div className="border-b pt-2 pb-1" key={log.id}>
+                <div className="text-[#777] text-[14px]">
+                  {getDateStringFromTimestamp(log.datetime)}
+                </div>
+                <div className="flex justify-between text-text-primary">
+                  <div>{log.action}</div>
+                  <div
+                    className={`${
+                      log.value > 0 ? "text-[#30ba00]" : "text-[#ce1313]"
+                    }`}
+                  >
+                    {log.value < 0 ? "-" : "+"}$
+                    {log.value < 0 ? log.value * -1 : log.value}
+                  </div>
                 </div>
               </div>
-            </div>
+            );
           })}
         </div>
       </Modal>

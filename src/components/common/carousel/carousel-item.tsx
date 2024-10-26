@@ -7,10 +7,17 @@ interface CarouselItemProps {
   active?: boolean;
 }
 
-const CarouselItem = ({ children, containerClassName, active, activeIndex }: CarouselItemProps) => {
+const CarouselItem = ({
+  children,
+  containerClassName,
+  active,
+  activeIndex,
+}: CarouselItemProps) => {
   return (
-    <div 
-      className={`inline-block w-full padding-0 whitespace-nowrap duration-300 ${active ? 'visible' : ''} ${containerClassName}`}
+    <div
+      className={`inline-block w-full p-0 whitespace-nowrap duration-300 ${
+        active ? "visible" : ""
+      } ${containerClassName}`}
       style={{
         transform: `translateX(-${activeIndex * 100}%)`,
       }}
