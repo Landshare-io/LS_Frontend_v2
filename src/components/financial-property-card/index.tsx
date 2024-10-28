@@ -7,6 +7,7 @@ import IconRefresh from "../../../public/icons/refresh.svg";
 import capRate from "../../../public/icons/dollars.svg";
 import Est from "../../../public/icons/raised.svg";
 import myRwa from "../../../public/icons/coin-stacked-small.svg";
+import burnFire from "../../../public/icons/burn-fire.svg";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { StringKeyStringValueObject } from "../../utils/type";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
@@ -19,7 +20,8 @@ const iconUrl: StringKeyStringValueObject = {
   "Market Cap": Est,
   "Circulating Supply": myRwa,
   "Current Price": capRate,
-};
+  "Burned Amount": burnFire
+}
 
 const tips: StringKeyStringValueObject = {
   "Rental Yield": "",
@@ -31,7 +33,8 @@ const tips: StringKeyStringValueObject = {
   "Circulating Supply": "",
   "Cap Rate": "",
   "Current Price": "",
-};
+  "Burned Amount": ""
+}
 
 interface FinancialPropertyCardProps {
   title: string;
