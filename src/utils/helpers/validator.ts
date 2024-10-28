@@ -1,8 +1,8 @@
-export const validateResource = async (resource: number[], cost: number[]) => {
+export const validateResource = async (resource: number[], cost: number[] | string[]) => {
   let isValidated = true;
   for (let i = 0; i < 5; i++) {
     let resouceAmount = parseFloat(resource[i].toString());
-    if (resouceAmount < cost[i]) {
+    if (resouceAmount < Number(cost[i])) {
       isValidated = false;
       break;
     }

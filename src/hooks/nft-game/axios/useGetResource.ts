@@ -7,6 +7,10 @@ export default function useGetResource() {
   const [resource, setResource] = useState([0, 0, 0, 0, 0])
   const [userReward, setUserReward] = useState([0, 0, 0, 0, 0])
   const [maxPowerLimit, setMaxPowerLimit] = useState(0)
+  const [boostItem, setBoostItem] = useState<any>({
+    hasItem: 0,
+    item: 0
+  })
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -33,6 +37,7 @@ export default function useGetResource() {
       resourceData.userReward?.token ?? 0
     ])
     setMaxPowerLimit(resourceData.maxPowerLimit)
+    setBoostItem(resourceData.boostItem)
   }
 
   return {
@@ -41,6 +46,8 @@ export default function useGetResource() {
     userReward,
     setUserReward,
     maxPowerLimit,
-    getResources
+    getResources,
+    boostItem,
+    setBoostItem
   }
 }
