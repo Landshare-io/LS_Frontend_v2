@@ -52,7 +52,7 @@ export default function RwaCalculator() {
   return (
     <div className="flex flex-col p-0 max-w-[1200px] m-auto gap-[50px]">
       <div className="w-full flex justify-center">
-        <div className="flex items-center w-fit py-[6px] bg-white pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-tw-secondary">
+        <div className="flex items-center w-fit py-[6px] bg-white pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-secondary dark:bg-secondary">
           <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-primary">
             <IoIosTrendingUp className="w-[24px] h-[24px] text-[#24BC48]" />
           </div>
@@ -151,7 +151,7 @@ export default function RwaCalculator() {
 
           <button
             onClick={() => scrollToElement()}
-            className={`!bg-[#fff] w-full rounded-[100px] py-[10px] text-[16px] leading-[24px] font-bold `}
+            className={`!bg-[#fff] text-[#000] w-full rounded-[100px] py-[10px] text-[16px] leading-[24px] font-bold `}
           >
             Invest Now →
           </button>
