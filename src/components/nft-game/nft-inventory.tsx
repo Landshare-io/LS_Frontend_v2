@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactLoading from "react-loading";
 import numeral from "numeral";
+import ReactModal from "react-modal";
 import { useDisconnect, useAccount, useChainId } from "wagmi";
 import Topbar from "../common/topbar";
 import YouOwn from "../common/you-own";
 import { ChargeIcon } from "../common/icons/nft";
 
 
-import { Harvestable } from "./harvestable/Harvestable";
+import RewardHarvest from "./reward-harvest";
 import { NftItems } from "./Nft/nftList/NftItems";
 
 import ConnectWallet from "../connect-wallet";
@@ -18,16 +19,14 @@ import { useLandshareNftContext } from "../contexts/LandshareNftContext";
 import "../components/inventory/nftList/Maintenance.css";
 import NftItem from "./Nft/nftList/NftItem";
 import { InputCost } from "./Nft/inputCost/InputCost";
-import { Modal } from "../components/common/modal";
-import { Modal as ReactModal } from "react-bootstrap";
 import plusSlot from "../assets/img/icons/plus-slot.svg"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { BigNumberish, ethers, formatEther } from "ethers";
 
-
-import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import Button from "../common/button";
+import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 import useGetHouses from "../../hooks/nft-game/axios/useGetHouses";
 import useBalanceOfAsset from "../../hooks/contract/RWAContract/useBalanceOf";
 import useBalanceOfLand from "../../hooks/contract/LandTokenContract/useBalanceOf";
@@ -302,6 +301,24 @@ export default function InventoryPage() {
   const activatedHouses = houseItems.filter((house: any) => house.isActivated);
   const activatedHousesLength = activatedHouses.length;
 
+	const customModalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      maxWidth: "400px",
+      width: "90%",
+      height: "fit-content",
+      borderRadius: "20px",
+      padding: 0,
+      border: 0
+    },
+    overlay: {
+      background: '#00000080'
+    }
+  };
+
   return (
     <div className={`${theme == 'dark' ? "dark" : ""}`}>
       <div className="bg-primary">
@@ -322,18 +339,18 @@ export default function InventoryPage() {
                     chainId == MAJOR_WORK_CHAIN.id ? (
                       <>
                         <Topbar isNftList={true} />
-                        <div className="text-text-primary d-flex w-100 flex-wrap align-items-center justify-content-between px-2">
-                          <span className="fw-bold fs-md">Your Properties</span>
-                          <div className="divider d-block w-100 mb-4 my-3"></div>
-                          <div className="d-flex flex-column w-100 pb-3">
-                            <div className="properties-section-content mb-5">
-                              <div className="slider-container">
+                        <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
+                          <span className={`text-[16px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
+                          <div className="border-b-[1px] border-[#00000050] block w-full mb-4 my-3"></div>
+                          <div className="flex flex-col w-full pb-3">
+                            <div className="flex flex-col gap-[30px] md:flex-row items-center justify-between mb-5">
+                              <div className="w-full my-[20px] md:w-[75%]">
                                 {(houseItems?.length > 0) ? (
                                   <Slider {...settings}>
                                     {activatedHousesLength > 0 &&
                                       activatedHouses.map((houseItem, idx) => (
                                         <div
-                                          className="d-flex justify-content-center m-margin"
+                                          className="flex justify-center pr-[20px] md:pr-[40px]"
                                           key={`activated-house-item-${idx}`}
                                         >
                                           <NftItem house={houseItem} />
@@ -342,26 +359,26 @@ export default function InventoryPage() {
 
                                     {Array.from({ length: userActivatedSlots - activatedHousesLength }).map((_, index) => (
                                       <div
-                                        className="d-flex justify-content-center m-margin"
+                                        className="d-flex justify-content-center pr-[20px] md:pr-[40px]"
                                         key={`user-activated-slots-${index}`}
                                         onClick={() => setShowItemsModal(true)}
                                       >
-                                        <div className="need-more-slots nft-house-item d-flex flex-column">
+                                        <div className="h-[378px] p-[16px] items-center justify-center text-cener border-[2px] border-dotted border-[#61cd81] w-[251px] cursor-pointer m-auto animate-[fadeIn] overflow-hidden duration-[1200] rounded-[16px] flex flex-col">
                                           <h2>Slot Available</h2>
-                                          <p className="need-more-card-desc">Click here to add new NFT</p>
+                                          <p>Click here to add new NFT</p>
                                         </div>
                                       </div>
                                     ))}
 
                                     {Number(houseSlots) - Number(userActivatedSlots) > 0 && (
-                                      <div className="d-flex justify-content-center m-margin">
-                                        <div className="need-more-slots nft-house-item cards-hover-animation d-flex flex-column gap-[20px]">
+                                      <div className="d-flex justify-content-center pr-[20px] md:pr-[40px]">
+                                        <div className="h-[378px] p-[16px] items-center justify-center text-cener border-[2px] border-dotted border-[#61cd81] w-[251px] cursor-pointer m-auto animate-[fadeIn] overflow-hidden duration-300 rounded-[16px] shadow-md flex flex-col gap-[20px]">
                                           <div>
-                                            <p className="need-more-card-desc">{`Add New Slot (${buySlotCost} LAND)`}</p>
+                                            <p>{`Add New Slot (${buySlotCost} LAND)`}</p>
                                           </div>
-                                          <button
-                                            className={`btn nav-btn w-auto px-4 py-2 br-md fs-xs fw-700 text-button-text-secondary ${buyHouseSlotLoading
-                                              ? "d-flex justify-content-center align-items-center"
+                                          <Button
+                                            className={`w-auto px-4 py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className} ${buyHouseSlotLoading
+                                              ? "flex justify-center items-center"
                                               : ""
                                               }`}
                                             onClick={() => buyHouseSlot()}
@@ -371,36 +388,36 @@ export default function InventoryPage() {
                                               <>
                                                 <ReactLoading
                                                   type="spin"
-                                                  className="me-2 button-spinner"
+                                                  className="me-2 mb-[4px]"
                                                   width="24px"
                                                   height="24px"
                                                 />
-                                                <span className="upgrade-status">Loading</span>
+                                                <span className="font-semibold">Loading</span>
                                               </>
                                             ) : (
                                               "Buy House Slot"
                                             )}
-                                          </button>
+                                          </Button>
                                         </div>
                                       </div>
                                     )}
                                   </Slider>
-                                ) : (<div className="text-center font-bold text-gray-500">No NFTs Found</div>)}
+                                ) : (<div className={`text-center text-gray-500 ${BOLD_INTER_TIGHT.className}`}>No NFTs Found</div>)}
                               </div>
 
-                              <div className="show-properties-info">
-                                <div className="dashed-divider d-md-none"></div>
-                                <div className="d-flex mt-2 py-2  justify-content-between">
-                                  <span className={`font-semibold fs-16 ${theme == 'dark' ? "text-white-700" : "text-black-700"}`}>
+                              <div className="w-full ml-0 md:w-[280px] md:ml-[5px]">
+                                <div className="border-b-[1px] border-dashed border-[#000000] dark:border-[#cbcbcb]"></div>
+                                <div className="flex mt-2 py-2 justify-between">
+                                  <span className={`font-semibold text-[16px] ${theme == 'dark' ? "text-white-700" : "text-black-700"}`}>
                                     RWA Tokens Deposited:
                                   </span>
-                                  <span className={`fw-normal fs-xs ${theme == 'dark' ? "text-white" : "text-black"}`}>
+                                  <span className={`font-normal text-[16px] ${theme == 'dark' ? "text-white" : "text-black"}`}>
                                     {depositedBalance}{" "}
                                     {"LSRWA"}
                                   </span>
                                 </div>
-                                <div className="my-1 pt-1 d-flex flex-column mb-4">
-                                  <div className="d-flex flex-column">
+                                <div className="my-1 pt-1 flex flex-col mb-4">
+                                  <div className="flex flex-col">
                                     <div className="deposite-input-box w-full mt-2 justify-content-center">
                                       <InputCost
                                         height={34}
@@ -411,14 +428,14 @@ export default function InventoryPage() {
                                       />
                                     </div>
                                     <div className="mt-2 pt-3 flex justify-between">
-                                      <button
+                                      <Button
                                         onClick={handleDeposit}
-                                        className={`btn nav-btn py-2 br-md fs-xs fw-700 text-button-text-secondary
+                                        className={`py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || depositLoading) &&
-                                          	" btn-repair-disable "
+                                          	" bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
                                 					${depositLoading
-                                            ? " d-flex justify-content-center align-items-center"
+                                            ? " flex justify-center items-center"
                                             : ""
                                           }`}
                                         disabled={
@@ -429,26 +446,26 @@ export default function InventoryPage() {
                                           <>
                                             <ReactLoading
                                               type="spin"
-                                              className="me-2 button-spinner"
+                                              className="me-2 mb-[4px]"
                                               width="24px"
                                               height="24px"
                                             />
-                                            <span className="upgrade-status">
+                                            <span className="font-semibold">
                                               Loading
                                             </span>
                                           </>
                                         ) : (
                                           "Deposit"
                                         )}
-                                      </button>
-                                      <button
+                                      </Button>
+                                      <Button
                                         onClick={handleWithdraw}
-                                        className={`btn nav-btn py-2 br-md fs-xs fw-700 text-button-text-secondary
+                                        className={`py-2 br-md text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || withdrawLoading) &&
-                                          " btn-repair-disable "
+                                          " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
                                 					${withdrawLoading
-                                            ? "d-flex justify-content-center align-items-center"
+                                            ? "flex justify-center items-center"
                                             : ""
                                           }`}
                                         disabled={
@@ -459,48 +476,38 @@ export default function InventoryPage() {
                                           <>
                                             <ReactLoading
                                               type="spin"
-                                              className="me-2 button-spinner"
+                                              className="me-2 mb-[4px]"
                                               width="24px"
                                               height="24px"
                                             />
-                                            <span className="upgrade-status">
+                                            <span className="font-semibold">
                                               Loading
                                             </span>
                                           </>
                                         ) : (
                                           "Withdraw"
                                         )}
-                                      </button>
+                                      </Button>
                                     </div>
                                   </div>
                                 </div>
-                                <div className="dashed-divider mb-2 d-md-none"></div>
-                                <div className="d-flex flex-row justify-content-between ">
-                                  <div className="d-flex flex-column me-3 justify-content-between  py-1">
-                                    <span className={`d-flex fs-xs ${theme == 'dark' ? "text-gray-300" : "text-black-700"} align-items-center`}>
+                                <div className="border-b-[2px] border-dashed border-[#000000] mb-2"></div>
+                                <div className="flex flex-row justify-between ">
+                                  <div className="flex flex-col mr-3 justify-between py-1">
+                                    <span className={`flex text-[16px] ${theme == 'dark' ? "text-gray-300" : "text-black-700"} items-center`}>
                                       Total Multiplier:
                                     </span>
-                                    <span className={`d-flex fs-xs ${theme == 'dark' ? "text-gray-300" : "text-black-700"} align-items-center`}>
+                                    <span className={`flex text-[16px] ${theme == 'dark' ? "text-gray-300" : "text-black-700"} items-center`}>
                                       Annual Yield:
                                     </span>
-                                    <span className={`d-flex fs-xs ${theme == 'dark' ? "text-gray-300" : "text-black-700"} align-items-center`}>
-                                      <span className="me-1">LAND Remaining:</span>
+                                    <span className={`flex text-[16px] ${theme == 'dark' ? "text-gray-300" : "text-black-700"} items-center`}>
+                                      <span className="mr-1">LAND Remaining:</span>
                                     </span>
-
-                                    {/* <span className="text-black fs-xs">
-                              x
-                              {numeral(
-                                houseItems.filter(house => house.isActivated).length > 0 ?
-                                  houseItems.filter(house => house.isActivated).map(house => house.multiplier).reduce((a, b) => a + b) : 0
-                              ).format("0.[00]").toString()}{" "}
-                              LAND
-                            </span> */}
                                   </div>
 
-
-                                  <div className="d-flex flex-column align-items-end justify-content-between  gap-[10px] py-1">
-                                    <span className="d-flex fs-xs text-black-700 align-items-center">
-                                      <span className={`${theme == 'dark' ? "text-white" : "text-black"} fs-xs`}>
+                                  <div className="flex flex-col items-end justify-between gap-[10px] py-1">
+                                    <span className="flex text-[16px] text-black-700 items-center">
+                                      <span className={`${theme == 'dark' ? "text-white" : "text-black"} text-[16px]`}>
                                         x
                                         {numeral(
                                           houseItems.filter((house: any) => house.isActivated).length > 0 ?
@@ -510,7 +517,7 @@ export default function InventoryPage() {
                                       </span>
 
                                     </span>
-                                    <span className={`${theme == 'dark' ? "text-white" : "text-black"} fs-xs`}>
+                                    <span className={`${theme == 'dark' ? "text-white" : "text-black"} text-[16px]`}>
                                       {`${numeral((
                                         Number(depositedBalance) * (
                                           houseItems.filter((house: any) => house.isActivated).length > 0 ?
@@ -520,7 +527,7 @@ export default function InventoryPage() {
                                         "0.[0]"
                                       )} LAND`}
                                     </span>
-                                    <span className={`${theme == 'dark' ? "text-white" : "text-black"} fs-xs`}>
+                                    <span className={`${theme == 'dark' ? "text-white" : "text-black"} text-[16px]`}>
                                       {`${landRemaining} / ${numeral(
                                         Number(
                                           houseItems.filter((house: any) => house.isActivated).length > 0 ?
@@ -537,29 +544,29 @@ export default function InventoryPage() {
                               </div>
                             </div>
                           </div>
-                          <span className="fw-bold fs-md">Harvestable resources</span>
-                          <div className="divider d-block w-100 mb-4 my-3"></div>
-                          <div className="d-flex flex-column w-100">
-                            <Harvestable
+                          <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Harvestable resources</span>
+                          <div className="border-b-[1px] border-b-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
+                          <div className="flex flex-col w-full">
+                            <RewardHarvest
                               setTotalHarvestCost={setTotalHarvestCost}
                               selectedResource={selectedResource}
                               setSelectedResource={setSelectedResource}
                             />
-                            <div className="d-flex pt-5 pb-5 pb-lg-4 justify-content-start justify-content-lg-end harvest-cost">
+                            <div className="flex pt-5 pb-5 lg:pb-4 justify-start lg:justify-end">
                               <div
-                                className={`d-flex switch-btn active align-items-center position-relative`}
+                                className={`flex h-[40px] active items-center relative`}
                               >
-                                <span className={`d-flex fs-14 ${theme == 'dark' ? "text-gray-300" : "text-black-700"} align-items-center justify-content-center ps-4`}>
+                                <span className={`flex text-[14px] ${theme == 'dark' ? "text-gray-300" : "text-black-700"} items-center justify-center pl-4`}>
                                   Cost:{" "}
-                                  <span className="fw-bold ms-1 text-text-primary">
+                                  <span className={`ml-1 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                                     {totalHarvestCost} {<ChargeIcon iconColor={theme == 'dark' ? "#cacaca" : "#4C4C4C"} />}
                                   </span>
                                 </span>
-                                <button
+                                <Button
                                   onClick={handleHarvest}
-                                  className={`btn btn-switch-sale fs-16 fw-700 d-flex align-items-center justify-content-center position-absolute dark:text-button-text-secondary
-                          ${harvestLoading
-                                      ? "d-flex justify-content-center align-items-center"
+                                  className={`h-[40px] w-[159px] text-[16] flex items-center justify-center absolute dark:text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                          					${harvestLoading
+                                      ? "flex justify-center items-center"
                                       : ""
                                     }`}
                                   disabled={harvestLoading}
@@ -568,28 +575,28 @@ export default function InventoryPage() {
                                     <>
                                       <ReactLoading
                                         type="spin"
-                                        className="me-2 button-spinner"
+                                        className="me-2 mb-[4px]"
                                         width="24px"
                                         height="24px"
                                       />
-                                      <span className="upgrade-status">Loading</span>
+                                      <span className="font-semibold">Loading</span>
                                     </>
                                   ) : (
                                     "Harvest"
                                   )}
-                                </button>
+                                </Button>
                               </div>
                             </div>
                           </div>
-                          <span className="fw-bold fs-md">Production Facilities</span>
-                          <div className="divider d-block w-100 mb-4 my-3"></div>
-                          <div className="d-flex flex-column w-100">
+                          <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Production Facilities</span>
+                          <div className="border-b-[1px] border-[#00000050] block w-full mb-4 my-3"></div>
+                          <div className="flex flex-col w-full">
                             <ProductionFacilities />
                           </div>
                         </div>
                       </>
                     ) : (
-                      <div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite] h-[calc(100vh-25rem)]">
+                      <div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling] h-[calc(100vh-25rem)]">
                         Chain not Supported / Switch to BSC
                       </div>
                     )
@@ -597,39 +604,37 @@ export default function InventoryPage() {
                 </>
               )}
             </div>
-            <Modal
-              modalOptions={{
-                centered: true,
-                size: 'lg'
-              }}
-              modalShow={showItemsModal}
-              setModalShow={setShowItemsModal}
+            <ReactModal
+              style={customModalStyles}
+              isOpen={showItemsModal}
+							onRequestClose={() => { setShowItemsModal(!showItemsModal), document.body.classList.remove('modal-open'); }}
             >
-              <Modal.Body className='px-3 my-5'>
+              <div className='px-3 my-5'>
                 <NftItems
                   houseItems={houseItems.filter((house: any) => !house.isActivated)}
                 />
-              </Modal.Body>
-            </Modal>
+              </div>
+            </ReactModal>
 
             <ReactModal
-              show={showHarvestConfirm}
-              onHide={() => setShowHarvestConfirm(false)}
-              className={`modal_content ${theme == 'dark' ? "dark" : ""}`}
+							style={customModalStyles}
+              isOpen={showHarvestConfirm}
+							onRequestClose={() => { setShowHarvestConfirm(!showHarvestConfirm), document.body.classList.remove('modal-open'); }}
+              className={`flex items-center ${theme == 'dark' ? "dark" : ""}`}
             >
-              <div className="modal_body bg-third">
-                <div className="modal_header text-text-primary">
+              <div className="p-[20px] max-w-[300px] bg-third">
+                <div className="text-[15px] text-center text-text-primary">
                   Rewards will not be harvested due to negative NFT Credit balance. Continue withdrawal?
                 </div>
-                <div className="modal_buttons">
+                <div className="flex mt-[20px]">
                   <div
-                    className="modal_buttons_yes cursor-pointer text-button-text-secondary"
+                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
                     onClick={() => harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)}
                   >
                     Yes
                   </div>
                   <div
-                    className="modal_buttons_no cursor-pointer bg-primary text-text-secondary"
+                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] cursor-pointer bg-primary text-text-secondary"
                     onClick={() => setShowHarvestConfirm(false)}
                   >
                     No
@@ -639,17 +644,18 @@ export default function InventoryPage() {
             </ReactModal>
 
             <ReactModal
-              show={showWithdrawAlert}
-              onHide={() => setShowWithdrawAlert(false)}
-              className={`modal_content ${theme == 'dark' ? "dark" : ""}`}
+							style={customModalStyles}
+              isOpen={showWithdrawAlert}
+							onRequestClose={() => { setShowWithdrawAlert(!showWithdrawAlert), document.body.classList.remove('modal-open'); }}
+              className={`flex items-center ${theme == 'dark' ? "dark" : ""}`}
             >
-              <div className="modal_body bg-third">
-                <div className="modal_header text-text-primary">
+              <div className="p-[20px] max-w-[300px] bg-third">
+                <div className="text-[15px] text-center text-text-primary">
                   Withdraw will reset all reward
                 </div>
-                <div className="modal_buttons">
+                <div className="flex mt-[20px]">
                   <div
-                    className="modal_buttons_yes cursor-pointer text-button-text-secondary"
+                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
                     onClick={() => {
                       setShowWithdrawAlert(false)
                       setWithdrawLoading(true)
@@ -659,7 +665,7 @@ export default function InventoryPage() {
                     Yes
                   </div>
                   <div
-                    className="modal_buttons_no cursor-pointer bg-primary text-text-secondary"
+                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] cursor-pointer bg-primary text-text-secondary"
                     onClick={() => {
                       setWithdrawLoading(false)
                       setShowWithdrawAlert(false)
