@@ -1,15 +1,17 @@
+const { nextui } = require("@nextui-org/theme");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/components/popover.js",
   ],
-  darkMode: 'selector',
+  darkMode: "selector",
   theme: {
     extend: {
       colors: {
-        "primary": "var(--color-primary)",
-        "secondary": "var(--color-secondary)",
-        "third": "var(--color-third)",
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        third: "var(--color-third)",
         "vault-input": "var(--color-vault-input)",
         "input-field": "var(--color-input-field)",
         "text-primary": "var(--color-text-primary)",
@@ -32,23 +34,23 @@ module.exports = {
         xxl: "1680px",
       },
       fontFamily: {
-        inter: ['var(--font-inter)'],
+        inter: ["var(--font-inter)"],
       },
       keyframes: {
         sparkling: {
-          '0%, 100%': { filter: 'opacity(0.5)' },
-          '50%': { filter: 'opacity(1.1)' },
+          "0%, 100%": { filter: "opacity(0.5)" },
+          "50%": { filter: "opacity(1.1)" },
         },
         fadeIn: {
-          '0%': { opacity: 0.3 },
-          '100%': { opacity: 1 },
-        }
+          "0%": { opacity: 0.3 },
+          "100%": { opacity: 1 },
+        },
       },
       animation: {
-        sparkling: 'sparkling 3s infinite',
-        fadeIn: "fadeIn 1.2s"
+        sparkling: "sparkling 3s infinite",
+        fadeIn: "fadeIn 1.2s",
       },
     },
   },
-  plugins: [],
+  plugins: [nextui()],
 };
