@@ -1,5 +1,5 @@
 import { useChainId } from 'wagmi'
-import MintPage from './mint'
+import NftMint from '../../components/nft-mint'
 import { supportChainIds } from '../../wagmi'
 
 export default function Mint() {
@@ -12,7 +12,7 @@ export default function Mint() {
           Chain not Supported / Switch to BSC
         </div>
       ) : (
-        <MintPage />
+        <NftMint />
       )}
     </div>
   )
