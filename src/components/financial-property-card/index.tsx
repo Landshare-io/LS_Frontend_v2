@@ -12,6 +12,12 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import { StringKeyStringValueObject } from "../../utils/type";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import "react-loading-skeleton/dist/skeleton.css";
+import {
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../common/tooltip";
+import { Tooltip } from "@nextui-org/tooltip";
 
 const iconUrl: StringKeyStringValueObject = {
   "Rental Yield": capRate,
@@ -20,8 +26,8 @@ const iconUrl: StringKeyStringValueObject = {
   "Market Cap": Est,
   "Circulating Supply": myRwa,
   "Current Price": capRate,
-  "Burned Amount": burnFire
-}
+  "Burned Amount": burnFire,
+};
 
 const tips: StringKeyStringValueObject = {
   "Rental Yield": "",
@@ -33,8 +39,8 @@ const tips: StringKeyStringValueObject = {
   "Circulating Supply": "",
   "Cap Rate": "",
   "Current Price": "",
-  "Burned Amount": ""
-}
+  "Burned Amount": "",
+};
 
 interface FinancialPropertyCardProps {
   title: string;
@@ -67,15 +73,23 @@ export default function FinancialPropertyCard({
         <span className="text-text-secondary justify-center font-medium text-[14px] leading-[22px] min-w-[180px] md:justify-start flex gap-1 items-center relative">
           {title}
           {tips[title] != "" && (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={<span>{tips[title]}</span>}
-            >
-              <BsInfoCircle
-                id="tooltip-icon"
-                className="w-4 h-4 cursor-pointer z-50"
-              />
-            </OverlayTrigger>
+            <>
+              <Tooltip
+                closeDelay={100}
+                radius="sm"
+                size="sm"
+                classNames={{ content: "bg-black/70 text-white max-w-[260px]" }}
+                content={tips[title]}
+              >
+                <div>
+                  {/* svg icons must be wrapped around a div */}
+                  <BsInfoCircle
+                    id="tooltip-icon"
+                    className="w-4 h-4 cursor-pointer z-50"
+                  />
+                </div>
+              </Tooltip>
+            </>
           )}
         </span>
         <SkeletonTheme
