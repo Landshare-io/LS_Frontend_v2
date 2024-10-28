@@ -83,10 +83,7 @@ export default function PriceGraph({
           setRecentData({
             pair: "LAND / USD",
             price: landPrice,
-            change_price: (landGraphData.prices[Number(landGraphData.prices.length) - Number(1)]
-            [1]
-              - landGraphData.prices[0][1]) /
-              landGraphData.prices[0][1] * 100,
+            change_price: (landGraphData.prices[Number(landGraphData.prices.length) - Number(1)][1] - landGraphData.prices[0][1]) / landGraphData.prices[0][1] * 100,
             date: now
           })
           setIsLoading(false);
@@ -102,7 +99,7 @@ export default function PriceGraph({
             setSeries([{
               data: data.concat(filtered)
             }]);
-            change_price = filtered[1][1] != 0 ? (filtered[filtered.length - 1][1] - filtered[1][1]) / filtered[1][1] * 100 : 0
+            change_price = filtered.length > 1 ? (filtered[1][1] != 0 ? (filtered[filtered.length - 1][1] - filtered[1][1]) / filtered[1][1] * 100 : 0) : 0
           }
           setRecentData({
             pair: "LSRWA / USD",
