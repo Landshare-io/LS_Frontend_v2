@@ -13,12 +13,12 @@ export default function useSecondaryTradingLimitOf(chainId: number, address: Add
     args: [address]
   })
 
-  if (typeof address == 'undefined') return false
-  if (isLoading) return false
+  if (typeof address == 'undefined') return { data: 0, refetch }
+  if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching RWAContract secondaryTradingLimitOf error', error)
-    return false
+    return { data: 0, refetch }
   }
 
-  return data
+  return { data, refetch }
 }
