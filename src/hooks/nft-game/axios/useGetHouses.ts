@@ -16,7 +16,9 @@ export default function useGetHouses() {
     if (!isAuthenticated) return
     const { data: houseData } = await axios.get('/house/find-by-user');
 
-    setHouses(houseData)
+    if (houseData.length > 0) {
+      setHouses(houseData.sort((houseA: any, houseB: any) => houseA.id - houseB.id))
+    } else setHouses([])
   }
 
   return {

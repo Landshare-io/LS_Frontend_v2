@@ -79,6 +79,18 @@ export default function useGetSetting() {
     powerPerLumber,
     powerPerLandtoken,
     premiumMintCap,
-    getGameSetting
+    getGameSetting,
+    setOneDayTime,
+    setHarvestCost,
+    setPremiumAbleTime,
+    setPremiumAttachPrice,
+    setHouseSlots,
+    setUserActivatedSlots,
+    setBuySlotCost,
+    setMinAssetAmount,
+    setWithdrawStakedCost,
+    setPowerPerLumber,
+    setPowerPerLandtoken,
+    setPremiumMintCap
   }
 }

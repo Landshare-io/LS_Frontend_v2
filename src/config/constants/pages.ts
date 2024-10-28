@@ -13,14 +13,14 @@ export const PAGES: PAGE[] = [
     name: "Real World Assets",
     path: "/rwa",
   },
-  // {
-  //   name: "DAO",
-  //   path: "/dao",
-  // },
-  // {
-  //   name: "Migration",
-  //   path: "/migration",
-  // },
+  {
+    name: "DAO",
+    path: "/dao",
+  },
+  {
+    name: "Migration",
+    path: "/migration",
+  },
   {
     name: "Swap",
     url: "https://app.dsswap.io/info",

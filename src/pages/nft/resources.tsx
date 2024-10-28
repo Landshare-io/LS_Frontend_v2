@@ -13,7 +13,7 @@ const NftResources: NextPage = () => {
       <Head>
         <title>Landshare - NFT Resources</title>
       </Head>
-      {chainId === MAJOR_WORK_CHAIN.id ? (
+      {chainId !== MAJOR_WORK_CHAIN.id ? (
         <div className="min-h-[600px] flex flex-col justify-center items-center text-center mt-10 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
           Chain not Supported / Switch to BSC
         </div>
