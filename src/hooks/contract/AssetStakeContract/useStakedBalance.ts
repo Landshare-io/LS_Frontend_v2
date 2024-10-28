@@ -1,5 +1,4 @@
 import { useReadContract } from "wagmi";
-import { bsc } from "viem/chains";
 import { Address } from "viem";
 import AssetStake from "../../../abis/AssetStake.json"
 import { ASSET_STAKE_CONTRACT_ADDRESS } from "../../../config/constants/environments";
