@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import Image from "next/image";
 import { NextLabelIcon, PrevLabelIcon, QuestionIcon } from "../../common/icons/index";
-import NftItem from "./NftItem";
+import NftItem from "./nft-item";
 import sadEmoji from "../../../../public/icons/sad_emoji.png";
 import sadEmoji_Dark from "../../../../public/icons/no_item_dark.png";
 import { useGlobalContext } from "../../../context/GlobalContext";

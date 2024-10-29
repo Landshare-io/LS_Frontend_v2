@@ -3,6 +3,7 @@ import axios from "./nft-game-axios";
 
 export default function useGetUserData() {
   const [userData, setUserData] = useState({
+    id: null,
     activatedSlots: 2,
     depositedBalance: 0,
   });
@@ -23,6 +24,8 @@ export default function useGetUserData() {
   return {
     userData,
     facilities,
-    getUserData
+    getUserData,
+    setFacilities,
+    setUserData
   }
 }

@@ -10,7 +10,7 @@ import {
 } from "../../common/icons/nft";
 import HarvestCost from "./harvest-cost";
 
-import landTokenStakingImg from "../../assets/img/icons/land-token-staking-img.png";
+import landTokenStakingImg from "../../../../public/icons/land-token-staking-img.png";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
