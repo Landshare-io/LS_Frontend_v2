@@ -6,7 +6,7 @@ export default function useGetUserData() {
     activatedSlots: 2,
     depositedBalance: 0,
   });
-  const [facilities, setFacilities] = useState([])
+  const [facilities, setFacilities] = useState<any[]>([])
 
   const getUserData = async () => {
     try {
