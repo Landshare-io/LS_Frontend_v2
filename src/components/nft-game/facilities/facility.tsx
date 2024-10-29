@@ -1,0 +1,213 @@
+import React, { useState } from "react";
+import { useDisconnect } from "wagmi";
+import axios from "../../helper/axios";
+import {
+  ChargeIcon,
+  BrickIcon,
+  LumberIcon,
+  ConcreteIcon,
+  SteelIcon,
+} from "../../common/icons/nft";
+import Badge from "../../common/badge";
+import FacilityContent from "./facility-content";
+import { CustomModal } from "../../components/common/modal/Modal";
+import { OpenModalICon } from "../../components/common/Icons";
+import { useGlobalContext } from "../../contexts/GlobalContext";
+
+import useHandleFacilities from "../../../hooks/nft-game/axios/useHandleFacilities";
+
+import windfarm1 from "../../assets/img/production-facilities/windfarm1.png";
+import windfarm2 from "../../assets/img/production-facilities/windfarm2.png";
+import windfarm3 from "../../assets/img/production-facilities/windfarm3.png";
+import windfarm4 from "../../assets/img/production-facilities/windfarm4.png";
+import windfarm5 from "../../assets/img/production-facilities/windfarm5.png";
+import brick1 from "../../assets/img/production-facilities/brick1.png";
+import brick2 from "../../assets/img/production-facilities/brick2.png";
+import brick3 from "../../assets/img/production-facilities/brick3.png";
+import brick4 from "../../assets/img/production-facilities/brick4.png";
+import brick5 from "../../assets/img/production-facilities/brick5.png";
+import concrete1 from "../../assets/img/production-facilities/concrete1.png";
+import concrete2 from "../../assets/img/production-facilities/concrete2.png";
+import concrete3 from "../../assets/img/production-facilities/concrete3.png";
+import concrete4 from "../../assets/img/production-facilities/concrete4.png";
+import concrete5 from "../../assets/img/production-facilities/concrete5.png";
+import lumber1 from "../../assets/img/production-facilities/lumber1.png";
+import lumber2 from "../../assets/img/production-facilities/lumber2.png";
+import lumber3 from "../../assets/img/production-facilities/lumber3.png";
+import lumber4 from "../../assets/img/production-facilities/lumber4.png";
+import lumber5 from "../../assets/img/production-facilities/lumber5.png";
+import steel1 from "../../assets/img/production-facilities/steel1.png";
+import steel2 from "../../assets/img/production-facilities/steel2.png";
+import steel3 from "../../assets/img/production-facilities/steel3.png";
+import steel4 from "../../assets/img/production-facilities/steel4.png";
+import steel5 from "../../assets/img/production-facilities/steel5.png";
+import BoostImg from "../../assets/img/icons/boost.png";
+import "./Facility.css";
+
+interface FacilityProps {
+  type: number;
+  isBoosts?: boolean;
+}
+
+export default function Facility({
+  type,
+  isBoosts = false
+}: FacilityProps) {
+  const {
+    userResource,
+    setUserResource,
+    notifyError,
+    notifySuccess,
+    facilities,
+    setFacilities,
+    checkIsAuthenticated,
+    isDarkMode
+  } = useGlobalContext();
+  const { buyOrUpgradeFacility } = useHandleFacilities()
+  const { disconnect } = useDisconnect();
+  const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const icons = {
+    "Wind Farm": <ChargeIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+    "Lumber Mill": <LumberIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+    "Brick Factory": <BrickIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+    "Concrete Plant": <ConcreteIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+    "Steel Mill": <SteelIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+  };
+  const modalIcons = {
+    "Wind Farm": <ChargeIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+    "Lumber Mill": <LumberIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+    "Brick Factory": <BrickIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+    "Concrete Plant": <ConcreteIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+    "Steel Mill": <SteelIcon className="" iconColor={isDarkMode ? "#e4e4e4" : "#161616"} />,
+  };
+  const facilityImages = {
+    "Wind Farm": [windfarm1, windfarm1, windfarm1, windfarm1, windfarm1, windfarm2, windfarm2, windfarm2, windfarm2, windfarm2, windfarm3, windfarm3, windfarm3, windfarm3, windfarm3, windfarm4, windfarm4, windfarm4, windfarm4, windfarm4, windfarm5, windfarm5, windfarm5, windfarm5, windfarm5],
+    "Lumber Mill": [lumber1, lumber1, lumber1, lumber1, lumber1, lumber2, lumber2, lumber2, lumber2, lumber2, lumber3, lumber3, lumber3, lumber3, lumber3, lumber4, lumber4, lumber4, lumber4, lumber4, lumber5, lumber5, lumber5, lumber5, lumber5],
+    "Brick Factory": [brick1, brick1, brick1, brick1, brick1, brick2, brick2, brick2, brick2, brick2, brick3, brick3, brick3, brick3, brick3, brick4, brick4, brick4, brick4, brick4, brick5, brick5, brick5, brick5, brick5],
+    "Concrete Plant": [concrete1, concrete1, concrete1, concrete1, concrete1, concrete2, concrete2, concrete2, concrete2, concrete2, concrete3, concrete3, concrete3, concrete3, concrete3, concrete4, concrete4, concrete4, concrete4, concrete4, concrete5, concrete5, concrete5, concrete5, concrete5],
+    "Steel Mill": [steel1, steel1, steel1, steel1, steel1, steel2, steel2, steel2, steel2, steel2, steel3, steel3, steel3, steel3, steel3, steel4, steel4, steel4, steel4, steel4, steel5, steel5, steel5, steel5, steel5],
+  };
+  const description = (
+    <div>
+      <p></p>
+      <p>
+        The {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name == "Wind Farm" && "automatically"} produces{" "}
+        {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name == "Wind Farm" ? "Power" : facilities[type].currentFacility?.name || facilities[type].nextFacility?.name.split(/(\s+)/)[0]} over time.
+      </p>
+      <div className="d-flex justify-content-between">
+        <div>
+          <p>
+            <b>Current {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} LVL {facilities[type].currentFacility?.level ?? 0}:</b>{" "}
+            {facilities[type].currentFacility?.buyReward[2 + type] ?? 0} {modalIcons[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name]}/day
+          </p>
+          <p>
+            <b>Next {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} LVL {facilities[type].nextFacility?.level ?? maxLevel}:</b>{" "}
+            {facilities[type].nextFacility?.buyReward[2 + type] ?? 0} {modalIcons[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name]}/day
+          </p>
+          <p>
+            <b>{(facilities[type].currentFacility?.level ?? 0) > facilities[type].maxLevel && `We set your ${facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} level as a max level cause of you have not got enough activated houses.`}</b>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  );
+
+  return (
+    <>
+      <div className="flex flex-col max-w-[300px] overflow-hidden rounded-[15px] animate-[fadeIn] duration-300">
+        <div className="flex items-center justify-between py-[11px] px-[16px] bg-[#162246]">
+          <span className="text-[16px] font-semibold leading-[24px] text-[#ffffff]">{facilities[type].currentFacility?.name || facilities[type].nextFacility?.name}</span>
+          {facilities[type].currentFacility?.level ? (
+            facilities[type].currentFacility?.level > facilities[type].maxLevel ? (
+              <Badge label1="LVL" label2={facilities[type].maxLevel} color="default" />
+            ) : (
+              <Badge label1="LVL" label2={facilities[type].currentFacility?.level} color="default" />
+            )
+          ) : (
+            <Badge label1="" label2="" color="" />
+          )}
+        </div>
+        <div className='w-full h-[300px] bg-gradient-to-b from-[#9E9E9E] to-[#c3c3c300] relative'>
+          {isBoosts && (
+            <img src={BoostImg} alt={facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} className="absolute top-[12px] left-[12px]" />
+          )}
+          <img
+            src={(facilities[type].currentFacility?.level ?? 0) == 0 ?
+              facilityImages[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name][0] :
+              ((facilities[type].currentFacility?.level ?? 0) > 24 ?
+                facilityImages[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name][24] :
+                facilityImages[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name][(facilities[type].currentFacility?.level ?? 0) - 1])}
+            alt={facilities[type].currentFacility?.name || facilities[type].nextFacility?.name}
+            className="translate-x-[-50%] w-[280px] h-[280px] left-[50%] top-0 absolute"
+          />
+          <div className="flex absolute items-end w-full justify-between px-3 bottom-[5px]">
+            {facilities[type].currentFacility ? (
+              <div className="bottom-0">
+                <span className={`font-semibold text-[12px] leading-[18px] text-[#000000] opacity-50 mr-2 ${isDarkMode ? "text-[#ffffff]" : "text-[#000000]"}`}>Current Yield: </span>
+                {icons[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name]}
+                <span className={`value ms-1 fs-16 fw-600 ${isDarkMode ? "text-[#e6e6e6]" : "text-[#161616]"}`}>{facilities[type].currentFacility.buyReward[2 + type]} </span>
+                <span className={`ms-1 fs-16 fw-600 ${isDarkMode ? "text-[#e6e6e6]" : "text-[#161616]"}`}>/day</span>
+              </div>
+            ) : (
+              <div></div>
+            )}
+            <div className="facility-svg">
+              <div onClick={() => setOpenModal(true)}>
+                <OpenModalICon iconColor={isDarkMode && "white"} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-tw-secondary">
+          <div className={`d-flex next-yield-status ${isDarkMode ? "bg-[#5c727e66]" : "bg-[#6f8e9d66]"}`}>
+            <FacilityContent
+              type={type}
+              nextLevel={facilities[type].nextFacility?.level ?? facilities[type].maxLevel}
+              maxLevel={facilities[type].maxLevel}
+              color={(facilities[type].maxLevel > 0) ? ((facilities[type].currentFacility?.level ?? 0) > 0 ? (facilities[type].currentFacility?.level == facilities[type].maxLevel ? "light-blue" : "yellow") : "green") : 'grey'}
+              upgradeFacility={() => buyOrUpgradeFacility(type)}
+              isLoading={isLoading}
+              activated={facilities[type].maxLevel > 0}
+              nextLevelInfo={facilities[type].nextFacility}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="text-center facility-info">
+        {facilities[type].currentFacility?.level ? (
+          facilities[type].currentFacility?.level > facilities[type].maxLevel ? (
+            <span className="level-descriptor fw-500">
+              {`You own ${facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} `}
+              <b className={isDarkMode ? "text-[#ffffff]" : "text-[#000000]"}>Level {Number(facilities[type].maxLevel ?? 0)}</b>
+            </span>
+          ) : (
+            <span className="level-descriptor fw-500">
+              {`You own ${facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} `}
+              <b className={isDarkMode ? "text-[#ffffff]" : "text-[#000000]"}>Level {Number(facilities[type].currentFacility?.level ?? 0)}</b>
+            </span>
+          )
+        ) : (
+          <span className="level-descriptor fw-500">
+            {`You do not own any ${facilities[type].currentFacility?.name || facilities[type].nextFacility?.name}`}
+          </span>
+        )}
+      </div>
+      {description && (
+        <CustomModal
+          modalOptions={{
+            centered: true,
+            size: "lg",
+          }}
+          modalShow={openModal}
+          setModalShow={setOpenModal}
+        >
+          <CustomModal.Body className="d-flex min-h-100 justify-content-center align-items-center">
+            <span className="my-2 mx-3 fs-14 fw-400">{description}</span>
+          </CustomModal.Body>
+        </CustomModal>
+      )}
+    </>
+  );
+};
