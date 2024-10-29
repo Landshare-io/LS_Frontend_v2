@@ -5,19 +5,20 @@ import { Address } from "viem";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { NFT_GAME_BACKEND_URL } from "../../../config/constants/environments";
 
-export default function useLogin(address: Address | undefined) {
+export default function useLogin() {
   const { notifyError, notifySuccess, setIsAuthenticated } = useGlobalContext()
   const [isLoading, setIsLoading] = useState(false)
   const [signNonce, setSignNonce] = useState(0)
   const [showNotify, setShowNotify] = useState(false)
   const { signMessage, data: signMessageData } = useSignMessage()
+  const [walletAddress, setWalletAddress] = useState<Address | undefined>()
 
   useEffect(() => {
     (async () => {
       if (signMessageData) {
         const { data } = await axios.post(`${NFT_GAME_BACKEND_URL}/auth/login`, {
           "signature": signMessageData,
-          "walletAddress": address,
+          "walletAddress": walletAddress,
           "nonce": signNonce
         });
       
@@ -37,8 +38,9 @@ export default function useLogin(address: Address | undefined) {
     })()
   }, [signMessageData])
 
-  const loginToBackend = async (needNotify: boolean) => {
+  const loginToBackend = async (needNotify: boolean, address: Address | undefined) => {
     try {
+      setWalletAddress(address)
       setIsLoading(true)
       setShowNotify(needNotify)
       const { data: messageData } = await axios.post(`${NFT_GAME_BACKEND_URL}/auth/get-nonce`);

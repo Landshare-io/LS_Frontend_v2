@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactModal from "react-modal";
-import { HarvestableCards } from "./HarvestableCards";
+import HarvestCards from "./harvest-cards";
 
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useGetGameItems from "../../../hooks/nft-game/axios/useGetGameItems";
@@ -87,7 +87,7 @@ export default function RewardHarvest({
         {boostItemsList.map((item, type) => {
           const isActivatedBoost = boostItem.item == item.id
           return (
-            <HarvestableCards
+            <HarvestCards
               key={`harvestable-card-${type}`}
               item={item}
               type={type}

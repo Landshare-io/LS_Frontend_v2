@@ -9,7 +9,7 @@ import { ChargeIcon } from "../common/icons/nft";
 
 
 import RewardHarvest from "./reward-harvest";
-import { NftItems } from "./Nft/nftList/NftItems";
+import NftItems from "./nft/nft-items";
 
 import ConnectWallet from "../connect-wallet";
 
@@ -59,7 +59,7 @@ export default function InventoryPage() {
 	const { data: maxAssetTokenBalance, refetch: refetchDepositAmount } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
 	const { data: landTokenBalance, refetch: refetchLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
 	const { data: stakedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
-	const { isLoading: isLoginLoading } = useLogin(address)
+	const { isLoading: isLoginLoading } = useLogin()
 	const { boostItemsList } = useGetGameItems()
 	const { resource, userReward } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
