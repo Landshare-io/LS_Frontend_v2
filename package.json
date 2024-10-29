@@ -12,7 +12,6 @@
     "@ethersproject/solidity": "^5.7.0",
     "@nextui-org/system": "^2.2.6",
     "@nextui-org/theme": "^2.2.11",
-    "@nextui-org/tooltip": "^2.0.41",
     "@rainbow-me/rainbowkit": "^2.1.5",
     "@reduxjs/toolkit": "^2.2.7",
     "@snapshot-labs/snapshot.js": "^0.12.24",

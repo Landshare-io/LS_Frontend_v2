@@ -12,12 +12,7 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import { StringKeyStringValueObject } from "../../utils/type";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import "react-loading-skeleton/dist/skeleton.css";
-import {
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../common/tooltip";
-import { Tooltip } from "@nextui-org/tooltip";
+import Tooltip from "../common/tooltip";
 
 const iconUrl: StringKeyStringValueObject = {
   "Rental Yield": capRate,
@@ -74,13 +69,7 @@ export default function FinancialPropertyCard({
           {title}
           {tips[title] != "" && (
             <>
-              <Tooltip
-                closeDelay={100}
-                radius="sm"
-                size="sm"
-                classNames={{ content: "bg-black/70 text-white max-w-[260px]" }}
-                content={tips[title]}
-              >
+              <Tooltip content={tips[title]}>
                 <div>
                   {/* svg icons must be wrapped around a div */}
                   <BsInfoCircle

@@ -15,7 +15,7 @@ import HouseRareNft from "./../../public/img/house/house_rare_big.bmp";
 import HouseBRareNft from "./../../public/img/house/houseB_rare.bmp";
 import HouseCNft from "./../../public/img/house/houseC.bmp";
 import HouseCRareNft from "./../../public/img/house/houseC_rare.bmp";
-import { Tooltip } from "@nextui-org/tooltip";
+import Tooltip from "../common/tooltip";
 
 interface HouseMintItemProps {
   product: any;
@@ -85,15 +85,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
         <div className="flex justify-between items-center">
           <div className="text-[#0b6c96] text-[18px] font-semibold flex items-center">
             <span className="pr-1 text-text-secondary">NFT Credit Cost</span>
-            <Tooltip
-              closeDelay={100}
-              radius="sm"
-              size="sm"
-              classNames={{
-                content: "bg-black/70 text-white max-w-[260px]",
-              }}
-              content="The number of NFT Credits to spend on the minting. NFT Credits can be earned by purchasing RWA Tokens."
-            >
+            <Tooltip content="The number of NFT Credits to spend on the minting. NFT Credits can be earned by purchasing RWA Tokens.">
               {/* svg icon must be wrapped in a div */}
               <div>
                 <BsInfoCircle
@@ -122,15 +114,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
         <div className="flex items-end justify-between pr-2 pt-1">
           <div className="text-[#0b6c96] text-[18px] font-semibold flex items-center">
             <span className="pr-1 text-text-secondary">Harvestable LAND</span>
-            <Tooltip
-              closeDelay={100}
-              radius="sm"
-              size="sm"
-              classNames={{
-                content: "bg-black/70 text-white max-w-[260px]",
-              }}
-              content="The number of NFT Credits to spend on the minting. NFT Credits can be earned by purchasing RWA Tokens."
-            >
+            <Tooltip content="The number of NFT Credits to spend on the minting. NFT Credits can be earned by purchasing RWA Tokens.">
               {/* svg icon must be wrapped in a div */}
               <div>
                 <BsInfoCircle

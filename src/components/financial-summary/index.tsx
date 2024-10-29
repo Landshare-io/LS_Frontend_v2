@@ -50,7 +50,7 @@ import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";
 import useOptIn from "../../hooks/contract/AutoRedeemContract/useOptIn";
 import useBalanceOf from "../../hooks/contract/RWAContract/useBalanceOf";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Tooltip } from "@nextui-org/tooltip";
+import Tooltip from "../common/tooltip";
 
 export default function FinancialSummary() {
   const { theme } = useGlobalContext();
@@ -305,12 +305,6 @@ export default function FinancialSummary() {
                 <div>Financial Summary</div>
 
                 <Tooltip
-                  closeDelay={100}
-                  radius="sm"
-                  size="sm"
-                  classNames={{
-                    content: "bg-black/70 text-white max-w-[260px]",
-                  }}
                   content="Financial information is provided for your information
                         only. Expenses and property valuations are estimated and
                         subject to change at any time. Maintenance costs,

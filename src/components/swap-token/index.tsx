@@ -50,7 +50,7 @@ import IconInfo from "../../../public/icons/info.svg";
 import IconInfoGray from "../../../public/icons/info-gray.svg";
 import IconClose from "../../../public/icons/close.svg";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Tooltip } from "@nextui-org/tooltip";
+import Tooltip from "../common/tooltip";
 
 export default function SwapToken() {
   const { isConnected, address } = useAccount();
@@ -495,12 +495,6 @@ export default function SwapToken() {
                       Monthly Sale Limit
                     </span>
                     <Tooltip
-                      closeDelay={100}
-                      radius="sm"
-                      size="sm"
-                      classNames={{
-                        content: "bg-black/70 text-white max-w-[260px]",
-                      }}
                       content={
                         reachedLimit
                           ? "Your remaining monthly USDC sale limit. To make a larger sale, please contact admin@landshare.io."
@@ -538,12 +532,6 @@ export default function SwapToken() {
                     </span>
 
                     <Tooltip
-                      closeDelay={100}
-                      radius="sm"
-                      size="sm"
-                      classNames={{
-                        content: "bg-black/70 text-white max-w-[260px]",
-                      }}
                       content={
                         <>
                           Remaining number of RWA Tokens that can be transferred
