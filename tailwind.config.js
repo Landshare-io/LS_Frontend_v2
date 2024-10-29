@@ -6,6 +6,18 @@ module.exports = {
   darkMode: 'selector',
   theme: {
     extend: {
+      backgroundImage: {
+        'stripes': `linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.15) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.15) 50%,
+          rgba(255, 255, 255, 0.15) 75%,
+          transparent 75%,
+          transparent
+        )`,
+      },
       colors: {
         "primary": "var(--color-primary)",
         "secondary": "var(--color-secondary)",
@@ -42,11 +54,16 @@ module.exports = {
         fadeIn: {
           '0%': { opacity: 0.3 },
           '100%': { opacity: 1 },
+        },
+        progress: {
+          '0%': { "background-position": '0 0' },
+          '100%': { "background-position": '1rem 1rem' }
         }
       },
       animation: {
         sparkling: 'sparkling 3s infinite',
-        fadeIn: "fadeIn 1.2s"
+        fadeIn: "fadeIn 1.2s",
+        progress: "progress 1s infinite linear",
       },
     },
   },
