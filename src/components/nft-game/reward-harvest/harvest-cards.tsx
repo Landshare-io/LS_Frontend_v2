@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Form } from "react-bootstrap";
+import FormCheck from "../../common/form/check";
 import numeral from "numeral";
 import {
   LumberMainIcon,
@@ -125,14 +125,10 @@ export default function HarvestCards({
   return (
     <div className="min-w-[200px] mb-[20px] border-[1px] border-[#00000033] pt-[17px] bg-gradient-to-b from-[#9e9e9e33] to-[#d9d9d933] duration-300 hovershadow-md">
       <div className="pl-[10px] cursor-pointer">
-        <Form.Check
+        <FormCheck
           type="checkbox"
           id={`checkbox-${type}`}
-          label={
-            <span className={`text-[16px] font-semibold ${theme == "dark" ? "text-gray-300" : "text-black-700"} cursor-pointer`}>
-              {item.name}
-            </span>
-          }
+          label={item.name}
           className="custom-checkbox"
           checked={selectedResource[type]}
           disabled={
