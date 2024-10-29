@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useChainId, useAccount } from "wagmi";
 import { BigNumberish, formatEther } from "ethers";
 import PremiumNft from "./premium-nft";
-import marble from "../../../../assets/img/marketplace-property/marble.png";
-import pool from "../../../../assets/img/marketplace-property/pool.png";
-import windfarm from "../../../../assets/img/marketplace-property/tile.png";
+import marble from "../../../public/img/marketplace-property/marble.png";
+import pool from "../../../public/img/marketplace-property/pool.png";
+import windfarm from "../../../public/img/marketplace-property/tile.png";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { getDependencyItemInstances } from "../../utils/helpers/validator";
 import useGetGameItems from "../../hooks/nft-game/axios/useGetGameItems";
@@ -13,7 +13,6 @@ import useGetSetting from "../../hooks/nft-game/axios/useGetSetting";
 import useMintPremiumNft from "../../hooks/nft-game/premium-nfts/useMintPremiumNft";
 import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import { PREMIUM_NFT_CONTRACT_ADDRESS } from "../../config/constants/environments";
-import "./PremiumNfts.css";
 
 export default function PremiumNfts() {
   const { address } = useAccount()
