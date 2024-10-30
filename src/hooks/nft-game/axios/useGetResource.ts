@@ -48,6 +48,7 @@ export default function useGetResource() {
     maxPowerLimit,
     getResources,
     boostItem,
-    setBoostItem
+    setBoostItem,
+    setMaxPowerLimit
   }
 }

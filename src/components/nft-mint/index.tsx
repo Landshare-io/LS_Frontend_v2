@@ -11,7 +11,7 @@ import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 export default function NftMint() {
   const { isConnected, address } = useAccount();
-  const { isLoading: isLoginLoading } = useLogin(address)
+  const { isLoading: isLoginLoading } = useLogin()
   const {
     isAuthenticated,
     theme
