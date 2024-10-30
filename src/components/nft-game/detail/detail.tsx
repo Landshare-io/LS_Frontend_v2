@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import numeral from "numeral";
 import { useRouter } from "next/router";
-import { useDisconnect, useSigner } from "wagmi";
+import { useDisconnect, useChainId, useAccount } from "wagmi";
 import { ethers } from "ethers";
+import { BigNumberish } from "ethers";
 
 import axios from "../../helper/axios";
 import HouseNft from "../../assets/img/house/house.bmp";
@@ -20,22 +21,43 @@ import HouseGardenRareNft from "../../assets/img/house/house_garden_rare.bmp";
 import HouseBGardenRareNft from "../../assets/img/house/houseB_garden_rare.bmp";
 import HouseCNft from "../../assets/img/house/houseC.bmp"
 import HouseCRareNft from "../../assets/img/house/houseC_rare.bmp"
+
 import { Harvestable } from "../harvestable/Harvestable";
-import { ReparingStatus } from "./reparingStatus/ReparingStatus";
-import { Reparing } from "./reparing/Reparing";
-import { EditableNft } from "./editableNft/editableNft";
+
+import ReparingStatus from "../reparing-status";
+import Repair from "./repair";
+import EditableNft from "./editable-nft";
+
 import { TotalYieldMultiModal } from "./totalYieldMultiModal/TotalYieldMultiModal";
 import { useLandshareNftContext } from "../../contexts/LandshareNftContext";
-import { useGlobalContext } from "../../contexts/GlobalContext";
-import { InputCost } from "./inputCost/InputCost";
+
+import InputCost from "../../common/input-cost";
 import { CustomModal } from "../../components/common/modal/Modal";
 import OnSaleModal from "./modals/OnSale";
-import gameSetting from "../../contexts/game/setting.json";
-import { NftDurabilityIcon, ChargeIcon } from "./NftIcon";
+
+
+import { NftDurabilityIcon, ChargeIcon } from "../../common/icons/nft";
 import MintModal from "../../components/mintModal";
 import { validateResource } from "../../helper/validator";
 import { Modal as ReactModal } from "react-bootstrap";
 import "./nftDetails.css";
+
+import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAIN } from "../../../config/constants/environments";
+import useGetHouses from "../../../hooks/nft-game/axios/useGetHouses";
+import useBalanceOfAsset from "../../../hooks/contract/RWAContract/useBalanceOf";
+import useBalanceOfLand from "../../../hooks/contract/LandTokenContract/useBalanceOf";
+import useLogin from "../../../hooks/nft-game/axios/useLogin";
+import useGetResource from "../../../hooks/nft-game/axios/useGetResource";
+import useStakedBalance from "../../../hooks/contract/AssetStakeContract/useStakedBalance";
+import useHarvest from "../../../hooks/nft-game/axios/useHarvest";
+import useHandleBuyHouseSlots from "../../../hooks/nft-game/axios/useHandleBuyHouseSlots";
+import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
+import useStake from "../../../hooks/nft-game/axios/useStake";
+import useGetNftCredits from "../../../hooks/nft-game/apollo/useGetNftCredits";
+import useWithdrawAsset from "../../../hooks/nft-game/axios/useWithdrawAsset";
+import useSecondaryTradingLimitOf from "../../../hooks/contract/RWAContract/useSecondaryTradingLimitOf";
+import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 interface NftDetailsProps {
   house: any,
@@ -50,27 +72,29 @@ export default function NftDetails({
 }: NftDetailsProps) {
   const { theme } = useGlobalContext();
   const {
-    account,
-    provider,
-    userData,
-    houseItems,
-    minAssetAmount,
-    withdrawStakedCost,
-    assetNewContract,
-    landTokenV2Contract,
     notifySuccess,
-    notifyError,
-    userResource,
-    setUserResource,
-    getUserData,
-    boostItemsList,
-    checkHasLandscaping,
-    checkHasGarden,
-    getUserHouses,
-    nftCredits,
-    updateNftCredits,
-    totalCredits
+    notifyError
   } = useGlobalContext();
+  const chainId = useChainId()
+  const { address } = useAccount()
+  const [harvestLoading, setHarvestLoading] = useState(false)
+  const [depositLoading, setDepositLoading] = useState(false)
+  const [withdrawLoading, setWithdrawLoading] = useState(false)
+  const { userData } = useGetUserData()
+  const { houses: houseItems, getHouses } = useGetHouses()
+	const { data: maxAssetTokenBalance, refetch: refetchDepositAmount } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
+	const { data: landTokenBalance, refetch: refetchLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
+	const { data: stakedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
+	const { isLoading: isLoginLoading } = useLogin()
+	const { userReward } = useGetResource()
+	const { harvest } = useHarvest(setHarvestLoading)
+	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost } = useGetSetting()
+
+	const { stake } = useStake(chainId, address, setDepositLoading)
+	const { nftCredits, totalCredits } = useGetNftCredits()
+	const { withdrawAssetTokenHandler } = useWithdrawAsset(chainId, address, setDepositLoading, setWithdrawLoading)
+	const { data: tradingLimit } = useSecondaryTradingLimitOf(chainId, address) as { data: BigNumberish, refetch: Function }
+
   const {
     contract: {
       newHouseContract,
@@ -81,11 +105,11 @@ export default function NftDetails({
     }
   } = useLandshareNftContext();
   const [houseImgUrl, setHouseImgUrl] = useState(HouseNft)
-  const { data: signer } = useSigner();
+
   const isOwn = house.userId === userData?.id
-  const houseIds = houseItems.map(houseItem => houseItem.id).sort((a, b) => a - b)
+
   const { disconnect } = useDisconnect();
-  const [depositeAmount, setDepositeAmount] = useState("");
+  const [depositAmount, setDepositAmount] = useState("");
   const [depositedBalance, setDepositedBalance] = useState("");
 
   const [isTotalYieldModalOpen, setIsTotalYieldModalOpen] = useState(false);
@@ -94,7 +118,6 @@ export default function NftDetails({
   const [showHarvestConfirm, setShowHarvestConfirm] = useState(false)
   const [selectedResource, setSelectedResource] = useState([false, false, false, false, false])
 
-  const [harvestLoading, setHarvestLoading] = useState(false);
   const [saleOpen, setSaleOpen] = useState(false);
 
   const [hasLandscaping, setHasLandscaping] = useState(false)
@@ -111,7 +134,7 @@ export default function NftDetails({
   const [durabilityModal, setDurabilityModal] = useState(false);
 
   const [showMintModal, setShowMintModal] = useState(false);
-  const [withdrawLoading, setWithdrawLoading] = useState(false)
+  
   const [showWithdrawAlert, setShowWithdrawAlert] = useState(false)
   const [showOnSaleAlert, setShowOnSaleAlert] = useState(false)
 
@@ -120,10 +143,6 @@ export default function NftDetails({
 
   const [totalHarvestCost, setTotalHarvestCost] = useState(0);
 
-  async function updateDepositedBalance() {
-    const balance = await newStakeContract.stakedBalance(account);
-    setDepositedBalance(ethers.utils.formatUnits(balance, 0));
-  }
 
   useEffect(() => {
     updateDepositedBalance();
@@ -166,187 +185,113 @@ export default function NftDetails({
     }
   };
 
-  const stake = async () => {
-    try {
-      const txApprove = await assetNewContract.approve(newStakeAddress, depositeAmount);
-      const receipt = await txApprove.wait();
-      if (receipt.status) {
-        const txDeposit = await newStakeContract.deposit(depositeAmount);
-        const receipt = await txDeposit.wait();
-        if (receipt.status) {
-          const { data } = await axios.post('/house/deposit-asset-token', {
-            houseId: house.id
-          })
-          if (data.status) {
-            await getUserHouses()
-            notifySuccess(`${depositeAmount} Asset Tokens deposited!`);
-            getHouse(house.id);
-            setDepositeAmount("");
-            const balance = await newStakeContract.stakedBalance(account);
-            setDepositedBalance(ethers.utils.formatUnits(balance, 0));
-            setIsLoading([false, false, false, false, false]);
-          } else {
-            setIsLoading([false, false, false, false, false]);
-            notifyError("Deposit failed");
-          }
-        } else {
-          setIsLoading([false, false, false, false, false]);
-          notifyError("Deposit failed");
-        }
-      } else {
-        setIsLoading([false, false, false, false, false]);
-        notifyError("Deposit failed");
-      }
-    } catch (error) {
-      console.log("deposite error", error);
-      setIsLoading([false, false, false, false, false]);
-      notifyError(error.response.data.message);
-    }
-  };
-
   const handleDeposit = async () => {
-    if (isLoading[0]) return
-    setIsLoading([true, false, false, false, false]);
-    const maxAssetTokenBalance = await assetNewContract.balanceOf(account);
-    const tradingLimit = await assetNewContract.secondaryTradingLimitOf(account);
-    const stakedBalance = await newStakeContract.stakedBalance(account);
+    if (depositLoading) return
+    setDepositLoading(true);
 
     if (!localStorage.getItem("jwtToken-v2")) {
-      setIsLoading([false, false, false, false, false]);
+      setDepositLoading(false);
       return notifyError("Please login!");
     }
 
     if (!house.isActivated) {
-      setIsLoading([false, false, false, false, false]);
+      setDepositLoading(false);
       return notifyError("Please Activate First");
     }
 
     if (!isOwn) {
-      setIsLoading([false, false, false, false, false]);
+      setDepositLoading(false);
       return notifyError("You are not an owner of this house");
     }
 
-    if (depositeAmount === "" || depositeAmount === "0") {
-      setIsLoading([false, false, false, false, false]);
+    if (depositAmount === "" || depositAmount === "0") {
+      setDepositLoading(false);
       return notifyError("No deposit amount");
     }
 
-    if (depositeAmount % 1 != "0") {
-      setIsLoading([false, false, false, false, false]);
+    if (Number(depositAmount) % 1 != 0) {
+      setDepositLoading(false);
       return notifyError("Please input Integer value");
     }
 
-    if (depositeAmount < 1) {
-      setIsLoading([false, false, false, false, false]);
+    if (Number(depositAmount) < 1) {
+      setDepositLoading(false);
       return notifyError("Please input Integer value");
     }
 
-    if (Number(depositeAmount) > maxAssetTokenBalance) {
-      setIsLoading([false, false, false, false, false]);
+    if (Number(depositAmount) > maxAssetTokenBalance) {
+      setDepositLoading(false);
       return notifyError("Deposit amount should not be bigger than max amount");
     }
 
-    if ((Number(stakedBalance) + Number(depositeAmount)) >= Number(tradingLimit)) {
+    if ((Number(stakedBalance) + Number(depositAmount)) >= Number(tradingLimit)) {
       setDepositLoading(false)
       return notifyError("Please increase your secondary trading limit. Please check details: https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/secondary-trading-limits");
     }
 
-    const { data } = await axios.get(`/user-reward/${userData.id}`);
-    if (Number(data.brick) + Number(data.concrete) + Number(data.lumber) + Number(data.steel) + Number(data.token) > 0) {
+    if (Number(userReward[0]) + Number(userReward[1]) + Number(userReward[2]) + Number(userReward[3]) + Number(userReward[4]) > 0) {
       return notifyError("Harvest rewards before deposit");
     }
 
-    stake();
+    stake(depositAmount);
   };
 
   const handleWithdraw = async () => {
     if (withdrawLoading || isLoading[1]) return
     setWithdrawLoading(true)
-    setIsLoading([false, true, false, false, false]);
+
     if (!localStorage.getItem("jwtToken-v2")) {
-      setIsLoading([false, false, false, false, false]);
+      setWithdrawLoading(false)
       return notifyError("Please login!");
     }
 
     if (!house.isActivated) {
-      setIsLoading([false, false, false, false, false]);
+      setWithdrawLoading(false)
       return notifyError("Please Activate First");
     }
 
     if (!isOwn) {
-      setIsLoading([false, false, false, false, false]);
+      setWithdrawLoading(false)
       return notifyError("You are not an owner of this house");
     }
 
-    if (depositeAmount === "" || depositeAmount === "0") {
-      setIsLoading([false, false, false, false, false]);
+    if (depositAmount === "" || depositAmount === "0") {
+      setWithdrawLoading(false)
       return notifyError("No deposit amount");
     }
 
-    if (depositeAmount % 1 != "0") {
-      setIsLoading([false, false, false, false, false]);
+    if (Number(depositAmount) % 1 != 0) {
+      setWithdrawLoading(false)
       return notifyError("Please input Integer value");
     }
 
-    if (depositeAmount < 1) {
-      setIsLoading([false, false, false, false, false]);
+    if (Number(depositAmount) < 1) {
+      setWithdrawLoading(false)
       return notifyError("Please input Integer value");
     }
 
-    if (Number(depositeAmount) > house.depositedBalance) {
-      setIsLoading([false, false, false, false, false]);
+    if (Number(depositAmount) > house.depositedBalance) {
+      setWithdrawLoading(false)
       return notifyError("Withdraw amount should not be less than deposited balance");
     }
 
-    const pastUserReward = userResource.userReward
-    if (Number(depositeAmount) == Number(depositedBalance)) {
-      const withdrawAssetTokenCost = withdrawStakedCost.split(',')
-      if (Number(pastUserReward[4]) > 0.1) {
+    if (Number(depositAmount) == Number(depositedBalance)) {
+      if (Number(userReward[4]) > 0.1) {
         setWithdrawLoading(false)
         setIsLoading([false, false, false, false, false])
         return notifyError('Please harvest your token reward before withdraw.')
       } else {
-        withdrawAssetTokenHandler()
+        withdrawAssetTokenHandler(withdrawStakedCost, depositAmount)
       }
     } else {
-      if (Number(pastUserReward[4]) > 0.1) {
+      if (Number(userReward[4]) > 0.1) {
         setWithdrawLoading(false)
-        setIsLoading([false, false, false, false, false]);
         setShowWithdrawAlert(true)
       } else {
-        withdrawAssetTokenHandler()
+        withdrawAssetTokenHandler(withdrawStakedCost, depositAmount)
       }
     }
   };
-
-  const withdrawAssetTokenHandler = async () => {
-    const withdrawCost = withdrawStakedCost.split(',')
-    if (await validateResource(userResource, withdrawCost)) {
-      try {
-        const txWithdraw = await newStakeContract.withdraw(depositeAmount);
-        await txWithdraw.wait().then(async () => {
-          await axios.post('/house/withdraw-asset-token', {
-            houseId: -1
-          })
-          getUserData()
-          notifySuccess(`${depositeAmount} LSRWA withdrawn successfully!`);
-          setWithdrawLoading(false)
-          const balance = await newStakeContract.stakedBalance(account);
-          setDepositedBalance(ethers.utils.formatUnits(balance, 0));
-          setIsLoading([false, false, false, false, false]);
-        });
-      } catch (error) {
-        console.log("Withdraw error", error);
-        setWithdrawLoading(false)
-        setIsLoading([false, false, false, false, false]);
-        notifyError(error.response.data.message);
-      }
-    } else {
-      setWithdrawLoading(false)
-      setIsLoading([false, false, false, false, false]);
-      notifyError("Insufficient resources.");
-    }
-  }
 
   const handleV1Withdraw = async () => {
     // if (!house.isActivated) {
@@ -476,8 +421,8 @@ export default function NftDetails({
   };
 
   const calcDepositMax = async () => {
-    const userAssetTokenBalance = await assetNewContract.balanceOf(account);
-    setDepositeAmount(userAssetTokenBalance.toString());
+    const userAssetTokenBalance = await assetNewContract.balanceOf(address);
+    setDepositAmount(userAssetTokenBalance.toString());
   };
 
   const getHouseImageUrl = () => {
@@ -563,7 +508,7 @@ export default function NftDetails({
         setOnSaleLoading(true);
         try {
           const isApprovedForAll = await newHouseContract.isApprovedForAll(
-            account,
+            address,
             process.env.REACT_APP_ADMIN_WALLET_ADDRESS
           );
           if (isApprovedForAll) {
@@ -592,9 +537,8 @@ export default function NftDetails({
 
   const extendHarvestLimit = async (landAmount) => {
     try {
-      const maxAssetTokenBalance = await assetNewContract.balanceOf(account);
-      const ableAmount = nftCredits
-      const userLandAmount = await landTokenV2Contract.balanceOf(account);
+
+      const userLandAmount = await landTokenV2Contract.balanceOf(address);
       if (landAmount > userLandAmount) {
         return notifyError('Insufficient LAND amount')
       }
@@ -618,7 +562,7 @@ export default function NftDetails({
           })
 
           if (data) {
-            const landTokenV2Balance = await landTokenV2Contract.balanceOf(account);
+            const landTokenV2Balance = await landTokenV2Contract.balanceOf(address);
 
             await updateNftCredits()
             setUserResource((prevState) => ({
@@ -688,51 +632,6 @@ export default function NftDetails({
     }
   };
 
-  const harvest = async () => {
-    if (totalHarvestCost === 0) {
-      setHarvestLoading(false);
-      return notifyError("Select resources to harvest");
-    }
-
-    if (await validateResource(userResource, [totalHarvestCost, 0, 0, 0, 0])) {
-      try {
-        const pastUserReward = userResource.userReward
-        const { data } = await axios.post(`/user-reward/harvest`, {
-          harvestItem: [...selectedResource]
-        })
-
-        const harvestMessages = []
-        selectedResource.map((sR, type) => {
-          if (sR) {
-            harvestMessages.push(`${numeral(pastUserReward[type]).format('0.[00]')} ${boostItemsList[type].name.split(' ')[0]}`)
-          }
-        })
-
-        setUserResource((prevState) => ({
-          ...prevState,
-          resource: [data.resourceData.power, data.resourceData.lumber, data.resourceData.brick, data.resourceData.concrete, data.resourceData.steel],
-          userReward: [data.userReward.lumber, data.userReward.brick, data.userReward.concrete, data.userReward.steel, data.userReward.token]
-        }))
-        setSelectedResource([false, false, false, false, false])
-        setHarvestLoading(false)
-        return notifySuccess(harvestMessages.join(', ') + ' harvested successfully.')
-      } catch (error: any) {
-        console.log(error)
-        setHarvestLoading(false)
-        setIsLoading([false, false, false, false, false]);
-        if (error.response?.data.status == 401) {
-          localStorage.removeItem("jwtToken-v2");
-          disconnect();
-          return notifyError(`Unautherized error`);
-        } else
-          return notifyError(error.response.data.message);
-      }
-    } else {
-      setIsLoading({ type: -1, loading: false });
-      return notifyError("Not enough resource");
-    }
-  }
-
   useEffect(() => {
     (async () => {
       if (!house.isActivated) return
@@ -748,7 +647,7 @@ export default function NftDetails({
 
   return (
     <>
-      <div className=" justify-content-center nft-house mb-5 pb-4 px-2">
+      <div className="justify-center nft-house mb-5 pb-4 px-2">
         <div className="px-xl-0">
           <div>
             <div className="d-flex flex-wrap justify-content-between nft-title-section pb-2">
@@ -854,7 +753,7 @@ export default function NftDetails({
                         </span>
                       </div>
                     </div>
-                    <Reparing
+                    <Repair
                       house={house}
                       setHouse={setHouse}
                     />
@@ -874,8 +773,8 @@ export default function NftDetails({
                         <div className="deposite-input-box mt-2 text-tw-text-secondary">
                           <InputCost
                             height={34}
-                            value={depositeAmount}
-                            changeRepairAmount={setDepositeAmount}
+                            value={depositAmount}
+                            changeRepairAmount={setDepositAmount}
                             calcMaxAmount={calcDepositMax}
                           />
                         </div>
@@ -886,15 +785,15 @@ export default function NftDetails({
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " btn-repair-disable "
                               }
-                            ${isLoading[0]
+                            ${depositLoading
                                 ? " d-flex justify-content-center align-items-center"
                                 : ""
                               }`}
                             disabled={
-                              isLoading[0] || !house.isActivated || !isOwn || house.onSale
+                              depositLoading || !house.isActivated || !isOwn || house.onSale
                             }
                           >
-                            {isLoading[0] ? (
+                            {depositLoading ? (
                               <>
                                 <ReactLoading
                                   type="spin"
@@ -977,7 +876,7 @@ export default function NftDetails({
                                     : ""
                                   }`}
                                 disabled={
-                                  isLoading[0] || !house.isActivated || !isOwn || house.onSale
+                                  depositLoading || !house.isActivated || !isOwn || house.onSale
                                 }
                               >
                                 {isLoading[1] ? (

@@ -7,13 +7,13 @@ import NftDetails from "./NftDetails";
 import Topbar from "../../common/topbar";
 import YouOwn from "../../common/you-own";
 import MainTabs from "../../components/common/tab/Tab";
-import { PremiumNfts } from "./premiumNfts/PremiumNfts";
+import PremiumNfts from "../../mint-premium-nfts";
 import { UpgradeListTable } from "./upgradeListTable/UpgradeListTable";
 import { ProductionUpgrade } from "./productionUpgrade/ProductionUpgrade";
 import { UpgradeSection } from "./upgradeSection/UpgradeSection";
 
 import { useGlobalContext } from "../../../context/GlobalContext";
-import ConnectWallet from "../../components/ConnectWallet";
+import ConnectWallet from "../../connect-wallet";
 
 import useGetHouse from "../../../hooks/nft-game/axios/useGetHouse";
 
