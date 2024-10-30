@@ -1,15 +1,11 @@
-const { nextui } = require("@nextui-org/theme");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/components/popover.js",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   darkMode: "selector",
   theme: {
     extend: {
       backgroundImage: {
-        'stripes': `linear-gradient(
+        stripes: `linear-gradient(
           45deg,
           rgba(255, 255, 255, 0.15) 25%,
           transparent 25%,
@@ -54,21 +50,20 @@ module.exports = {
           "50%": { filter: "opacity(1.1)" },
         },
         fadeIn: {
-
-          '0%': { opacity: 0.3 },
-          '100%': { opacity: 1 },
+          "0%": { opacity: 0.3 },
+          "100%": { opacity: 1 },
         },
         progress: {
-          '0%': { "background-position": '0 0' },
-          '100%': { "background-position": '1rem 1rem' }
-        }
+          "0%": { "background-position": "0 0" },
+          "100%": { "background-position": "1rem 1rem" },
+        },
       },
       animation: {
-        sparkling: 'sparkling 3s infinite',
+        sparkling: "sparkling 3s infinite",
         fadeIn: "fadeIn 1.2s",
         progress: "progress 1s infinite linear",
       },
     },
   },
-  plugins: [nextui()],
+  plugins: [],
 };
