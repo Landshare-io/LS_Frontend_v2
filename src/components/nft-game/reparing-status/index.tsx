@@ -1,7 +1,6 @@
 import React from 'react';
 import numeral from 'numeral';
 import ProgressBar from '../../common/progressbar';
-import './ReparingStatus.css'
 
 interface ReparingStatusProps {
   max: number
