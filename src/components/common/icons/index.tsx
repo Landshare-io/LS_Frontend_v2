@@ -86,7 +86,7 @@ export const QuestionIcon = () => {
   )
 };
 
-export const OpenModalICon = ({ iconColor }: { iconColor?: string }) => {
+export const OpenModalIcon = ({ iconColor }: { iconColor?: string }) => {
   const { theme } = useGlobalContext();
   return (
     <svg
