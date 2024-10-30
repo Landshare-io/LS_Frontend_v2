@@ -2,29 +2,18 @@ import React, { useEffect, useState, useRef } from "react";
 import ReactLoading from "react-loading";
 import numeral from "numeral";
 import ReactModal from "react-modal";
+import Slider from "react-slick";
 import { useDisconnect, useAccount, useChainId } from "wagmi";
 import Topbar from "../common/topbar";
 import YouOwn from "../common/you-own";
 import { ChargeIcon } from "../common/icons/nft";
-
-
 import RewardHarvest from "./reward-harvest";
 import NftItems from "./nft/nft-items";
-
 import ConnectWallet from "../connect-wallet";
-
-import { ProductionFacilities } from "./productionFacilities/ProductionFacilities";
-
-import { useLandshareNftContext } from "../contexts/LandshareNftContext";
-import "../components/inventory/nftList/Maintenance.css";
-import NftItem from "./Nft/nftList/NftItem";
-import { InputCost } from "./Nft/inputCost/InputCost";
-import plusSlot from "../assets/img/icons/plus-slot.svg"
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
-import { BigNumberish, ethers, formatEther } from "ethers";
-
+import ProductionFacilities from "./facilities";
+import NftItem from "./nft/nft-item";
+import InputCost from "../common/input-cost";
+import { BigNumberish, formatEther } from "ethers";
 import Button from "../common/button";
 import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 import useGetHouses from "../../hooks/nft-game/axios/useGetHouses";
@@ -33,7 +22,6 @@ import useBalanceOfLand from "../../hooks/contract/LandTokenContract/useBalanceO
 import useLogin from "../../hooks/nft-game/axios/useLogin";
 import useGetGameItems from "../../hooks/nft-game/axios/useGetGameItems";
 import useGetResource from "../../hooks/nft-game/axios/useGetResource";
-import { validateResource } from "../../utils/helpers/validator";
 import useStakedBalance from "../../hooks/contract/AssetStakeContract/useStakedBalance";
 import useHarvest from "../../hooks/nft-game/axios/useHarvest";
 import useHandleBuyHouseSlots from "../../hooks/nft-game/axios/useHandleBuyHouseSlots";
@@ -43,6 +31,8 @@ import useGetNftCredits from "../../hooks/nft-game/apollo/useGetNftCredits";
 import useWithdrawAsset from "../../hooks/nft-game/axios/useWithdrawAsset";
 import useSecondaryTradingLimitOf from "../../hooks/contract/RWAContract/useSecondaryTradingLimitOf";
 import { useGlobalContext } from "../../context/GlobalContext";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 
 export default function InventoryPage() {
@@ -75,9 +65,7 @@ export default function InventoryPage() {
     isAuthenticated,
     notifyError,	
   } = useGlobalContext();
-  const {
-    contract: { newStakeContract }
-  } = useLandshareNftContext()
+
   const [isLoading, setIsLoading] = useState(false);
   const { disconnect } = useDisconnect();
   const [totalHarvestCost, setTotalHarvestCost] = useState(0);
