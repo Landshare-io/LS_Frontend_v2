@@ -10,8 +10,6 @@
   "dependencies": {
     "@apollo/client": "^3.11.8",
     "@ethersproject/solidity": "^5.7.0",
-    "@nextui-org/system": "^2.2.6",
-    "@nextui-org/theme": "^2.2.11",
     "@rainbow-me/rainbowkit": "^2.1.5",
     "@reduxjs/toolkit": "^2.2.7",
     "@snapshot-labs/snapshot.js": "^0.12.24",
