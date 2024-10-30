@@ -12,7 +12,6 @@ import { useBalance } from "wagmi";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { IoIosArrowDown } from "react-icons/io";
 import Carousel from "../common/carousel";
-import Tooltip from "../common/tooltip";
 import CarouselItem from "../common/carousel/carousel-item";
 import CarouselControl from "../common/carousel/carousel-control";
 import PropertyItem from "../financial-property-item";
@@ -51,6 +50,7 @@ import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";
 import useOptIn from "../../hooks/contract/AutoRedeemContract/useOptIn";
 import useBalanceOf from "../../hooks/contract/RWAContract/useBalanceOf";
 import "react-loading-skeleton/dist/skeleton.css";
+import Tooltip from "../common/tooltip";
 
 export default function FinancialSummary() {
   const { theme } = useGlobalContext();
@@ -301,20 +301,24 @@ export default function FinancialSummary() {
             <div
               className={`flex justify-between items-center text-[24px] leading-[30px] mb-[24px] ${BOLD_INTER_TIGHT.className}`}
             >
-              <div className="flex gap-x-1">
+              <div className="flex gap-x-1 items-center">
                 <div>Financial Summary</div>
+
                 <Tooltip
-                  title="Financial information is provided for your information only. Expenses and property valuations are estimated and subject to change at any time. Maintenance costs, vacancies, and other factors can affect property returns."
-                  tooltipClassName="min-w-[400px]"
+                  content="Financial information is provided for your information
+                        only. Expenses and property valuations are estimated and
+                        subject to change at any time. Maintenance costs,
+                        vacancies, and other factors can affect property
+                        returns."
                 >
-                  <BsInfoCircle
-                    id="tooltip-icon"
-                    className="w-4 h-4 cursor-pointer"
-                  ></BsInfoCircle>
+                  {/* svg icon must be wrapped in a div */}
+                  <div>
+                    <BsInfoCircle
+                      id="tooltip-icon"
+                      className="w-4 h-4 cursor-pointer"
+                    ></BsInfoCircle>
+                  </div>
                 </Tooltip>
-                {/* <div id="tooltip-content" className="hidden md:block absolute -left-[1000px] z-40 bg-white top-5 w-[200px] md:w-[400px] opacity-0 hover:opacity-100 hover:left-5 transition delay-75 text-[15px] rounded-lg shadow-lg px-3 py-2 font-normal">
-                  Financial information is provided for your information only. Expenses and property valuations are estimated and subject to change at any time. Maintenance costs, vacancies, and other factors can affect property returns.
-                </div> */}
               </div>
               <Image
                 onClick={() => setIsModalOpen(true)}
