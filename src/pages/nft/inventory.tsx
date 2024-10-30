@@ -8,7 +8,7 @@ export default function Inventory() {
   return (
     <div>
       {!supportChainIds.includes(chainId) ? (
-        <div className="min-h-[600px] flex flex-col justify-center items-center text-center mt-10 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
+        <div className="min-h-[600px] flex flex-col justify-center items-center text-center mt-10 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
           Chain not Supported / Switch to BSC
         </div>
       ) : (
