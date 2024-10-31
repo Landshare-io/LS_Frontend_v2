@@ -44,8 +44,8 @@ export default function FeatureCard({
               <p className="text-text-secondary text-[12px] leading-[18px] mlg:text-[14px] mlg:leading-[22px] overflow-hidden text-ellipsis">{description}</p>
             </div>
             <Button 
-              className="w-fit py-[4px] px-[6px] mlg:hover:text-secondary  !border-0 mlg:px-[20px] mlg:py-[9px] mlg:!border-[1px] rounded-[100px]"
-              textClassName="text-[#61cd81] mlg:text-[#3c3c3c] dark:text-[#fff]"
+              className="w-fit py-[4px] px-[6px] !border-0 mlg:px-[20px] mlg:py-[9px] mlg:!border-[1px] rounded-[100px] group "
+              textClassName="text-[#61cd81] mlg:text-[#3c3c3c] dark:text-[#fff] group-hover:text-secondary"
               outlined 
               onClick={navigate}
             >
