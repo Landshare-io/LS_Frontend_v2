@@ -192,20 +192,20 @@ export default function DAO() {
                 </div>
               </div>
             </div>
-            <div className="bg-secondary p-[10px] pt-[25px] md:p-[40px] shadow-lg rounded-[14px]">
+            <div className="bg-secondary p-[10px] pt-[25px] md:p-[40px] space-y-4 lg:space-y-0 shadow-lg rounded-[14px]">
               <div className={`flex justify-between pl-[10px] mlg:px-[35px] mlg:pb-[30px] items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
                 <div className="text-text-primary pr-3 font-bold text-[24px] leading-[36px]">
                   {isViewAll ? `All Proposals` : `Latest Proposals`}
                 </div>
                 <div className="flex gap-[15px]">
-                  <button className="text-button-text-secondary py-[5px] px-[10px] min-h-[32px] min-w-[32px] text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
+                  <button className="text-button-text-secondary py-[5px] px-[5px] min-h-[32px] min-w-fit text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
                     onClick={() => {
                       window.open("https://vote.landshare.io");
                     }}
                   >
                     View All
                   </button>
-                  <button className="text-button-text-secondary py-[5px] px-[10px] min-h-[32px] min-w-[32px] text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
+                  <button className="text-button-text-secondary py-[5px] px-[5px] min-h-[32px] min-w-fit text-[12px] leading-[14px] bg-text-third md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
                     disabled={(isBalanceGnosisLoading || isBalanceMarketingLoading) || chainId != bsc.id}
                     onClick={handleClickCreateProposal}
                   >
