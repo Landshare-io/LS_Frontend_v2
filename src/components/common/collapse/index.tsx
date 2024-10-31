@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {AnimatePresence, motion } from "framer-motion"
 
 interface CollapseProps {
   children: JSX.Element | JSX.Element[];
@@ -8,11 +9,20 @@ interface CollapseProps {
 export default function Collapse({ children, isOpen }: CollapseProps) {
   return (
     <div className="w-full">
+      <AnimatePresence>
       {isOpen && (
-        <div className={`transition-[max-height] ease-in-out duration-300 overflow-hidden`}>
+        <motion.div 
+        key={+isOpen}
+        initial={{height: 0}}
+        animate={{height: "fit-content"}}
+        exit={{height: 0}}
+        transition={{duration: 0.25, ease: "easeInOut"}}
+        
+        className={`transition-[max-height] ease-in-out duration-300 overflow-hidden`}>
           {children}
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 }
