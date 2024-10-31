@@ -93,7 +93,7 @@ export default function DaoProposalsList({ count, refreshCount }: DaoProposalsLi
 
   return (
     <>
-      <div className="flex w-[800px] flex-col px-[24px] gap-[10px]">
+      <div className="flex w-full flex-col px-[24px] gap-[10px]">
         {loading ? (
           <div className="flex w-full justify-center">
             <ReactLoading type="cylon" color="#61cd81" />
