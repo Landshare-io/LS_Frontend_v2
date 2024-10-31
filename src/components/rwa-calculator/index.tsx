@@ -65,7 +65,7 @@ export default function RwaCalculator() {
         <div className="flex flex-col flex-1 py-[34px] lg:py-[10px] gap-[20px] justify-between px-[30px] h-[238px]">
           <div className="flex flex-col gap-[10px]">
             <h2
-              className={`text-[28px] mlg:text-[32px] leading-[24px] text-tw-text-primary font-bold `}
+              className={`text-[28px] mlg:text-[32px] leading-[24px] text-text-primary font-bold `}
             >
               Calculate returns
             </h2>
@@ -76,7 +76,7 @@ export default function RwaCalculator() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-[minmax(200px,max-content),minmax(310px,max-content),minmax(50px,max-content)] gap-[20px] gap-y-[10px]">
             <span
-              className={`text-[16px] leading-[22px] text-tw-text-primary font-bold `}
+              className={`text-[16px] leading-[22px] text-text-primary font-bold `}
             >
               Initial Investment
             </span>
@@ -95,9 +95,9 @@ export default function RwaCalculator() {
             </span>
           </div>
 
-          <div className="flex justify-between lg:justify-start items-center gap-[20px] text-tw-text-primary">
+          <div className="flex justify-between lg:justify-start items-center gap-[20px] text-text-primary">
             <div className="flex flex-col items-center">
-              <p className=" text-tw-text-secondary text-[14px] text-center mb-1 ">
+              <p className=" text-text-secondary text-[14px] text-center mb-1 ">
                 Annual Rental Yield
               </p>
               <p className={`text-[18px] leading-[22px] font-bold `}>
@@ -105,7 +105,7 @@ export default function RwaCalculator() {
               </p>
             </div>
             <div className="flex flex-col items-center">
-              <p className="text-tw-text-secondary text-[14px] text-center mb-1">
+              <p className="text-text-secondary text-[14px] text-center mb-1">
                 Annual value growth
               </p>
               <p className={`text-[18px] leading-[22px] font-bold `}>
@@ -113,7 +113,7 @@ export default function RwaCalculator() {
               </p>
             </div>
             <div className="flex flex-col items-center">
-              <p className="text-tw-text-secondary text-[14px] text-center mb-1">
+              <p className="text-text-secondary text-[14px] text-center mb-1">
                 Total annual return
               </p>
               <p className={`text-[18px] leading-[22px] font-bold `}>

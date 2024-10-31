@@ -137,3 +137,23 @@ export const NextLabelIcon = () => (
     />
   </svg>
 );
+
+export const OpenModalICon = ({ iconColor }: { iconColor?: string }) => {
+  const { theme } = useGlobalContext();
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 26 26"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="cursor-pointer svg-info"
+    >
+      <path
+        d="M13.2461 0.640625C6.46064 0.640625 0.953583 6.14769 0.953583 12.9332C0.953583 19.7187 6.46064 25.2257 13.2461 25.2257C20.0316 25.2257 25.5387 19.7187 25.5387 12.9332C25.5387 6.14769 20.0316 0.640625 13.2461 0.640625ZM14.4754 19.0794H12.0169V11.7039H14.4754V19.0794ZM14.4754 9.24541H12.0169V6.7869H14.4754V9.24541Z"
+        fill={theme == 'dark' ? "#a0a0a0" : iconColor ? iconColor : "black"}
+        fillOpacity="0.5"
+      />
+    </svg>
+  )
+};

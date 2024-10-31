@@ -3,7 +3,7 @@ import ReactLoading from "react-loading";
 import numeral from "numeral";
 import ReactModal from "react-modal";
 import Slider from "react-slick";
-import { useDisconnect, useAccount, useChainId } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import Topbar from "../common/topbar";
 import YouOwn from "../common/you-own";
 import { ChargeIcon } from "../common/icons/nft";
@@ -20,7 +20,6 @@ import useGetHouses from "../../hooks/nft-game/axios/useGetHouses";
 import useBalanceOfAsset from "../../hooks/contract/RWAContract/useBalanceOf";
 import useBalanceOfLand from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useLogin from "../../hooks/nft-game/axios/useLogin";
-import useGetGameItems from "../../hooks/nft-game/axios/useGetGameItems";
 import useGetResource from "../../hooks/nft-game/axios/useGetResource";
 import useStakedBalance from "../../hooks/contract/AssetStakeContract/useStakedBalance";
 import useHarvest from "../../hooks/nft-game/axios/useHarvest";
@@ -37,6 +36,11 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function InventoryPage() {
 	const chainId = useChainId()
+  const {
+		theme,
+    isAuthenticated,
+    notifyError,	
+  } = useGlobalContext();
   const { isConnected, address } = useAccount();
 	const [harvestLoading, setHarvestLoading] = useState(false);
 	const [buyHouseSlotLoading, setBuyHouseSlotLoading] = useState(false)
@@ -50,8 +54,7 @@ export default function InventoryPage() {
 	const { data: landTokenBalance, refetch: refetchLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
 	const { data: stakedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
 	const { isLoading: isLoginLoading } = useLogin()
-	const { boostItemsList } = useGetGameItems()
-	const { resource, userReward } = useGetResource()
+	const { userReward } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
 	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost } = useGetSetting()
 	const { handleBuyHouseSlots } = useHandleBuyHouseSlots(chainId, address, setUserActivatedSlots, setBuyHouseSlotLoading)
@@ -59,19 +62,10 @@ export default function InventoryPage() {
 	const { nftCredits, totalCredits } = useGetNftCredits()
 	const { withdrawAssetTokenHandler } = useWithdrawAsset(chainId, address, setDepositLoading, setWithdrawLoading)
 	const { data: tradingLimit } = useSecondaryTradingLimitOf(chainId, address) as { data: BigNumberish, refetch: Function }
-	
-  const {
-		theme,
-    isAuthenticated,
-    notifyError,	
-  } = useGlobalContext();
-
   const [isLoading, setIsLoading] = useState(false);
-  const { disconnect } = useDisconnect();
   const [totalHarvestCost, setTotalHarvestCost] = useState(0);
   const [selectedResource, setSelectedResource] = useState([false, false, false, false, false])
   const [showItemsModal, setShowItemsModal] = useState(false)
-  
   const [showHarvestConfirm, setShowHarvestConfirm] = useState(false)
   const [showWithdrawAlert, setShowWithdrawAlert] = useState(false)
   const [landRemaining, setLandRemaining] = useState(0);

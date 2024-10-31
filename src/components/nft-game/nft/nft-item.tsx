@@ -111,7 +111,7 @@ export default function NftItem({ house }: NftItemProps) {
       <div className="bg-[#6f8e9d66] p-[12px] flex flex-col">
         <div>
           <div className="flex justify-between items-end pb-2">
-            <div className="w-[50%] text-[15px] font-semibold flex justify-between pr-1 dark:text-tw-text-primary">
+            <div className="w-[50%] text-[15px] font-semibold flex justify-between pr-1 dark:text-text-primary">
               <span>Durability</span>
               <div
                 onClick={() => {
@@ -128,10 +128,10 @@ export default function NftItem({ house }: NftItemProps) {
             />
           </div>
           <div className="flex justify-between items-end pr-2 pb-1">
-            <div className="text-[#0b6c96] text-[14px] font-semibold dark:text-tw-text-primary">
+            <div className="text-[#0b6c96] text-[14px] font-semibold dark:text-text-primary">
               Land Remaining:
             </div>
-            <div className="text-[14px] font-semibold dark:text-tw-text-primary">{`${numeral(
+            <div className="text-[14px] font-semibold dark:text-text-primary">{`${numeral(
               Number(house.tokenHarvestLimit) +
               Number(house.extendedBalance) -
               Number(house.tokenReward) -
@@ -141,14 +141,14 @@ export default function NftItem({ house }: NftItemProps) {
         <div className="m-auto d-flex justify-content-center pt-2">
           {house.isActivated ? (
             <Button
-              className="w-[131px] h-[40px] text-[16px] font-semibold cursor-pointer text-tw-button-text-secondary"
+              className="w-[131px] h-[40px] text-[16px] font-semibold cursor-pointer text-button-text-secondary"
               onClick={() => router.push(`/nft/${house.id}`)}
             >
               MANAGE
             </Button>
           ) : (
             <Button
-              className={`w-[131px] h-[40px] text-[16px] font-semibold cursor-pointer  text-tw-button-text-secondary ${isActivating
+              className={`w-[131px] h-[40px] text-[16px] font-semibold cursor-pointer  text-button-text-secondary ${isActivating
                 ? "d-flex justify-content-center align-items-center"
                 : ""
                 }`}

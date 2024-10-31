@@ -170,7 +170,7 @@ export default function Facility({
             </div>
           </div>
         </div>
-        <div className="bg-tw-secondary">
+        <div className="bg-secondary">
           <div className={`d-flex next-yield-status ${theme == 'dark' ? "bg-[#5c727e66]" : "bg-[#6f8e9d66]"}`}>
             <FacilityContent
               type={type}
