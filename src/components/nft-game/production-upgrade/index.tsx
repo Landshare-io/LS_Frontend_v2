@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useAccount } from "wagmi";
 import { Carousel } from "react-responsive-carousel";
-
-import { YieldUpgrade } from "../yieldUpgrade/YieldUpgrade";
-import { FireplaceUpgrade } from "../yieldUpgrade/FireplaceUpgrade";
-import { HireHandymanUpgrade } from "../yieldUpgrade/HireHandyman";
-
-import { productionUpdgradesData } from "../UpgradeBoxData";
-
+import YieldUpgrade from "./yield-upgrade";
+import FireplaceUpgrade from "./fireplace-upgrade";
+import HireHandymanUpgrade from "./hirehandyman-upgrade";
+import { productionUpdgradesData } from "../../../config/constants/game-data";
 import { 
   validateItemDate,
   getItemDuration
@@ -16,9 +13,8 @@ import {
 import useProductionUpgrade from "../../../hooks/nft-game/axios/useProductionUpgrade";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
-
 import carouselIcon from "../../../assets/img/icons/carousel-icon.png";
-import "./ProductionUpgrade.css";
+
 
 interface ProductionUpdgradeProps {
   house: any
@@ -57,14 +53,14 @@ export default function ProductionUpgrade ({
   } = useProductionUpgrade(house, setHouse, address, setIsLoading)
 
   return (
-    <div className="container px-0 my-5">
-      <div className="upgrade-section upgrade-section-row">
-        <div className="position-relative d-flex justify-content-center toolshed-carousel product-upgrade-mobile">
+    <div className="max-w-[1200px] px-0 my-5">
+      <div className="flex flex-col md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] justify-between gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] md:gap-[70px]">
+        <div className="relative flex justify-center toolshed-carousel w-[257px] mr-[10px] sm:mr-[40px]">
           <span
             onClick={() =>
               handleToolshedSelect(toolshedIndex > 0 ? toolshedIndex - 1 : 0)
             }
-            className="d-flex carousel-control-icon control-icon-prev position-absolute justify-content-center align-items-center"
+            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer left-[-5px] absolute justify-center items-center"
           >
             <Image src={carouselIcon} alt="Carousel prev icon" />
           </span>
@@ -106,7 +102,6 @@ export default function ProductionUpgrade ({
                       : switchToolshed(toolshed)
                   }
                   disabled={house.onSale || btnTitle === "OWNED" || !house.isActivated || !isOwn}
-                  className="none-animate"
                   isLoading={isLoading}
                 />
               );
@@ -116,12 +111,12 @@ export default function ProductionUpgrade ({
             onClick={() =>
               handleToolshedSelect(toolshedIndex < 3 ? toolshedIndex + 1 : 3)
             }
-            className="d-flex carousel-control-icon control-icon-next position-absolute justify-content-center align-items-center"
+            className="d-flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer right-[-5px] absolute justify-center items-center"
           >
             <Image src={carouselIcon} alt="Carousel next icon" />
           </span>
         </div>
-        <div className="product-upgrade-mobile">
+        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <FireplaceUpgrade
             item={{
               ...productionUpdgradesData.filter((item: any) => item.title == "Firepit")[0],
@@ -143,7 +138,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        <div className="product-upgrade-mobile">
+        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
               ...productionUpdgradesData.filter((item: any) => item.title == "Concrete Foundation")[0],
@@ -167,7 +162,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        <div className="product-upgrade-mobile">
+        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
               ...productionUpdgradesData.filter((item: any) => item.title == "Harvester")[0],
@@ -208,7 +203,7 @@ export default function ProductionUpgrade ({
           return (
             <div
               key={`production-upgrade-${index}`}
-              className="product-upgrade-mobile"
+              className="w-[257px] mr-[10px] sm:mr-[40px]"
             >
               <YieldUpgrade
                 item={item}
@@ -216,14 +211,13 @@ export default function ProductionUpgrade ({
                 btnTitle={btnTitle}
                 onPurcharse={btnTitle === "OWNED" ? () => {} : () => buyProductionItem(item, oneDayTime)}
                 disabled={house.onSale || btnTitle === "OWNED" || !house.isActivated || !isOwn}
-                durationDate={durationDate}
                 type="production"
                 isLoading={isLoading}
               />
             </div>
           );
         })}
-        <div className="product-upgrade-mobile">
+        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <HireHandymanUpgrade
             item={{
               ...productionUpdgradesData.filter((item: any) => item.title == "Hire Handman")[0],
@@ -263,7 +257,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        <div className="product-upgrade-mobile">
+        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
               ...productionUpdgradesData.filter((item: any) => item.title == "Generator")[0],
