@@ -659,7 +659,7 @@ export default function NftDetails({
                   target="nftName"
                   activated={house.isActivated && isOwn}
                 >
-                  <h2 className="fs-xxl font-semibold property-title text-tw-text-primary">
+                  <h2 className="fs-xxl font-semibold property-title text-text-primary">
                     {`${nftName} ${house.isRare
                       ? `Rare #${Number(house.typeId) + 1}`
                       : `#${Number(house.typeId) + 1}`
@@ -668,7 +668,7 @@ export default function NftDetails({
                 </EditableNft>
               </div>
               <div className="d-flex align-items-center for-sale">
-                <span className="fs-xs text-tw-text-primary">On-Sale:</span>
+                <span className="fs-xs text-text-primary">On-Sale:</span>
                 <div className="on-off-toggle ms-sm-3 ms-1">
                   <input
                     className="on-off-toggle__input"
@@ -688,7 +688,7 @@ export default function NftDetails({
             <div className="divider"></div>
             <div className="nft-detail-content-section">
               <div className="house-desc d-flex">
-                <h6 className="fw-600 fs-sm mb-0 text-tw-text-secondary">
+                <h6 className="fw-600 fs-sm mb-0 text-text-secondary">
                   {`${nftSeries} ${house.isRare
                     ? `Rare #${Number(house.typeId) + 1}`
                     : `#${Number(house.typeId) + 1}`
@@ -705,7 +705,7 @@ export default function NftDetails({
                   />
                   {isOwn && (
                     <button
-                      className={`btn nav-btn btn_active w-auto d-flex text-tw-button-text-secondary align-items-center justify-content-center px-5 fs-xs fw-700 ${isLoading[3]
+                      className={`btn nav-btn btn_active w-auto d-flex text-button-text-secondary align-items-center justify-content-center px-5 fs-xs fw-700 ${isLoading[3]
                         ? "d-flex justify-content-center align-items-center"
                         : ""
                         }`}
@@ -732,7 +732,7 @@ export default function NftDetails({
                   <div className="d-flex flex-column w-100">
                     <div className="dashed-divider"></div>
                     <div className="d-flex flex-column flex-sm-row py-3 justify-content-sm-between">
-                      <div className="fs-xs mb-sm-0 font-normal d-flex flex-nowrap align-items-center justify-content-start text-tw-text-secondary">
+                      <div className="fs-xs mb-sm-0 font-normal d-flex flex-nowrap align-items-center justify-content-start text-text-secondary">
                         Durability
                         <div
                           onClick={() => setDurabilityModal(true)}
@@ -748,7 +748,7 @@ export default function NftDetails({
                             now={house.lastDurability}
                           />
                         </div>
-                        <span className="fs-12 font-normal text-tw-text-secondary ps-2 fs-xxs fw-600">
+                        <span className="fs-12 font-normal text-text-secondary ps-2 fs-xxs fw-600">
                           MAX {house.maxDurability} %
                         </span>
                       </div>
@@ -759,10 +759,10 @@ export default function NftDetails({
                     />
                     <div className="dashed-divider"></div>
                     <div className="d-flex justify-content-between mt-2 py-2">
-                      <span className="font-semibold fs-16 text-tw-text-secondary">
+                      <span className="font-semibold fs-16 text-text-secondary">
                         Asset Tokens Deposited:
                       </span>
-                      <span className="text-tw-text-primary fw-normal fs-xs">
+                      <span className="text-text-primary fw-normal fs-xs">
                         {depositedBalance}{" "}
                         {"LSRWA"}
                       </span>
@@ -770,7 +770,7 @@ export default function NftDetails({
                     {/*============ ASSET TOKENS DEPOSITED ROW ============*/}
                     <div className="my-1 pt-1 d-flex flex-column mb-4">
                       <div className="d-flex flex-column flex-sm-row justify-content-between">
-                        <div className="deposite-input-box mt-2 text-tw-text-secondary">
+                        <div className="deposite-input-box mt-2 text-text-secondary">
                           <InputCost
                             height={34}
                             value={depositAmount}
@@ -781,7 +781,7 @@ export default function NftDetails({
                         <div className="d-flex mt-2 mt-sm-0 button-group">
                           <button
                             onClick={handleDeposit}
-                            className={`btn nav-btn  w-auto me-3 px-4 py-2 br-md fs-xs fw-700  text-tw-button-text-secondary
+                            className={`btn nav-btn  w-auto me-3 px-4 py-2 br-md fs-xs fw-700  text-button-text-secondary
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " btn-repair-disable "
                               }
@@ -811,7 +811,7 @@ export default function NftDetails({
                           </button>
                           <button
                             onClick={handleWithdraw}
-                            className={`btn nav-btn  w-auto px-4 py-2 br-md fs-xs fw-700  text-tw-button-text-secondary
+                            className={`btn nav-btn  w-auto px-4 py-2 br-md fs-xs fw-700  text-button-text-secondary
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " btn-repair-disable "
                               }
@@ -904,7 +904,7 @@ export default function NftDetails({
                     <div className="d-flex flex-column justify-content-between h-100 my-3">
                       <div className="d-flex justify-content-between py-1">
                         <span className="d-flex fs-xs text-black-700 align-items-center">
-                          <span className="me-1 text-tw-text-secondary">
+                          <span className="me-1 text-text-secondary">
                             Total Yields multiplier:
                           </span>
                           <span
@@ -918,24 +918,24 @@ export default function NftDetails({
                             ?
                           </span>
                         </span>
-                        <span className="fs-xs text-tw-text-primary">
+                        <span className="fs-xs text-text-primary">
                           x
                           {numeral(house.multiplier).format("0.[00]").toString()}{" "}
                           LAND
                         </span>
                       </div>
                       <div className="d-flex justify-content-between py-1">
-                        <span className="d-flex fs-xs align-items-center text-tw-text-secondary">
+                        <span className="d-flex fs-xs align-items-center text-text-secondary">
                           Annual Yield:
                         </span>
-                        <span className="fx-xs text-tw-text-primary">
+                        <span className="fx-xs text-text-primary">
                           {numeral((depositedBalance * house.multiplier / 50).toString()).format(
                             "0.[00]"
                           )}
                         </span>
                       </div>
                       <div className="d-flex justify-content-between py-1">
-                        <span className="d-flex fs-xs text-tw-text-secondary align-items-center">
+                        <span className="d-flex fs-xs text-text-secondary align-items-center">
                           <span className="me-1">LAND Remaining:</span>
                           {house.isActivated && !house.onSale && (
                             <span
@@ -946,7 +946,7 @@ export default function NftDetails({
                             </span>
                           )}
                         </span>
-                        <span className="text-tw-text-primary fx-xs">
+                        <span className="text-text-primary fx-xs">
                           {`${numeral(
                             Number(
                               house.tokenHarvestLimit
@@ -971,10 +971,10 @@ export default function NftDetails({
                         </span>
                       </div>
                       <div className="d-flex justify-content-between py-1">
-                        <span className="d-flex fs-xs text-tw-text-secondary align-items-center">
+                        <span className="d-flex fs-xs text-text-secondary align-items-center">
                           LAND Generated:
                         </span>
-                        <span className="fx-xs text-tw-text-primary">
+                        <span className="fx-xs text-text-primary">
                           {`${numeral(
                             Number(
                               house.totalHarvestedToken
@@ -999,7 +999,7 @@ export default function NftDetails({
                     className={`d-flex switch-btn active align-items-center position-relative ${isOwn ? "" : "grey"
                       }`}
                   >
-                    <span className="d-flex fs-14 text-tw-text-secondary align-items-center justify-content-center ps-4">
+                    <span className="d-flex fs-14 text-text-secondary align-items-center justify-content-center ps-4">
                       Cost:{" "}
                       <span className="fw-bold ms-1">
                         {totalHarvestCost}{" "}
@@ -1008,7 +1008,7 @@ export default function NftDetails({
                     </span>
                     <button
                       onClick={handleHarvest}
-                      className={`btn btn-switch-sale fs-16 fw-700 d-flex align-items-center justify-content-center position-absolute dark:text-tw-button-text-secondary
+                      className={`btn btn-switch-sale fs-16 fw-700 d-flex align-items-center justify-content-center position-absolute dark:text-button-text-secondary
                         ${harvestLoading
                           ? "d-flex justify-content-center align-items-center"
                           : ""
@@ -1081,19 +1081,19 @@ export default function NftDetails({
         onHide={() => setShowHarvestConfirm(false)}
         className={`modal_content ${theme == 'dark' ? "dark" : ""}`}
       >
-        <div className="modal_body bg-tw-third">
-          <div className="modal_header text-tw-text-primary">
+        <div className="modal_body bg-third">
+          <div className="modal_header text-text-primary">
             Rewards will not be harvested due to negative NFT Credit balance. Continue withdrawal?
           </div>
           <div className="modal_buttons">
             <div
-              className="modal_buttons_yes cursor-pointer text-tw-button-text-secondary"
+              className="modal_buttons_yes cursor-pointer text-button-text-secondary"
               onClick={() => harvest()}
             >
               Yes
             </div>
             <div
-              className="modal_buttons_no cursor-pointer bg-tw-primary text-tw-text-secondary"
+              className="modal_buttons_no cursor-pointer bg-primary text-text-secondary"
               onClick={() => setShowHarvestConfirm(false)}
             >
               No
@@ -1106,13 +1106,13 @@ export default function NftDetails({
         onHide={() => setShowWithdrawAlert(false)}
         className={`modal_content ${theme == 'dark' ? "dark" : ""}`}
       >
-        <div className="modal_body bg-tw-third">
-          <div className="modal_header text-tw-text-primary">
+        <div className="modal_body bg-third">
+          <div className="modal_header text-text-primary">
             Withdraw will reset all reward
           </div>
           <div className="modal_buttons">
             <div
-              className="modal_buttons_yes cursor-pointer text-tw-button-text-secondary"
+              className="modal_buttons_yes cursor-pointer text-button-text-secondary"
               onClick={() => {
                 setShowWithdrawAlert(false)
                 setIsLoading([false, true, false, false, false]);
@@ -1122,7 +1122,7 @@ export default function NftDetails({
               Yes
             </div>
             <div
-              className="modal_buttons_no cursor-pointer bg-tw-primary text-tw-text-secondary"
+              className="modal_buttons_no cursor-pointer bg-primary text-text-secondary"
               onClick={() => {
                 setShowWithdrawAlert(false)
                 setIsLoading([false, false, false, false, false]);
@@ -1138,13 +1138,13 @@ export default function NftDetails({
         onHide={() => setShowOnSaleAlert(false)}
         className={`modal_content ${theme == 'dark' ? "dark" : ""}`}
       >
-        <div className="modal_body bg-tw-third">
-          <div className="modal_header text-tw-text-primary">
+        <div className="modal_body bg-third">
+          <div className="modal_header text-text-primary">
             Unharvested tokens will be sold with this house
           </div>
           <div className="modal_buttons">
             <div
-              className="modal_buttons_yes cursor-pointer text-tw-button-text-secondary"
+              className="modal_buttons_yes cursor-pointer text-button-text-secondary"
               onClick={() => {
                 setShowOnSaleAlert(false)
                 setSaleOpen(true);
@@ -1153,7 +1153,7 @@ export default function NftDetails({
               Yes
             </div>
             <div
-              className="modal_buttons_no cursor-pointer bg-tw-primary text-tw-text-secondary"
+              className="modal_buttons_no cursor-pointer bg-primary text-text-secondary"
               onClick={() => {
                 setShowOnSaleAlert(false)
               }}
