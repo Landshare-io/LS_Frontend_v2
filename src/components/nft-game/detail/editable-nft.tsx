@@ -8,15 +8,14 @@ interface EditableNftProps {
   defaultValue: string
   onChangeValue: Function
   children: React.ReactNode
-  target: string
+
 }
 
 export default function EditableNft({
   className = '',
   defaultValue,
   onChangeValue,
-  children,
-  target
+  children
 }: EditableNftProps) {
   const [editable, setEditable] = useState(false);
   const [showValue, setShowValue] = useState(defaultValue);
@@ -41,7 +40,7 @@ export default function EditableNft({
               alt="check" 
               onClick={() => {
                 setEditable(false);
-                onChangeValue(target, showValue);
+                onChangeValue(showValue);
               }}
             />
             <Image 
