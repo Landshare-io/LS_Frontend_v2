@@ -52,7 +52,7 @@ export default function HomeRwaAssetsSummary() {
               text="Real World Assets"
               type="gray"
             />
-            <h1 className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] md:my-[12px] md:mx-0 text-center md:text-start ${BOLD_INTER_TIGHT.className}`}>
+            <h1 className={`text-text-primary text-[32px] leading-[50px] md:text-[54px] md:leading-[68px] md:my-[12px] md:mx-0 text-center md:text-start ${BOLD_INTER_TIGHT.className}`}>
               Asset Summary
             </h1>
           </div>
