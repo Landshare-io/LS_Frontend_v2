@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactLoading from "react-loading";
 import ReactModal from 'react-modal';
-import { OpenModalICon } from "../common/icons/index";
+import { OpenModalIcon } from "../common/icons/index";
 import Button from '../common/button';
 import { useGlobalContext } from '../../context/GlobalContext';
 
@@ -54,7 +54,7 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
               </div>
               <div>
                 <div onClick={() => setOpenModal(true)}>
-                  <OpenModalICon />
+                  <OpenModalIcon />
                 </div>
               </div>
             </div>

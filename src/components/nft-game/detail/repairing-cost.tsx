@@ -13,7 +13,7 @@ interface RepairingCostProps {
 export default function ReparingCost({ cost, className }: RepairingCostProps) {
   return (
     <div className={`w-full flex items-center pr-[20px] ${className}`}>
-      <span className="mx-1 text-[14px] text-tw-text-secondary">Cost:</span>
+      <span className="mx-1 text-[14px] text-text-secondary">Cost:</span>
       <div className="hidden md:flex w-full">
         <ReparingCostList cost={cost} />
       </div>

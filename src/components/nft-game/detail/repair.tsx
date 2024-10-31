@@ -39,7 +39,7 @@ export default function Repair({
           className={`main-reparing-cost d-flex justify-content-between py-[1px] main-reparing-cost-${house.isActivated && !house.onSale ? "allow" : "disable"
             }`}
         >
-          <div className="d-flex flex-grow-1 justify-content-between align-items-center py-1 me-sm-3 me-0 text-tw-text-primary">
+          <div className="d-flex flex-grow-1 justify-content-between align-items-center py-1 me-sm-3 me-0 text-text-primary">
             <span className="me-2 fs-14 ">Amount: </span>
             <InputCost
               width={70}
