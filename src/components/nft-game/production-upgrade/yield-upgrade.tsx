@@ -1,48 +1,35 @@
 import React, { useState } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { YieldCostUpgrade } from "../buyOrUpgrade/YieldCostUpgrade";
-import { YieldCostContent } from "../buyOrUpgrade/YieldCostContent";
-import { ProductionCostContent } from "../buyOrUpgrade/ProductionCostContent";
-import { CustomModal } from "../../../components/common/modal/Modal";
-import { CheckMark, CloseMark } from "../NftIcon";
-import { useGlobalContext } from "../../../contexts/GlobalContext";
-import { getItemDuration } from "../../../helper/validator";
-import "./YieldUpgrade.css";
-import { OpenModalICon } from "../../../components/common/Icons";
+import ReactModal from "react-modal";
+import YieldUpgradeCost from "./yield-upgrade-cost";
+import ProductionUpgradeCost from "./production-upgrade-cost";
+import { OpenModalICon } from "../../common/icons/index";
+import Tooltip from "../../common/tooltip";
+import { getItemDuration } from "../../../utils/helpers/validator";
+import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
 
-String.prototype.stringToSlug = function () {
-  var str = this; // <-- added this statement
+interface YieldUpgradeProps {
+  item: any;
+  type: string;
+  btnTitle: string;
+  colorType: number;
+  onPurcharse: Function;
+  disabled?: boolean;
+  isLoading?: any;
+}
 
-  str = str.replace(/^\s+|\s+$/g, ""); // trim
-  str = str.toLowerCase();
-  str = str
-    .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
-    .replace(/\s+/g, "-") // collapse whitespace and replace by -
-    .replace(/-+/g, "-"); // collapse dashes
-  return str;
-};
 
-export const YieldUpgrade = ({
+export default function YieldUpgrade({
   item,
   type,
   btnTitle,
   colorType,
   onPurcharse,
   disabled = false,
-  isLoading,
-  // type = "yield",
-  // durationDate = 0,
-  // className = "",
-  showAlert = false,
-  // durationTime,
-  // hasAddon,
-  // hasPorcelainTileNFT,
-  // hasPoolTableNFT,
-  // hasMarbleCounteropsNFT
-}) => {
-  const { oneDayTime } = useGlobalContext();
+  isLoading
+}: YieldUpgradeProps) {
   const [openModal, setOpenModal] = useState(false);
-  const descriptions = {
+  const { oneDayTime } = useGetSetting()
+  const descriptions: Record<string, string> = {
     "Hardwood Floors": `Install natural hardwood floors to your property. Increases LAND yields by x${
       item.buyReward[9] ?? ""
     }. Increase lumber repair cost by 1 per 10% repaired.`,
@@ -129,6 +116,24 @@ export const YieldUpgrade = ({
     "light-blue",
   ];
 
+  const customModalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      maxWidth: "400px",
+      width: "90%",
+      height: "fit-content",
+      borderRadius: "20px",
+      padding: 0,
+      border: 0
+    },
+    overlay: {
+      background: '#00000080'
+    }
+  };
+
   let durationDateNode = null
   let fertilizeDateNode = null
   const durationDay = getItemDuration(item, oneDayTime)
@@ -187,144 +192,131 @@ export const YieldUpgrade = ({
 
   let message = ''
   if (item.dependencyItems?.length > 0) {
-    const dItems = item.dependencyItems.filter(dItem => dItem.isActivated == false)
+    const dItems = item.dependencyItems.filter((dItem: any) => dItem.isActivated == false)
     if (dItems.length > 0)
-      message = `*Require ${dItems.map(dItem => dItem.name).join(", ")}`
+      message = `*Require ${dItems.map((dItem: any) => dItem.name).join(", ")}`
   }
 
   return (
     <>
       <div
-        className="yield-upgrade d-flex flex-column cards-hover-animation yield-upgrade-mobile"
+        className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px]"
       >
-        <div className="yield-upgrade-content-section">
+        <div className="bg-[#fff]">
           <div
-            className={`yield-upgrade-content d-flex flex-column align-items-center ${type}`}
+            className={`flex flex-col items-center ${type}`}
           >
-            <div className="yield-title w-100 d-flex justify-content-center yield-head">
-              <span className="fs-xs text-white fw-600">{item.name}</span>
+            <div className="bg-[#00000033] w-full flex justify-center h-[49px] py-[8px]">
+              <span className="text-[16px] text-white font-semibold">{item.name}</span>
             </div>
-            <div className="d-flex flex-column w-100 yield-upgrade-content-image position-relative">
-              
+            <div className="flex flex-col w-full h-[210px] relative">
               <img
-                className="position-absolute yield-upgrade-main-image"
+                className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] h-[18px] w-auto"
                 src={item.imgUrl}
                 alt={item.name}
               />
               {durationDay ? (
                 item.name === "Garden" ? (
                   item.isBought ? (
-                    <div className="duration-section d-flex w-100 justify-content-between align-items-end py-1 position-absolute">
-                      <div className={`duration ${type}`}>
+                    <div className="px-[12px] bottom-0 flex w-full justify-between items-end py-1 absolute">
+                      <div className={`text-[0.8rem] text-white font-semibold ${type}`}>
                         {fertilizeDateNode} <br />
                         {durationDateNode}
                       </div>
                       <div>
                         {message && (
-                            <OverlayTrigger
-                              key="yieldUpgrade-garden-fertilize-top"
-                              placement="top"
-                              overlay={
-                                <Tooltip
-                                  id={`tooltip-${btnTitle.stringToSlug()}`}
-                                >
-                                  Missing Dependency: <br />
-                                  {message}.<br />
-                                  Multiplier not active.
-                                </Tooltip>
-                              }
-                            >
+                          <Tooltip content={(
+                            <>
+                              Missing Dependency: <br />
+                              {message}.<br />
+                              Multiplier not active.
+                            </>
+                          )}>
+                            <div>
+                              {/* svg icons must be wrapped around a div */}
                               <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                                x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer show-alert">
+                                x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-[5px] right-[5px]">
                                 <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                               </svg>
-                            </OverlayTrigger>
-                          )}
+                            </div>
+                          </Tooltip>
+                        )}
                         <div onClick={() => setOpenModal(true)}>
                           <OpenModalICon />
                         </div>
                       </div>
                     </div>
                   ) : (
-                    <div className="duration-section d-flex w-100 justify-content-end px-4 py-1 position-absolute">
+                    <div className="px-[12px] flex w-full justify-end px-4 py-1 absolute">
                       {message && (
-                          <OverlayTrigger
-                            key={`yieldUpgrade-${item.name.stringToSlug()}-missing-top`}
-                            placement="top"
-                            overlay={
-                              <Tooltip
-                                id={`tooltip-${btnTitle.stringToSlug()}`}
-                              >
-                                Missing Dependency: <br />
-                                {message}.<br />
-                                Multiplier not active.
-                              </Tooltip>
-                            }
-                          >
+                        <Tooltip content={(
+                          <>
+                            Missing Dependency: <br />
+                            {message}.<br />
+                            Multiplier not active.
+                          </>
+                        )}>
+                          <div>
+                            {/* svg icons must be wrapped around a div */}
                             <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer show-alert">
+                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-[5px] right-[5px]">
                               <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                             </svg>
-                          </OverlayTrigger>
-                        )}
+                          </div>
+                        </Tooltip>
+                      )}
                       <div onClick={() => setOpenModal(true)}>
                         <OpenModalICon />
                       </div>
                     </div>
                   )
                 ) : (
-                  <div className="duration-section d-flex w-100 justify-content-between align-items-end py-1 position-absolute">
-                      <div className={`duration ${type}`}>
-                        {durationDateNode}
-                      </div>
-                      <div>
-                        {message && (
-                            <OverlayTrigger
-                              key="yieldUpgrade-garden-fertilize-top"
-                              placement="top"
-                              overlay={
-                                <Tooltip
-                                  id={`tooltip-${btnTitle.stringToSlug()}`}
-                                >
-                                  Missing Dependency: <br />
-                                  {message}.<br />
-                                  Multiplier not active.
-                                </Tooltip>
-                              }
-                            >
-                              <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                                x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer show-alert">
-                                <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
-                              </svg>
-                            </OverlayTrigger>
-                          )}
-                        <div onClick={() => setOpenModal(true)}>
-                          <OpenModalICon />
-                        </div>
-                      </div>
+                  <div className="px-[12px] bottom-0 flex w-full justify-between items-end py-1 absolute">
+                    <div className={`text-[0.8rem] text-white font-semibold ${type}`}>
+                      {durationDateNode}
                     </div>
-                )
-              ) : (
-                <div className="duration-section d-flex w-100 justify-content-end px-4 py-1 position-absolute">
-                  {message && (
-                      <OverlayTrigger
-                        key={`yieldUpgrade-${item.name.stringToSlug()}-missing-top`}
-                        placement="top"
-                        overlay={
-                          <Tooltip
-                            id={`tooltip-${btnTitle.stringToSlug()}`}
-                          >
+                    <div>
+                      {message && (
+                        <Tooltip content={(
+                          <>
                             Missing Dependency: <br />
                             {message}.<br />
                             Multiplier not active.
-                          </Tooltip>
-                        }
-                      >
+                          </>
+                        )}>
+                          <div>
+                            {/* svg icons must be wrapped around a div */}
+                            <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
+                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-[5px] right-[5px]">
+                              <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
+                            </svg>
+                          </div>
+                        </Tooltip>
+                      )}
+                      <div onClick={() => setOpenModal(true)}>
+                        <OpenModalICon />
+                      </div>
+                    </div>
+                  </div>
+                )
+              ) : (
+                <div className="px-[12px] bottom-0 flex w-full justify-end px-4 py-1 absolute">
+                  {message && (
+                    <Tooltip content={(
+                      <>
+                        Missing Dependency: <br />
+                        {message}.<br />
+                        Multiplier not active.
+                      </>
+                    )}>
+                      <div>
+                        {/* svg icons must be wrapped around a div */}
                         <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                          x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer show-alert">
+                          x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-[5px] right-[5px]">
                           <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                         </svg>
-                      </OverlayTrigger>
+                      </div>
+                    </Tooltip>
                     )}
                   <div onClick={() => setOpenModal(true)}>
                     <OpenModalICon />
@@ -333,56 +325,49 @@ export const YieldUpgrade = ({
               )}
             </div>
           </div>
-          <div className="yield-upgrade-cost">
-            <YieldCostUpgrade
-              color={colors[colorType]}
-              btnLabel={btnTitle}
-              onPurcharse={onPurcharse}
-              disabled={disabled}
-              isLoading={isLoading}
-              type={item.id}
-            >
-              {type == "yield" ? (
-                <YieldCostContent
-                  item={item}
-                  // costs={btnTitle == 'SALVAGE' ? item.salvageCost : item.}
-                  colorType={colorType}
-                  color={colors[colorType]}
-                  // multiplier={multiplier}
-                  // receiveCost={item.salvageReceive}
-                  btnLabel={btnTitle}
-                />
-              ) : (
-                <ProductionCostContent
-                  item={item}
-                  colorType={colorType}
-                  color={colors[colorType]}
-                  type={item.type}
-                />
-              )}
-            </YieldCostUpgrade>
+          <div className="bg-[#6f8e9d66] px-[12px] py-[13px]">
+            {type == "yield" ? (
+              <YieldUpgradeCost
+                color={colors[colorType]}
+                btnLabel={btnTitle}
+                onPurcharse={onPurcharse}
+                disabled={disabled}
+                isLoading={isLoading}
+                type={item.id}
+                item={item}
+                colorType={colorType}
+              />
+            ) : (
+              <ProductionUpgradeCost
+                color={colors[colorType]}
+                btnLabel={btnTitle}
+                onPurcharse={onPurcharse}
+                disabled={disabled}
+                isLoading={isLoading}
+                type={item.id}
+                item={item}
+                colorType={colorType}
+              />
+            )}
           </div>
         </div>
       </div>
-      <div className="yield-description text-center mt-2">
-        <span className="yield-level-descriptor fw-500">
+      <div className="max-w-[257px] text-center mt-2">
+        <span className="text-[#8f8f8f] text-[15px] font-medium">
           {message}
         </span>
       </div>
-      <CustomModal
-        modalOptions={{
-          centered: true,
-          size: "lg",
-        }}
-        modalShow={openModal}
-        setModalShow={setOpenModal}
+      <ReactModal
+        isOpen={openModal}
+        onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
+        style={customModalStyles}
       >
-        <CustomModal.Body className="d-flex min-h-100 justify-content-center align-items-center">
-          <span className="my-2 mx-3 fs-14 fw-400">
+        <div className="flex min-h-full justify-center items-center">
+          <span className="my-2 mx-3 text-[14px]">
             {descriptions[item.name] ?? ""}
           </span>
-        </CustomModal.Body>
-      </CustomModal>
+        </div>
+      </ReactModal>
     </>
   );
 };
