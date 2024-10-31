@@ -8,13 +8,12 @@ import Topbar from "../../common/topbar";
 import YouOwn from "../../common/you-own";
 import MainTabs from "../../components/common/tab/Tab";
 import PremiumNfts from "../../mint-premium-nfts";
-import { UpgradeListTable } from "./upgradeListTable/UpgradeListTable";
-import { ProductionUpgrade } from "./productionUpgrade/ProductionUpgrade";
-import { UpgradeSection } from "./upgradeSection/UpgradeSection";
+import UpgradeListTable from "./upgrade-list-table";
 
+import ProductionUpgrade from "../production-upgrade";
+import YieldUpgrades from "../yield-upgrade";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import ConnectWallet from "../../connect-wallet";
-
 import useGetHouse from "../../../hooks/nft-game/axios/useGetHouse";
 
 const NftPage = () => {
@@ -32,7 +31,7 @@ const NftPage = () => {
     {
       id: "Yield Upgrades",
       children: (
-        <UpgradeSection
+        <YieldUpgrades
           house={house}
           setHouse={setHouse}
         />
@@ -86,7 +85,7 @@ const NftPage = () => {
         </div>
       ) : (
         <>
-          <div className="relative max-w-[1200px] px-0 m-auto flex flex-col pt-0 bg-tw-primary">
+          <div className="relative max-w-[1200px] px-0 m-auto flex flex-col pt-0 bg-primary">
             {(!isAuthenticated) ? (
               <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
                 <ConnectWallet />
