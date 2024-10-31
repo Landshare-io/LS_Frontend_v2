@@ -1,28 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useChainId, useAccount } from "wagmi";
 import ReactModal from "react-modal";
-import { useDisconnect } from "wagmi";
-import { ethers } from "ethers";
-import { useGlobalContext } from "../../../contexts/GlobalContext";
-import { useLandshareNftContext } from "../../../contexts/LandshareNftContext";
-import { YieldUpgrade } from "../yieldUpgrade/YieldUpgrade";
-import { FirepitUpgrade } from "../yieldUpgrade/FirepitUpgrade";
-import gameSetting from "../../../contexts/game/setting.json";
-import axios from "../../../helper/axios";
+import { BigNumberish } from "ethers";
+import { useGlobalContext } from "../../../context/GlobalContext";
+import YieldUpgrade from "../production-upgrade/yield-upgrade";
+import FirepitUpgrade from "./firepit-upgrade";
 import {
-  validateDependency,
   validateResource,
   validateItemDate,
   getItemDuration,
   getDependencyItem,
-  validateItemDateWithDeadTime,
-  getItemDurationWithDeadTime
-} from "../../../helper/validator";
-import { yieldUpdgradesData } from "../UpgradeBoxData";
-
+  validateItemDateWithDeadTime
+} from "../../../utils/helpers/validator";
+import { yieldUpdgradesData } from "../../../config/constants/game-data";
+import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
+import useGetResource from "../../../hooks/nft-game/axios/useGetResource";
+import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useHandleAddons from "../../../hooks/nft-game/axios/useHandleAddons";
-
-import "./UpgradeSection.css";
+import useBalanceOfLand from "../../../hooks/contract/LandTokenContract/useBalanceOf"
 
 interface YieldUpdgradesProps {
   house: any
@@ -35,23 +30,7 @@ export default function YieldUpgrades({
 }: YieldUpdgradesProps) {
   const chainId = useChainId();
   const { address } = useAccount()
-  const { 
-    signer,
-    account,
-    provider,
-    userData,
-    notifyError, 
-    notifySuccess,
-    oneDayTime,
-    helperContract,
-    helperBContract,
-    settingContract,
-    resourceContract,
-    landTokenV2Contract,
-    userResource,
-    setUserResource
-  } = useGlobalContext();
-  const { disconnect } = useDisconnect();
+  const { notifyError } = useGlobalContext();
   const customModalStyles = {
     content: {
       top: "50%",
@@ -71,7 +50,9 @@ export default function YieldUpgrades({
       background: '#00000080'
     }
   };
-
+  
+  const { userData } = useGetUserData()
+  const { oneDayTime } = useGetSetting()
   const isOwn = house?.userId == userData?.id
   const [salvageAddonId, setSalvageAddonId] = useState(-1);
   const [hasAddonId, setHasAddonId] = useState(-1);
@@ -85,6 +66,8 @@ export default function YieldUpgrades({
     salvageAddon, 
     buyTreeAddonHandler 
   } = useHandleAddons(chainId, address, house, setHouse, setIsLoading);
+  const { resource } = useGetResource()
+  const { data: landTokenAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish }
 
 
   const buyTreeAddon = async (item: any) => {
@@ -112,8 +95,8 @@ export default function YieldUpgrades({
 
     const amount = item.buy[1]
 
-    if (await validateResource(userResource, item.buy.slice(2, 7))) {
-      if (amount > userResource.landTokenBalance) {
+    if (await validateResource(resource, item.buy.slice(2, 7))) {
+      if (amount > landTokenAmount) {
         setIsLoading({ type: -1, loading: false });
         return notifyError("Not enough LAND tokens");
       } else {
@@ -163,7 +146,7 @@ export default function YieldUpgrades({
             const dependencyItems = getDependencyItem(house, yieldItem.id, oneDayTime)
 
             if (item.title == 'Fireplace') {
-              havingItem = validateItemDateWithDeadTime(yieldItem, oneDayTime)
+              havingItem = validateItemDateWithDeadTime(yieldItem)
 
               return (
                 <div
@@ -240,13 +223,13 @@ export default function YieldUpgrades({
         onRequestClose={() => { setOpenSalvageModal(!openSalvageModal), document.body.classList.remove('modal-open'); }}
         style={customModalStyles}
       >
-        <div className="modal_body">
-          <div className="modal_header">
+        <div className="w-[300px] p-[20px]">
+          <div className="text-[15px] text-center">
             Warning: Salvaging will remove this upgrade. Proceed?
           </div>
-          <div className="modal_buttons">
+          <div className="flex mt-[20px]">
             <div
-              className="modal_buttons_yes cursor-pointer"
+              className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[1px] border-[#00a8f3] bg-[#00a8f3] cursor-pointer"
               onClick={() => {
                 setOpenSalvageModal(false);
                 salvageAddon(isOwn, salvageAddonId, hasAddonId);
@@ -255,7 +238,7 @@ export default function YieldUpgrades({
               Yes
             </div>
             <div
-              className="modal_buttons_no cursor-pointer"
+              className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[1px] border-[#00a8f3] bg-transparent cursor-pointer"
               onClick={() => {
                 setIsLoading({ type: -1, loading: false });
                 setOpenSalvageModal(false);

@@ -93,7 +93,7 @@ export default function FireplaceUpgrade({
             />
             {durationDate ? (
               <div className="px-[12px] bottom-0 flex w-full justify-between items-end px-3 py-1 absolute">
-                <span className="duration">
+                <span className="text-[0.8rem] text-white font-semibold">
                   Duration: {durationDate} {colorType == 3 && "left"}
                 </span>
                 <div onClick={() => setOpenModal(true)}>
