@@ -102,7 +102,7 @@ export default function HireHandymanUpgrade({
             />
             {durationNode ? (
               <div className="px-[12px] bottom-0 flex w-full justify-between items-end px-3 py-1 absolute">
-                <span className="duration">{durationNode}</span>
+                <span className="text-[0.8rem] text-white font-semibold">{durationNode}</span>
                 <div onClick={() => setOpenModal(true)}>
                   <OpenModalICon />
                 </div>
