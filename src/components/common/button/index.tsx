@@ -20,13 +20,11 @@ export default function Button ({
 }: ButtonProps) {
   return (
     <button
-      className={`flex justify-center items-center disabled:cursor-not-allowed ${outlined ? ' bg-transparent border-[1px] border-[#61cd81] hover:bg-[#61cd81] hover:text-white ' : ' bg-[#61cd81] border-0 ' } ${className}`}
+      className={`flex justify-center text-[14px] leading-[22px] font-bold dark:text-[#3c3c3c]  items-center disabled:cursor-not-allowed ${outlined ? ' bg-transparent border-[1px] border-[#61cd81] hover:bg-[#61cd81] hover:text-white ' : ' bg-[#61cd81] border-0 ' } ${BOLD_INTER_TIGHT.className} ${className}`}
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`text-[14px] leading-[22px] font-bold dark:text-[#3c3c3c] ${BOLD_INTER_TIGHT.className} ${textClassName}`}>
         {children}
-      </span>
     </button>
   );
 };
