@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import numeral from "numeral";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import { useDisconnect, useChainId, useAccount } from "wagmi";
-import { ethers } from "ethers";
+import { useChainId, useAccount } from "wagmi";
 import { BigNumberish } from "ethers";
+import ReactModal from "react-modal";
 
-import axios from "../../helper/axios";
 import HouseNft from "../../assets/img/house/house.bmp";
 import HouseBNft from "../../assets/img/house/houseB.bmp";
 import HouseRareNft from "../../assets/img/house/house_rare.bmp";
@@ -22,24 +22,19 @@ import HouseBGardenRareNft from "../../assets/img/house/houseB_garden_rare.bmp";
 import HouseCNft from "../../assets/img/house/houseC.bmp"
 import HouseCRareNft from "../../assets/img/house/houseC_rare.bmp"
 
-import { Harvestable } from "../harvestable/Harvestable";
+import RewardHarvest from "../reward-harvest";
 
 import ReparingStatus from "../reparing-status";
 import Repair from "./repair";
 import EditableNft from "./editable-nft";
 
-import { TotalYieldMultiModal } from "./totalYieldMultiModal/TotalYieldMultiModal";
-import { useLandshareNftContext } from "../../contexts/LandshareNftContext";
-
+import TotalYieldMultiModal from "../../common/modals/total-yield-multi";
 import InputCost from "../../common/input-cost";
-import { CustomModal } from "../../components/common/modal/Modal";
 import OnSaleModal from "./modals/OnSale";
 
 
 import { NftDurabilityIcon, ChargeIcon } from "../../common/icons/nft";
-import MintModal from "../../components/mintModal";
-
-import { Modal as ReactModal } from "react-bootstrap";
+import MintModal from "../../common/modals/mint-modal";
 import "./nftDetails.css";
 
 import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAIN } from "../../../config/constants/environments";
@@ -78,6 +73,23 @@ export default function NftDetails({
     notifySuccess,
     notifyError
   } = useGlobalContext();
+  const customModalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      maxWidth: "400px",
+      width: "90%",
+      height: "fit-content",
+      borderRadius: "20px",
+      padding: 0,
+      border: 0
+    },
+    overlay: {
+      background: '#00000080'
+    }
+  };
   const chainId = useChainId()
   const { address } = useAccount()
   const [harvestLoading, setHarvestLoading] = useState(false)
@@ -98,37 +110,22 @@ export default function NftDetails({
   const { houses: houseItems, getHouses } = useGetHouses()
 	const { data: maxAssetTokenBalance, refetch: calcDepositMax } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
 	const { data: landTokenBalance, refetch: refetchLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
-	const { data: stakedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
+	const { data: depositedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
 	const { isLoading: isLoginLoading } = useLogin()
 	const { userReward } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
-	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost } = useGetSetting()
+	const { minAssetAmount, withdrawStakedCost } = useGetSetting()
   const landRemaining = house.tokenHarvestLimit + house.extendedBalance - house.tokenReward - house.totalHarvestedToken
   
 	const { stake } = useStake(chainId, address, setDepositLoading)
-	const { nftCredits, totalCredits } = useGetNftCredits()
+	const { nftCredits, totalCredits } = useGetNftCredits(address)
 	const { withdrawAssetTokenHandler } = useWithdrawAsset(chainId, address, setDepositLoading, setWithdrawLoading)
 	const { data: tradingLimit } = useSecondaryTradingLimitOf(chainId, address) as { data: BigNumberish, refetch: Function }
-  const { activate, deactivate, renameNft, setOnSale, onSaleHandler } = useHandleHouse(house, setHouse, setIsLoading, isOwn, onSaleLoading, setOnSaleLoading, setSaleOpen, setShowOnSaleAlert, address)
+  const { activate, deactivate, renameNft, setOnSale, onSaleHandler, extendHarvestLimit } = useHandleHouse(house, setHouse, setIsLoading, isOwn, onSaleLoading, setOnSaleLoading, setSaleOpen, setShowOnSaleAlert, address)
   const { hasLandscaping } = useCheckHasLandscaping(house.id)
   const { hasGarden } = useCheckHasGarden(house.id)
-
-  const {
-    contract: {
-      newHouseContract,
-      newStakeContract
-    },
-    address: {
-      newStakeAddress
-    }
-  } = useLandshareNftContext();
   const [houseImgUrl, setHouseImgUrl] = useState(HouseNft)
-
-
-  const { disconnect } = useDisconnect();
   const [depositAmount, setDepositAmount] = useState("");
-  const [depositedBalance, setDepositedBalance] = useState("");
-
   const [isTotalYieldModalOpen, setIsTotalYieldModalOpen] = useState(false);
 
   const [showHarvestConfirm, setShowHarvestConfirm] = useState(false)
@@ -195,7 +192,7 @@ export default function NftDetails({
       return notifyError("Deposit amount should not be bigger than max amount");
     }
 
-    if ((Number(stakedBalance) + Number(depositAmount)) >= Number(tradingLimit)) {
+    if ((Number(depositedBalance) + Number(depositAmount)) >= Number(tradingLimit)) {
       setDepositLoading(false)
       return notifyError("Please increase your secondary trading limit. Please check details: https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/secondary-trading-limits");
     }
@@ -352,53 +349,6 @@ export default function NftDetails({
     })()
   }, [house])
 
-  const extendHarvestLimit = async (landAmount) => {
-    try {
-
-      const userLandAmount = await landTokenV2Contract.balanceOf(address);
-      if (landAmount > userLandAmount) {
-        return notifyError('Insufficient LAND amount')
-      }
-      if (nftCredits < landAmount * 4) {
-        return notifyError(`Insufficient NFT Credits`);
-      }
-
-      const { data: transactionData } = await axios.post('/house/get-transaction-for-house-mint', {
-        assetAmount: landAmount * 4
-      })
-
-      const sendedTransaction = await signer.sendTransaction(transactionData.transaction)
-      sendedTransaction.wait().then(async (receipt) => {
-        if (receipt.status) {
-          const { data } = await axios.post('/house/extend-house-limit', {
-            houseId: houseId,
-            assetAmount: landAmount * 4,
-            txHash: receipt.transactionHash,
-            nonce: transactionData.nonce,
-            blockNumber: receipt.blockNumber
-          })
-
-          if (data) {
-            const landTokenV2Balance = await landTokenV2Contract.balanceOf(address);
-
-            await updateNftCredits()
-            setUserResource((prevState) => ({
-              ...prevState,
-              landTokenV2: landTokenV2Balance,
-            }))
-            getHouse(houseId)
-            notifySuccess(`Extended house harvest limit`)
-          }
-        } else {
-          notifyError(`Extending house harvest limit Error`);
-        }
-      })
-    } catch (error) {
-      console.log(error)
-      notifyError(error.response.data.message);
-    }
-  }
-
   const handleHarvest = async () => {
     if (harvestLoading) return
     setHarvestLoading(true)
@@ -417,17 +367,17 @@ export default function NftDetails({
 
   return (
     <>
-      <div className="justify-center nft-house mb-5 pb-4 px-2">
-        <div className="px-xl-0">
+      <div className="justify-center mt-[18px] mb-0 pb-0 md:mb-5 md:pb-4 px-2">
+        <div className="px-0">
           <div>
-            <div className="d-flex flex-wrap justify-content-between nft-title-section pb-2">
-              <div className="d-flex align-items-center">
+            <div className="flex flex-wrap justify-between min-h-[45px] pb-2">
+              <div className="flex items-center">
                 <EditableNft
-                  className="fs-xxl"
+                  className="text-[36px]"
                   defaultValue={nftName}
                   onChangeValue={renameNft}
                 >
-                  <h2 className="fs-xxl font-semibold property-title text-text-primary">
+                  <h2 className="text-[24px] font-semibold m-0 md:text-[36px] text-text-primary">
                     {`${nftName} ${house.isRare
                       ? `Rare #${Number(house.typeId) + 1}`
                       : `#${Number(house.typeId) + 1}`
@@ -435,9 +385,9 @@ export default function NftDetails({
                   </h2>
                 </EditableNft>
               </div>
-              <div className="d-flex align-items-center for-sale">
-                <span className="fs-xs text-text-primary">On-Sale:</span>
-                <div className="on-off-toggle ms-sm-3 ms-1">
+              <div className="flex items-center">
+                <span className="text-[16px] text-text-primary">On-Sale:</span>
+                <div className="relative inline-block w-[60px] h-[28px] sm:ml-3 ml-1">
                   <input
                     className="on-off-toggle__input"
                     type="checkbox"
@@ -453,10 +403,10 @@ export default function NftDetails({
                 </div>
               </div>
             </div>
-            <div className="divider"></div>
-            <div className="nft-detail-content-section">
-              <div className="house-desc d-flex">
-                <h6 className="fw-600 fs-sm mb-0 text-text-secondary">
+            <div className="border-b-[1px] border-[#00000050]"></div>
+            <div className="">
+              <div className="pt-[14px] pb-[21px] d-flex">
+                <h6 className="font-semibold fs-sm mb-0 text-text-secondary">
                   {`${nftSeries} ${house.isRare
                     ? `Rare #${Number(house.typeId) + 1}`
                     : `#${Number(house.typeId) + 1}`
@@ -465,11 +415,10 @@ export default function NftDetails({
               </div>
               <div className="d-flex flex-column flex-xl-row nft-house-action-status">
                 <div className="d-flex flex-column align-items-center mb-3 position-relative">
-                  <img
-                    className="br-sm mb-xl-0 nft-house-image"
+                  <Image
+                    className="br-sm mb-xl-0 nft-house-image w-full"
                     src={houseImgUrl}
                     alt="house image"
-                    style={{ width: '100%' }}
                   />
                   {isOwn && (
                     <button
@@ -759,7 +708,7 @@ export default function NftDetails({
               </div>
               <div className="dashed-divider"></div>
               <div className="d-flex flex-column w-100 mt-5">
-                <Harvestable
+                <RewardHarvest
                   selectedResource={selectedResource}
                   setSelectedResource={setSelectedResource}
                   setTotalHarvestCost={setTotalHarvestCost}
@@ -812,22 +761,19 @@ export default function NftDetails({
         show={showMintModal}
         setShow={setShowMintModal}
         minAmount={minAssetAmount}
-        onSubmit={(land) => extendHarvestLimit(land)}
+        onSubmit={(land: number) => extendHarvestLimit(land)}
       />
       <TotalYieldMultiModal
         house={house}
         modalShow={isTotalYieldModalOpen}
         setModalShow={setIsTotalYieldModalOpen}
       />
-      <CustomModal
-        modalOptions={{
-          centered: true,
-          size: "lg",
-        }}
-        modalShow={durabilityModal}
-        setModalShow={setDurabilityModal}
+      <ReactModal
+        style={customModalStyles}
+        isOpen={durabilityModal}
+        onRequestClose={() => { setDurabilityModal(!durabilityModal), document.body.classList.remove('modal-open'); }}
       >
-        <CustomModal.Body className="d-flex min-h-100 justify-content-center align-items-center">
+        <div className="d-flex min-h-100 justify-content-center align-items-center">
           <span className="my-2 mx-3 fs-14 fw-400">
             Durability determines the current repair status of your
             property. Your yield multiplier for a given period of time is
@@ -837,8 +783,8 @@ export default function NftDetails({
             <b>{` ${house.hasConcreteFoundation ? "8%" : "10%"} `}</b>per
             day.
           </span>
-        </CustomModal.Body>
-      </CustomModal>
+        </div>
+      </ReactModal>
       <OnSaleModal
         modalShow={saleOpen}
         setModalShow={setSaleOpen}
@@ -848,9 +794,9 @@ export default function NftDetails({
         onSaleLoading={onSaleLoading}
       />
       <ReactModal
-        show={showHarvestConfirm}
-        onHide={() => setShowHarvestConfirm(false)}
-        className={`modal_content ${theme == 'dark' ? "dark" : ""}`}
+        style={customModalStyles}
+        isOpen={showHarvestConfirm}
+        onRequestClose={() => { setShowHarvestConfirm(!showHarvestConfirm), document.body.classList.remove('modal-open'); }}
       >
         <div className="modal_body bg-third">
           <div className="modal_header text-text-primary">
@@ -859,7 +805,7 @@ export default function NftDetails({
           <div className="modal_buttons">
             <div
               className="modal_buttons_yes cursor-pointer text-button-text-secondary"
-              onClick={() => harvest()}
+              onClick={() => harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)}
             >
               Yes
             </div>
@@ -873,9 +819,9 @@ export default function NftDetails({
         </div>
       </ReactModal>
       <ReactModal
-        show={showWithdrawAlert}
-        onHide={() => setShowWithdrawAlert(false)}
-        className={`modal_content ${theme == 'dark' ? "dark" : ""}`}
+        style={customModalStyles}
+        isOpen={showWithdrawAlert}
+        onRequestClose={() => { setShowWithdrawAlert(!showWithdrawAlert), document.body.classList.remove('modal-open'); }}
       >
         <div className="modal_body bg-third">
           <div className="modal_header text-text-primary">
@@ -905,9 +851,9 @@ export default function NftDetails({
         </div>
       </ReactModal>
       <ReactModal
-        show={showOnSaleAlert}
-        onHide={() => setShowOnSaleAlert(false)}
-        className={`modal_content ${theme == 'dark' ? "dark" : ""}`}
+        style={customModalStyles}
+        isOpen={showOnSaleAlert}
+        onRequestClose={() => { setShowOnSaleAlert(!showOnSaleAlert), document.body.classList.remove('modal-open'); }}
       >
         <div className="modal_body bg-third">
           <div className="modal_header text-text-primary">
