@@ -346,7 +346,7 @@ export default function NftResource() {
                       loader={loader}
                       onSubmit={(item: any, price: number) =>
                         item.marketplaceItem !== -1 ?
-                          setPremiumNftsOffSale(item) : setPremiumNftsOnSale(PREMIUM_NFT_CONTRACT_ADDRESS[item.name][chainId], item, price)
+                          setPremiumNftsOffSale(item) : setPremiumNftsOnSale(item.name, item, price)
                       }
                     />
                   ))}
