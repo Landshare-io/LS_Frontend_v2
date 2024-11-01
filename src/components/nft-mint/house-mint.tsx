@@ -22,13 +22,13 @@ interface HouseMintItemProps {
 }
 
 export default function HouseMintItem({ product }: HouseMintItemProps) {
+  const { address } = useAccount();
+  const chainId = useChainId();
   const { theme } = useGlobalContext();
-  const { nftCredits } = useGetNftCredits();
+  const { nftCredits } = useGetNftCredits(address);
   const [isLoading, setIsLoading] = useState(false);
   const [harvestAmount, setHarvestAmount] = useState(Number());
   const [nftCreditCost, setNftCreditCost] = useState(Number());
-  const { address } = useAccount();
-  const chainId = useChainId();
   const { mint: mintNewHouse } = useMintHouseNft(
     chainId,
     address,
