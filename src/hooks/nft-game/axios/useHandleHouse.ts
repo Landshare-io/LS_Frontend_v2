@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { useDisconnect, useWaitForTransactionReceipt, useChainId } from "wagmi";
+import { 
+  useDisconnect, 
+  useWaitForTransactionReceipt, 
+  useChainId, 
+  useSendTransaction 
+} from "wagmi";
 import { bsc } from "viem/chains";
 import { Address } from "viem";
 import { BigNumberish, formatEther } from "ethers";
@@ -12,7 +17,8 @@ import useSetApprovalForAll from "../../contract/HouseNftContract/useSetApproval
 import useApprove from "../../contract/HouseNftContract/useApprove";
 import useBalanceOfLand from "../../contract/LandTokenContract/useBalanceOf";
 import useGetNftCredits from "../apollo/useGetNftCredits";
-import { ADMIN_WALLET_ADDRESS } from "../../../config/constants/environments";
+import useGetHouse from "./useGetHouse";
+import { ADMIN_WALLET_ADDRESS, PROVIDERS } from "../../../config/constants/environments";
 
 export default function useHandleHouse(
   house: any, 
@@ -28,6 +34,8 @@ export default function useHandleHouse(
   const chainId = useChainId()
   const [salePrice, setSalePrice] = useState(0)
   const [isSale, setIsSale] = useState(false)
+  const [transactionNonce, setTransactionNonce] = useState(0)
+  const [extendLandAmount, setExtendLandAmount] = useState(0)
   const { disconnect } = useDisconnect();
   const { userData, getUserData } = useGetUserData()
   const { notifyError, notifySuccess } = useGlobalContext()
@@ -35,8 +43,10 @@ export default function useHandleHouse(
   const { setApprovalForAll, data: setApprovalForAllTx } = useSetApprovalForAll()
   const { approve, data: approveTx } = useApprove()
   const { userReward } = useGetResource()
-  const { data: userLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
-  const { nftCredits, getNftCredits } = useGetNftCredits()
+  const { data: userLandAmount, refetch: refetchLand } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
+  const { nftCredits, getNftCredits } = useGetNftCredits(address)
+  const { sendTransaction, data: sendTransactionTx } = useSendTransaction()
+  const { getHouse } = useGetHouse(house.id)
 
   const { isSuccess: approveForAllSuccess } = useWaitForTransactionReceipt({
     hash: setApprovalForAllTx,
@@ -100,6 +110,39 @@ export default function useHandleHouse(
       }
     })()
   }, [approveTx, approveSuccess])
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (sendTransactionTx) {
+          const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+
+          if (receipt.status) {
+            const { data } = await axios.post('/house/extend-house-limit', {
+              houseId: house.id,
+              assetAmount: extendLandAmount * 4,
+              txHash: receipt.transactionHash,
+              nonce: transactionNonce,
+              blockNumber: receipt.blockNumber
+            })
+  
+            if (data) {
+              refetchLand()
+              getNftCredits()
+              getHouse()
+              notifySuccess(`Extended house harvest limit`)
+            }
+          } else {
+            notifyError(`Extending house harvest limit Error`);
+          }
+        }
+      } catch (error) {
+        setOnSaleLoading(false)
+        notifyError("Transaction failed")
+        console.log(error)
+      }
+    })()
+  }, [sendTransactionTx])
 
   const renameNft = async (value: string) => {
     if (value.length > 0) {
@@ -287,33 +330,10 @@ export default function useHandleHouse(
         assetAmount: landAmount * 4
       })
 
-      const sendedTransaction = await signer.sendTransaction(transactionData.transaction)
-      sendedTransaction.wait().then(async (receipt) => {
-        if (receipt.status) {
-          const { data } = await axios.post('/house/extend-house-limit', {
-            houseId: houseId,
-            assetAmount: landAmount * 4,
-            txHash: receipt.transactionHash,
-            nonce: transactionData.nonce,
-            blockNumber: receipt.blockNumber
-          })
-
-          if (data) {
-            const landTokenV2Balance = await landTokenV2Contract.balanceOf(address);
-
-            await updateNftCredits()
-            setUserResource((prevState) => ({
-              ...prevState,
-              landTokenV2: landTokenV2Balance,
-            }))
-            getHouse(houseId)
-            notifySuccess(`Extended house harvest limit`)
-          }
-        } else {
-          notifyError(`Extending house harvest limit Error`);
-        }
-      })
-    } catch (error) {
+      setExtendLandAmount(landAmount)
+      setTransactionNonce(transactionData.nonce)
+      sendTransaction(transactionData.transaction)
+    } catch (error: any) {
       console.log(error)
       notifyError(error.response.data.message);
     }
@@ -324,6 +344,7 @@ export default function useHandleHouse(
     deactivate,
     renameNft,
     setOnSale,
-    onSaleHandler
+    onSaleHandler,
+    extendHarvestLimit
   }
 }
