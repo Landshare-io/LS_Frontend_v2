@@ -7,6 +7,7 @@ import useIsApprovedForAll from "../../contract/PremiumNftContract/useIsApproveF
 import useApprove from "../../contract/PremiumNftContract/useApprove";
 import useGetPremiumNfts from "../premium-nfts/useGetPremiumNfts";
 import { useGlobalContext } from "../../../context/GlobalContext";
+import { PREMIUM_NFT_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useSetPremiumNftSaleHandler(chainId: number, address: Address | undefined) {
   const { notifyError, notifySuccess, isAuthenticated } = useGlobalContext()
@@ -14,15 +15,20 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
   const [premiumNftAddress, setPremiumNftAddress] = useState<Address>("0x")
   const [premiumNftData, setPremiumNftData] = useState<any>({})
   const [premiumNftPrice, setPremiumNftPrice] = useState(0)
-  const { isApprovedForAll, data: isApprovedForAllTx } = useIsApprovedForAll()
+  const { data: isApprovedForAllOfPocelain } = useIsApprovedForAll(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Porcelain Tile"][chainId], address) as { data: boolean }
+  const { data: isApprovedForAllOfPool } = useIsApprovedForAll(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Pool Table"][chainId], address) as { data: boolean }
+  const { data: isApprovedForAllOfMarble } = useIsApprovedForAll(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Marble Countertops"][chainId], address) as { data: boolean }
+
+  const isApprovedForAll: Record<string, boolean> = {
+    "Porcelain Tile": isApprovedForAllOfPocelain,
+    "Pool Table": isApprovedForAllOfPool,
+    "Marble Countertops": isApprovedForAllOfMarble
+  }
   const { setApprovalForAll, data: setApprovalForAllTx } = useSetApprovalForAll()
   const { approve, data: approveTx } = useApprove()
   const { getPremiumNfts } = useGetPremiumNfts(chainId, address)
 
-  const { isSuccess: isApprovedForAllSuccess, isLoading: isApprovedForAllLoading } = useWaitForTransactionReceipt({
-    hash: isApprovedForAllTx,
-    chainId: chainId
-  });
+
   const { isSuccess: setApprovalForAllSuccess, isLoading: setApprovalForAllLoading } = useWaitForTransactionReceipt({
     hash: setApprovalForAllTx,
     chainId: chainId
@@ -32,16 +38,6 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
     chainId: chainId
   });
 
-  useEffect(() => {
-    if (isApprovedForAllTx) {
-      if (isApprovedForAllSuccess) {
-        setApprovalForAll(chainId, premiumNftAddress)
-      } else {
-        setIsLoading('')
-        notifyError("Transaction Failed")
-      }
-    }
-  }, [isApprovedForAllTx, isApprovedForAllSuccess])
 
   useEffect(() => {
     if (setApprovalForAllTx) {
@@ -80,13 +76,15 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
     })()
   }, [approveTx, approveSuccess])
 
-  const setPremiumNftsOnSale = (contractAddress: Address, item: any, price: number) => {
+
+  const setPremiumNftsOnSale = (contractName: string, item: any, price: number) => {
     if (!isAuthenticated) return notifyError("Please login")
-    setIsLoading(`${item.id}-${item.onChainId}`)
+      setIsLoading(`${item.id}-${item.onChainId}`)
     setPremiumNftData(item)
     setPremiumNftPrice(price)
-    setPremiumNftAddress(contractAddress)
-    isApprovedForAll(chainId, contractAddress, address)
+    setPremiumNftAddress(PREMIUM_NFT_CONTRACT_ADDRESS[contractName][chainId])
+    if (isApprovedForAll[contractName]) approve(chainId, PREMIUM_NFT_CONTRACT_ADDRESS[contractName][chainId], premiumNftData.onChainId)
+    else setApprovalForAll(chainId, PREMIUM_NFT_CONTRACT_ADDRESS[contractName][chainId])
   }
 
   const setPremiumNftsOffSale = async (item: any) => {
