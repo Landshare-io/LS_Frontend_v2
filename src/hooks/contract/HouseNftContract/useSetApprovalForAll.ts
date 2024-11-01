@@ -10,13 +10,13 @@ export default function useSetApprovalForAll() {
     writeContract
   } = useWriteContract();
 
-  async function setApprovalForAll() {
+  async function setApprovalForAll(value: boolean) {
     await writeContract({
       address: HOUSE_NFT_CONTRACT,
       abi: HouseNft,
       functionName: "setApprovalForAll",
       chainId: bsc.id,
-      args: [ADMIN_WALLET_ADDRESS, true]
+      args: [ADMIN_WALLET_ADDRESS, value]
     })
   }
 
