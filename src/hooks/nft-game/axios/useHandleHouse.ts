@@ -1,12 +1,105 @@
-import { useDisconnect } from "wagmi";
+import { useState, useEffect } from "react";
+import { useDisconnect, useWaitForTransactionReceipt, useChainId } from "wagmi";
+import { bsc } from "viem/chains";
+import { Address } from "viem";
+import { BigNumberish, formatEther } from "ethers";
 import axios from "./nft-game-axios";
 import useGetUserData from "./useGetUserData";
 import { useGlobalContext } from "../../../context/GlobalContext";
+import useGetResource from "./useGetResource";
+import useIsApprovedForAll from "../../contract/HouseNftContract/useIsApprovedForAll";
+import useSetApprovalForAll from "../../contract/HouseNftContract/useSetApprovalForAll";
+import useApprove from "../../contract/HouseNftContract/useApprove";
+import useBalanceOfLand from "../../contract/LandTokenContract/useBalanceOf";
+import useGetNftCredits from "../apollo/useGetNftCredits";
+import { ADMIN_WALLET_ADDRESS } from "../../../config/constants/environments";
 
-export default function useHandleHouse(house: any, setHouse: Function, setIsLoading: Function) {
+export default function useHandleHouse(
+  house: any, 
+  setHouse: Function, 
+  setIsLoading: Function, 
+  isOwn: boolean, 
+  onSaleLoading: boolean,
+  setOnSaleLoading: Function, 
+  setSaleOpen: Function,
+  setShowOnSaleAlert: Function, 
+  address: Address | undefined
+) {
+  const chainId = useChainId()
+  const [salePrice, setSalePrice] = useState(0)
+  const [isSale, setIsSale] = useState(false)
   const { disconnect } = useDisconnect();
   const { userData, getUserData } = useGetUserData()
   const { notifyError, notifySuccess } = useGlobalContext()
+  const { data: isApprovedForAll } = useIsApprovedForAll(address)
+  const { setApprovalForAll, data: setApprovalForAllTx } = useSetApprovalForAll()
+  const { approve, data: approveTx } = useApprove()
+  const { userReward } = useGetResource()
+  const { data: userLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
+  const { nftCredits, getNftCredits } = useGetNftCredits()
+
+  const { isSuccess: approveForAllSuccess } = useWaitForTransactionReceipt({
+    hash: setApprovalForAllTx,
+    chainId: bsc.id
+  });
+  const { isSuccess: approveSuccess } = useWaitForTransactionReceipt({
+    hash: approveTx,
+    chainId: bsc.id
+  });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (setApprovalForAllTx) {
+          if (approveForAllSuccess) {
+            await setHouseToOnSale();
+          } else {
+            setOnSaleLoading(false);
+              notifyError("Approve error");
+          }
+        }
+      } catch (error) {
+        setOnSaleLoading(false)
+        notifyError("Transaction failed")
+        console.log(error)
+      }
+    })()
+  }, [setApprovalForAllTx, approveForAllSuccess])
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (approveTx) {
+          if (approveSuccess) {
+            const { data } = await axios.post('/house/set-sale', {
+              hosueId: house.id,
+              setSale: isSale,
+              price: salePrice
+            })
+    
+            setHouse((prevState: any) => ({
+              ...prevState,
+              onSale: data.onSale,
+              salePrice: data.salePrice
+            }));
+    
+            setSaleOpen(false);
+            setOnSaleLoading(false);
+            notifySuccess(isSale ? `NFT successfully listed for sale` : `Successfully removed NFT from marketplace`);
+          } else {
+            setSaleOpen(false);
+            setOnSaleLoading(false);
+            notifyError("Approve error");
+          }
+        }
+      } catch (error: any) {
+        console.log(`Setting ${isSale ? 'on' : 'off'}-sale error`, error);
+        setSaleOpen(false);
+        setOnSaleLoading(false);
+        notifyError(error.response.data.message);
+      }
+    })()
+  }, [approveTx, approveSuccess])
 
   const renameNft = async (value: string) => {
     if (value.length > 0) {
@@ -112,9 +205,125 @@ export default function useHandleHouse(house: any, setHouse: Function, setIsLoad
     }
   };
 
+  const onSaleHandler = async () => {
+    if (house.isActivated) {
+      if (isOwn) {
+        if (!onSaleLoading) {
+          if (house.onSale) {
+            try {
+              setIsSale(false)
+              const { data } = await axios.post('/house/set-sale', {
+                hosueId: house.id,
+                setSale: false
+              })
+              setApprovalForAll(false);
+
+            } catch (error: any) {
+              console.log("Setting off-sale error", error);
+              setSaleOpen(false);
+              notifyError(error.response.data.message);
+            }
+          } else {
+            if (userReward[4] > 0.1) {
+              setShowOnSaleAlert(true)
+            } else {
+              setSaleOpen(true);
+            }
+          }
+        }
+      } else {
+        notifyError("You do not own this NFT.");
+      }
+    } else {
+      notifyError("Please activate this house");
+    }
+  };
+
+  const setOnSale = async (price: number) => {
+    if (house.isActivated) {
+      if (isOwn) {
+        setOnSaleLoading(true);
+        try {
+          setIsSale(true)
+          setSalePrice(price)
+          if (isApprovedForAll) {
+            await setHouseToOnSale();
+          } else {
+            setApprovalForAll(true);
+          }
+        } catch (error: any) {
+          setOnSaleLoading(false);
+          notifyError(error.response.data.message);
+        }
+      } else {
+        notifyError("You do not own this NFT.");
+      }
+    } else {
+      notifyError("Please activate this house");
+    }
+  };
+
+  const setHouseToOnSale = async () => {
+    try {
+      approve(ADMIN_WALLET_ADDRESS, house.houseId);
+    } catch (error: any) {
+      console.log("Setting on-sale error", error);
+      setSaleOpen(false);
+      setOnSaleLoading(false);
+      notifyError(error.response.data.message);
+    }
+  };
+
+  const extendHarvestLimit = async (landAmount: number) => {
+    try {
+      if (landAmount > Number(formatEther(userLandAmount))) {
+        return notifyError('Insufficient LAND amount')
+      }
+      if (nftCredits < landAmount * 4) {
+        return notifyError(`Insufficient NFT Credits`);
+      }
+
+      const { data: transactionData } = await axios.post('/house/get-transaction-for-house-mint', {
+        assetAmount: landAmount * 4
+      })
+
+      const sendedTransaction = await signer.sendTransaction(transactionData.transaction)
+      sendedTransaction.wait().then(async (receipt) => {
+        if (receipt.status) {
+          const { data } = await axios.post('/house/extend-house-limit', {
+            houseId: houseId,
+            assetAmount: landAmount * 4,
+            txHash: receipt.transactionHash,
+            nonce: transactionData.nonce,
+            blockNumber: receipt.blockNumber
+          })
+
+          if (data) {
+            const landTokenV2Balance = await landTokenV2Contract.balanceOf(address);
+
+            await updateNftCredits()
+            setUserResource((prevState) => ({
+              ...prevState,
+              landTokenV2: landTokenV2Balance,
+            }))
+            getHouse(houseId)
+            notifySuccess(`Extended house harvest limit`)
+          }
+        } else {
+          notifyError(`Extending house harvest limit Error`);
+        }
+      })
+    } catch (error) {
+      console.log(error)
+      notifyError(error.response.data.message);
+    }
+  }
+
   return {
     activate,
     deactivate,
-    renameNft
+    renameNft,
+    setOnSale,
+    onSaleHandler
   }
 }
