@@ -38,7 +38,7 @@ import OnSaleModal from "./modals/OnSale";
 
 import { NftDurabilityIcon, ChargeIcon } from "../../common/icons/nft";
 import MintModal from "../../components/mintModal";
-import { validateResource } from "../../helper/validator";
+
 import { Modal as ReactModal } from "react-bootstrap";
 import "./nftDetails.css";
 
@@ -57,6 +57,9 @@ import useGetNftCredits from "../../../hooks/nft-game/apollo/useGetNftCredits";
 import useWithdrawAsset from "../../../hooks/nft-game/axios/useWithdrawAsset";
 import useSecondaryTradingLimitOf from "../../../hooks/contract/RWAContract/useSecondaryTradingLimitOf";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
+import useHandleHouse from "../../../hooks/nft-game/axios/useHandleHouse";
+import useCheckHasGarden from "../../../hooks/nft-game/axios/useCheckHasGarden";
+import useCheckHasLandscaping from "../../../hooks/nft-game/axios/useCheckHasLandscaping";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
 interface NftDetailsProps {
@@ -80,20 +83,35 @@ export default function NftDetails({
   const [harvestLoading, setHarvestLoading] = useState(false)
   const [depositLoading, setDepositLoading] = useState(false)
   const [withdrawLoading, setWithdrawLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+  const [onSaleLoading, setOnSaleLoading] = useState(false);
+  const [saleOpen, setSaleOpen] = useState(false);
+  const [showOnSaleAlert, setShowOnSaleAlert] = useState(false)
   const { userData } = useGetUserData()
+  const isOwn = house.userId === userData?.id
   const { houses: houseItems, getHouses } = useGetHouses()
-	const { data: maxAssetTokenBalance, refetch: refetchDepositAmount } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
+	const { data: maxAssetTokenBalance, refetch: calcDepositMax } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
 	const { data: landTokenBalance, refetch: refetchLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
 	const { data: stakedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
 	const { isLoading: isLoginLoading } = useLogin()
 	const { userReward } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
 	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost } = useGetSetting()
-
+  const landRemaining = house.tokenHarvestLimit + house.extendedBalance - house.tokenReward - house.totalHarvestedToken
+  
 	const { stake } = useStake(chainId, address, setDepositLoading)
 	const { nftCredits, totalCredits } = useGetNftCredits()
 	const { withdrawAssetTokenHandler } = useWithdrawAsset(chainId, address, setDepositLoading, setWithdrawLoading)
 	const { data: tradingLimit } = useSecondaryTradingLimitOf(chainId, address) as { data: BigNumberish, refetch: Function }
+  const { activate, deactivate, renameNft, setOnSale, onSaleHandler } = useHandleHouse(house, setHouse, setIsLoading, isOwn, onSaleLoading, setOnSaleLoading, setSaleOpen, setShowOnSaleAlert, address)
+  const { hasLandscaping } = useCheckHasLandscaping(house.id)
+  const { hasGarden } = useCheckHasGarden(house.id)
 
   const {
     contract: {
@@ -106,29 +124,15 @@ export default function NftDetails({
   } = useLandshareNftContext();
   const [houseImgUrl, setHouseImgUrl] = useState(HouseNft)
 
-  const isOwn = house.userId === userData?.id
 
   const { disconnect } = useDisconnect();
   const [depositAmount, setDepositAmount] = useState("");
   const [depositedBalance, setDepositedBalance] = useState("");
 
   const [isTotalYieldModalOpen, setIsTotalYieldModalOpen] = useState(false);
-  const [onSaleLoading, setOnSaleLoading] = useState(false);
 
   const [showHarvestConfirm, setShowHarvestConfirm] = useState(false)
   const [selectedResource, setSelectedResource] = useState([false, false, false, false, false])
-
-  const [saleOpen, setSaleOpen] = useState(false);
-
-  const [hasLandscaping, setHasLandscaping] = useState(false)
-  const [hasGarden, setHasGarden] = useState(false)
-  const [isLoading, setIsLoading] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
   const [nftName, setNftName] = useState(house.name);
   const [nftSeries, setNftSeries] = useState(house.series);
   const [durabilityModal, setDurabilityModal] = useState(false);
@@ -136,7 +140,6 @@ export default function NftDetails({
   const [showMintModal, setShowMintModal] = useState(false);
   
   const [showWithdrawAlert, setShowWithdrawAlert] = useState(false)
-  const [showOnSaleAlert, setShowOnSaleAlert] = useState(false)
 
   const router = useRouter()
   const { houseId } = router.query as { houseId: string };
@@ -152,38 +155,6 @@ export default function NftDetails({
     setNftName(house.name);
     setNftSeries(house.series);
   }, [house]);
-
-  const renameNft = async (target, value) => {
-    if (value.length > 0) {
-      if (value.length < 32) {
-        if (target === "nftName") {
-          try {
-            const { data: houseData } = await axios.patch(`/house/${houseId}`, {
-              name: value
-            })
-            setHouse((prevState) => ({
-              ...prevState,
-              ...houseData
-            }))
-            notifySuccess("Rename NFT successfully!");
-          } catch (error) {
-            if (error.response?.data.status == 401) {
-              localStorage.removeItem("jwtToken-v2");
-              disconnect();
-              return notifyError(`Unautherized error`);
-            } else
-              return notifyError(error.response.data.message);
-          }
-        } else {
-          return notifyError("Invalid field type.");
-        }
-      } else {
-        return notifyError("This field maximum length is 31.");
-      }
-    } else {
-      return notifyError("This field value is not empty.");
-    }
-  };
 
   const handleDeposit = async () => {
     if (depositLoading) return
@@ -344,87 +315,6 @@ export default function NftDetails({
     // }
   };
 
-  const deactivate = async () => {
-    if (isLoading[3]) return
-    setIsLoading([false, false, false, true, false]);
-
-    if (!house.isActivated) {
-      setIsLoading([false, false, false, false, false]);
-      return notifyError("Already Deactivated");
-    }
-
-    if (house.userId != userData.id) {
-      setIsLoading([false, false, false, false, false]);
-      return notifyError("You are not house owner");
-    }
-
-    try {
-      const { data: houseData } = await axios.patch(`/house/${houseId}`, {
-        isActivated: false,
-        lastRepairTime: new Date()
-      })
-
-      setHouse((prevState) => ({
-        ...prevState,
-        ...houseData
-      }))
-      await getUserData();
-      setIsLoading([false, false, false, false, false]);
-      notifySuccess("Deactivated successfully!");
-    } catch (error) {
-      setIsLoading([false, false, false, false, false]);
-      if (error.response?.data.status == 401) {
-        localStorage.removeItem("jwtToken-v2");
-        disconnect();
-        return notifyError(`Unautherized error`);
-      } else
-        return notifyError(error.response.data.message);
-    }
-  };
-
-  const activate = async () => {
-    if (isLoading[3]) return
-    setIsLoading([false, false, false, true, false]);
-
-    if (house.isActivated) {
-      setIsLoading([false, false, false, false, false]);
-      return notifyError("Already activated");
-    }
-
-    if (house.userId != userData.id) {
-      setIsLoading([false, false, false, false, false]);
-      return notifyError("You are not house owner");
-    }
-
-    try {
-      const { data: houseData } = await axios.patch(`/house/${houseId}`, {
-        isActivated: true,
-        lastRepairTime: new Date()
-      })
-
-      setHouse((prevState) => ({
-        ...prevState,
-        ...houseData
-      }))
-      await getUserData();
-      setIsLoading([false, false, false, false, false]);
-      notifySuccess("Activated successfully!");
-    } catch (error) {
-      setIsLoading([false, false, false, false, false]);
-      if (error.response?.data.status == 401) {
-        localStorage.removeItem("jwtToken-v2");
-        disconnect();
-        return notifyError(`Unautherized error`);
-      } else
-        return notifyError(error.response.data.message);
-    }
-  };
-
-  const calcDepositMax = async () => {
-    const userAssetTokenBalance = await assetNewContract.balanceOf(address);
-    setDepositAmount(userAssetTokenBalance.toString());
-  };
-
   const getHouseImageUrl = () => {
     if (house) {
       if (house.isRare) {
@@ -461,79 +351,6 @@ export default function NftDetails({
       setHouseImgUrl(getHouseImageUrl())
     })()
   }, [house])
-
-  const onSaleHandler = async () => {
-    if (house.isActivated) {
-      if (isOwn) {
-        if (!onSaleLoading) {
-          if (house.onSale) {
-            try {
-              const { data } = await axios.post('/house/set-sale', {
-                hosueId: house.id,
-                setSale: false
-              })
-              const transaction = await newHouseContract.setApprovalForAll(process.env.REACT_APP_ADMIN_WALLET_ADDRESS, false);
-              await transaction.wait()
-
-              setHouse((prevState) => ({
-                ...prevState,
-                onSale: data.onSale,
-              }));
-
-              return notifySuccess(`Successfully removed NFT from marketplace`);
-            } catch (error) {
-              console.log("Setting off-sale error", error);
-              setSaleOpen(false);
-              notifyError(error.response.data.message);
-            }
-          } else {
-            if (userResource.userReward[4] > 0.1) {
-              setShowOnSaleAlert(true)
-            } else {
-              setSaleOpen(true);
-            }
-          }
-        }
-      } else {
-        notifyError("You do not own this NFT.");
-      }
-    } else {
-      notifyError("Please activate this house");
-    }
-  };
-
-  const setOnSale = async (price) => {
-    if (house.isActivated) {
-      if (isOwn) {
-        setOnSaleLoading(true);
-        try {
-          const isApprovedForAll = await newHouseContract.isApprovedForAll(
-            address,
-            process.env.REACT_APP_ADMIN_WALLET_ADDRESS
-          );
-          if (isApprovedForAll) {
-            await setHouseToOnSale(price);
-          } else {
-            const transaction = await newHouseContract.setApprovalForAll(process.env.REACT_APP_ADMIN_WALLET_ADDRESS, true);
-            const receipt = await transaction.wait()
-            if (receipt.status) {
-              await setHouseToOnSale(price);
-            } else {
-              setOnSaleLoading(false);
-              notifyError("Approve error");
-            }
-          }
-        } catch (error) {
-          setOnSaleLoading(false);
-          notifyError(error.response.data.message);
-        }
-      } else {
-        notifyError("You do not own this NFT.");
-      }
-    } else {
-      notifyError("Please activate this house");
-    }
-  };
 
   const extendHarvestLimit = async (landAmount) => {
     try {
@@ -582,40 +399,6 @@ export default function NftDetails({
     }
   }
 
-  const setHouseToOnSale = async (price) => {
-    try {
-      const approveTransaction = await newHouseContract.approve(process.env.REACT_APP_ADMIN_WALLET_ADDRESS, house.houseId);
-      const approveReceipt = await approveTransaction.wait()
-      console.log("here")
-      if (approveReceipt.status) {
-        const { data } = await axios.post('/house/set-sale', {
-          hosueId: house.id,
-          setSale: true,
-          price: price
-        })
-
-        setHouse((prevState) => ({
-          ...prevState,
-          onSale: data.onSale,
-          salePrice: data.salePrice
-        }));
-
-        notifySuccess(`NFT successfully listed for sale`);
-        setSaleOpen(false);
-        setOnSaleLoading(false);
-      } else {
-        setSaleOpen(false);
-        setOnSaleLoading(false);
-        notifyError("Approve error");
-      }
-    } catch (error) {
-      console.log("Setting on-sale error", error);
-      setSaleOpen(false);
-      setOnSaleLoading(false);
-      notifyError(error.response.data.message);
-    }
-  };
-
   const handleHarvest = async () => {
     if (harvestLoading) return
     setHarvestLoading(true)
@@ -625,25 +408,12 @@ export default function NftDetails({
     }
 
     if (totalCredits >= 1000) {
-      harvest()
+      harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)
     } else {
       if (nftCredits < 0) return setShowHarvestConfirm(true)
-      else harvest()
+      else harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      if (!house.isActivated) return
-
-      const tempHasLandscaping = await checkHasLandscaping(house.id)
-      const tempHasGarden = await checkHasGarden(house.id)
-
-      setHasLandscaping(tempHasLandscaping)
-      setHasGarden(tempHasGarden)
-    })()
-  }, [house])
-
 
   return (
     <>
@@ -656,8 +426,6 @@ export default function NftDetails({
                   className="fs-xxl"
                   defaultValue={nftName}
                   onChangeValue={renameNft}
-                  target="nftName"
-                  activated={house.isActivated && isOwn}
                 >
                   <h2 className="fs-xxl font-semibold property-title text-text-primary">
                     {`${nftName} ${house.isRare
@@ -709,7 +477,7 @@ export default function NftDetails({
                         ? "d-flex justify-content-center align-items-center"
                         : ""
                         }`}
-                      onClick={() => house.isActivated ? deactivate() : activate()}
+                      onClick={() => house.isActivated ? deactivate(isLoading) : activate(isLoading)}
                       disabled={isLoading[3] || house.onSale}
                     >
                       {isLoading[3] ? (
@@ -775,7 +543,10 @@ export default function NftDetails({
                             height={34}
                             value={depositAmount}
                             changeRepairAmount={setDepositAmount}
-                            calcMaxAmount={calcDepositMax}
+                            calcMaxAmount={async () => {
+                              await calcDepositMax()
+                              setDepositAmount(maxAssetTokenBalance.toString())
+                            }}
                           />
                         </div>
                         <div className="d-flex mt-2 mt-sm-0 button-group">
@@ -1116,7 +887,7 @@ export default function NftDetails({
               onClick={() => {
                 setShowWithdrawAlert(false)
                 setIsLoading([false, true, false, false, false]);
-                withdrawAssetTokenHandler()
+                withdrawAssetTokenHandler(withdrawStakedCost, depositAmount)
               }}
             >
               Yes
