@@ -3,7 +3,7 @@ import numeral from "numeral";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
 interface InputCostProps {
-  width: number;
+  width?: number;
   height?: number;
   value: string | number;
   changeRepairAmount: any;

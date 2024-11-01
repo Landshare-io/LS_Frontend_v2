@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Address } from "viem";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import axios from "../axios/nft-game-axios";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { APOLLO_RWA_BUY_URL, APOLLO_RWA_URL } from "../../../config/constants/environments";
 
-export default function useGetNftCredits() {
+export default function useGetNftCredits(address: Address | undefined) {
   const { isAuthenticated } = useGlobalContext()
   const [nftCredits, setNftCredits] = useState(0)
   const [totalCredits, setTotalCredits] = useState(0)
 
-  const getNftCredits = (address: Address | undefined) => {
+  useEffect(() => {
+    if (address) {
+      getNftCredits()
+    }
+  }, [address])
+
+  const getNftCredits = () => {
     if (!isAuthenticated) return
     const query1 = `
       query {

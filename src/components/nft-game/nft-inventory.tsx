@@ -59,7 +59,7 @@ export default function InventoryPage() {
 	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost } = useGetSetting()
 	const { handleBuyHouseSlots } = useHandleBuyHouseSlots(chainId, address, setUserActivatedSlots, setBuyHouseSlotLoading)
 	const { stake } = useStake(chainId, address, setDepositLoading)
-	const { nftCredits, totalCredits } = useGetNftCredits()
+	const { nftCredits, totalCredits } = useGetNftCredits(address)
 	const { withdrawAssetTokenHandler } = useWithdrawAsset(chainId, address, setDepositLoading, setWithdrawLoading)
 	const { data: tradingLimit } = useSecondaryTradingLimitOf(chainId, address) as { data: BigNumberish, refetch: Function }
   const [isLoading, setIsLoading] = useState(false);
