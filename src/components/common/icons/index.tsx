@@ -157,3 +157,117 @@ export const OpenModalICon = ({ iconColor }: { iconColor?: string }) => {
     </svg>
   )
 };
+
+export const NextIconYieldIcon = () => (
+  <svg
+    width="72"
+    height="71"
+    viewBox="0 0 72 71"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g filter="url(#filter0_d_1806_312)">
+      <circle r="23" transform="matrix(1 0 0 -1 36 31)" fill="white" />
+    </g>
+    <path
+      opacity="0.7"
+      d="M33.5789 37.0527L39.6315 31.0001L33.5789 24.9475"
+      stroke="black"
+      strokeWidth="2.42105"
+    />
+    <defs>
+      <filter
+        id="filter0_d_1806_312"
+        x="0.894736"
+        y="0.736842"
+        width="70.2105"
+        height="70.2105"
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy="4.84211" />
+        <feGaussianBlur stdDeviation="6.05263" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_1806_312"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_1806_312"
+          result="shape"
+        />
+      </filter>
+    </defs>
+  </svg>
+);
+
+export const SlickPrevIcon = () => (
+  <svg
+    width="72"
+    height="71"
+    viewBox="0 0 72 71"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g filter="url(#filter0_d_1806_312)">
+      <circle r="23" transform="matrix(-1 0 0 1 36 31)" fill="white" />
+    </g>
+    <path
+      opacity="0.7"
+      d="M38.4211 24.9473L32.3684 30.9999L38.4211 37.0525"
+      stroke="black"
+      strokeWidth="2.42105"
+    />
+    <defs>
+      <filter
+        id="filter0_d_1806_312"
+        x="0.894736"
+        y="0.736842"
+        width="70.2105"
+        height="70.2105"
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy="4.84211" />
+        <feGaussianBlur stdDeviation="6.05263" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_1806_312"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_1806_312"
+          result="shape"
+        />
+      </filter>
+    </defs>
+  </svg>
+);

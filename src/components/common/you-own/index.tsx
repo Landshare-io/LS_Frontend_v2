@@ -29,7 +29,7 @@ export default function YouOwn(){
   const chainId = useChainId()
   const { data: landTokenBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
   const { resource, maxPowerLimit } = useGetResource()
-  const { nftCredits } = useGetNftCredits()
+  const { nftCredits } = useGetNftCredits(address)
   
   return (
     <section className="bottom-[73px] md:bottom-0 bg-[#bce4fa] duration-500 sticky z-[999] opacity-90 shadow-lg py-3 dark:bg-third">
