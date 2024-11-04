@@ -5,10 +5,10 @@ export const PAGES: PAGE[] = [
     name: "Vaults",
     path: "/vaults",
   },
-  // {
-  //   name: "NFT",
-  //   path: "/nft/inventory",
-  // },
+  {
+    name: "NFT",
+    path: "/nft/inventory",
+  },
   {
     name: "Real World Assets",
     path: "/rwa",
@@ -32,5 +32,11 @@ export const PAGES: PAGE[] = [
 ];
 
 export const VISIBLE_FOOTER_PAGES = [
-  '/', '/rwa', '/vaults', '/tokenized-asset', '/dao', '/migration'
+  "/",
+  "/rwa",
+  "/vaults",
+  "/nft/inventory",
+  "/tokenized-asset",
+  "/dao",
+  "/migration",
 ];

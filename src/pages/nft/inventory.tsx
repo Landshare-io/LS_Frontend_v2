@@ -1,9 +1,9 @@
-import { useChainId } from 'wagmi'
-import InventoryPage from './inventory'
-import { supportChainIds } from '../../wagmi'
+import { useChainId } from "wagmi";
+import InventoryPage from "./inventoryPage";
+import { supportChainIds } from "../../wagmi";
 
 export default function Inventory() {
-  const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
+  const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002;
 
   return (
     <div>
@@ -15,5 +15,5 @@ export default function Inventory() {
         <InventoryPage />
       )}
     </div>
-  )
+  );
 }
