@@ -1,69 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
-import backendAxios from "../../helper/axios";
-import Topbar from "../Nft/topbar/Topbar";
-import { useScreenFixedProvider } from "../../contexts/ScreenFixedProvider";
-import { useGlobalContext } from "../../contexts/GlobalContext";
-import { useLandshareNftContext } from "../../contexts/LandshareNftContext";
-import YouOwn from "../Nft/YouOwn";
-import { MarketplaceItems } from "./MarketplaceItems/MarketplaceItems";
-import { PremiumNftItems } from "./PremiumNftItems/PremiumNftItems";
-import { SelectarrowIcon } from "../../components/common/Icons";
-import ConnectWallet from "../../components/ConnectWallet";
-import "../Nft/nftList/Maintenance.css";
-import MintModal from "../../components/mintModal";
-import marble from "../../assets/img/marketplace-property/marble.png";
-import pool from "../../assets/img/marketplace-property/pool.png";
-import tile from "../../assets/img/marketplace-property/tile.png";
+import { useAccount, useChainId } from "wagmi";
+import Topbar from "../common/topbar";
+import YouOwn from "../common/you-own";
+import MarketplaceItems from "./items"
+import ConnectWallet from "../connect-wallet";
+import { SelectarrowIcon } from "../common/icons/index";
 import useGetMarketplaceItems from "../../hooks/nft-game/axios/useGetMarketplaceItems";
-import './Marketplace.css'
+import useLogin from "../../hooks/nft-game/axios/useLogin";
+import { useGlobalContext } from "../../context/GlobalContext";
+import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 export default function MarketplacePage() {
-  const { isConnected } = useAccount();
+  const chainId = useChainId();
+  const { isConnected, address } = useAccount();
   const [isItemsLoading, setIsItemsLoading] = useState(true);
   const {
     getProducts,
     products,
     premiumProducts
   } = useGetMarketplaceItems(setIsItemsLoading)
-
-  const { setNftRoute, setShowNftFooter } = useScreenFixedProvider();
+  const { checkIsAuthenticated } = useLogin()
   const {
-    signer,
-    account,
-    isDarkMode,
-    userResource,
-    isAuthenticated,
-    checkIsAuthenticated,
-    premiumUpgradesList
+    theme,
+    isAuthenticated
   } = useGlobalContext();
-
   const [searchData, setSearchData] = useState({
     searchType: "all_active",
     sortType: "date",
   });
 
-  const images = {
-    "Porcelain Tile": tile,
-    "Pool Table": pool,
-    "Marble Countertops": marble
-  }
-
   useEffect(() => {
-    if (signer && isAuthenticated == false) { checkIsAuthenticated() }
-  }, [signer])
-
-  useEffect(() => {
-    setNftRoute(true);
-    setShowNftFooter(true);
-    return () => {
-      setNftRoute(false);
-      setShowNftFooter(false);
-    };
-  }, []);
+    if (isConnected && isAuthenticated == false) { checkIsAuthenticated() }
+  }, [isConnected])
 
 
-  const changeMarketplaceView = (value) => {
+  const changeMarketplaceView = (value: string) => {
     setIsItemsLoading(true);
     getProducts({
       searchType: value,
@@ -75,7 +46,7 @@ export default function MarketplacePage() {
     }));
   };
 
-  const changeMarketplaceSort = (value) => {
+  const changeMarketplaceSort = (value: string) => {
     setIsItemsLoading(true);
     getProducts({
       searchType: searchData.searchType,
@@ -89,29 +60,28 @@ export default function MarketplacePage() {
 
   return (
     <>
-      <div className="section-container nft-game-container pt-0">
-        {signer === undefined || (!isConnected && setIsLoading == false) ? (
-          <div className="text-center min-h-60vh d-flex flex-column justify-content-center align-items-center">
+      <div className="relative py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] max-w-[1200px] m-auto pt-0">
+        {(!isConnected && isItemsLoading == false) ? (
+          <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
             <ConnectWallet />
           </div>
         ) : (
           <>
             <Topbar isNftList={true} />
-
-            <div className="d-flex w-100 overflow-auto scrollbar-style flex-wrap align-items-center justify-conetent-between px-2 marketplace-wrapper">
-              <span className="fw-bold fs-md">House NFTs</span>
-              <div className="divider w-100 d-block d-md-none d my-3"></div>
-              <div className="d-flex ms-md-4 marketplace-input-wrapper flex-nowrap flex-grow-1 justify-content-start justify-content-md-end marketplace-filter">
-                <div className="d-flex ms-sm-4 ms-1 align-items-center">
+            <div className="flex w-full flex-col items-center md:flex-row overflow-auto flex-wrap items-center justify-between px-2">
+              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>House NFTs</span>
+              <div className="border-b-[1px] border-[#00000050] w-full hidden md:block my-3"></div>
+              <div className="flex ms-4 ml-0 flex-nowrap flex-1 justify-end md:justify-start">
+                <div className="flex ms-4 sm:ms-1 items-center">
                   <label
                     htmlFor="marketplace-view"
-                    className={`d-inline-block white-space-nowrap me-1 fs-16 fw-500 ${isDarkMode ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                    className={`inline-block whitespace-nowrap mr-1 text-[16px] ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
                   >
                     View:
                   </label>
-                  <div className="position-relative marketplace-view-section me-2">
+                  <div className="relative mr-2">
                     <select
-                      className={`form-select ${isDarkMode ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                      className={`whitespace-nowrap text-ellipsis ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
                       name="marketplace-view"
                       id="marketplace-view"
                       onChange={(e) => changeMarketplaceView(e.target.value)}
@@ -119,19 +89,19 @@ export default function MarketplacePage() {
                       <option value="all">Available NFTs</option>
                       <option value="mine">My NFTs</option>
                     </select>
-                    <SelectarrowIcon />
+                    <SelectarrowIcon className="absolute right-[10px] top-[50%] translate-y-[-50%]" />
                   </div>
                 </div>
-                <div className="d-flex ms-sm-4 ms-1 align-items-center">
+                <div className="flex ms-4 sm:ms-1 items-center">
                   <label
                     htmlFor="marketplace-sort"
-                    className={`d-inline-block white-space-nowrap me-1 fs-16 fw-500 ${isDarkMode ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                    className={`inline-block whitespace-nowrap mr-1 text-[16px] ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
                   >
                     Sort by:
                   </label>
-                  <div className="position-relative marketplace-sort-section me-2">
+                  <div className="relative mr-2">
                     <select
-                      className={`form-select ${isDarkMode ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                      className={`whitespace-nowrap text-ellipsis ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
                       name="marketplace-sort"
                       id="marketplace-sort"
                       onChange={(e) => changeMarketplaceSort(e.target.value)}
@@ -144,32 +114,18 @@ export default function MarketplacePage() {
                 </div>
               </div>
             </div>
-            <div className="divider d-block w-100 mb-4 my-3"></div>
+            <div className="border-b-[1px] border-[#00000050] block w-full mb-4 my-3"></div>
 
             <MarketplaceItems
               isLoading={isItemsLoading}
               products={products}
               getProducts={getProducts}
             />
-
-            {/* <div className="d-flex w-100 overflow-auto scrollbar-style flex-wrap align-items-center justify-conetent-between px-2 marketplace-wrapper mt-4">
-              <span className="fw-bold fs-md">Premium Upgrades</span>
-            </div>
-            <div className="divider d-block w-100 mb-4 my-3"></div>
-            <PremiumNftItems
-              isLoading={isItemsLoading}
-              products={premiumProducts}
-              getProducts={getProducts}
-            /> */}
           </>
         )}
       </div>
-      {signer !== "undefined" && isConnected && (
-        <YouOwn
-          resource={userResource.resource}
-          maxPowerLimit={userResource.maxPowerLimit}
-          landTokenBalance={userResource.landTokenBalance}
-        />
+      {isConnected && (
+        <YouOwn />
       )}
     </>
   );
