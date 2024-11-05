@@ -18,11 +18,11 @@ export default function useStake(chainId: number, address: Address | undefined, 
   const { refetch: refetchStakedAmount } = useStakedBalance(chainId, address)
   const { getUserData } = useGetUserData()
 
-  const { isSuccess: approveSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: chainId
   });
-  const { isSuccess: depositSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
     hash: depositTx,
     chainId: chainId
   });
@@ -30,41 +30,49 @@ export default function useStake(chainId: number, address: Address | undefined, 
   useEffect(() => {
     (async () => {
       if (approveTx) {
-        if (approveSuccess) {
-          try {
-            deposit(depositAmount)
-          } catch (error: any) {
-            setDepositLoading(false)
-            notifyError(error.response.data.message);
+        if (approveStatusData) {
+          if (approveSuccess) {
+            try {
+              deposit(depositAmount)
+            } catch (error: any) {
+              setDepositLoading(false)
+              notifyError(error.response.data.message);
+            }
           }
         }
       }
     })()
-  }, [approveTx, approveSuccess])
+  }, [approveTx, approveStatusData, approveSuccess])
 
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await axios.post('/house/deposit-asset-token', {
-          houseId: -1
-        })
-
-        if (data.status) {
-          setDepositAmount(0)
-          refetchStakedAmount()
-          getUserData()
-          setDepositLoading(false);
-          notifySuccess(`${depositAmount} Asset Tokens deposited!`);
-        } else {
-          setDepositLoading(false);
-          notifyError("Deposit failed");
+        if (depositTx) {
+          if (depositStatusData) {
+            if (depositSuccess) {
+              const { data } = await axios.post('/house/deposit-asset-token', {
+                houseId: -1
+              })
+      
+              if (data.status) {
+                setDepositAmount(0)
+                refetchStakedAmount()
+                getUserData()
+                setDepositLoading(false);
+                notifySuccess(`${depositAmount} Asset Tokens deposited!`);
+              } else {
+                setDepositLoading(false);
+                notifyError("Deposit failed");
+              }
+            }
+          }
         }
       } catch (error: any) {
       setDepositLoading(false)
       notifyError(error.response.data.message);
     }
     })()
-  }, [depositTx, depositSuccess])
+  }, [depositTx, depositStatusData, depositSuccess])
   
 
   const stake = async (amount: BigNumberish) => {

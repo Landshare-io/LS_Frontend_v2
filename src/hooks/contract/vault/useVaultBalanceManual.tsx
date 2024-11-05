@@ -4,11 +4,11 @@ import { formatEther, BigNumberish } from "ethers";
 import { Address } from "viem";
 import { bsc } from "viem/chains";
 import { useGlobalContext } from "../../../context/GlobalContext";
-import useDeposit from "../AutoVaultV3Contract/useDeposit";
-import useWithdraw from "../AutoVaultV3Contract/useWithdraw";
-import useBalanceOfLpTokenV2 from "../LpTokenV2Contract/useBalanceOf";
-import useAllowanceOfLpTokenV2 from "../LpTokenV2Contract/useAllowance";
-import useApprove from "../LpTokenV2Contract/useApprove";
+import useDeposit from "../MasterchefContract/useDeposit";
+import useWithdraw from "../MasterchefContract/useWithdraw";
+import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
+import useAllowanceOfLandToken from "../LandTokenContract/useAllowance";
+import useApprove from "../LandTokenContract/useApprove";
 import useTotalStaked from "../MasterchefContract/useTotalStaked";
 import useUserInfo from "../MasterchefContract/useUserInfo";
 import usePendingLand from "../MasterchefContract/usePendingLand";
@@ -18,26 +18,26 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
   const { setScreenLoadingStatus } = useGlobalContext()
   const { deposit, data: depositTx } = useDeposit(chainId)
   const { withdraw, data: withdrawTx } = useWithdraw(chainId)
-  const { approve, data: approveTx } = useApprove(chainId)
-  const { data: lpTokenV2Balance, refetch: refetchLpTokenV2 } = useBalanceOfLpTokenV2({ chainId, address }) as {
+  const { approve, data: approveTx } = useApprove()
+  const { data: landTokenV2Balance, refetch: refetchLandToken } = useBalanceOfLandToken({ chainId, address }) as {
     data: BigNumberish,
     refetch: Function
   }
-  const { refetch: refetchAllowanceOfLpTokenV2OfVault } = useAllowanceOfLpTokenV2(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id])
-  const { refetch: refetchAllowanceOfLpTokenV2OfMasterChef } = useAllowanceOfLpTokenV2(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id])
+  const { refetch: refetchAllowanceOfLandTokenOfVault } = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId])
+  const { refetch: refetchAllowanceOfLandTokenOfMasterChef } = useAllowanceOfLandToken(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId])
   const { refetch: refetchTotalStaked } = useTotalStaked(chainId)
   const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 0, address })
   const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 0, address })
 
-  const { isSuccess: depositSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
     hash: depositTx,
     chainId: chainId
   });
-  const { isSuccess: withdrawSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: withdrawSuccess, data: withdraswStatusData } = useWaitForTransactionReceipt({
     hash: withdrawTx,
     chainId: chainId
   });
-  const { isSuccess: approveSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: chainId
   });
@@ -45,13 +45,15 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
   useEffect(() => {
     try {
       if (depositTx) {
-        if (depositSuccess) {
-          refetchLpTokenV2()
-          refetchAllowanceOfLpTokenV2OfVault()
-          refetchAllowanceOfLpTokenV2OfMasterChef()
-          setScreenLoadingStatus("Deposit Transaction success")
-        } else {
-          setScreenLoadingStatus("Transaction failed")
+        if (depositStatusData) {
+          if (depositSuccess) {
+            refetchLandToken()
+            refetchAllowanceOfLandTokenOfVault()
+            refetchAllowanceOfLandTokenOfMasterChef()
+            setScreenLoadingStatus("Deposit Transaction success")
+          } else {
+            setScreenLoadingStatus("Transaction failed")
+          }
         }
       }
     } catch (error) {
@@ -64,19 +66,21 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [depositTx, depositSuccess])
+  }, [depositTx, depositStatusData, depositSuccess])
 
   useEffect(() => {
     try {
       if (withdrawTx) {
-        if (withdrawSuccess) {
-          refetchLpTokenV2()
-          refetchTotalStaked()
-          refetchUserInfo()
-          refetchPendingLand()
-          setScreenLoadingStatus("Withdraw Transaction success")
-        } else {
-          setScreenLoadingStatus("Transaction failed")
+        if (withdraswStatusData) {
+          if (withdrawSuccess) {
+            refetchLandToken()
+            refetchTotalStaked()
+            refetchUserInfo()
+            refetchPendingLand()
+            setScreenLoadingStatus("Withdraw Transaction success")
+          } else {
+            setScreenLoadingStatus("Transaction failed")
+          }
         }
       }
     } catch (error) {
@@ -89,18 +93,20 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [withdrawTx, withdrawSuccess])
+  }, [withdrawTx, withdraswStatusData, withdrawSuccess])
 
   useEffect(() => {
     try {
       if (approveTx) {
-        if (approveSuccess) {
-          refetchAllowanceOfLpTokenV2OfVault()
-          refetchAllowanceOfLpTokenV2OfMasterChef()
-  
-          setScreenLoadingStatus("Approve Transaction success")
-        } else {
-          setScreenLoadingStatus("Transaction failed")
+        if (approveStatusData) {
+          if (approveSuccess) {
+            refetchAllowanceOfLandTokenOfVault()
+            refetchAllowanceOfLandTokenOfMasterChef()
+    
+            setScreenLoadingStatus("Approve Transaction success")
+          } else {
+            setScreenLoadingStatus("Transaction failed")
+          }
         }
       }
     } catch (error) {
@@ -113,26 +119,26 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [approveTx, approveSuccess])
+  }, [approveTx, approveStatusData, approveSuccess])
 
   const depositVault = (amount: BigNumberish) => {
-    if (Number(formatEther(amount)) > Number(formatEther(lpTokenV2Balance))) {
+    if (Number(formatEther(amount)) > Number(formatEther(landTokenV2Balance))) {
       window.alert("Insufficient Balance");
       return;
     }
 
     setScreenLoadingStatus("Deposit Transaction in progress...")
-    deposit(amount)
+    deposit(0, amount)
   }
 
   const withdrawVault = (amount: BigNumberish) => {
     setScreenLoadingStatus("Withdraw Transaction in progress...")
-    withdraw(amount)
+    withdraw(0, amount)
   }
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(MASTERCHEF_CONTRACT_ADDRESS[bsc.id], "1000000000000000000000000000000")
+    approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[chainId], "1000000000000000000000000000000")
     updateStatus()
   }
 

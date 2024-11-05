@@ -20,7 +20,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
 
   const { approve: approveUsdc, data: usdcApproveTx } = useApproveOfUsdcContract()
 
-  const { isSuccess: usdcApproveSuccess, isLoading: usdcApproveLoading } = useWaitForTransactionReceipt({
+  const { isSuccess: usdcApproveSuccess, data: usdcApproveStatusData } = useWaitForTransactionReceipt({
     hash: usdcApproveTx,
     chainId: chainId
   });
@@ -32,13 +32,13 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
 
   const { approve: approveLand, data: landApproveTx } = useApproveOfLandContract()
 
-  const { isSuccess: landApproveSuccess, isLoading: landApproveLoading } = useWaitForTransactionReceipt({
+  const { isSuccess: landApproveSuccess, data: landApproveStatusData } = useWaitForTransactionReceipt({
     hash: landApproveTx,
   });
 
   const { buyToken, data: sellTx } = useBuyToken(chainId)
 
-  const { isSuccess: sellSuccess, isLoading: sellLoading } = useWaitForTransactionReceipt({
+  const { isSuccess: sellSuccess, data: sellStatusData } = useWaitForTransactionReceipt({
     hash: sellTx,
   });
 
@@ -46,16 +46,18 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     (async () => {
       try {
         if (usdcApproveTx) {
-          await usdcAllowanceRefetch()
-          if (BigInt(usdcAllowance) < amount) {
-            window.alert("Please approve sufficient allowance.")
-            setTransactionStatus("Insufficient Allowance")
-          }
-    
-          if (usdcApproveSuccess) {
-            if (BigInt(landAllowance) < BigInt(amount)) {
-              await approveLand(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id], landAmount)
-              await landAllowanceRefetch()
+          if (usdcApproveStatusData) {
+            await usdcAllowanceRefetch()
+            if (BigInt(usdcAllowance) < amount) {
+              window.alert("Please approve sufficient allowance.")
+              setTransactionStatus("Insufficient Allowance")
+            }
+      
+            if (usdcApproveSuccess) {
+              if (BigInt(landAllowance) < BigInt(amount)) {
+                await approveLand(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id], landAmount)
+                await landAllowanceRefetch()
+              }
             }
           }
         }
@@ -64,20 +66,22 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
         console.log(error)
       }
     })()
-  }, [usdcApproveTx, usdcApproveSuccess])
+  }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess])
 
   useEffect(() => {
     (async () => {
       try {
         if (landApproveTx) {
-          await landAllowanceRefetch()
-          if (BigInt(landAllowance) < BigInt(landAmount)) {
-            window.alert("Please approve sufficient allowance.")
-            setTransactionStatus("Insufficient Allowance")
-          }
-    
-          if (landApproveSuccess) {
-            await buyToken(amount, USDC_ADDRESS[chainId])
+          if (landApproveStatusData) {
+            await landAllowanceRefetch()
+            if (BigInt(landAllowance) < BigInt(landAmount)) {
+              window.alert("Please approve sufficient allowance.")
+              setTransactionStatus("Insufficient Allowance")
+            }
+      
+            if (landApproveSuccess) {
+              await buyToken(amount, USDC_ADDRESS[chainId])
+            }
           }
         }
       } catch (error) {
@@ -85,17 +89,19 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
         console.log(error)
       }
     })()
-  }, [landApproveTx, landApproveSuccess])
+  }, [landApproveTx, landApproveStatusData, landApproveSuccess])
 
   useEffect(() => {
     if (sellTx) {
-      if (sellSuccess) {
-        setTransactionStatus("Transaction Successful")
-      } else {
-        setTransactionStatus("Transaction failed")
+      if (sellStatusData) {
+        if (sellSuccess) {
+          setTransactionStatus("Transaction Successful")
+        } else {
+          setTransactionStatus("Transaction failed")
+        }
       }
     }
-  }, [sellTx, sellSuccess])
+  }, [sellTx, sellStatusData, sellSuccess])
 
   const buyTokens = async () => {
     try {

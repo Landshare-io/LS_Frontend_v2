@@ -21,49 +21,65 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
   const { data: balanceOfLpToken, refetch: refetchLpTokenBalance } = useBalanceOfLpTokenV2({ chainId: bsc.id, address });
   
   const { deposit: autoVaultV3Deposit, data: autoVaultV3DepositTx } = useDepositAutoVaultV3(bsc.id)
-  const { isSuccess: autoVaultV3DepositSuccess } = useWaitForTransactionReceipt({   
+  const { isSuccess: autoVaultV3DepositSuccess, data: autoVaultV3DepositStatusData } = useWaitForTransactionReceipt({   
     hash: autoVaultV3DepositTx,
     chainId: bsc.id
   });
 
   const { deposit: masterchefDeposit, data: masterchefDepositTx } = useDepositMastchef(bsc.id)
-  const { isSuccess: masterchefDepositSuccess } = useWaitForTransactionReceipt({   
+  const { isSuccess: masterchefDepositSuccess, data: masterchefDepositStatusData } = useWaitForTransactionReceipt({   
     hash: masterchefDepositTx,
     chainId: bsc.id
   });
 
   useEffect(() => {
     if (autoVaultV3DepositTx) {
-      if (autoVaultV3DepositSuccess) {
-        try {
-          refetchLandTokenBalance()
-          setScreenLoadingStatus("Transaction Completed.")
-          setIsSuccessDeposit(true);
-        } catch (error) {
-          console.log("deposit error", error)
-          setIsSuccessDeposit(false);
-          setScreenLoadingStatus("Transaction Failed.")
+      if (autoVaultV3DepositStatusData) {
+        if (autoVaultV3DepositSuccess) {
+          try {
+            refetchLandTokenBalance()
+            setScreenLoadingStatus("Transaction Completed.")
+            setIsSuccessDeposit(true);
+          } catch (error) {
+            console.log("deposit error", error)
+            setIsSuccessDeposit(false);
+            setScreenLoadingStatus("Transaction Failed.")
+          }
+
+          return () => {
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
+          }
         }
       }
     }
-  }, [autoVaultV3DepositTx, autoVaultV3DepositSuccess])
+  }, [autoVaultV3DepositTx, autoVaultV3DepositStatusData, autoVaultV3DepositSuccess])
 
   useEffect(() => {
     if (masterchefDepositTx) {
-      if (masterchefDepositSuccess) {
-        try {
-          refetchLandTokenBalance()
-          refetchLpTokenBalance()
-          setScreenLoadingStatus("Transaction Completed.")
-          setIsSuccessDeposit(true);
-        } catch (error) {
-          console.log("deposit error", error)
-          setIsSuccessDeposit(false);
-          setScreenLoadingStatus("Transaction Failed.")
+      if (masterchefDepositStatusData) {
+        if (masterchefDepositSuccess) {
+          try {
+            refetchLandTokenBalance()
+            refetchLpTokenBalance()
+            setScreenLoadingStatus("Transaction Completed.")
+            setIsSuccessDeposit(true);
+          } catch (error) {
+            console.log("deposit error", error)
+            setIsSuccessDeposit(false);
+            setScreenLoadingStatus("Transaction Failed.")
+          }
+
+          return () => {
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
+          }
         }
       }
     }
-  }, [masterchefDepositTx, masterchefDepositSuccess])
+  }, [masterchefDepositTx, masterchefDepositStatusData, masterchefDepositSuccess])
 
   async function depositAutoLandv2(amount: number) {
     if (isConnected == true) {

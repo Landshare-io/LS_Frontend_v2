@@ -4,7 +4,7 @@ import { LAND_TOKEN_CONTRACT_ADDRESS } from "../../../config/constants/environme
 import { Address } from "viem";
 
 export default function useAllowance(chainId: number, address: Address | undefined, spender: Address | undefined) {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
     abi: LpTokenV2Abi,
     functionName: "allowance",
@@ -12,12 +12,12 @@ export default function useAllowance(chainId: number, address: Address | undefin
     args: [address, spender]
   })
 
-  if (typeof address == 'undefined') return 0
-  if (isLoading) return 0
+  if (typeof address == 'undefined') return { data: 0, refetch }
+  if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching LandTokenContract allowance error', error)
-    return 0
+    return { data: 0, refetch }
   }
 
-  return data
+  return { data, refetch }
 }

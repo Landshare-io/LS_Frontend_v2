@@ -36,64 +36,68 @@ export default function useSplitLP({
   const { approve, data: approveTx } = useApprove()
   const { removeLiquidityETH, data: removeLiquidityETHTx } = useRemoveLiquidityETH()
 
-  const { isSuccess: approveSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: bsc.id
   });
 
-  const { isSuccess: removeLiquiditySuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: removeLiquiditySuccess, data: removeLiquidityStatusData } = useWaitForTransactionReceipt({
     hash: removeLiquidityETHTx,
     chainId: bsc.id
   });
 
   useEffect(() => {
     if (approveTx) {
-      if (approveSuccess) {
-        try {
-          setScreenLoadingStatus("Transaction 2 of 2 Pending...")
-          removeLiquidityETH(
-            LAND_TOKEN_V1_CONTRACT_ADDRESS,
-            removeLiquidityETHAmount, removeLiquidityETHMinLand, removeLiquidityETHMinEth,
-            address,
-            Date.now()
-          )
-        } catch (error) {
-          console.log("swap error", error)
-          setScreenLoadingStatus("Transaction Failed.")
-
-          return () => {
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
+      if (approveStatusData) {
+        if (approveSuccess) {
+          try {
+            setScreenLoadingStatus("Transaction 2 of 2 Pending...")
+            removeLiquidityETH(
+              LAND_TOKEN_V1_CONTRACT_ADDRESS,
+              removeLiquidityETHAmount, removeLiquidityETHMinLand, removeLiquidityETHMinEth,
+              address,
+              Date.now()
+            )
+          } catch (error) {
+            console.log("swap error", error)
+            setScreenLoadingStatus("Transaction Failed.")
+  
+            return () => {
+              setTimeout(() => {
+                setScreenLoadingStatus("")
+              }, 1000);
+            }
           }
         }
       }
     }
-  }, [approveSuccess, approveTx])
+  }, [approveSuccess, approveStatusData, approveTx])
 
   useEffect(() => {
     (async () => {
       if (removeLiquidityETHTx) {
-        if (removeLiquiditySuccess) {
-          try {
-            const receiptTx = await PROVIDERS[bsc.id].getTransactionReceipt(removeLiquidityETHTx);
-            const amountLand = receiptTx.args.amount0;
-            const amountBNB = receiptTx.args.amount1;
-            setAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
-            setScreenLoadingStatus("Transaction Completed.")
-            setIsSuccessSplit(true)
-          } catch (error) {
-            setScreenLoadingStatus("Transaction Failed.")
-          }
-          return () => {
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
+        if (removeLiquidityStatusData) {
+          if (removeLiquiditySuccess) {
+            try {
+              const receiptTx = await PROVIDERS[bsc.id].getTransactionReceipt(removeLiquidityETHTx);
+              const amountLand = receiptTx.args.amount0;
+              const amountBNB = receiptTx.args.amount1;
+              setAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
+              setScreenLoadingStatus("Transaction Completed.")
+              setIsSuccessSplit(true)
+            } catch (error) {
+              setScreenLoadingStatus("Transaction Failed.")
+            }
+            return () => {
+              setTimeout(() => {
+                setScreenLoadingStatus("")
+              }, 1000);
+            }
           }
         }
       }
     })()
-  }, [removeLiquiditySuccess, removeLiquidityETHTx])
+  }, [removeLiquiditySuccess, removeLiquidityStatusData, removeLiquidityETHTx])
 
   async function splitLP(amount: string | number, minLand: string | number | bigint, minEth: string | number | bigint) {
     if (isConnected == true) {

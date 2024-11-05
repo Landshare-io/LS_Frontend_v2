@@ -31,26 +31,48 @@ export default function useRecombine({
   const { data: balanceLandV2 } = useBalanceOfLandToken({ chainId: bsc.id, address }) as { data: BigNumberish }
   const { data: landAllowance } = useAllowanceOfLandToken(bsc.id, address, PSC_ROUTER_CONTRACT_ADDRESS) as { data: BigNumberish }
   const { approve, data: approveTx } = useApproveLandToken()
-  const { isSuccess: approveSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: bsc.id
   });
 
   const { addLiquidityETH, data: addLiquidityETHTx } = useAddLiquidityETH()
-  const { isSuccess: addLiquiditySuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: addLiquiditySuccess, data: addLiquidityStatusData } = useWaitForTransactionReceipt({
     hash: addLiquidityETHTx,
     chainId: bsc.id
   })
 
   useEffect(() => {
     if (approveTx) {
-      if (approveSuccess) {
-        setScreenLoadingStatus("Transaction 2 of 2 Pending...")
-        addLiquidityETH(LandAmount, address, minGas)
-      } else {
-        setScreenLoadingStatus("Transaction Failed")
-        setIsSuccessRecombine(false);
+      if (approveStatusData) {
+        if (approveSuccess) {
+          setScreenLoadingStatus("Transaction 2 of 2 Pending...")
+          addLiquidityETH(LandAmount, address, minGas)
+        } else {
+          setScreenLoadingStatus("Transaction Failed")
+          setIsSuccessRecombine(false);
+  
+          return () => {
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
+          }
+        }
+      }
+    }
+  }, [approveTx, approveStatusData, approveSuccess])
 
+  useEffect(() => {
+    if (addLiquidityETHTx) {
+      if (addLiquidityStatusData) {
+        if (addLiquiditySuccess) {
+          setScreenLoadingStatus("Transaction success")
+          setIsSuccessRecombine(true);
+        } else {
+          setScreenLoadingStatus("Transaction Failed")
+          setIsSuccessRecombine(false);
+        }
+  
         return () => {
           setTimeout(() => {
             setScreenLoadingStatus("")
@@ -58,25 +80,7 @@ export default function useRecombine({
         }
       }
     }
-  }, [approveTx, approveSuccess])
-
-  useEffect(() => {
-    if (addLiquidityETHTx) {
-      if (addLiquiditySuccess) {
-        setScreenLoadingStatus("Transaction success")
-        setIsSuccessRecombine(true);
-      } else {
-        setScreenLoadingStatus("Transaction Failed")
-        setIsSuccessRecombine(false);
-      }
-
-      return () => {
-        setTimeout(() => {
-          setScreenLoadingStatus("")
-        }, 1000);
-      }
-    }
-  }, [addLiquidityETHTx, addLiquiditySuccess])
+  }, [addLiquidityETHTx, addLiquidityStatusData, addLiquiditySuccess])
 
   async function recombine(
     amountBNB: string | number | BigNumberish,
