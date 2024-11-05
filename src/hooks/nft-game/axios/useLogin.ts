@@ -16,7 +16,7 @@ export default function useLogin() {
   useEffect(() => {
     (async () => {
       if (signMessageData) {
-        const { data } = await axios.post(`${NFT_GAME_BACKEND_URL}/auth/login`, {
+        const { data } = await axios.post(`${process.env.NEXT_PUBLIC_NEW_BACKEND_BASE_URL}/auth/login`, {
           "signature": signMessageData,
           "walletAddress": walletAddress,
           "nonce": signNonce
@@ -43,7 +43,7 @@ export default function useLogin() {
       setWalletAddress(address)
       setIsLoading(true)
       setShowNotify(needNotify)
-      const { data: messageData } = await axios.post(`${NFT_GAME_BACKEND_URL}/auth/get-nonce`);
+      const { data: messageData } = await axios.post(`${process.env.NEXT_PUBLIC_NEW_BACKEND_BASE_URL}/auth/get-nonce`);
   
       setSignNonce(messageData.nonce)
       signMessage(messageData.sign_message)
@@ -58,7 +58,7 @@ export default function useLogin() {
   const checkIsAuthenticated = async () => {
     try {
       if (localStorage.getItem("jwtToken-v2")) {
-        const { data } = await axios.get(`${NFT_GAME_BACKEND_URL}/user/is-loggedin`)
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_NEW_BACKEND_BASE_URL}/user/is-loggedin`)
         if (data.success) {
           setIsAuthenticated(true)
           return true

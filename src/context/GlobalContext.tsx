@@ -7,8 +7,10 @@ import React, {
   useMemo
 } from "react";
 import axios from "../hooks/nft-game/axios/nft-game-axios";
+import axiosInstance from "axios"
 import { useWalletClient, useAccount } from "wagmi";
-import { loginToBackendWithoutNotify } from "../utils/helpers/login";
+import { signMessage } from '@wagmi/core'
+import { config } from "../wagmi";
 
 interface GlobalContextType {
   signer : any,
@@ -104,8 +106,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { address, connector, isConnected } = useAccount();
   const [houseItems, setHouseItems] = useState([]);
-  const [userActivatedSlots, setUserActivatedSlots] = useState<number>(2)
-
+  const [userActivatedSlots, setUserActivatedSlots] = useState<number>(2);
 
   const [userResource, setUserResource] = useState({
     resource: ["0", "0", "0", "0", "0"],
@@ -129,6 +130,37 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     setTheme(newTheme);
     localStorage.setItem("land-v2-theme", newTheme); // Store theme preference
   };
+
+  const loginToBackendWithoutNotify = async (
+    singer: any, 
+    account: string, 
+    setIsLoginLoading: (isLoading: boolean) => void
+  ): Promise<boolean> => {
+    try {
+      const { data: messageData } = await axiosInstance.post(`${process.env.NEXT_PUBLIC_NEW_BACKEND_BASE_URL}/auth/get-nonce`);
+
+      const signature = await signMessage(config, {message : messageData.sign_message});
+
+      const { data } = await axiosInstance.post(`${process.env.NEXT_PUBLIC_NEW_BACKEND_BASE_URL}/auth/login`, {
+        "signature": signature,
+        "walletAddress": account,
+        "nonce": messageData.nonce
+      });
+      
+      if (data.access_token) {
+        localStorage.setItem('jwtToken-v2', data.access_token);
+        setIsLoginLoading(false);
+        return true;
+      }
+  
+      setIsLoginLoading(false);
+      return false;
+    } catch (error: any) {
+      console.log('login error', error.response?.data?.message || error.message);
+      setIsLoginLoading(false);
+      return false;
+    }
+  }
 
 
   const  getGameSettingData = async () => {

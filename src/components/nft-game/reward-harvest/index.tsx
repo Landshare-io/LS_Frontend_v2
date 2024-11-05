@@ -32,7 +32,12 @@ export default function RewardHarvest({
   const { buyOverdrive } = useBuyOverdrive(setIsLoading)
 
   const harvester = useGetItem("Harvester")
-  const hasHarvster = useCheckHasItem(harvester, -1)
+  
+  let hasHarvster : any;
+
+  if(harvester && Object.keys(harvester).length !== 0){
+    hasHarvster = useCheckHasItem(harvester, -1)
+  }
 
   useEffect(() => {
     let cost = 0

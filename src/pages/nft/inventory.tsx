@@ -1,6 +1,6 @@
 import { useChainId } from "wagmi";
-import InventoryPage from "./inventoryPage";
 import { supportChainIds } from "../../wagmi";
+import InventoryPage from "../../components/nft-game/nft-inventory";
 
 export default function Inventory() {
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002;

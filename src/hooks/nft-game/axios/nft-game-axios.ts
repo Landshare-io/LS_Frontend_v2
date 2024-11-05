@@ -2,7 +2,7 @@ import axios from 'axios';
 import { NFT_GAME_BACKEND_URL } from "../../../config/constants/environments"
 
 const ApiService = axios.create({
-  baseURL: NFT_GAME_BACKEND_URL,
+  baseURL: process.env.NEXT_PUBLIC_NEW_BACKEND_BASE_URL,
 });
 
 // Add a request interceptor to set the Authorization header with a JWT token.

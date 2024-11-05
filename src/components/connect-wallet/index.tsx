@@ -72,37 +72,28 @@ export default function ConnectWallet({
                     </Button>
                   );
                 }
-
-                if (pathname.includes('/nft') && chain.id == MAJOR_WORK_CHAIN.id) { // !isAuthenticated && 
-                  return (
-                    <></>
-                    // <button onClick={() => checkIsAuthenticated()} type="button-container" className="nav-btn bg-[#61CD81] text-button-text-secondary">
-                    //   Login
-                    // </button>
-                  );
-                } else {
-                  return (
-                    <div className="flex items-center">
-                      <div
-                        onClick={openChainModal}
-                        className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary hover:bg-gray-200 transition-colors duration-200 mr-2"
-                      >
-                        <img
-                          src={chain.iconUrl}
-                          alt={chain.name}
-                          className="w-6 h-6"
-                        />
-                      </div>
-                      <Button
-                        onClick={openAccountModal}
-                        className="text-[#fff] px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81]"
-                        textClassName="hover:dark:text-[#61CD81]"
-                      >
-                        {account.displayName}
-                      </Button>
+              
+                return (
+                  <div className="flex items-center">
+                    <div
+                      onClick={openChainModal}
+                      className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary hover:bg-gray-200 transition-colors duration-200 mr-2"
+                    >
+                      <img
+                        src={chain.iconUrl}
+                        alt={chain.name}
+                        className="w-6 h-6"
+                      />
                     </div>
-                  );
-                }
+                    <Button
+                      onClick={openAccountModal}
+                      className="text-[#fff] px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81]"
+                      textClassName="hover:dark:text-[#61CD81]"
+                    >
+                      {account.displayName}
+                    </Button>
+                  </div>
+                );
               })()}
             </div>
           );
