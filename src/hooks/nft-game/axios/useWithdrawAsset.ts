@@ -18,7 +18,7 @@ export default function useWithdrawAsset(chainId: number, address: Address | und
   const { refetch } = useStakedBalance(chainId, address)
   const { getUserData } = useGetUserData()
 
-  const { isSuccess: withdrawSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: withdrawSuccess, data: withdrawStatusData } = useWaitForTransactionReceipt({
     chainId,
     hash: withdrawTx,
   })
@@ -27,15 +27,17 @@ export default function useWithdrawAsset(chainId: number, address: Address | und
     (async () => {
       try {
         if (withdrawTx) {
-          if (withdrawSuccess) {
-            await axios.post('/house/withdraw-asset-token', {
-              houseId: -1
-            })
-  
-            getUserData()
-            setDepositLoading(false);
-            setWithdrawLoading(false)
-            notifySuccess(`${depositAmount} LSRWA withdrawn successfully!`);
+          if (withdrawStatusData) {
+            if (withdrawSuccess) {
+              await axios.post('/house/withdraw-asset-token', {
+                houseId: -1
+              })
+    
+              getUserData()
+              setDepositLoading(false);
+              setWithdrawLoading(false)
+              notifySuccess(`${depositAmount} LSRWA withdrawn successfully!`);
+            }
           }
         }
       } catch (error: any) {
@@ -44,7 +46,7 @@ export default function useWithdrawAsset(chainId: number, address: Address | und
         notifyError(error.response.data.message);
       }
     })()
-  }, [withdrawTx, withdrawSuccess])
+  }, [withdrawTx, withdrawStatusData, withdrawSuccess])
 
   const withdrawAssetTokenHandler = async (withdrawStakedCost: string, amount: BigNumberish) => {
     const withdrawCost = withdrawStakedCost.split(',')

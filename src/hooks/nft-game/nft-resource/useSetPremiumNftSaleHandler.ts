@@ -29,11 +29,11 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
   const { getPremiumNfts } = useGetPremiumNfts(chainId, address)
 
 
-  const { isSuccess: setApprovalForAllSuccess, isLoading: setApprovalForAllLoading } = useWaitForTransactionReceipt({
+  const { isSuccess: setApprovalForAllSuccess, data: setApprovalForAllStatusData } = useWaitForTransactionReceipt({
     hash: setApprovalForAllTx,
     chainId: chainId
   });
-  const { isSuccess: approveSuccess, isLoading: approveLoading } = useWaitForTransactionReceipt({
+  const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: chainId
   });
@@ -41,40 +41,44 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
 
   useEffect(() => {
     if (setApprovalForAllTx) {
-      if (setApprovalForAllSuccess) {
-        approve(chainId, premiumNftAddress, premiumNftData.onChainId)
-      } else {
-        setIsLoading('')
-        notifyError("Transaction Failed")
-      }
-    }
-  }, [setApprovalForAllTx, setApprovalForAllSuccess])
-
-  useEffect(() => {
-    (async () => {
-      if (approveTx) {
-        if (approveSuccess) {
-          try {
-            const { data } = await axios.post('/premium-nft-marketplace', {
-              type: premiumNftData.id,
-              nftId: premiumNftData.onChainId,
-              price: premiumNftPrice
-            })
-
-            setIsLoading('')
-            notifySuccess(`Set on-sale ${premiumNftData.name} #${premiumNftData.onChainId} successfully`)
-          } catch (error: any) {
-            console.log(error)
-            setIsLoading('')
-            notifyError(error.response.data.message);
-          }
+      if (setApprovalForAllStatusData) {
+        if (setApprovalForAllSuccess) {
+          approve(chainId, premiumNftAddress, premiumNftData.onChainId)
         } else {
           setIsLoading('')
           notifyError("Transaction Failed")
         }
       }
+    }
+  }, [setApprovalForAllTx, setApprovalForAllStatusData, setApprovalForAllSuccess])
+
+  useEffect(() => {
+    (async () => {
+      if (approveTx) {
+        if (approveStatusData) {
+          if (approveSuccess) {
+            try {
+              const { data } = await axios.post('/premium-nft-marketplace', {
+                type: premiumNftData.id,
+                nftId: premiumNftData.onChainId,
+                price: premiumNftPrice
+              })
+  
+              setIsLoading('')
+              notifySuccess(`Set on-sale ${premiumNftData.name} #${premiumNftData.onChainId} successfully`)
+            } catch (error: any) {
+              console.log(error)
+              setIsLoading('')
+              notifyError(error.response.data.message);
+            }
+          } else {
+            setIsLoading('')
+            notifyError("Transaction Failed")
+          }
+        }
+      }
     })()
-  }, [approveTx, approveSuccess])
+  }, [approveTx, approveStatusData, approveSuccess])
 
 
   const setPremiumNftsOnSale = (contractName: string, item: any, price: number) => {

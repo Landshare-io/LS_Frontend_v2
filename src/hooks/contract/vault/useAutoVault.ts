@@ -32,6 +32,7 @@ import {
 
 
 export default function useAutoVault(chainId: number, address: Address | undefined) {
+  const [isCcipDeposit, setIsCcipDeposit] = useState(false)
   const [depositAmount, setDepositAmount] = useState<BigNumberish>(0)
   const [transferAction, setTransferAction] = useState('')
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
@@ -44,9 +45,9 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     address,
     chainId
   })
-  const ccipAllowance = useAllowanceOfLandToken(chainId, address, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId]) as BigNumberish
+  const { data: ccipAllowance } = useAllowanceOfLandToken(chainId, address, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
   const { approve: approveLand, data: approveLandTx } = useApproveLandToken()
-  const { isSuccess: approveLandSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: approveLandSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveLandTx,
     chainId: chainId
   });
@@ -62,71 +63,74 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] })
   const { data: landTokenBalance, refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish, refetch: Function }
   const { transfer, data: transferTx } = useTransfer(chainId)
-  const { isSuccess: transferSuccess, refetch: refetchTransferTx, data: receiptTx } = useWaitForTransactionReceipt({
+  const { isSuccess: transferSuccess, refetch: refetchTransferTx, data: transferStatusData } = useWaitForTransactionReceipt({
     hash: transferTx,
     chainId: chainId
   });
-  const { isSuccess: withdrawAllSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: withdrawAllSuccess, data: withdrawAllStatusData } = useWaitForTransactionReceipt({
     hash: withdrawAllTx,
     chainId: chainId
   });
-  const { isSuccess: depositSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
     hash: depositTx,
     chainId: chainId
   });
-  const { isSuccess: withdrawSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: withdrawSuccess, data: withdrawStatusData } = useWaitForTransactionReceipt({
     hash: withdrawTx,
     chainId: chainId
   });
-  const { isSuccess: harvestSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: harvestSuccess, data: harvestStatusData } = useWaitForTransactionReceipt({
     hash: harvestTx,
     chainId: chainId
   });
 
   useEffect(() => {
-    (async () => {
-      if (approveLandTx) {
-        if (approveLandSuccess) {
+    if (approveLandTx) {
+      if (approveStatusData) {
+        if (approveLandSuccess && isCcipDeposit) {
           setScreenLoadingStatus("Deposit Transaction in progress...")
+          setIsCcipDeposit(false)
           transfer(chainId, depositAmount, 0, 0, 500000)
         }
       }
-    })()
-  }, [approveLandTx, approveLandSuccess])
+    }
+  }, [approveLandTx, approveStatusData, approveLandSuccess])
 
   useEffect(() => {
     if (harvestTx) {
-      if (harvestSuccess) {
-        setScreenLoadingStatus("Claim Harvest Transaction success")
-      } else {
-        setScreenLoadingStatus("Claim Harvest Transaction failed")
+      if (harvestStatusData) {
+        if (harvestSuccess) {
+          setScreenLoadingStatus("Claim Harvest Transaction success")
+        } else {
+          setScreenLoadingStatus("Claim Harvest Transaction failed")
+        }
       }
     }
-  }, [harvestTx, harvestSuccess])
+  }, [harvestTx, harvestStatusData, harvestSuccess])
 
   useEffect(() => {
-    (async () => {
-      if (withdrawAllTx) {
+    if (withdrawAllTx) {
+      if (withdrawAllStatusData) {
         if (withdrawAllSuccess) {
           setScreenLoadingStatus("Deposit Transaction success")
         } else {
           setScreenLoadingStatus("Transaction failed")
         }
       }
-    })()
+    }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [withdrawAllTx, withdrawAllSuccess])
+  }, [withdrawAllTx, withdrawAllStatusData, withdrawAllSuccess])
 
   useEffect(() => {
-    (async () => {
-      if (transferTx) {
+    if (transferTx) {
+      if (transferStatusData) {
         if (transferSuccess) {
-          const receiptTx = await PROVIDERS[chainId].getTransactionReceipt(transferTx);
+          const receiptTx = PROVIDERS[chainId].getTransactionReceipt(transferTx);
           const messageId = receiptTx?.events.filter((item: any) => item.hasOwnProperty('args')).map((item: any) => item.args)[0][0]
           dispatch(updateCcipTransaction({
             walletAddress: address,
@@ -141,98 +145,98 @@ export default function useAutoVault(chainId: number, address: Address | undefin
           setScreenLoadingStatus("Transaction failed")
         }
       }
-    })()
+    }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [transferTx, transferSuccess])
+  }, [transferTx, transferStatusData, transferSuccess])
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (depositTx) {
+    try {
+      if (depositTx) {
+        if (depositStatusData) {
           if (depositSuccess) {
-            await refetchTotalSupply()
-            await refetchBalanceOfWBNB()
-            await refetchUserInfo()
-            await refetchPendingLand()
-            await refetchBalanceOfLandToken()
+            refetchTotalSupply()
+            refetchBalanceOfWBNB()
+            refetchUserInfo()
+            refetchPendingLand()
+            refetchBalanceOfLandToken()
             setScreenLoadingStatus("Deposit Transaction success")
           } else {
             setScreenLoadingStatus("Transaction failed")
           }
         }
-      } catch (error) {
-        setScreenLoadingStatus("Transaction failed")
-        console.log(error)
       }
-    })()
+    } catch (error) {
+      setScreenLoadingStatus("Transaction failed")
+      console.log(error)
+    }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [depositTx, depositSuccess])
+  }, [depositTx, depositStatusData, depositSuccess])
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (withdrawTx) {
+    try {
+      if (withdrawTx) {
+        if (withdrawStatusData) {
           if (withdrawSuccess) {
-            await refetchTotalSupply()
-            await refetchBalanceOfWBNB()
-            await refetchUserInfo()
-            await refetchPendingLand()
-            await refetchBalanceOfLandToken()
+            refetchTotalSupply()
+            refetchBalanceOfWBNB()
+            refetchUserInfo()
+            refetchPendingLand()
+            refetchBalanceOfLandToken()
             setScreenLoadingStatus("Withdraw Transaction success")
           } else {
             setScreenLoadingStatus("Transaction failed")
           }
         }
-      } catch (error) {
-        setScreenLoadingStatus("Transaction failed")
-        console.log(error)
       }
-    })()
+    } catch (error) {
+      setScreenLoadingStatus("Transaction failed")
+      console.log(error)
+    }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [withdrawTx, withdrawSuccess])
+  }, [withdrawTx, withdrawStatusData, withdrawSuccess])
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (approveLandTx) {
+    try {
+      if (approveLandTx) {
+        if (approveStatusData) {
           if (approveLandSuccess) {
-            await refetchTotalSupply()
-            await refetchBalanceOfWBNB()
-            await refetchUserInfo()
-            await refetchPendingLand()
-            await refetchBalanceOfLandToken()
+            refetchTotalSupply()
+            refetchBalanceOfWBNB()
+            refetchUserInfo()
+            refetchPendingLand()
+            refetchBalanceOfLandToken()
             setScreenLoadingStatus("Approve Transaction success")
           } else {
             setScreenLoadingStatus("Transaction failed")
           }
         }
-      } catch (error) {
-        setScreenLoadingStatus("Transaction failed")
-        console.log(error)
       }
-    })()
+    } catch (error) {
+      setScreenLoadingStatus("Transaction failed")
+      console.log(error)
+    }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [approveLandTx, approveLandSuccess])
+  }, [approveLandTx, approveStatusData, approveLandSuccess])
 
   const depositVault = (amount: BigNumberish) => {
     setDepositAmount(amount)
@@ -250,11 +254,13 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     
     if (chainId !== MAJOR_WORK_CHAIN.id) {
       if (ccipAllowance < amount) {
+        setIsCcipDeposit(true)
         approveLand(chainId, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId], amount)
       }
       setScreenLoadingStatus("Deposit Transaction in progress...")
       transfer(chainId, amount, 0, 0, 500000)
     } else {
+      setScreenLoadingStatus("Deposit Transaction in progress...")
       deposit(amount)
     }
   }
@@ -297,7 +303,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
   const approveVault = () => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approveLand(chainId, AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id], "1000000000000000000000000000000")
+    approveLand(chainId, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId], "1000000000000000000000000000000")
   }
 
   const clainBounty = () => {

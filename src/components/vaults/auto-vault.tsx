@@ -81,7 +81,7 @@ export default function AutoVault({
     autoReward: BigNumberish;
   }
   const minTransferAmount = useMinTransferAmount(chainId) as BigNumberish
-  const autoLandAllowance = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id]) as BigNumberish
+  const { data: autoLandAllowance } = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
 
   const ccipTransactions = useAppSelector(selectCcipTransactionCounts)
   const ccipPendingTransactions = useAppSelector(selectCcipPendingTransactions)

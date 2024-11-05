@@ -25,20 +25,20 @@ export default function useSellTokens(chainId: number, address: Address | undefi
 
   const { approve: approveRWA, data: rwaApproveTx } = useApproveOfRwaContract(chainId)
 
-  const { isSuccess: rwaApproveSuccess, isLoading: rwaApproveLoading } = useWaitForTransactionReceipt({
+  const { isSuccess: rwaApproveSuccess, data: rwaApproveStatusData } = useWaitForTransactionReceipt({
     hash: rwaApproveTx,
     chainId: chainId
   });
 
   const { approve: approveLand, data: landApproveTx } = useApproveOfLandContract()
 
-  const { isSuccess: landApproveSuccess, isLoading: landApproveLoading } = useWaitForTransactionReceipt({
+  const { isSuccess: landApproveSuccess, data: landApproveStatusData } = useWaitForTransactionReceipt({
     hash: landApproveTx,
   });
 
   const { sellRwa, data: sellTx } = useSellRwa(chainId)
 
-  const { isSuccess: sellSuccess, isLoading: sellLoading } = useWaitForTransactionReceipt({
+  const { isSuccess: sellSuccess, data: sellStatusData } = useWaitForTransactionReceipt({
     hash: sellTx,
   });
 
@@ -46,15 +46,17 @@ export default function useSellTokens(chainId: number, address: Address | undefi
     try {
       (async () => {
         if (rwaApproveTx) {
-          await rwaAllowanceRefetch()
-          if (BigInt(rwaAllowance) < amount) {
-            return ''
-          }
-    
-          if (rwaApproveSuccess) {
-            if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
-              await approveLand(chainId, LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id], landFeeAmount)
-              await landAllowanceRefetch()
+          if (rwaApproveStatusData) {
+            await rwaAllowanceRefetch()
+            if (BigInt(rwaAllowance) < amount) {
+              return ''
+            }
+      
+            if (rwaApproveSuccess) {
+              if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
+                await approveLand(chainId, LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id], landFeeAmount)
+                await landAllowanceRefetch()
+              }
             }
           }
         }
@@ -63,20 +65,22 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       setTransactionStatus("Transaction failed")
       console.log(error)
     }
-  }, [rwaApproveTx, rwaApproveSuccess])
+  }, [rwaApproveTx, rwaApproveStatusData, rwaApproveSuccess])
 
   useEffect(() => {
     try {
       (async () => {
         if (landApproveTx) {
-          await landAllowanceRefetch()
-          if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
-            window.alert("Please approve sufficient allowance.")
-            setTransactionStatus("Insufficient Allowance")
-          }
-    
-          if (landApproveSuccess) {
-            await sellRwa(amount)
+          if (landApproveStatusData) {
+            await landAllowanceRefetch()
+            if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
+              window.alert("Please approve sufficient allowance.")
+              setTransactionStatus("Insufficient Allowance")
+            }
+      
+            if (landApproveSuccess) {
+              await sellRwa(amount)
+            }
           }
         }
       })()
@@ -84,17 +88,19 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       setTransactionStatus("Transaction failed")
       console.log(error)
     }
-  }, [landApproveTx, landApproveSuccess])
+  }, [landApproveTx, landApproveStatusData, landApproveSuccess])
 
   useEffect(() => {
     if (sellTx) {
-      if (sellSuccess) {
-        setTransactionStatus("Transaction Successful")
-      } else {
-        setTransactionStatus("Transaction failed")
+      if (sellStatusData) {
+        if (sellSuccess) {
+          setTransactionStatus("Transaction Successful")
+        } else {
+          setTransactionStatus("Transaction failed")
+        }
       }
     }
-  }, [sellTx, sellSuccess])
+  }, [sellTx, sellStatusData, sellSuccess])
 
   const sellTokens = async () => {
     try {

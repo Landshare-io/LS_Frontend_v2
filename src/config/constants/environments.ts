@@ -43,6 +43,7 @@ export const PROVIDERS: {
   421614: getDefaultProvider(PROVIDER_URLS['42161'])
 }
 export const ADDRESS_BOOK_ID = 731780 // 18c3953f93f00ab7003571dbd4e0a915
+export const HOUSE_NFT_CONTRACT = "0x08116b6B5b561e881b0B980ddCd12cFaB356537b" as Address
 export const LAND_TOKEN_V1_CONTRACT_ADDRESS = "0x9D986A3f147212327Dd658F712d5264a73a1fdB0" as Address
 export const LP_TOKEN_V1_CONTRACT_ADDRESS = "0x468CDe4aD48cbAfA3cDfb68Fd9f2c114DDfE6c08" as Address
 export const PSC_ROUTER_CONTRACT_ADDRESS = "0x10ED43C718714eb63d5aA57B78B54704E256024E" as Address
@@ -79,7 +80,7 @@ export const LIVE_COIN_API_KEY= '95ce49d3-3e89-475d-b61e-6638a002b1fe'
 export const ZERO_ID_WIDGET_API_KEY = '10000000-0000-0000-0000-7f9a2af16a1c'
 export const ZERO_ID_WIDGET_VERIFIER_URL = 'https://landshare-zeroid-verdict.onrender.com/verdict'
 export const ZERO_ID_WIDGET_ENV = 'zeroid'
-export const ADMIN_WALLET_ADDRESS = ""
+export const ADMIN_WALLET_ADDRESS = "" as Address
 export const PREMIUM_NFT_CONTRACT_ADDRESS: Record<string, MULTI_CHAIN_CONTRACT_TYPE> = {
   "Porcelain Tile": {
     56: '0x7E96B1A21Cc702D495eD9c430A4B87CB1e163ab3' as Address,

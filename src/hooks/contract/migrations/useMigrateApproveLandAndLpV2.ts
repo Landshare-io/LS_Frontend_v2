@@ -23,60 +23,64 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
   const { data: lpTokenV2Balance } = useBalanceOfLpTokenV2({ chainId: bsc.id, address }) as { data: BigNumberish }
 
   const { approve: approveLand, data: approveLandTx } = useApproveLandToken()
-  const { isSuccess: approveLandSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: approveLandSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveLandTx,
     chainId: bsc.id
   });
 
   const { approve: approveLp, data: approveLpTx } = useApproveOfLpTokenV2(bsc.id)
-  const { isSuccess: approveLpSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: approveLpSuccess, data: approveLpStatusData } = useWaitForTransactionReceipt({
     hash: approveLpTx,
     chainId: bsc.id
   });
 
   useEffect(() => {
     if (approveLandTx) {
-      if (approveLandSuccess) {
-        try {
-          setScreenLoadingStatus("Transaction Completed.")
-          setIsSuccessApprove(true);
-        } catch (error) {
-          console.log("approve error", error)
-          setIsSuccessApprove(false);
-          setScreenLoadingStatus("Transaction Failed.")
-        }
-
-        return () => {
-          setTimeout(() => {
-            setScreenLoadingStatus("")
-          }, 1000);
+      if (approveStatusData) {
+        if (approveLandSuccess) {
+          try {
+            setScreenLoadingStatus("Transaction Completed.")
+            setIsSuccessApprove(true);
+          } catch (error) {
+            console.log("approve error", error)
+            setIsSuccessApprove(false);
+            setScreenLoadingStatus("Transaction Failed.")
+          }
+  
+          return () => {
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
+          }
         }
       }
     }
 
-  }, [approveLandTx, approveLandSuccess])
+  }, [approveLandTx, approveStatusData, approveLandSuccess])
 
   useEffect(() => {
     if (approveLpTx) {
-      if (approveLpSuccess) {
-        try {
-          setScreenLoadingStatus("Transaction Completed.")
-          setIsSuccessApprove(true);
-        } catch (error) {
-          console.log("approve error", error)
-          setIsSuccessApprove(false);
-          setScreenLoadingStatus("Transaction Failed.")
-        }
-
-        return () => {
-          setTimeout(() => {
-            setScreenLoadingStatus("")
-          }, 1000);
+      if (approveLpStatusData) {
+        if (approveLpSuccess) {
+          try {
+            setScreenLoadingStatus("Transaction Completed.")
+            setIsSuccessApprove(true);
+          } catch (error) {
+            console.log("approve error", error)
+            setIsSuccessApprove(false);
+            setScreenLoadingStatus("Transaction Failed.")
+          }
+  
+          return () => {
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
+          }
         }
       }
     }
 
-  }, [approveLpTx, approveLpSuccess])
+  }, [approveLpTx, approveLpStatusData, approveLpSuccess])
 
   async function approveLandV2(approveAddress: Address) {
     if (isConnected == true) {

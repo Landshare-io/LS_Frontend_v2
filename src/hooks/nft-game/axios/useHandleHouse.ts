@@ -48,11 +48,11 @@ export default function useHandleHouse(
   const { sendTransaction, data: sendTransactionTx } = useSendTransaction()
   const { getHouse } = useGetHouse(house.id)
 
-  const { isSuccess: approveForAllSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: approveForAllSuccess, data: approveForAllStatusData } = useWaitForTransactionReceipt({
     hash: setApprovalForAllTx,
     chainId: bsc.id
   });
-  const { isSuccess: approveSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: bsc.id
   });
@@ -61,11 +61,13 @@ export default function useHandleHouse(
     (async () => {
       try {
         if (setApprovalForAllTx) {
-          if (approveForAllSuccess) {
-            await setHouseToOnSale();
-          } else {
-            setOnSaleLoading(false);
+          if (approveForAllStatusData) {
+            if (approveForAllSuccess) {
+              await setHouseToOnSale();
+            } else {
+              setOnSaleLoading(false);
               notifyError("Approve error");
+            }
           }
         }
       } catch (error) {
@@ -74,32 +76,34 @@ export default function useHandleHouse(
         console.log(error)
       }
     })()
-  }, [setApprovalForAllTx, approveForAllSuccess])
+  }, [setApprovalForAllTx, approveForAllStatusData, approveForAllSuccess])
 
   useEffect(() => {
     (async () => {
       try {
         if (approveTx) {
-          if (approveSuccess) {
-            const { data } = await axios.post('/house/set-sale', {
-              hosueId: house.id,
-              setSale: isSale,
-              price: salePrice
-            })
-    
-            setHouse((prevState: any) => ({
-              ...prevState,
-              onSale: data.onSale,
-              salePrice: data.salePrice
-            }));
-    
-            setSaleOpen(false);
-            setOnSaleLoading(false);
-            notifySuccess(isSale ? `NFT successfully listed for sale` : `Successfully removed NFT from marketplace`);
-          } else {
-            setSaleOpen(false);
-            setOnSaleLoading(false);
-            notifyError("Approve error");
+          if (approveStatusData) {
+            if (approveSuccess) {
+              const { data } = await axios.post('/house/set-sale', {
+                hosueId: house.id,
+                setSale: isSale,
+                price: salePrice
+              })
+      
+              setHouse((prevState: any) => ({
+                ...prevState,
+                onSale: data.onSale,
+                salePrice: data.salePrice
+              }));
+      
+              setSaleOpen(false);
+              setOnSaleLoading(false);
+              notifySuccess(isSale ? `NFT successfully listed for sale` : `Successfully removed NFT from marketplace`);
+            } else {
+              setSaleOpen(false);
+              setOnSaleLoading(false);
+              notifyError("Approve error");
+            }
           }
         }
       } catch (error: any) {
@@ -109,7 +113,7 @@ export default function useHandleHouse(
         notifyError(error.response.data.message);
       }
     })()
-  }, [approveTx, approveSuccess])
+  }, [approveTx, approveStatusData, approveSuccess])
 
   useEffect(() => {
     (async () => {
