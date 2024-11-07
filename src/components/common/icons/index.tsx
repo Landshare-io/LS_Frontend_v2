@@ -271,3 +271,49 @@ export const SlickPrevIcon = () => (
     </defs>
   </svg>
 );
+
+export const SelectarrowIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    width="9"
+    height="8"
+    viewBox="0 0 9 8"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M9 0.289062L0 0.289063L4.5 7.96313L9 0.289062Z" fill="#808080" />
+  </svg>
+);
+
+export const NextLabelIconMarketPlaceIcon = () => (
+  <svg
+    width="20"
+    height="16"
+    viewBox="0 0 20 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      opacity="0.8"
+      d="M19.7071 7.29289C20.0976 7.68342 20.0976 8.31658 19.7071 8.70711L13.3431 15.0711C12.9526 15.4616 12.3195 15.4616 11.9289 15.0711C11.5384 14.6805 11.5384 14.0474 11.9289 13.6569L17.5858 8L11.9289 2.34315C11.5384 1.95262 11.5384 1.31946 11.9289 0.928932C12.3195 0.538408 12.9526 0.538408 13.3431 0.928932L19.7071 7.29289ZM0 7L19 7V9L0 9L0 7Z"
+      fill="#7B7B7B"
+    />
+  </svg>
+);
+
+export const PrevLabelIconMarketPlaceIcon = () => (
+  <svg
+    width="20"
+    height="16"
+    viewBox="0 0 20 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ transform: 'rotate(180deg)' }}
+  >
+    <path
+      opacity="0.8"
+      d="M0.292892 7.29289C-0.0976315 7.68342 -0.0976315 8.31658 0.292892 8.70711L6.65685 15.0711C7.04738 15.4616 7.68054 15.4616 8.07107 15.0711C8.46159 14.6805 8.46159 14.0474 8.07107 13.6569L2.41421 8L8.07107 2.34315C8.46159 1.95262 8.46159 1.31946 8.07107 0.928932C7.68054 0.538408 7.04738 0.538408 6.65685 0.928932L0.292892 7.29289ZM20 7L1 7V9L20 9V7Z"
+      fill="#7B7B7B"
+    />
+  </svg>
+);
