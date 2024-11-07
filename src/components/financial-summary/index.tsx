@@ -155,7 +155,7 @@ export default function FinancialSummary() {
                   <span
                     className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}
                   >
-                    {Number(formatEther(rwaPrice)) === undefined ||
+                    {Number(formatEther(rwaPrice ?? 0)) === undefined ||
                     isConnected === false
                       ? "0"
                       : `${parseFloat(balance?.formatted ?? 0)}`}
@@ -231,7 +231,7 @@ export default function FinancialSummary() {
                         <span
                           className={`text-[24px] leading-[30px] text-text-primary ${BOLD_INTER_TIGHT.className}`}
                         >
-                          {Number(formatEther(rwaPrice)) === undefined ||
+                          {Number(formatEther(rwaPrice ?? 0)) === undefined ||
                           isConnected === false
                             ? "0"
                             : `${parseFloat(balance?.data?.formatted)}`}
@@ -441,7 +441,7 @@ export default function FinancialSummary() {
               <PropertyItem
                 property={{
                   title: "Token Price",
-                  value: Number(formatEther(rwaPrice)).toLocaleString(
+                  value: Number(formatEther(rwaPrice ?? 0)).toLocaleString(
                     undefined,
                     { maximumFractionDigits: 4 }
                   ),
