@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import { BOLD_INTER_TIGHT } from "../config/constants/environments";
 import Logo from "../components/common/logo";
+import YouOwn from '../components/common/you-own';
 
 const Custom404: NextPage = () => {
   return (
