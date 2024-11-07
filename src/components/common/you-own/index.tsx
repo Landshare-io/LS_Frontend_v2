@@ -57,11 +57,11 @@ export default function YouOwn(){
                 {show && (
                   <div className="flex flex-wrap justify-between gap-3 w-full px-3">
                     <div className="flex items-center w-[150px] lg:w-[120px]">
-                      <div className="w-8 h-8">
+                      <div className="size-[48px] flex items-center">
                         {theme == 'dark' ? <img src={LandshareLogo_Dark}></img> : <LogoIcon />}
                       </div>
                       <span
-                        className={`font-bold flex flex-col  pl-2 pr-3 text-[16px] text-text-primary`}
+                        className={`font-bold flex flex-col pl-2 pr-3 text-[16px] text-text-primary`}
                       >
                         {numeral(formatEther(landTokenBalance)).format("0.[00]").toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                         <span className="text-[14px] text-text-primary font-medium"> LAND</span>
