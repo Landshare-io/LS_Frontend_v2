@@ -74,7 +74,7 @@ export default function SwapToken() {
 
   const { data: balance } = useBalance({
     address: address,
-    token: RWA_CONTRACT_ADDRESS[bsc.id],
+    token: RWA_CONTRACT_ADDRESS[chainId],
     chainId: chainId,
   }) as { data: any };
 
@@ -85,7 +85,7 @@ export default function SwapToken() {
   }) as { data: any };
 
   const { data: poolBalance } = useBalance({
-    address: RWA_POOL_CONTRACT_ADDRESS[bsc.id],
+    address: RWA_POOL_CONTRACT_ADDRESS[chainId],
     token: USDC_ADDRESS[chainId],
     chainId: chainId,
   }) as { data: any };
@@ -132,10 +132,18 @@ export default function SwapToken() {
     buyLANDAmount,
     RWATokenAmount
   );
+  const buyTokenAmount = useBuyTokenView(
+    chainId,
+    RWATokenAmount,
+    USDC_ADDRESS[chainId]
+  ) as any;
 
   useEffect(() => {
-    setUsdcAmount(Number(formatEther(rwaPrice)) * RWATokenAmount);
-  }, [rwaPrice, RWATokenAmount]);
+    console.log(rwaPrice, RWATokenAmount, Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount)
+    setUsdcAmount(Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount);
+    setBuyLANDAmount(buyTokenAmount.amountOfLAND)
+    setBuyUSDCAmount(buyTokenAmount.amountOfStableCoin)
+  }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
 
   useEffect(() => {
     if (isSTAPShow) {
@@ -154,12 +162,6 @@ export default function SwapToken() {
       );
     }
   }, [isSTAPShow]);
-
-  const buyTokenAmount = useBuyTokenView(
-    chainId,
-    RWATokenAmount,
-    USDC_ADDRESS[chainId]
-  ) as any;
 
   const customModalStyles = {
     content: {
@@ -396,7 +398,7 @@ export default function SwapToken() {
                     {rwaPrice == undefined || isConnected === false
                       ? "0"
                       : `${parseFloat(balance?.formatted)} ($${(
-                          Number(formatEther(rwaPrice)) *
+                          Number(formatEther(rwaPrice ?? 0)) *
                           parseFloat(balance?.formatted)
                         ).toLocaleString(undefined, {
                           minimumFractionDigits: 2,
@@ -453,7 +455,7 @@ export default function SwapToken() {
                     $
                     {rwaPrice == 0
                       ? "Loading..."
-                      : Number(formatEther(rwaPrice)).toLocaleString(
+                      : Number(formatEther(rwaPrice ?? 0)).toLocaleString(
                           undefined,
                           { minimumFractionDigits: 4 }
                         )}
@@ -581,7 +583,7 @@ export default function SwapToken() {
                       {rwaPrice == undefined
                         ? "0"
                         : `${parseFloat(balance?.formatted)} ($${(
-                            Number(formatEther(rwaPrice)) *
+                            Number(formatEther(rwaPrice ?? 0)) *
                             parseFloat(balance?.formatted)
                           ).toLocaleString(undefined, {
                             minimumFractionDigits: 2,
@@ -711,7 +713,7 @@ export default function SwapToken() {
                         }
                         onClick={sellTokens}
                         textClassName="text-[#fff]"
-                        className="w-fll mb-[16px]"
+                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px]"
                       >
                         {RWATokenAmount && usdcAmount && landFeeAmount
                           ? RWATokenAmount > parseFloat(balance?.formatted)
@@ -756,7 +758,7 @@ export default function SwapToken() {
                           setIsSTAPshow(true);
                         }}
                         textClassName="text-[#fff]"
-                        className="w-fll mb-[16px]"
+                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px]"
                       >
                         {RWATokenAmount && buyLANDAmount && usdcAmount
                           ? Number(formatEther(buyLANDAmount.toString())) >
@@ -778,7 +780,7 @@ export default function SwapToken() {
                     rel="noopener noreferrer"
                     className="text-decoration-none"
                   >
-                    <Button outlined className="w-full">
+                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px]">
                       Trade on DS Swap
                     </Button>
                   </a>
@@ -998,7 +1000,7 @@ export default function SwapToken() {
         style={customModalStyles}
       >
         <div className="flex w-full justify-between items-center pl-4 z-10 bg-secondary">
-          <div className="text-[16px] md:text-[24px]">
+          <div className={`text-[16px] md:text-[24px] ${BOLD_INTER_TIGHT.className}`}>
             Security Token Purchase Agreement
           </div>
           <div className="flex justify-end px-[16px] pt-[16px] pb-3">
@@ -1058,7 +1060,7 @@ export default function SwapToken() {
               />
               <label
                 htmlFor="custom-checkbox"
-                className="before:content-[''] before:inline-block before:absolute before:w-[20px] before:h-[20px] before:left-0 before:ml-[-20px] before:border before:border-gray-700 before:rounded before:bg-white before:transition before:ease-in-out peer-checked:before:bg-red-500 text-[16px] font-bold text-black-700 cursor-pointer"
+                className="pl-[25px] before:content-[''] before:inline-block before:absolute before:w-[20px] before:h-[20px] before:left-0 before:border before:border-gray-700 before:rounded before:bg-white before:transition before:ease-in-out peer-checked:before:bg-red-500 text-[16px] font-bold text-black-700 cursor-pointer"
               >
                 Acknowledge and sign
               </label>
@@ -1066,7 +1068,7 @@ export default function SwapToken() {
           </div>
           <div>
             <Button
-              className="flex justify-center items-center"
+              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px]"
               onClick={async () => {
                 setIsSTAPshow(false);
                 buyOrSell == "Buy" ? buyTokens() : sellTokens();
