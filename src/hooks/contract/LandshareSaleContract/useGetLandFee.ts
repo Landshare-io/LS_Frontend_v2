@@ -6,17 +6,17 @@ import { BigNumberish } from "ethers";
 
 export default function useGetLandFee(chainId: number, usdcAmount: BigNumberish) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
+    address: LANDSHARE_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareSaleAbi,
     functionName: "getLANDFee",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [usdcAmount],
   })
 
-  if (isLoading) return false
+  if (isLoading) return 0
   if (isError) {
     console.log('Fetching LandshareSaleContract useGetLandFee error', error)
-    return false
+    return 0
   }
 
   return data

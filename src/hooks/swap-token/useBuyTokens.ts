@@ -13,7 +13,7 @@ import { BigNumberish } from 'ethers';
 export default function useBuyTokens(chainId: number, address: Address | undefined, landAmount: BigNumberish, amount: number) {
   const [transactionStatus, setTransactionStatus] = useState('')
 
-  const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id]) as {
+  const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]) as {
     data: BigNumberish,
     refetch: Function
   }
@@ -25,7 +25,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     chainId: chainId
   });
 
-  const { data: landAllowance, refetch: landAllowanceRefetch } = useAllowanceOfLandContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id]) as {
+  const { data: landAllowance, refetch: landAllowanceRefetch } = useAllowanceOfLandContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]) as {
     data: BigNumberish,
     refetch: Function
   }
@@ -46,16 +46,16 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     (async () => {
       try {
         if (usdcApproveTx) {
+          await usdcAllowanceRefetch()
+          // if (BigInt(usdcAllowance) < amount) {
+          //   window.alert("Please approve sufficient allowance.")
+          //   setTransactionStatus("Insufficient Allowance")
+          // }
+
           if (usdcApproveStatusData) {
-            await usdcAllowanceRefetch()
-            if (BigInt(usdcAllowance) < amount) {
-              window.alert("Please approve sufficient allowance.")
-              setTransactionStatus("Insufficient Allowance")
-            }
-      
             if (usdcApproveSuccess) {
               if (BigInt(landAllowance) < BigInt(amount)) {
-                await approveLand(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id], landAmount)
+                await approveLand(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], landAmount)
                 await landAllowanceRefetch()
               }
             }
@@ -72,13 +72,13 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     (async () => {
       try {
         if (landApproveTx) {
+          await landAllowanceRefetch()
+          // if (BigInt(landAllowance) < BigInt(landAmount)) {
+          //   window.alert("Please approve sufficient allowance.")
+          //   setTransactionStatus("Insufficient Allowance")
+          // }
+
           if (landApproveStatusData) {
-            await landAllowanceRefetch()
-            if (BigInt(landAllowance) < BigInt(landAmount)) {
-              window.alert("Please approve sufficient allowance.")
-              setTransactionStatus("Insufficient Allowance")
-            }
-      
             if (landApproveSuccess) {
               await buyToken(amount, USDC_ADDRESS[chainId])
             }
@@ -107,7 +107,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     try {
       setTransactionStatus("Transaction Pending...")
       if (BigInt(usdcAllowance) < amount) {
-        await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id], amount);
+        await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], amount);
         await usdcAllowanceRefetch()
       }
     } catch (error) {
