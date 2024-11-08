@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAccount, useChainId } from "wagmi";
+import { useAccount } from "wagmi";
 import Topbar from "../common/topbar";
 import YouOwn from "../common/you-own";
 import MarketplaceItems from "./items"
@@ -11,13 +11,11 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 export default function MarketplacePage() {
-  const chainId = useChainId();
-  const { isConnected, address } = useAccount();
+  const { isConnected } = useAccount();
   const [isItemsLoading, setIsItemsLoading] = useState(true);
   const {
     getProducts,
     products,
-    premiumProducts
   } = useGetMarketplaceItems(setIsItemsLoading)
   const { checkIsAuthenticated } = useLogin()
   const {

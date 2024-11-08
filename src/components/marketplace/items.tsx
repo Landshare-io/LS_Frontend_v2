@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import ReactLoading from "react-loading";
-import MarketplaceItem from "./MarketplaceItem";
+import MarketplaceItem from "./item";
 import {
   NextLabelIconMarketPlaceIcon,
   PrevLabelIconMarketPlaceIcon,
