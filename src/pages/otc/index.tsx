@@ -13,7 +13,7 @@ import {
 import FullPageLoading from "../../components/common/full-page-loading";
 import WalletNotConnected from "../../components/common/wallet-not-connet";
 import WhiteFooter from "../../components/common/white-footer";
-
+import RequestsCard from "../../components/otc/request-card";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 export default function OTC() {
@@ -41,7 +41,7 @@ export default function OTC() {
     }
   };
 
-  const completeRequest = async (requestIdx: string) => {
+  const completeRequest = async (requestIdx: string | number) => {
     setIsLoading(true);
 
     const docRef = collection(db, "otcRequests");
@@ -62,7 +62,7 @@ export default function OTC() {
     getOTCData();
   };
 
-  const rejectRequest = async (requestIdx: string) => {
+  const rejectRequest = async (requestIdx: string | number) => {
     setIsLoading(true);
 
     const docRef = collection(db, "otcRequests");
