@@ -6,7 +6,7 @@ import NftDetails from "./detail";
 import Topbar from "../../common/topbar";
 import YouOwn from "../../common/you-own";
 import MainTabs from "../../components/common/tab/Tab";
-import PremiumNfts from "../../mint-premium-nfts";
+import GamePremiumNfts from "../game-premium-nfts";
 import UpgradeListTable from "./upgrade-list-table";
 
 import ProductionUpgrade from "../production-upgrade";
@@ -48,9 +48,8 @@ const NftPage = () => {
     {
       id: "Premium Upgrades",
       children: (
-        <PremiumNfts
+        <GamePremiumNfts
           house={house}
-          getHouse={getHouse}
         />
       ),
     },
