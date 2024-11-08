@@ -1,77 +1,54 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import numeral from "numeral";
 import { useChainId, useAccount } from "wagmi";
 import ReactLoading from "react-loading";
-
 import useBuyHouse from "../../hooks/nft-game/axios/useBuyHouse";
+import ReparingStatus from "../nft-game/reparing-status";
+import Button from "../common/button";
+import { InfoIconMarketPlaceItem } from "../common/icons/index";
+import useCheckHasLandscaping from "../../hooks/nft-game/axios/useCheckHasLandscaping";
+import useCheckHasGarden from "../../hooks/nft-game/axios/useCheckHasGarden";
+import useGetPrice from "../../hooks/get-apy/useGetPrice";
+import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import HouseNft from "../../../public/img/house/house_big.bmp";
+import HouseRareNft from "../../../public/img/house/house_rare_big.bmp";
+import HouseLandNft from "../../../public/img/house/house_land_big.bmp";
+import HouseLandRareNft from "../../../public/img/house/house_land_rare_big.bmp";
+import HouseGardenNft from "../../../public/img/house/house_garden_big.bmp";
+import HouseGardenRareNft from "../../../public/img/house/house_garden_rare_big.bmp";
+import HouseBNft from "../../../public/img/house/houseB.bmp";
+import HouseBRareNft from "../../../public/img/house/houseB_rare.bmp";
+import HouseBLandNft from "../../../public/img/house/houseB_land.bmp";
+import HouseBLandRareNft from "../../../public/img/house/houseB_land_rare.bmp";
+import HouseBGardenNft from "../../../public/img/house/houseB_garden.bmp";
+import HouseBGardenRareNft from "../../../public/img/house/houseB_garden_rare.bmp";
+import HouseCNft from "../../../public/img/house/houseC.bmp"
+import HouseCRareNft from "../../../public/img/house/houseC_rare.bmp"
 
-import { withRouter } from "react-router-dom";
-import backendAxios from "../../../helper/axios";
-import { useGlobalContext } from "../../../contexts/GlobalContext";
-import { useLandshareNftContext } from "../../../contexts/LandshareNftContext";
-import { ReparingStatus } from "../../Nft/reparingStatus/ReparingStatus";
-import HouseNft from "../../../assets/img/house/house_big.bmp";
-import HouseRareNft from "../../../assets/img/house/house_rare_big.bmp";
-import HouseLandNft from "../../../assets/img/house/house_land_big.bmp";
-import HouseLandRareNft from "../../../assets/img/house/house_land_rare_big.bmp";
-import HouseGardenNft from "../../../assets/img/house/house_garden_big.bmp";
-import HouseGardenRareNft from "../../../assets/img/house/house_garden_rare_big.bmp";
-import HouseBNft from "../../../assets/img/house/houseB.bmp";
-import HouseBRareNft from "../../../assets/img/house/houseB_rare.bmp";
-import HouseBLandNft from "../../../assets/img/house/houseB_land.bmp";
-import HouseBLandRareNft from "../../../assets/img/house/houseB_land_rare.bmp";
-import HouseBGardenNft from "../../../assets/img/house/houseB_garden.bmp";
-import HouseBGardenRareNft from "../../../assets/img/house/houseB_garden_rare.bmp";
-import HouseCNft from "../../../assets/img/house/houseC.bmp"
-import HouseCRareNft from "../../../assets/img/house/houseC_rare.bmp"
+interface MarketplaceItemProps {
+  product: any;
+  getProducts: Function;
+}
 
-import "./MarketplaceItem.css";
-import { InfoIconMarketPlaceItem } from "../../../components/common/Icons";
-import { ethers } from "ethers";
-
-const MarketplaceItem = ({
+export default function MarketplaceItem({
   product,
   getProducts,
-}) => {
+}: MarketplaceItemProps) {
   const { address } = useAccount()
   const chainId = useChainId();
-  const {
-    signer,
-    account,
-    provider,
-    notifySuccess,
-    notifyError,
-    landTokenV2Contract,
-    userResource,
-    setUserResource,
-    checkHasLandscaping,
-    checkHasGarden,
-    price
-  } =
-    useGlobalContext();
-  const {
-    contract: { marketplaceContract },
-    address: { marketplaceAddress },
-  } = useLandshareNftContext();
   const [isLoading, setIsLoading] = useState(false);
   const totalMultiplier = numeral(product.multiplier).format("0.[00]").toString()
   const [tokenPriceUSD, setTokenPriceUSD] = useState("0")
-  const [hasLandscaping, setHasLandscaping] = useState(false)
-  const [hasGarden, setHasGarden] = useState(false)
-
+  const hasLandscaping = useCheckHasLandscaping(product.id)
+  const hasGarden = useCheckHasGarden(product.id)
+  const { price } = useGetPrice(chainId)
   const { buyProduct } = useBuyHouse(chainId, product, address, setIsLoading, getProducts);
 
   useEffect(() => {
     if (price) {
       setTokenPriceUSD(numeral(Number(price)).format("0.[000]"))
-    // (async () => {
-    //   const tokenPriceData = await axios(gameSetting.landshareCostApi);
-
-    //   setTokenPriceUSD(numeral(
-    //     Number(tokenPriceData.data.landshare.usd)
-    //   ).format("0.[000]"));
-    // })()
     }
     
   }, [price])
@@ -127,94 +104,81 @@ const MarketplaceItem = ({
     return url;
   };
 
-  useEffect(() => {
-    (async () => {
-      if (!product.isActivated) return
-
-      const tempHasLandscaping = await checkHasLandscaping(product.id)
-      const tempHasGarden = await checkHasGarden(product.id)
-
-      setHasLandscaping(tempHasLandscaping)
-      setHasGarden(tempHasGarden)
-    })()
-  }, [product])
-
   return (
-    <div className="marketplace-item cards-hover-animation d-flex flex-column">
-      <div className="marketplace-header position-relative">
-        <div className="marketplace-title position-absolute top-0 w-100 text-center p-2">
+    <div className="w-full md:max-w-[251px] rounded-[16px] overflow-hidden duration-700 flex flex-col">
+      <div className="h-[249px] relative">
+        <div className={`bg-[#c4c4c433] text-[#fff] rounded-[16px] absolute top-0 w-full text-center p-2 ${BOLD_INTER_TIGHT.className}`}>
           {getHouseName()}
         </div>
-    
-        <img
+        <Image
           src={getHouseImageUrl()}
           alt="marketplace-image-house"
-          className="marketplace_img-house "
+          className="w-full h-auto"
         />
      
-        <div className="d-flex align-items-end position-absolute w-100 justify-content-between card-current-multipler">
-          <div className="current-multiplier">
-            <span className="value fs-14 fw-600">
+        <div className="flex items-end absolute w-full justify-between px-[10px] bottom-[10px]">
+          <div>
+            <span className="text-[#fff] text-[14px] font-semibold leading-[18px] align-text-bottom">
               x
               {numeral(totalMultiplier).format("0.[0]").toString()}{" "}
             </span>
-            <span className="label fw-600">LAND &nbsp;Yield/Year</span>
+            <span className="text-[#fff] text-[10px] font-semibold pl-[2pz] align-text-bottom">LAND &nbsp;Yield/Year</span>
           </div>
-          <div className="mb-1 info-icon">
-            <Link to={generateURL()}>
+          <div className="mb-1">
+            <Link href={generateURL()}>
               <InfoIconMarketPlaceItem />
             </Link>
           </div>
         </div>
       </div>
-      <div className="nft-house-body d-flex flex-column p-3">
-        <div className="nft-house-content">
-          <div className="d-flex justify-content-between nft-house-durability align-items-end pb-2">
-            <div className="house-item-label1 fs-15 fw-600 d-flex justify-content-between pe-1 dark:text-tw-text-secondary">
+      <div className="bg-[#6f8e9d66] p-[12px] flex flex-col">
+        <div>
+          <div className="flex justify-between items-end pb-2">
+            <div className="w-[50%] text-[15px] font-semibold flex justify-between pr-1 dark:text-text-secondary">
               <span>Durability</span>
             </div>
             <ReparingStatus
               max={product.maxDurability}
               now={product.lastDurability}
-              usePercentWidth={true}
             />
           </div>
         </div>
-        <div className="d-flex justify-content-between align-items-end pe-2 pt-1 ">
-          <div className="house-item-label2 fs-xxs fw-600 dark:text-tw-text-secondary">Remaining</div>
-          <div className="house-item-value fs-xxs fw-600">
+        <div className="flex justify-between items-end pr-2 pt-1 ">
+          <div className="text-[#0b6c96] text-[14px] font-semibold dark:text-text-secondary">Remaining</div>
+          <div className="text-[#00000080] text-[14px] font-semibold">
             {(Number(product.tokenHarvestLimit) + Number(product.extendedBalance) - Number(product.totalHarvestedToken)).toFixed(2)}
           </div>
         </div>
-        <div className="d-flex pt-3 w-100 justify-content-sm-end marketplace-buy market-buy">
-          <div className="d-flex switch-btn  active align-items-center position-relative">
-            <div className="d-block fs-14 text-black-700 align-items-end justify-content-center">
+        <div className="flex pt-3 w-full justify-end market-buy">
+          <div className="flex px-[5px] active items-center relative border-0">
+            <div className="block text-[14px] text-black-700 items-end justify-center">
               <div>
-                <span className="fs-14 fw-600">
+                <span className="text-[14px] font-semibold">
                   {product.salePrice}
                 </span>
-                <span className="fs-10 fw-600 ms-1"> LAND</span>
+                <span className="text-[10px] font-semibold ms-1"> LAND</span>
               </div>
               <div>
-                <span className="fs-12 fw-500 text-muted">
-                  ${(product.salePrice * tokenPriceUSD).toFixed(2)}
+                <span className="text-[12px] font-normal">
+                  ${(product.salePrice * Number(tokenPriceUSD)).toFixed(2)}
                 </span>
-                <span className="fs-10 fw-500 ms-1 text-muted">USD</span>
+                <span className="text-[10px] font-normal ml-1">USD</span>
               </div>
             </div>
-            <button
+            <Button
               onClick={buyProduct}
               disabled={
                 isLoading ||
-                product.seller.toLowerCase() == account.toLowerCase() ||
+                product.seller.toLowerCase() == address?.toString().toLowerCase() ||
                 product.state == 1
               }
-              className={`btn btn-switch-sale fs-16 fw-700 d-flex align-items-center justify-content-center position-absolute 
-              ${product.seller.toLowerCase() == account.toLowerCase() ||
+              className={`w-[115px] bg-[#8f8f8f] border-[2px] border-[#8f8f8f] flex items-center justify-center absolute 
+              ${product.seller.toLowerCase() == address?.toString().toLowerCase() ||
                   product.state == 1
-                  ? "item-owned"
+                  ? "!bg-[#0B6C96] !border-[#0B6C96]"
                   : ""
                 }`}
+              textClassName={`text-[16px] ${BOLD_INTER_TIGHT.className}`}
             >
               {isLoading ? (
                 <ReactLoading
@@ -225,17 +189,15 @@ const MarketplaceItem = ({
                 />
               ) : product.state == 1 ? (
                 "SOLD"
-              ) : product.seller.toLowerCase() == account.toLowerCase() ? (
+              ) : product.seller.toLowerCase() == address?.toString().toLowerCase() ? (
                 "OWNED"
               ) : (
                 "BUY"
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-export default withRouter(MarketplaceItem);
