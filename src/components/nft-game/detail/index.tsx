@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import ReactLoading from "react-loading";
-
-import NftDetails from "./NftDetails";
+import NftDetails from "./detail";
 import Topbar from "../../common/topbar";
 import YouOwn from "../../common/you-own";
 import MainTabs from "../../components/common/tab/Tab";

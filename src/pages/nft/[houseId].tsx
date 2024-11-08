@@ -1,5 +1,5 @@
 import { useChainId } from 'wagmi'
-import NftPage from './Nft'
+import NftPage from '../../components/nft-game/detail'
 import { supportChainIds } from '../../wagmi'
 
 export default function Nft() {
