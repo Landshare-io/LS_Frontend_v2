@@ -262,7 +262,7 @@ export default function InventoryPage() {
     arrows: true,
     responsive: [
       {
-        breakpoint: 992,
+        breakpoint: 1200,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
@@ -341,7 +341,7 @@ export default function InventoryPage() {
 
                                     {Array.from({ length: userActivatedSlots - activatedHousesLength }).map((_, index) => (
                                       <div
-                                        className="d-flex justify-content-center pr-[20px] md:pr-[40px]"
+                                        className="flex justify-center pr-[20px] md:pr-[40px]"
                                         key={`user-activated-slots-${index}`}
                                         onClick={() => setShowItemsModal(true)}
                                       >
@@ -353,7 +353,7 @@ export default function InventoryPage() {
                                     ))}
 
                                     {Number(houseSlots) - Number(userActivatedSlots) > 0 && (
-                                      <div className="d-flex justify-content-center pr-[20px] md:pr-[40px]">
+                                      <div className="flex justify-center pr-[20px] md:pr-[40px]">
                                         <div className="h-[378px] p-[16px] items-center justify-center text-cener border-[2px] border-dotted border-[#61cd81] w-[251px] cursor-pointer m-auto animate-[fadeIn] overflow-hidden duration-300 rounded-[16px] shadow-md flex flex-col gap-[20px]">
                                           <div>
                                             <p>{`Add New Slot (${buySlotCost} LAND)`}</p>
@@ -388,7 +388,7 @@ export default function InventoryPage() {
                               </div>
 
                               <div className="w-full ml-0 md:w-[280px] md:ml-[5px]">
-                                <div className="border-b-[1px] border-dashed border-[#000000] dark:border-[#cbcbcb]"></div>
+                                <div className="border-b-[1px] md:border-0 border-dashed border-[#000000] dark:border-[#cbcbcb]"></div>
                                 <div className="flex mt-2 py-2 justify-between">
                                   <span className={`font-semibold text-[16px] ${theme == 'dark' ? "text-white-700" : "text-black-700"}`}>
                                     RWA Tokens Deposited:
@@ -409,10 +409,10 @@ export default function InventoryPage() {
                                         calcMaxAmount={calcDepositMax}
                                       />
                                     </div>
-                                    <div className="mt-2 pt-3 flex justify-between">
+                                    <div className="mt-2 pt-3 flex justify-between gap-[20px]">
                                       <Button
                                         onClick={handleDeposit}
-                                        className={`py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                                        className={`w-full py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || depositLoading) &&
                                           	" bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
@@ -442,7 +442,7 @@ export default function InventoryPage() {
                                       </Button>
                                       <Button
                                         onClick={handleWithdraw}
-                                        className={`py-2 br-md text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                                        className={`w-full py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || withdrawLoading) &&
                                           " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
@@ -473,7 +473,7 @@ export default function InventoryPage() {
                                     </div>
                                   </div>
                                 </div>
-                                <div className="border-b-[2px] border-dashed border-[#000000] mb-2"></div>
+                                <div className="border-b-[1px] md:border-0 border-dashed border-[#000000] mb-2"></div>
                                 <div className="flex flex-row justify-between ">
                                   <div className="flex flex-col mr-3 justify-between py-1">
                                     <span className={`flex text-[16px] ${theme == 'dark' ? "text-gray-300" : "text-black-700"} items-center`}>
@@ -536,17 +536,17 @@ export default function InventoryPage() {
                             />
                             <div className="flex pt-5 pb-5 lg:pb-4 justify-start lg:justify-end">
                               <div
-                                className={`flex h-[40px] active items-center relative`}
+                                className={`flex h-[40px] w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
                               >
-                                <span className={`flex text-[14px] ${theme == 'dark' ? "text-gray-300" : "text-black-700"} items-center justify-center pl-4`}>
+                                <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
                                   Cost:{" "}
-                                  <span className={`ml-1 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                                  <span className={`flex items-center gap-[3px] ml-1 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                                     {totalHarvestCost} {<ChargeIcon iconColor={theme == 'dark' ? "#cacaca" : "#4C4C4C"} />}
                                   </span>
                                 </span>
                                 <Button
                                   onClick={handleHarvest}
-                                  className={`h-[40px] w-[159px] text-[16] flex items-center justify-center absolute dark:text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                                  className={`h-[40px] w-[159px] text-[16px] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
                           					${harvestLoading
                                       ? "flex justify-center items-center"
                                       : ""
