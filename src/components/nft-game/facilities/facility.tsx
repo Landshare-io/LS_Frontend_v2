@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDisconnect } from "wagmi";
+import { useAccount } from "wagmi";
 import Image from "next/image";
 import ReactModal from "react-modal";
 import {
@@ -15,7 +15,6 @@ import { OpenModalIcon } from "../../common/icons/index";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useHandleFacilities from "../../../hooks/nft-game/axios/useHandleFacilities";
-
 import windfarm1 from "../../../../public/img/production-facilities/windfarm1.png";
 import windfarm2 from "../../../../public/img/production-facilities/windfarm2.png";
 import windfarm3 from "../../../../public/img/production-facilities/windfarm3.png";
@@ -52,10 +51,10 @@ export default function Facility({
   type,
   isBoosts = false
 }: FacilityProps) {
+  const { address } = useAccount();
   const { theme } = useGlobalContext();
   const { facilities } = useGetUserData()
-  const { buyOrUpgradeFacility } = useHandleFacilities()
-  const { disconnect } = useDisconnect();
+  const { buyOrUpgradeFacility } = useHandleFacilities(address)
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const icons = {
