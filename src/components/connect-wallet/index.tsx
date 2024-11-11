@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
+import useLogin from "../../hooks/nft-game/axios/useLogin";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 
 const interTight = Inter_Tight({
@@ -23,6 +25,8 @@ export default function ConnectWallet({
 }: ConnectWalletProps) {
   const router = useRouter();
   const { pathname } = router;
+  const { checkIsAuthenticated } = useLogin()
+  const { isAuthenticated } = useGlobalContext()
 
   return (
     <>
@@ -73,12 +77,15 @@ export default function ConnectWallet({
                   );
                 }
 
-                if (pathname.includes('/nft') && chain.id == MAJOR_WORK_CHAIN.id) { // !isAuthenticated && 
+                if (pathname.includes('/nft') && chain.id == MAJOR_WORK_CHAIN.id && !isAuthenticated) {
                   return (
-                    <></>
-                    // <button onClick={() => checkIsAuthenticated()} type="button-container" className="nav-btn bg-[#61CD81] text-button-text-secondary">
-                    //   Login
-                    // </button>
+                    <Button 
+                      onClick={() => checkIsAuthenticated(account?.address)}
+                      className="px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
+                      textClassName="hover:dark:text-[#61CD81]"
+                    >
+                      Login
+                    </Button>
                   );
                 } else {
                   return (
@@ -95,7 +102,7 @@ export default function ConnectWallet({
                       </div>
                       <Button
                         onClick={openAccountModal}
-                        className="text-[#fff] px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81]"
+                        className="px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
                         textClassName="hover:dark:text-[#61CD81]"
                       >
                         {account.displayName}
