@@ -11,7 +11,7 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 export default function MarketplacePage() {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const [isItemsLoading, setIsItemsLoading] = useState(true);
   const {
     getProducts,
@@ -28,7 +28,7 @@ export default function MarketplacePage() {
   });
 
   useEffect(() => {
-    if (isConnected && isAuthenticated == false) { checkIsAuthenticated() }
+    if (isConnected && isAuthenticated == false) { checkIsAuthenticated(address) }
   }, [isConnected])
 
 
