@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useAccount } from "wagmi";
 import axios from "./nft-game-axios";
 import useGetGameItems from "./useGetGameItems";
 import useLogin from "./useLogin";
@@ -7,6 +8,7 @@ import pool from "../../../../public/img/marketplace-property/pool.png";
 import tile from "../../../../public/img/marketplace-property/tile.png";
 
 export default function useGetMarketplaceItems(setIsItemsLoading: Function) {
+  const { address } = useAccount()
   const [products, setProducts] = useState<any[]>([])
   const [premiumProducts, setPremiumProducts] = useState<any[]>([])
   const { premiumUpgradesList } = useGetGameItems()
@@ -49,7 +51,7 @@ export default function useGetMarketplaceItems(setIsItemsLoading: Function) {
         }, 100);
       } catch (error) {
         console.log(error)
-        checkIsAuthenticated()
+        checkIsAuthenticated(address)
       }
     }
   }
