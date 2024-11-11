@@ -1019,15 +1019,17 @@ export const DurabilityIcon = () => (
 interface NftIconProps {
   color?: string;
   opacity?: number;
+  className?: string
 }
 
-export const LumberMainIcon = ({ color, opacity }: NftIconProps) => (
+export const LumberMainIcon = ({ color, opacity, className }: NftIconProps) => (
   <svg
     width="72"
     height="59"
     viewBox="0 0 72 59"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <g clipPath="url(#clip0_5708_25965)">
       <path
@@ -1064,13 +1066,14 @@ export const LumberMainIcon = ({ color, opacity }: NftIconProps) => (
   </svg>
 );
 
-export const BrickMainIcon = ({ color, opacity }: NftIconProps) => (
+export const BrickMainIcon = ({ color, opacity, className }: NftIconProps) => (
   <svg
     width="80"
     height="73"
     viewBox="0 0 80 73"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M3.68478 53.1038C7.16041 54.9102 10.636 56.7167 14.1093 58.4555C15.1117 58.9714 15.1117 58.9714 15.0928 60.3248C14.9492 63.7782 14.8057 67.2316 14.6646 70.7526C14.6739 71.023 14.62 71.3626 14.6339 71.7681C12.9617 70.8632 11.2918 70.0259 9.6875 69.187C7.54919 68.0909 5.3453 66.9965 3.20699 65.9005C3.32253 61.636 3.50366 57.3699 3.68478 53.1038Z"
@@ -1130,13 +1133,14 @@ export const BrickMainIcon = ({ color, opacity }: NftIconProps) => (
   </svg>
 );
 
-export const ConcreteMainIcon = ({ color, opacity }: NftIconProps) => (
+export const ConcreteMainIcon = ({ color, opacity, className }: NftIconProps) => (
   <svg
     width="89"
     height="59"
     viewBox="0 0 89 59"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M70.4377 0.602802C71.8351 0.602802 73.9679 0.472572 76.0271 0.602802C79.2631 0.863263 82.0578 2.16557 84.1906 4.37948C88.2356 8.67708 89.7801 13.6909 88.6033 19.2257C87.8679 22.5466 85.6615 25.021 82.352 26.714C78.6748 28.6023 74.924 30.4255 71.1732 32.2488C70.879 32.379 70.5113 32.379 70.2171 32.3139C62.4948 30.2302 55.361 32.3139 50.5805 38.1091C50.4334 38.3045 49.9922 38.4998 49.7715 38.4998C47.1975 38.1091 44.5498 37.7835 41.9758 37.2626C38.5191 36.5464 35.8715 34.7231 34.18 31.9883C32.6355 29.579 30.8704 27.1698 30.5027 24.3047C30.135 21.8955 29.8408 19.356 29.9879 16.9467C30.135 13.5607 32.2678 10.9561 35.1361 8.87243C37.416 7.17943 39.6223 5.42132 41.8287 3.66321C43.2996 2.23068 45.2117 1.57953 47.4916 1.51441C54.9197 1.25395 62.3477 0.928378 70.4377 0.602802Z"
@@ -1171,13 +1175,14 @@ export const ConcreteMainIcon = ({ color, opacity }: NftIconProps) => (
   </svg>
 );
 
-export const SteelMainIcon = ({ color, opacity }: NftIconProps) => (
+export const SteelMainIcon = ({ color, opacity, className }: NftIconProps) => (
   <svg
     width="70"
     height="53"
     viewBox="0 0 70 53"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M39.8835 21.7181C39.8835 23.2036 39.8835 24.6271 39.8835 26.2363C34.1501 27.2884 28.4827 28.2787 22.6176 29.3309C22.6176 34.7155 22.6176 40.0382 22.6176 45.4847C28.3509 46.475 34.0842 47.4653 39.8835 48.5174C39.8835 50.0028 39.8835 51.4264 39.8835 52.9118C26.8352 52.9118 13.7869 52.9118 0.672725 52.9118C0.672725 51.5501 0.606825 50.3123 0.738626 49.0126C0.738626 48.7031 1.19993 48.2699 1.46353 48.208C6.01066 47.3415 10.4919 46.5369 15.039 45.7323C15.6321 45.6085 16.1593 45.6704 16.1593 44.742C16.1593 39.6669 16.1593 34.6536 16.1593 29.5165C11.0191 28.4644 5.87886 27.4741 0.738626 26.4219C0.738626 24.8127 0.738626 23.2654 0.738626 21.6562C13.721 21.7181 26.7034 21.7181 39.8835 21.7181Z"
@@ -1217,13 +1222,14 @@ export const SteelMainIcon = ({ color, opacity }: NftIconProps) => (
   </svg>
 );
 
-export const LumberBoosts = ({ color, opacity }: NftIconProps) => (
+export const LumberBoosts = ({ color, opacity, className }: NftIconProps) => (
   <svg
     width="149"
     height="123"
     viewBox="0 0 149 123"
     fill={color}
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <g opacity={opacity} clipPath="url(#clip0_5684_784370)">
       <path
@@ -1255,13 +1261,14 @@ export const LumberBoosts = ({ color, opacity }: NftIconProps) => (
   </svg>
 );
 
-export const BrickBoosts = ({ color, opacity }: NftIconProps) => (
+export const BrickBoosts = ({ color, opacity, className }: NftIconProps) => (
   <svg
     width="161"
     height="149"
     viewBox="0 0 161 149"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M9.38615 111.378C16.4793 114.603 23.5724 117.828 30.6555 120.919C32.7008 121.839 32.7008 121.839 32.7703 124.518C32.7575 131.364 32.7447 138.209 32.742 145.188C32.782 145.722 32.7012 146.399 32.7613 147.2C29.3458 145.577 25.9402 144.088 22.6657 142.59C18.303 140.636 13.8094 138.692 9.44668 136.738C9.33917 128.291 9.36266 119.835 9.38615 111.378Z"
@@ -1321,13 +1328,14 @@ export const BrickBoosts = ({ color, opacity }: NftIconProps) => (
   </svg>
 );
 
-export const ConcreteBoosts = ({ color, opacity }: NftIconProps) => (
+export const ConcreteBoosts = ({ color, opacity, className }: NftIconProps) => (
   <svg
     width="185"
     height="130"
     viewBox="0 0 185 130"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M146.436 0.840505C149.342 0.840505 153.776 0.548978 158.057 0.840505C164.784 1.42356 170.594 4.33884 175.028 9.29481C183.437 18.9152 186.648 30.139 184.202 42.529C182.673 49.9629 178.086 55.502 171.206 59.2918C163.561 63.519 155.763 67.6004 147.965 71.6817C147.354 71.9733 146.589 71.9733 145.978 71.8275C129.924 67.1631 115.093 71.8275 105.154 84.8005C104.849 85.2378 103.931 85.6751 103.473 85.6751C98.1212 84.8005 92.6169 84.0717 87.2656 82.9056C80.0794 81.3022 74.5752 77.2208 71.0586 71.0987C67.8477 65.7054 64.1782 60.3122 63.4137 53.8986C62.6492 48.5053 62.0377 42.8205 62.3434 37.4272C62.6492 29.8475 67.0832 24.017 73.0462 19.3525C77.786 15.5627 82.3729 11.627 86.9598 7.69141C90.0177 4.4846 93.993 3.02696 98.7328 2.8812C114.175 2.29814 129.618 1.56932 146.436 0.840505Z"
@@ -1362,13 +1370,14 @@ export const ConcreteBoosts = ({ color, opacity }: NftIconProps) => (
   </svg>
 );
 
-export const SteelBoosts = ({ color, opacity }: NftIconProps) => (
+export const SteelBoosts = ({ color, opacity, className }: NftIconProps) => (
   <svg
     width="185"
     height="130"
     viewBox="0 0 70 53"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M39.8835 21.7181C39.8835 23.2036 39.8835 24.6271 39.8835 26.2363C34.1501 27.2884 28.4827 28.2787 22.6176 29.3309C22.6176 34.7155 22.6176 40.0382 22.6176 45.4847C28.3509 46.475 34.0842 47.4653 39.8835 48.5174C39.8835 50.0028 39.8835 51.4264 39.8835 52.9118C26.8352 52.9118 13.7869 52.9118 0.672725 52.9118C0.672725 51.5501 0.606825 50.3123 0.738626 49.0126C0.738626 48.7031 1.19993 48.2699 1.46353 48.208C6.01066 47.3415 10.4919 46.5369 15.039 45.7323C15.6321 45.6085 16.1593 45.6704 16.1593 44.742C16.1593 39.6669 16.1593 34.6536 16.1593 29.5165C11.0191 28.4644 5.87886 27.4741 0.738626 26.4219C0.738626 24.8127 0.738626 23.2654 0.738626 21.6562C13.721 21.7181 26.7034 21.7181 39.8835 21.7181Z"
