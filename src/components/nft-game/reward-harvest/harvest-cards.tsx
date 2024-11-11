@@ -9,10 +9,8 @@ import {
   SteelMainIcon,
 } from "../../common/icons/nft";
 import HarvestCost from "./harvest-cost";
-
 import landTokenStakingImg from "../../../../public/icons/land-token-staking-img.png";
 import { useGlobalContext } from "../../../context/GlobalContext";
-
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useGetResource from "../../../hooks/nft-game/axios/useGetResource";
 
@@ -43,6 +41,8 @@ export default function HarvestCards({
     notifyError,
     theme
   } = useGlobalContext();
+
+  if (facilities.length < 1) return null
 
   const colors = ["disable", "grey", "yellow", "blue"];
   const resourceActiveIcons = [
