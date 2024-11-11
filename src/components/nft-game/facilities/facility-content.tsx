@@ -54,13 +54,13 @@ export default function FacilityContent({
           <div className='flex flex-col px-[14px] pt-[12px]'>
             <div className='flex items-center'>
               <span className='text-[#6f899d] font-semibold text-[10px] ml-[4px] pr-[2px]'>Yield: </span>
-              <div>
-                <span className='text-[16px] font-semibold'>{`${(nextLevelInfo.buyReward[2 + type])} `}</span>
+              <div className='flex items-center'>
+                <span className='text-[16px] font-semibold mr-[5px]'>{`${(nextLevelInfo.buyReward[2 + type])} `}</span>
                 {icons[type]}
-                <span className='text-[12px] font-semibold'> /day</span>
+                <span className='text-[12px] font-semibold ml-[2px]'> /day</span>
               </div>
             </div>
-            <div className="border-b-[1px] border-[#00000050] w-full"></div>
+            <div className="border-b-[1px] border-[#494949] my-[7px] w-full"></div>
           </div>
           <div className='flex pb-2 items-center px-[14px]'>
             <span className='text-[#6f899d] font-semibold text-[10px] ml-[4px] pr-[2px]'>Cost: </span>
@@ -69,7 +69,7 @@ export default function FacilityContent({
                 {nextLevelInfo.buy.slice(2, 7).map((cost: number[], index: number) => {
                   if (Number(cost) > 0) 
                     return (
-                      <div key={`next-cost-${index}`} className='min-w-[20px] text-[16px] font-semibold'>
+                      <div key={`next-cost-${index}`} className='flex items-center min-w-[20px] text-[16px] font-semibold gap-[2px]'>
                         {`${cost} `}
                         {icons[index]}
                       </div>
@@ -89,7 +89,7 @@ export default function FacilityContent({
       ) : null}
           <Button
             onClick={() => upgradeFacility(type)}
-            className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute text-button-text-secondary ${((isLoading.type > -1) && (isLoading.type != type)) ? 'grey' : color} ${((isLoading.type == type) && isLoading.loading) ? 'd-flex justify-content-center align-items-center' : ''}`}
+            className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute text-button-text-secondary rounded-[20px] ${((isLoading.type > -1) && (isLoading.type != type)) ? 'grey' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
             disabled={((isLoading.type == type) && isLoading.loading) || !activated || ((isLoading.type > -1) && (isLoading.type != type))}
           >
             {((isLoading.type == type) && isLoading.loading) ? (
@@ -99,7 +99,7 @@ export default function FacilityContent({
               </>
             ) : (
               <>
-                <span className="font-semibold">{nextLevel == 1 ? 'BUY' : 'UPGRADE'}</span>
+                <span className="text-[16px] font-semibold">{nextLevel == 1 ? 'BUY' : 'UPGRADE'}</span>
                 <span className="text-[0.7rem] font-normal ml-1">{nextLevel > 1 ? 'TO LEVEL ' + nextLevel : ''}</span>
               </>
             )}
