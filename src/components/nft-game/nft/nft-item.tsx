@@ -71,9 +71,9 @@ export default function NftItem({ house }: NftItemProps) {
   };
 
   return (
-    <div className="rounded-[16px] overflow-hidden w-[251px] duration-300 animate-[fadeIn] flex flex-col m-auto">
-      <div className="h-[249px] relative overflow-hidden">
-        <div className={`bg-[#c4c4c433] text-[#fff] rounded-[16px] absolute top-0 w-full text-center p-2 ${BOLD_INTER_TIGHT.className}`}>
+    <div className="font-inter rounded-[16px] overflow-hidden w-[251px] duration-300 animate-[fadeIn] flex flex-col m-auto">
+      <div className="h-[249px] w-full relative overflow-hidden">
+        <div className={`bg-[#c4c4c433] text-[#fff] rounded-[16px] w-full absolute top-0 text-center p-2 ${BOLD_INTER_TIGHT.className}`}>
           {house.name.length > 10
             ? `${house.name.slice(0, 10)}... ${house.isRare
               ? `Rare #${Number(house.typeId) + 1}`
@@ -85,19 +85,19 @@ export default function NftItem({ house }: NftItemProps) {
             }`}
         </div>
         <Image
-          className="w-[249px] h-[249px]"
+          className="w-[251px] h-[249px]"
           src={getHouseImageUrl()}
           alt="nft-house-image"
         />
         <div className="flex items-end absolute w-full justify-between px-[10px] bottom-[10px]">
           <div>
-            <span className="text-[#fff] text-[14px] font-semibold aline-text-bottom leading-[18px]">
+            <span className="font-inter text-[#fff] text-[14px] font-semibold aline-text-bottom leading-[18px]">
               x
               {numeral(house.multiplier)
                 .format("0.[0]")
                 .toString()}
             </span>
-            <span className="text-[#fff] text-[10px] pl-[2px] align-text-bottom text-semibold">LAND &nbsp;Yield/Year</span>
+            <span className="font-inter text-[#fff] text-[10px] pl-[2px] align-text-bottom font-semibold">LAND &nbsp;Yield/Year</span>
           </div>
         </div>
         {house.onSale && 
@@ -131,7 +131,7 @@ export default function NftItem({ house }: NftItemProps) {
             <div className="text-[#0b6c96] text-[14px] font-semibold dark:text-text-primary">
               Land Remaining:
             </div>
-            <div className="text-[14px] font-semibold dark:text-text-primary">{`${numeral(
+            <div className="text-[14px] font-semibold text-[#00000080] dark:text-text-primary">{`${numeral(
               Number(house.tokenHarvestLimit) +
               Number(house.extendedBalance) -
               Number(house.tokenReward) -
@@ -141,15 +141,15 @@ export default function NftItem({ house }: NftItemProps) {
         <div className="m-auto d-flex justify-content-center pt-2">
           {house.isActivated ? (
             <Button
-              className="w-[131px] h-[40px] text-[16px] rounded-[100px] font-semibold cursor-pointer text-button-text-secondary "
+              className="w-[131px] h-[40px] text-[16px] rounded-[100px] font-semibold cursor-pointer text-button-text-secondary rounded-[20px]"
               onClick={() => router.push(`/nft/${house.id}`)}
             >
               MANAGE
             </Button>
           ) : (
             <Button
-              className={`w-[131px] h-[40px] text-[16px] font-semibold cursor-pointer  text-button-text-secondary ${isActivating
-                ? "d-flex justify-content-center align-items-center"
+              className={`w-[131px] h-[40px] text-[16px] font-semibold cursor-pointer rounded-[20px] text-button-text-secondary ${isActivating
+                ? "flex justify-center items-center"
                 : ""
                 }`}
               onClick={() => activate(house)}
