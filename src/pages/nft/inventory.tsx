@@ -1,8 +1,9 @@
 import { useChainId } from 'wagmi'
-import InventoryPage from './inventory'
+import type { NextPage } from 'next';
+import InventoryPage from '../../components/nft-game/nft-inventory';
 import { supportChainIds } from '../../wagmi'
 
-export default function Inventory() {
+const Inventory: NextPage = () => {
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
 
   return (
@@ -17,3 +18,5 @@ export default function Inventory() {
     </div>
   )
 }
+
+export default Inventory

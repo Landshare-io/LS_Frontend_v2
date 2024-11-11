@@ -1,8 +1,9 @@
 import { useChainId } from 'wagmi'
+import type { NextPage } from 'next';
 import NftMint from '../../components/nft-mint'
 import { supportChainIds } from '../../wagmi'
 
-export default function Mint() {
+const Mint: NextPage = () => {
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
 
   return (
@@ -17,3 +18,5 @@ export default function Mint() {
     </div>
   )
 }
+
+export default Mint
