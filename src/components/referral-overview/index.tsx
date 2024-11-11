@@ -4,7 +4,7 @@ import moreInfo from "../../../public/icons/referral-more-info.svg"
 
 export default function ReferralOverview (){
     return(
-    <div className="bg-white rounded-2xl p-6 w-[617px] h-[217px]">
+    <div className="lg:w-[617px] w-full bg-white rounded-2xl p-6 h-[240px] sm:h-[217px]">
         <div className="w-full flex justify-between">
             <p className="font-bold text-lg leading-7 text-[#0A0A0A]">Overview</p>
 
@@ -29,6 +29,6 @@ export default function ReferralOverview (){
         </div>
 
         <p className="text-[#535457] text-sm leading-4 mt-[29px]">Tiers are based on referred taker volume in the past 60 days and total LSRWA staked.</p>
-        <p className="font-bold underline text-[#61CD81] text-sm mt-[3px]">Learn more  Stake LSRWA</p>
+        <p className="font-bold text-[#61CD81] text-sm mt-[3px]"><span className="underline">Learn more</span>  <span className="underline">Stake LSRWA</span></p>
     </div>)
 }

@@ -1,6 +1,6 @@
 export default function ReferralOthers () {
     return(
-        <div className="flex flex-col bg-white rounded-2xl p-6 w-[617px] h-[217px] gap-8">
+        <div className="lg:w-[617px] w-full flex flex-col bg-white rounded-2xl p-6 h-[240px] sm:h-[217px] gap-4 sm:gap-8">
             <div className="w-full flex justify-between items-end">
                 <p className="font-bold text-lg leading-7 text-[#0A0A0A]">Refer Others</p>
 
@@ -9,9 +9,9 @@ export default function ReferralOthers () {
 
             <button className="w-full py-3 rounded-xl bg-[#F6F8F9] text-[#61CD81] text-base leading-5">Connect your wallet to view link</button>
 
-            <div className="flex justify-between text-black text-base leading-5">
+            <div className="sm:flex justify-between text-black text-base leading-5">
                 <div className="space-y-1">
-                    <p>VRTX Incentives</p>
+                    <p>LSRWA Incentives</p>
                     <p>Fast and deep liquidity</p>
                 </div>
                 

@@ -1,6 +1,6 @@
 export default function ReferralEarning() {
     return(
-    <div className="flex flex-col bg-white rounded-2xl p-6 w-[543px] h-[474px]">
+    <div className="lg:w-[543px] w-full  flex flex-col bg-white rounded-2xl p-6 h-[474px]">
         <p className="font-bold text-lg leading-7 text-[#0A0A0A]">Earnings</p>
 
         <div className="mt-[22px] flex justify-between">
