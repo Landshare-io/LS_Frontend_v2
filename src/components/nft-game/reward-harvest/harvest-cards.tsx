@@ -44,12 +44,12 @@ export default function HarvestCards({
 
   if (facilities.length < 1) return null
 
-  const colors = ["disable", "grey", "yellow", "blue"];
+  const colors = ["disable", "grey", "border-[2px] border-[#ec9821] bg-[#ec9821]", "blue"];
   const resourceActiveIcons = [
-    <LumberMainIcon color="black" opacity={1} />,
-    <BrickMainIcon color="black" opacity={1} />,
-    <ConcreteMainIcon color="black" opacity={1} />,
-    <SteelMainIcon color="black" opacity={1} />,
+    <LumberMainIcon color="black" opacity={1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
+    <BrickMainIcon color="black" opacity={1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
+    <ConcreteMainIcon color="black" opacity={1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
+    <SteelMainIcon color="black" opacity={1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
     <Image
       alt="land-token"
       style={{
@@ -61,15 +61,15 @@ export default function HarvestCards({
               ? "1"
               : "0.6",
       }}
-      className="harvestable-card-image"
+      className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%] w-auto"
       src={landTokenStakingImg}
     />
   ];
   const resourceIcons = [
-    <LumberMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.6} />,
-    <BrickMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.6} />,
-    <ConcreteMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.6} />,
-    <SteelMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.6} />,
+    <LumberMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.6} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
+    <BrickMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.6} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
+    <ConcreteMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.6} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
+    <SteelMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.6} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
     <Image
       alt="land-token"
       style={{
@@ -81,15 +81,15 @@ export default function HarvestCards({
               ? "1"
               : "0.6",
       }}
-      className="harvestable-card-image"
+      className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%] w-auto"
       src={landTokenStakingImg}
     />
   ];
   const resourceDisabledIcons = [
-    <LumberMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.1} />,
-    <BrickMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.1} />,
-    <ConcreteMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.1} />,
-    <SteelMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.1} />,
+    <LumberMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
+    <BrickMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
+    <ConcreteMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
+    <SteelMainIcon color={theme == "dark" ? "#cbcbcb" : "#000"} opacity={0.1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
     <Image
       alt="land-token"
       style={{
@@ -101,7 +101,7 @@ export default function HarvestCards({
               ? "1"
               : "0.6",
       }}
-      className="harvestable-card-image"
+      className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%] w-auto"
       src={landTokenStakingImg}
     />
   ];
@@ -122,8 +122,9 @@ export default function HarvestCards({
       ...prevState.slice(type + 1),
     ]);
   };
+
   return (
-    <div className="min-w-[200px] mb-[20px] border-[1px] border-[#00000033] pt-[17px] bg-gradient-to-b from-[#9e9e9e33] to-[#d9d9d933] duration-300 hovershadow-md">
+    <div className="w-[200px] mb-[20px] border-[1px] border-[#00000033] pt-[17px] bg-gradient-to-b from-[#9e9e9e33] to-[#d9d9d933] duration-300 hover:shadow-2xl rounded-[10px]">
       <div className="pl-[10px] cursor-pointer">
         <FormCheck
           type="checkbox"
@@ -147,7 +148,7 @@ export default function HarvestCards({
           }}
         />
         <div
-          className={`text-[16px] font-semibold ${theme == "dark" ? "text-gray-300" : "text-black-700"} pl-4 cursor-pointer ${item.name == 'Harvest Token' ? 'mt-[24px]' : ''}`}
+          className={`text-[16px] font-semibold ${theme == "dark" ? "text-[#dee2e6]" : "text-[#000000b3]"} pl-[25px] cursor-pointer ${item.name == 'Harvest Token' ? 'mt-[24px]' : ''}`}
           onClick={() => harvestSelect(type)}
         >
           {

@@ -71,7 +71,7 @@ export default function NftItem({ house }: NftItemProps) {
   };
 
   return (
-    <div className="rounded-[16px] overflow-hidden w-[251px] duration-300 animate-[fadeIn] flex flex-col">
+    <div className="rounded-[16px] overflow-hidden w-[251px] duration-300 animate-[fadeIn] flex flex-col m-auto">
       <div className="h-[249px] relative overflow-hidden">
         <div className={`bg-[#c4c4c433] text-[#fff] rounded-[16px] absolute top-0 w-full text-center p-2 ${BOLD_INTER_TIGHT.className}`}>
           {house.name.length > 10
