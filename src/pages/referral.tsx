@@ -32,7 +32,7 @@ const Referral: NextPage = () => {
                 <link href="/favicon.ico" rel="icon" />
             </Head>
 
-            <div className="bg-primary pt-[41px] pb-[40px] sm:px-5 px-[10px] lg:px-[120px]">
+            <div className="bg-primary pb-[40px] sm:px-5 px-[10px] lg:px-[120px]">
                 <div className='max-w-[1200px] m-auto'>
                     <Breadcrumb items={breadcrumbItems} />
 

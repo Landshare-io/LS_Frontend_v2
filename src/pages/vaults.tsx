@@ -155,7 +155,7 @@ const StakingPage: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <div className="bg-primary pt-[41px] pb-[25px] px-[20px] lg:px-[120px]">
+      <div className="bg-primary pb-[25px] px-[20px] lg:px-[120px]">
         <div className="max-w-[1200px] m-auto">
           <Breadcrumb items={breadcrumbItems} />
         </div>

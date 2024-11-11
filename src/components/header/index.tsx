@@ -33,7 +33,7 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="w-full h-full fixed bg-[#80849890] z-10 top-0" />
       )}
-      <div className="relative bg-primary px-[10px] pt-[20px] pb-[32px] xl:p-[32px]">
+      <div className="relative bg-primary px-[10px] pt-[20px] pb-[40px] xl:p-[32px]">
         <div className="flex justify-between items-center rounded-[90px] h-[64px] max-w-[1230px] m-auto xl:max-w-[1250px] pl-4 pr-4 mlg:pl-8 mlg:pr-8 md:h-[80px] bg-secondary">
           <Logo />
           <div className="flex itmes-center gap-[40px]">
