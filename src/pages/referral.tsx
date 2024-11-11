@@ -32,7 +32,7 @@ const Referral: NextPage = () => {
                 <link href="/favicon.ico" rel="icon" />
             </Head>
 
-            <div className="bg-primary pt-[41px] pb-[40px] px-[20px] lg:px-[120px]">
+            <div className="bg-primary pt-[41px] pb-[40px] sm:px-5 px-[10px] lg:px-[120px]">
                 <div className='max-w-[1200px] m-auto'>
                     <Breadcrumb items={breadcrumbItems} />
 
@@ -44,8 +44,8 @@ const Referral: NextPage = () => {
                         <p className='font-bold text-[28px] leading-[22px]'>Referrals</p>
                     </div>
 
-                    <div className='w-full flex justify-between gap-10'>
-                        <div className='flex flex-col gap-10'>
+                    <div className='w-full flex flex-col lg:flex-row justify-between gap-5 lg:gap-10'>
+                        <div className='flex flex-col gap-5 lg:gap-10'>
                             <ReferralOverview/>
                             <ReferralOthers/>
                         </div>

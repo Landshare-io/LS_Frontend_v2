@@ -25,7 +25,7 @@ const Pagination = ({pageCount, currentPage, setCurrentPage} : PaginationProps) 
     }
 
     return (
-        <div className="flex w-[150px] justify-start items-center">
+        <div className="flex w-[150px] justify-start items-center bg-white border-[#D8D8D8]">
             <div 
                 onClick={() =>  PreviousPage()}
                 className={`w-8 h-8 flex justify-center items-center rounded-tl-[7px] rounded-bl-[6px] cursor-pointer border-[#D8D8D8] bg-[#66CE85] {${currentPage > 1}}`}>
