@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "./nft-game-axios";
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 export default function useGetUserData() {
   const [userData, setUserData] = useState({
@@ -8,6 +9,7 @@ export default function useGetUserData() {
     depositedBalance: 0,
   });
   const [facilities, setFacilities] = useState<any[]>([])
+  const { isAuthenticated } = useGlobalContext()
 
   const getUserData = async () => {
     try {
@@ -15,11 +17,17 @@ export default function useGetUserData() {
       const { data: facilityData } = await axios.get(`/user/facility`)
 
       setUserData(userInfo)
-      setFacilities(facilityData)
+      setFacilities(facilityData.sort((a: any, b: any) => a.sortingId - b.sortingId))
     } catch (error: any) {
       console.log(error.response.data.message, error)
     }
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getUserData()
+    }
+  }, [isAuthenticated])
 
   return {
     userData,
