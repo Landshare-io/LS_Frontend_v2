@@ -73,7 +73,7 @@ export default function ReferralLeaderBoard () {
 
             <div className="grid grid-cols-5 sm:grid-cols-6  mt-6 px-[18px] py-[11px] text-sm leading-[22px] text-left">
                 <p>Rank</p>
-                <p className="col-span-2">Account</p>
+                <p className="max-sm:col-span-2">Account</p>
                 <p>Earnings</p>
                 <p>Sign Ups</p>
                 <p className="hidden sm:block">Total Taker Volume <span className="text-[#61CD81]">ⓘ</span></p>
@@ -83,7 +83,7 @@ export default function ReferralLeaderBoard () {
             {leaderboardData.map((data, index) => (
                 <div key={index} className="grid grid-cols-5 sm:grid-cols-6 font-bold bg-[#FFFFFF] rounded-2xl mt-6 px-[18px] py-[21px] text-sm leading-[22px] text-left">
                     <p>{data.rank}</p>
-                    <p className="col-span-2">{`${data.account.slice(0, 6)}...${data.account.slice(-4)}`}</p>
+                    <p className="max-sm:col-span-2">{`${data.account.slice(0, 6)}...${data.account.slice(-4)}`}</p>
                     <p>{data.earnings}</p>
                     <p>{data.signUps}</p>
                     <p className="hidden sm:block">{data.totalTakerVolume}</p>
