@@ -83,7 +83,7 @@ export default function RewardHarvest({
 
   return (
     <div className="flx flex-col">
-      <div className="flex overflow-x-scroll pb-[20px] mlg:gird mlg:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] lg:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] xl::grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] justify-between gap-[4rem]">
+      <div className="flex pb-[20px] mlg:gird mlg:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] lg:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] xl:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] justify-between">
         {boostItemsList.map((item, type) => {
           const isActivatedBoost = boostItem.item == item.id
           return (

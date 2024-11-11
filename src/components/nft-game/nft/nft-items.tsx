@@ -29,7 +29,7 @@ export default function NftItems({ houseItems }: NftItemsProps) {
     <>
       <div className="">
         {houseItems.length > 0 ? (
-          <div className="flex overflow-x-scroll pb-[20px] lg:grid lg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] lg:justify-between lg:gap-[4rem] xl:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] mb-5">
+          <div className="flex overflow-x-scroll pb-[20px] gap-[20px]">
             {currentItems.map((houseItem, index) => {
               return (
                 <div
