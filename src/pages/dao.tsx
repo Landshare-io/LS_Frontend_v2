@@ -3,7 +3,6 @@ import type { NextPage } from 'next';
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import { Inter_Tight } from 'next/font/google';
 import DAO from "../components/dao";
-import { useGlobalContext } from "../context/GlobalContext";
 
 const client = new ApolloClient({
   uri: "https://hub.snapshot.org/graphql",
@@ -18,8 +17,6 @@ const interTight = Inter_Tight({
 });
 
 const DAOPage: NextPage = () => {
-  const { theme } = useGlobalContext();
-
   return (
     <ApolloProvider client={client}>
       <div className={`${interTight.variable} font-inter`}>
