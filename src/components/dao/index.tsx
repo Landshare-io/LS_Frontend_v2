@@ -74,7 +74,7 @@ export default function DAO() {
           content="View and create proposal in the Landshare DAO."
         />
       </Head>
-      <div className="bg-primary pt-[41px] pb-[25px] px-[20px] lg:px-[120px]">
+      <div className="bg-primary pt-[41px] pb-[25px] px-[20px]">
         <div className="max-w-[1200px] m-auto">
           <Breadcrumb items={breadcrumbItems} />
         </div>
@@ -87,7 +87,7 @@ export default function DAO() {
           <ReactLoading type="bars" color="#61cd81" />
         </div>
       ) : (
-        <div className="bg-primary py-0 px-[20px] md:pt-[20px] md:pb-[100px] mlg:pt-[20px] mlg:pb-[10px] mlg:px-0 xl:pt-0 xl:pb-[25px] xl:px-0 tracking-[2%]">
+        <div className="bg-primary py-0 px-[20px] md:pt-[20px] md:pb-[100px] mlg:pt-0 mlg:pb-[10px] mlg:px-0 xl:pt-0 xl:pb-[25px] xl:px-0 tracking-[2%]">
           {isCreating && (
             <DaoCreateProposal
               close={() => setIsCreating(false)}
@@ -95,8 +95,8 @@ export default function DAO() {
               balance={balanceGnosis.toString()}
             />
           )}
-          <div className="flex flex-col lg:flex-row gap-[40px] max-w-[1200px] w-full m-auto">
-            <div className="bg-secondary flex flex-row lg:flex-col items-end justify-around p-[10px] mlg:min-w-[251px] lg:h-[478px] rounded-[14px] shadow shadow-lg md:items-center mlg:justify-between mlg:p-[20px]">
+          <div className="flex flex-col lg:flex-row gap-[40px] max-w-[1200px] w-full m-auto mb-10">
+            <div className="bg-secondary flex flex-row lg:flex-col items-end justify-around p-[10px] mlg:min-w-[251px] lg:h-[478px] rounded-[14px] shadow-xl md:items-center mlg:justify-between mlg:p-[20px]">
               <div className="flex flex-col items-center">
                 <Image alt="logo" src={Logo} className="w-[75px] sm:w-[100px] md:w-[130px] m-[5px]" />
                 <div 
@@ -192,7 +192,7 @@ export default function DAO() {
                 </div>
               </div>
             </div>
-            <div className="bg-secondary p-[10px] pt-[25px] md:p-[40px] space-y-4 lg:space-y-0 shadow-lg rounded-[14px]">
+            <div className="bg-secondary p-[10px] pt-[25px] md:p-[40px] space-y-4 lg:space-y-0 shadow-xl rounded-[14px]">
               <div className={`flex justify-between pl-[10px] mlg:px-[35px] mlg:pb-[30px] items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
                 <div className="text-text-primary pr-3 font-bold text-[24px] leading-[36px]">
                   {isViewAll ? `All Proposals` : `Latest Proposals`}
