@@ -110,9 +110,9 @@ export default function NftItem({ house }: NftItemProps) {
       </div>
       <div className="bg-[#6f8e9d66] p-[12px] flex flex-col">
         <div>
-          <div className="flex justify-between items-end pb-2">
-            <div className="w-[50%] text-[15px] font-semibold flex justify-between pr-1 dark:text-text-primary">
-              <span>Durability</span>
+          <div className="flex justify-between items-center pb-2">
+            <div className="w-full text-[15px] font-semibold flex justify-between items-center pr-1 dark:text-text-primary">
+              <span className="text-[#0b6c96] text-[14px] font-semibold dark:text-text-primary">Durability</span>
               <div
                 onClick={() => {
                   if (isLoading) return;
@@ -141,7 +141,7 @@ export default function NftItem({ house }: NftItemProps) {
         <div className="m-auto d-flex justify-content-center pt-2">
           {house.isActivated ? (
             <Button
-              className="w-[131px] h-[40px] text-[16px] font-semibold cursor-pointer text-button-text-secondary"
+              className="w-[131px] h-[40px] text-[16px] rounded-[100px] font-semibold cursor-pointer text-button-text-secondary "
               onClick={() => router.push(`/nft/${house.id}`)}
             >
               MANAGE
