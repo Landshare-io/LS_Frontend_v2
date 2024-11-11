@@ -6,7 +6,6 @@ import {
   NextLabelIconMarketPlaceIcon,
   PrevLabelIconMarketPlaceIcon,
 } from "../common/icons/index";
-import "./MarketplaceItems.css";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 interface MarketplaceItemsProps {
