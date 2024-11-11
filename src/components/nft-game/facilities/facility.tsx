@@ -57,21 +57,24 @@ export default function Facility({
   const { buyOrUpgradeFacility } = useHandleFacilities(address)
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const icons = {
+
+  if (facilities.length < 1) return null
+  
+  const icons: Record<any, any> = {
     "Wind Farm": <ChargeIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
     "Lumber Mill": <LumberIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
     "Brick Factory": <BrickIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
     "Concrete Plant": <ConcreteIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
     "Steel Mill": <SteelIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
   };
-  const modalIcons = {
+  const modalIcons: Record<any, any> = {
     "Wind Farm": <ChargeIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
     "Lumber Mill": <LumberIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
     "Brick Factory": <BrickIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
     "Concrete Plant": <ConcreteIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
     "Steel Mill": <SteelIcon className="" iconColor={theme == 'dark' ? "#e4e4e4" : "#161616"} />,
   };
-  const facilityImages = {
+  const facilityImages: Record<any, any> = {
     "Wind Farm": [windfarm1, windfarm1, windfarm1, windfarm1, windfarm1, windfarm2, windfarm2, windfarm2, windfarm2, windfarm2, windfarm3, windfarm3, windfarm3, windfarm3, windfarm3, windfarm4, windfarm4, windfarm4, windfarm4, windfarm4, windfarm5, windfarm5, windfarm5, windfarm5, windfarm5],
     "Lumber Mill": [lumber1, lumber1, lumber1, lumber1, lumber1, lumber2, lumber2, lumber2, lumber2, lumber2, lumber3, lumber3, lumber3, lumber3, lumber3, lumber4, lumber4, lumber4, lumber4, lumber4, lumber5, lumber5, lumber5, lumber5, lumber5],
     "Brick Factory": [brick1, brick1, brick1, brick1, brick1, brick2, brick2, brick2, brick2, brick2, brick3, brick3, brick3, brick3, brick3, brick4, brick4, brick4, brick4, brick4, brick5, brick5, brick5, brick5, brick5],
@@ -98,28 +101,22 @@ export default function Facility({
   };
 
   const description = (
-    <div>
-      <p></p>
+    <div className="flex flex-col gap-[3px] py-[10px]">
       <p>
         The {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name == "Wind Farm" && "automatically"} produces{" "}
         {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name == "Wind Farm" ? "Power" : facilities[type].currentFacility?.name || facilities[type].nextFacility?.name.split(/(\s+)/)[0]} over time.
       </p>
-      <div className="d-flex justify-content-between">
-        <div>
-          <p>
-            <b>Current {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} LVL {facilities[type].currentFacility?.level ?? 0}:</b>{" "}
-            {facilities[type].currentFacility?.buyReward[2 + type] ?? 0} {modalIcons[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name]}/day
-          </p>
-          <p>
-            <b>Next {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} LVL {facilities[type].nextFacility?.level ?? facilities[type].maxLevel}:</b>{" "}
-            {facilities[type].nextFacility?.buyReward[2 + type] ?? 0} {modalIcons[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name]}/day
-          </p>
-          <p>
-            <b>{(facilities[type].currentFacility?.level ?? 0) > facilities[type].maxLevel && `We set your ${facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} level as a max level cause of you have not got enough activated houses.`}</b>
-          </p>
-        </div>
-      </div>
-
+      <p className="flex items-end gap-[1px]">
+        <b>Current {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} LVL {facilities[type].currentFacility?.level ?? 0}:</b>{" "}
+        {facilities[type].currentFacility?.buyReward[2 + type] ?? 0} {modalIcons[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name]}/day
+      </p>
+      <p className="flex items-end gap-[1px]">
+        <b>Next {facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} LVL {facilities[type].nextFacility?.level ?? facilities[type].maxLevel}:</b>{" "}
+        {facilities[type].nextFacility?.buyReward[2 + type] ?? 0} {modalIcons[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name]}/day
+      </p>
+      <p>
+        <b>{(facilities[type].currentFacility?.level ?? 0) > facilities[type].maxLevel && `We set your ${facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} level as a max level cause of you have not got enough activated houses.`}</b>
+      </p>
     </div>
   );
 
@@ -130,12 +127,12 @@ export default function Facility({
           <span className="text-[16px] font-semibold leading-[24px] text-[#ffffff]">{facilities[type].currentFacility?.name || facilities[type].nextFacility?.name}</span>
           {facilities[type].currentFacility?.level ? (
             facilities[type].currentFacility?.level > facilities[type].maxLevel ? (
-              <Badge label1="LVL" label2={facilities[type].maxLevel} color="default" />
+              <Badge label1="LVL" label2={facilities[type].maxLevel} className="bg-[#fff]" />
             ) : (
-              <Badge label1="LVL" label2={facilities[type].currentFacility?.level} color="default" />
+              <Badge label1="LVL" label2={facilities[type].currentFacility?.level} className="bg-[#fff]" />
             )
           ) : (
-            <Badge label1="" label2="" color="" />
+            <Badge label1="" label2="" className="" />
           )}
         </div>
         <div className='w-full h-[300px] bg-gradient-to-b from-[#9E9E9E] to-[#c3c3c300] relative'>
@@ -153,11 +150,13 @@ export default function Facility({
           />
           <div className="flex absolute items-end w-full justify-between px-3 bottom-[5px]">
             {facilities[type].currentFacility ? (
-              <div className="bottom-0">
+              <div className="flex items-end bottom-0">
                 <span className={`font-semibold text-[12px] leading-[18px] text-[#000000] opacity-50 mr-2 ${theme == 'dark' ? "text-[#ffffff]" : "text-[#000000]"}`}>Current Yield: </span>
-                {icons[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name]}
-                <span className={`value ms-1 fs-16 fw-600 ${theme == 'dark' ? "text-[#e6e6e6]" : "text-[#161616]"}`}>{facilities[type].currentFacility.buyReward[2 + type]} </span>
-                <span className={`ms-1 fs-16 fw-600 ${theme == 'dark' ? "text-[#e6e6e6]" : "text-[#161616]"}`}>/day</span>
+                <div className="flex items-center">
+                  {icons[facilities[type].currentFacility?.name || facilities[type].nextFacility?.name]}
+                  <span className={`leading-[24px] ml-1 text-[16px] font-semibold ${theme == 'dark' ? "text-[#e6e6e6]" : "text-[#161616]"}`}>{facilities[type].currentFacility.buyReward[2 + type]} </span>
+                  <span className={`ml-1 text-[16px] font-semibold ${theme == 'dark' ? "text-[#e6e6e6]" : "text-[#161616]"}`}>/day</span>
+                </div>
               </div>
             ) : (
               <div></div>
@@ -170,12 +169,12 @@ export default function Facility({
           </div>
         </div>
         <div className="bg-secondary">
-          <div className={`d-flex next-yield-status ${theme == 'dark' ? "bg-[#5c727e66]" : "bg-[#6f8e9d66]"}`}>
+          <div className={`flex px-[17px] py-[20px] ${theme == 'dark' ? "bg-[#5c727e66]" : "bg-[#6f8e9d66]"}`}>
             <FacilityContent
               type={type}
               nextLevel={facilities[type].nextFacility?.level ?? facilities[type].maxLevel}
               maxLevel={facilities[type].maxLevel}
-              color={(facilities[type].maxLevel > 0) ? ((facilities[type].currentFacility?.level ?? 0) > 0 ? (facilities[type].currentFacility?.level == facilities[type].maxLevel ? "light-blue" : "yellow") : "green") : 'grey'}
+              color={(facilities[type].maxLevel > 0) ? ((facilities[type].currentFacility?.level ?? 0) > 0 ? (facilities[type].currentFacility?.level == facilities[type].maxLevel ? "bg-[#1eceae] border-[2px] border-[#1eceae]" : "bg-[#ec9821] border-[2px] border-[#ec9821]") : "bg-[#61cd81] border-[2px] border-[#61cd81]") : 'bg-[#8f8f8f] border-[2px] border-[#8f8f8f] hover:bg-transparent hover:text-[#8f8f8f]'}
               upgradeFacility={() => buyOrUpgradeFacility(type)}
               isLoading={isLoading}
               activated={facilities[type].maxLevel > 0}
@@ -184,21 +183,21 @@ export default function Facility({
           </div>
         </div>
       </div>
-      <div className="text-center facility-info">
+      <div className="text-center w-[300px]">
         {facilities[type].currentFacility?.level ? (
           facilities[type].currentFacility?.level > facilities[type].maxLevel ? (
-            <span className="level-descriptor fw-500">
+            <span className="mt-[9px] text-[#8f8f8f] text-[18px] font-semibold">
               {`You own ${facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} `}
               <b className={theme == 'dark' ? "text-[#ffffff]" : "text-[#000000]"}>Level {Number(facilities[type].maxLevel ?? 0)}</b>
             </span>
           ) : (
-            <span className="level-descriptor fw-500">
+            <span className="mt-[9px] text-[#8f8f8f] text-[18px] font-semibold">
               {`You own ${facilities[type].currentFacility?.name || facilities[type].nextFacility?.name} `}
               <b className={theme == 'dark' ? "text-[#ffffff]" : "text-[#000000]"}>Level {Number(facilities[type].currentFacility?.level ?? 0)}</b>
             </span>
           )
         ) : (
-          <span className="level-descriptor fw-500">
+          <span className="mt-[9px] text-[#8f8f8f] text-[18px] font-semibold">
             {`You do not own any ${facilities[type].currentFacility?.name || facilities[type].nextFacility?.name}`}
           </span>
         )}
