@@ -56,7 +56,7 @@ export default function YouOwn(){
                 </div>
                 {show && (
                   <div className="flex flex-wrap justify-between gap-3 w-full px-3">
-                    <div className="flex items-center w-[150px] lg:w-[120px]">
+                    <div className="flex items-center w-[150px] lg:w-[120px] relative">
                       <div className="size-[48px] flex items-center">
                         {theme == 'dark' ? <img src={LandshareLogo_Dark}></img> : <LogoIcon />}
                       </div>
@@ -67,7 +67,7 @@ export default function YouOwn(){
                         <span className="text-[14px] text-text-primary font-medium"> LAND</span>
                       </span>
                       <span
-                        className="cursor-pointer  hover:shadow-md  text-[#61CD81] font-medium w-[20px] h-[20px] text-center rounded-full text-[16px] border-[1px] border-[#61CD81] flex items-center justify-center duration-300 dark:bg-primary dark:text-text-primary"
+                        className="absolute right-0 cursor-pointer hover:shadow-md text-[#61CD81] font-medium w-[20px] h-[20px] leading-[20px] text-center rounded-full text-[16px] border-[1px] border-[#61CD81] flex items-center justify-center duration-300 dark:bg-primary dark:text-text-primary"
                         onClick={() => router.push("/nft/resources")}
                       >
                         +
@@ -100,7 +100,7 @@ export default function YouOwn(){
                         <span className="fs-xs text-text-primary font-medium"> Steel</span>
                       </span>
                     </div>
-                    <div className="flex items-center w-[150px] lg:w-[130px]">
+                    <div className="relative flex items-center w-[150px] lg:w-[130px]">
                       <div className="size-[48px] flex items-center justify-center bg-[#CE8B11]/15 border-[1px] border-[#CE8B11]/40 rounded-full">
                         <EnergyIcon fill="#CE8B11"  height="24" width="24"/>
                       </div>
@@ -111,7 +111,7 @@ export default function YouOwn(){
                         <span className="fs-xs text-text-primary font-medium"> Power</span>
                       </span>
                       <span
-                        className="cursor-pointer  hover:shadow-md  text-[#61CD81] font-medium w-[20px] h-[20px] text-center rounded-full text-[16px] border-[1px] border-[#61CD81] flex items-center justify-center duration-300 dark:bg-primary dark:text-text-primary"
+                        className="absolute right-0 cursor-pointer hover:shadow-md text-[#61CD81] font-medium w-[20px] h-[20px] leading-[20px] text-center rounded-full text-[16px] border-[1px] border-[#61CD81] flex items-center justify-center duration-300 dark:bg-primary dark:text-text-primary"
                         onClick={() => router.push("/nft/resources")}
                       >
                         +
@@ -134,6 +134,9 @@ export default function YouOwn(){
                       {numeral(Number(nftCredits)).format("0.[00]")}
                         <span className="fs-xs text-text-primary font-medium"> Credits</span>
                       </span>
+                    </div>
+                    <div className="w-[150px]">
+                      <SwitchTheme className="!m-0" />
                     </div>
                   </div>
                 )}
