@@ -301,8 +301,26 @@ export default function InventoryPage() {
     }
   };
 
+  const modalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      width: "90%",
+      height: "fit-content",
+      borderRadius: "20px",
+      padding: 0,
+      border: 0,
+      maxWidth: '800px'
+    },
+    overlay: {
+      background: '#00000080'
+    }
+  };
+
   return (
-    <div className={`${theme == 'dark' ? "dark" : ""}`}>
+    <div className={`font-inter ${theme == 'dark' ? "dark" : ""}`}>
       <div className="bg-primary">
         {isLoginLoading || isLoading ? (
           <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
@@ -587,11 +605,11 @@ export default function InventoryPage() {
               )}
             </div>
             <ReactModal
-              style={customModalStyles}
+              style={modalStyles}
               isOpen={showItemsModal}
 							onRequestClose={() => { setShowItemsModal(!showItemsModal), document.body.classList.remove('modal-open'); }}
             >
-              <div className='px-3 my-5'>
+              <div className='px-3 py-5 bg-primary'>
                 <NftItems
                   houseItems={houseItems.filter((house: any) => !house.isActivated)}
                 />
