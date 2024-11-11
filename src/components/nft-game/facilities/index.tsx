@@ -2,7 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import Facility from "./facility";
-import "react-multi-carousel/lib/styles.css";
+// import "react-multi-carousel/lib/styles.css";
 
 export default function ProductionFacilities() {
   const {

@@ -13,7 +13,7 @@ import {
 import useProductionUpgrade from "../../../hooks/nft-game/axios/useProductionUpgrade";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
-import carouselIcon from "../../../assets/img/icons/carousel-icon.png";
+import carouselIcon from "../../../../public/icons/carousel-icon.png";
 
 
 interface ProductionUpdgradeProps {

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-
 import InputCost from "../../common/input-cost";
 import ReparingCost from "./repairing-cost";
 import RepairButton from "./repair-button";
-
 import useHouseRepair from "../../../hooks/nft-game/axios/useHouseRepair";
-import "./Reparing.css";
+
 
 interface RepairProps {
   house: any;

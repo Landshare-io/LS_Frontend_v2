@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Check from '../../../assets/img/icons/check.jpg';
-import Close from '../../../assets/img/icons/close.png';
+import Check from '../../../../public/icons/check.jpg';
+import Close from '../../../../public/icons/close.png';
 
 interface EditableNftProps {
   className?: string
