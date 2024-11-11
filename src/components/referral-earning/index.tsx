@@ -1,6 +1,6 @@
 export default function ReferralEarning() {
     return(
-    <div className="lg:w-[543px] w-full  flex flex-col bg-white rounded-2xl p-6 h-[474px]">
+    <div className="lg:w-[543px] w-full flex flex-col bg-white rounded-2xl p-6 h-[480px] sm:h-[474px]">
         <p className="font-bold text-lg leading-7 text-[#0A0A0A]">Earnings</p>
 
         <div className="mt-[22px] flex justify-between">
@@ -30,10 +30,10 @@ export default function ReferralEarning() {
 
         <button className="w-full font-bold border border-[#61CD81] opacity-60 text-[#000000] text-sm mt-[22px] py-[13px] rounded-[100px]">Claim Earnings</button>
 
-        <p className="text-sm mt-2 text-[#535457] leading-[22px]">Referral commissions and rebates are only tracked across Arbitrum and Mantle. Rewards can be claimed on Arbitrum.
-            <span className="text-[#61CD81] font-bold">Learn more</span>
+        <p className="text-sm mt-2 text-[#535457] leading-[22px]">Referral commissions and rebates are only tracked across Arbitrum and Mantle. Rewards can be claimed on Arbitrum. 
+            <span className="text-[#61CD81] underline font-bold"> Learn more</span>
         </p>
 
-        <p className="text-sm mt-[60px] text-[#535457] leading-[22px]">If you were referred by another trader, you’ll be able to see and claim available rebates here.</p>
+        <p className="text-sm mt-11 sm:mt-[60px] text-[#535457] leading-[22px]">If you were referred by another trader, you’ll be able to see and claim available rebates here.</p>
     </div>)
 }
