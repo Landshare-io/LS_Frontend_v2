@@ -41,7 +41,7 @@ const Referral: NextPage = () => {
                     </div>
                     
                     <div className='my-6'>
-                        <p className='font-bold text-[28px] leading-[22px]'>Referrals</p>
+                        <p className='font-bold text-[28px] leading-[22px] text-text-primary'>Referrals</p>
                     </div>
 
                     <div className='w-full flex flex-col lg:flex-row justify-between gap-5 lg:gap-10'>
