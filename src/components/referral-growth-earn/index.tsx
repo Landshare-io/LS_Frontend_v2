@@ -1,14 +1,14 @@
-import Image from "next/image";
-import Earning from "../../../public/icons/referral-growth.svg";
+import { IoTrendingUp } from "react-icons/io5";
 
 export default function GrowthEarning() {
   return (
-    <div className="flex justify-start items-center px-[6px] py-[7px] w-[85px] h-[34px] bg-third rounded-[50px] gap-2">
-      <Image src={Earning} alt="Growth Earning" width={20} height={20} />
-
-      <p className="text-text-primary text-sm font-medium leading-[22px]">
-        Earn
-      </p>
+    <div className="flex items-center w-fit py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-secondary ">
+      <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-primary">
+        <IoTrendingUp className="w-[24px] h-[24px] text-[#61CD81]" />
+      </div>
+      <span className="text-[14px] leading-[22px] tracking-[0.02em] font-semibold text-text-primary">
+        Assets of the future
+      </span>
     </div>
   );
 }

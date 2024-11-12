@@ -1,5 +1,13 @@
 import { useState } from "react";
 import Pagination from "../common/pagination";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../common/table";
 
 interface leaderboardDataProps {
   rank: number;
@@ -71,41 +79,44 @@ export default function ReferralLeaderBoard() {
       <h2 className="text-text-primary font-bold text-2xl leading-[22px]">
         Leaderboard
       </h2>
-
-      <div className="w-full overflow-auto mb-[18px] lg:mb-6">
-        <div className="min-w-[960px] text-text-primary grid grid-cols-6 mt-6 px-[18px] py-[11px] text-sm leading-[22px] text-left">
-          <p>Rank</p>
-          <p>Account</p>
-          <p>Earnings</p>
-          <p>Sign Ups</p>
-          <p>
-            Total Taker Volume <span className="text-[#61CD81]">ⓘ</span>
-          </p>
-          <p>Tier</p>
-        </div>
-
-        {leaderboardData.map((data, index) => {
-          const { rank, account, earnings, signUps, totalTakerVolume, tier } =
-            data;
-          const accountDisplay = `${account.slice(0, 6)}...${account.slice(
-            -4
-          )}`;
-
-          return (
-            <div
-              key={index}
-              className="text-text-primary min-w-[960px] grid grid-cols-6 font-bold bg-third rounded-2xl mt-6 px-[18px] py-[21px] text-sm leading-[22px] text-left"
-            >
-              <p>{rank}</p>
-              <p>{accountDisplay}</p>
-              <p>{earnings}</p>
-              <p>{signUps}</p>
-              <p>{totalTakerVolume}</p>
-              <p>{tier}</p>
-            </div>
-          );
-        })}
-      </div>
+      <Table className="border-separate text-text-primary border-spacing-y-3">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px] ">Rank</TableHead>
+            <TableHead>Account</TableHead>
+            <TableHead>Earnings</TableHead>
+            <TableHead className="min-w-[110px] lg:min-w-max">
+              Sign Ups
+            </TableHead>
+            <TableHead className="min-w-[200px] lg:min-w-max">
+              Total Taker Volume <span className="text-[#61CD81]">ⓘ</span>
+            </TableHead>
+            <TableHead className="min-w-[100px] w-auto">Tier</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {leaderboardData.map((data, index) => {
+            const { rank, account, earnings, signUps, totalTakerVolume, tier } =
+              data;
+            const accountDisplay = `${account.slice(0, 6)}...${account.slice(
+              -4
+            )}`;
+            return (
+              <TableRow
+                className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
+                key={index}
+              >
+                <TableCell className="rounded-l-xl">{rank}</TableCell>
+                <TableCell>{accountDisplay}</TableCell>
+                <TableCell>{earnings}</TableCell>
+                <TableCell>{signUps}</TableCell>
+                <TableCell>{totalTakerVolume}</TableCell>
+                <TableCell className="rounded-r-xl">{tier}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
 
       <Pagination
         pageCount={pageCount}

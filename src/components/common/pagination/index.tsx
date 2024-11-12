@@ -31,12 +31,12 @@ const Pagination = ({
             currentPage > 1
           }}`}
         >
-          <SlArrowLeft className="text-current w-3 h-3 text-[#535457] group-hover:text-white" />
+          <SlArrowLeft className=" w-3 h-3 text-text-primary group-hover:text-white" />
         </button>
 
         <div className="grow flex justify-center items-center h-8 text-center text-text-primary border-x-0 border-y border-[#D8D8D8]">
-          <span className="font-bold">{currentPage}</span>&nbsp;/&nbsp;
-          <span className="text-text-secondary">{pageCount}</span>
+          <span className="text-[14px]">{currentPage}</span>&nbsp;/&nbsp;
+          <span className="text-[14px] text-text-secondary">{pageCount}</span>
         </div>
 
         <button
@@ -45,7 +45,7 @@ const Pagination = ({
             currentPage < pageCount
           }`}
         >
-          <SlArrowRight className="text-current w-3 h-3 text-[#535457] group-hover:text-white" />
+          <SlArrowRight className="w-3 h-3  text-text-primary group-hover:text-white" />
         </button>
       </div>
     </div>

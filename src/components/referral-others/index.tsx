@@ -24,14 +24,11 @@ export default function ReferralOthers() {
   };
 
   return (
-    <div className="lg:w-[617px] w-full flex flex-col bg-third rounded-2xl p-6 h-fit gap-4 sm:gap-8 shadow-md">
-      <div className="w-full flex justify-between items-end">
-        <p className="text-text-secondary font-bold text-lg leading-7">
-          Refer Others
-        </p>
-
+    <div className="w-full flex flex-col bg-third  rounded-2xl p-6 h-fit gap-4 sm:gap-8 shadow-lg">
+      <div className="w-full flex justify-between items-center">
+        <p className="font-bold text-lg text-text-primary">Refer Others</p>
         <p
-          className="text-sm leading-4 text-text-secondary cursor-pointer"
+          className="text-sm cursor-pointer text-text-primary"
           onClick={handleOpenModal}
         >
           Customize
@@ -53,7 +50,7 @@ export default function ReferralOthers() {
               {(() => {
                 if (!connected) {
                   return (
-                    <div className="w-full text-center py-3 rounded-xl bg-[#F6F8F9] text-[#61CD81] text-base leading-5">
+                    <div className="w-full text-center py-3 rounded-xl bg-primary text-[#61CD81] text-base leading-5">
                       Connect your wallet to view link
                     </div>
                   );
@@ -61,7 +58,7 @@ export default function ReferralOthers() {
 
                 if (chain.unsupported) {
                   return (
-                    <div className="w-full text-center py-3 rounded-xl bg-[#F6F8F9] text-[#61CD81] text-base leading-5">
+                    <div className="w-full text-center py-3 rounded-xl bg-primary text-[#61CD81] text-base leading-5">
                       Wrong network
                     </div>
                   );

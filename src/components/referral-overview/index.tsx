@@ -5,7 +5,7 @@ import Tooltip from "../common/tooltip";
 
 export default function ReferralOverview() {
   return (
-    <div className="flex flex-col lg:w-[617px] w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-[29px] shadow-md">
+    <div className="flex flex-col  w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-[29px] shadow-lg">
       <div className="w-full flex justify-between">
         <p className="text-text-primary font-bold text-lg leading-7">
           Overview
@@ -18,23 +18,21 @@ export default function ReferralOverview() {
             width={26}
             height={26}
           />
+          <div className="flex align-text-bottom gap-1">
+            <p className="font-bold text-lg leading-7 text-text-primary">
+              Tier 1
+            </p>
+            <p className="font-normal text-[14px] leading-7 text-text-secondary">
+              10%commission
+            </p>
+          </div>
           <Tooltip
+            tooltipClassName="-translate-x-[190px] lg:-translate-x-[100px] "
             content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in re"
             position="bottom"
           >
-            <p className="font-bold text-lg leading-7 text-text-primary cursor-pointer">
-              Tier 1
-            </p>
+            <span className="text-[#61CD81] cursor-pointer ">ⓘ</span>
           </Tooltip>
-          <p className="font-normal leading-7 text-text-secondary">
-            10%commission
-          </p>
-          <Image
-            src={moreInfo}
-            alt="Referral Overview"
-            width={20}
-            height={24}
-          />
         </div>
       </div>
 
@@ -55,17 +53,19 @@ export default function ReferralOverview() {
           </p>
         </div>
       </div>
-
       <div className="">
         <p className="text-text-secondary text-sm leading-4">
           Tiers are based on referred taker volume in the past 60 days and total
           LSRWA staked.
         </p>
-        <p className="font-bold text-[#61CD81] text-sm mt-[3px]">
-          <span className="underline cursor-pointer">Learn more</span>
-          &nbsp;&nbsp;
-          <span className="underline cursor-pointer">Stake LSRWA</span>
-        </p>
+        <div className="flex gap-2">
+          <p className="font-bold text-[#61CD81] text-sm mt-[3px] cursor-pointer">
+            Learn more
+          </p>
+          <p className="font-bold text-[#61CD81] text-sm mt-[3px] cursor-pointer">
+            Stake LSRWA
+          </p>
+        </div>
       </div>
     </div>
   );
