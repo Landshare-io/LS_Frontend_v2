@@ -32,13 +32,10 @@ export default function Repair({
 
   return (
     <>
-      <div className="input-group mb-4 reparing-section position-relative">
-        <div
-          className={`main-reparing-cost d-flex justify-content-between py-[1px] main-reparing-cost-${house.isActivated && !house.onSale ? "allow" : "disable"
-            }`}
-        >
-          <div className="d-flex flex-grow-1 justify-content-between align-items-center py-1 me-sm-3 me-0 text-text-primary">
-            <span className="me-2 fs-14 ">Amount: </span>
+      <div className="flex md:hidden mb-4 pr-0 flex-nowrap md:pr-[125px] relative">
+        <div className={`flex-1 rounded-[2rem] rounded-r-0 pl-0 px-[0.75rem] pr-[1.5rem] flex gap-[20px] justify-between py-[1px] ${house.isActivated && !house.onSale ? "border-[2px] border-[#61cd81] border-r-0 pr-0" : "border-[2px] border-[#8f8f8f] border-r-0 pr-0"}`}>
+          <div className="flex flex-grow-1 justify-between items-center pl-[20px] py-1 mr-3 sm:mr-0 text-text-primary">
+            <span className="mr-2 text-[14px]">Amount: </span>
             <InputCost
               width={70}
               value={displayPercent}
@@ -46,14 +43,11 @@ export default function Repair({
               calcMaxAmount={calcMaxAmount}
             />
           </div>
-          <div
-            className={`d-none d-sm-flex repair-cost w-100 repair-cost-${house.isActivated && !house.onSale ? "allow" : "disable"
-              }`}
-          >
+          <div className={`flex pr-[130px] pl-[20px] w-full ${house.isActivated && !house.onSale ? "border-l-[1px] border-[#61cd81] rounded-[48px]" : "border-l-[1px] border-[#8f8f8f] rounded-[48px]"}`}>
             {isLoading ? <>
-              <span className="upgrade-status" style={{ marginLeft: "20px" }}>Loading</span></> :
+              <span className="font-semibold" style={{ marginLeft: "20px" }}>Loading</span></> :
               <ReparingCost
-                className="min-w-[316px]"
+                className="min-w-[316px] gap-[20px]"
                 cost={{
                   power: house?.repairCost[0] ?? 0,
                   lumber: house?.repairCost[1] ?? 0,
@@ -64,7 +58,7 @@ export default function Repair({
               />}
           </div>
         </div>
-        <div className="d-none d-sm-block">
+        <div className="block">
           <RepairButton
             repair={() => repairWithAmount(house, setHouse, setDisplayPercent, displayPercent)}
             isLoading={isLoading}
@@ -72,11 +66,20 @@ export default function Repair({
           />
         </div>
       </div>
-      <div className="input-group d-block d-sm-none mb-3 mobile-reparing-section reparing-section position-relative">
+      <div className="hidden md:block mb-3 h-[44px] pr-0 md:pr-[125px] relative">
         <div
-          className={`main-reparing-cost h-100 d-flex py-2 justify-content-between main-reparing-cost-allow`}
+          className={`flex-1 px-[0.75rem] rounded-l-[2rem] pr-[1.5rem] h-full flex gap-[30px] justify-between border-[2px] border-[#61cd81] pr-0`}
         >
-          <div className="d-flex d-sm-none repair-cost w-100">
+          <div className="flex flex-grow-1 justify-between items-center py-2 mr-3 sm:mr-0 text-text-primary">
+            <span className="mr-2 text-[14px]">Amount: </span>
+            <InputCost
+              width={70}
+              value={displayPercent}
+              changeRepairAmount={() => changeRepairAmount(house, setHouse, setDisplayPercent, displayPercent)}
+              calcMaxAmount={calcMaxAmount}
+            />
+          </div>
+          <div className="hidden md:flex w-full border-l-[1px] border-[#61cd81] rounded-[2rem] pl-[10px]">
             <ReparingCost
               className="min-w-[316px]"
               cost={{
@@ -89,13 +92,11 @@ export default function Repair({
             />
           </div>
         </div>
-        <div className="d-block d-sm-none">
-          <RepairButton
-            repair={() => repairWithAmount(house, setHouse, setDisplayPercent, displayPercent)}
-            isLoading={isLoading}
-            activated={house.isActivated && !house.onSale}
-          />
-        </div>
+        <RepairButton
+          repair={() => repairWithAmount(house, setHouse, setDisplayPercent, displayPercent)}
+          isLoading={isLoading}
+          activated={house.isActivated && !house.onSale}
+        />
       </div>
     </>
   );
