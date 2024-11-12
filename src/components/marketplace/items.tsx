@@ -31,7 +31,7 @@ export default function MarketplaceItems({
   return (
     <>
       {isLoading ? (
-        <div className="flex w-full min-h-[60vh] h-full items-center justify-center mlg:grid mlg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] lg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] mlg:justify-between mlg:gap-[4rem]">
+        <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
           <ReactLoading type="bars" color="#61cd81" />
         </div>
       ): 
@@ -53,7 +53,6 @@ export default function MarketplaceItems({
         ) : 
           <div className='flex w-full items-center justify-center flex-col min-h-[40vh]'>
             <div className={`text-[20px] mb-[20px] text-gray-500 ${BOLD_INTER_TIGHT.className}`}>No NFTs Found</div>
-        
           </div>
         }
         {pageCount > 1 && (
