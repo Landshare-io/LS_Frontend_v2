@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
 import axios from "./nft-game-axios";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
@@ -53,10 +52,11 @@ export default function useGetHouse(houseId: number | string) {
     (async () => {
       await getHouse()
     })()
-  }, [isAuthenticated])
+  }, [isAuthenticated, houseId])
 
   const getHouse = async () => {
     if (!isAuthenticated) return
+    if (typeof houseId === "undefined" || houseId === '') return
     const { data } = await axios.get(`/house/detail/${houseId}`)
 
     setHouse((prevState) => ({
