@@ -1,5 +1,6 @@
 import React from "react";
 import ReactLoading from 'react-loading';
+import Button from "../../common/button";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface RepairButtonProps {
@@ -11,9 +12,8 @@ interface RepairButtonProps {
 export default function RepairButton({ repair, isLoading, activated }: RepairButtonProps) {
   return (
     <>
-      <button
-        className={`btn text-[16px] absolute text-button-text-secondary right-[-1px] rounded-[24px] w-[145px] h-[44px] text-[#fff] duration-400 capitalize whitespace-nowrap btn-repair-${(activated) ? "allow" : "disable"
-          } ${isLoading ? 'flex justify-center items-center' : ''} ${BOLD_INTER_TIGHT.className}`}
+      <Button
+        className={`text-[16px] absolute text-button-text-secondary top-0 right-[-1px] rounded-[24px] w-[145px] h-[44px] text-[#fff] duration-400 capitalize whitespace-nowrap ${(activated) ? "bg-[#61cd81] border-[2px] border-[#61cd81]" : "bg-[#8f8f8f] border-[2px] border-[#8f8f8f]"} ${isLoading ? 'flex justify-center items-center' : ''} ${BOLD_INTER_TIGHT.className}`}
         onClick={() => repair()}
         disabled={!activated || isLoading}
       >
@@ -25,7 +25,7 @@ export default function RepairButton({ repair, isLoading, activated }: RepairBut
         ) : (
           'REPAIR'
         )}
-      </button>
+      </Button>
     </>
   );
 };
