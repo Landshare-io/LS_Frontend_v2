@@ -383,7 +383,7 @@ export default function NftDetails({
             <div className="border-b-[1px] border-[#00000050]"></div>
             <div className="">
               <div className="pt-[14px] pb-[21px] d-flex">
-                <h6 className="font-semibold text-[16px] mb-0 text-text-secondary">
+                <h6 className="font-semibold text-[18px] mb-0 text-text-secondary">
                   {`${nftSeries} ${house.isRare
                     ? `Rare #${Number(house.typeId) + 1}`
                     : `#${Number(house.typeId) + 1}`
@@ -425,7 +425,7 @@ export default function NftDetails({
                 <div className="flex flex-grow ml-0 lg:ml-[1.5rem]">
                   <div className="flex flex-col w-full">
                     <div className="border-b-[1px] border-dashed border-[#000000]"></div>
-                    <div className="flex sm:flex-col flex-row py-3 justifybetween">
+                    <div className="flex flex-col md:flex-row py-3 justify-between">
                       <div className="text-[16px] mb-0 font-normal flex flex-nowrap items-center justify-start text-text-secondary">
                         Durability
                         <div
@@ -626,7 +626,7 @@ export default function NftDetails({
                           Annual Yield:
                         </span>
                         <span className="text-[24px] text-text-primary">
-                          {numeral((depositedBalance * house.multiplier / 50).toString()).format(
+                          {numeral((Number(depositedBalance) * Number(house.multiplier) / 50).toString()).format(
                             "0.[00]"
                           )}
                         </span>
