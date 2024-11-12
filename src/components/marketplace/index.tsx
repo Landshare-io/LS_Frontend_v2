@@ -79,7 +79,7 @@ export default function MarketplacePage() {
                   </label>
                   <div className="relative mr-2">
                     <select
-                      className={`whitespace-nowrap text-ellipsis ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                      className={`whitespace-nowrap text-ellipsis py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
                       name="marketplace-view"
                       id="marketplace-view"
                       onChange={(e) => changeMarketplaceView(e.target.value)}
@@ -87,7 +87,7 @@ export default function MarketplacePage() {
                       <option value="all">Available NFTs</option>
                       <option value="mine">My NFTs</option>
                     </select>
-                    <SelectarrowIcon className="absolute right-[10px] top-[50%] translate-y-[-50%]" />
+                    <SelectarrowIcon className="absolute right-[4px] top-[50%] translate-y-[-50%]" />
                   </div>
                 </div>
                 <div className="flex ms-4 sm:ms-1 items-center">
@@ -99,7 +99,7 @@ export default function MarketplacePage() {
                   </label>
                   <div className="relative mr-2">
                     <select
-                      className={`whitespace-nowrap text-ellipsis ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                      className={`whitespace-nowrap text-ellipsis py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
                       name="marketplace-sort"
                       id="marketplace-sort"
                       onChange={(e) => changeMarketplaceSort(e.target.value)}
@@ -107,7 +107,7 @@ export default function MarketplacePage() {
                       <option value="date">Date</option>
                       <option value="price">Price</option>
                     </select>
-                    <SelectarrowIcon />
+                    <SelectarrowIcon className="absolute right-[4px] top-[50%] translate-y-[-50%]" />
                   </div>
                 </div>
               </div>
