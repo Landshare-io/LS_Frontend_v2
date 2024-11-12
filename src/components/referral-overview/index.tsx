@@ -2,6 +2,7 @@ import Image from "next/image";
 import resourceLandshare from "../../../public/icons/resource-landshare.png";
 import moreInfo from "../../../public/icons/referral-more-info.svg"
 import { useGlobalContext } from "../../context/GlobalContext";
+import Tooltip from "../common/tooltip";
 
 export default function ReferralOverview (){
     const { theme } = useGlobalContext();
@@ -13,7 +14,12 @@ export default function ReferralOverview (){
 
             <div className="flex justify-start items-center gap-1">
                 <Image src={resourceLandshare} alt="Referral Overview" width={26} height={26}/>
-                <p className="font-bold text-lg leading-7 text-text-primary">Tier 1</p>
+                <Tooltip
+                  content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in re"
+                  position="bottom"
+                >
+                    <p className="font-bold text-lg leading-7 text-text-primary cursor-pointer">Tier 1</p>
+                </Tooltip>
                 <p className="font-normal leading-7 text-text-secondary">10%commission</p> 
                 <Image src={moreInfo} alt="Referral Overview" width={20} height={24}/>
             </div>
@@ -33,7 +39,7 @@ export default function ReferralOverview (){
 
         <div className="">
             <p className="text-text-secondary text-sm leading-4">Tiers are based on referred taker volume in the past 60 days and total LSRWA staked.</p>
-            <p className="font-bold text-[#61CD81] text-sm mt-[3px]"><span className="underline">Learn more</span>  <span className="underline">Stake LSRWA</span></p>
+            <p className="font-bold text-[#61CD81] text-sm mt-[3px]"><span className="underline cursor-pointer">Learn more</span>&nbsp;&nbsp;<span className="underline cursor-pointer">Stake LSRWA</span></p>
         </div>
     </div>)
 }

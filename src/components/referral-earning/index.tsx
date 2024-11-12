@@ -30,8 +30,8 @@ export default function ReferralEarning() {
 
         <button className="w-full font-bold border border-[#61CD81] opacity-60 text-text-primary text-sm mt-[22px] py-[13px] rounded-[100px]">Claim Earnings</button>
 
-        <p className="text-sm mt-2 text-text-secondary leading-[22px]">Referral commissions and rebates are only tracked across Arbitrum and Mantle. Rewards can be claimed on Arbitrum. 
-            <span className="text-[#61CD81] underline font-bold"> Learn more</span>
+        <p className="text-sm mt-2 text-text-secondary leading-[22px]">Referral commissions and rebates are only tracked across Arbitrum and Mantle. Rewards can be claimed on Arbitrum.
+            {" "}<span className="text-[#61CD81] font-bold underline cursor-pointer">Learn more</span>
         </p>
 
         <p className="text-sm mt-[60px] md:mt-[66px] text-text-secondary leading-[22px]">If you were referred by another trader, you’ll be able to see and claim available rebates here.</p>
