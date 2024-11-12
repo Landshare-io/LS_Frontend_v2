@@ -106,6 +106,43 @@ a {
 	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
 }
 
+.toggle-switch {
+	--diameter: 2rem;
+	--spacing: 0.24rem;
+	inline-size: 3.2rem; /* width */
+	block-size: 1.84rem; /* height */
+	border: none;
+	cursor: pointer;
+	color: var(--clr-text);
+	position: relative;
+	border-radius: 100vh;
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-around;
+	transition:
+		background-color 0.4s ease-in-out,
+		color 0.4s ease-in-out;
+
+	margin-right: 16px;
+}
+
+.toggle-switch::before {
+	content: '';
+	position: absolute;
+	inset-inline-start: var(--spacing); /* left */
+	inset-block-start: var(--spacing); /* top */
+	border-radius: 100vh;
+	inline-size: 1.36rem; /* width */
+	block-size: 1.36rem; /* height */
+	background: #ffffff;
+	transition: inset-inline-start 0.4s ease-in-out; /* left */
+}
+
+.toggle-switch.sale::before {
+	--offset: calc(100% - 2.3rem);
+	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
