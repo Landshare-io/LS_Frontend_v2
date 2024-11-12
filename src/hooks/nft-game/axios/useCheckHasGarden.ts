@@ -8,10 +8,11 @@ export default function useCheckHasGarden(houseId: number | string) {
     (async () => {
       await checkHasGarden()
     })()
-  }, [])
-
+  }, [houseId])
+  
   async function checkHasGarden() {
     try {
+      if (typeof houseId === "undefined" || houseId === '') return
       const { data } = await axios.get(`/has-item/has-garden/${houseId}`)
 
       setHasGarden(data)
