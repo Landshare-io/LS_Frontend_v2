@@ -8,10 +8,11 @@ export default function useCheckHasLandscaping(houseId: number | string) {
     (async () => {
       await checkHasLandscaping()
     })()
-  }, [])
-
+  }, [houseId])
+  
   const checkHasLandscaping = async () => {
     try {
+      if (typeof houseId === "undefined" || houseId === '') return
       const { data } = await axios.get(`/has-item/has-landscaping/${houseId}`)
 
       setHasLandscaping(data)
