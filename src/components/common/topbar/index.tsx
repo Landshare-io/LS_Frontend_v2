@@ -66,9 +66,9 @@ export default function Topbar({ isNftList }: TopbarProps) {
         {isNftList ? (
           <div className="mt-2"></div>
         ) : (
-          <div className="d-flex align-items-center back-to-list">
+          <div className="flex items-center mt-[5px] md:mt-[20px] ml-[6px] text-[#131414]">
             <div
-              className="inline-block cursor-pointer"
+              className="flex items-center cursor-pointer"
               onClick={() => router.push("/nft/inventory")}
             >
               <BackIcon />
