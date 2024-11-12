@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
+import type { NextPage } from 'next';
 import { db } from "../../utils/firebase";
 import {
   doc,
@@ -13,10 +14,10 @@ import {
 import FullPageLoading from "../../components/common/full-page-loading";
 import WalletNotConnected from "../../components/common/wallet-not-connet";
 import WhiteFooter from "../../components/common/white-footer";
-
+import RequestsCard from "../../components/otc/request-card";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
-export default function OTC() {
+const OTC: NextPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [otcRequests, setOTCRequests] = useState<any>({});
@@ -41,7 +42,7 @@ export default function OTC() {
     }
   };
 
-  const completeRequest = async (requestIdx: string) => {
+  const completeRequest = async (requestIdx: string | number) => {
     setIsLoading(true);
 
     const docRef = collection(db, "otcRequests");
@@ -62,7 +63,7 @@ export default function OTC() {
     getOTCData();
   };
 
-  const rejectRequest = async (requestIdx: string) => {
+  const rejectRequest = async (requestIdx: string | number) => {
     setIsLoading(true);
 
     const docRef = collection(db, "otcRequests");
@@ -70,7 +71,6 @@ export default function OTC() {
     const docSnapshots = await getDocs(docQuery);
     const prevDocData = docSnapshots.docs[0].data();
 
-    console.log(prevDocData.requests, requestIdx);
     prevDocData.requests[requestIdx].status = "rejected_by_user";
 
     await setDoc(
@@ -116,3 +116,5 @@ export default function OTC() {
     </>
   );
 }
+
+export default OTC

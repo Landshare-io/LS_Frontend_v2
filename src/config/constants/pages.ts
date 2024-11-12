@@ -31,6 +31,6 @@ export const PAGES: PAGE[] = [
   },
 ];
 
-export const VISIBLE_FOOTER_PAGES = [
-  '/', '/rwa', '/vaults', '/tokenized-asset', '/dao', '/migration'
+export const NOT_VISIBLE_FOOTER_PAGES = [
+  '/nft', '/marketplace'
 ];

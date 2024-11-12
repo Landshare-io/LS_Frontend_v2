@@ -1,9 +1,18 @@
-import { useChainId } from 'wagmi'
+import { useEffect } from 'react';
+import { useChainId, useAccount } from 'wagmi'
+import type { NextPage } from 'next';
 import NftPage from '../../components/nft-game/detail'
+import useLogin from '../../hooks/nft-game/axios/useLogin';
 import { supportChainIds } from '../../wagmi'
 
-export default function Nft() {
+const Nft: NextPage = () => {
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
+  const { address } = useAccount()
+  const { checkIsAuthenticated } = useLogin()
+
+  useEffect(() => {
+    if (typeof address != "undefined") checkIsAuthenticated(address)
+  }, [address])
 
   return (
     <div>
@@ -17,3 +26,5 @@ export default function Nft() {
     </div>
   )
 }
+
+export default Nft

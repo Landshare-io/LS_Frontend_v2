@@ -5,7 +5,7 @@ export default function useCheckHasItem(item: any, houseId: number) {
   const [hasItem, setHasItem] = useState<any>({})
 
   useEffect(() => {
-    if (item) {
+    if (typeof item !== 'undefined' && typeof item.id !== 'undefined') {
       const fetchItem = async () => {
         const { data } = await axios.get(`/has-item/find-item-and-house-and-user?itemId=${item.id}&houseId=${houseId}`);
         setHasItem(data);

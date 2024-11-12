@@ -1,120 +1,61 @@
 import { useState, useEffect } from "react";
-import { useGlobalContext } from "../../context/GlobalContext";
+import ReactLoading from 'react-loading';
+import { formatEther, BigNumberish } from "ethers";
+import Button from "../common/button";
+import useShowOffer from "../../hooks/contract/SwapCatContract/useShowoffer";
+import useBuyOffer from "../../hooks/contract/otc/useBuyOffer";
+import useApproveOffer from "../../hooks/contract/otc/useApproveOffer";
 
-export default function RequestsCard({ requestData, completeRequest, rejectRequest }) {
-  const { notifySuccess, notifyError } = useGlobalContext();
-  const { signer, assetTokenContract, assetTokenMDContract, provider, account } = useGlobalContext();
-  const swapcatContract = useContract({
-    address: process.env.REACT_APP_SWAPCAT_ADDR,
-    abi: Swapcat.abi,
-    signerOrProvider: signer || provider
-  })
-  if (requestData.status === "rejected") return null;
-  if (requestData.status === "rejected_by_user") return null;
+interface RequestsCardProps {
+  requestData: any;
+  completeRequest: Function;
+  rejectRequest: any;
+}
 
-
-
-
+export default function RequestsCard({ requestData, completeRequest, rejectRequest }: RequestsCardProps) {
   const [isSwapping, setIsSwapping] = useState([false, false]);
-
-  const [BUSDAmount, setBUSDAmount] = useState(0);
-  const [LANDAmount, setLANDAmount] = useState(0);
+  const [BUSDAmount, setBUSDAmount] = useState<BigNumberish>(0);
+  const [LANDAmount, setLANDAmount] = useState<BigNumberish>(0);
   const [BUSDAmountAT, setBUSDAmountAT] = useState(0);
   const [LANDAmountAT, setLANDAmountAT] = useState(0);
 
   const getOfferAmounts = async () => {
-    const BUSDoffer = await swapcatContract.showoffer(requestData.BUSDofferId)
 
-    const LANDoffer = await swapcatContract
-      .showoffer(requestData.LANDofferId)
+    setBUSDAmount(busdOffer[4]);
+    setLANDAmount(landOffer[4]);
+    setBUSDAmountAT(busdOffer[3].toString());
+    setLANDAmountAT(landOffer[3].toString());
 
-    setBUSDAmount(BUSDoffer[4]);
-    setLANDAmount(LANDoffer[4]);
-    console.log("BUSD AT: " + BUSDoffer[3]);
-    console.log("LAND AT: " + LANDoffer[3]);
-    console.log(BUSDoffer)
-    setBUSDAmountAT(BUSDoffer[3].toString());
-    setLANDAmountAT(LANDoffer[3].toString());
-
-    return parseInt(BUSDoffer[5].toString()).toString() + parseInt(LANDoffer[5].toString()).toString();
+    return parseInt(landOffer[5].toString()).toString() + parseInt(landOffer[5].toString()).toString();
   };
 
   useEffect(() => {
     getOfferAmounts();
   }, []);
 
-  const buyOffer = async (offerId) => {
-   
-    const tx = await swapcatContract
-      .buy(offerId).catch((e) => {
-        notifyError("Swap Error");
-        console.log("swap error", e);
-        setIsSwapping([false, false]);
-        return
-      })
+  const { buyOffer } = useBuyOffer(setIsSwapping, getOfferAmounts, completeRequest)
+  const { data: busdOffer } = useShowOffer(requestData.BUSDofferId) as { data: any[] }
+  const { data: landOffer } = useShowOffer(requestData.LANDofferId) as { data: any[] }
+  const { approveAsset } = useApproveOffer(buyOffer, setIsSwapping)
 
-    tx.wait().then(async () => {
-      const totalOfferAmount = await getOfferAmounts();
-      console.log(totalOfferAmount);
-      if (totalOfferAmount === 0) {
-        // Complete offer if both BUSD and LAND swap offer was completed
-        completeRequest();
-      }
-      setIsSwapping([false, false]);
-      notifySuccess("Swap success!");
-      }).catch((e) => {
-        notifyError("Swap Error");
-        console.log("swap error", e);
-        setIsSwapping([false, false]);
-        return
-    })
-  };
+  if (requestData.status === "rejected") return null;
+  if (requestData.status === "rejected_by_user") return null;
 
-  const approveOffer = async (tokenType) => {
-    console.log("requestData", requestData);
 
+  const approveOffer = async (tokenType: string) => {
     const offerID = requestData[`${tokenType}offerId`]; // BUSDofferId or LANDofferId
-    const offer = await swapcatContract.showoffer(offerID);
+    const offer = tokenType == "BUSD" ? busdOffer : landOffer
     const amountOfOffer = offer[4];
     const buyerPrice = offer[3];
 
-    console.log("amountOffer", amountOfOffer);
-    console.log("buyerPrice", buyerPrice);
-
     if (amountOfOffer === "0") {
-      // User does not have to buy
       return;
     }
 
     if (tokenType === "BUSD") setIsSwapping([true, false]);
     else setIsSwapping([false, true]);
-  
-    const assetToken =
-      requestData.token === "LSNF" ? assetTokenContract : assetTokenMDContract
 
-    const tx = await assetToken
-      .approve(
-        process.env.REACT_APP_SWAPCAT_ADDR,
-        buyerPrice 
-      ).catch((e) => {
-        notifyError("Swap Error");
-        console.log("swap error", e);
-        setIsSwapping([false, false]);
-      return
-      })
-
-
-    tx.wait().then(async () => {
-
-      await buyOffer(offerID);
-
-    }).catch((e) => {
-      notifyError("Swap Error");
-      console.log("swap error", e);
-      setIsSwapping([false, false]);
-    
-    })
-
+    approveAsset(offerID, tokenType, buyerPrice);
   };
 
   return (
@@ -174,7 +115,7 @@ export default function RequestsCard({ requestData, completeRequest, rejectReque
                     fill="black"
                   />
                 </svg>
-                {Math.round(formatEther(BUSDAmount.toString()))} BUSD
+                {Math.round(formatEther(BUSDAmount))} BUSD
               </p>
               <Button
                 className={`bg-[#61cd91] rounded-[41px] text-white px-[20px] py-[5px] duration-300 border-[2px] border-[#61cd91] mt-3 m-auto h-[34px] w-[120px] ${isSwapping[0]
@@ -212,7 +153,7 @@ export default function RequestsCard({ requestData, completeRequest, rejectReque
                     fill="black"
                   />
                 </svg>
-                {Math.round(formatEther(LANDAmount.toString()))} LAND
+                {Math.round(formatEther(LANDAmount))} LAND
               </p>
               <button
                 className={`bg-[#61cd91] rounded-[41px] text-white px-[20px] py-[5px] duration-300 border-[2px] border-[#61cd91] mt-3 m-auto h-[34px] w-[120px] ${isSwapping[1]

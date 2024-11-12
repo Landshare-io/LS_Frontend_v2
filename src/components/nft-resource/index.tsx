@@ -29,11 +29,11 @@ import { BOLD_INTER_TIGHT, PREMIUM_NFT_CONTRACT_ADDRESS } from "../../config/con
 import sadEmoji from "../../../public/icons/sad_emoji.png";
 import sadEmojiWhite from "../../../public/icons/sad_emoji_white.png";
 import resourceLandshare from "../../../public/icons/resource-landshare.png";
-import resourceLumber from ".../../../public/icons/resource-lumber.png";
-import resourcePower from ".../../../public/icons/resource-power.png";
-import marble from ".../../../public/img/marketplace-property/marble.png";
-import pool from ".../../../public/img/marketplace-property/pool.png";
-import tile from ".../../../public/img/marketplace-property/tile.png";
+import resourceLumber from "../../../public/icons/resource-lumber.png";
+import resourcePower from "../../../public/icons/resource-power.png";
+import marble from "../../../public/img/marketplace-property/marble.png";
+import pool from "../../../public/img/marketplace-property/pool.png";
+import tile from "../../../public/img/marketplace-property/tile.png";
 
 export default function NftResource() {
   const { isConnected, address } = useAccount();
@@ -157,7 +157,7 @@ export default function NftResource() {
           ) : (
             <>
               <Topbar isNftList />
-              <span className={`text-[16px] ${BOLD_INTER_TIGHT.className}`}>Resources</span>
+              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Resources</span>
               <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-5 mt-3`}></div>
               <div
                 className={`flex w-full min-h-[60vh] h-full items-center justify-center ${isPageLoading ? "grid" : "hidden"}`}
@@ -180,9 +180,9 @@ export default function NftResource() {
                   }}
                   cardClassName="bg-gradient-to-b from-[#31AF52] to-[#80CED9]"
                 >
-                  <div className="flex flex-col bg-[#6f8e9d66] h-[160px] justify-between">
+                  <div className="flex flex-col bg-[#6f8e9d66] h-[160px] justify-between py-[17px] px-[8px]">
                     <div className="relative flex flex-col items-center h-full">
-                      <span className="text-[14px] font-normal text-center">
+                      <span className="text-[14px] font-medium text-center">
                         Use LAND Tokens to purchase additional power or repair your house.
                       </span>
                       <div className="bottom-0 left-[50%] translate-x-[-50%] flex justify-center items-center absolute">
@@ -191,7 +191,7 @@ export default function NftResource() {
                           href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
                           target="_blank"
                         >
-                          <Button className="text-[16px] font-semibold w-[171px] h-[40px] text-button-text-secondary">
+                          <Button className="text-[16px] font-semibold w-[171px] h-[40px] text-button-text-secondary rounded-[20px]">
                             BUY
                           </Button>
                         </a>
@@ -210,21 +210,21 @@ export default function NftResource() {
                   }}
                   cardClassName="bg-gradient-to-b from-[#4896F1] to-[#77a1d28c]"
                 >
-                  <div className="flex flex-col resource-body bg-[#6f8e9d66] h-[160px] justify-between">
-                    <div className="flex flex-col border-b-[2px] border-[#61cd81] rounded-[25px] pt-[10px] bg-secondary relative h-[125px]">
+                  <div className="flex flex-col resource-body bg-[#6f8e9d66] h-[160px] justify-between py-[17px] px-[8px]">
+                    <div className="flex flex-col border-b-[2px] border-[#61cd81] rounded-[25px] border-[2px] border-[#61cd81] pt-[10px] bg-secondary relative h-[125px]">
                       <div className="px-[13px]">
                         <div className="flex justify-start items-center">
                           <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-2 text-text-secondary">POWER: </span>
                           <input
-                            className={`px-[5px] max-w-[50px] border-[1px] border-[#8d8d8d] rounded-[5px] text-[0.8rem] px-[5px] focus-visible:outline-0 focus-visible:shadow-md mr-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
-                            type="number"
+                            className={`px-[5px] max-w-[50px] border-[1px] border-[#8d8d8d] rounded-[5px] text-[0.8rem] px-[5px] text-right focus-visible:outline-0 focus-visible:shadow-md mr-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
+                            type="string"
                             step="1"
                             value={powerToBuy}
                             onChange={(e) => setPowerToBuy(e.target.value)}
                           />
                           <ChargeIcon iconColor={theme == 'dark' ? "#cec9c9" : ''} />
                         </div>
-                        <div className="border-b-[1px] border-[#00000050] w-full"></div>
+                        <div className="border-b-[1px] border-[#00000050] my-[5px] w-full"></div>
                         <div className="flex justify-start">
                           <div>
                             <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-2 text-text-secondary">Cost: </span>
@@ -235,7 +235,7 @@ export default function NftResource() {
                         </div>
                       </div>
                       <Button
-                        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute bg-[#61cd81] border-[2px] border-[#61cd81] text-button-text-secondary ${isLoading[0]
+                        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute bg-[#61cd81] border-[2px] border-[#61cd81] text-button-text-secondary rounded-[20px] ${isLoading[0]
                           ? "flex justify-center items-center"
                           : ""
                           }`}
@@ -279,14 +279,14 @@ export default function NftResource() {
                   }}
                   cardClassName="bg-gradient-to-b from-[#A27E23] to-[#a794538c]"
                 >
-                  <div className="flex flex-col bg-[#6f8e9d66] h-[160px] justify-between">
-                    <div className="flex flex-col border-[2px] border-[#ec9821] pt-[10px] bg-secondary relative h-[125px]">
+                  <div className="flex flex-col bg-[#6f8e9d66] h-[160px] justify-between py-[17px] px-[8px]">
+                    <div className="flex flex-col rounded-[25px] border-[2px] border-[#ec9821] pt-[10px] bg-secondary relative h-[125px]">
                       <div className="px-[13px]">
                         <div className="flex justify-start items-center">
                           <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-2 text-text-secondary">Gather: </span>
                           <input
-                            className={`px-[5px] max-w-[50px] border-[1px] border-[#8d8d8d] rounded-[5px] text-[0.8rem] px-[5px] focus-visible:outline-0 focus-visible:shadow-md mr-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
-                            type="number"
+                            className={`px-[5px] max-w-[50px] border-[1px] border-[#8d8d8d] rounded-[5px] text-[0.8rem] px-[5px] text-right focus-visible:outline-0 focus-visible:shadow-md mr-1 ${theme == 'dark' ? "bg-gray-600" : ""}`}
+                            type="string"
                             step="1"
                             max={isHavingTree ? "3" : "2"}
                             disabled={!gatheringLumberStatus.canGather}
@@ -295,11 +295,11 @@ export default function NftResource() {
                           />
                           <LumberIcon iconColor={theme == 'dark' ? "#cec9c9" : ''} />
                         </div>
-                        <div className="border-b-[1px] border-[#00000050] w-full"></div>
+                        <div className="border-b-[1px] border-[#00000050] w-full my-[5px]"></div>
                         <div className="flex justify-start">
-                          <div>
+                          <div className="flex items-center">
                             <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-2 text-text-secondary">Cost: </span>
-                            <span className={`${theme == 'dark' ? "text-[#cec9c9]" : "text-[#323131]"} text-[14px] font-[600]`}>
+                            <span className={`${theme == 'dark' ? "text-[#cec9c9]" : "text-[#323131]"} flex items-center gap-[2px] text-[14px] font-semibold`}>
                               {Number(gatheringLumber) * Number(powerPerLumber)}{" "}
                               <ChargeIcon iconColor={theme == 'dark' ? "#cec9c9" : ''} />
                             </span>
@@ -307,7 +307,7 @@ export default function NftResource() {
                         </div>
                       </div>
                       <Button
-                        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute bg-[#61cd81] border-[2px] border-[#61cd81] text-button-text-secondary ${isLoading[1]
+                        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute bg-[#ec9821] border-[2px] border-[#ec9821] text-button-text-secondary rounded-[20px] ${isLoading[1]
                           ? "d-flex justify-content-center align-items-center"
                           : ""
                           }`}
@@ -335,7 +335,7 @@ export default function NftResource() {
                 </ResourceCard>
                 {/* <TokenCard /> */}
               </div>
-              <span className={`text-[16px] ${BOLD_INTER_TIGHT.className}`}>Premium Upgrades</span>
+              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Premium Upgrades</span>
               <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-5 mt-3`}></div>
               {premiumNfts.length > 0 ? (
                 <div className="flex pb-[20px] mlg:grid mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] xl:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] my-2">

@@ -54,7 +54,7 @@ export default function HarvestCost({
               return (
                 <div key={`reduction-percent-${index}`}>
                   <span className='font-semibold text-[10px] ml-[4px] pr-[2px] text-text-secondary'>Production: </span>
-                  <span className={theme == 'dark' ? "text-gray-300 text-[12px]" : `status-production-${color != 'blue' ? color : 'grey'}`}>{`${percent * 100}%`}</span>
+                  <span className="text-[#323131] font-semibold text-[12px]">{`${percent * 100}%`}</span>
                 </div>
               )
             }
@@ -69,7 +69,7 @@ export default function HarvestCost({
             {item.buy.slice(2, 7).map((cost: number, index: number) => {
               if (Number(cost) > 0)
                 return (
-                  <div key={`next-cost-${index}`} className={`min-w-[20px] text-[14px] ${theme == 'dark' ? "text-gray-300" : color != 'blue' ? color : 'grey'}`}>
+                  <div key={`next-cost-${index}`} className={`flex gap-[1px] items-center min-w-[20px] text-[14px] font-medium text-[#323131]`}>
                     {colorType == 0 ? (
                       <>
                         {`${cost} `}
@@ -96,7 +96,7 @@ export default function HarvestCost({
       </div>
       <Button
         onClick={() => onPurcharse()}
-        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute text-button-text-secondary ${((isLoading.type > -1) && (isLoading.type != type)) ? 'disable' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
+        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] text-button-text-secondary ${((isLoading.type > -1) && (isLoading.type != type)) ? 'disable' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
         disabled={(color != "yellow") || (btnLabel == "ACTIVE") || ((isLoading.type == type) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
       >
         {((isLoading.type == type) && isLoading.loading) ? (

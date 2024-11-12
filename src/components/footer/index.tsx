@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { VISIBLE_FOOTER_PAGES } from "../../config/constants/pages";
+import { NOT_VISIBLE_FOOTER_PAGES } from "../../config/constants/pages";
 // import toast, { Toaster } from 'react-hot-toast';
 
 import Logo from "../common/logo";
@@ -20,10 +20,11 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const router = useRouter();
   const { pathname } = router;
-  const isFooterVisible = VISIBLE_FOOTER_PAGES.map((allowedPath: string) =>
-    pathname.startsWith(allowedPath)
+  const isFooterNotVisible = NOT_VISIBLE_FOOTER_PAGES.map((notAllowedPath: string) =>
+    pathname.startsWith(notAllowedPath)
   );
-  if (!isFooterVisible) return null;
+
+  if (isFooterNotVisible[0]) return null;
 
   function getSPKey(type: string, SPdata: any) {
     const accessData = {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactLoading from "react-loading";
+import Image from 'next/image';
 import ReactModal from 'react-modal';
 import { OpenModalIcon } from "../common/icons/index";
 import Button from '../common/button';
@@ -43,7 +44,7 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
             <span className="font-semibold text-white text-[20px]">{premiumNft.name}</span>
           </div>
           <div className='w-full h-[210px] relative'>
-            <img
+            <Image
               src={premiumNft.imgSrc}
               alt={premiumNft.name}
               className="translate-x-[-50%] w-[210px] h-[210px] left-[50%] top-0 absolute"
@@ -63,7 +64,7 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
         <div className="bg-[#6f8e9d66] py-[13px] px-[12px]">
           <div className='flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] bg-primary relative border-[2px] border-[#61cd81]'>
             <div className='flex flex-col px-2'>
-              <div className='flex justify-between'>
+              <div className='flex justify-between pt-[12px]'>
                 <div>
                   <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] text-text-secondary'>Multiplier: </span>
                   <span className={`${theme == 'dark' ? "text-[#cec9c9]" : "text-[#323131]"} text-[12px] font-[600] mr-[4px]`}>+{premiumNft.multiplier}</span>
@@ -80,14 +81,15 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
             <div className='flex pb-3 items-center px-2'>
               <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] text-text-secondary'>Cost: </span>
               <div className='w-full'>
-                <div className='min-w-[20px] font-semibold ml-1 text-[14px] font-normal text-[#00000080]'>
+                <div className='min-w-[20px] font-semibold ml-1 text-[14px]'>
                   {premiumNft.price} LAND
                 </div>
               </div>
             </div>
             <Button
               onClick={() => onSubmit()}
-              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute  ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
+              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
+              textClassName='text-[#fff]'
               disabled
             >
               {(loader == premiumNft.name) ? (

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
+import Image from "next/image";
 import { InfoIcon } from "../common/icons/index";
 import styles from "./resource-card.module.css"
 
@@ -25,7 +26,7 @@ interface ResourceCardProps {
   children?: React.ReactNode;
   title: string;
   subTitle: string;
-  imgSrc: any;
+  imgSrc?: any;
   cost: {
     value: string;
     description: string;
@@ -52,7 +53,7 @@ export default function ResourceCard({
           <span className="text-[14px] font-semibold text-white text-center mt-2">
             {subTitle}
           </span>
-          <img src={imgSrc} alt="resource-img" className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]" />
+          <Image src={imgSrc} alt="resource-img" className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]" />
           <div className={`flex w-full bottom-[10px] px-2 absolute ${title=="Gather Lumber" ? 'justify-between' : 'justify-center'}`}>
             {title=="Gather Lumber" && (
               <div className="w-[20px]"></div>
@@ -62,7 +63,7 @@ export default function ResourceCard({
               <span className="text-[12px] font-semibold">{cost.description}</span>
             </div>
             {title=="Gather Lumber" && (
-              <div className={styles.infoIcon} onClick={() => setOpenModal(true)}>
+              <div className={`flex items-center ${styles.infoIcon}`} onClick={() => setOpenModal(true)}>
                 <InfoIcon />
               </div>
             )}

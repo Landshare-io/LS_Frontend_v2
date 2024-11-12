@@ -23,7 +23,7 @@ export default function FormCheck({
   const { theme } = useGlobalContext()
 
   return (
-    <div className={`flex items-center ${className}`}>
+    <div className={`flex items-center gap-[10px] ${className}`}>
       <input
         id={id}
         type="checkbox"
@@ -39,7 +39,7 @@ export default function FormCheck({
       {label && (
         <label
           htmlFor={id}
-          className={`text-[16px] font-semibold ${theme == "dark" ? "text-gray-300" : "text-black-700"} cursor-pointer`}
+          className={`text-[16px] font-semibold ${theme == "dark" ? "text-gray-300" : "text-black-700"} cursor-pointer ${disabled && 'opacity-50'}`}
         >
           {label}
         </label>

@@ -92,7 +92,7 @@ export default function PremiumNfts() {
   }
 
   return (
-    <div className="flex overflow-x-scroll pb-[20px] mlg:grid mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] xl:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] my-5">
+    <div className="flex overflow-x-scroll pb-[20px] mlg:grid mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] my-5">
       {premiumNfts.map((item, index) => (
         <PremiumNft
           key={`mpremium-item-${index}`}

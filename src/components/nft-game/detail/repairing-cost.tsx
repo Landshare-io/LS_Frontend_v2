@@ -3,7 +3,6 @@ import numeral from "numeral";
 import Dropdown from "../../common/dropdown";
 import ReparingCostList from "./repairing-cost-list";
 import { ChargeIcon } from "../../common/icons/nft";
-import './ReparingCost.css';
 
 interface RepairingCostProps {
   cost: any;

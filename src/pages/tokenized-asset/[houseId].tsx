@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import Link from "next/link";
 import { bsc } from "viem/chains";
 import { BigNumberish } from "ethers";
+import type { NextPage } from 'next';
 import { BackIcon } from "../../components/common/icons";
 import { useGlobalContext } from "../../context/GlobalContext";
 import HouseInfoCarouselComponent from "../../components/investment-house-detail/house-info-carousel";
@@ -18,7 +19,7 @@ import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import usePropertyValues from "../../hooks/contract/APIConsumerContract/useGetPropertyValues";
 
 
-const MarketPlace = () => {
+const MarketPlace: NextPage = () => {
   const router = useRouter()
   const { houseId } = router.query as { houseId: string };
   const { theme } = useGlobalContext();

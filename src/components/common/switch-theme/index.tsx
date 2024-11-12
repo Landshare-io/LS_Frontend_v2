@@ -1,11 +1,15 @@
 import { useGlobalContext } from "../../../context/GlobalContext";
 
-export default function SwitchTheme() {
+interface SwitchThemeProps {
+  className?: string
+}
+
+export default function SwitchTheme({ className }: SwitchThemeProps) {
   const { theme, setTheme } = useGlobalContext();
 
   return (
     <button
-      className={`theme-switch ${theme} ${theme == 'dark' ? "bg-[#345b6f]" : "bg-[#e9c46a]"} ml-4 mt-2.5`}
+      className={`theme-switch ${theme} ${theme == 'dark' ? "bg-[#345b6f]" : "bg-[#e9c46a]"} ml-4 mt-2.5 ${className}`}
       type="button"
       aria-pressed="false"
       aria-label="Use Dark Mode"

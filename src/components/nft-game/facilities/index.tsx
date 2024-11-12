@@ -2,7 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import Facility from "./facility";
-import "react-multi-carousel/lib/styles.css";
+// import "react-multi-carousel/lib/styles.css";
 
 export default function ProductionFacilities() {
   const {
@@ -38,16 +38,18 @@ export default function ProductionFacilities() {
   return (
     <>
       {(facilities.length > 0) && (
-        <Slider {...settings} className="block md:hidden">
-          {facilities.sort((a, b) => a.sortingId - b.sortingId).map((facility, type) => (
-            <div key={`facility-levels-${type}`} className="flex flex-col items-center">
-              <Facility
-                type={type}
-                isBoosts={false}
-              />
-            </div>
-          ))}
-        </Slider>
+        <div className="block md:hidden">
+          <Slider {...settings}>
+            {facilities.sort((a, b) => a.sortingId - b.sortingId).map((facility, type) => (
+              <div key={`facility-levels-${type}`} className="flex flex-col items-center">
+                <Facility
+                  type={type}
+                  isBoosts={false}
+                />
+              </div>
+            ))}
+          </Slider>
+        </div>
       )}
       <div className="mb-5 hidden pb-[20px] md:grid md:grid-cols-[minmax(300px,max-content),minmax(300px,max-content)] justify-between gap-[50px] lg:md:grid-cols-[minmax(300px,max-content),minmax(300px,max-content),minmax(300px,max-content)]">
         {(facilities.length > 0) && facilities.sort((a, b) => a.sortingId - b.sortingId).map((facility, type) => (
