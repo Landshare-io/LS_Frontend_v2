@@ -16,15 +16,16 @@ function Dropdown({ children }: { children: JSX.Element[] }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const clonedChildren = children.map((child) => {
+  const clonedChildren = children.map((child, index: number) => {
     if (child.type === Dropdown.Toggle) {
       return React.cloneElement(child, {
+        key: `dropdown-toggle-${index}`,
         onClick: () => setIsOpen(!isOpen),
         isOpen,
       });
     }
     if (child.type === Dropdown.Menu) {
-      return React.cloneElement(child, { isOpen });
+      return React.cloneElement(child, { key: `dropdown-toggle-${index}`, isOpen });
     }
     return child;
   });
