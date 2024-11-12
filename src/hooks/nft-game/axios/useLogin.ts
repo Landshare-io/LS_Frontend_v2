@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import backendAxios from "./nft-game-axios";
 import { useSignMessage } from "wagmi";
 import { Address } from "viem";
 import { useGlobalContext } from "../../../context/GlobalContext";
@@ -58,7 +59,7 @@ export default function useLogin() {
   const checkIsAuthenticated = async (address: Address | string | undefined) => {
     try {
       if (localStorage.getItem("jwtToken-v2")) {
-        const { data } = await axios.get(`${NFT_GAME_BACKEND_URL}/user/is-loggedin`)
+        const { data } = await backendAxios.get('/user/is-loggedin')
         if (data.success) {
           setIsAuthenticated(true)
           return true
