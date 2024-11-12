@@ -1,10 +1,18 @@
-import { useChainId } from 'wagmi'
+import { useEffect } from 'react';
+import { useChainId, useAccount } from 'wagmi'
 import type { NextPage } from 'next';
 import NftMint from '../../components/nft-mint'
+import useLogin from '../../hooks/nft-game/axios/useLogin';
 import { supportChainIds } from '../../wagmi'
 
 const Mint: NextPage = () => {
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
+  const { address } = useAccount()
+  const { checkIsAuthenticated } = useLogin()
+
+  useEffect(() => {
+    if (typeof address != "undefined") checkIsAuthenticated(address)
+  }, [address])
 
   return (
     <div>
