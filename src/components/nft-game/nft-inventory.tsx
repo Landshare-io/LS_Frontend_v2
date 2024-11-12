@@ -321,7 +321,7 @@ export default function InventoryPage() {
 
   return (
     <div className={`font-inter ${theme == 'dark' ? "dark" : ""}`}>
-      <div className="bg-primary h-[calc(100vh-144px)]">
+      <div className="bg-primary min-h-[calc(100vh-144px)]">
         {isLoginLoading || isLoading ? (
           <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
             <ReactLoading type="bars" color="#61cd81" />
