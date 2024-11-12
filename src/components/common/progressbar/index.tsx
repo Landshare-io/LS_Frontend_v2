@@ -22,19 +22,19 @@ export default function ProgressBar({
   const progress = Math.min(100, Math.max(0, ((now - min) / (max - min)) * 100));
 
   return (
-    <div className="w-full bg-gray-200 rounded-lg overflow-hidden h-6">
+    <div className="w-full bg-gray-200 rounded-lg overflow-hidden h-6 relative">
       <div
         className={`h-full ${color} ${striped ? "bg-stripes bg-[length:1rem_1rem]" : ""} ${
           animated ? "animate-[progress]" : ""
         }`}
         style={{ width: `${progress}%` }}
       >
-        {label && (
-          <span className="text-white text-xs font-semibold px-2">
-            {label}
-          </span>
-        )}
       </div>
+      {label && (
+        <span className="text-white absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] text-[16px] font-semibold px-2">
+          {label}
+        </span>
+      )}
     </div>
   );
 };
