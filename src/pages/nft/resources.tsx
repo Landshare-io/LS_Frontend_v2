@@ -1,12 +1,19 @@
-import React from "react";
+import { useEffect } from 'react';
+import { useChainId, useAccount } from 'wagmi'
 import type { NextPage } from 'next';
 import Head from "next/head";
-import { useChainId } from "wagmi";
 import NftResource from "../../components/nft-resource";
+import useLogin from '../../hooks/nft-game/axios/useLogin';
 import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 
 const NftResources: NextPage = () => {
   const chainId = useChainId();
+  const { address } = useAccount()
+  const { checkIsAuthenticated } = useLogin()
+
+  useEffect(() => {
+    if (typeof address != "undefined") checkIsAuthenticated(address)
+  }, [address])
 
   return (
     <div>
