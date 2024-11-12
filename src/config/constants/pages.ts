@@ -32,5 +32,5 @@ export const PAGES: PAGE[] = [
 ];
 
 export const NOT_VISIBLE_FOOTER_PAGES = [
-  '/nft'
+  '/nft', '/marketplace'
 ];
