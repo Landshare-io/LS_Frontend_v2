@@ -11,6 +11,7 @@ import Repair from "./repair";
 import EditableNft from "./editable-nft";
 import TotalYieldMultiModal from "../../common/modals/total-yield-multi";
 import InputCost from "../../common/input-cost";
+import ToggleSwitch from "../../common/toggle-switch";
 import OnSaleModal from "../../common/modals/on-sale-modal";
 import { NftDurabilityIcon, ChargeIcon } from "../../common/icons/nft";
 import MintModal from "../../common/modals/mint-modal";
@@ -97,6 +98,7 @@ export default function NftDetails({
   const isOwn = house.userId === userData?.id
 	const { data: maxAssetTokenBalance, refetch: calcDepositMax } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
 	const { data: depositedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
+  console.log('depositedBalance', depositedBalance)
 	const { userReward } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
 	const { minAssetAmount, withdrawStakedCost } = useGetSetting()
@@ -238,57 +240,6 @@ export default function NftDetails({
     }
   };
 
-  const handleV1Withdraw = async () => {
-    // if (!house.isActivated) {
-    //   setIsLoading([false, false, false, false, false]);
-    //   return notifyError("Please Activate First");
-    // }
-
-    // if (depositeV1Amount % 1 != "0") {
-    //   setIsLoading([false, false, false, false, false]);
-    //   return notifyError("Please input Integer value");
-    // }
-
-    // if (house.depositedV1Balance === "0") {
-    //   setIsLoading([false, false, false, false, false]);
-    //   return notifyError("No withdraw amount");
-    // }
-
-    // if (!depositeV1Amount) {
-    //   setIsLoading([false, false, false, false, false]);
-    //   return notifyError("Please input Withdraw amount");
-    // }
-
-    // if (depositeV1Amount < 1) {
-    //   setIsLoading([false, false, false, false, false]);
-    //   return notifyError("Please input Integer value");
-    // }
-
-    // setIsLoading([false, true, false, false, false]);
-    // try {
-    //   const transaction = await NFTV1StakeContract.unstake(depositeV1Amount, house.houseV1tokenId);
-    //   const receipt = await transaction.wait();
-    //   if (receipt.status) {
-    //     notifySuccess(`${depositeV1Amount} LAND withdrawn successfully!`);
-    //     setHouse((prevState) => ({
-    //       ...prevState,
-    //       depositedV1Balance: (
-    //         Number(prevState.depositedV1Balance) - Number(depositeV1Amount)
-    //       ).toString(),
-    //     }));
-    //     getHouse();
-    //     setIsLoading([false, false, false, false, false]);
-    //   } else {
-    //     setIsLoading([false, false, false, false, false]);
-    //     notifyError("Withdraw failed");
-    //   }
-    // } catch (error) {
-    //   console.log("Withdraw error", error);
-    //   setIsLoading([false, false, false, false, false]);
-    //   notifyError("Withdraw failed");
-    // }
-  };
-
   const getHouseImageUrl = () => {
     if (house) {
       if (house.isRare) {
@@ -364,20 +315,11 @@ export default function NftDetails({
               </div>
               <div className="flex items-center">
                 <span className="text-[16px] text-text-primary">On-Sale:</span>
-                <div className="relative inline-block w-[60px] h-[28px] sm:ml-3 ml-1">
-                  <input
-                    className="on-off-toggle__input"
-                    type="checkbox"
-                    onChange={() => onSaleHandler()}
-                    id="bopis"
-                    checked={house.onSale}
-                    disabled={onSaleLoading}
-                  />
-                  <label
-                    htmlFor="bopis"
-                    className="on-off-toggle__slider round"
-                  ></label>
-                </div>
+                <ToggleSwitch 
+                  isSale={house.onSale} 
+                  onClick={() => {}} 
+                  disabled={onSaleLoading}
+                />
               </div>
             </div>
             <div className="border-b-[1px] border-[#00000050]"></div>
@@ -399,10 +341,11 @@ export default function NftDetails({
                   />
                   {isOwn && (
                     <Button
-                      className={`absolute translate-x-[-50%] bottom-0 left-[50%] mb-[0.9rem] w-auto flex text-button-text-secondary items-center justify-center px-5 fs-xs fw-700 ${isLoading[3]
+                      className={`absolute translate-x-[-50%] bottom-0 left-[50%] mb-[0.9rem] w-auto h-[44px] rounded-[20px] flex text-button-text-secondary items-center justify-center px-[40px] text-[16px] ${isLoading[3]
                         ? "flex justify-center items-center"
                         : ""
                         }`}
+                      textClassName="text-[16px]"
                       onClick={() => house.isActivated ? deactivate(isLoading) : activate(isLoading)}
                       disabled={isLoading[3] || house.onSale}
                     >
@@ -424,7 +367,7 @@ export default function NftDetails({
                 </div>
                 <div className="flex flex-grow ml-0 lg:ml-[1.5rem]">
                   <div className="flex flex-col w-full">
-                    <div className="border-b-[1px] border-dashed border-[#000000]"></div>
+                    <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
                     <div className="flex flex-col md:flex-row py-3 justify-between">
                       <div className="text-[16px] mb-0 font-normal flex flex-nowrap items-center justify-start text-text-secondary">
                         Durability
@@ -451,19 +394,19 @@ export default function NftDetails({
                       house={house}
                       setHouse={setHouse}
                     />
-                    <div className="border-b-[1px] border-dashed border-[#000000]"></div>
+                    <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
                     <div className="flex justify-between mt-2 py-2">
-                      <span className="font-semibold fs-16 text-text-secondary">
+                      <span className="font-semibold text-[16px] text-text-secondary">
                         Asset Tokens Deposited:
                       </span>
                       <span className="text-text-primary font-normal text-[16px]">
-                        {depositedBalance}{" "}
+                        {depositedBalance.toString()}{" "}
                         {"LSRWA"}
                       </span>
                     </div>
                     {/*============ ASSET TOKENS DEPOSITED ROW ============*/}
                     <div className="my-1 pt-1 flex flex-col mb-4">
-                      <div className="flex flex-row md:flex-col justify-between">
+                      <div className="flex flex-col md:flex-row justify-between">
                         <div className="flex justify-center mt-2 text-text-secondary">
                           <InputCost
                             height={34}
@@ -478,7 +421,7 @@ export default function NftDetails({
                         <div className="flex mt-0 md:mt-2 justify-center">
                           <Button
                             onClick={handleDeposit}
-                            className={`w-auto re-3 px-4 py-2 rounded-[24px] text-[24px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                            className={`w-auto mr-3 px-4 py-2 rounded-[24px] text-[24px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] hover:text-[#fff] "
                               }
@@ -539,73 +482,15 @@ export default function NftDetails({
                         </div>
                       </div>
                     </div>
-                    {/*============ V1 ASSET TOKENS DEPOSITED ROW ============*/}
-                    {house.depositedV1Balance > 0 && (
-                      <>
-                        <div className="border-b-[1px] border-dashed border-[#000000]"></div>
-                        <div className="flex justify-between mt-2 py-2">
-                          <span className="font-semibold text-[16px] text-black-700">
-                            Asset Tokens Deposited in V1 Game:
-                          </span>
-                          <span className="text-black font-normal text-[24px]">
-                            {house.depositedV1Balance} LSNF
-                          </span>
-                        </div>
-                        <div className="my-1 pt-1 flex flex-col mb-4">
-                          <div className="flex flex-row md:flex-col justify-between">
-                            <div className="flex justify-center mt-2">
-                              {/* <InputCost
-                                height={34}
-                                value={depositeV1Amount}
-                                changeRepairAmount={setDepositeV1Amount}
-                                calcMaxAmount={calcDepositMaxV1}
-                              /> */}
-                            </div>
-                            <div className="flex mt-2 mt-sm-0 justify-center">
-                              <Button
-                                onClick={handleV1Withdraw}
-                                className={`w-auto px-4 py-2 rounded-[24px] text-[24px] ${BOLD_INTER_TIGHT.className} 
-                                  ${(!house.isActivated || !isOwn) &&
-                                    " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] hover:text-[#fff] "
-                                  }
-                                  ${isLoading[1]
-                                    ? "flex justify-center items-center"
-                                    : ""
-                                  }`}
-                                disabled={
-                                  depositLoading || !house.isActivated || !isOwn || house.onSale
-                                }
-                              >
-                                {isLoading[1] ? (
-                                  <>
-                                    <ReactLoading
-                                      type="spin"
-                                      className="mr-2 mb-[4px]"
-                                      width="24px"
-                                      height="24px"
-                                    />
-                                    <span className="font-semibold">
-                                      Loading
-                                    </span>
-                                  </>
-                                ) : (
-                                  "WITHDRAW"
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                    <div className="border-b-[1px] border-dashed border-[#000000]"></div>
+                    <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
                     <div className="flex flex-col justify-between h-full my-3">
                       <div className="flex justify-between py-1">
-                        <span className="flex text-[24px] text-black-700 items-center">
+                        <span className="flex text-[16px] text-black-700 items-center">
                           <span className="me-1 text-text-secondary">
                             Total Yields multiplier:
                           </span>
                           <span
-                            className="cursor-pointer text-[#fff] w-[15px] h-[15px] leading-[16px] text-center rouneded-[50%] bg-[#717171] text-[10px] duration-300 ml-1"
+                            className="cursor-pointer text-[#fff] w-[15px] h-[15px] leading-[16px] text-center rounded-full bg-[#717171] text-[10px] duration-300 ml-1"
                             onClick={() =>
                               setIsTotalYieldModalOpen(
                                 !isTotalYieldModalOpen
@@ -615,35 +500,35 @@ export default function NftDetails({
                             ?
                           </span>
                         </span>
-                        <span className="text-[24px] text-text-primary">
+                        <span className="text-[16px] text-text-primary">
                           x
                           {numeral(house.multiplier).format("0.[00]").toString()}{" "}
                           LAND
                         </span>
                       </div>
                       <div className="flex justify-between py-1">
-                        <span className="flex text-[24px] items-center text-text-secondary">
+                        <span className="flex text-[16px] items-center text-text-secondary">
                           Annual Yield:
                         </span>
-                        <span className="text-[24px] text-text-primary">
+                        <span className="text-[16px] text-text-primary">
                           {numeral((Number(depositedBalance) * Number(house.multiplier) / 50).toString()).format(
                             "0.[00]"
                           )}
                         </span>
                       </div>
                       <div className="flex justify-between py-1">
-                        <span className="flex text-[24px] text-text-secondary items-center">
+                        <span className="flex text-[16px] text-text-secondary items-center">
                           <span className="mr-1">LAND Remaining:</span>
                           {house.isActivated && !house.onSale && (
                             <span
-                              className="cursor-pointer text-[#fff] w-[15px] h-[15px] leading-[16px] text-center rouneded-[50%] bg-[#717171] text-[10px] duration-300 ml-1"
+                              className="cursor-pointer text-[#fff] w-[15px] h-[15px] leading-[16px] text-center rounded-full bg-[#717171] text-[10px] duration-300 ml-1"
                               onClick={() => setShowMintModal(true)}
                             >
                               +
                             </span>
                           )}
                         </span>
-                        <span className="text-text-primary text-[24px]">
+                        <span className="text-text-primary text-[16px]">
                           {`${numeral(
                             Number(
                               house.tokenHarvestLimit
@@ -668,10 +553,10 @@ export default function NftDetails({
                         </span>
                       </div>
                       <div className="flex justify-between py-1">
-                        <span className="flex text-[24px] text-text-secondary items-center">
+                        <span className="flex text-[16px] text-text-secondary items-center">
                           LAND Generated:
                         </span>
-                        <span className="text-[24px] text-text-primary">
+                        <span className="text-[16px] text-text-primary">
                           {`${numeral(
                             Number(
                               house.totalHarvestedToken
@@ -683,7 +568,7 @@ export default function NftDetails({
                   </div>
                 </div>
               </div>
-              <div className="border-b-[1px] border-dashed border-[#000000]"></div>
+              <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
               <div className="flex flex-col w-full mt-5">
                 <RewardHarvest
                   selectedResource={selectedResource}
@@ -691,34 +576,34 @@ export default function NftDetails({
                   setTotalHarvestCost={setTotalHarvestCost}
                 />
                 {/*================ HARVEST AND COST BUTTON ================*/}
-                <div className="flex pt-5 pb-4 justify-end">
-                  <div className={`flex h-[40px] items-center relative ${isOwn ? "" : "grey"}`}>
-                    <span className="flex text-[14px] text-text-secondary items-center justify-center pl-4">
+                <div className="flex pt-5 pb-5 lg:pb-4 justify-start lg:justify-end">
+                  <div
+                    className={`flex h-[40px] w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
+                  >
+                    <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
                       Cost:{" "}
-                      <span className={`ml-1 ${BOLD_INTER_TIGHT.className}`}>
-                        {totalHarvestCost}{" "}
-                        {<ChargeIcon iconColor={theme == 'dark' ? "#cbcbcb" : "#4C4C4C"} />}
+                      <span className={`flex items-center gap-[3px] ml-1 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                        {totalHarvestCost} {<ChargeIcon iconColor={theme == 'dark' ? "#cacaca" : "#4C4C4C"} />}
                       </span>
                     </span>
                     <Button
                       onClick={handleHarvest}
-                      className={`right-[-1px] bg-[#61cd81] border-[1px] border-[#61cd81] rounded-[24px] w-[159px] h-[40px] duration-400 text-nowrap hover:bg-transparent hover:text-[#61cd81] flex items-center justify-center absolute dark:text-button-text-secondary
+                      className={`h-[40px] w-[159px] text-[16px] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
                         ${harvestLoading
-                          ? "d-flex justify-content-center align-items-center"
+                          ? "flex justify-center items-center"
                           : ""
-                        } ${isOwn ? "" : "grey"}`}
-                      disabled={harvestLoading || !isOwn}
-                      textClassName={`text-[16px] text-[#fff] hover:text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
+                        }`}
+                      disabled={harvestLoading}
                     >
                       {harvestLoading ? (
                         <>
                           <ReactLoading
                             type="spin"
-                            className="me-2 button-spinner"
+                            className="me-2 mb-[4px]"
                             width="24px"
                             height="24px"
                           />
-                          <span className="upgrade-status">Loading</span>
+                          <span className="font-semibold">Loading</span>
                         </>
                       ) : (
                         "Harvest"
