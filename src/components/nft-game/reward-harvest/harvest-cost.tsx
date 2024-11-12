@@ -69,7 +69,7 @@ export default function HarvestCost({
             {item.buy.slice(2, 7).map((cost: number, index: number) => {
               if (Number(cost) > 0)
                 return (
-                  <div key={`next-cost-${index}`} className={`flex gap-[1px] items-center min-w-[20px] text-[14px] text-[#dee2e6]`}>
+                  <div key={`next-cost-${index}`} className={`flex gap-[1px] items-center min-w-[20px] text-[14px] font-medium text-[#323131]`}>
                     {colorType == 0 ? (
                       <>
                         {`${cost} `}
