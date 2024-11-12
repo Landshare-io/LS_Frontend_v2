@@ -1,11 +1,9 @@
 import Image from "next/image";
 import resourceLandshare from "../../../public/icons/resource-landshare.png";
 import moreInfo from "../../../public/icons/referral-more-info.svg"
-import { useGlobalContext } from "../../context/GlobalContext";
 import Tooltip from "../common/tooltip";
 
 export default function ReferralOverview (){
-    const { theme } = useGlobalContext();
 
     return(
     <div className="flex flex-col lg:w-[617px] w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-[29px] shadow-md">

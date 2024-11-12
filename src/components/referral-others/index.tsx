@@ -61,14 +61,16 @@ export default function ReferralOthers () {
 
                                 if (!chain.unsupported && connected) {
                                     return (
-                                        <div className="w-full flex items-center p-2 gap-4 rounded-lg bg-gray-500 bg-opacity-10">
+                                        <div className="w-full flex justify-between items-center p-2 gap-4 rounded-lg bg-gray-500 bg-opacity-10">
                                             <p className="truncate break-words text-text-primary">
                                                 {referralLink}
                                             </p>
 
-                                            {showCheck 
-                                            ? <FaCheck className={`cursor-pointer ${theme === `dark` ? "text-white" : ""}`}/> 
-                                            : <IoCopy onClick={handleCopy} className={`cursor-pointer ${theme === `dark` ? "text-white" : ""}`}/>} 
+                                            <div>
+                                                {showCheck 
+                                                ? <FaCheck className={`cursor-pointer ${theme === `dark` ? "text-white" : ""}`}/> 
+                                                : <IoCopy onClick={handleCopy} className={`cursor-pointer ${theme === `dark` ? "text-white" : ""}`}/>} 
+                                            </div>
                                         </div>
                                     );
                                 }
