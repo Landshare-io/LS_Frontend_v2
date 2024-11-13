@@ -5,7 +5,7 @@ import ReactLoading from "react-loading";
 import NftDetails from "./detail";
 import Topbar from "../../common/topbar";
 import YouOwn from "../../common/you-own";
-import MainTabs from "../../components/common/tab/Tab";
+import MainTabs from "../../common/tabs";
 import GamePremiumNfts from "../game-premium-nfts";
 import UpgradeListTable from "./upgrade-list-table";
 

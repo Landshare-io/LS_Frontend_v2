@@ -13,7 +13,7 @@ export default function RepairButton({ repair, isLoading, activated }: RepairBut
   return (
     <>
       <Button
-        className={`text-[16px] absolute text-button-text-secondary top-0 right-[-1px] rounded-[24px] w-[145px] h-[44px] text-[#fff] duration-400 capitalize whitespace-nowrap ${(activated) ? "bg-[#61cd81] border-[2px] border-[#61cd81]" : "bg-[#8f8f8f] border-[2px] border-[#8f8f8f]"} ${isLoading ? 'flex justify-center items-center' : ''} ${BOLD_INTER_TIGHT.className}`}
+        className={`text-[16px] absolute text-button-text-secondary bottom-0 md:top-0 right-[-1px] rounded-[24px] w-[145px] h-[44px] text-[#fff] duration-400 capitalize whitespace-nowrap ${(activated) ? "bg-[#61cd81] border-[2px] border-[#61cd81]" : "bg-[#8f8f8f] border-[2px] border-[#8f8f8f]"} ${isLoading ? 'flex justify-center items-center' : ''} ${BOLD_INTER_TIGHT.className}`}
         onClick={() => repair()}
         disabled={!activated || isLoading}
       >
