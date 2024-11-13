@@ -32,9 +32,9 @@ export default function Repair({
 
   return (
     <>
-      <div className="flex md:hidden mb-4 pr-0 flex-nowrap md:pr-[125px] relative">
-        <div className={`flex-1 rounded-[2rem] rounded-r-0 pl-0 px-[0.75rem] pr-[1.5rem] flex gap-[20px] justify-between py-[1px] ${house.isActivated && !house.onSale ? "border-[2px] border-[#61cd81] border-r-0 pr-0" : "border-[2px] border-[#8f8f8f] border-r-0 pr-0"}`}>
-          <div className="flex flex-grow-1 justify-between items-center pl-[20px] py-1 mr-3 sm:mr-0 text-text-primary">
+      <div className="block md:hidden mb-4 w-full">
+        <div className={`flex flex-col rounded-r-0 gap-[20px] justify-between py-[1px]`}>
+          <div className={`flex justify-between items-center px-[20px] py-1 text-text-primary rounded-[2rem] h-[46px] ${house.isActivated && !house.onSale ? "border-[2px] border-[#61cd81]" : "border-[2px] border-[#8f8f8f]"}`}>
             <span className="mr-2 text-[14px]">Amount: </span>
             <InputCost
               width={70}
@@ -43,7 +43,7 @@ export default function Repair({
               calcMaxAmount={calcMaxAmount}
             />
           </div>
-          <div className={`flex pr-[130px] pl-[20px] w-full ${house.isActivated && !house.onSale ? "border-l-[1px] border-[#61cd81] rounded-[48px]" : "border-l-[1px] border-[#8f8f8f] rounded-[48px]"}`}>
+          <div className={`flex pr-[130px] pl-[20px] w-full h-[46px] relative rounded-[2rem] ${house.isActivated && !house.onSale ? "border-[2px] border-[#61cd81]" : "border-[2px] border-[#8f8f8f]"}`}>
             {isLoading ? <>
               <span className="font-semibold" style={{ marginLeft: "20px" }}>Loading</span></> :
               <ReparingCost
@@ -56,19 +56,19 @@ export default function Repair({
                   steel: house?.repairCost[4] ?? 0,
                 }}
               />}
+            <RepairButton
+              repair={() => repairWithAmount(house, setHouse, setDisplayPercent, displayPercent)}
+              isLoading={isLoading}
+              activated={house.isActivated && !house.onSale}
+            />
           </div>
         </div>
-        <div className="block">
-          <RepairButton
-            repair={() => repairWithAmount(house, setHouse, setDisplayPercent, displayPercent)}
-            isLoading={isLoading}
-            activated={house.isActivated && !house.onSale}
-          />
-        </div>
+        {/* <div className="block">
+        </div> */}
       </div>
       <div className="hidden md:block mb-3 h-[44px] pr-0 md:pr-[125px] relative">
         <div
-          className={`flex-1 px-[0.75rem] rounded-l-[2rem] pr-[1.5rem] h-full flex gap-[30px] justify-between border-[2px] border-[#61cd81] pr-0`}
+          className={`flex-1 px-[0.75rem] rounded-l-[2rem] pr-[1.5rem] h-full flex gap-[30px] justify-between ${house.isActivated && !house.onSale ? "border-[2px] border-[#61cd81] pr-0" : "border-[2px] border-[#8f8f8f] pr-0"}`}
         >
           <div className="flex flex-grow-1 justify-between items-center py-2 mr-3 sm:mr-0 text-text-primary">
             <span className="mr-2 text-[14px]">Amount: </span>
