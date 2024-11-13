@@ -38,7 +38,7 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
 
   return (
     <>
-      <div className="flex flex-col animate-[fadeIn] duration-1200 rounded-[15px] overflow-hidden w-[257px]">
+      <div className="flex flex-col animate-[fadeIn] duration-1200 rounded-[15px] overflow-hidden min-w-[257px]">
         <div className='bg-gradient-to-b from-[#68819D] to-[#4da3a942]'>
           <div className="flex flex-col items-center justif-center bg-[#00000033] h-[49px] py-[8px]">
             <span className="font-semibold text-white text-[20px]">{premiumNft.name}</span>
