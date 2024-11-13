@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactLoading from "react-loading";
+import Image from "next/image";
 import ReactModal from 'react-modal';
 import { OpenModalIcon } from "../../common/icons/index";
 import Button from '../../common/button';
@@ -41,7 +42,7 @@ export default function PremiumNft({
 
   return (
     <>
-      <div className="flex flex-col animate-[fadeIn] duration-1200 rounded-[15px] overflow-hidden w-[257px]">
+      <div className="flex flex-col animate-[fadeIn] duration-1200 rounded-[15px] overflow-hidden min-w-[257px]">
         <div className='bg-gradient-to-b from-[#68819D] to-[#4da3a942]'>
           <div className="flex flex-col items-center justif-center bg-[#00000033] h-[49px] py-[8px]">
             <span className="font-semibold text-white text-[20px]">{premiumNft.name}</span>
@@ -52,7 +53,7 @@ export default function PremiumNft({
                 {remainingTime ? `Next Refurbish: ${remainingTime}` : ''}
               </div>
             </div>
-            <img
+            <Image
               src={premiumNft.imgSrc}
               alt={premiumNft.name}
               className="translate-x-[-50%] w-[210px] h-[210px] left-[50%] top-0 absolute"
@@ -70,8 +71,8 @@ export default function PremiumNft({
           </div>
         </div>
         <div className="bg-[#6f8e9d66] py-[13px] px-[12px]">
-          <div className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] bg-primary relative border-[2px] border-[#61cd81]
-            ${premiumNft.hasNft ? "yellow" : "green"}`}>
+          <div className={`flex flex-col w-full h-[95px] rounded-[25px] bg-[#fff] bg-primary relative border-[2px] pt-[12px]
+            ${premiumNft.hasNft ? "border-[2px] border-[#f1b258] bg-[#f1b258]" : "border-[2px] border-[#61cd81] bg-[#61cd81]"}`}>
             <div className='flex flex-col px-2'>
               <div className='flex justify-start'>
                 <div>
@@ -83,9 +84,10 @@ export default function PremiumNft({
             </div>
             <Button
               onClick={() => onSubmit()}
-              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute 
-              ${premiumNft.hasNft ? 'yellow' : ''}
+              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] 
+              ${premiumNft.hasNft ? 'border-[2px] border-[#f1b258] bg-[#f1b258]' : ''}
               ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
+              textClassName='text-white'
               disabled={loader == premiumNft.name}
             >
               {(loader == premiumNft.name) ? (
