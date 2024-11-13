@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactLoading from "react-loading";
 import ReactModal from "react-modal";
+import Image from "next/image";
 import Button from "../../common/button";
 import { OpenModalICon } from "../../common/icons/index";
 import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
@@ -88,14 +89,14 @@ export default function HireHandymanUpgrade({
   }
 
   return (
-    <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px]">
+    <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px] rounded-[20px] overflow-hidden">
       <div className="bg-[#fff]">
         <div className="flex flex-col items-center bg-gradient-to-b from-[#68819D] to-[#4da3a942]">
           <div className="bg-[#00000030] w-full flex justify-center h-[49px] py-[8px]">
             <span className="text-[16px] text-white font-semibold">{item.title}</span>
           </div>
           <div className="flex flex-col w-full h-[210px] relative">
-            <img
+            <Image
               className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] h-[180px] w-auto"
               src={item.imgUrl}
               alt={item.title}
@@ -127,7 +128,7 @@ export default function HireHandymanUpgrade({
                   {houseMaxDurability}%
                 </span>
               </div>
-              <div className="border-[1px] border-[#00000050] w-full my-2"></div>
+              <div className="border-b-[1px] border-[#00000050] w-full my-[8px]"></div>
               <div>
                 <div>
                   <span className="text-[#6f8e9d] text-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary">Cost: </span>
@@ -144,7 +145,7 @@ export default function HireHandymanUpgrade({
             </div>
             <Button
               onClick={() => onPurcharse()}
-              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold position text-button-text-secondary ${isLoading.type > -1 && isLoading.type != type
+              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] text-button-text-secondary ${isLoading.type > -1 && isLoading.type != type
                 ? "grey"
                 : colors[colorType]
                 } 
