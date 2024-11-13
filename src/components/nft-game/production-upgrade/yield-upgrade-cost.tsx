@@ -59,7 +59,7 @@ export default function YieldUpgradeCost({
 
   if (cost[1]) {
     yieldCostContent.push((
-      <div className={`min-w-[20px] font-semibold mt-1 text-[14px] ${color}`}>
+      <div className='min-w-[20px] font-semibold mt-1 text-[14px]'>
         {item.buy[1]} LAND
       </div>
     ))
@@ -68,17 +68,17 @@ export default function YieldUpgradeCost({
     if (Number(cost) > 0)
       yieldCostContent.push((
         <div key={`next-cost-${index}`}
-          className={`min-w-[20px] font-semibold mt-1 text-[14px] ${color} ${item.name == 'Finished Basement' ? 'fs-13' : ''}`}>
+          className={`min-w-[20px] font-semibold mt-1 text-[14px] ${item.name == 'Finished Basement' ? 'fs-13' : ''}`}>
           {colorType == 0 ? (
-            <>
+            <div className='flex gap-[2px] items-center'>
               {`${Number(cost)} `}
               {disabledIcons[index]}
-            </>
+            </div>
           ) : (
-            <>
+            <div className='flex gap-[2px] items-center'>
               {`${Number(cost)} `}
               {activeIcons[index]}
-            </>
+            </div>
           )}
         </div>
       ));
@@ -92,16 +92,16 @@ export default function YieldUpgradeCost({
   })
 
   return (
-    <div className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#ffffff] relative bg-primary ${color}`}>
+    <div className={`flex flex-col w-full h-[130px] rounded-[25px] !bg-[#ffffff] relative pt-[12px] ${color}`}>
       <div className='flex flex-col text-[14px] px-[10px]'>
         {((colorType < 2) || (btnLabel != 'SALVAGE')) ? (
           <div className='flex items-center'>
             <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>Yield: </span>
             <div className='status-value'>
-              <span className={`font-semibold text-[12px] text-[#323131] mr-[4px] dark:text-text-primary ${color}`}>
+              <span className='font-semibold text-[12px] text-[#323131] mr-[4px] dark:text-text-primary'>
                 +{item.buyReward[9]}
               </span>
-              <span className={`text-[8px] font-semibold dark:text-text-secondary ${color}`}> Multiplier</span>
+              <span className='text-[8px] font-semibold dark:text-text-secondary'> Multiplier</span>
               <span className='font-semibold text-[9px] leading-[18px] ml-[2px] text-[#323131] dark:text-text-secondary'> /year</span>
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function YieldUpgradeCost({
                 {item.sellReward.slice(2, 7).map((cost: number, index: number) => {
                   if (Number(cost) > 0)
                     return (
-                      <div key={`next-cost-${index}`} className={`min-w-[20px] font-semibold mt-1 text-[14px] dark:text-text-primary ${color}`}>
+                      <div key={`next-cost-${index}`} className='min-w-[20px] font-semibold mt-1 text-[14px] dark:text-text-primary'>
                         {colorType == 0 ? (
                           <>
                             {`${Number(cost)} `}
@@ -132,7 +132,7 @@ export default function YieldUpgradeCost({
             </div>
           </div>
         )}
-        <div className="border-b-[1px] border-[#00000050] w-full my-1"></div>
+        <div className="border-b-[1px] border-[#00000050] w-full my-[8px]"></div>
       </div>
       <div className='flex items-center text-[14px] px-[10px]'>
         <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>Cost: </span>
@@ -146,7 +146,7 @@ export default function YieldUpgradeCost({
       </div>
       <Button
         onClick={() => onPurcharse()}
-        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute  ${((isLoading.type > -1) && (isLoading.type != type)) ? 'grey' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
+        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] ${((isLoading.type > -1) && (isLoading.type != type)) ? 'grey' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
         disabled={disabled || ((isLoading.type == type) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
       >
         {((isLoading.type == type) && isLoading.loading) ? (
