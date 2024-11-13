@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactModal from "react-modal";
+import Image from "next/image";
 import ReactLoading from "react-loading";
 import numeral from "numeral";
 import Tooltip from "../../common/tooltip";
@@ -52,13 +53,13 @@ export default function FirepitUpgrade({
     (10 - Number(Math.ceil(durationDate))).toString()
   );
   const colors = [
-    "grey",
-    "green",
-    "yellow",
-    "blue",
-    "dark-blue",
-    "light-yellow",
-    "light-blue",
+    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f]",
+    "border-[2px] border-[#61cd81] bg-[#61cd81]",
+    "border-[2px] border-[#f1b258] bg-[#f1b258]",
+    "border-[2px] border-[#40bef6] bg-[#40bef6]",
+    "border-[2px] border-[#0b6c96] bg-[#0b6c96]",
+    "border-[2px] border-[#f9c710] bg-[#f9c710]",
+    "border-[2px] border-[#1eceae] bg-[#1eceae]",
   ];
   const customModalStyles = {
     content: {
@@ -117,14 +118,14 @@ export default function FirepitUpgrade({
     );
 
   return (
-    <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px]">
+    <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[20px] md:mr-0 rounded-[20px] overflow-hidden">
       <div className="bg-[#fff]">
-        <div className="flex flex-col items-center bg-gradient-to-b from-[#0ed14500] to-[#3a9c5652]">
+        <div className="flex flex-col items-center bg-gradient-to-b from-[#689D77] to-[#3a9c5652]">
           <div className="bg-[#00000030] w-full flex justify-center h-[49px] py-[8px]">
             <span className="text-[16px] text-white font-semibold">{item.name}</span>
           </div>
           <div className="flex flex-col w-full h-[210px] relative">
-            <img
+            <Image
               className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] h-[180px] w-auto"
               src={item.imgUrl}
               alt={item.name}
@@ -151,7 +152,7 @@ export default function FirepitUpgrade({
                 </div>
               </div>
             ) : (
-              <div className="px-[12px] bottom-0 flex w-full justify-between items-end px-3 py-1 absolute">
+              <div className="px-[12px] bottom-0 flex w-full justify-end items-end px-3 py-1 absolute">
                 {(btnTitle == "SALVAGE" && durationDate == 0) && (
                   <Tooltip content="No lumber loaded. Multiplier not active.">
                     <div>
@@ -209,7 +210,7 @@ export default function FirepitUpgrade({
                   )}
                 </div>
               </div>
-              <div className="border-b-[1px] border-[#00000050] w-full my-1"></div>
+              <div className="border-b-[1px] border-[#00000050] w-full my-[8px]"></div>
               <div>
                 {btnTitle === "BUY" && (
                   <div className="flex items-center">
