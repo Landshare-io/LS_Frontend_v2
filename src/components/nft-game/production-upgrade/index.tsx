@@ -14,6 +14,7 @@ import useProductionUpgrade from "../../../hooks/nft-game/axios/useProductionUpg
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
 import carouselIcon from "../../../../public/icons/carousel-icon.png";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 
 interface ProductionUpdgradeProps {
@@ -66,6 +67,7 @@ export default function ProductionUpgrade ({
           </span>
           <Carousel
             width={257}
+            showIndicators={false}
             showStatus={false}
             showThumbs={false}
             showArrows={false}
@@ -111,7 +113,7 @@ export default function ProductionUpgrade ({
             onClick={() =>
               handleToolshedSelect(toolshedIndex < 3 ? toolshedIndex + 1 : 3)
             }
-            className="d-flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer right-[-5px] absolute justify-center items-center"
+            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer right-[-5px] absolute justify-center items-center rotate-180"
           >
             <Image src={carouselIcon} alt="Carousel next icon" />
           </span>
