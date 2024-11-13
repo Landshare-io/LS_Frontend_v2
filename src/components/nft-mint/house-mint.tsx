@@ -54,7 +54,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
   };
 
   return (
-    <div className="flex flex-col animate-[fadeIn] duration-1200 rounded-[15px] overflow-hidden w-[257px]">
+    <div className="flex flex-col animate-[fadeIn] duration-1200 rounded-[15px] overflow-hidden min-w-[257px]">
       <div className="h-[249px] relative">
         <div
           className={`bg-[#c4c4c433] text-[#fff] rounded-[16px] absolute top-0 w-full text-center p-2 ${BOLD_INTER_TIGHT.className}`}
