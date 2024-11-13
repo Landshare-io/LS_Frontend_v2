@@ -552,9 +552,9 @@ export default function InventoryPage() {
                               selectedResource={selectedResource}
                               setSelectedResource={setSelectedResource}
                             />
-                            <div className="flex pt-5 pb-5 lg:pb-4 justify-start lg:justify-end">
+                            <div className="flex pt-5 pb-5 lg:pb-4 justify-start md:justify-end">
                               <div
-                                className={`flex h-[40px] w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
+                                className={`flex h-[40px] w-full md:w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
                               >
                                 <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
                                   Cost:{" "}
