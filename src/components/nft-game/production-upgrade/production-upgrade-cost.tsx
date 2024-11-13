@@ -66,7 +66,7 @@ export default function ProductionUpgradeCost({
           </div>
         )}
         {type == 'overdrive' && (
-          <div className='d-flex align-items-center justify-content-between'>
+          <div className='flex items-center justify-between'>
             {item.reductionPercent.map((percent: number, index: number) => {
               if (Number(percent) > 0) {
                 return (
@@ -126,7 +126,7 @@ export default function ProductionUpgradeCost({
             {item.buy.slice(2, 7).map((cost: number, index: number) => {
               if (Number(cost) > 0)
                 return (
-                  <div key={`next-cost-${index}`} className={`min-w-[20px] text-[14px] ${color}`}>
+                  <div key={`next-cost-${index}`} className={`min-w-[20px] text-[14px] flex gap-[2px] items-center`}>
                     {colorType == 0 ? (
                       <>
                         {`${cost} `}
@@ -153,7 +153,7 @@ export default function ProductionUpgradeCost({
       </div>
       <Button
         onClick={() => onPurcharse()}
-        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute  ${((isLoading.type > -1) && (isLoading.type != type)) ? 'grey' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
+        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] ${((isLoading.type > -1) && (isLoading.type != type)) ? 'grey' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
         disabled={disabled || ((isLoading.type == type) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
       >
         {((isLoading.type == type) && isLoading.loading) ? (
