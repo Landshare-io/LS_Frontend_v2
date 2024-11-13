@@ -98,7 +98,6 @@ export default function NftDetails({
   const isOwn = house.userId === userData?.id
 	const { data: maxAssetTokenBalance, refetch: calcDepositMax } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
 	const { data: depositedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
-  console.log('depositedBalance', depositedBalance)
 	const { userReward } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
 	const { minAssetAmount, withdrawStakedCost } = useGetSetting()
@@ -418,7 +417,7 @@ export default function NftDetails({
                             }}
                           />
                         </div>
-                        <div className="flex mt-0 md:mt-2 justify-center">
+                        <div className="flex mt-2 md:mt-0 justify-center">
                           <Button
                             onClick={handleDeposit}
                             className={`w-auto mr-3 px-4 py-2 rounded-[24px] text-[24px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
@@ -576,9 +575,9 @@ export default function NftDetails({
                   setTotalHarvestCost={setTotalHarvestCost}
                 />
                 {/*================ HARVEST AND COST BUTTON ================*/}
-                <div className="flex pt-5 pb-5 lg:pb-4 justify-start lg:justify-end">
+                <div className="flex pt-5 pb-5 lg:pb-4 justify-start md:justify-end">
                   <div
-                    className={`flex h-[40px] w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
+                    className={`flex h-[40px] w-full md:w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
                   >
                     <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
                       Cost:{" "}
