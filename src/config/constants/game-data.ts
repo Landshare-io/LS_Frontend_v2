@@ -10,7 +10,6 @@ import FinishedBasement from "../../../public/img/yield-upgrades/finished_baseme
 import Cellar from "../../../public/img/yield-upgrades/cellar.png";
 import Trees from "../../../public/img/yield-upgrades/trees.png";
 import Fireplace from '../../../public/img/yield-upgrades/fireplace.png'
-
 import Toolshed1 from "../../../public/img/production-upgrade/toolshed1.png";
 import Toolshed2 from "../../../public/img/production-upgrade/toolshed2.png";
 import Toolshed3 from "../../../public/img/production-upgrade/toolshed3.png";
@@ -77,61 +76,73 @@ export const yieldUpdgradesData = [
 
 export const productionUpdgradesData = [
   {
+    id: 0,
     title: "Lumber Toolshed",
     imgUrl: Toolshed1,
     sortingId: 0
   },
   {
+    id: 1,
     title: "Brick Toolshed",
     imgUrl: Toolshed2,
     sortingId: 0
   },
   {
+    id: 2,
     title: "Concrete Toolshed",
     imgUrl: Toolshed3,
     sortingId: 0
   },
   {
+    id: 3,
     title: "Steel Toolshed",
     imgUrl: Toolshed4,
     sortingId: 0
   },
   {
+    id: 4,
     title: "Firepit",
     imgUrl: Firepit,
     sortingId: 1
   },
   {
+    id: 5,
     title: "Concrete Foundation",
     imgUrl: ConcreteFoundation,
     sortingId: 2
   },
   {
+    id: 6,
     title: "Harvester",
     imgUrl: Harvester,
     sortingId: 3
   },
   {
+    id: 7,
     title: "Fortification Brick",
     imgUrl: FatificationBrick,
     sortingId: 4
   },
   {
+    id: 8,
     title: "Fortification Concrete",
     imgUrl: FatificationConcrete,
     sortingId: 4
   },
   {
+    id: 9,
     title: "Fortification Steel",
     imgUrl: FatificationSteel,
     sortingId: 4
   },
   {
+    id: 10,
     title: "Hire Handman",
     imgUrl: Handyman,
     sortingId: 5
   },
   {
+    id: 11,
     title: "Generator",
     imgUrl: Generator,
     sortingId: 6
