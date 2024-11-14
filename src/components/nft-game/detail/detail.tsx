@@ -58,17 +58,31 @@ export default function NftDetails({
   getHouse,
 }: NftDetailsProps) {
   const { theme } = useGlobalContext();
-  const {
-    notifySuccess,
-    notifyError
-  } = useGlobalContext();
+  const { notifyError } = useGlobalContext();
   const customModalStyles = {
     content: {
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "600px",
+      width: "90%",
+      height: "fit-content",
+      borderRadius: "20px",
+      padding: 0,
+      border: 0
+    },
+    overlay: {
+      background: '#00000080'
+    }
+  };
+  const confirmModalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      maxWidth: "300px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -340,7 +354,7 @@ export default function NftDetails({
                   />
                   {isOwn && (
                     <Button
-                      className={`absolute translate-x-[-50%] bottom-0 left-[50%] mb-[0.9rem] w-auto h-[44px] rounded-[20px] flex text-button-text-secondary items-center justify-center px-[40px] text-[16px] ${isLoading[3]
+                      className={`absolute translate-x-[-50%] bg-[#61cd81] bottom-0 left-[50%] mb-[0.9rem] w-auto h-[44px] rounded-[20px] flex text-button-text-secondary items-center justify-center px-[40px] text-[16px] ${isLoading[3]
                         ? "flex justify-center items-center"
                         : ""
                         }`}
@@ -420,7 +434,7 @@ export default function NftDetails({
                         <div className="flex mt-2 md:mt-0 justify-center">
                           <Button
                             onClick={handleDeposit}
-                            className={`w-auto mr-3 px-4 py-2 rounded-[24px] text-[24px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                            className={`w-auto mr-3 px-4 py-2 rounded-[24px] bg-[#61cd81] text-[24px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] hover:text-[#fff] "
                               }
@@ -450,7 +464,7 @@ export default function NftDetails({
                           </Button>
                           <Button
                             onClick={handleWithdraw}
-                            className={`w-auto px-4 py-2 rounded-[24px] text-[24px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                            className={`w-auto px-4 py-2 rounded-[24px] text-[24px] bg-[#61cd81] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] hover:text-[#fff] "
                               }
@@ -490,11 +504,7 @@ export default function NftDetails({
                           </span>
                           <span
                             className="cursor-pointer text-[#fff] w-[15px] h-[15px] leading-[16px] text-center rounded-full bg-[#717171] text-[10px] duration-300 ml-1"
-                            onClick={() =>
-                              setIsTotalYieldModalOpen(
-                                !isTotalYieldModalOpen
-                              )
-                            }
+                            onClick={() => setIsTotalYieldModalOpen(!isTotalYieldModalOpen)}
                           >
                             ?
                           </span>
@@ -587,7 +597,7 @@ export default function NftDetails({
                     </span>
                     <Button
                       onClick={handleHarvest}
-                      className={`h-[40px] w-[159px] text-[16px] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
+                      className={`h-[40px] w-[159px] text-[16px] bg-[#61cd81] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
                         ${harvestLoading
                           ? "flex justify-center items-center"
                           : ""
@@ -633,7 +643,7 @@ export default function NftDetails({
         onRequestClose={() => { setDurabilityModal(!durabilityModal), document.body.classList.remove('modal-open'); }}
       >
         <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 fs-14 fw-400">
+          <span className="my-2 mx-3 pt-1 text-[14px] font-normal">
             Durability determines the current repair status of your
             property. Your yield multiplier for a given period of time is
             multiplied by your durability amount. For example, if your
@@ -653,7 +663,7 @@ export default function NftDetails({
         onSaleLoading={onSaleLoading}
       />
       <ReactModal
-        style={customModalStyles}
+        style={confirmModalStyles}
         isOpen={showHarvestConfirm}
         onRequestClose={() => { setShowHarvestConfirm(!showHarvestConfirm), document.body.classList.remove('modal-open'); }}
       >
@@ -678,7 +688,7 @@ export default function NftDetails({
         </div>
       </ReactModal>
       <ReactModal
-        style={customModalStyles}
+        style={confirmModalStyles}
         isOpen={showWithdrawAlert}
         onRequestClose={() => { setShowWithdrawAlert(!showWithdrawAlert), document.body.classList.remove('modal-open'); }}
       >
@@ -710,7 +720,7 @@ export default function NftDetails({
         </div>
       </ReactModal>
       <ReactModal
-        style={customModalStyles}
+        style={confirmModalStyles}
         isOpen={showOnSaleAlert}
         onRequestClose={() => { setShowOnSaleAlert(!showOnSaleAlert), document.body.classList.remove('modal-open'); }}
       >
@@ -739,13 +749,6 @@ export default function NftDetails({
           </div>
         </div>
       </ReactModal>
-      {/* {house.isActivated && !house.onSale && (
-        <LoadHouseNFTs
-          modalShow={openLoadNftModal}
-          setModalShow={setOpenLoadNftModal}
-          setHouse={setHouse}
-        />
-      )} */}
     </>
   );
 };
