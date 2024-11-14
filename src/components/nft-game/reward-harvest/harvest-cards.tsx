@@ -44,7 +44,12 @@ export default function HarvestCards({
 
   if (facilities.length < 1) return null
 
-  const colors = ["disable", "grey", "border-[2px] border-[#ec9821] bg-[#ec9821]", "blue"];
+  const colors = [
+    "border-[2px] border-[#8f8f8f50] bg-[#8f8f8f50]", 
+    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f]", 
+    "border-[2px] border-[#ec9821] bg-[#ec9821]", 
+    "border-[2px] border-[#00a8f3] bg-[#00a8f3]"
+  ];
   const resourceActiveIcons = [
     <LumberMainIcon color="black" opacity={1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
     <BrickMainIcon color="black" opacity={1} className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%]" />,
