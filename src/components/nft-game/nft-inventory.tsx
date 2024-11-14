@@ -377,7 +377,7 @@ export default function InventoryPage() {
                                             <p>{`Add New Slot (${buySlotCost} LAND)`}</p>
                                           </div>
                                           <Button
-                                            className={`w-auto px-4 py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className} ${buyHouseSlotLoading
+                                            className={`w-auto px-4 py-2 bg-[#61cd81] rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className} ${buyHouseSlotLoading
                                               ? "flex justify-center items-center"
                                               : ""
                                               }`}
@@ -430,7 +430,7 @@ export default function InventoryPage() {
                                     <div className="mt-2 pt-3 flex justify-between gap-[20px]">
                                       <Button
                                         onClick={handleDeposit}
-                                        className={`w-full py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                                        className={`w-full py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || depositLoading) &&
                                           	" bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
@@ -460,7 +460,7 @@ export default function InventoryPage() {
                                       </Button>
                                       <Button
                                         onClick={handleWithdraw}
-                                        className={`w-full py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                                        className={`w-full py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || withdrawLoading) &&
                                           " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
@@ -564,7 +564,7 @@ export default function InventoryPage() {
                                 </span>
                                 <Button
                                   onClick={handleHarvest}
-                                  className={`h-[40px] w-[159px] text-[16px] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
+                                  className={`h-[40px] w-[159px] text-[16px] bg-[#61cd81] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
                           					${harvestLoading
                                       ? "flex justify-center items-center"
                                       : ""
