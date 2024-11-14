@@ -150,7 +150,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             Number(nftCreditCost) < 400 ||
             Number(nftCreditCost) > Number(nftCredits)
           }
-          className={`w-full text-[16px] flex items-center justify-center mt-2 py-[5px] px-[20px] rounded-[20px] duration-400 h-[44px] disabled:bg-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
+          className={`w-full text-[16px] flex items-center bg-[#61cd81] justify-center mt-2 py-[5px] px-[20px] rounded-[20px] duration-400 h-[44px] disabled:bg-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
           textClassName="text-[#fff]"
         >
           {isLoading ? (
