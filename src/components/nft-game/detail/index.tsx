@@ -8,7 +8,6 @@ import YouOwn from "../../common/you-own";
 import MainTabs from "../../common/tabs";
 import GamePremiumNfts from "../game-premium-nfts";
 import UpgradeListTable from "./upgrade-list-table";
-
 import ProductionUpgrade from "../production-upgrade";
 import YieldUpgrades from "../yield-upgrade";
 import { useGlobalContext } from "../../../context/GlobalContext";

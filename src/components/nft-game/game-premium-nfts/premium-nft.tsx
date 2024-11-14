@@ -84,7 +84,7 @@ export default function PremiumNft({
             </div>
             <Button
               onClick={() => onSubmit()}
-              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] 
+              className={`w-full bottom-[-1px] h-[45px] text-[18px] bg-[#61cd81] font-semibold absolute rounded-[20px] 
               ${premiumNft.hasNft ? 'border-[2px] border-[#f1b258] bg-[#f1b258]' : ''}
               ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
               textClassName='text-white'
