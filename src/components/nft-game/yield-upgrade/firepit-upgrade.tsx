@@ -67,7 +67,7 @@ export default function FirepitUpgrade({
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "600px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -341,7 +341,7 @@ export default function FirepitUpgrade({
         style={customModalStyles}
       >
         <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 text-[14px] font-normal">{`Add an outdoor fireplace to your property, increasing yields by x${item.buyReward[9]}. Must load lumber to activate yield multiplier, with 1 lumber being burned per day. Up to 10 lumber can be loaded at one time.`}</span>
+          <span className="my-2 mx-3 text-[14px] pt-1 font-normal">{`Add an outdoor fireplace to your property, increasing yields by x${item.buyReward[9]}. Must load lumber to activate yield multiplier, with 1 lumber being burned per day. Up to 10 lumber can be loaded at one time.`}</span>
         </div>
       </ReactModal>
     </div>
