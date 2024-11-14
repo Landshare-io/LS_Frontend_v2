@@ -14,6 +14,7 @@ import Footer from "../components/footer";
 import LoadingStatus from "../components/common/loading-status";
 import AlertModal from "../components/common/modals/alert";
 import { config } from "../wagmi";
+import { Fuul } from "@fuul/sdk";
 
 const interTight = Inter_Tight({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -25,6 +26,11 @@ const interTight = Inter_Tight({
 const client = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
+
+  Fuul.init({
+    apiKey: process.env.NEXT_PUBLIC_FUUL_API_KEY ?? ""
+  });
+  
   return (
     <main className={`${interTight.variable} font-inter`}>
       <WagmiProvider config={config}>

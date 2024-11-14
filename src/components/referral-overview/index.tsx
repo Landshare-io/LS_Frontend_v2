@@ -2,8 +2,26 @@ import Image from "next/image";
 import resourceLandshare from "../../../public/icons/resource-landshare.png";
 import moreInfo from "../../../public/icons/referral-more-info.svg";
 import Tooltip from "../common/tooltip";
+import { Fuul } from '@fuul/sdk';
+import { useEffect } from "react";
+import { useAccount } from "wagmi";
 
 export default function ReferralOverview() {
+  const {address} = useAccount();
+  useEffect(() => {
+    const fetchData = async () => {
+      if(address){
+        const res = await Fuul.getUserPointsByConversion({ 
+          user_address: address, 
+          from: new Date('2000-01-01'),
+          to: new Date(),
+        });
+      }
+    }
+    
+    fetchData();
+  }, [address])
+
   return (
     <div className="flex flex-col  w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-[29px] shadow-lg">
       <div className="w-full flex justify-between">
