@@ -1,20 +1,37 @@
 import { useGlobalContext } from "../../context/GlobalContext";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCopy } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import ReferralCustomizeModal from "../referral-customize";
+import { Fuul } from "@fuul/sdk";
+import { useAccount } from "wagmi";
 
 export default function ReferralOthers() {
   const { theme } = useGlobalContext();
-  const [referralLink, setReferralLink] = useState<string>(
-    "https://app.landshare.io/?referrer=0x60307d37662f66B5b506B40645a41dDD89D83A35"
-  );
+  const {address} = useAccount();
   const [showCheck, setShowCheck] = useState(false);
   const [showCustomizeModal, setShowCustomizeModal] = useState<boolean>(false);
+  const [trackingLinkUrl, setTrackingLinkUrl] = useState<string>("");
+
+  useEffect(() => {
+    async function fetchTrackingLink() {
+      try {
+        const link = await Fuul.generateTrackingLink(
+          `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
+          address ?? ""
+        );
+        setTrackingLinkUrl(link);
+      } catch (error) {
+        console.error("Error generating tracking link:", error);
+      }
+    }
+
+    fetchTrackingLink();
+  }, [address]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(referralLink);
+    navigator.clipboard.writeText(trackingLinkUrl);
     setShowCheck(true);
     setTimeout(() => setShowCheck(false), 2000);
   };
@@ -67,9 +84,9 @@ export default function ReferralOthers() {
                 if (!chain.unsupported && connected) {
                   return (
                     <div className="w-full flex justify-between items-center p-2 gap-4 rounded-lg bg-gray-500 bg-opacity-10">
-                      <p className="truncate break-words text-text-primary">
-                        {referralLink}
-                      </p>
+                      <div className="truncate break-words text-text-primary">
+                        {trackingLinkUrl}
+                      </div>
 
                       <div>
                         {showCheck ? (
