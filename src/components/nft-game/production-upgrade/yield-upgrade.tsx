@@ -123,7 +123,7 @@ export default function YieldUpgrade({
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "600px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -345,7 +345,7 @@ export default function YieldUpgrade({
                 onPurcharse={onPurcharse}
                 disabled={disabled}
                 isLoading={isLoading}
-                type={item.id}
+                type={item.type}
                 item={item}
                 colorType={colorType}
               />
@@ -364,7 +364,7 @@ export default function YieldUpgrade({
         style={customModalStyles}
       >
         <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 text-[14px]">
+          <span className="my-2 mx-3 pt-1 text-[14px]">
             {descriptions[item.name] ?? ""}
           </span>
         </div>
