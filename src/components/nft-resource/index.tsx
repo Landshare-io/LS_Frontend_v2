@@ -191,7 +191,7 @@ export default function NftResource() {
                           href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
                           target="_blank"
                         >
-                          <Button className="text-[16px] font-semibold w-[171px] h-[40px] text-button-text-secondary rounded-[20px]">
+                          <Button className="text-[16px] font-semibold bg-[#61cd81] w-[171px] h-[40px] text-button-text-secondary rounded-[20px]">
                             BUY
                           </Button>
                         </a>
