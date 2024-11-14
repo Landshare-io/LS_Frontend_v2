@@ -38,13 +38,13 @@ export default function FireplaceUpgrade({
   const [openModal, setOpenModal] = useState(false);
   const [lumberCount, setLumberCount] = useState("10");
   const colors = [
-    "grey",
-    "green",
-    "yellow",
-    "blue",
-    "dark-blue",
-    "light-yellow",
-    "light-blue",
+    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f]",
+    "border-[2px] border-[#61cd81] bg-[#61cd81]",
+    "border-[2px] border-[#f1b258] bg-[#f1b258]",
+    "border-[2px] border-[#40bef6] bg-[#40bef6]",
+    "border-[2px] border-[#0b6c96] bg-[#0b6c96]",
+    "border-[2px] border-[#f9c710] bg-[#f9c710]",
+    "border-[2px] border-[#1eceae] bg-[#1eceae]",
   ];
   const { theme } = useGlobalContext();
   const activeIcons = [
@@ -67,7 +67,7 @@ export default function FireplaceUpgrade({
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "600px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -111,9 +111,7 @@ export default function FireplaceUpgrade({
           </div>
         </div>
         <div className="bg-[#6f8e9d66] py-[13px] px-[12px]">
-          <div
-            className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary ${colors[colorType]}`}
-          >
+          <div className="flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary">
             <div className="flex flex-col px-[10px]">
               <div className="flex justify-start items-center pt-[12px]">
                 <span className="text-[#6f8e9d] text-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary">
@@ -144,7 +142,7 @@ export default function FireplaceUpgrade({
                           return (
                             <div
                               key={`next-cost-${index}`}
-                              className={`min-w-[20px] font-semibold flex gap-[2px] items-center text-[14px] font-medium ${colors[colorType]}`}
+                              className="min-w-[20px] font-semibold flex gap-[2px] items-center text-[14px] font-medium"
                             >
                               {colorType == 0 ? (
                                 <>
@@ -218,7 +216,7 @@ export default function FireplaceUpgrade({
         style={customModalStyles}
       >
         <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 text-[14px] font-normal">{`Burn lumber for power with the Firepit upgrade. Each lumber generates ${Number(item.buyReward[2])
+          <span className="my-2 mx-3 pt-1 text-[14px] font-normal">{`Burn lumber for power with the Firepit upgrade. Each lumber generates ${Number(item.buyReward[2])
             } power.`}</span>
         </div>
       </ReactModal>
