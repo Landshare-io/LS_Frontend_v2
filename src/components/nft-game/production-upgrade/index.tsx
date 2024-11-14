@@ -55,7 +55,7 @@ export default function ProductionUpgrade ({
 
   return (
     <div className="max-w-[1200px] px-0 my-5">
-      <div className="flex flex-col md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] justify-between gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] md:gap-[70px]">
+      <div className="flex flex-col md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] justify-between gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)]">
         <div className="relative flex justify-center toolshed-carousel w-[257px] mr-[10px] sm:mr-[40px]">
           <span
             onClick={() =>
