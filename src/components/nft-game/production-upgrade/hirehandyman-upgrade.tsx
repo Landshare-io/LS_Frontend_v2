@@ -34,13 +34,13 @@ export default function HireHandymanUpgrade({
   const { oneDayTime } = useGetSetting();
   const [openModal, setOpenModal] = useState(false);
   const colors = [
-    "grey",
-    "green",
-    "yellow",
-    "blue",
-    "dark-blue",
-    "light-yellow",
-    "light-blue",
+    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f]",
+    "border-[2px] border-[#61cd81] bg-[#61cd81]",
+    "border-[2px] border-[#f1b258] bg-[#f1b258]",
+    "border-[2px] border-[#40bef6] bg-[#40bef6]",
+    "border-[2px] border-[#0b6c96] bg-[#0b6c96]",
+    "border-[2px] border-[#f9c710] bg-[#f9c710]",
+    "border-[2px] border-[#1eceae] bg-[#1eceae]",
   ];
   const customModalStyles = {
     content: {
@@ -48,7 +48,7 @@ export default function HireHandymanUpgrade({
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "600px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -122,7 +122,7 @@ export default function HireHandymanUpgrade({
             className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary ${colors[colorType]}`}
           >
             <div className="flex flex-col px-[10px]">
-              <div className="flex justify-start items-center">
+              <div className="flex justify-start items-center pt-[12px]">
                 <span className="text-[#6f8e9d] text-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary">Restore Durability: </span>
                 <span className="font-semibold text-[14px] text-[#323131] dark:text-text-primary">
                   {houseMaxDurability}%
@@ -182,7 +182,7 @@ export default function HireHandymanUpgrade({
         style={customModalStyles}
       >
         <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 text-[14px] font-normal">
+          <span className="my-2 mx-3 text-[14px] pt-1 font-normal">
             The Hire Handyman consumable allows you to restore your property to
             100% every 14 days for a flat rate of 1 LAND.
           </span>
