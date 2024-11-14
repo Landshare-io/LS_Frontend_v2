@@ -141,14 +141,14 @@ export default function NftItem({ house }: NftItemProps) {
         <div className="m-auto d-flex justify-content-center pt-2">
           {house.isActivated ? (
             <Button
-              className="w-[131px] h-[40px] text-[16px] rounded-[100px] font-semibold cursor-pointer text-button-text-secondary rounded-[20px]"
+              className="w-[131px] h-[40px] text-[16px] bg-[#61cd81] rounded-[100px] font-semibold cursor-pointer text-button-text-secondary rounded-[20px]"
               onClick={() => router.push(`/nft/${house.id}`)}
             >
               MANAGE
             </Button>
           ) : (
             <Button
-              className={`w-[131px] h-[40px] text-[16px] font-semibold cursor-pointer rounded-[20px] text-button-text-secondary ${isActivating
+              className={`w-[131px] h-[40px] text-[16px] bg-[#61cd81] font-semibold cursor-pointer rounded-[20px] text-button-text-secondary ${isActivating
                 ? "flex justify-center items-center"
                 : ""
                 }`}
