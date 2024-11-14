@@ -21,7 +21,7 @@ export default function MintModal({ title, show, setShow, minAmount, onSubmit }:
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "500px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -50,17 +50,19 @@ export default function MintModal({ title, show, setShow, minAmount, onSubmit }:
       isOpen={show}
       onRequestClose={() => { setShow(!show), document.body.classList.remove('modal-open'); }}
     >
-      <div className='p-3 text-[25px] text-[#000]'>
+      <div className='p-3 text-[25px] font-medium text-[#000]'>
         {title}
       </div>
       <div className='px-3 mb-3'>
-        <div className="mb-3">
-          <label>Extend Land Amount</label>
+        <div className="flex flex-col mb-3 gap-[0.5rem]">
+          <label htmlFor='mint-amount'>Extend Land Amount</label>
           <input 
-            type="number"
+            id="mint-amount"
+            type="text"
             value={landAmount}
             onChange={(e: any) => setLandAmount(e.target.value)}
             min={minAmount}
+            className='px-[0.75rem] py-[0.375rem] leading-[1.5] text-[#212529] border-[1px] border-[#ced4da] bg-[#fff] rounded-[0.25rem] duration-[150] transition-all ease-in-out'
           />
           {assetError && (
             <span className="text-danger">
@@ -72,7 +74,7 @@ export default function MintModal({ title, show, setShow, minAmount, onSubmit }:
         <div className="items-center flex my-auto ml-0 justify-between">
           <span className='pl-[1px]'>Fee amount: {landAmount / 100 * 8} Land</span>
           <Button
-            className="flex justify-center items-center"
+            className="flex justify-center items-center bg-[#61cd81] text-[#fff] duration-300 font-semibold w-[165px] h-[44px] rounded-[20px] disabled:bg-[#c2c5c3]"
             onClick={handleAction}
             disabled={isLoading || ((landAmount * 4) < Number(minAmount))}
           >
