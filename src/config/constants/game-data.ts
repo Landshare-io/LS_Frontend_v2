@@ -25,50 +25,62 @@ import Generator from "../../../public/img/production-upgrade/generator.png";
 
 export const yieldUpdgradesData = [
   {
+    id: 0,
     title: "Hardwood Floors",
     imgUrl: HardwoodFloors
   },
   {
+    id: 1,
     title: "Landscaping",
     imgUrl: Landscaping
   },
   {
+    id: 2,
     title: "Garden",
     imgUrl: Garden
   },
   {
+    id: 3,
     title: "Trees",
     imgUrl: Trees
   },
   {
+    id: 4,
     title: "Fireplace",
     imgUrl: Fireplace
   },
   {
+    id: 5,
     title: "Kitchen Remodel",
     imgUrl: KitchenRemodel
   },
   {
+    id: 6,
     title: "Bathroom Remodel",
     imgUrl: BathroomRemodel
   },
   {
+    id: 7,
     title: "Jacuzzi Tub",
     imgUrl: JacuzziTub
   },
   {
+    id: 8,
     title: "Steel Sliding",
     imgUrl: SteelSiding
   },
   {
+    id: 9,
     title: "Steel Application",
     imgUrl: SteelAppliances
   },
   {
+    id: 10,
     title: "Cellar",
     imgUrl: Cellar
   },
   {
+    id: 11,
     title: "Finished Basement",
     imgUrl: FinishedBasement
   }
