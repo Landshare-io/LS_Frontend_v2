@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import backendAxios from "./nft-game-axios";
-import { useSignMessage } from "wagmi";
+import { signMessage } from '@wagmi/core'
+import { config } from "../../../wagmi";
 import { Address } from "viem";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { NFT_GAME_BACKEND_URL } from "../../../config/constants/environments";
@@ -11,14 +12,15 @@ export default function useLogin() {
   const [isLoading, setIsLoading] = useState(false)
   const [signNonce, setSignNonce] = useState(0)
   const [showNotify, setShowNotify] = useState(false)
-  const { signMessage, data: signMessageData } = useSignMessage()
+  const [signatureData, setSignatureData] = useState<string>("")
+  
   const [walletAddress, setWalletAddress] = useState<Address | string | undefined>()
 
   useEffect(() => {
     (async () => {
-      if (signMessageData) {
+      if (signatureData) {
         const { data } = await axios.post(`${NFT_GAME_BACKEND_URL}/auth/login`, {
-          "signature": signMessageData,
+          "signature": signatureData,
           "walletAddress": walletAddress,
           "nonce": signNonce
         });
@@ -37,7 +39,7 @@ export default function useLogin() {
         return false
       }
     })()
-  }, [signMessageData])
+  }, [signatureData])
 
   const loginToBackend = async (needNotify: boolean, address: Address | string | undefined) => {
     try {
@@ -47,7 +49,8 @@ export default function useLogin() {
       const { data: messageData } = await axios.post(`${NFT_GAME_BACKEND_URL}/auth/get-nonce`);
   
       setSignNonce(messageData.nonce)
-      signMessage({ message: messageData.sign_message})
+      const signature = await signMessage(config, { message: messageData.sign_message });
+      setSignatureData(signature);
     } catch (error) {
       setIsLoading(false)
       setIsAuthenticated(false)

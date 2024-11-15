@@ -17,11 +17,14 @@ export default function ReferralOthers() {
   useEffect(() => {
     async function fetchTrackingLink() {
       try {
-        const link = await Fuul.generateTrackingLink(
-          `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
-          address ?? ""
-        );
-        setTrackingLinkUrl(link);
+        if(address){
+          const link = await Fuul.generateTrackingLink(
+            `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
+            address
+          );
+          setTrackingLinkUrl(link);
+        }
+        
       } catch (error) {
         console.error("Error generating tracking link:", error);
       }
@@ -84,7 +87,7 @@ export default function ReferralOthers() {
                 if (!chain.unsupported && connected) {
                   return (
                     <div className="w-full flex justify-between items-center p-2 gap-4 rounded-lg bg-gray-500 bg-opacity-10">
-                      <div className="truncate break-words text-text-primary">
+                      <div className=" truncate break-words text-text-primary">
                         {trackingLinkUrl}
                       </div>
 
