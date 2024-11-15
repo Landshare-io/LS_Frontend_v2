@@ -8,13 +8,14 @@ import { useAccount } from "wagmi";
 
 export default function ReferralOverview() {
   const {address} = useAccount();
+
   useEffect(() => {
     const fetchData = async () => {
       if(address){
-        const res = await Fuul.getUserPointsByConversion({ 
+        const res = await Fuul.getPointsLeaderboard({ 
           user_address: address, 
           from: new Date('2000-01-01'),
-          to: new Date(),
+          to: new Date()
         });
       }
     }
@@ -36,13 +37,8 @@ export default function ReferralOverview() {
             width={26}
             height={26}
           />
-          <div className="flex align-text-bottom gap-1">
-            <p className="font-bold text-lg leading-7 text-text-primary">
-              Tier 1
-            </p>
-            <p className="font-normal text-[14px] leading-7 text-text-secondary">
-              10%commission
-            </p>
+          <div className="flex align-text-bottom gap-1 font-normal text-[14px] leading-7 text-text-secondary">
+              10% Commission
           </div>
           <Tooltip
             tooltipClassName="-translate-x-[190px] lg:-translate-x-[100px] "

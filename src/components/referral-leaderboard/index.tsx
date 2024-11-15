@@ -21,12 +21,14 @@ interface leaderboardDataProps {
 
 export default function ReferralLeaderBoard() {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageCount, setPageCount] = useState<number>(4);
+  const [pageCount, setPageCount] = useState<number>(0);
   const [leaderboardData, setLeaderboardData] = useState<leaderboardDataProps[]>();
 
   useEffect(()=>{
     const fetchData = async () => {
       const res = await Fuul.getPointsLeaderboard({});
+
+      setPageCount(res.results.length / 10 + 1);
 
       const formattedData = res?.results?.map((item: any) => ({
         rank: item.rank,
@@ -40,17 +42,6 @@ export default function ReferralLeaderBoard() {
 
     fetchData();
   }, [])
-
-  useEffect(() => {
-    const fetchData = async () => {
-        const res = await Fuul.getPayoutsLeaderboard(
-          { currency_address: '0x475eD67Bfc62B41c048b81310337c1D75D45aADd' }
-        );
-    } 
-
-    fetchData()
-  }, [])
-
 
   return (
     <div className="mt-12">
@@ -69,11 +60,10 @@ export default function ReferralLeaderBoard() {
             <TableHead className="min-w-[200px] lg:min-w-max">
               Total Taker Volume <span className="text-[#61CD81]">ⓘ</span>
             </TableHead>
-            <TableHead className="min-w-[100px] w-auto">Tier</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {leaderboardData?.map((data, index) => {
+          {leaderboardData?.slice(10 * (currentPage - 1), 10 * (currentPage - 1) + 10).map((data, index) => {
             const { rank, account, total_amount, total_attributions } =
               data;
             const accountDisplay = `${account.slice(0, 6)}...${account.slice(
@@ -89,7 +79,6 @@ export default function ReferralLeaderBoard() {
                 <TableCell>{total_amount}</TableCell>
                 <TableCell>{"0"}</TableCell>
                 <TableCell>{"totalTakerVolume"}</TableCell>
-                <TableCell className="rounded-r-xl">{"tier"}</TableCell>
               </TableRow>
             );
           })}

@@ -22,6 +22,7 @@ export default function ReferralOthers() {
             `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
             address
           );
+          
           setTrackingLinkUrl(link);
         }
         
