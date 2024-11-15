@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Breadcrumb from "../components/common/breadcrumb";
@@ -9,8 +8,6 @@ import ReferralOverview from "../components/referral-overview";
 import ReferralOthers from "../components/referral-others";
 import ReferralEarning from "../components/referral-earning";
 import ReferralLeaderBoard from "../components/referral-leaderboard";
-import { Fuul } from "@fuul/sdk";
-import { useAccount } from "wagmi";
 
 const breadcrumbItems: BREADCRUMB[] = [
   {
@@ -24,30 +21,6 @@ const breadcrumbItems: BREADCRUMB[] = [
 ];
 
 const Referral: NextPage = () => {
-  const {address, chainId} = useAccount();
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (address) {
-  //       const affiliateCode = await Fuul.getAffiliateCode(address);
-
-  //       if(!affiliateCode) {
-  //         const res = await Fuul.createAffiliateCode({
-  //           address: address,
-  //           code: 'my-code',
-  //           signature: signature,
-  //           accountChainId: chainId // Only for smart contract wallets
-  //         });
-  //       }
-  //     } else {
-  //       console.error("Address is undefined");
-  //     }
-  //   }
-
-  //   fetchData()
-    
-  // }, [address])
-
   return (
     <div className={`${styles.container}`}>
       <Head>

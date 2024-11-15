@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { HiMiniLockOpen } from "react-icons/hi2";
@@ -10,6 +11,11 @@ import BeneficalAssets from '../components/benefical-assets';
 import InvestmentExplain from '../components/investment-explain';
 import RwaCalculator from '../components/rwa-calculator';
 import styles from '../styles/Home.module.css';
+import { signMessage } from '@wagmi/core';
+import { config } from '../wagmi';
+import { Fuul } from '@fuul/sdk';
+import { useAccount } from "wagmi";
+import { useSearchParams } from 'next/navigation';
 
 const breadcrumbItems: BREADCRUMB[] = [
   {
@@ -23,6 +29,36 @@ const breadcrumbItems: BREADCRUMB[] = [
 ]
 
 const RwaPage: NextPage = () => {
+  
+  const searchParams = useSearchParams();
+  const {address, chainId} = useAccount();
+  const referralCode = searchParams.get('af');
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      if (address && referralCode) {
+        const affiliateCode = await Fuul.getAffiliateCode(address);
+
+        const signature = await signMessage(config, { message: `I confirm that I am creating the ${referralCode} code on Fuul` });
+
+        if(!affiliateCode) {
+          await Fuul.createAffiliateCode({
+            address: address,
+            code: referralCode,
+            signature: signature,
+            accountChainId: chainId 
+          });
+        }
+      } else {
+
+        console.error("Address is undefined");
+      }
+    }
+
+    fetchData()
+  }, [address, referralCode])
+
   return (
     <div className={`${styles.container}`}>
       <Head>
