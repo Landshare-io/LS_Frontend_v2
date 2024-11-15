@@ -15,7 +15,8 @@ export default function ReferralOverview() {
         const res = await Fuul.getPointsLeaderboard({ 
           user_address: address, 
           from: new Date('2000-01-01'),
-          to: new Date()
+          to: new Date(),
+          user_type: 'end_user',
         });
       }
     }
