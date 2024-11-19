@@ -7,7 +7,7 @@ export default function GrowthEarning() {
         <IoTrendingUp className="w-[24px] h-[24px] text-[#61CD81]" />
       </div>
       <span className="text-[14px] leading-[22px] tracking-[0.02em] font-semibold text-text-primary">
-        Assets of the future
+        Earn
       </span>
     </div>
   );

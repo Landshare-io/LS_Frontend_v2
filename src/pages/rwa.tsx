@@ -29,7 +29,6 @@ const breadcrumbItems: BREADCRUMB[] = [
 ]
 
 const RwaPage: NextPage = () => {
-  
   const searchParams = useSearchParams();
   const {address, chainId} = useAccount();
   const referralCode = searchParams.get('af');
@@ -40,9 +39,9 @@ const RwaPage: NextPage = () => {
       if (address && referralCode) {
         const affiliateCode = await Fuul.getAffiliateCode(address);
 
-        const signature = await signMessage(config, { message: `I confirm that I am creating the ${referralCode} code on Fuul` });
-
         if(!affiliateCode) {
+          const signature = await signMessage(config, { message: `I confirm that I am creating the ${referralCode} code on Fuul` });
+
           await Fuul.createAffiliateCode({
             address: address,
             code: referralCode,
@@ -51,13 +50,18 @@ const RwaPage: NextPage = () => {
           });
         }
       } else {
-
         console.error("Address is undefined");
       }
     }
 
     fetchData()
   }, [address, referralCode])
+
+  useEffect(() => {
+    if(referralCode){
+      Fuul.sendPageview("rwa");
+    }
+  }, [referralCode]);
 
   return (
     <div className={`${styles.container}`}>

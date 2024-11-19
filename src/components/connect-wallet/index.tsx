@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from 'next/router';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -7,6 +7,11 @@ import Button from "../common/button";
 import useLogin from "../../hooks/nft-game/axios/useLogin";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import { useSearchParams } from 'next/navigation';
+import { Fuul } from "@fuul/sdk";
+import { signMessage } from '@wagmi/core';
+import { config } from "../../wagmi";
+import { useAccount } from "wagmi";
 
 const interTight = Inter_Tight({
   weight: "700",
@@ -24,9 +29,43 @@ export default function ConnectWallet({
   connectButtonClassName
 }: ConnectWalletProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { pathname } = router;
   const { checkIsAuthenticated } = useLogin()
   const { isAuthenticated } = useGlobalContext()
+  const referralCode = searchParams.get('af');
+  const {isConnected, address} = useAccount();
+
+  const formatAffiliateAcceptance = (date : any) => {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    const day = date.getDate();
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    const formattedDate = `${day}-${month} ${year} ${hours}:${minutes}:${seconds}`;
+    return `Accept affiliate on ${formattedDate}`;
+}
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const signature = await signMessage(config, { message: formatAffiliateAcceptance(new Date())});
+
+      await Fuul.sendConnectWallet({
+        address: address as string,
+        signature: signature,
+        message: formatAffiliateAcceptance(new Date())
+      });
+    }
+
+    if(isConnected && address && referralCode){
+      fetchData();
+    }
+  }, [isConnected])
+    
 
   return (
     <>
