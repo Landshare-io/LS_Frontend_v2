@@ -43,25 +43,51 @@ export default function ReferralLeaderBoard() {
     fetchData();
   }, [])
 
+  const getCurrentEpoch = () => {
+    const today = new Date();
+    
+    const currentMonthIndex = today.getMonth();
+    
+    const previousMonthIndex = (currentMonthIndex + 11) % 12;
+    const nextMonthIndex = (currentMonthIndex + 1) % 12;     
+
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    const previousMonth = monthNames[previousMonthIndex];
+    const currentMonth = monthNames[currentMonthIndex];
+    const nextMonth = monthNames[nextMonthIndex];
+
+    return `${previousMonth} 1 - ${nextMonth} 1`;
+}
+
   return (
     <div className="mt-12">
       <h2 className="text-text-primary font-bold text-2xl leading-[22px]">
         Leaderboard
       </h2>
+
+      <p className="mt-[10px] text-text-primary text-sm">The program operates in 3-month epochs.</p>
+
+      <p className="w-fit my-6 text-text-primary font-bold text-sm py-2 px-4 bg-white border border-gray-200 rounded-md">{getCurrentEpoch()}</p>
+
       <Table className="border-separate text-text-primary border-spacing-y-3">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px] ">Rank</TableHead>
-            <TableHead>Account</TableHead>
-            <TableHead>Earnings</TableHead>
-            <TableHead className="min-w-[110px] lg:min-w-max">
-              Sign Ups
+            <TableHead className="w-1/5">Rank</TableHead>
+            <TableHead className="w-1/5">Account</TableHead>
+            <TableHead className="w-1/5">Claimed Earnings</TableHead>
+            <TableHead className="w-1/5">
+              Approved invites
             </TableHead>
-            <TableHead className="min-w-[200px] lg:min-w-max">
-              Total Taker Volume <span className="text-[#61CD81]">ⓘ</span>
+            <TableHead className="w-1/5">
+              Purchase Volume <span className="text-[#61CD81]"> ⓘ</span>
             </TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
           {leaderboardData?.slice(10 * (currentPage - 1), 10 * (currentPage - 1) + 10).map((data, index) => {
             const { rank, account, total_amount, total_attributions } =

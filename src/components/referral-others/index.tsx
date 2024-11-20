@@ -89,7 +89,7 @@ export default function ReferralOthers() {
                 if (!connected) {
                   return (
                     <div className="w-full text-center py-3 rounded-xl bg-primary text-[#61CD81] text-base leading-5">
-                      Connect your wallet to view link
+                      Connect your wallet to get your personalized invite link!
                     </div>
                   );
                 }
@@ -133,18 +133,6 @@ export default function ReferralOthers() {
           );
         }}
       </ConnectButton.Custom>
-
-      <div className="sm:flex justify-between text-text-primary text-base leading-5">
-        <div className="space-y-1">
-          <p>LSRWA Incentives</p>
-          <p>Fast and deep liquidity</p>
-        </div>
-
-        <div className="space-y-1">
-          <p>All collateral earns interest</p>
-          <p>Unbeatable fees: 0-0.02%</p>
-        </div>
-      </div>
 
       <ReferralCustomizeModal
         showModal={showCustomizeModal}

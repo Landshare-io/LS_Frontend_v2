@@ -5,27 +5,13 @@ export default function ReferralEarning() {
 
       <div className="">
         <div className="mt-[22px] flex justify-between">
-          <div>
-            <p className="text-text-secondary text-sm leading-[28px]">
-              Total Earned
-            </p>
-            <p className="text-text-primary font-bold leading-[22px]">
-              0.000 USDT
-            </p>
-          </div>
+          <p className="text-text-secondary text-sm leading-[28px]">
+            Total Earned
+          </p>
 
-          <div className="text-text-secondary text-sm leading-[28px] flex flex-col items-end">
-            <p>
-              Commissions:{" "}
-              <span className="font-bold text-text-primary">0.00</span>{" "}
-              <span className="text-text-primary">USDT</span>
-            </p>
-            <p>
-              Fee Rebates:{" "}
-              <span className="font-bold text-text-primary">0.00</span>{" "}
-              <span className="text-text-primary">USDT</span>
-            </p>
-          </div>
+          <p className="font-bold text-text-primary text-lg leading-[28px] flex flex-col items-end">
+              0.00 USDT
+          </p>
         </div>
 
         <hr className="w-full my-[22px] bg-[#D8D8D8]" />
@@ -56,19 +42,17 @@ export default function ReferralEarning() {
           Claim Earnings
         </button>
 
-        <p className="text-sm mt-2 text-text-secondary leading-[22px]">
-          Referral commissions and rebates are only tracked across Arbitrum and
-          Mantle. Rewards can be claimed on Arbitrum.{" "}
-          <span className="text-[#61CD81] font-bold  cursor-pointer">
-            Learn more
-          </span>
-        </p>
       </div>
 
-      <p className="text-sm mt-[60px] md:mt-[66px] text-text-secondary leading-[22px]">
-        If you were referred by another trader, you’ll be able to see and claim
-        available rebates here.
-      </p>
+      <div className="text-sm mt-[60px] md:mt-[66px] text-text-secondary leading-[22px]">
+        <p className="text-[#FF0000] font-bold">
+          30-Day Holding Requirement
+        </p>
+        <p>
+          Both the referrer and referee must wait until the referee holds the LSRWA tokens for at least 30 days before rewards can be claimed.
+        </p>
+      </div>
+     
     </div>
   );
 }
