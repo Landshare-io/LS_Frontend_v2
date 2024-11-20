@@ -23,18 +23,20 @@ export default function ReferralOthers() {
           const affiliateCode = await Fuul.getAffiliateCode(address);
 
           if(!affiliateCode){
-            const signature = await signMessage(config, { message: `I confirm that I am creating the ${affiliateCode} code on Fuul` });
+            const signature = await signMessage(config, { message: `I confirm that I am creating the ${address} code on Fuul` });
 
             await Fuul.createAffiliateCode({
               address: address ?? "",
-              code: affiliateCode ?? "",
+              code: address ?? "",
               signature: signature,
             })
           }
-          
+
+          const code = await Fuul.getAffiliateCode(address);
+
           const link = await Fuul.generateTrackingLink(
             `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
-            address
+            code ?? ""
           );
           
           setTrackingLinkUrl(link);
