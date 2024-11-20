@@ -1,7 +1,8 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
+import { useEffect } from "react";
 import type { AppProps } from "next/app";
-
+import Modal from 'react-modal';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider, lightTheme } from "@rainbow-me/rainbowkit";
@@ -25,6 +26,10 @@ const interTight = Inter_Tight({
 const client = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    Modal.setAppElement('#__next'); // Set the root app element for accessibility
+  }, []);
+
   return (
     <main className={`${interTight.variable} font-inter`}>
       <WagmiProvider config={config}>
