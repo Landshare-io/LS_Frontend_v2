@@ -13,6 +13,11 @@ interface GlobalContextType {
   setScreenLoadingStatus: Function;
   isAuthenticated: boolean;
   setIsAuthenticated: Function;
+  iskycmodal : boolean;
+  setKycopen : (iskycmodal : boolean) => void;
+  handleclosemodal : () => void;
+  isZeroIDModal : boolean;
+  setZeroIDModalOpen : (isZeroIDModal : boolean) => void;
 }
 
 // Create the context with a default value of undefined
@@ -29,6 +34,11 @@ const GlobalContext = createContext<GlobalContextType>({
   setScreenLoadingStatus: () => {},
   isAuthenticated: false,
   setIsAuthenticated: () => {},
+  iskycmodal : false,
+  setKycopen : (iskycmodal : boolean) => {},
+  handleclosemodal : () => {},
+  isZeroIDModal : false,
+  setZeroIDModalOpen : (isZeroIDModal : boolean) => {},
 });
 
 // Define the props for the provider
@@ -46,6 +56,14 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   });
   const [screenLoadingStatus, setScreenLoadingStatus] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const [iskycmodal, setKycopen] = useState<boolean>(false);
+  const [isZeroIDModal, setZeroIDModalOpen] = useState<boolean>(false);
+
+  const handleclosemodal = () => {
+    setKycopen(false);
+    document.body.style.overflow = "auto";
+  }
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('land-v2-theme') as 'light' | 'dark' || 'light';
@@ -79,7 +97,12 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     screenLoadingStatus,
     setScreenLoadingStatus,
     isAuthenticated,
-    setIsAuthenticated
+    setIsAuthenticated,
+    iskycmodal,
+    setKycopen,
+    handleclosemodal ,
+    isZeroIDModal,
+    setZeroIDModalOpen,
   };
 
   return (

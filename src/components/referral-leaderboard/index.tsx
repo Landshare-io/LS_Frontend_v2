@@ -69,9 +69,9 @@ export default function ReferralLeaderBoard() {
         Leaderboard
       </h2>
 
-      <p className="mt-[10px] text-text-primary text-sm">The program operates in 3-month epochs.</p>
+      <div className="mt-[10px] text-text-secondary text-sm">The program operates in 3-month epochs.</div>
 
-      <p className="w-fit my-6 text-text-primary font-bold text-sm py-2 px-4 bg-white border border-gray-200 rounded-md">{getCurrentEpoch()}</p>
+      <div className="w-fit my-6 text-text-primary font-bold text-sm py-2 px-4 bg-secondary border border-gray-200 rounded-md">{getCurrentEpoch()}</div>
 
       <Table className="border-separate text-text-primary border-spacing-y-3">
         <TableHeader>

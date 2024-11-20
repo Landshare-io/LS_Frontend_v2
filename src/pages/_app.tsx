@@ -15,6 +15,7 @@ import LoadingStatus from "../components/common/loading-status";
 import AlertModal from "../components/common/modals/alert";
 import { config } from "../wagmi";
 import { Fuul } from "@fuul/sdk";
+import KYCModal from "../components/common/modals/kyc";
 
 const interTight = Inter_Tight({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -61,6 +62,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <Footer />
                 <LoadingStatus />
                 <AlertModal />
+                <KYCModal/>
               </StoreProvider>
             </GlobalProvider>
           </RainbowKitProvider>

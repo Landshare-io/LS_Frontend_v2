@@ -8,6 +8,7 @@ import ReferralOverview from "../components/referral-overview";
 import ReferralOthers from "../components/referral-others";
 import ReferralEarning from "../components/referral-earning";
 import ReferralLeaderBoard from "../components/referral-leaderboard";
+import ReferralParticipate from "../components/referral-participate";
 
 const breadcrumbItems: BREADCRUMB[] = [
   {
@@ -54,6 +55,10 @@ const Referral: NextPage = () => {
             </div>
           </div>
           <ReferralLeaderBoard />
+
+          <p className="mt-12 mb-6 text-text-primary font-bold text-2xl">How To Participate</p>
+
+          <ReferralParticipate/>
         </div>
       </div>
     </div>

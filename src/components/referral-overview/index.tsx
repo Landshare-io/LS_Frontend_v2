@@ -1,7 +1,3 @@
-import Image from "next/image";
-import resourceLandshare from "../../../public/icons/resource-landshare.png";
-import moreInfo from "../../../public/icons/referral-more-info.svg";
-import Tooltip from "../common/tooltip";
 import { Fuul } from '@fuul/sdk';
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
@@ -26,9 +22,9 @@ export default function ReferralOverview() {
   }, [address])
 
   return (
-    <div className="flex flex-col  w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-[29px] shadow-lg">
+    <div className="flex flex-col w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-[29px] shadow-lg">
       <p className="w-full flex justify-between text-text-primary font-bold text-lg leading-7">
-          Overview
+        Overview
       </p>
 
       <div className="flex justify-start gap-6">
