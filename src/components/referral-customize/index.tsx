@@ -49,7 +49,8 @@ export default function ReferralCustomizeModal({showModal, setShowModal, setTrac
                     signature: signature,
                 })
 
-                setTrackingprettyCode(process.env.NEXT_PUBLIC_FUUL_API_URL + prettyCode);
+                setTrackingprettyCode(process.env.NEXT_PUBLIC_FUUL_API_URL + "?af=" + prettyCode);
+
                 setPrettyCode("");
                 notifySuccess("The code is successfully updated and prettyCode is defined");
             }else{
