@@ -21,6 +21,7 @@ const breadcrumbItems: BREADCRUMB[] = [
 ];
 
 const Referral: NextPage = () => {
+
   return (
     <div className={`${styles.container}`}>
       <Head>
@@ -45,6 +46,7 @@ const Referral: NextPage = () => {
           <div className="w-full grid lg:grid-cols-[52%_48%] grid-cols-1 gap-[40px]">
             <div className="flex flex-col gap-[40px] ">
               <ReferralOverview />
+              
               <ReferralOthers />
             </div>
             <div>

@@ -6,6 +6,8 @@ import { FaCheck } from "react-icons/fa";
 import ReferralCustomizeModal from "../referral-customize";
 import { Fuul } from "@fuul/sdk";
 import { useAccount } from "wagmi";
+import { signMessage } from '@wagmi/core';
+import { config } from "../../wagmi";
 
 export default function ReferralOthers() {
   const { theme } = useGlobalContext();
@@ -18,6 +20,18 @@ export default function ReferralOthers() {
     async function fetchTrackingLink() {
       try {
         if(address){
+          const affiliateCode = await Fuul.getAffiliateCode(address);
+
+          if(!affiliateCode){
+            const signature = await signMessage(config, { message: `I confirm that I am creating the ${affiliateCode} code on Fuul` });
+
+            await Fuul.createAffiliateCode({
+              address: address ?? "",
+              code: affiliateCode ?? "",
+              signature: signature,
+            })
+          }
+          
           const link = await Fuul.generateTrackingLink(
             `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
             address
@@ -33,6 +47,7 @@ export default function ReferralOthers() {
 
     fetchTrackingLink();
   }, [address]);
+  
 
   const handleCopy = () => {
     navigator.clipboard.writeText(trackingLinkUrl);
@@ -132,6 +147,8 @@ export default function ReferralOthers() {
       <ReferralCustomizeModal
         showModal={showCustomizeModal}
         setShowModal={setShowCustomizeModal}
+        setTrackingprettyCode={setTrackingLinkUrl}
+        address={address}
       />
     </div>
   );

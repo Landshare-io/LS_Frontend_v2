@@ -11,8 +11,6 @@ import BeneficalAssets from '../components/benefical-assets';
 import InvestmentExplain from '../components/investment-explain';
 import RwaCalculator from '../components/rwa-calculator';
 import styles from '../styles/Home.module.css';
-import { signMessage } from '@wagmi/core';
-import { config } from '../wagmi';
 import { Fuul } from '@fuul/sdk';
 import { useAccount } from "wagmi";
 import { useSearchParams } from 'next/navigation';
@@ -30,31 +28,8 @@ const breadcrumbItems: BREADCRUMB[] = [
 
 const RwaPage: NextPage = () => {
   const searchParams = useSearchParams();
-  const {address, chainId} = useAccount();
+  const {address} = useAccount();
   const referralCode = searchParams.get('af');
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (address && referralCode) {
-        const affiliateCode = await Fuul.getAffiliateCode(address);
-
-        if(!affiliateCode) {
-          const signature = await signMessage(config, { message: `I confirm that I am creating the ${referralCode} code on Fuul` });
-
-          await Fuul.createAffiliateCode({
-            address: address,
-            code: referralCode,
-            signature: signature,
-            accountChainId: chainId 
-          });
-        }
-      } else {
-        console.error("Address is undefined");
-      }
-    }
-
-    fetchData();
-  }, [address, referralCode])
 
   useEffect(() => {
     if(referralCode){
