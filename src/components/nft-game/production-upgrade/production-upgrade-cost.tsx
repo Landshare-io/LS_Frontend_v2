@@ -128,15 +128,15 @@ export default function ProductionUpgradeCost({
                 return (
                   <div key={`next-cost-${index}`} className={`min-w-[20px] text-[14px] flex gap-[2px] items-center`}>
                     {colorType == 0 ? (
-                      <>
+                      <div className='flex items-center gap-[2px]'>
                         {`${cost} `}
                         {disabledIcons[index]}
-                      </>
+                      </div>
                     ) : (
-                      <>
+                      <div className='flex items-center gap-[2px]'>
                         {`${cost} `}
                         {activeIcons[index]}
-                      </>
+                      </div>
                     )}
                   </div>
                 )
@@ -157,10 +157,10 @@ export default function ProductionUpgradeCost({
         disabled={disabled || ((isLoading.type == item.id) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
       >
         {((isLoading.type == item.id) && isLoading.loading) ? (
-          <>
+          <div className='flex justify-center items-center'>
             <ReactLoading type="spin" className="me-2 mb-[4px]" width="24px" height="24px" />
             <span className="font-semibold text-button-text-secondary">Loading</span>
-          </>
+          </div>
         ) : (
           <span className="font-semibold text-button-text-secondary">{btnLabel}</span>
         )}
