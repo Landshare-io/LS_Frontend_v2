@@ -52,7 +52,7 @@ export default function YieldUpgrade({
     "Jacuzzi Tub": `Add a Jacuzzi Tub to your bathroom, increasing yields by x${
       item.buyReward[9] ?? ""
     }. Increases concrete repair cost by 1 per 10% repaired.`,
-    "Steel Siding": `Install steel siding to your property, increasing yields by x${
+    "Steel Sliding": `Install steel siding to your property, increasing yields by x${
       item.buyReward[9] ?? ""
     }. Requires a concrete fortification. Increases steel repair cost by 1 per 10% repaired.`,
     "Steel Application": `Modernize your kitchen with steel appliances, increasing LAND yields by x${
