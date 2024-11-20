@@ -50,6 +50,7 @@ export default function ReferralCustomizeModal({showModal, setShowModal, setTrac
                 })
 
                 setTrackingprettyCode(process.env.NEXT_PUBLIC_FUUL_API_URL + prettyCode);
+                setPrettyCode("");
                 notifySuccess("The code is successfully updated and prettyCode is defined");
             }else{
                 console.error("The code is not free or prettyCode is not defined");
