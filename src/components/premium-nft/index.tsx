@@ -68,10 +68,10 @@ export default function PremiumNft({
             //</div>={loader == `${premiumNft.id}-${premiumNft.onChainId}`}
             >
               {(loader == `${premiumNft.id}-${premiumNft.onChainId}`) ? (
-                <>
+                <div className='flex justify-center items-center'>
                   <ReactLoading type="spin" className="mr-2 mb-[4px]" width="24px" height="24px" />
                   <span className="font-semibold">Loading</span>
-                </>
+                </div>
               ) : (<span className="font-semibold text-button-text-secondary">{premiumNft.marketplaceItem !== -1 ? 'Set off-sale' : 'Set On Sale'}</span>)
               }
             </Button>
