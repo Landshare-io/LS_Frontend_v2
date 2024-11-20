@@ -557,7 +557,7 @@ export default function AutoVault({
                                   // (typeof address == 'undefined') ?
                                   //   "Connect Wallet" :
                                   isDepositing ? (
-                                    <>
+                                    <div className='flex justify-center items-center'>
                                       <ReactLoading
                                         type="spin"
                                         className="me-2 button-spinner"
@@ -567,7 +567,7 @@ export default function AutoVault({
                                       <span className="upgrade-status">
                                         Loading
                                       </span>
-                                    </>
+                                    </div>
                                   ) : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
                                     (chainId === MAJOR_WORK_CHAIN.id || chainId === 97) ? "Withdraw" : "Withdraw"
                                   )) : "Enter Amount"}

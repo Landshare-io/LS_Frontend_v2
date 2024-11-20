@@ -363,7 +363,7 @@ export default function NftDetails({
                       disabled={isLoading[3] || house.onSale}
                     >
                       {isLoading[3] ? (
-                        <>
+                        <div className='flex justify-center items-center'>
                           <ReactLoading
                             type="spin"
                             className="mr-2 mb-[4px]"
@@ -371,7 +371,7 @@ export default function NftDetails({
                             height="24px"
                           />
                           <span className="font-semibold">Loading</span>
-                        </>
+                        </div>
                       ) : (
                         house.isActivated ? "Deactivate" : "Activate"
                       )}
@@ -447,7 +447,7 @@ export default function NftDetails({
                             }
                           >
                             {depositLoading ? (
-                              <>
+                              <div className='flex justify-center items-center'>
                                 <ReactLoading
                                   type="spin"
                                   className="mr-2 mb-[4px]"
@@ -457,7 +457,7 @@ export default function NftDetails({
                                 <span className="font-semibold">
                                   Loading
                                 </span>
-                              </>
+                              </div>
                             ) : (
                               "DEPOSIT"
                             )}
@@ -477,7 +477,7 @@ export default function NftDetails({
                             }
                           >
                             {isLoading[1] ? (
-                              <>
+                              <div className='flex justify-center items-center'>
                                 <ReactLoading
                                   type="spin"
                                   className="me-2 button-spinner"
@@ -487,7 +487,7 @@ export default function NftDetails({
                                 <span className="upgrade-status">
                                   Loading
                                 </span>
-                              </>
+                              </div>
                             ) : (
                               "WITHDRAW"
                             )}
@@ -605,7 +605,7 @@ export default function NftDetails({
                       disabled={harvestLoading}
                     >
                       {harvestLoading ? (
-                        <>
+                        <div className='flex justify-center items-center'>
                           <ReactLoading
                             type="spin"
                             className="me-2 mb-[4px]"
@@ -613,7 +613,7 @@ export default function NftDetails({
                             height="24px"
                           />
                           <span className="font-semibold">Loading</span>
-                        </>
+                        </div>
                       ) : (
                         "Harvest"
                       )}

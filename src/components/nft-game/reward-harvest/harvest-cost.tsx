@@ -100,10 +100,10 @@ export default function HarvestCost({
         disabled={(color != "yellow") || (btnLabel == "ACTIVE") || ((isLoading.type == type) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
       >
         {((isLoading.type == type) && isLoading.loading) ? (
-          <>
+          <div className='flex justify-center items-center'>
             <ReactLoading type="spin" className="me-2 mb-[4px]" width="24px" height="24px" />
             <span className="font-semibold">Loading</span>
-          </>
+          </div>
         ) : (
           <span className="font-semibold">{btnLabel}</span>
         )}

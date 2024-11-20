@@ -243,7 +243,7 @@ export default function NftResource() {
                         disabled={isLoading[0]}
                       >
                         {isLoading[0] ? (
-                          <>
+                          <div className='flex justify-center items-center'>
                             <ReactLoading
                               type="spin"
                               className="mr-2 mb-[4px]"
@@ -251,7 +251,7 @@ export default function NftResource() {
                               height="24px"
                             />
                             <span className="font-semibold">Loading</span>
-                          </>
+                          </div>
                         ) : (
                           "BUY"
                         )}
@@ -317,7 +317,7 @@ export default function NftResource() {
                         }
                       >
                         {isLoading[1] ? (
-                          <>
+                          <div className='flex justify-center items-center'>
                             <ReactLoading
                               type="spin"
                               className="mr-2 mb-[4px]"
@@ -325,7 +325,7 @@ export default function NftResource() {
                               height="24px"
                             />
                             <span className="font-semibold">Loading</span>
-                          </>
+                          </div>
                         ) : (
                           "Gather"
                         )}

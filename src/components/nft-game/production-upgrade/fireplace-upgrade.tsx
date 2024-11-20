@@ -194,7 +194,7 @@ export default function FireplaceUpgrade({
               }
             >
               {isLoading.type == item.id && isLoading.loading ? (
-                <>
+                <div className='flex justify-center items-center'>
                   <ReactLoading
                     type="spin"
                     className="me-2 mb-[4px]"
@@ -202,7 +202,7 @@ export default function FireplaceUpgrade({
                     height="24px"
                   />
                   <span className="font-semibold">Loading</span>
-                </>
+                </div>
               ) : (
                 <span className="font-semibold">{btnTitle}</span>
               )}

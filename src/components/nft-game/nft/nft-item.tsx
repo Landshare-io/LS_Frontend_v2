@@ -156,7 +156,7 @@ export default function NftItem({ house }: NftItemProps) {
               disabled={isActivating || house.onSale}
             >
               {isActivating ? (
-                <>
+                <div className='flex justify-center items-center'>
                   <ReactLoading
                     type="spin"
                     className="mr-2 mb-[4px]"
@@ -164,7 +164,7 @@ export default function NftItem({ house }: NftItemProps) {
                     height="24px"
                   />
                   <span className="font-semibold">Loading</span>
-                </>
+                </div>
               ) : (
                 "Activate"
               )}

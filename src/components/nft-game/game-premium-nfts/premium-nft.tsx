@@ -91,10 +91,10 @@ export default function PremiumNft({
               disabled={loader == premiumNft.name}
             >
               {(loader == premiumNft.name) ? (
-                <>
+                <div className='flex justify-center items-center'>
                   <ReactLoading type="spin" className="me-2 mb-[4px]" width="24px" height="24px" />
                   <span className="font-semibold">Loading</span>
-                </>
+                </div>
               ) : (<span className="font-semibold">{premiumNft.hasNft ? 'UNINSTALL' : 'INSTALL'}</span>)
               }
             </Button>
