@@ -54,7 +54,7 @@ export default function InventoryPage() {
 	const { data: landTokenBalance, refetch: refetchLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
 	const { data: stakedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
 	const { isLoading: isLoginLoading } = useLogin()
-	const { userReward } = useGetResource()
+	const { userReward, getResources } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
 	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost } = useGetSetting()
 	const { handleBuyHouseSlots } = useHandleBuyHouseSlots(chainId, address, setUserActivatedSlots, setBuyHouseSlotLoading)
@@ -94,6 +94,7 @@ export default function InventoryPage() {
   const getHousesList = async () => {
     setIsLoading(true);
     await getHouses();
+    await getResources();
     setTimeout(() => {
       setIsLoading(false);
     }, 1500)
@@ -385,7 +386,7 @@ export default function InventoryPage() {
                                             disabled={buyHouseSlotLoading || houseSlots === userActivatedSlots}
                                           >
                                             {buyHouseSlotLoading ? (
-                                              <>
+                                              <div className='flex justify-center items-center'>
                                                 <ReactLoading
                                                   type="spin"
                                                   className="me-2 mb-[4px]"
@@ -393,7 +394,7 @@ export default function InventoryPage() {
                                                   height="24px"
                                                 />
                                                 <span className="font-semibold">Loading</span>
-                                              </>
+                                              </div>
                                             ) : (
                                               "Buy House Slot"
                                             )}
@@ -443,7 +444,7 @@ export default function InventoryPage() {
                                         }
                                       >
                                         {depositLoading ? (
-                                          <>
+                                          <div className='flex justify-center items-center'>
                                             <ReactLoading
                                               type="spin"
                                               className="me-2 mb-[4px]"
@@ -453,7 +454,7 @@ export default function InventoryPage() {
                                             <span className="font-semibold">
                                               Loading
                                             </span>
-                                          </>
+                                          </div>
                                         ) : (
                                           "Deposit"
                                         )}
@@ -473,7 +474,7 @@ export default function InventoryPage() {
                                         }
                                       >
                                         {withdrawLoading ? (
-                                          <>
+                                          <div className='flex justify-center items-center'>
                                             <ReactLoading
                                               type="spin"
                                               className="me-2 mb-[4px]"
@@ -483,7 +484,7 @@ export default function InventoryPage() {
                                             <span className="font-semibold">
                                               Loading
                                             </span>
-                                          </>
+                                          </div>
                                         ) : (
                                           "Withdraw"
                                         )}
@@ -572,7 +573,7 @@ export default function InventoryPage() {
                                   disabled={harvestLoading}
                                 >
                                   {harvestLoading ? (
-                                    <>
+                                    <div className='flex justify-center items-center'>
                                       <ReactLoading
                                         type="spin"
                                         className="me-2 mb-[4px]"
@@ -580,7 +581,7 @@ export default function InventoryPage() {
                                         height="24px"
                                       />
                                       <span className="font-semibold">Loading</span>
-                                    </>
+                                    </div>
                                   ) : (
                                     "Harvest"
                                   )}
