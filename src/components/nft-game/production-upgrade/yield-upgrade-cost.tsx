@@ -115,15 +115,15 @@ export default function YieldUpgradeCost({
                     return (
                       <div key={`next-cost-${index}`} className='min-w-[20px] font-semibold mt-1 text-[14px] dark:text-text-primary'>
                         {colorType == 0 ? (
-                          <>
+                          <div className='flex items-center gap-[2px]'>
                             {`${Number(cost)} `}
                             {disabledIcons[index]}
-                          </>
+                          </div>
                         ) : (
-                          <>
+                          <div className='flex items-center gap-[2px]'>
                             {`${Number(cost)} `}
                             {activeIcons[index]}
-                          </>
+                          </div>
                         )}
                       </div>
                     )
@@ -150,10 +150,10 @@ export default function YieldUpgradeCost({
         disabled={disabled || ((isLoading.type == type) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
       >
         {((isLoading.type == type) && isLoading.loading) ? (
-          <>
+          <div className='flex justify-center items-center'>
             <ReactLoading type="spin" className="mr-2 mb-[4px]" width="24px" height="24px" />
             <span className="font-semibold text-button-text-secondary">Loading</span>
-          </>
+          </div>
         ) : (
           <span className="font-semibold text-button-text-secondary">{btnLabel}</span>
         )}
