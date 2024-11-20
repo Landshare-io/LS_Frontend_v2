@@ -9,6 +9,7 @@ import IconMenu from "../../../public/icons/menu.svg";
 import LandDao from "../../../public/icons/land-dao.svg";
 import DsSwap from "../../../public/icons/ds-swap.svg";
 import LeftRight from "../../../public/icons/left-right.svg"
+import { BsCreditCardFill } from "react-icons/bs";
 
 export default function MobileNavbar() {
   const [isMore, setIsMore] = useState(false);
@@ -126,7 +127,16 @@ export default function MobileNavbar() {
                 />
                 <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">Bridge</span>
               </a>
-              
+              <a
+                  href="https://pools.landshare.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex px-[16px] py-[10px] items-center gap-[4px] w-full"
+                >
+                  <BsCreditCardFill className="fill-[#b1b1b1]"/>
+                  <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">Lending</span>
+              </a>
+
             </div>
           ) : null}
         </div>

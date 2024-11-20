@@ -29,6 +29,10 @@ export const PAGES: PAGE[] = [
     name: "Bridge",
     url: "https://app.transporter.io/?tab=token&token=LAND",
   },
+  {
+    name: "Lending",
+    url: "https://pools.landshare.io",
+  },
 ];
 
 export const NOT_VISIBLE_FOOTER_PAGES = [
