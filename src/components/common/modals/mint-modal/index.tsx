@@ -79,7 +79,7 @@ export default function MintModal({ title, show, setShow, minAmount, onSubmit }:
             disabled={isLoading || ((landAmount * 4) < Number(minAmount))}
           >
             {isLoading ? (
-              <>
+              <div className='flex justify-center items-center'>
                 <ReactLoading
                   type="spin"
                   className="mr-2 mb-[4px]"
@@ -87,7 +87,7 @@ export default function MintModal({ title, show, setShow, minAmount, onSubmit }:
                   height="24px"
                 />
                 <span className="font-semibold">Loading</span>
-              </>
+              </div>
             ) : (
               <span className="text-[16px]">{landAmount * 4} NFT Credits</span>
             )}
