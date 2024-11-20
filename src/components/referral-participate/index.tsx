@@ -16,7 +16,7 @@ export default function ReferralParticipate() {
 
     return(
         <div className="w-full grid md:grid-cols-3 grid-cols-1 h-fit gap-6">
-            <div className="md:flex md:col-span-2 bg-third rounded-[32px] p-5 gap-6">
+            <div className="md:flex md:col-span-2 bg-third rounded-[32px] p-5 gap-6 shadow-lg">
                 <Image src={KYC_Referral_User} alt="KYC Referral Page" className="w-[304px] h-[304px] max-md:mx-auto shadow-lg"/>
 
                 <div>
