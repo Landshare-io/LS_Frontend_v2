@@ -172,7 +172,7 @@ export default function FirepitUpgrade({
         </div>
         <div className="bg-[#6f8e9d66] py-[13px] px-[12px]">
           <div
-            className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary ${colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}`}
+            className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary pt-[12px] ${colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}`}
           >
             <div className="flex flex-col px-[10px]">
               <div className="flex items-center">
@@ -225,15 +225,15 @@ export default function FirepitUpgrade({
                                 className="min-w-[20px] mt-1 text-[14px] font-normal dark:text-text-primary"
                               >
                                 {colorType == 0 ? (
-                                  <>
+                                  <div className="flex gap-[2px] items-center">
                                     {`${cost} `}
                                     {disabledIcons[index]}
-                                  </>
+                                  </div>
                                 ) : (
-                                  <>
+                                  <div className="flex gap-[2px] items-center">
                                     {`${cost} `}
                                     {activeIcons[index]}
-                                  </>
+                                  </div>
                                 )}
                               </div>
                             );
@@ -263,15 +263,15 @@ export default function FirepitUpgrade({
                               className={`min-w-[20px] text-[14px] font-normal dark:text-text-primary`}// ${colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}
                             >
                               {((btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType) == 0 ? (
-                                <>
+                                <div className="flex gap-[2px] items-center">
                                   {`${cost} `}
                                   {disabledIcons[index]}
-                                </>
+                                </div>
                               ) : (
-                                <>
+                                <div className="flex gap-[2px] items-center">
                                   {`${cost} `}
                                   {activeIcons[index]}
-                                </>
+                                </div>
                               )}
                             </div>
                           );
@@ -306,7 +306,7 @@ export default function FirepitUpgrade({
                   onPurcharse(btnTitle != "BUY" ? Number(lumberCount) : 0)
                 }
               }}
-              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute text-button-text-secondary
+              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute text-button-text-secondary rounded-[20px]
               ${((isLoading.type > -1) && (isLoading.type != item.id)) ? 'grey' : colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}
               ${isLoading.type == item.id && isLoading.loading
                   ? "d-flex justify-content-center align-items-center"
@@ -317,7 +317,7 @@ export default function FirepitUpgrade({
               }
             >
               {isLoading.type == item.id && isLoading.loading ? (
-                <>
+                <div className='flex justify-center items-center'>
                   <ReactLoading
                     type="spin"
                     className="mr-2 mb-[4px]"
@@ -325,7 +325,7 @@ export default function FirepitUpgrade({
                     height="24px"
                   />
                   <span className="font-semibold">Loading</span>
-                </>
+                </div>
               ) : (
                 <span className="font-semibold text-button-text-secondary">
                   {Number(lumberCount) == 0 ? 'SALVAGE' : (havingItem == -1 ? 'BUY' : 'LOAD')}
