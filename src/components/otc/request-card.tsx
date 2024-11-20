@@ -115,7 +115,7 @@ export default function RequestsCard({ requestData, completeRequest, rejectReque
                     fill="black"
                   />
                 </svg>
-                {Math.round(formatEther(BUSDAmount))} BUSD
+                {Math.round(Number(formatEther(BUSDAmount)))} BUSD
               </p>
               <Button
                 className={`bg-[#61cd91] rounded-[41px] text-white px-[20px] py-[5px] duration-300 border-[2px] border-[#61cd91] mt-3 m-auto h-[34px] w-[120px] ${isSwapping[0]
@@ -153,7 +153,7 @@ export default function RequestsCard({ requestData, completeRequest, rejectReque
                     fill="black"
                   />
                 </svg>
-                {Math.round(formatEther(LANDAmount))} LAND
+                {Math.round(Number(formatEther(LANDAmount)))} LAND
               </p>
               <button
                 className={`bg-[#61cd91] rounded-[41px] text-white px-[20px] py-[5px] duration-300 border-[2px] border-[#61cd91] mt-3 m-auto h-[34px] w-[120px] ${isSwapping[1]
