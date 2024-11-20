@@ -52,19 +52,20 @@ export default function ConnectWallet({
 
   useEffect(() => {
     const fetchData = async () => {
-      const signature = await signMessage(config, { message: formatAffiliateAcceptance(new Date())});
+      if (isConnected && address && referralCode) {
+        const message = formatAffiliateAcceptance(new Date());
+        const signature = await signMessage(config, { message });
 
-      await Fuul.sendConnectWallet({
-        address: address as string,
-        signature: signature,
-        message: formatAffiliateAcceptance(new Date())
-      });
+        await Fuul.sendConnectWallet({
+          address: address,
+          signature: signature,
+          message: message
+        });
+      }
     }
 
-    if(isConnected && address && referralCode){
-      fetchData();
-    }
-  }, [isConnected])
+    fetchData();
+  }, [isConnected, address, referralCode])
     
 
   return (

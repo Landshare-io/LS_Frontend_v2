@@ -35,7 +35,6 @@ const RwaPage: NextPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-
       if (address && referralCode) {
         const affiliateCode = await Fuul.getAffiliateCode(address);
 
@@ -54,7 +53,7 @@ const RwaPage: NextPage = () => {
       }
     }
 
-    fetchData()
+    fetchData();
   }, [address, referralCode])
 
   useEffect(() => {
