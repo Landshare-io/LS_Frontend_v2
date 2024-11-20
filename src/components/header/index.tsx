@@ -42,7 +42,7 @@ export default function Header() {
                 <div className={`hidden mlg:flex items-center font-bold text-[15px] leading-[20px] text-[#0f0a0a] border-0 outline-0 bg-transparent ${pathname === page.path ? "text-[#0a0a0a]" : ""}`} key={page.name}>
                   {page.url ? (
                     <Link
-                      href= {page?.name == "Swap" ? "https://app.dsswap.io/info" : "https://app.transporter.io/?tab=token&token=LAND"}
+                      href= {page?.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 text-[#0f0a0a] dark:text-[#f1f1f1] font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left ${BOLD_INTER_TIGHT.className}`}
