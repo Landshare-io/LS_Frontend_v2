@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Image from "next/image";
 import { useAccount } from "wagmi";
 import useIsWhitelistedAddress from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
@@ -14,37 +13,12 @@ export default function InvestmentExplain() {
   const isWhitelisted = useIsWhitelistedAddress(56, address);
   const {setKycopen} = useGlobalContext();
 
-  const customModalStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      overflow: "hidden",
-      maxWidth: "400px",
-      width: "90%",
-      height: "fit-content",
-      borderRadius: "20px",
-    },
-    overlay: {
-      background: "#00000080",
-    },
-  };
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
-
-  async function handlemodalkyc() {
-    setKycopen(true);
-    document.body.style.overflow = "hidden";
-  }
-  function handleclosemodal() {
-    setKycopen(false);
-    document.body.style.overflow = "auto";
-  }
 
   return (
     <div className="flex flex-col gap-[40px] items-center p-0 mlg:px-[20px] md:pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">

@@ -12,7 +12,7 @@ import { useGlobalContext } from "../../context/GlobalContext";
 
 export default function ReferralParticipate() {
     const router = useRouter();
-    const {setKycopen, setZeroIDModalOpen} = useGlobalContext();
+    const {setKycopen} = useGlobalContext();
 
     return(
         <div className="w-full grid md:grid-cols-3 grid-cols-1 h-fit gap-6">
