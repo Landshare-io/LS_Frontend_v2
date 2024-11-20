@@ -94,11 +94,11 @@ export default function OnSaleModal ({ modalShow, setModalShow, multiplier, rewa
             >
               {onSaleLoading ? (
                 <ReactLoading
-                type="spin"
-                className="me-2 button-spinner"
-                width="24px"
-                height="24px"
-              />
+                  type="spin"
+                  className="me-2 button-spinner"
+                  width="24px"
+                  height="24px"
+                />
               ) : (
                 <span className="fs-16">Confirm</span>
               )}
