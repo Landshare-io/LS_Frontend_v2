@@ -9,13 +9,23 @@ import useDepositAutoVaultV3 from "../AutoVaultV3Contract/useDeposit";
 import useDepositMastchef from "../MasterchefContract/useDeposit";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
+let isSuccessDepositState = false
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 interface useMigrateDepositLandAndLpV2Props {
   address: Address | undefined
 }
 
 export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepositLandAndLpV2Props) {
   const { isConnected } = useAccount()
-  const [isSuccessDeposit, setIsSuccessDeposit] = useState(false);
+  const [isSuccessDeposit, setIsSuccessDeposit] = useState(isSuccessDepositState);
   const {  setScreenLoadingStatus } = useGlobalContext();
   const { data: balanceOfLandToken, refetch: refetchLandTokenBalance } = useBalanceOfLandToken({ chainId: bsc.id, address });
   const { data: balanceOfLpToken, refetch: refetchLpTokenBalance } = useBalanceOfLpTokenV2({ chainId: bsc.id, address });
@@ -33,16 +43,34 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
   });
 
   useEffect(() => {
+    // Subscribe on mount
+    const update = () => {
+      setIsSuccessDeposit(isSuccessDepositState);
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updateIsSuccessDeposit = (newIsSuccessDeposit: boolean) => {
+    isSuccessDepositState = newIsSuccessDeposit;
+    notifySubscribers();
+  };
+
+  useEffect(() => {
     if (autoVaultV3DepositTx) {
       if (autoVaultV3DepositStatusData) {
         if (autoVaultV3DepositSuccess) {
           try {
             refetchLandTokenBalance()
             setScreenLoadingStatus("Transaction Completed.")
-            setIsSuccessDeposit(true);
+            updateIsSuccessDeposit(true);
           } catch (error) {
             console.log("deposit error", error)
-            setIsSuccessDeposit(false);
+            updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
 
@@ -64,10 +92,10 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
             refetchLandTokenBalance()
             refetchLpTokenBalance()
             setScreenLoadingStatus("Transaction Completed.")
-            setIsSuccessDeposit(true);
+            updateIsSuccessDeposit(true);
           } catch (error) {
             console.log("deposit error", error)
-            setIsSuccessDeposit(false);
+            updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
 
@@ -92,7 +120,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         autoVaultV3Deposit(amount);
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
-        setIsSuccessDeposit(false);
+        updateIsSuccessDeposit(false);
       }
     }
   }
@@ -108,7 +136,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         masterchefDeposit(0, amount)
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
-        setIsSuccessDeposit(false);
+        updateIsSuccessDeposit(false);
       }
     }
   }
@@ -124,7 +152,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         masterchefDeposit(1, amount);
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
-        setIsSuccessDeposit(false);
+        updateIsSuccessDeposit(false);
       }
     }
   }
@@ -134,6 +162,6 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
     depositLandv2,
     depositLP,
     isSuccessDeposit,
-    setIsSuccessDeposit,
+    setIsSuccessDeposit: updateIsSuccessDeposit,
   };
 }
