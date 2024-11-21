@@ -14,6 +14,16 @@ import useAddLiquidityETH from "../PCSRouterContract/useAddLiquidityETH";
 import { PSC_ROUTER_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { BigNumberish } from "ethers";
 
+let isSuccessRecombineState = false
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 interface useRecombineProps {
   address: Address | undefined
 }
@@ -23,7 +33,7 @@ export default function useRecombine({
 }: useRecombineProps) {
   const { setScreenLoadingStatus } = useGlobalContext()
   const { isConnected } = useAccount();
-  const [isSuccessRecombine, setIsSuccessRecombine] = useState(false);
+  const [isSuccessRecombine, setIsSuccessRecombine] = useState(isSuccessRecombineState);
   const [LandAmount, setLandAmount] = useState<number | string | BigNumberish>(0)
   const [minGas, setMinGas] = useState<number | string | BigNumberish>(0)
 
@@ -43,6 +53,24 @@ export default function useRecombine({
   })
 
   useEffect(() => {
+    // Subscribe on mount
+    const update = () => {
+      setIsSuccessRecombine(isSuccessRecombineState);
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updateIsSuccessRecombine = (newIsSuccessRecombine: boolean) => {
+    isSuccessRecombineState = newIsSuccessRecombine;
+    notifySubscribers();
+  };
+
+  useEffect(() => {
     if (approveTx) {
       if (approveStatusData) {
         if (approveSuccess) {
@@ -50,7 +78,7 @@ export default function useRecombine({
           addLiquidityETH(LandAmount, address, minGas)
         } else {
           setScreenLoadingStatus("Transaction Failed")
-          setIsSuccessRecombine(false);
+          updateIsSuccessRecombine(false);
   
           return () => {
             setTimeout(() => {
@@ -67,10 +95,10 @@ export default function useRecombine({
       if (addLiquidityStatusData) {
         if (addLiquiditySuccess) {
           setScreenLoadingStatus("Transaction success")
-          setIsSuccessRecombine(true);
+          updateIsSuccessRecombine(true);
         } else {
           setScreenLoadingStatus("Transaction Failed")
-          setIsSuccessRecombine(false);
+          updateIsSuccessRecombine(false);
         }
   
         return () => {
@@ -107,10 +135,10 @@ export default function useRecombine({
         }
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
-        setIsSuccessRecombine(false);
+        updateIsSuccessRecombine(false);
         console.log("Error, withdraw: ", e);
       }
     }
   }
-  return { recombine, isSuccessRecombine, setIsSuccessRecombine };
+  return { recombine, isSuccessRecombine, setIsSuccessRecombine: updateIsSuccessRecombine };
 }
