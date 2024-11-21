@@ -9,7 +9,7 @@ import { useGlobalContext } from "../../../context/GlobalContext";
 export default function useHandleFacilities(address: Address | undefined) {
   const { checkIsAuthenticated } = useLogin()
   const { facilities, setFacilities } = useGetUserData()
-  const { resource, setResource, setMaxPowerLimit } = useGetResource()
+  const { resource, setResource, maxPowerLimit, setMaxPowerLimit } = useGetResource()
   const { notifyError, notifySuccess } = useGlobalContext()
 
   const buyOrUpgradeFacility = async (type: number) => {
@@ -22,19 +22,19 @@ export default function useHandleFacilities(address: Address | undefined) {
           currentHasItemId: facilities[type].hasFacilityId
         })
 
-        setFacilities((prevState) => ([
-          ...prevState.slice(0, type),
+        setFacilities([
+          ...facilities.slice(0, type),
           {
-            ...prevState[type],
+            ...facilities[type],
             currentFacility: data.currentFacility,
             nextFacility: data.nextFacility,
             hasFacilityId: data.hasFacilityId,
           },
-          ...prevState.slice(type + 1)
-        ]))
+          ...facilities.slice(type + 1)
+        ])
 
         setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
-        setMaxPowerLimit((prevState) => type == 0 ? data.currentFacility.rewardLimit[2] : prevState)
+        setMaxPowerLimit(type == 0 ? data.currentFacility.rewardLimit[2] : maxPowerLimit)
         return notifySuccess(`Upgraded ${data.currentFacility.name} successfully!`)
       } catch (error: any) {
         if (error.response?.data.status == 401) {
