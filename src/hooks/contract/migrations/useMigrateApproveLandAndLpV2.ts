@@ -10,12 +10,22 @@ import useBalanceOfLpTokenV2 from "../LpTokenV2Contract/useBalanceOf";
 import useApproveOfLpTokenV2 from "../LpTokenV2Contract/useApprove";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
+let isSuccessApproveState = false
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 interface useMigrateApproveLandAndLpV2Props {
   address: Address | undefined
 }
 
 export default function useMigrateApproveLandAndLpV2({ address }: useMigrateApproveLandAndLpV2Props) {
-  const [isSuccessApprove, setIsSuccessApprove] = useState(false);
+  const [isSuccessApprove, setIsSuccessApprove] = useState(isSuccessApproveState);
   const { isConnected } = useAccount()
   const { setScreenLoadingStatus } = useGlobalContext();
 
@@ -35,15 +45,33 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
   });
 
   useEffect(() => {
+    // Subscribe on mount
+    const update = () => {
+      setIsSuccessApprove(isSuccessApproveState);
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updateIsSuccessApprove = (newIsSuccessApprove: boolean) => {
+    isSuccessApproveState = newIsSuccessApprove;
+    notifySubscribers();
+  };
+
+  useEffect(() => {
     if (approveLandTx) {
       if (approveStatusData) {
         if (approveLandSuccess) {
           try {
             setScreenLoadingStatus("Transaction Completed.")
-            setIsSuccessApprove(true);
+            updateIsSuccessApprove(true);
           } catch (error) {
             console.log("approve error", error)
-            setIsSuccessApprove(false);
+            updateIsSuccessApprove(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
   
@@ -64,10 +92,10 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
         if (approveLpSuccess) {
           try {
             setScreenLoadingStatus("Transaction Completed.")
-            setIsSuccessApprove(true);
+            updateIsSuccessApprove(true);
           } catch (error) {
             console.log("approve error", error)
-            setIsSuccessApprove(false);
+            updateIsSuccessApprove(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
   
@@ -88,7 +116,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
         setScreenLoadingStatus("Transaction is in progress...")
         approveLand(bsc.id, approveAddress, landTokenV2Balance);
       } catch (e) {
-        setIsSuccessApprove(false);
+        updateIsSuccessApprove(false);
         console.log(e);
       }
     }
@@ -100,7 +128,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
         setScreenLoadingStatus("Transaction is in progress...")
         approveLp(approveAddress, lpTokenV2Balance);
       } catch (e) {
-        setIsSuccessApprove(false);
+        updateIsSuccessApprove(false);
         console.log(e);
       }
     }
@@ -110,6 +138,6 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
     approveLandV2,
     approveLpTokenV2,
     isSuccessApprove,
-    setIsSuccessApprove,
+    setIsSuccessApprove: updateIsSuccessApprove,
   };
 }
