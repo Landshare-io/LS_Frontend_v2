@@ -15,6 +15,20 @@ import {
   PSC_ROUTER_CONTRACT_ADDRESS 
 } from "../../../config/constants/environments";
 
+let isSuccessSplitState = false
+let amountSplitedTokensState = {
+  bnb: 0,
+  land: 0,
+}
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 interface useSplitLPProps {
   address: Address | undefined
 }
@@ -22,14 +36,11 @@ interface useSplitLPProps {
 export default function useSplitLP({
   address
 }: useSplitLPProps) {
-  const [isSuccessSplit, setIsSuccessSplit] = useState(false);
+  const [isSuccessSplit, setIsSuccessSplit] = useState(isSuccessSplitState);
   const [removeLiquidityETHAmount, setRemoveLiquidityETHAmount] = useState<string | number>(0)
   const [removeLiquidityETHMinLand, setRemoveLiquidityETHMinLand] = useState<string | number | bigint>(0)
   const [removeLiquidityETHMinEth, setRemoveLiquidityETHMinEth] = useState<string | number | bigint>(0)
-  const [amountSplitedTokens, setAmountSplitedTokens] = useState({
-    bnb: 0,
-    land: 0,
-  });
+  const [amountSplitedTokens, setAmountSplitedTokens] = useState(amountSplitedTokensState);
   const {setScreenLoadingStatus} = useGlobalContext()
   const { isConnected } = useAccount();
   const { data: balance } = useBalanceOf({ address })
@@ -45,6 +56,31 @@ export default function useSplitLP({
     hash: removeLiquidityETHTx,
     chainId: bsc.id
   });
+
+  useEffect(() => {
+    // Subscribe on mount
+    const update = () => {
+      setAmountSplitedTokens(amountSplitedTokensState)
+      setIsSuccessSplit(isSuccessSplitState)
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updateIsSuccessSplit = (newUpdateIsSuccessSplit: any) => {
+    isSuccessSplitState = newUpdateIsSuccessSplit;
+    notifySubscribers();
+  };
+
+  const updateNewAmountSplitedTokens = (newAmountSplitedTokens: any) => {
+    amountSplitedTokensState = newAmountSplitedTokens;
+    notifySubscribers();
+  };
+
 
   useEffect(() => {
     if (approveTx) {
@@ -82,9 +118,9 @@ export default function useSplitLP({
               const receiptTx = await PROVIDERS[bsc.id].getTransactionReceipt(removeLiquidityETHTx);
               const amountLand = receiptTx.args.amount0;
               const amountBNB = receiptTx.args.amount1;
-              setAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
+              updateNewAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
               setScreenLoadingStatus("Transaction Completed.")
-              setIsSuccessSplit(true)
+              updateIsSuccessSplit(true)
             } catch (error) {
               setScreenLoadingStatus("Transaction Failed.")
             }
@@ -114,12 +150,12 @@ export default function useSplitLP({
         
       } catch (e) {
         setScreenLoadingStatus("Transaction failed")
-        setIsSuccessSplit(false);
+        updateIsSuccessSplit(false);
         console.log("Error, withdraw: ", e);
       }
    
     }
   }
 
-  return { splitLP, isSuccessSplit, amountSplitedTokens, setIsSuccessSplit };
+  return { splitLP, isSuccessSplit, amountSplitedTokens, setIsSuccessSplit: updateIsSuccessSplit };
 }
