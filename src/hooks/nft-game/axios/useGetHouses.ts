@@ -14,11 +14,15 @@ export default function useGetHouses() {
 
   const getHouses = async () => {
     if (!isAuthenticated) return
-    const { data: houseData } = await axios.get('/house/find-by-user');
-
-    if (houseData.length > 0) {
-      setHouses(houseData.sort((houseA: any, houseB: any) => houseA.id - houseB.id))
-    } else setHouses([])
+    try {
+      const { data: houseData } = await axios.get('/house/find-by-user');
+  
+      if (houseData.length > 0) {
+        setHouses(houseData.sort((houseA: any, houseB: any) => houseA.id - houseB.id))
+      } else setHouses([])
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return {
