@@ -60,18 +60,17 @@ export default function ReferralLeaderBoard() {
     const currentMonth = monthNames[currentMonthIndex];
     const nextMonth = monthNames[nextMonthIndex];
 
-    return `${previousMonth} 1 - ${nextMonth} 1`;
+    return `${previousMonth} 25 - ${nextMonth} 25`;
 }
 
   return (
     <div className="mt-12">
       <h2 className="text-text-primary font-bold text-2xl leading-[22px]">
         Leaderboard
+        <span className="px-2 w-fit my-6 text-text-primary text-sm font-normal">{getCurrentEpoch()}  <span className="text-[#61CD81]">ⓘ</span></span>
       </h2>
 
       <div className="mt-[10px] text-text-secondary text-sm">The program operates in 3-month epochs.</div>
-
-      <div className="w-fit my-6 text-text-primary font-bold text-sm py-2 px-4 bg-secondary border border-gray-200 rounded-md">{getCurrentEpoch()}</div>
 
       <Table className="border-separate text-text-primary border-spacing-y-3">
         <TableHeader>
@@ -104,18 +103,47 @@ export default function ReferralLeaderBoard() {
                 <TableCell>{accountDisplay}</TableCell>
                 <TableCell>{total_amount}</TableCell>
                 <TableCell>{"0"}</TableCell>
-                <TableCell>{"totalTakerVolume"}</TableCell>
+                <TableCell className="rounded-r-xl">{"totalTakerVolume"}</TableCell>
               </TableRow>
             );
           })}
+
+          {/* test Data */}
+          
+          <TableRow
+              className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
+            >
+            <TableCell className="rounded-l-xl">{"1"}</TableCell>
+            <TableCell >{"0xf362…8247"}</TableCell>
+            <TableCell >{"85,613.67 USDC"}</TableCell>
+            <TableCell >{"0"}</TableCell>
+            <TableCell className="rounded-r-xl">{"totalTakerVolume"}</TableCell>
+          </TableRow>
+
+          <TableRow
+              className="mb-3 shadow-md shadow-gray-400/10 rounded-xl text-[#0B6C96] bg-[#0B6C961A] font-bold"
+            >
+            <TableCell className="rounded-l-xl border border-r-0 border-[#0B6C9680]">{"1"}</TableCell>
+            <TableCell className="border-y border-[#0B6C9680]">{"0xf362…8247"}</TableCell>
+            <TableCell className="border-y border-[#0B6C9680]">{"85,613.67 USDC"}</TableCell>
+            <TableCell className="border-y border-[#0B6C9680]">{"0"}</TableCell>
+            <TableCell className="rounded-r-xl border border-l-0 border-[#0B6C9680]">{"totalTakerVolume"}</TableCell>
+          </TableRow>
+
         </TableBody>
       </Table>
 
-      <Pagination
-        pageCount={pageCount}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      <div className="flex justify-between">
+        <div className="text-text-primary font-bold text-base">
+          Your rank: 34 
+        </div>
+
+        <Pagination
+          pageCount={pageCount}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
     </div>
   );
 }
