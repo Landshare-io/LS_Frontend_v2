@@ -7,6 +7,17 @@ import marble from "../../../../public/img/marketplace-property/marble.png";
 import pool from "../../../../public/img/marketplace-property/pool.png";
 import tile from "../../../../public/img/marketplace-property/tile.png";
 
+let productsState: any[] = []
+let premiumProductsState: any[] = []
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 export default function useGetMarketplaceItems(setIsItemsLoading: Function) {
   const { address } = useAccount()
   const [products, setProducts] = useState<any[]>([])
@@ -18,6 +29,30 @@ export default function useGetMarketplaceItems(setIsItemsLoading: Function) {
     "Pool Table": pool,
     "Marble Countertops": marble
   }
+
+  useEffect(() => {
+    // Subscribe on mount
+    const update = () => {
+      setProducts(productsState)
+      setPremiumProducts(premiumProductsState)
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updateProducts = (newProducts: any[]) => {
+    productsState = newProducts;
+    notifySubscribers();
+  };
+
+  const updatePremiumProducts = (newPremiumProducts: any[]) => {
+    premiumProductsState = newPremiumProducts;
+    notifySubscribers();
+  };
 
   useEffect(() => {
     getProducts("all_active")
@@ -43,9 +78,8 @@ export default function useGetMarketplaceItems(setIsItemsLoading: Function) {
             imgSrc: images[premiumUpgradeData.name],
           })
         }
-        setProducts(productItems);
-        console.log('tempPremiumProducts', tempPremiumProducts)
-        setPremiumProducts(tempPremiumProducts)
+        updateProducts(productItems);
+        updatePremiumProducts(tempPremiumProducts)
         setTimeout(() => {
           setIsItemsLoading(false);
         }, 100);
