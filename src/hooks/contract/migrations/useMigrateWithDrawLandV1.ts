@@ -18,6 +18,16 @@ import useWithdrawLandTokenStakeV2 from "../LandTokenStakeV2/useWithdraw";
 import useWithdrawLandTokenStakeV3 from "../LandTokenStakeV3/useWithdraw";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
+let isSuccessWithdrawState = false
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 interface useMigrateWithDrawLandv1Props {
   oldAutoBalance: BigNumberish
   address: Address | undefined
@@ -25,7 +35,7 @@ interface useMigrateWithDrawLandv1Props {
 
 export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: useMigrateWithDrawLandv1Props) {
   const { isConnected } = useAccount();
-  const [isSuccessWithdraw, setIsSuccessWithdraw] = useState(false);
+  const [isSuccessWithdraw, setIsSuccessWithdraw] = useState(isSuccessWithdrawState);
   const balanceMigration = useMigrationBalance({ address });
   const { setScreenLoadingStatus } = useGlobalContext()
   const { data: totalSharesOfAutLandV1 } = useTotalSharesAutoLandV1() as { data: BigNumberish };
@@ -64,16 +74,34 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
   });
 
   useEffect(() => {
+    // Subscribe on mount
+    const update = () => {
+      setIsSuccessWithdraw(isSuccessWithdrawState);
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updateIsSuccessWithdraw = (newIsSuccessWithdraw: boolean) => {
+    isSuccessWithdrawState = newIsSuccessWithdraw;
+    notifySubscribers();
+  };
+
+  useEffect(() => {
     if (withdrawLPFramTx) {
       if (withdrawLPFramStatusData) {
         if (withdrawLPFramSuccess) {
           try {
             setScreenLoadingStatus("Transaction Completed")
-            setIsSuccessWithdraw(true);
+            updateIsSuccessWithdraw(true);
           } catch (error) {
             console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
-            setIsSuccessWithdraw(false);
+            updateIsSuccessWithdraw(false);
   
             return () => {
               setTimeout(() => {
@@ -92,11 +120,11 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         if (withdrawAutoVaultV1Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
-            setIsSuccessWithdraw(true);
+            updateIsSuccessWithdraw(true);
           } catch (error) {
             console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
-            setIsSuccessWithdraw(false);
+            updateIsSuccessWithdraw(false);
   
             return () => {
               setTimeout(() => {
@@ -115,11 +143,11 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         if (withdrawAutoVaultV2Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
-            setIsSuccessWithdraw(true);
+            updateIsSuccessWithdraw(true);
           } catch (error) {
             console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
-            setIsSuccessWithdraw(false);
+            updateIsSuccessWithdraw(false);
   
             return () => {
               setTimeout(() => {
@@ -138,11 +166,11 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         if (withdrawLandTokenStakeV2Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
-            setIsSuccessWithdraw(true);
+            updateIsSuccessWithdraw(true);
           } catch (error) {
             console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
-            setIsSuccessWithdraw(false);
+            updateIsSuccessWithdraw(false);
   
             return () => {
               setTimeout(() => {
@@ -161,11 +189,11 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         if (withdrawLandTokenStakeV3Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
-            setIsSuccessWithdraw(true);
+            updateIsSuccessWithdraw(true);
           } catch (error) {
             console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
-            setIsSuccessWithdraw(false);
+            updateIsSuccessWithdraw(false);
   
             return () => {
               setTimeout(() => {
@@ -197,7 +225,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         withdrawLPFarm(amount);
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
-        setIsSuccessWithdraw(false);
+        updateIsSuccessWithdraw(false);
         console.log("Error, withdraw: ", e);
       }
       
@@ -218,7 +246,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         withdrawAutoVaultV1(amount)
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
-        setIsSuccessWithdraw(false);
+        updateIsSuccessWithdraw(false);
         console.log("Error, withdraw: ", e);
       }
       
@@ -246,7 +274,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         withdrawAutoVaultV2(amount)
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.", false);
-        setIsSuccessWithdraw(false);
+        updateIsSuccessWithdraw(false);
         console.log("Error, withdraw: ", e);
       }
       
@@ -271,7 +299,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         withdrawLandTokenStakeV2(amount);
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.", false);
-        setIsSuccessWithdraw(false);
+        updateIsSuccessWithdraw(false);
         console.log("Error, withdraw: ", e);
       }
       
@@ -296,7 +324,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         withdrawLandTokenStakeV3(amount);
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
-        setIsSuccessWithdraw(false);
+        updateIsSuccessWithdraw(false);
         console.log("Error, withdraw: ", e);
       }
       
@@ -309,6 +337,6 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
     withdrawStakingV2,
     withdrawStakingV3,
     isSuccessWithdraw,
-    setIsSuccessWithdraw,
+    setIsSuccessWithdraw: updateIsSuccessWithdraw,
   };
 }
