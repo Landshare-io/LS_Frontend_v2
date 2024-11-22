@@ -184,9 +184,11 @@ export default function ReferralLeaderBoard() {
        :<CircleLoader/>}
 
       <div className="w-full flex justify-between items-center">
-            <div className="text-text-primary font-bold text-base">
-              Your rank: {myRank} 
-            </div>
+            {myRank > 0 && 
+              <div className="text-text-primary font-bold text-base">
+                Your rank: {myRank} 
+              </div>
+            }
 
             <Pagination
               pageCount={pageCount}
