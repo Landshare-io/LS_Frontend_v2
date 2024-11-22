@@ -54,9 +54,11 @@ export default function Facility({
   const { address } = useAccount();
   const { theme } = useGlobalContext();
   const { facilities } = useGetUserData()
-  const { buyOrUpgradeFacility } = useHandleFacilities(address)
+  const [isLoading, setIsLoading] = useState({
+    type: -1, loading: false
+  });
+  const { buyOrUpgradeFacility } = useHandleFacilities(address, setIsLoading)
   const [openModal, setOpenModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   if (facilities.length < 1) return null
   
