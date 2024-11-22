@@ -76,9 +76,9 @@ export default function ReferralParticipate() {
                     </div>
 
                     <div className="flex justify-between text-sm text-text-primary py-[10px] font-medium">
-                        <p>Pass Key</p>
+                        <p className="flex-1 text-start">Pass Key</p>
                         <p>Generate Invite Link</p>
-                        <p>Refer Friends</p>
+                        <p className="flex-1 text-end">Refer Friends</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-6">
