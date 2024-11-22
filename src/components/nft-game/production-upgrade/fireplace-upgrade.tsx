@@ -111,7 +111,7 @@ export default function FireplaceUpgrade({
           </div>
         </div>
         <div className="bg-[#6f8e9d66] py-[13px] px-[12px]">
-          <div className="flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary">
+          <div className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary ${colors[colorType]}`}>
             <div className="flex flex-col px-[10px]">
               <div className="flex justify-start items-center pt-[12px]">
                 <span className="text-[#6f8e9d] text-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary">
@@ -170,9 +170,9 @@ export default function FireplaceUpgrade({
                     </span>
                   </div>
                 ) : (
-                  <div>
+                  <div className="flex items-center">
                     <span className="text-[#6f8e9d] text-semibold text-[10px] ml-[4px] pr-[2px] text-text-secondary">Receive: </span>
-                    <span className="font-semibold text-[14px] text-[#323131] text-text-primary">
+                    <span className="flex gap-[2px] items-center font-semibold text-[14px] text-[#323131] text-text-primary">
                       {numeral(
                         (Number(lumberCount) * item.buyReward[2])
                       ).format("0.[00]")}{" "}
