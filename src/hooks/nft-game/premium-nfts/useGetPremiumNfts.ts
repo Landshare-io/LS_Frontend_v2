@@ -11,14 +11,47 @@ import {
 import useGetSetting from "../axios/useGetSetting"
 import { useGlobalContext } from "../../../context/GlobalContext"
 
+let premiumNftsState: any[] = []
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 export default function useGetPremiumNfts(chainId: number, address: Address | undefined) {
   const { isAuthenticated } = useGlobalContext()
-  const [premiumNfts, setPremiumNfts] = useState<any[]>([])
+  const [premiumNfts, setPremiumNfts] = useState<any[]>(premiumNftsState)
   const { premiumUpgradesList } = useGetGameItems()
   const { premiumAbleTime } = useGetSetting()
   const porcelainItems = useGetItemsByOwner(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Porcelain Tile"][chainId], address)
   const poolTableItems = useGetItemsByOwner(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Pool Table"][chainId], address)
   const marbleItems = useGetItemsByOwner(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Marble Countertops"][chainId], address)
+
+  useEffect(() => {
+    // Subscribe on mount
+    const update = () => {
+      setPremiumNfts(premiumNftsState);
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updatePremiumNfts = (newPremiumNfts: any) => {
+    premiumNftsState = newPremiumNfts;
+    notifySubscribers();
+  };
+
+  useEffect(() => {
+    if (typeof address == 'undefined') return
+    getPremiumNfts()
+  }, [address])
 
   const getPremiumNfts = async () => {
     if (!isAuthenticated) return
@@ -50,7 +83,7 @@ export default function useGetPremiumNfts(chainId: number, address: Address | un
         })
       }
     }
-    setPremiumNfts(premiumUpgrades)
+    updatePremiumNfts(premiumUpgrades)
   }
 
   return {
