@@ -201,7 +201,7 @@ export default function FirepitUpgrade({
                       </div>
                       <div className="flex justify-start items-center">
                         <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] me-1 dark:text-text-secondary">Remain:</span>
-                        <div className="min-w-[20px] mt-1 text-[14px] font-normal dark:text-text-primary">
+                        <div className="flex gap-[2px] items-center min-w-[20px] mt-1 text-[14px] font-normal dark:text-text-primary">
                           {`${numeral(Number(durationDate)).format("0.[00]")} `}
                           {activeIcons[1]}
                         </div>
@@ -290,7 +290,7 @@ export default function FirepitUpgrade({
                 {btnTitle != "BUY" && Number(lumberCount) > 0 && (
                   <div className="flex justify-start items-center">
                     <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-1">Cost:</span>
-                    <div className="min-w-[20px] font-semibold text-text-secondary mt-1 text-[14px] font-normal">
+                    <div className="flex gap-[2px] items-center min-w-[20px] font-semibold text-text-secondary mt-1 text-[14px] font-normal">
                       {`${numeral(Number(lumberCount)).format("0.[00]")} `}
                       {activeIcons[1]}
                     </div>
