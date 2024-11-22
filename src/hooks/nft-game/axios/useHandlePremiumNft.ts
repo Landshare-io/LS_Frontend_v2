@@ -26,13 +26,23 @@ import marble from "../../../../public/img/marketplace-property/marble.png";
 import pool from "../../../../public/img/marketplace-property/pool.png";
 import windfarm from "../../../../public/img/marketplace-property/tile.png";
 
+let premiumNftsState: any[] = []
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 export default function useHandlePremiumNft(chainId: number, address: Address | undefined, setLoader: Function, house: any) {
   const [premiumNft, setPremiumNft] = useState<any>(null)
   const [attachStatus, setAttachStatus] = useState('')
   const [transactionNonce, setTransactionNonce] = useState(0)
   const [premiumNftId, setPremiumNftId] = useState(0)
   const { premiumAttachPrice, premiumAbleTime } = useGetSetting()
-  const [premiumNfts, setPremiumNfts] = useState<any[]>([]);
+  const [premiumNfts, setPremiumNfts] = useState<any[]>(premiumNftsState);
   const { isConnected } = useAccount();
   const { isAuthenticated, notifyError, notifySuccess } = useGlobalContext()
   const { data: landTokenBalance, refetch } = useBalanceOf({ chainId, address })
@@ -69,6 +79,24 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
     "Pool Table": poolTableItems,
     "Marble Countertops": marbleItems
   }
+
+  useEffect(() => {
+    // Subscribe on mount
+    const update = () => {
+      setPremiumNfts(premiumNftsState);
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updatePremiumNfts = (newPremiumNfts: any) => {
+    premiumNftsState = newPremiumNfts;
+    notifySubscribers();
+  };
 
   useEffect(() => {
     if (typeof address == 'undefined') return
@@ -195,7 +223,7 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
       })
     }
 
-    setPremiumNfts(premiumUpgrades)
+    updatePremiumNfts(premiumUpgrades)
   }
 
   const attachePremiumNftHandler = async (item: any) => {
