@@ -97,7 +97,7 @@ export default function HarvestCost({
       <Button
         onClick={() => onPurcharse()}
         className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] text-button-text-secondary ${((isLoading.type > -1) && (isLoading.type != type)) ? 'disable' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
-        disabled={(color != "yellow") || (btnLabel == "ACTIVE") || ((isLoading.type == type) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
+        disabled={(color != "border-[2px] border-[#ec9821] bg-[#ec9821]") || (btnLabel == "ACTIVE") || ((isLoading.type == type) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
       >
         {((isLoading.type == type) && isLoading.loading) ? (
           <div className='flex justify-center items-center'>
