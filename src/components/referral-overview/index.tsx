@@ -20,7 +20,7 @@ export default function ReferralOverview() {
           user_address: address, 
           from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
           to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-          user_type: 'end_user', //If user reach out first conversation, pending users can assume as total
+          user_type: 'affiliate', //If user reach out first conversation, pending users can assume as total
           fields: 'referred_volume',
           conversions : '3'
         });
@@ -31,7 +31,7 @@ export default function ReferralOverview() {
           user_address: address, 
           from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
           to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-          user_type: 'end_user', //After completed all conversations, these are approved users 
+          user_type: 'affiliate', //After completed all conversations, these are approved users 
           fields: 'referred_volume',
           conversions : '4'
         });
