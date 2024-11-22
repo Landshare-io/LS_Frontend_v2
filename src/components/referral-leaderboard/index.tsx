@@ -11,6 +11,7 @@ import {
 import { Fuul } from '@fuul/sdk';
 import { useAccount } from "wagmi";
 import { getCurrentEpoch } from "../../utils/helpers/generate-epochs";
+import CircleLoader from "../common/circle-loader";
 
 interface leaderboardDataProps {
   rank: number;
@@ -26,12 +27,15 @@ export default function ReferralLeaderBoard() {
   const [pageCount, setPageCount] = useState<number>(0);
   const [leaderboardData, setLeaderboardData] = useState<leaderboardDataProps[]>();
   const [myLeaderboard, setMyLeaderboard] = useState<leaderboardDataProps[]>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [myRank, setMyRank] = useState<number>(0);
   const {address} = useAccount();
   const current_epoch = getCurrentEpoch();
 
   useEffect(()=>{
     const fetchData = async () => {
+      setLoading(false);
+
       const res = await Fuul.getPointsLeaderboard({
         page : currentPage,
         page_size : pageSize, 
@@ -51,6 +55,8 @@ export default function ReferralLeaderBoard() {
 
       setPageCount(res.total_results); 
       setLeaderboardData(formattedData);
+
+      setLoading(true);
     }
 
     fetchData();
@@ -85,7 +91,7 @@ export default function ReferralLeaderBoard() {
   const formatEpochDates = (startDate?: string, endDate?: string): string => {
     const startMonth = startDate ? new Date(startDate).toLocaleString('default', { month: 'long' }) : 'Unknown';
     const endMonth = endDate ? new Date(new Date(endDate).setMonth(new Date(endDate).getMonth() + 1)).toLocaleString('default', { month: 'long' }) : 'Unknown';
-    return `${startMonth} 25 - ${endMonth} 25`;
+    return `${startMonth} ${startDate?.slice(-2)} - ${endMonth} ${endDate?.slice(-2)}`;
   }
 
   return (
@@ -100,80 +106,82 @@ export default function ReferralLeaderBoard() {
 
       <div className="mt-[10px] text-text-secondary text-sm">The program operates in 3-month epochs.</div>
 
-      <Table className="border-separate text-text-primary border-spacing-y-3">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-1/5">Rank</TableHead>
-            <TableHead className="w-1/5">Account</TableHead>
-            <TableHead className="w-1/5">Claimed Earnings</TableHead>
-            <TableHead className="w-1/5">
-              Approved invites
-            </TableHead>
-            <TableHead className="w-1/5">
-              Purchase Volume <span className="text-[#61CD81]"> ⓘ</span>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {leaderboardData?.slice(10 * (currentPage - 1), 10 * (currentPage - 1) + 10).map((data, index) => {
-            const { rank, account, total_amount, referred_users, referred_volume } =
-              data;
-            const accountDisplay = `${account.slice(0, 6)}...${account.slice(
-              -4
-            )}`;
-            
-            if(address !==account){
-              return (
-                <TableRow
-                  className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
-                  key={index}
-                >
-                  <TableCell className="rounded-l-xl">{rank}</TableCell>
-                  <TableCell>{accountDisplay}</TableCell>
-                  <TableCell>{total_amount}</TableCell>
-                  <TableCell>{referred_users}</TableCell>
-                  <TableCell className="rounded-r-xl">{referred_volume}</TableCell>
-                </TableRow>
-              );
-            }else{
-              <TableRow
-                  className="mb-3 shadow-md shadow-gray-400/10 rounded-xl text-[#0B6C96] bg-[#0B6C961A] font-bold"
-                >
-                <TableCell className="rounded-l-xl border border-r-0 border-[#0B6C9680]">{rank}</TableCell>
-                <TableCell className="border-y border-[#0B6C9680]">{accountDisplay}</TableCell>
-                <TableCell className="border-y border-[#0B6C9680]">{total_amount}</TableCell>
-                <TableCell className="border-y border-[#0B6C9680]">{referred_users}</TableCell>
-                <TableCell className="rounded-r-xl border border-l-0 border-[#0B6C9680]">{referred_volume}</TableCell>
+      {loading ?
+          <Table className="border-separate text-text-primary border-spacing-y-3">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-1/5">Rank</TableHead>
+                <TableHead className="w-1/5">Account</TableHead>
+                <TableHead className="w-1/5">Claimed Earnings</TableHead>
+                <TableHead className="w-1/5">
+                  Approved invites
+                </TableHead>
+                <TableHead className="w-1/5">
+                  Purchase Volume <span className="text-[#61CD81]"> ⓘ</span>
+                </TableHead>
               </TableRow>
-            }
-          })}
-
-          {
-            myLeaderboard?.map((data, index) => {
-              const { rank, account, total_amount, referred_users, referred_volume } =
-                data;
-              const accountDisplay = `${account.slice(0, 6)}...${account.slice(
-                -4
-              )}`;
-              setMyRank(rank);
-            return (
-              <>
-                <TableRow
-                  className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
-                  key={index}
-                >
-                  <TableCell className="rounded-l-xl">{rank}</TableCell>
-                  <TableCell>{accountDisplay}</TableCell>
-                  <TableCell>{total_amount}</TableCell>
-                  <TableCell>{referred_users}</TableCell>
-                  <TableCell className="rounded-r-xl">{referred_volume}</TableCell>
-                </TableRow>
-              </>
-            );
-          })}
-        </TableBody>
-      </Table>
+            </TableHeader>
+    
+            <TableBody>
+              {leaderboardData?.slice(10 * (currentPage - 1), 10 * (currentPage - 1) + 10).map((data, index) => {
+                const { rank, account, total_amount, referred_users, referred_volume } =
+                  data;
+                const accountDisplay = `${account.slice(0, 6)}...${account.slice(
+                  -4
+                )}`;
+                
+                if(address !==account){
+                  return (
+                    <TableRow
+                      className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
+                      key={index}
+                    >
+                      <TableCell className="rounded-l-xl">{rank}</TableCell>
+                      <TableCell>{accountDisplay}</TableCell>
+                      <TableCell>{total_amount}</TableCell>
+                      <TableCell>{referred_users}</TableCell>
+                      <TableCell className="rounded-r-xl">{referred_volume}</TableCell>
+                    </TableRow>
+                  );
+                }else{
+                  <TableRow
+                      className="mb-3 shadow-md shadow-gray-400/10 rounded-xl text-[#0B6C96] bg-[#0B6C961A] font-bold"
+                    >
+                    <TableCell className="rounded-l-xl border border-r-0 border-[#0B6C9680]">{rank}</TableCell>
+                    <TableCell className="border-y border-[#0B6C9680]">{accountDisplay}</TableCell>
+                    <TableCell className="border-y border-[#0B6C9680]">{total_amount}</TableCell>
+                    <TableCell className="border-y border-[#0B6C9680]">{referred_users}</TableCell>
+                    <TableCell className="rounded-r-xl border border-l-0 border-[#0B6C9680]">{referred_volume}</TableCell>
+                  </TableRow>
+                }
+              })}
+    
+              {
+                myLeaderboard?.map((data, index) => {
+                  const { rank, account, total_amount, referred_users, referred_volume } =
+                    data;
+                  const accountDisplay = `${account.slice(0, 6)}...${account.slice(
+                    -4
+                  )}`;
+                  setMyRank(rank);
+                return (
+                  <>
+                    <TableRow
+                      className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
+                      key={index}
+                    >
+                      <TableCell className="rounded-l-xl">{rank}</TableCell>
+                      <TableCell>{accountDisplay}</TableCell>
+                      <TableCell>{total_amount}</TableCell>
+                      <TableCell>{referred_users}</TableCell>
+                      <TableCell className="rounded-r-xl">{referred_volume}</TableCell>
+                    </TableRow>
+                  </>
+                );
+              })}
+            </TableBody>
+          </Table>
+       :<CircleLoader/>}
 
       <div className="w-full flex justify-between items-center">
             <div className="text-text-primary font-bold text-base">
