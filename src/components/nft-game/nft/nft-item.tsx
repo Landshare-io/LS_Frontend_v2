@@ -152,7 +152,7 @@ export default function NftItem({ house }: NftItemProps) {
                 ? "flex justify-center items-center"
                 : ""
                 }`}
-              onClick={() => activate(house)}
+              onClick={async () => await activate(house)}
               disabled={isActivating || house.onSale}
             >
               {isActivating ? (
