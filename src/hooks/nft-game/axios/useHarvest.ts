@@ -15,10 +15,12 @@ export default function useHarvest(setHarvestLoading: Function) {
 
   const harvest = async (landRemaining: number, totalHarvestCost: number, selectedResource: boolean[], setSelectedResource: Function) => {
     if (totalHarvestCost === 0) {
+      setHarvestLoading(false);
       return notifyError("Select resources to harvest");
     }
 
-    if (landRemaining === 0 || userReward[4] > landRemaining) {
+    if (selectedResource[4] && (landRemaining === 0 || userReward[4] > landRemaining)) {
+      setHarvestLoading(false);
       return notifyError("No harvest allowed")
     }
 
