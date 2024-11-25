@@ -54,7 +54,7 @@ export default function useGetUserData() {
       updateUserData(userInfo)
       updateFacilities(facilityData.sort((a: any, b: any) => a.sortingId - b.sortingId))
     } catch (error: any) {
-      console.log(error.response.data.message, error)
+      console.log(error)
     }
   }
 
