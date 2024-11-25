@@ -89,8 +89,8 @@ export default function ReferralLeaderBoard() {
   }, []);
 
   const formatEpochDates = (startDate?: string, endDate?: string): string => {
-    const startMonth = startDate ? new Date(startDate).toLocaleString('default', { month: 'long' }) : 'Unknown';
-    const endMonth = endDate ? new Date(new Date(endDate).setMonth(new Date(endDate).getMonth() + 1)).toLocaleString('default', { month: 'long' }) : 'Unknown';
+    const startMonth = startDate ? new Date(startDate + 1).toLocaleString('default', { month: 'long' }) : 'Unknown';
+    const endMonth = endDate ? new Date(new Date(endDate).setMonth(new Date(endDate).getMonth())).toLocaleString('default', { month: 'long' }) : 'Unknown';
     return `${startMonth} ${startDate?.slice(-2)} - ${endMonth} ${endDate?.slice(-2)}`;
   }
 
@@ -190,11 +190,13 @@ export default function ReferralLeaderBoard() {
               </div>
             }
 
-            <Pagination
-              pageCount={pageCount}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
+            <div className="w-full flex justify-end">
+              <Pagination
+                pageCount={pageCount}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
         </div>
     </div>
   );
