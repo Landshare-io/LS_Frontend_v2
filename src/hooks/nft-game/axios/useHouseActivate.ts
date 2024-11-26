@@ -23,7 +23,7 @@ export default function useHouseActivate(setIsActivating: Function) {
       return notifyError("You are not house owner");
     }
 
-    if (houses.filter((hItem: any) => hItem.isActivated).length > 0) {
+    if (house.isActivated) {
       setIsActivating(false)
       return notifyError("You have already activated this house type");
     }
