@@ -23,7 +23,8 @@ export default function AlertModal() {
       background: 'transparent'
     },
     overlay: {
-      background: '#00000080'
+      background: '#00000080',
+      zIndex: 99999
     }
   };
 
