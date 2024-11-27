@@ -7,6 +7,7 @@ const getQuarterDates = (year : number) => {
     ];
 }
 
+
 const formatDate = (date : any) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, pad with leading zero

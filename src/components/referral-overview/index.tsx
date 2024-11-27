@@ -15,33 +15,38 @@ export default function ReferralOverview() {
     const fetchData = async () => {
       const current_epoch = getCurrentEpoch();
       
-      if(address){
-        const pending_users = await Fuul.getPointsLeaderboard({ 
-          user_address: address, 
-          from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
-          to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-          user_type: 'affiliate', //If user reach out first conversation, pending users can assume as total
-          fields: 'referred_volume',
-          conversions : '3'
-        });
-
-        setPendingInvites(pending_users.results.length);
-
-        const invited_users = await Fuul.getPointsLeaderboard({ 
-          user_address: address, 
-          from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
-          to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-          user_type: 'affiliate', //After completed all conversations, these are approved users 
-          fields: 'referred_volume',
-          conversions : '4'
-        });
-
-        const totalPurchaseAmountSum = [...pending_users.results, ...invited_users.results].reduce((sum, item) => sum + Number(item?.total_amount), 0);
-        const totalReferredAmountSum = [...invited_users.results].reduce((sum, item) => sum + Number(item?.referred_volume), 0);
-
-        setPurchaseVolume(totalPurchaseAmountSum);
-        setReferredVolume(totalReferredAmountSum);
-        setApprovedInvites(invited_users.results.length)
+      try {
+        
+        if(address){
+          const pending_users = await Fuul.getPointsLeaderboard({ 
+            user_address: address, 
+            from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
+            to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
+            user_type: 'affiliate', //If user reach out first conversation, pending users can assume as total
+            fields: 'referred_volume',
+            conversions : '3'
+          });
+  
+          setPendingInvites(pending_users.results.length);
+  
+          const invited_users = await Fuul.getPointsLeaderboard({ 
+            user_address: address, 
+            from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
+            to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
+            user_type: 'affiliate', //After completed all conversations, these are approved users 
+            fields: 'referred_volume',
+            conversions : '4'
+          });
+  
+          const totalPurchaseAmountSum = [...pending_users.results, ...invited_users.results].reduce((sum, item) => sum + Number(item?.total_amount), 0);
+          const totalReferredAmountSum = [...invited_users.results].reduce((sum, item) => sum + Number(item?.referred_volume), 0);
+  
+          setPurchaseVolume(totalPurchaseAmountSum);
+          setReferredVolume(totalReferredAmountSum);
+          setApprovedInvites(invited_users.results.length);
+        }
+      }catch (error : any){
+        console.log(error);
       }
     }
     
