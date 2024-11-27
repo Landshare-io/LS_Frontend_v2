@@ -16,7 +16,6 @@ export default function ReferralOverview() {
       const current_epoch = getCurrentEpoch();
       
       try {
-        
         if(address){
           const pending_users = await Fuul.getPointsLeaderboard({ 
             user_address: address, 

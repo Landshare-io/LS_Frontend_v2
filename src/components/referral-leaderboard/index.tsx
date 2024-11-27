@@ -68,25 +68,29 @@ export default function ReferralLeaderBoard() {
 
   useEffect(()=>{
     const fetchData = async () => {
-      const res = await Fuul.getPointsLeaderboard({
-        user_address : address,
-        page : currentPage,
-        page_size : pageSize, 
-        user_type : 'affiliate',
-        fields: 'referred_volume,referred_users',
-        from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
-        to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-      });
-
-      const formattedData = res?.results?.map((item: any) => ({
-        rank: item.rank,
-        account: item.account,
-        total_amount: item.total_amount,
-        referred_users: item.referred_users,
-        referred_volume : item.referred_volume
-      }));
-
-      setMyLeaderboard(formattedData);
+      try {
+        const res = await Fuul.getPointsLeaderboard({
+          user_address : address,
+          page : currentPage,
+          page_size : pageSize, 
+          user_type : 'affiliate',
+          fields: 'referred_volume,referred_users',
+          from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
+          to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
+        });
+  
+        const formattedData = res?.results?.map((item: any) => ({
+          rank: item.rank,
+          account: item.account,
+          total_amount: item.total_amount,
+          referred_users: item.referred_users,
+          referred_volume : item.referred_volume
+        }));
+  
+        setMyLeaderboard(formattedData);
+      }catch(error){
+        console.log(error);
+      }
     }
 
     fetchData();
