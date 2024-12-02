@@ -65,12 +65,14 @@ export default function ReferralOthers() {
     <div className="w-full flex flex-col bg-third  rounded-2xl p-6 h-fit gap-4 sm:gap-8 shadow-lg">
       <div className="w-full flex justify-between items-center">
         <p className="font-bold text-lg text-text-primary">Refer Others</p>
-        <p
-          className="text-sm cursor-pointer text-text-primary"
-          onClick={handleOpenModal}
-        >
-          Customize
-        </p>
+        {address &&
+          <p
+              className="text-sm cursor-pointer text-text-primary"
+              onClick={handleOpenModal}
+            >
+            Customize
+          </p>}
+       
       </div>
 
       <ConnectButton.Custom>

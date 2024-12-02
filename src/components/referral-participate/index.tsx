@@ -1,6 +1,5 @@
-import { FaFileLines } from "react-icons/fa6";
+import { FaFileLines, FaUser } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
-import { FaUser } from "react-icons/fa6";
 import { useRouter } from "next/router";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { HiIdentification } from "react-icons/hi2";
