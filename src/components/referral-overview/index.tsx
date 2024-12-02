@@ -85,12 +85,12 @@ export default function ReferralOverview() {
   }, [address]);
 
   return (
-    <div className="flex flex-col w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-[29px] shadow-lg">
+    <div className="flex flex-col w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-5 shadow-lg">
       <p className="w-full flex justify-between text-text-primary font-bold text-lg leading-7">
         Overview
       </p>
 
-      <div className="flex justify-start gap-6">
+      <div className="flex justify-between">
         <div>
           <p className="text-sm text-text-secondary font-normal leading-7">
             Pending invites <span className="text-[#61CD81]">ⓘ</span>
@@ -99,21 +99,33 @@ export default function ReferralOverview() {
           <p className="font-bold text-lg text-text-primary leading-7">{pendingInvites}</p>
         </div>
 
-        <div className="pr-6">
-          <p className="text-sm text-text-secondary font-normal leading-7">
-            Total Approved Invites
+        <div>
+          <p className="text-sm text-text-secondary font-normal leading-7 pr-2">
+            Approved Invites
           </p>
 
           <p className="font-bold text-lg text-text-primary leading-7">{approvedInvites - pendingInvites}</p>
         </div>
+      </div>
 
+      <div className="flex justify-between">
         <div>
           <p className="text-sm text-text-secondary font-normal leading-7">
-            Total Purchase Volume
+            Purchase Volume
           </p>
 
           <p className="font-bold text-lg text-text-primary leading-7">
-            {purchaseVolume} USDT
+            {purchaseVolume} LSRWA
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-text-secondary font-normal leading-7">
+            Your Current Rank
+          </p>
+
+          <p className="font-bold text-lg text-text-primary leading-7">
+            {purchaseVolume} 
           </p>
         </div>
       </div>
