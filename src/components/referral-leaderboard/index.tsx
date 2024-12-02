@@ -12,14 +12,7 @@ import { Fuul } from '@fuul/sdk';
 import { useAccount } from "wagmi";
 import { getCurrentEpoch } from "../../utils/helpers/generate-epochs";
 import CircleLoader from "../common/circle-loader";
-
-interface leaderboardDataProps {
-  rank: number;
-  account: string;
-  total_amount: number;
-  referred_users: number;
-  referred_volume: number;
-}
+import { leaderboardDataProps } from "../../utils/type";
 
 export default function ReferralLeaderBoard() {
   const [currentPage, setCurrentPage] = useState<number>(1);

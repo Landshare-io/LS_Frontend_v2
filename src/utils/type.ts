@@ -42,4 +42,12 @@ export type TOKEN_TYPE = {
   symbol: string
 }
 
+export interface leaderboardDataProps {
+  rank: number;
+  account: string;
+  total_amount: number;
+  referred_users: number;
+  referred_volume: number;
+}
+
 export type PremiumNftType = "Porcelain Tile" | "Pool Table" | "Marble Countertops"

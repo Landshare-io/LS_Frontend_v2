@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import Slider from "../common/slider";
 import { getCurrentEpoch } from '../../utils/helpers/generate-epochs';
+import { leaderboardDataProps } from '../../utils/type';
 
 export default function ReferralOverview() {
   const { address } = useAccount();
@@ -12,6 +13,7 @@ export default function ReferralOverview() {
   const [referredVolume, setReferredVolume] = useState<number>(0);
   const [remainingInvitations, setRemainingInvitationsNumber] = useState<number>(0);
   const current_epoch = getCurrentEpoch();
+  const [myLeaderboard, setMyLeaderboard] = useState<leaderboardDataProps[]>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,6 +86,34 @@ export default function ReferralOverview() {
     }
   }, [address]);
 
+  useEffect(()=>{
+    const fetchData = async () => {
+      try {
+        const res = await Fuul.getPointsLeaderboard({
+          user_address : address,
+          user_type : 'affiliate',
+          fields: 'referred_volume,referred_users',
+          from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
+          to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
+        });
+  
+        const formattedData = res?.results?.map((item: any) => ({
+          rank: item.rank,
+          account: item.account,
+          total_amount: item.total_amount,
+          referred_users: item.referred_users,
+          referred_volume : item.referred_volume
+        }));
+  
+        setMyLeaderboard(formattedData);
+      }catch(error){
+        console.log(error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <div className="flex flex-col w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-5 shadow-lg">
       <p className="w-full flex justify-between text-text-primary font-bold text-lg leading-7">
@@ -123,9 +153,9 @@ export default function ReferralOverview() {
           <p className="text-sm text-text-secondary font-normal leading-7">
             Your Current Rank
           </p>
-
+        
           <p className="font-bold text-lg text-text-primary leading-7">
-            {purchaseVolume} 
+            {myLeaderboard ? myLeaderboard[0]?.rank : ""} 
           </p>
         </div>
       </div>
