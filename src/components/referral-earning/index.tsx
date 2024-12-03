@@ -1,7 +1,9 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { ethers } from 'ethers'; // Import ethers
+import { ethers } from 'ethers';
+import { useWriteContract } from 'wagmi';
+ // Import ethers
 
 export default function ReferralEarning() {
   const APIURL = 'https://api.studio.thegraph.com/query/71690/fuul-protocol-bsc/version/latest';
@@ -51,35 +53,39 @@ export default function ReferralEarning() {
   const handleClaim = async () => {
     setIsClaiming(true);
 
+    const claimChecks = [
+      {
+        projectAddress: '0x5c41b8814315988163e308c4734AC3FAF7092A10', // Replace with actual address
+        currency: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+        amount: ethers.parseEther(rewards.availableToClaim.toString()), // Convert to BigNumber
+        tokenIds: [],
+        amounts: [],
+      },
+    ];
+
+    const address = "0xC38E3A10B5818601b29c83F195E8b5854AAE45aF";
+
+    const abi = [
+      "function claim(ClaimCheck[] calldata claimChecks) external"
+    ];
+
+    const {
+      data,
+      isPending,
+      writeContract
+    } = useWriteContract();
+
     try {
-      const claimChecks = [
-        {
-          projectAddress: '0x5c41b8814315988163e308c4734AC3FAF7092A10', // Replace with actual address
-          currency: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
-          amount: ethers.parseEther(rewards.availableToClaim.toString()), // Convert to BigNumber
-          tokenIds: [],
-          amounts: [],
-        },
-      ];
+      const result = writeContract({
+        address,
+        abi,
+        functionName: 'claim',
+        args: [claimChecks],
+      });
 
-      const address = "0xC38E3A10B5818601b29c83F195E8b5854AAE45aF";
-
-      const abi = [
-        "function claim(ClaimCheck[] calldata claimChecks) external"
-      ];
-
-      const provider = new ethers.BrowserProvider(window.ethereum);
-
-      const user1 = await provider.getSigner();
-
-      const fuulManager = new ethers.Contract(address, abi, user1);
-
-      const tx = await fuulManager.claim(claimChecks);
-      await tx.wait(); // Wait for the transaction to be mined
-
-      console.log('Claim successful:', tx);
+      console.log('Claim result: ', result);
     } catch (error) {
-      console.error('Error claiming rewards:', error);
+      console.error('Error during claim: ', error);
     } finally {
       setIsClaiming(false);
     }
