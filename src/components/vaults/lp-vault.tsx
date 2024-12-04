@@ -366,7 +366,8 @@ export default function LpVault({
                                 notifyError('Please enter an amount')
                               }
                             } else {
-                              switchChain({ chainId: MAJOR_WORK_CHAIN.id })
+                              notifyError(`Please switch your chain to ${MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                              // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                             }
                           }}
                           disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
@@ -452,7 +453,8 @@ export default function LpVault({
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  switchChain({ chainId: MAJOR_WORK_CHAIN.id })
+                                  notifyError(`Please switch your chain to ${MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                                  // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
