@@ -47,7 +47,7 @@ export default function ReferralLeaderBoard() {
           referred_volume : item.referred_volume
         }));
   
-        setPageCount(res.total_results); 
+        setPageCount(res.total_results + 1); 
         setLeaderboardData(formattedData);
       }catch (error: any){
         console.log(error);
@@ -103,7 +103,7 @@ export default function ReferralLeaderBoard() {
         <span className="px-2 w-fit my-6 text-text-primary text-sm font-normal">
           {formatEpochDates(current_epoch?.start_date, current_epoch?.end_date)}
         </span>
-        <span className="text-[#61CD81]">{"ⓘ"}</span>
+        <span className="text-[#61CD81] text-base">{"ⓘ"}</span>
       </h2>
 
       <div className="mt-[10px] text-text-secondary text-sm">The program operates in 3-month epochs.</div>
