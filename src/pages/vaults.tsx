@@ -117,7 +117,7 @@ const StakingPage: NextPage = () => {
   ];
 
   useEffect(() => {
-    if (chainId !== MAJOR_WORK_CHAIN.id) {
+    if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
       useSelectedVault(1)
     } else {
       useSelectedVault(0)
@@ -235,7 +235,7 @@ const StakingPage: NextPage = () => {
           </div>
           <div className="hidden mlg:flex mlg:flex-col gap-[32px] w-full">
             {(<>
-                {chainId == MAJOR_WORK_CHAIN.id ? (
+                {(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
                   <>
                     <ManualVault
                       title="LAND Token Staking"
