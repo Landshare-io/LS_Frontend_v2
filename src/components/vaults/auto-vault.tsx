@@ -134,7 +134,7 @@ export default function AutoVault({
       const bal = BigInt(lpTokenV2Balance) * BigInt(percent) / BigInt(100)
       setInputValue(formatEther(bal))
     } else {
-      const bal = chainId == MAJOR_WORK_CHAIN.id ? BigInt(vaultBalance.autoLandV3) * BigInt(percent) / BigInt(100) : BigInt(ccipVaultBalance.autoLandV3) * BigInt(percent) / BigInt(100)
+      const bal = (MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? BigInt(vaultBalance.autoLandV3) * BigInt(percent) / BigInt(100) : BigInt(ccipVaultBalance.autoLandV3) * BigInt(percent) / BigInt(100)
       setInputValue(formatEther(bal))
     }
   }
@@ -150,7 +150,7 @@ export default function AutoVault({
       }
 
       amountLS = parseEther(amountLS).toString(); //convert to wei
-      if (chainId != MAJOR_WORK_CHAIN.id) {
+      if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
         if (BigInt(minTransferAmount) > BigInt(amountLS)) {
           notifyError(`Minimum transfer amount is ${formatEther(minTransferAmount.toString())} LAND`);
           return;
@@ -177,7 +177,7 @@ export default function AutoVault({
       return;
     }
     amountLS = parseEther(amountLS).toString(); //convert to wei
-    if (chainId != MAJOR_WORK_CHAIN.id) {
+    if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
       if (BigInt(minTransferAmount) > BigInt(amountLS)) {
         setInputValue("");
         notifyError(`Minimum transfer amount is ${formatEther(minTransferAmount.toString())} LAND`);
@@ -193,10 +193,10 @@ export default function AutoVault({
   async function updateStatus() {
     try {
       if (!isConnected || typeof address == 'undefined') return
-      if (chainId != MAJOR_WORK_CHAIN.id ? ccipVaultBalance.autoLandV3 ?? 0 : vaultBalance.autoLandV3) {
+      if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? ccipVaultBalance.autoLandV3 ?? 0 : vaultBalance.autoLandV3) {
         SetWithdrawable(
           Number(inputValue) <=
-          Number(formatEther(chainId != MAJOR_WORK_CHAIN.id ? ccipVaultBalance.autoLandV3 ?? 0 : vaultBalance.autoLandV3))
+          Number(formatEther(!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? ccipVaultBalance.autoLandV3 ?? 0 : vaultBalance.autoLandV3))
         );
       }
       if (lpTokenV2Balance) {
@@ -290,7 +290,7 @@ export default function AutoVault({
                       <Image src={arbitrumIcon} className="w-8 h-8" alt="" />
                     </div>
                   </div>
-                  {((chainId != MAJOR_WORK_CHAIN.id) && (ccipTransactions > 0)) && (isConnected) && (
+                  {((!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) && (ccipTransactions > 0)) && (isConnected) && (
                     <a className="ml-auto mr-0 font-bold text-primary-700" href="/vaults/ccip-transactions">
                       View all CCIP Transactions
                     </a>
@@ -329,7 +329,7 @@ export default function AutoVault({
                   </div>
                 </div>
                 <div className="ccip-transaction md:absolute md:top-[20px] md:right-[10px]">
-                  {(chainId != MAJOR_WORK_CHAIN.id) && (isConnected) && (
+                  {(!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) && (isConnected) && (
                     ccipLoading ?
 
                       <div className="flex items-center justify-center mb-2 flex-row">
@@ -389,12 +389,12 @@ export default function AutoVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{chainId == MAJOR_WORK_CHAIN.id ? abbreviateNumber(Number(formatEther(vaultBalance.autoLandV3.toString()))) : abbreviateNumber(Number(formatEther((ccipVaultBalance?.autoLandV3 ?? 0).toString())))}</span>
+                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? abbreviateNumber(Number(formatEther(vaultBalance.autoLandV3.toString()))) : abbreviateNumber(Number(formatEther((ccipVaultBalance?.autoLandV3 ?? 0).toString())))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                      {chainId != MAJOR_WORK_CHAIN.id ? ccipVaultBalance?.autoReward ?? 0 : vaultBalance?.autoReward ?? 0}</span>
+                      {!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? ccipVaultBalance?.autoReward ?? 0 : vaultBalance?.autoReward ?? 0}</span>
                   </div>
                 </div>
               </div>
@@ -449,7 +449,7 @@ export default function AutoVault({
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
                             if (inputValue && Number(inputValue) > Number(0)) {
-                              if (chainId == MAJOR_WORK_CHAIN.id) {
+                              if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                 depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                               } else {
                                 depositing ? depositHandler() : withdrawHandler()
@@ -462,7 +462,7 @@ export default function AutoVault({
                         >
                           {
                             inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
-                              (chainId === MAJOR_WORK_CHAIN.id || chainId === 97) ? "Withdraw" : "Withdraw"
+                              ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) ? "Withdraw" : "Withdraw"
                             )) : "Enter Amount"
                           }
                         </button>
@@ -541,7 +541,7 @@ export default function AutoVault({
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className} ${isDepositing ? 'flex justify-center items-center' : ''}`}
                                 onClick={() => {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    if (chainId == MAJOR_WORK_CHAIN.id) {
+                                    if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                       depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                                     } else {
                                       depositing ? depositHandler() : withdrawHandler()
@@ -569,7 +569,7 @@ export default function AutoVault({
                                       </span>
                                     </div>
                                   ) : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
-                                    (chainId === MAJOR_WORK_CHAIN.id || chainId === 97) ? "Withdraw" : "Withdraw"
+                                    ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) ? "Withdraw" : "Withdraw"
                                   )) : "Enter Amount"}
 
                               </button>
@@ -578,7 +578,7 @@ export default function AutoVault({
                                 onClick={() => clainBounty()}
                                 disabled={typeof address == 'undefined'}
                               >
-                                {`Claim Bounty (${chainId == MAJOR_WORK_CHAIN.id ? (formatEther(bountyReward).substr(0, 6)) : (formatEther(ccipBountyReward ?? 0).substr(0, 6))} LAND)`}
+                                {`Claim Bounty (${(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (formatEther(bountyReward).substr(0, 6)) : (formatEther(ccipBountyReward ?? 0).substr(0, 6))} LAND)`}
                               </button>
                             </>
                           )
@@ -610,7 +610,7 @@ export default function AutoVault({
                       </div>
                     </div>
                     <div className="flex w-full flex-col items-center justify-center p-[16px]">
-                      {chainId == 137 ? (
+                      {(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
                         <>
                           <div className="w-8 h-8 rounded-full bg-third">
                             <a href="https://quickswap.exchange/#/swap?currency0=ETH&currency1=0xC03E6ad83dE7C58c9166fF08D66B960d78e64105&swapIndex=0"><Image className="w-[32px] h-[32px]" src={quickSwap} alt="" /></a>
