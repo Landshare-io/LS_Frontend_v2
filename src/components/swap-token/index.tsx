@@ -124,6 +124,7 @@ export default function SwapToken() {
     address,
     LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]
   ) as { data: BigNumberish };
+  console.log('=============usdcAllowance', usdcAllowance)
   const { sellTokens, transactionStatus: sellTransactionStatus } =
     useSellTokens(chainId, address, landFeeAmount, RWATokenAmount);
   const { buyTokens, transactionStatus: buyTransactionStatus } = useBuyTokens(
@@ -137,6 +138,7 @@ export default function SwapToken() {
     RWATokenAmount,
     USDC_ADDRESS[chainId]
   ) as any;
+  console.log('buyTokenAmount', buyTokenAmount)
 
   useEffect(() => {
     console.log(rwaPrice, RWATokenAmount, Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount)
@@ -467,9 +469,9 @@ export default function SwapToken() {
                 placeholder="00.00 USDC"
                 readOnly
                 value={
-                  Number(formatEther(usdcAllowance)) == 0
+                  Number(formatEther(usdcAllowance ?? 0)) == 0
                     ? ""
-                    : formatEther(usdcAllowance)
+                    : formatEther(usdcAllowance ?? 0)
                 }
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
               />
@@ -688,7 +690,7 @@ export default function SwapToken() {
         )}
         <div className="w-full">
           {isConnected ? (
-            chainId == MAJOR_WORK_CHAIN.id ? (
+            (MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
               <>
                 {isWhitelisted && (
                   <>
