@@ -7,10 +7,10 @@ import { Address } from "viem";
 
 export default function useBuyTokenView(chainId: number, amountOfSecurities: number | BigNumberish, stableCoinAddress: Address) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id],
+    address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareBuySaleAbi,
     functionName: "buyTokenView",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [amountOfSecurities, stableCoinAddress]
   })
 
