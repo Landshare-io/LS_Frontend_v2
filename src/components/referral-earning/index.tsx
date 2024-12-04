@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { ethers } from 'ethers';
 import { useWriteContract } from 'wagmi';
+import { getCurrentEpoch } from '../../utils/helpers/generate-epochs';
+import { Fuul } from '@fuul/sdk';
  // Import ethers
 
 export default function ReferralEarning() {
@@ -10,6 +12,31 @@ export default function ReferralEarning() {
   const { address } = useAccount();
   const [rewards, setRewards] = useState({ availableToClaim: 0, claimed: 0, currency: '' });
   const [isClaiming, setIsClaiming] = useState(false); 
+  const [referredVolume, setReferredVolume] = useState<number>(0);
+  const current_epoch = getCurrentEpoch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (address) {
+          const total_conversions = await Fuul.getPointsLeaderboard({
+            user_address: address,
+            from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
+            to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
+            user_type: 'affiliate', 
+            fields: 'referred_volume',
+          });
+
+          const totalReferredAmountSum = [...total_conversions.results].reduce((sum, item) => sum + Number(item?.referred_volume), 0);
+          setReferredVolume(totalReferredAmountSum);
+        }
+      } catch (error: any) {
+        console.log(error);
+      }
+    }
+
+    fetchData();
+  }, [address]);
 
   useEffect(() => {
     const client = new ApolloClient({
@@ -102,7 +129,7 @@ export default function ReferralEarning() {
           </p>
 
           <p className="font-bold text-text-primary text-lg leading-[28px] flex flex-col items-end">
-              0.00 USDC
+              {referredVolume} USDC
           </p>
         </div>
 

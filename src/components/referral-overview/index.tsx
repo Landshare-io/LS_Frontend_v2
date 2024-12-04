@@ -10,38 +10,24 @@ export default function ReferralOverview() {
   const [pendingInvites, setPendingInvites] = useState<number>(0);
   const [approvedInvites, setApprovedInvites] = useState<number>(0);
   const [purchaseVolume, setPurchaseVolume] = useState<number>(0);
-  const [referredVolume, setReferredVolume] = useState<number>(0);
   const [remainingInvitations, setRemainingInvitations] = useState<number>(0);
-  const current_epoch = getCurrentEpoch();
   const [myLeaderboard, setMyLeaderboard] = useState<leaderboardDataProps[]>();
+  const current_epoch = getCurrentEpoch();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (address) {
-          const buy_conversions = await Fuul.getPointsLeaderboard({
+          const total_conversions = await Fuul.getPointsLeaderboard({
             user_address: address,
             from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
             to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
             user_type: 'affiliate', 
             fields: 'referred_volume',
-            conversions: '3'
           });
 
-          const buy_sell_conversions = await Fuul.getPointsLeaderboard({
-            user_address: address,
-            from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
-            to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-            user_type: 'affiliate', 
-            fields: 'referred_volume',
-            conversions: '4'
-          });
-
-          const totalPurchaseAmountSum = [...buy_conversions.results, ...buy_sell_conversions.results].reduce((sum, item) => sum + Number(item?.total_amount), 0);
-          const totalReferredAmountSum = [...buy_sell_conversions.results].reduce((sum, item) => sum + Number(item?.referred_volume), 0);
-
+          const totalPurchaseAmountSum = [...total_conversions.results, ...total_conversions.results].reduce((sum, item) => sum + Number(item?.total_amount), 0);
           setPurchaseVolume(totalPurchaseAmountSum);
-          setReferredVolume(totalReferredAmountSum);
         }
       } catch (error: any) {
         console.log(error);
