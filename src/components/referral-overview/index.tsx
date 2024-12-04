@@ -19,32 +19,29 @@ export default function ReferralOverview() {
     const fetchData = async () => {
       try {
         if (address) {
-          const pending_users = await Fuul.getPointsLeaderboard({
+          const buy_conversions = await Fuul.getPointsLeaderboard({
             user_address: address,
             from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
             to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-            user_type: 'affiliate', //If user reach out first conversation, pending users can assume as total
+            user_type: 'affiliate', 
             fields: 'referred_volume',
             conversions: '3'
           });
 
-          setPendingInvites(pending_users.results.length);
-
-          const invited_users = await Fuul.getPointsLeaderboard({
+          const buy_sell_conversions = await Fuul.getPointsLeaderboard({
             user_address: address,
             from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
             to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-            user_type: 'affiliate', //After completed all conversations, these are approved users 
+            user_type: 'affiliate', 
             fields: 'referred_volume',
             conversions: '4'
           });
 
-          const totalPurchaseAmountSum = [...pending_users.results, ...invited_users.results].reduce((sum, item) => sum + Number(item?.total_amount), 0);
-          const totalReferredAmountSum = [...invited_users.results].reduce((sum, item) => sum + Number(item?.referred_volume), 0);
+          const totalPurchaseAmountSum = [...buy_conversions.results, ...buy_sell_conversions.results].reduce((sum, item) => sum + Number(item?.total_amount), 0);
+          const totalReferredAmountSum = [...buy_sell_conversions.results].reduce((sum, item) => sum + Number(item?.referred_volume), 0);
 
           setPurchaseVolume(totalPurchaseAmountSum);
           setReferredVolume(totalReferredAmountSum);
-          setApprovedInvites(invited_users.results.length);
         }
       } catch (error: any) {
         console.log(error);
@@ -62,7 +59,7 @@ export default function ReferralOverview() {
           user_type: "affiliate",
           from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
           to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-          conversions: 'buy'
+          conversions: '3'
         });
 
         const { results: total_results } = await Fuul.getPayoutsLeaderboard({
@@ -70,7 +67,6 @@ export default function ReferralOverview() {
           user_type: "affiliate",
           from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
           to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-          conversions: 'buy'
         });
 
         setPendingInvites(pending_results.length);
@@ -111,8 +107,10 @@ export default function ReferralOverview() {
       }
     }
 
-    fetchData();
-  }, []);
+    if(address){
+      fetchData();
+    }
+  }, [address]);
 
   return (
     <div className="flex flex-col w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-5 shadow-lg">
