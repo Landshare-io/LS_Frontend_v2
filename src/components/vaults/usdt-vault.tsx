@@ -361,28 +361,29 @@ export default function Usdtvault({
                         <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
-                            if (chainId == MAJOR_WORK_CHAIN.id) {
+                            if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                               if (inputValue && Number(inputValue) > Number(0)) {
                                 depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
                             } else {
-                              switchChain({ chainId: MAJOR_WORK_CHAIN.id })
+                              notifyError(`Please switch your chain to ${MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                              // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                             }
                           }}
                           disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                         >
                           {
-                            chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                            !(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                           }
                         </button>
 
-                        {chainId == MAJOR_WORK_CHAIN.id && (
+                        {(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
                           <button
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => withdrawVault(0)}
-                            disabled={chainId != MAJOR_WORK_CHAIN.id}
+                            disabled={!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
                           >
                             Harvest
                           </button>
@@ -449,28 +450,29 @@ export default function Usdtvault({
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if (chainId == MAJOR_WORK_CHAIN.id) {
+                                if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  switchChain({ chainId: MAJOR_WORK_CHAIN.id })
+                                  notifyError(`Please switch your chain to ${MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                                  // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                !(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
 
-                            {chainId == MAJOR_WORK_CHAIN.id && (
+                            {(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawVault(0)}
-                                disabled={chainId != MAJOR_WORK_CHAIN.id}
+                                disabled={!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
                               >
                                 Harvest
                               </button>
