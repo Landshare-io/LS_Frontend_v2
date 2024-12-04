@@ -337,7 +337,7 @@ export default function InventoryPage() {
               ) : (
                 <>
                   {
-                    chainId == MAJOR_WORK_CHAIN.id ? (
+                    (MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
                       <>
                         <Topbar isNftList={true} />
                         <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
