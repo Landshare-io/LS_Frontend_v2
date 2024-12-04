@@ -57,7 +57,7 @@ export default function ReferralOverview() {
 
         setPendingInvites(pending_results.length);
         setApprovedInvites(total_results.length - pending_results.length);
-        setRemainingInvitations(total_results.length - pending_results.length);
+        setRemainingInvitations(5 - total_results.length + pending_results.length > 0 ? 5 - total_results.length + pending_results.length : 0);
       } catch (error) {
         console.log(error);
       }
