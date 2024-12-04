@@ -132,7 +132,7 @@ export default function ReferralOverview() {
             Approved Invites
           </p>
 
-          <p className="font-bold text-lg text-text-primary leading-7">{approvedInvites }</p>
+          <p className="font-bold text-lg text-text-primary leading-7">{approvedInvites}</p>
         </div>
       </div>
 

@@ -182,7 +182,7 @@ export default function ReferralLeaderBoard() {
               })}
             </TableBody>
           </Table>
-       :<CircleLoader/>}
+      :<CircleLoader/>}
 
       <div className="w-full flex justify-between items-center">
             {myRank > 0 && 
