@@ -81,6 +81,7 @@ export default function ReferralLeaderBoard() {
         }));
   
         setMyLeaderboard(formattedData);
+        setMyRank(formattedData[0].rank);
       }catch(error){
         console.log(error);
       }
@@ -101,8 +102,8 @@ export default function ReferralLeaderBoard() {
         Leaderboard
         <span className="px-2 w-fit my-6 text-text-primary text-sm font-normal">
           {formatEpochDates(current_epoch?.start_date, current_epoch?.end_date)}
-        <span className="text-[#61CD81]"> {"ⓘ"}</span>
         </span>
+        <span className="text-[#61CD81]">{"ⓘ"}</span>
       </h2>
 
       <div className="mt-[10px] text-text-secondary text-sm">The program operates in 3-month epochs.</div>
@@ -157,48 +158,49 @@ export default function ReferralLeaderBoard() {
                 }
               })}
     
-              {
-                myLeaderboard?.map((data, index) => {
-                  const { rank, account, total_amount, referred_users, referred_volume } =
-                    data;
-                  const accountDisplay = `${account.slice(0, 6)}...${account.slice(
-                    -4
-                  )}`;
-                  setMyRank(rank);
-                return (
-                  <>
-                    <TableRow
-                      className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
-                      key={index}
-                    >
-                      <TableCell className="rounded-l-xl">{rank}</TableCell>
-                      <TableCell>{accountDisplay}</TableCell>
-                      <TableCell>{total_amount}</TableCell>
-                      <TableCell>{referred_users}</TableCell>
-                      <TableCell className="rounded-r-xl">{referred_volume}</TableCell>
-                    </TableRow>
-                  </>
-                );
+              {myLeaderboard?.map((data, index) => {
+                const { rank, account, total_amount, referred_users, referred_volume } =
+                  data;
+                const accountDisplay = `${account.slice(0, 6)}...${account.slice(
+                  -4
+                )}`;
+                if(rank > pageSize * pageSize){
+                  return (
+                    <>
+                      <TableRow
+                        className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
+                        key={index}
+                      >
+                        <TableCell className="rounded-l-xl">{rank}</TableCell>
+                        <TableCell>{accountDisplay}</TableCell>
+                        <TableCell>{total_amount}</TableCell>
+                        <TableCell>{referred_users}</TableCell>
+                        <TableCell className="rounded-r-xl">{referred_volume}</TableCell>
+                      </TableRow>
+                    </>
+                  );
+                }
+                return null;
               })}
             </TableBody>
           </Table>
       :<CircleLoader/>}
 
       <div className="w-full flex justify-between items-center">
-            {myRank > 0 && 
-              <div className="text-text-primary font-bold text-base">
-                Your rank: {myRank} 
-              </div>
-            }
+        {myRank > 0 && 
+          <div className="text-text-primary font-bold text-base">
+            Your rank: {myRank} 
+          </div>
+        }
 
-            <div className="w-full flex justify-end">
-              <Pagination
-                pageCount={pageCount}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </div>
+        <div className="w-full flex justify-end">
+          <Pagination
+            pageCount={pageCount}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
+      </div>
     </div>
   );
 }
