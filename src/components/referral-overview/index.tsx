@@ -11,7 +11,7 @@ export default function ReferralOverview() {
   const [approvedInvites, setApprovedInvites] = useState<number>(0);
   const [purchaseVolume, setPurchaseVolume] = useState<number>(0);
   const [referredVolume, setReferredVolume] = useState<number>(0);
-  const [remainingInvitations, setRemainingInvitationsNumber] = useState<number>(0);
+  const [remainingInvitations, setRemainingInvitations] = useState<number>(0);
   const current_epoch = getCurrentEpoch();
   const [myLeaderboard, setMyLeaderboard] = useState<leaderboardDataProps[]>();
 
@@ -71,7 +71,7 @@ export default function ReferralOverview() {
 
         setPendingInvites(pending_results.length);
         setApprovedInvites(total_results.length - pending_results.length);
-        setRemainingInvitationsNumber((total_results.length - pending_results.length) % 5);
+        setRemainingInvitations(total_results.length - pending_results.length);
       } catch (error) {
         console.log(error);
       }
