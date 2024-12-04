@@ -388,7 +388,7 @@ export default function ManualVault({
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if (chainId == MAJOR_WORK_CHAIN.id) {
+                                if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
                                   } else {
@@ -401,14 +401,14 @@ export default function ManualVault({
                               disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                !(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
-                            {chainId == MAJOR_WORK_CHAIN.id && (
+                            {(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawVault(0)}
-                                disabled={(typeof address == 'undefined') || chainId != MAJOR_WORK_CHAIN.id}
+                                disabled={(typeof address == 'undefined') || !(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
                               >
                                 Harvest
                               </button>
