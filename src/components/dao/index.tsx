@@ -54,7 +54,7 @@ export default function DAO() {
     if (typeof address == "undefined") {
       alert("Please connect your wallet.");
     } else if (
-      chainId !== Number(MAJOR_WORK_CHAIN.id)
+      !(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)
     ) {
       alert("Please connect to the Binance Smart Chain.");
     } else {
