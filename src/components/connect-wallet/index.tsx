@@ -77,7 +77,7 @@ export default function ConnectWallet({
                   );
                 }
 
-                if (pathname.includes('/nft') && chain.id == MAJOR_WORK_CHAIN.id && !isAuthenticated) {
+                if (pathname.includes('/nft') && (MAJOR_WORK_CHAIN.map(chains => chains.id) as number[]).includes(chain.id) && !isAuthenticated) {
                   return (
                     <Button 
                       onClick={() => checkIsAuthenticated(account?.address)}
