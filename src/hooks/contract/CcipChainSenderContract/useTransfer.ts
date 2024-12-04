@@ -1,11 +1,11 @@
 import { useWriteContract } from "wagmi";
 import { parseUnits } from "ethers";
 import { BigNumberish } from "ethers";
-import { config } from "../../../wagmi";
+import { bsc, bscTestnet } from "viem/chains";
 import CrossChainSenderAbi from "../../../abis/CrossChainSender.json"
 import { 
   GAS_COSTS,
-  MAJOR_WORK_CHAIN,
+  IS_TEST_MODE,
   CCIP_CHAIN_ID,
   CCIP_CHAIN_RECEIVER,
   CCIP_CHAIN_SENDER_CONTRACT_ADDRESS 
@@ -25,8 +25,8 @@ export default function useTransfer(chainId: number) {
       functionName: "transfer",
       chainId: chainId,
       args: [
-        CCIP_CHAIN_ID[MAJOR_WORK_CHAIN.id],
-        CCIP_CHAIN_RECEIVER[MAJOR_WORK_CHAIN.id],
+        CCIP_CHAIN_ID[IS_TEST_MODE ? bscTestnet.id : bsc.id],
+        CCIP_CHAIN_RECEIVER[IS_TEST_MODE ? bscTestnet.id : bsc.id],
         amount,
         action,
         feeNumber,
