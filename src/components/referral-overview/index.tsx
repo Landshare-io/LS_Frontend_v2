@@ -132,7 +132,7 @@ export default function ReferralOverview() {
             Approved Invites
           </p>
 
-          <p className="font-bold text-lg text-text-primary leading-7">{approvedInvites - pendingInvites}</p>
+          <p className="font-bold text-lg text-text-primary leading-7">{approvedInvites }</p>
         </div>
       </div>
 
@@ -162,7 +162,7 @@ export default function ReferralOverview() {
         <p className="text-text-primary text-sm">{remainingInvitations} invites remaining</p>
 
         <div className='flex justify-between items-center gap-6'>
-          <Slider percentage={(5 - remainingInvitations) * 20} />
+          <Slider percentage={approvedInvites * 20} />
 
           <div className='w-20 shrink-0'>
             <p className='text-text-secondary text-base'>Earn Bonus</p>
