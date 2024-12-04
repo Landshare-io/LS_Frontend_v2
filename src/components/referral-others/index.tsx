@@ -72,7 +72,6 @@ export default function ReferralOthers() {
             >
             Customize
           </p>}
-       
       </div>
 
       <ConnectButton.Custom>
