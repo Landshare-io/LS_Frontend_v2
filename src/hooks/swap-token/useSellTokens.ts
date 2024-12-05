@@ -13,7 +13,7 @@ import { BigNumberish } from 'ethers';
 export default function useSellTokens(chainId: number, address: Address | undefined, landFeeAmount: BigNumberish, amount: number) {
   const [transactionStatus, setTransactionStatus] = useState('')
 
-  const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(chainId, address, RWA_CONTRACT_ADDRESS[bsc.id]) as {
+  const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(chainId, address, RWA_CONTRACT_ADDRESS[chainId]) as {
     data: BigNumberish,
     refetch: Function
   }
