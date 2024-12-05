@@ -54,13 +54,17 @@ export default function ConnectWallet({
     const fetchData = async () => {
       if (isConnected && address && referralCode) {
         const message = formatAffiliateAcceptance(new Date());
-        const signature = await signMessage(config, { message });
+        try {
+          const signature = await signMessage(config, { message });
 
-        await Fuul.sendConnectWallet({
-          address: address,
-          signature: signature,
-          message: message
-        });
+          await Fuul.sendConnectWallet({
+            address: address,
+            signature: signature,
+            message: message
+          });
+      } catch (error) {
+        console.error("Error signing message:", error);
+      }
       }
     }
 
