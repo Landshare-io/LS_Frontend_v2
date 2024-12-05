@@ -1,11 +1,11 @@
 import { getDefaultProvider } from "ethers";
-import { bsc, bscTestnet } from "wagmi/chains";
+import { bsc, hardhat } from "wagmi/chains";
 import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
 import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
 export const IS_TEST_MODE = false
-export const MAJOR_WORK_CHAIN = IS_TEST_MODE ? bscTestnet : bsc
+export const MAJOR_WORK_CHAIN = IS_TEST_MODE ? hardhat : bsc
 export const BOLD_INTER_TIGHT = Inter_Tight({
   weight: "700",
   style: "normal",
@@ -28,7 +28,8 @@ export const PROVIDER_URLS = {
   137: 'https://polygon-rpc.com/',
   80002: 'https://rpc-amoy.polygon.technology',
   42161: 'https://arb1.arbitrum.io/rpc',
-  421614: 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public'
+  421614: 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
+  31337: 'http://localhost:8545'
 }
 export const PROVIDERS: {
   [key: number]: any
@@ -40,7 +41,8 @@ export const PROVIDERS: {
   137: getDefaultProvider(PROVIDER_URLS['137']),
   80002: getDefaultProvider(PROVIDER_URLS['80002']),
   42161: getDefaultProvider(PROVIDER_URLS['42161']),
-  421614: getDefaultProvider(PROVIDER_URLS['42161'])
+  421614: getDefaultProvider(PROVIDER_URLS['42161']),
+  31337: getDefaultProvider(PROVIDER_URLS['31337'])
 }
 export const ADDRESS_BOOK_ID = 731780 // 18c3953f93f00ab7003571dbd4e0a915
 export const HOUSE_NFT_CONTRACT = "0x08116b6B5b561e881b0B980ddCd12cFaB356537b" as Address
@@ -62,7 +64,8 @@ export const LAND_TOKEN_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   137: '0xC03E6ad83dE7C58c9166fF08D66B960d78e64105',
   80002: '0xcab0EF91Bee323d1A617c0a027eE753aFd6997E4',
   42161: '0x27Bc2757fAb0b8aB406016D1f71d8123452095d3',
-  421614: '0xA8C0c11bf64AF62CDCA6f93D3769B88BdD7cb93D'
+  421614: '0xA8C0c11bf64AF62CDCA6f93D3769B88BdD7cb93D',
+  31337: '0x2B0d36FACD61B71CC05ab8F3D2355ec3631C0dd5'
 }
 export const SWIPELUX_SETTING = {
   apiKey: '1d1fe8ad-a154-4dc0-a6bd-3fe8939ba7d0'
@@ -84,28 +87,34 @@ export const ADMIN_WALLET_ADDRESS = "" as Address
 export const PREMIUM_NFT_CONTRACT_ADDRESS: Record<string, MULTI_CHAIN_CONTRACT_TYPE> = {
   "Porcelain Tile": {
     56: '0x7E96B1A21Cc702D495eD9c430A4B87CB1e163ab3' as Address,
-    97: '' as Address
+    97: '' as Address,
+    31337: '0x5eb3Bc0a489C5A8288765d2336659EbCA68FCd00'
   },
   "Pool Table": {
     56: '0x422FCBc638E3f45E8b5555537A83AB59D9903716' as Address,
-    97: '' as Address
+    97: '' as Address,
+    31337: '0x809d550fca64d94Bd9F66E60752A544199cfAC3D'
   },
   "Marble Countertops": {
     56: '0x345E80D12b38E85E0CB205e54FA1A5853c1B91b7' as Address,
-    97: '' as Address
+    97: '' as Address,
+    31337: '0x1291Be112d480055DaFd8a610b7d1e203891C274'
   }
 }
 export const PORCELAIN_TILE_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x7E96B1A21Cc702D495eD9c430A4B87CB1e163ab3' as Address,
-  97: '' as Address
+  97: '' as Address,
+  31337: '0x5eb3Bc0a489C5A8288765d2336659EbCA68FCd00'
 }
 export const POOL_TALBE_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x422FCBc638E3f45E8b5555537A83AB59D9903716' as Address,
-  97: '' as Address
+  97: '' as Address,
+  31337: '0x809d550fca64d94Bd9F66E60752A544199cfAC3D'
 }
 export const MARBLE_COUNTEROPS_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x345E80D12b38E85E0CB205e54FA1A5853c1B91b7' as Address,
-  97: '' as Address
+  97: '' as Address,
+  31337: '0x1291Be112d480055DaFd8a610b7d1e203891C274'
 }
 export const API_CONSUMER_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x234fCeB8e266cc0843ea134f378f0157dB4d09dE' as Address,
@@ -135,7 +144,8 @@ export const ASSET_TOKEN_ADDRESS = "0xAC9611232704A38354858a8FBa4624a0b01987fB" 
 export const ASSET_MD_TOKEN_ADDRESS = "0xffbf45A8E54ADa0BbCbC880D13B6629ffD756308" as Address
 export const RWA_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x475eD67Bfc62B41c048b81310337c1D75D45aADd' as Address,
-  97: '' as Address
+  97: '' as Address,
+  31337: '0x99dBE4AEa58E518C50a1c04aE9b48C9F6354612f'
 }
 export const RWA_LP_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x89bad177367736C186F7b41a9fba7b23474A1b35' as Address,
@@ -185,7 +195,8 @@ export const MARKETING_TREASURY_ADDRESS = "0xee39392eCAc26a321D22bAfAE79b6e923a3
 export const REALITY_MODULE_ADDRESS = "0xfb934692b8Da0cd4d02F4dfDd8F619312eeC0D87" as Address
 export const MULTISEND_ADDRESS = "0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761" as Address
 export const ASSET_STAKE_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
-  56: '0x018E809663341771002c7dfd9B5ac36DF6044dB7'
+  56: '0x018E809663341771002c7dfd9B5ac36DF6044dB7',
+  31337: '0xCA8c8688914e0F7096c920146cd0Ad85cD7Ae8b9'
 }
 export const CCIP_CHAIN_ID: {
   [key: number]: string
