@@ -38,6 +38,8 @@ export default function ReferralOverview() {
   }, [address]);
 
   useEffect(() => {
+    // Purchase and hold = 3
+    // Purchase = 4
     const fetchData = async () => {
       try {
         const { results: pending_results } = await Fuul.getPayoutsLeaderboard({
@@ -45,7 +47,7 @@ export default function ReferralOverview() {
           user_type: "affiliate",
           from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
           to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-          conversions: '3'
+          conversions: '4'
         });
 
         const { results: total_results } = await Fuul.getPayoutsLeaderboard({
