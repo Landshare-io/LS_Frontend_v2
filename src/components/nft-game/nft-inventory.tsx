@@ -197,6 +197,7 @@ export default function InventoryPage() {
     }
 
     if (userReward[4] > 0.1) {
+      setDepositLoading(false);
       return notifyError("Harvest rewards before deposit");
     }
 
@@ -413,7 +414,7 @@ export default function InventoryPage() {
                                     RWA Tokens Deposited:
                                   </span>
                                   <span className={`font-normal text-[16px] ${theme == 'dark' ? "text-white" : "text-black"}`}>
-                                    {depositedBalance}{" "}
+                                    {stakedBalance.toString()}{" "}
                                     {"LSRWA"}
                                   </span>
                                 </div>
