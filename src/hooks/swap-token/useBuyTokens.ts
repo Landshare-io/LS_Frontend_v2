@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useWaitForTransactionReceipt } from 'wagmi';
 import { Address } from 'viem';
+import { formatEther, parseUnits } from 'viem';
 import { bsc } from 'viem/chains';
 import useAllowanceOfUsdcContract from '../contract/UsdcContract/useAllowance';
 import useApproveOfLandContract from '../contract/LandTokenContract/useApprove';
 import useApproveOfUsdcContract from '../contract/UsdcContract/useApprove';
 import useBuyToken from '../contract/LandshareBuySaleContract/useBuyToken';
+import useGetRwaPrice from '../contract/APIConsumerContract/useGetRwaPrice';
 import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
 import { LANDSHARE_BUY_SALE_CONTRACT_ADDRESS, USDC_ADDRESS } from '../../config/constants/environments';
 import { BigNumberish } from 'ethers';
 
 export default function useBuyTokens(chainId: number, address: Address | undefined, landAmount: BigNumberish, amount: number) {
   const [transactionStatus, setTransactionStatus] = useState('')
+  const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
 
   const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]) as {
     data: BigNumberish,
@@ -106,9 +109,11 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
   const buyTokens = async () => {
     try {
       setTransactionStatus("Transaction Pending...")
-      if (BigInt(usdcAllowance) < amount) {
-        await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], amount);
+      if (Number(formatEther(BigInt(usdcAllowance))) < Number(formatEther(BigInt(rwaPrice ?? 0))) * amount) {
+        await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], parseUnits((Number(formatEther(BigInt(rwaPrice ?? 0))) * amount).toString(), 18));
         await usdcAllowanceRefetch()
+      } else {
+        buyToken(amount, USDC_ADDRESS[chainId])
       }
     } catch (error) {
       console.error(error);
