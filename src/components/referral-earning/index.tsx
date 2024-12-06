@@ -39,42 +39,44 @@ export default function ReferralEarning() {
   }, [address]);
 
   useEffect(() => {
-    const client = new ApolloClient({
-      uri: APIURL,
-      cache: new InMemoryCache(),
-    });
-
-    const USER_BALANCES_QUERY = gql`
-      query GetUserBalances($owner: String!) {
-        userBalances(
-          where: { 
-            owner_contains_nocase: $owner, 
-            project_: {
-              deployedAddress: "0x5c41b8814315988163e308c4734AC3FAF7092A10"
-            }
-          }
-        ) {
-          availableToClaim
-          claimed
-          currency
-        }
-      }
-    `;
-
-    client
-      .query({
-        query: USER_BALANCES_QUERY,
-        variables: { owner: address },
-      })
-      .then((data) => {
-        console.log('Subgraph data: ', data);
-        if (data.data.userBalances.length > 0) {
-          setRewards(data.data.userBalances[0]);
-        }
-      })
-      .catch((err) => {
-        console.log('Error fetching data: ', err);
+    if(address){
+      const client = new ApolloClient({
+        uri: APIURL,
+        cache: new InMemoryCache(),
       });
+  
+      const USER_BALANCES_QUERY = gql`
+        query GetUserBalances($owner: String!) {
+          userBalances(
+            where: { 
+              owner_contains_nocase: $owner, 
+              project_: {
+                deployedAddress: "0x5c41b8814315988163e308c4734AC3FAF7092A10"
+              }
+            }
+          ) {
+            availableToClaim
+            claimed
+            currency
+          }
+        }
+      `;
+  
+      client
+        .query({
+          query: USER_BALANCES_QUERY,
+          variables: { owner: address },
+        })
+        .then((data) => {
+          console.log('Subgraph data: ', data);
+          if (data.data.userBalances.length > 0) {
+            setRewards(data.data.userBalances[0]);
+          }
+        })
+        .catch((err) => {
+          console.log('Error fetching data: ', err);
+        });
+    }
   }, [address]);
 
   const handleClaim = async () => {

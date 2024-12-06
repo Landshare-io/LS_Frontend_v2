@@ -1,14 +1,12 @@
 import { FaFileLines, FaUser } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
-import { useGlobalContext } from "../../context/GlobalContext";
 import { HiIdentification } from "react-icons/hi2";
 import { IoLink, IoPersonAdd } from "react-icons/io5"
 import { MdArrowOutward } from "react-icons/md";
 
 export default function ReferralParticipate() {
     const router = useRouter();
-    const {setKycopen} = useGlobalContext();
 
     return(
         <div className="w-full grid md:grid-cols-3 grid-cols-1 h-fit gap-6">
@@ -48,7 +46,7 @@ export default function ReferralParticipate() {
                         </p>
                     </div>
 
-                    <button className="w-fit bg-[#61CD81] px-6 py-[13px] rounded-[100px] text-white" onClick={() => setKycopen(true)}>
+                    <button className="w-fit bg-[#61CD81] px-6 py-[13px] rounded-[100px] text-white" onClick={() => {}}>
                         Verify now
                     </button>
                 </div>

@@ -4,8 +4,11 @@ import { useAccount } from "wagmi";
 import Slider from "../common/slider";
 import { getCurrentEpoch } from '../../utils/helpers/generate-epochs';
 import { leaderboardDataProps } from '../../utils/type';
+import { USDC_ADDRESS } from '../../config/constants/environments';
+import { useChainId } from 'wagmi';
 
 export default function ReferralOverview() {
+  const chainId = useChainId();
   const { address } = useAccount();
   const [pendingInvites, setPendingInvites] = useState<number>(0);
   const [approvedInvites, setApprovedInvites] = useState<number>(0);
@@ -18,7 +21,9 @@ export default function ReferralOverview() {
     const fetchData = async () => {
       try {
         if (address) {
-          const total_conversions = await Fuul.getPointsLeaderboard({
+          const total_conversions = await Fuul.getPayoutsLeaderboard({
+            currency_address :  USDC_ADDRESS[chainId],
+            // currency_address : '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
             user_address: address,
             from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
             to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
