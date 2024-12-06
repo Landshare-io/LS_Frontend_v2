@@ -6,17 +6,17 @@ import numeral from "numeral"
 import Image from "next/image";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import Slider from 'react-slick';
-import Collapse from "../components/common/collapse";
 import ReactModal from "react-modal";
-import Breadcrumb from "../components/common/breadcrumb";
-import ManualVault from "../components/vaults/manual-vault";
-import AutoVault from "../components/vaults/auto-vault";
-import LPVault from "../components/vaults/lp-vault";
-import Usdtvault from "../components/vaults/usdt-vault";
-import { useGlobalContext } from "../context/GlobalContext";
-import { supportChainIds } from "../wagmi";
-import useGetPrice from "../hooks/get-apy/useGetPrice";
-import { BOLD_INTER_TIGHT } from "../config/constants/environments";
+import Collapse from "../../components/common/collapse";
+import Breadcrumb from "../../components/common/breadcrumb";
+import ManualVault from "../../components/vaults/manual-vault";
+import AutoVault from "../../components/vaults/auto-vault";
+import LPVault from "../../components/vaults/lp-vault";
+import Usdtvault from "../../components/vaults/usdt-vault";
+import { useGlobalContext } from "../../context/GlobalContext";
+import { supportChainIds } from "../../wagmi";
+import useGetPrice from "../../hooks/get-apy/useGetPrice";
+import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import coinStack from "../../public/icons/coin-stacked.svg"
 import tabIcon3 from "../../public/icons/tab-icon3.svg"
 import tabIcon4 from "../../public/icons/tether.svg"
@@ -26,7 +26,7 @@ import CloseIcon from "../../public/icons/close.svg";
 import CloseIconDark from "../../public/icons/close-dark.svg";
 import leftRight from "../../public/icons/left-right.svg";
 import IconArrowUpDown from "../../public/icons/arrow-up-down.svg";
-import { MAJOR_WORK_CHAIN } from "../config/constants/environments";
+import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
