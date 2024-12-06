@@ -1,12 +1,16 @@
+import { useState } from "react";
 import { FaFileLines, FaUser } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { HiIdentification } from "react-icons/hi2";
 import { IoLink, IoPersonAdd } from "react-icons/io5"
 import { MdArrowOutward } from "react-icons/md";
+import KYCModal from "../common/modals/kyc";
 
 export default function ReferralParticipate() {
     const router = useRouter();
+    const [iskycmodal, setKycopen] = useState<boolean>(false);
+    const [isZeroIDModal, setZeroIDModalOpen] = useState<boolean>(false);
 
     return(
         <div className="w-full grid md:grid-cols-3 grid-cols-1 h-fit gap-6">
@@ -46,7 +50,7 @@ export default function ReferralParticipate() {
                         </p>
                     </div>
 
-                    <button className="w-fit bg-[#61CD81] px-6 py-[13px] rounded-[100px] text-white" onClick={() => {}}>
+                    <button className="w-fit bg-[#61CD81] px-6 py-[13px] rounded-[100px] text-white" onClick={() => {setKycopen(true)}}>
                         Verify now
                     </button>
                 </div>
@@ -93,6 +97,12 @@ export default function ReferralParticipate() {
                     </a>
                 </div>
             </div>
+
+            <KYCModal 
+                iskycmodal = {iskycmodal}
+                setKycopen = {setKycopen}
+                isZeroIDModal = {isZeroIDModal}
+                setZeroIDModalOpen = {setZeroIDModalOpen}/>
         </div>
     )
 }
