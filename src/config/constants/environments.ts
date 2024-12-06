@@ -211,6 +211,19 @@ export const CCIP_CHAIN_ID: {
   421614: '3478487238524512106'
 }
 
+export const CCIP_CHAIN_NAME: {
+  [key: number]: string
+} = {
+  11344663589394136015: 'Binance Smart Chain',
+  13264668187771770619: 'BSC Testnet',
+  1: '',
+  16015286601757825753: 'Ethereum Sepolia Testnet',
+  4051577828743386545: 'Polygon',
+  16281711391670634445: 'Polygon Amoy Testnet',
+  4949039107694359620: 'Arbitrum One',
+  421614: 'Arbitrum Sepolia'
+}
+
 export const CCIP_CHAIN_RECEIVER: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x8506Eb2e34e2162Bb584a03463E1D977eDeF06a4',
   97: '0xcf18991bc9d401264254090b7cBBDbfd70691c05',
