@@ -15,7 +15,7 @@ import CircleLoader from "../common/circle-loader";
 import { leaderboardDataProps } from "../../utils/type";
 import { USDC_ADDRESS } from '../../config/constants/environments';
 import { useChainId } from 'wagmi';
-import ethers from "ethers";
+import Tooltip from "../common/tooltip";
 
 export default function ReferralLeaderBoard() {
   const chainId = useChainId();
@@ -102,14 +102,17 @@ export default function ReferralLeaderBoard() {
 
   return (
     <div className="mt-12">
-      <h2 className="text-text-primary font-bold text-2xl leading-[22px]">
-        Leaderboard
+      <div className="text-sm text-text-secondary font-normal flex gap-1 items-baseline">
+        <h2 className="text-text-primary font-bold text-2xl leading-[22px]">
+          Leaderboard
+        </h2>
         <span className="px-2 w-fit my-6 text-text-primary text-sm font-normal">
           {formatEpochDates(current_epoch?.start_date, current_epoch?.end_date)}
         </span>
-        <span className="text-[#61CD81] text-base">{"ⓘ"}</span>
-      </h2>
-
+        <Tooltip position="bottom" tooltipClassName="-translate-x-48 md:-translate-x-24" content="At the end of each epoch, the top 3 referrers will receive up to $100 USDC in bonus, but the reward cannot exceed 10% of their total referral amount. For example, if the #3 referrer brings in $500 worth of buys, their bonus will be $50 (10% of their referral amount).">
+          <span className="text-[#61CD81] cursor-default">ⓘ</span>
+        </Tooltip>
+      </div>
       <div className="mt-[10px] text-text-secondary text-sm">The program operates in 3-month epochs.</div>
 
       {loading ?

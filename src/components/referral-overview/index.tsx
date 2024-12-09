@@ -1,11 +1,12 @@
-import { Fuul } from '@fuul/sdk';
+import { Fuul } from "@fuul/sdk";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import Slider from "../common/slider";
-import { getCurrentEpoch } from '../../utils/helpers/generate-epochs';
-import { leaderboardDataProps } from '../../utils/type';
-import { USDC_ADDRESS } from '../../config/constants/environments';
-import { useChainId } from 'wagmi';
+import { getCurrentEpoch } from "../../utils/helpers/generate-epochs";
+import { leaderboardDataProps } from "../../utils/type";
+import { USDC_ADDRESS } from "../../config/constants/environments";
+import { useChainId } from "wagmi";
+import Tooltip from "../common/tooltip";
 
 export default function ReferralOverview() {
   const chainId = useChainId();
@@ -24,10 +25,14 @@ export default function ReferralOverview() {
           const total_conversions = await Fuul.getPayoutsLeaderboard({
             currency_address :  USDC_ADDRESS[chainId],
             user_address: address,
-            from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
-            to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
-            user_type: 'affiliate', 
-            fields: 'referred_volume',
+            from: current_epoch?.start_date
+              ? new Date(current_epoch.start_date)
+              : undefined,
+            to: current_epoch?.end_date
+              ? new Date(current_epoch.end_date)
+              : undefined,
+            user_type: "affiliate",
+            fields: "referred_volume",
           });
           
           let totalPurchaseAmountSum = 0;
@@ -41,7 +46,7 @@ export default function ReferralOverview() {
       } catch (error: any) {
         console.log(error);
       }
-    }
+    };
 
     fetchData();
   }, [address]);
@@ -72,14 +77,14 @@ export default function ReferralOverview() {
       } catch (error) {
         console.log(error);
       }
-    }
+    };
 
     if (address) {
       fetchData();
     }
   }, [address]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await Fuul.getPayoutsLeaderboard({
@@ -90,82 +95,97 @@ export default function ReferralOverview() {
           from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
           to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
         });
-  
+
         const formattedData = res?.results?.map((item: any) => ({
           rank: item.rank,
           account: item.address,
           total_amount: item.total_amount,
           referred_users: item.referred_users,
-          referred_volume : item.referred_volume
+          referred_volume: item.referred_volume,
         }));
-  
+
         setMyLeaderboard(formattedData);
-      }catch(error){
+      } catch (error) {
         console.log(error);
       }
-    }
+    };
 
-    if(address){
+    if (address) {
       fetchData();
     }
   }, [address]);
 
   return (
-    <div className="flex flex-col w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-5 shadow-lg">
+    <div className="flex flex-col w-full bg-third rounded-2xl p-6 h-auto gap-8 md:gap-4 shadow-lg">
       <p className="w-full flex justify-between text-text-primary font-bold text-lg leading-7">
         Overview
       </p>
+      <div>
+        <div className="flex justify-between">
+          <div className="">
+            <div className="text-sm text-text-secondary font-normal flex gap-1">
+              <p>
+                Pending invites 
+              </p>
+              <Tooltip content="These are users you’ve referred who bought at least 50 LSRWA tokens but haven’t yet completed the 30-day holding period.">
+                <span className="text-[#61CD81] cursor-default">ⓘ</span>
+              </Tooltip>
+            </div>
 
-      <div className="flex justify-between">
-        <div>
-          <p className="text-sm text-text-secondary font-normal leading-7">
-            Pending invites <span className="text-[#61CD81]">ⓘ</span>
-          </p>
-
-          <p className="font-bold text-lg text-text-primary leading-7">{pendingInvites}</p>
-        </div>
-
-        <div>
-          <p className="text-sm text-text-secondary font-normal leading-7 pr-2">
-            Approved Invites
-          </p>
-
-          <p className="font-bold text-lg text-text-primary leading-7">{approvedInvites}</p>
-        </div>
-      </div>
-
-      <div className="flex justify-between">
-        <div>
-          <p className="text-sm text-text-secondary font-normal leading-7">
-            Purchase Volume
-          </p>
-
-          <p className="font-bold text-lg text-text-primary leading-7">
-            {purchaseVolume} LSRWA
-          </p>
-        </div>
-
-        <div>
-          <p className="text-sm text-text-secondary font-normal leading-7">
-            Your Current Rank
-          </p>
-        
-          <p className="font-bold text-lg text-text-primary leading-7">
-            {myLeaderboard ? myLeaderboard[0]?.rank : ""} 
-          </p>
-        </div>
-      </div>
-
-      <div className="w-full">
-        <p className="text-text-primary text-sm">{remainingInvitations} invites remaining</p>
-
-        <div className='flex justify-between items-center gap-6'>
-          <Slider percentage={approvedInvites * 20} />
-
-          <div className='w-20 shrink-0'>
-            <p className='text-text-secondary text-base'>Earn Bonus</p>
-            <p className='text-text-primary font-bold text-lg'>10 USDC</p>
+            <p className="font-bold text-lg text-text-primary">
+              {pendingInvites}
+            </p>
           </div>
+
+          <div>
+            <p className="text-sm text-text-secondary font-normal pr-2">
+              Approved Invites
+            </p>
+
+            <p className="font-bold text-lg text-text-primary">
+              {approvedInvites}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex justify-between">
+          <div>
+            <p className="text-sm text-text-secondary font-normal">
+              Purchase Volume
+            </p>
+
+            <p className="font-bold text-lg text-text-primary">
+              {purchaseVolume} LSRWA
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm text-text-secondary font-normal">
+              Your Current Rank
+            </p>
+
+            <p className="font-bold text-lg text-text-primary">
+              {myLeaderboard ? myLeaderboard[0]?.rank : ""}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <hr className="w-full my-[2px] bg-secondary" />
+
+      <div className="w-full flex gap-6">
+        <div className="flex flex-col flex-grow">
+          <p className="text-text-primary text-sm">
+            {remainingInvitations} invites remaining
+          </p>
+          <Slider percentage={approvedInvites * 20} />
+          <p className="text-text-secondary text-sm">
+            {remainingInvitations * 20}% completed
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <p className="text-text-secondary text-base">Earn Bonus</p>
+          <p className="text-text-primary font-bold text-lg">10 USDC</p>
         </div>
 
         <p className="text-text-secondary text-sm">{approvedInvites * 20}% completed</p>

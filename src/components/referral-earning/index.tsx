@@ -128,20 +128,20 @@ export default function ReferralEarning() {
 
   return (
     <div className="w-full h-full flex flex-col justify-between bg-third rounded-2xl p-6 shadow-lg">
-      <p className="font-bold text-lg leading-7 text-text-primary">Earnings</p>
-
-      <div className="">
-        <div className="mt-[22px] flex justify-between">
-          <p className="text-text-secondary text-sm leading-[28px]">
-            Total Earned
-          </p>
+      <div className='flex flex-col gap-8 md:gap-3'>
+        <p className="font-bold text-lg  text-text-primary">Earnings</p>
+        <div className="">
+          <div className=" flex justify-between">
+            <p className="text-text-secondary text-sm leading-[28px]">
+              Total Earned
+            </p>
 
           <p className="font-bold text-text-primary text-lg leading-[28px] flex flex-col items-end">
             {parseFloat(ethers.formatUnits((parseFloat(rewards.availableToClaim) + parseFloat(rewards.claimed)).toString(), 18)).toFixed(2)} USDC
           </p>
         </div>
 
-        <hr className="w-full my-[22px] bg-[#D8D8D8]" />
+          <hr className="w-full my-[22px] bg-secondary" />
 
         <div className="flex justify-between items-center">
           <div>
@@ -149,14 +149,14 @@ export default function ReferralEarning() {
               Available to Claim
             </p>
             <p className="text-text-primary font-bold leading-[22px]">
-              {parseFloat(ethers.formatUnits(rewards.availableToClaim, 18)).toFixed(2)} USDC
+              {rewards.availableToClaim} USDC
             </p>
           </div>
 
           <div className="text-text-secondary text-sm leading-[28px] flex flex-col items-end">
             <p>
               Total claimed:{" "}
-              <span className="font-bold text-text-primary">{parseFloat(ethers.formatUnits(rewards.claimed, 18)).toFixed(2)}</span>{" "}
+              <span className="font-bold text-text-primary">{rewards.claimed}</span>{" "}
               <span className="text-text-primary">USDC</span>
             </p>
           </div>
@@ -170,10 +170,11 @@ export default function ReferralEarning() {
           {isClaiming ? 'Claiming...' : 'Claim Earnings'}
         </button>
 
+        </div>
       </div>
 
       <div className="text-sm mt-[60px] md:mt-[66px] text-text-secondary leading-[22px]">
-        <p className="text-[#FF0000] font-bold">
+        <p className="text-red-500 dark:text-red-400 font-bold">
           30-Day Holding Requirement
         </p>
         <p>
