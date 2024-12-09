@@ -118,10 +118,10 @@ export default function ReferralLeaderBoard() {
       <div className="mt-[10px] text-text-secondary text-sm">The program operates in 3-month epochs.</div>
 
       {loading ?
-          <Table className="border-separate text-text-primary border-spacing-y-3 min-h-[210px]">
+          <Table className="border-separate text-text-primary border-spacing-y-3 ">
             <TableHeader>
               <TableRow>
-                <TableHead className="w-1/5">Rank</TableHead>
+                <TableHead className="w-1/5 ">Rank</TableHead>
                 <TableHead className="w-1/5">Account</TableHead>
                 <TableHead className="w-1/5">Claimed Earnings</TableHead>
                 <TableHead className="w-1/5">
