@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useWaitForTransactionReceipt } from 'wagmi';
 import { Address } from 'viem';
 import { formatEther, parseUnits } from 'viem';
 import { bsc } from 'viem/chains';
+import { BigNumberish } from 'ethers';
 import useAllowanceOfUsdcContract from '../contract/UsdcContract/useAllowance';
 import useApproveOfLandContract from '../contract/LandTokenContract/useApprove';
 import useApproveOfUsdcContract from '../contract/UsdcContract/useApprove';
@@ -10,10 +11,10 @@ import useBuyToken from '../contract/LandshareBuySaleContract/useBuyToken';
 import useGetRwaPrice from '../contract/APIConsumerContract/useGetRwaPrice';
 import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
 import { LANDSHARE_BUY_SALE_CONTRACT_ADDRESS, USDC_ADDRESS } from '../../config/constants/environments';
-import { BigNumberish } from 'ethers';
+import { useGlobalContext } from '../../context/GlobalContext';
 
 export default function useBuyTokens(chainId: number, address: Address | undefined, landAmount: BigNumberish, amount: number) {
-  const [transactionStatus, setTransactionStatus] = useState('')
+  const { setScreenLoadingStatus } = useGlobalContext()
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
 
   const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]) as {
@@ -52,7 +53,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
           await usdcAllowanceRefetch()
           // if (BigInt(usdcAllowance) < amount) {
           //   window.alert("Please approve sufficient allowance.")
-          //   setTransactionStatus("Insufficient Allowance")
+          //   setScreenLoadingStatus("Insufficient Allowance")
           // }
 
           if (usdcApproveStatusData) {
@@ -65,7 +66,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
           }
         }
       } catch (error) {
-        setTransactionStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction failed")
         console.log(error)
       }
     })()
@@ -78,7 +79,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
           await landAllowanceRefetch()
           // if (BigInt(landAllowance) < BigInt(landAmount)) {
           //   window.alert("Please approve sufficient allowance.")
-          //   setTransactionStatus("Insufficient Allowance")
+          //   setScreenLoadingStatus("Insufficient Allowance")
           // }
 
           if (landApproveStatusData) {
@@ -88,7 +89,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
           }
         }
       } catch (error) {
-        setTransactionStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction failed")
         console.log(error)
       }
     })()
@@ -98,9 +99,9 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     if (sellTx) {
       if (sellStatusData) {
         if (sellSuccess) {
-          setTransactionStatus("Transaction Successful")
+          setScreenLoadingStatus("Transaction Successful")
         } else {
-          setTransactionStatus("Transaction failed")
+          setScreenLoadingStatus("Transaction failed")
         }
       }
     }
@@ -108,7 +109,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
 
   const buyTokens = async () => {
     try {
-      setTransactionStatus("Transaction Pending...")
+      setScreenLoadingStatus("Transaction Pending...")
       if (Number(formatEther(BigInt(usdcAllowance))) < Number(formatEther(BigInt(rwaPrice ?? 0))) * amount) {
         await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], parseUnits((Number(formatEther(BigInt(rwaPrice ?? 0))) * amount).toString(), 18));
         await usdcAllowanceRefetch()
@@ -117,12 +118,11 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
       }
     } catch (error) {
       console.error(error);
-      setTransactionStatus('Transaction failed')
+      setScreenLoadingStatus('Transaction failed')
     }
   };
 
   return {
-    buyTokens,
-    transactionStatus
+    buyTokens
   };
 }
