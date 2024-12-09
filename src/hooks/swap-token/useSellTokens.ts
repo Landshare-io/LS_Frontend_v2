@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useWaitForTransactionReceipt } from 'wagmi';
 import { Address } from 'viem';
 import { bsc } from 'viem/chains';
+import { BigNumberish } from 'ethers';
 import useAllowanceOfRwaContract from '../contract/RWAContract/useAllowance';
 import useApproveOfRwaContract from '../contract/RWAContract/useApprove';
 import useApproveOfLandContract from '../contract/LandTokenContract/useApprove';
 import useSellRwa from '../contract/LandshareBuySaleContract/useSellRwa';
 import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
 import { RWA_CONTRACT_ADDRESS, LANDSHARE_SALE_CONTRACT_ADDRESS } from '../../config/constants/environments';
-import { BigNumberish } from 'ethers';
+import { useGlobalContext } from '../../context/GlobalContext';
 
 export default function useSellTokens(chainId: number, address: Address | undefined, landFeeAmount: BigNumberish, amount: number) {
-  const [transactionStatus, setTransactionStatus] = useState('')
+  const { setScreenLoadingStatus } = useGlobalContext()
 
   const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(chainId, address, RWA_CONTRACT_ADDRESS[chainId]) as {
     data: BigNumberish,
@@ -62,7 +63,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
         }
       })()
     } catch (error) {
-      setTransactionStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction failed")
       console.log(error)
     }
   }, [rwaApproveTx, rwaApproveStatusData, rwaApproveSuccess])
@@ -75,7 +76,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
             await landAllowanceRefetch()
             if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
               window.alert("Please approve sufficient allowance.")
-              setTransactionStatus("Insufficient Allowance")
+              setScreenLoadingStatus("Insufficient Allowance")
             }
       
             if (landApproveSuccess) {
@@ -85,7 +86,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
         }
       })()
     } catch (error) {
-      setTransactionStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction failed")
       console.log(error)
     }
   }, [landApproveTx, landApproveStatusData, landApproveSuccess])
@@ -94,9 +95,9 @@ export default function useSellTokens(chainId: number, address: Address | undefi
     if (sellTx) {
       if (sellStatusData) {
         if (sellSuccess) {
-          setTransactionStatus("Transaction Successful")
+          setScreenLoadingStatus("Transaction Successful")
         } else {
-          setTransactionStatus("Transaction failed")
+          setScreenLoadingStatus("Transaction failed")
         }
       }
     }
@@ -110,12 +111,11 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       }
     } catch (error) {
       console.error(error);
-      setTransactionStatus('Transaction failed')
+      setScreenLoadingStatus('Transaction failed')
     }
   };
 
   return {
-    sellTokens,
-    transactionStatus
+    sellTokens
   };
 }
