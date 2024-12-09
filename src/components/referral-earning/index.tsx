@@ -7,6 +7,7 @@ import { getCurrentEpoch } from '../../utils/helpers/generate-epochs';
 import { Fuul } from '@fuul/sdk';
 import { USDC_ADDRESS } from '../../config/constants/environments';
 import { useChainId } from 'wagmi';
+import { Web3Provider } from '@ethersproject/providers';
 
 export default function ReferralEarning() {
   const APIURL = 'https://api.studio.thegraph.com/query/71690/fuul-protocol-bsc/version/latest';
@@ -94,7 +95,7 @@ export default function ReferralEarning() {
 
   const handleClaim = async () => {
     setIsClaiming(true);
-
+  
     const claimChecks = [
       {
         projectAddress: '0x5c41b8814315988163e308c4734AC3FAF7092A10', 
@@ -104,28 +105,29 @@ export default function ReferralEarning() {
         amounts: [],
       },
     ];
-
+  
     const address = "0xC38E3A10B5818601b29c83F195E8b5854AAE45aF";
-
+  
     const abi = [
       "function claim(ClaimCheck[] calldata claimChecks) external"
     ];
-
+  
     try {
-      const result = writeContract({
-        address,
-        abi,
-        functionName: 'claim',
-        args: [claimChecks],
-      });
+      const provider = new Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
 
-      console.log('Claim result: ', result);
+      const fuulManager = new ethers.Contract(address, abi, signer as unknown as ethers.Signer);
+
+      const tx = await fuulManager.claim(claimChecks);
+      
+      console.log("claim", tx);
     } catch (error) {
       console.error('Error during claim: ', error);
     } finally {
       setIsClaiming(false);
     }
   };
+  
 
   return (
     <div className="w-full h-full flex flex-col justify-between bg-third rounded-2xl p-6 shadow-lg">

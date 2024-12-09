@@ -135,7 +135,6 @@ export default function ReferralLeaderBoard() {
                 const accountDisplay = `${account.slice(0, 6)}...${account.slice(
                   -4
                 )}`;
-                console.log(total_amount, 'AAAAAAAAAAAAAAAA')
 
                 if(address?.toLowerCase() !== account?.toLowerCase()){
                   return (
@@ -147,7 +146,7 @@ export default function ReferralLeaderBoard() {
                       <TableCell>{accountDisplay}</TableCell>
                       <TableCell>{total_amount.toFixed(2)}</TableCell>
                       <TableCell>{referred_users}</TableCell>
-                      <TableCell className="rounded-r-xl">{referred_volume}</TableCell>
+                      <TableCell className="rounded-r-xl">{(referred_volume/ Math.pow(10, 12)).toFixed(2)}</TableCell>
                     </TableRow>
                   );
                 }else{
