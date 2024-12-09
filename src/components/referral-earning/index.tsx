@@ -122,52 +122,53 @@ export default function ReferralEarning() {
 
   return (
     <div className="w-full h-full flex flex-col justify-between bg-third rounded-2xl p-6 shadow-lg">
-      <p className="font-bold text-lg leading-7 text-text-primary">Earnings</p>
-
-      <div className="">
-        <div className="mt-[22px] flex justify-between">
-          <p className="text-text-secondary text-sm leading-[28px]">
-            Total Earned
-          </p>
-
-          <p className="font-bold text-text-primary text-lg leading-[28px] flex flex-col items-end">
-              {referredVolume} USDC
-          </p>
-        </div>
-
-        <hr className="w-full my-[22px] bg-[#D8D8D8]" />
-
-        <div className="flex justify-between items-center">
-          <div>
+      <div className='flex flex-col gap-8 md:gap-3'>
+        <p className="font-bold text-lg  text-text-primary">Earnings</p>
+        <div className="">
+          <div className=" flex justify-between">
             <p className="text-text-secondary text-sm leading-[28px]">
-              Available to Claim
+              Total Earned
             </p>
-            <p className="text-text-primary font-bold leading-[22px]">
-              {rewards.availableToClaim} USDC
+
+            <p className="font-bold text-text-primary text-lg leading-[28px] flex flex-col items-end">
+                {referredVolume} USDC
             </p>
           </div>
 
-          <div className="text-text-secondary text-sm leading-[28px] flex flex-col items-end">
-            <p>
-              Total claimed:{" "}
-              <span className="font-bold text-text-primary">{rewards.claimed}</span>{" "}
-              <span className="text-text-primary">USDC</span>
-            </p>
+          <hr className="w-full my-[22px] bg-secondary" />
+
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-text-secondary text-sm leading-[28px]">
+                Available to Claim
+              </p>
+              <p className="text-text-primary font-bold leading-[22px]">
+                {rewards.availableToClaim} USDC
+              </p>
+            </div>
+
+            <div className="text-text-secondary text-sm leading-[28px] flex flex-col items-end">
+              <p>
+                Total claimed:{" "}
+                <span className="font-bold text-text-primary">{rewards.claimed}</span>{" "}
+                <span className="text-text-primary">USDC</span>
+              </p>
+            </div>
           </div>
+
+          <button
+            onClick={handleClaim}
+            disabled={isClaiming || rewards.availableToClaim === 0}
+            className="w-full font-bold border border-[#61CD81] text-text-primary text-sm mt-[22px] py-[13px] rounded-[100px]"
+          >
+            {isClaiming ? 'Claiming...' : 'Claim Earnings'}
+          </button>
+
         </div>
-
-        <button
-          onClick={handleClaim}
-          disabled={isClaiming || rewards.availableToClaim === 0}
-          className="w-full font-bold border border-[#61CD81] text-text-primary text-sm mt-[22px] py-[13px] rounded-[100px]"
-        >
-          {isClaiming ? 'Claiming...' : 'Claim Earnings'}
-        </button>
-
       </div>
 
       <div className="text-sm mt-[60px] md:mt-[66px] text-text-secondary leading-[22px]">
-        <p className="text-[#FF0000] font-bold">
+        <p className="text-red-500 dark:text-red-400 font-bold">
           30-Day Holding Requirement
         </p>
         <p>
