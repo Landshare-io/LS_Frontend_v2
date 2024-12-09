@@ -66,7 +66,7 @@ export default function ReferralOverview() {
         conversions.map((conversion) => {
           if(conversion.conversion_name === "Purchase"){
             pendingCount++;
-          }else if(conversion.conversion_name === "Buy and Hold TEST") {
+          }else if(conversion.conversion_name === "Purchase and hold") {
             approvedCount++;
           }
         })
