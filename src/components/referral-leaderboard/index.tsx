@@ -106,7 +106,7 @@ export default function ReferralLeaderBoard() {
         <span className="px-2 w-fit my-6 text-text-primary text-sm font-normal">
           {formatEpochDates(current_epoch?.start_date, current_epoch?.end_date)}
         </span>
-        <Tooltip position="bottom" content="At the end of each epoch, the top 3 referrers will receive up to $100 USDC in bonus, but the reward cannot exceed 10% of their total referral amount. For example, if the #3 referrer brings in $500 worth of buys, their bonus will be $50 (10% of their referral amount).">
+        <Tooltip position="bottom" tooltipClassName="-translate-x-48 md:-translate-x-24" content="At the end of each epoch, the top 3 referrers will receive up to $100 USDC in bonus, but the reward cannot exceed 10% of their total referral amount. For example, if the #3 referrer brings in $500 worth of buys, their bonus will be $50 (10% of their referral amount).">
           <span className="text-[#61CD81] cursor-default">ⓘ</span>
         </Tooltip>
       </div>
