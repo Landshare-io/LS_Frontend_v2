@@ -149,7 +149,7 @@ export default function ReferralEarning() {
               Available to Claim
             </p>
             <p className="text-text-primary font-bold leading-[22px]">
-              {rewards.availableToClaim} USDC
+              {parseFloat(ethers.formatUnits(rewards.availableToClaim, 18)).toFixed(2)} USDC
             </p>
           </div>
 
