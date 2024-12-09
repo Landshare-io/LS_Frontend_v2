@@ -23,8 +23,7 @@ export default function ReferralOverview() {
       try {
         if (address) {
           const total_conversions = await Fuul.getPayoutsLeaderboard({
-            currency_address: USDC_ADDRESS[chainId],
-            // currency_address : '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+            currency_address :  USDC_ADDRESS[chainId],
             user_address: address,
             from: current_epoch?.start_date
               ? new Date(current_epoch.start_date)
@@ -35,12 +34,14 @@ export default function ReferralOverview() {
             user_type: "affiliate",
             fields: "referred_volume",
           });
+          
+          let totalPurchaseAmountSum = 0;
 
-          const totalPurchaseAmountSum = [
-            ...total_conversions.results,
-            ...total_conversions.results,
-          ].reduce((sum, item) => sum + Number(item?.total_amount), 0);
-          setPurchaseVolume(totalPurchaseAmountSum);
+          total_conversions.results.forEach((result, index)=> {
+            totalPurchaseAmountSum += result?.referred_volume ? Number(result.referred_volume) / Math.pow(10, 12) : 0;
+          });
+
+          setPurchaseVolume(Number(totalPurchaseAmountSum.toFixed(2)));
         }
       } catch (error: any) {
         console.log(error);
@@ -51,40 +52,28 @@ export default function ReferralOverview() {
   }, [address]);
 
   useEffect(() => {
-    // Purchase and hold = 3
-    // Purchase = 4
     const fetchData = async () => {
       try {
-        const { results: pending_results } = await Fuul.getPayoutsLeaderboard({
-          user_address: address,
-          user_type: "affiliate",
-          from: current_epoch?.start_date
-            ? new Date(current_epoch.start_date)
-            : undefined,
-          to: current_epoch?.end_date
-            ? new Date(current_epoch.end_date)
-            : undefined,
-          conversions: "4",
+        const { results: conversions } = await Fuul.getUserPayoutsByConversion({
+          user_address: address ?? "",
+          from: current_epoch?.start_date ? new Date(current_epoch.start_date) : new Date(),
+          to: current_epoch?.end_date ? new Date(current_epoch.end_date) : new Date(),
         });
 
-        const { results: total_results } = await Fuul.getPayoutsLeaderboard({
-          user_address: address,
-          user_type: "affiliate",
-          from: current_epoch?.start_date
-            ? new Date(current_epoch.start_date)
-            : undefined,
-          to: current_epoch?.end_date
-            ? new Date(current_epoch.end_date)
-            : undefined,
-        });
+        let pendingCount = 0;
+        let approvedCount = 0;
 
-        setPendingInvites(pending_results.length);
-        setApprovedInvites(total_results.length - pending_results.length);
-        setRemainingInvitations(
-          5 - total_results.length + pending_results.length > 0
-            ? 5 - total_results.length + pending_results.length
-            : 0
-        );
+        conversions.map((conversion) => {
+          if(conversion.conversion_name === "Purchase"){
+            pendingCount++;
+          }else if(conversion.conversion_name === "Purchase and hold") {
+            approvedCount++;
+          }
+        })
+
+        setPendingInvites(pendingCount);
+        setApprovedInvites(approvedCount <= 5 ? approvedCount : 5);
+        setRemainingInvitations(5 - approvedCount);
       } catch (error) {
         console.log(error);
       }
@@ -98,21 +87,18 @@ export default function ReferralOverview() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await Fuul.getPointsLeaderboard({
-          user_address: address,
-          user_type: "affiliate",
-          fields: "referred_volume,referred_users",
-          from: current_epoch?.start_date
-            ? new Date(current_epoch.start_date)
-            : undefined,
-          to: current_epoch?.end_date
-            ? new Date(current_epoch.end_date)
-            : undefined,
+        const res = await Fuul.getPayoutsLeaderboard({
+          currency_address :  USDC_ADDRESS[chainId],
+          user_address : address,
+          user_type : 'affiliate',
+          fields: 'referred_volume,referred_users',
+          from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
+          to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
         });
 
         const formattedData = res?.results?.map((item: any) => ({
           rank: item.rank,
-          account: item.account,
+          account: item.address,
           total_amount: item.total_amount,
           referred_users: item.referred_users,
           referred_volume: item.referred_volume,
@@ -193,14 +179,13 @@ export default function ReferralOverview() {
             {remainingInvitations} invites remaining
           </p>
           <Slider percentage={approvedInvites * 20} />
-          <p className="text-text-secondary text-sm">
-            {remainingInvitations * 20}% completed
-          </p>
         </div>
         <div className="flex flex-col">
           <p className="text-text-secondary text-base">Earn Bonus</p>
           <p className="text-text-primary font-bold text-lg">10 USDC</p>
         </div>
+
+        <p className="text-text-secondary text-sm">{approvedInvites * 20}% completed</p>
       </div>
 
       <div className="flex gap-2">

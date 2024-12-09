@@ -54,6 +54,7 @@ const Referral: NextPage = () => {
               <ReferralEarning />
             </div>
           </div>
+          
           <ReferralLeaderBoard />
 
           <p className="mt-12 mb-6 text-text-primary font-bold text-2xl">How To Participate</p>

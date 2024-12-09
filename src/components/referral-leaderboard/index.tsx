@@ -13,9 +13,12 @@ import { useAccount } from "wagmi";
 import { getCurrentEpoch } from "../../utils/helpers/generate-epochs";
 import CircleLoader from "../common/circle-loader";
 import { leaderboardDataProps } from "../../utils/type";
+import { USDC_ADDRESS } from '../../config/constants/environments';
+import { useChainId } from 'wagmi';
 import Tooltip from "../common/tooltip";
 
 export default function ReferralLeaderBoard() {
+  const chainId = useChainId();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [pageCount, setPageCount] = useState<number>(0);
@@ -31,7 +34,8 @@ export default function ReferralLeaderBoard() {
       setLoading(false);
 
       try{
-        const res = await Fuul.getPointsLeaderboard({
+        const res = await Fuul.getPayoutsLeaderboard({
+          currency_address :  USDC_ADDRESS[chainId],
           page : currentPage,
           page_size : pageSize, 
           user_type : 'affiliate',
@@ -42,7 +46,7 @@ export default function ReferralLeaderBoard() {
   
         const formattedData = res?.results?.map((item: any) => ({
           rank: item.rank,
-          account: item.account,
+          account: item.address,
           total_amount: item.total_amount,
           referred_users: item.referred_users,
           referred_volume : item.referred_volume
@@ -63,10 +67,9 @@ export default function ReferralLeaderBoard() {
   useEffect(()=>{
     const fetchData = async () => {
       try {
-        const res = await Fuul.getPointsLeaderboard({
+        const res = await Fuul.getPayoutsLeaderboard({
+          currency_address :  USDC_ADDRESS[chainId],
           user_address : address,
-          page : currentPage,
-          page_size : pageSize, 
           user_type : 'affiliate',
           fields: 'referred_volume,referred_users',
           from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
@@ -75,7 +78,7 @@ export default function ReferralLeaderBoard() {
   
         const formattedData = res?.results?.map((item: any) => ({
           rank: item.rank,
-          account: item.account,
+          account: item.address,
           total_amount: item.total_amount,
           referred_users: item.referred_users,
           referred_volume : item.referred_volume
@@ -140,8 +143,8 @@ export default function ReferralLeaderBoard() {
                 const accountDisplay = `${account.slice(0, 6)}...${account.slice(
                   -4
                 )}`;
-                
-                if(address !== account){
+
+                if(address?.toLowerCase() !== account?.toLowerCase()){
                   return (
                     <TableRow
                       className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
@@ -149,21 +152,23 @@ export default function ReferralLeaderBoard() {
                     >
                       <TableCell className="rounded-l-xl">{rank}</TableCell>
                       <TableCell>{accountDisplay}</TableCell>
-                      <TableCell>{total_amount}</TableCell>
+                      <TableCell>{total_amount.toFixed(2)}</TableCell>
                       <TableCell>{referred_users}</TableCell>
-                      <TableCell className="rounded-r-xl">{referred_volume}</TableCell>
+                      <TableCell className="rounded-r-xl">{(referred_volume/ Math.pow(10, 12)).toFixed(2)}</TableCell>
                     </TableRow>
                   );
                 }else{
-                  <TableRow
-                      className="mb-3 shadow-md shadow-gray-400/10 rounded-xl text-[#0B6C96] bg-[#0B6C961A] font-bold"
-                    >
-                    <TableCell className="rounded-l-xl border border-r-0 border-[#0B6C9680]">{rank}</TableCell>
-                    <TableCell className="border-y border-[#0B6C9680]">{accountDisplay}</TableCell>
-                    <TableCell className="border-y border-[#0B6C9680]">{total_amount}</TableCell>
-                    <TableCell className="border-y border-[#0B6C9680]">{referred_users}</TableCell>
-                    <TableCell className="rounded-r-xl border border-l-0 border-[#0B6C9680]">{referred_volume}</TableCell>
-                  </TableRow>
+                  return (
+                    <TableRow
+                        className="mb-3 shadow-md shadow-gray-400/10 rounded-xl text-[#0B6C96] bg-[#0B6C961A] font-bold"
+                      >
+                      <TableCell className="rounded-l-xl border border-r-0 border-[#0B6C9680]">{rank}</TableCell>
+                      <TableCell className="border-y border-[#0B6C9680]">{accountDisplay}</TableCell>
+                      <TableCell className="border-y border-[#0B6C9680]">{total_amount.toFixed(2)}</TableCell>
+                      <TableCell className="border-y border-[#0B6C9680]">{referred_users}</TableCell>
+                      <TableCell className="rounded-r-xl border border-l-0 border-[#0B6C9680]">{(referred_volume/ Math.pow(10, 12)).toFixed(2)}</TableCell>
+                    </TableRow>
+                  );
                 }
               })}
     
@@ -173,23 +178,19 @@ export default function ReferralLeaderBoard() {
                 const accountDisplay = `${account.slice(0, 6)}...${account.slice(
                   -4
                 )}`;
-                if(rank > pageSize * pageSize){
+                if(myRank > pageSize * pageCount){
                   return (
-                    <>
                       <TableRow
-                        className="bg-secondary mb-3 shadow-md shadow-gray-400/10 rounded-xl"
-                        key={index}
+                        className="mb-3 shadow-md shadow-gray-400/10 rounded-xl text-[#0B6C96] bg-[#0B6C961A] font-bold"
                       >
-                        <TableCell className="rounded-l-xl">{rank}</TableCell>
-                        <TableCell>{accountDisplay}</TableCell>
-                        <TableCell>{total_amount}</TableCell>
-                        <TableCell>{referred_users}</TableCell>
-                        <TableCell className="rounded-r-xl">{referred_volume}</TableCell>
-                      </TableRow>
-                    </>
+                      <TableCell className="rounded-l-xl border border-r-0 border-[#0B6C9680]">{rank}</TableCell>
+                      <TableCell className="border-y border-[#0B6C9680]">{accountDisplay}</TableCell>
+                      <TableCell className="border-y border-[#0B6C9680]">{total_amount.toFixed(2)}</TableCell>
+                      <TableCell className="border-y border-[#0B6C9680]">{referred_users}</TableCell>
+                      <TableCell className="rounded-r-xl border border-l-0 border-[#0B6C9680]">{(referred_volume/ Math.pow(10, 12)).toFixed(2)}</TableCell>
+                    </TableRow>
                   );
                 }
-                return null;
               })}
             </TableBody>
           </Table>
@@ -197,12 +198,12 @@ export default function ReferralLeaderBoard() {
 
       <div className="w-full flex justify-between items-center">
         {myRank > 0 && 
-          <div className="text-text-primary font-bold text-base">
-            Your rank: {myRank} 
+          <div className="flex-1 text-text-primary font-bold text-base">
+            Your rank: <span>{myRank}</span> 
           </div>
         }
 
-        <div className="w-full flex justify-end">
+        <div className="w-full flex justify-end flex-1">
           <Pagination
             pageCount={pageCount}
             currentPage={currentPage}
