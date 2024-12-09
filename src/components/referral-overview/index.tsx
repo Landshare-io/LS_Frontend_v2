@@ -179,9 +179,6 @@ export default function ReferralOverview() {
             {remainingInvitations} invites remaining
           </p>
           <Slider percentage={approvedInvites * 20} />
-          <p className="text-text-secondary text-sm">
-            {remainingInvitations * 20}% completed
-          </p>
         </div>
         <div className="flex flex-col">
           <p className="text-text-secondary text-base">Earn Bonus</p>
