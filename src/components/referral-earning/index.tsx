@@ -8,6 +8,7 @@ import { Fuul } from '@fuul/sdk';
 import { USDC_ADDRESS } from '../../config/constants/environments';
 import { useChainId } from 'wagmi';
 import { Web3Provider } from '@ethersproject/providers';
+import FUULabi from "../../abis/FuulContract.json"
 
 export default function ReferralEarning() {
   const APIURL = 'https://api.studio.thegraph.com/query/71690/fuul-protocol-bsc/version/latest';
@@ -108,15 +109,11 @@ export default function ReferralEarning() {
   
     const address = "0xC38E3A10B5818601b29c83F195E8b5854AAE45aF";
   
-    const abi = [
-      "function claim(ClaimCheck[] calldata claimChecks) external"
-    ];
-  
     try {
       const provider = new Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
-      const fuulManager = new ethers.Contract(address, abi, signer as unknown as ethers.Signer);
+      const fuulManager = new ethers.Contract(address, FUULabi, signer as unknown as ethers.Signer);
 
       const tx = await fuulManager.claim(claimChecks);
       
