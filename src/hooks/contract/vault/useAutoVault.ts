@@ -88,7 +88,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     if (approveLandTx) {
       if (approveStatusData) {
         if (approveLandSuccess && isCcipDeposit) {
-          setScreenLoadingStatus("Deposit Transaction in progress...")
+          setScreenLoadingStatus("Transaction in progress...")
           setIsCcipDeposit(false)
           transfer(chainId, depositAmount, 0, 0, 500000)
         }
