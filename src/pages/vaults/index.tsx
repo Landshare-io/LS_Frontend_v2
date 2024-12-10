@@ -17,15 +17,15 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import { supportChainIds } from "../../wagmi";
 import useGetPrice from "../../hooks/get-apy/useGetPrice";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
-import coinStack from "../../public/icons/coin-stacked.svg"
-import tabIcon3 from "../../public/icons/tab-icon3.svg"
-import tabIcon4 from "../../public/icons/tether.svg"
-import tabBook from "../../public/icons/tab-book.svg"
-import rotateBlue from "../../public/icons/rotate-blue.svg";
-import CloseIcon from "../../public/icons/close.svg";
-import CloseIconDark from "../../public/icons/close-dark.svg";
-import leftRight from "../../public/icons/left-right.svg";
-import IconArrowUpDown from "../../public/icons/arrow-up-down.svg";
+import coinStack from "../../../public/icons/coin-stacked.svg"
+import tabIcon3 from "../../../public/icons/tab-icon3.svg"
+import tabIcon4 from "../../../public/icons/tether.svg"
+import tabBook from "../../../public/icons/tab-book.svg"
+import rotateBlue from "../../../public/icons/rotate-blue.svg";
+import CloseIcon from "../../../public/icons/close.svg";
+import CloseIconDark from "../../../public/icons/close-dark.svg";
+import leftRight from "../../../public/icons/left-right.svg";
+import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
 import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
