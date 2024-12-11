@@ -169,7 +169,8 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
           try {
             await axios.post(`/has-premium-nft/${attachStatus}`, 
             attachStatus == 'reattach-premium-nft-house' ? {
-              hasItemId: premiumNft.hasItemId
+              hasItemId: premiumNft.hasItemId,
+              houseId: house.id
             } : {
               itemId: premiumNft.id,
               houseId: house.id,
