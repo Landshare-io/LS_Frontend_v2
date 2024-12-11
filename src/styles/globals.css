@@ -109,6 +109,8 @@ a {
 	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
 }
 
+
+
 .toggle-switch {
 	--diameter: 2rem;
 	--spacing: 0.24rem;
@@ -158,4 +160,11 @@ a {
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 5px;
+}
+
+.slick-dots li.slick-active button:before {
+	color: var(--color-text-primary) !important;
+}
+.dark .slick-dots li button:before {
+	color: gray;
 }

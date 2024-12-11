@@ -213,7 +213,7 @@ export default function ManualVault({
                     <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
-                    <div className={`text-[18px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
+                    <div className={`cursor-pointer text-[16px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {title}
                       <button className={`hidden md:flex items-center justify-center gap-[4px] text-[14px] leading-[22px] tracking-[0.28px] text-[#61CD81] shrink-0 mt-2 hidden md:block ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                         <Image src={details ? up : down} alt="detail" />
@@ -233,8 +233,7 @@ export default function ManualVault({
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{
-                      abbreviateNumber(Number(formatEther(totalStaked)))}</span>
+                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{"$" +  abbreviateNumber(Number(formatEther(totalStaked)))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
