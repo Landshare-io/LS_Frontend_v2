@@ -5,10 +5,10 @@ export const PAGES: PAGE[] = [
     name: "Vaults",
     path: "/vaults",
   },
-  // {
-  //   name: "NFT",
-  //   path: "/nft/inventory",
-  // },
+  {
+    name: "NFT",
+    path: "/nft/inventory",
+  },
   {
     name: "Real World Assets",
     path: "/rwa",
