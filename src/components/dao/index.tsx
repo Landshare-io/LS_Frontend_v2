@@ -192,9 +192,9 @@ export default function DAO() {
                 </div>
               </div>
             </div>
-            <div className="bg-secondary p-[10px] pt-[25px] md:p-[40px] space-y-4 lg:space-y-0 shadow-xl rounded-[14px]">
-              <div className={`flex justify-between pl-[10px] mlg:px-[35px] mlg:pb-[30px] items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
-                <div className="text-text-primary pr-3 font-bold text-[24px] leading-[36px]">
+            <div className="bg-secondary w-full p-[10px] pt-[25px] md:p-[40px] space-y-4 lg:space-y-0 shadow-xl rounded-[14px]">
+              <div className={`flex justify-between pb-[30px] items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
+                <div className="text-text-primary font-bold text-[24px] leading-[36px]">
                   {isViewAll ? `All Proposals` : `Latest Proposals`}
                 </div>
                 <div className="flex gap-[15px]">

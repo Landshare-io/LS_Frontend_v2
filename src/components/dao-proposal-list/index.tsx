@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import ReactLoading from "react-loading";
+import Link from "next/link";
 import { useQuery, gql } from "@apollo/client";
 import Proposal from "./proposal";
 
@@ -93,20 +94,21 @@ export default function DaoProposalsList({ count, refreshCount }: DaoProposalsLi
 
   return (
     <>
-      <div className="flex w-full flex-col px-[24px] gap-[10px]">
+      <div className="flex w-full flex-col gap-[15px]">
         {loading ? (
           <div className="flex w-full justify-center">
             <ReactLoading type="cylon" color="#61cd81" />
           </div>
         ) : (
           proposals?.map((proposal: any) => (
-            <a
+            <Link
               href={`https://snapshot.org/#/landshare.eth/proposal/${proposal.id}`}
               target="_blank"
               key={proposal.id}
+              className="w-full"
             >
               <Proposal proposal={proposal} />
-            </a>
+            </Link>
           ))
         )}
       </div>
