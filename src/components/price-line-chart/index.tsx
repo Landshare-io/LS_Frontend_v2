@@ -70,7 +70,7 @@ export default function PriceGraph({
 
   useEffect(() => {
     (async () => {
-      if (rwaGraphData.length === 0) return;
+      if (rwaGraphData.length === 0 || landGraphData.prices.length === 0) return;
 
       const now = Date.now()
       switch (type) {

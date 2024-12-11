@@ -6,10 +6,10 @@ import { Address } from "viem";
 
 export default function useAllowance(chainId: number, address: Address | undefined, spender: Address | undefined) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: RWA_CONTRACT_ADDRESS[bsc.id],
+    address: RWA_CONTRACT_ADDRESS[chainId],
     abi: RwaContractAbi,
     functionName: "allowance",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [address, spender]
   })
 

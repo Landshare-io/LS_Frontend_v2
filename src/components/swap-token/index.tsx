@@ -118,16 +118,15 @@ export default function SwapToken() {
   const landFee = useLandFee(chainId) as number;
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
   const { allTokens } = useGetAllTokens();
-  const landFeeAmount = useGetLandFee(chainId, usdcAmount) as BigNumberish;
+  const landFeeAmount = useGetLandFee(chainId, usdcAmount) as number;
   const { data: usdcAllowance } = useAllowanceOfUsdcContract(
     chainId,
     address,
     LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]
   ) as { data: BigNumberish };
-  console.log('=============usdcAllowance', usdcAllowance)
-  const { sellTokens, transactionStatus: sellTransactionStatus } =
+  const { sellTokens } =
     useSellTokens(chainId, address, landFeeAmount, RWATokenAmount);
-  const { buyTokens, transactionStatus: buyTransactionStatus } = useBuyTokens(
+  const { buyTokens } = useBuyTokens(
     chainId,
     address,
     buyLANDAmount,
@@ -141,10 +140,10 @@ export default function SwapToken() {
   console.log('buyTokenAmount', buyTokenAmount)
 
   useEffect(() => {
-    console.log(rwaPrice, RWATokenAmount, Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount)
+    console.log(buyTokenAmount.amountOfLAND)
     setUsdcAmount(Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount);
-    setBuyLANDAmount(buyTokenAmount.amountOfLAND)
-    setBuyUSDCAmount(buyTokenAmount.amountOfStableCoin)
+    setBuyLANDAmount(buyTokenAmount[1])
+    setBuyUSDCAmount(buyTokenAmount[0])
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
 
   useEffect(() => {
@@ -630,9 +629,9 @@ export default function SwapToken() {
                   placeholder="00.00 USDC"
                   readOnly
                   value={
-                    buyUSDCAmount == undefined || RWATokenAmount === 0
+                    usdcAmount == undefined || RWATokenAmount === 0
                       ? ""
-                      : formatEther(buyUSDCAmount.toString())
+                      : usdcAmount.toString()
                   }
                 />
                 {isConnected && (
@@ -1073,6 +1072,7 @@ export default function SwapToken() {
               className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px]"
               onClick={async () => {
                 setIsSTAPshow(false);
+                console.log('buyOrSell', buyOrSell)
                 buyOrSell == "Buy" ? buyTokens() : sellTokens();
               }}
               disabled={false}

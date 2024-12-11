@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import type { NextPage } from 'next';
 import Button from "../../components/common/button";
-import otcCheck from "../assets/img/icons/OTC_check.svg";
+import otcCheck from "../../../public/icons/OTC_check.svg";
 
 const OtcRejectOffer: NextPage = () => {
   const router = useRouter()

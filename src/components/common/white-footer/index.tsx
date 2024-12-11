@@ -1,6 +1,6 @@
 import React from "react";
-import Logo from "../assets/img/icons/landshare-icon.svg";
-import Landshare from "../assets/img/icons/landshare-text.svg";
+import Logo from "../../../../public/icons/landshare-icon.svg";
+import Landshare from "../../../../public/icons/landshare-text.svg";
 
 export default function WhiteFooter() {
   return (

@@ -6,10 +6,10 @@ import { Address } from "viem";
 
 export default function useGetAllowedToTransfer(chainId: number, address: Address | undefined) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: RWA_CONTRACT_ADDRESS[bsc.id],
+    address: RWA_CONTRACT_ADDRESS[chainId],
     abi: RwaContractAbi,
     functionName: "getAllowedToTransfer",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [address]
   })
 

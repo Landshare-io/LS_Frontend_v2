@@ -18,10 +18,10 @@ export default function RepairButton({ repair, isLoading, activated }: RepairBut
         disabled={!activated || isLoading}
       >
         {isLoading ? (
-          <>
+          <div className="flex justify-center items-center">
             <ReactLoading type="spin" className="me-2 mb-[4px]" width="24px" height="24px" />
             <span className="font-semibold">Loading</span>
-          </>
+          </div>
         ) : (
           'REPAIR'
         )}

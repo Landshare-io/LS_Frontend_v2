@@ -189,7 +189,8 @@ export default function NftDetails({
       return notifyError("Please increase your secondary trading limit. Please check details: https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/secondary-trading-limits");
     }
 
-    if (Number(userReward[0]) + Number(userReward[1]) + Number(userReward[2]) + Number(userReward[3]) + Number(userReward[4]) > 0) {
+    if (Number(userReward[4]) > 0.1) {
+      setDepositLoading(false);
       return notifyError("Harvest rewards before deposit");
     }
 

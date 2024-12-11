@@ -11,7 +11,7 @@ export default function stringPadder(input: string, proposalType: string): strin
     output = input !== "" ? BigInt(parseEther(input).toString()) : BigInt(0);
   }
 
-  let hexOutput = hexlify(output).slice(2);
+  let hexOutput = hexlify(output.toString()).slice(2);
 
   while (hexOutput.length < 64) {
     hexOutput = "0" + hexOutput;

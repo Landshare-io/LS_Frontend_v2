@@ -14,10 +14,10 @@ export default function useApprove(chainId: number) {
 
   async function approve(approveAddress: Address, amount: number | BigNumberish) {
     await writeContract({
-      address: RWA_CONTRACT_ADDRESS[bsc.id],
+      address: RWA_CONTRACT_ADDRESS[chainId],
       abi: RwaContractAbi,
       functionName: "approve",
-      chainId: bsc.id,
+      chainId: chainId,
       args: [approveAddress, amount]
     });
   }

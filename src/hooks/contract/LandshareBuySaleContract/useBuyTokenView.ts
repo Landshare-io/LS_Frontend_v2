@@ -14,16 +14,18 @@ export default function useBuyTokenView(chainId: number, amountOfSecurities: num
     args: [amountOfSecurities, stableCoinAddress]
   })
 
-  if (isLoading) return {
-    amountOfStableCoin: 0,
-    amountOfLAND: 0
-  }
+  if (isLoading) return [0, 0]
+  // {
+  //   amountOfStableCoin: 0,
+  //   amountOfLAND: 0
+  // }
   if (isError) {
     console.log('Fetching LandshareBuySaleContract buyTokenView error', error)
-    return {
-      amountOfStableCoin: 0,
-      amountOfLAND: 0
-    }
+    return [0, 0]
+    // {
+    //   amountOfStableCoin: 0,
+    //   amountOfLAND: 0
+    // }
   }
 
   return data
