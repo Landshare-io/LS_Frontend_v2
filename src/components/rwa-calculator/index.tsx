@@ -27,15 +27,15 @@ export default function RwaCalculator() {
   }, [dispatch]);
 
   let totalAnnualReturns =
-    ((netRentalPerMonth * 12) / Number(totalPropertyValue)) * 100 +
+    ((netRentalPerMonth * 12) / Number(formatEther(totalPropertyValue))) * 100 +
     appreciation / Number(totalPropertyValue);
 
   let annualRentReturn = (
-    ((netRentalPerMonth * 12) / Number(totalPropertyValue)) *
+    ((netRentalPerMonth * 12) / Number(formatEther(totalPropertyValue))) *
     100
   ).toFixed(2);
 
-  let annualValueGrowth = (appreciation / Number(totalPropertyValue)).toFixed(
+  let annualValueGrowth = (appreciation / Number(formatEther(totalPropertyValue))).toFixed(
     2
   );
 
