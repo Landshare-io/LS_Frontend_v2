@@ -124,9 +124,9 @@ export default function SwapToken() {
     address,
     LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]
   ) as { data: BigNumberish };
-  const { sellTokens, transactionStatus: sellTransactionStatus } =
+  const { sellTokens } =
     useSellTokens(chainId, address, landFeeAmount, RWATokenAmount);
-  const { buyTokens, transactionStatus: buyTransactionStatus } = useBuyTokens(
+  const { buyTokens } = useBuyTokens(
     chainId,
     address,
     buyLANDAmount,
