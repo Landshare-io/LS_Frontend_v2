@@ -805,7 +805,7 @@ export default function SwapToken() {
                     <Button
                       onClick={handlemodalkyc}
                       textClassName="text-[#fff]"
-                      className="w-full mt-[14px] py-[13px] px-[24px] rounded-[100px]"
+                      className="w-full mt-[14px] py-[13px] bg-landshare-green px-[24px] rounded-[100px]"
                     >
                       Verify Now
                     </Button>
@@ -820,7 +820,7 @@ export default function SwapToken() {
                     }}
                   >
                     <span
-                      className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
+                      className={`text-[14px] cursor-pointer leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
                     >
                       Get LAND Token
                     </span>
@@ -859,7 +859,7 @@ export default function SwapToken() {
                 }}
               >
                 <span
-                  className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
+                  className={`text-[14px] cursor-pointer leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
                 >
                   Get LAND Token
                 </span>

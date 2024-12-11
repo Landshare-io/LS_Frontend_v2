@@ -86,7 +86,7 @@ export default function RwaCalculator() {
               max="10000"
               value={initialInvestment}
               onChange={(e) => setInitialInvestment(Number(e.target.value))}
-              className="w-full max-w-auto md:max-w-[310px] accent-[#61CD81]"
+              className="w-full max-w-auto cursor-pointer md:max-w-[310px] accent-[#61CD81]"
             />
             <span
               className={`text-[18px] leading-[22px] text-[#61CD81] font-bold `}

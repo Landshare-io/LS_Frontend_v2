@@ -142,7 +142,7 @@ export default function FinancialSummary() {
     <>
       <div className="flex flex-col w-full gap-[24px]">
         <div className="hidden md:flex gap-[24px]">
-          <div className="flex flex-col items-start w-full max-w-[371px] px-[24px] pt-[24px] pb-[8px] bg-third rounded-[16px] gap-[8px]">
+          <div className="flex flex-col items-start justify-center w-full max-w-[371px] px-[24px] pt-[24px] pb-[8px] bg-third rounded-[16px] gap-[8px]">
             <div className="flex justify-start flex-row gap-8 w-full">
               <div className="flex flex-col gap-[10px]">
                 <span className="font-medium text-[14px] leading-[22px] text-text-secondary">
