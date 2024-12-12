@@ -108,13 +108,13 @@ export default function YieldUpgrade({
     "Generator": `Reduce the power repair cost by ${item.buyReward[2] * 100}.`
   };
   const colors = [
-    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f]",
-    "border-[2px] border-[#61cd81] bg-[#61cd81]",
-    "border-[2px] border-[#f1b258] bg-[#f1b258]",
-    "border-[2px] border-[#40bef6] bg-[#40bef6]",
-    "border-[2px] border-[#0b6c96] bg-[#0b6c96]",
-    "border-[2px] border-[#f9c710] bg-[#f9c710]",
-    "border-[2px] border-[#1eceae] bg-[#1eceae]",
+    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f] disabled:bg-[#8f8f8f]",
+    "border-[2px] border-[#61cd81] bg-[#61cd81] disabled:bg-[#61cd81]",
+    "border-[2px] border-[#f1b258] bg-[#f1b258] disabled:bg-[#f1b258]",
+    "border-[2px] border-[#40bef6] bg-[#40bef6] disabled:bg-[#40bef6]",
+    "border-[2px] border-[#0b6c96] bg-[#0b6c96] disabled:bg-[#0b6c96]",
+    "border-[2px] border-[#f9c710] bg-[#f9c710] disabled:bg-[#f9c710]",
+    "border-[2px] border-[#1eceae] bg-[#1eceae] disabled:bg-[#1eceae]",
   ];
 
   const customModalStyles = {
