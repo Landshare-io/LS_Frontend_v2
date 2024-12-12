@@ -39,7 +39,7 @@ export default function useHandleHouse(
   const { disconnect } = useDisconnect();
   const { userData, getUserData } = useGetUserData()
   const { notifyError, notifySuccess } = useGlobalContext()
-  const { data: isApprovedForAll } = useIsApprovedForAll(address)
+  const { data: isApprovedForAll } = useIsApprovedForAll(chainId, address)
   const { setApprovalForAll, data: setApprovalForAllTx } = useSetApprovalForAll()
   const { approve, data: approveTx } = useApprove()
   const { userReward } = useGetResource()
@@ -263,7 +263,7 @@ export default function useHandleHouse(
                 hosueId: house.id,
                 setSale: false
               })
-              setApprovalForAll(false);
+              setApprovalForAll(chainId, false);
 
             } catch (error: any) {
               console.log("Setting off-sale error", error);
@@ -296,7 +296,7 @@ export default function useHandleHouse(
           if (isApprovedForAll) {
             await setHouseToOnSale();
           } else {
-            setApprovalForAll(true);
+            setApprovalForAll(chainId, true);
           }
         } catch (error: any) {
           setOnSaleLoading(false);
@@ -312,7 +312,7 @@ export default function useHandleHouse(
 
   const setHouseToOnSale = async () => {
     try {
-      approve(ADMIN_WALLET_ADDRESS, house.houseId);
+      approve(chainId, ADMIN_WALLET_ADDRESS, house.houseId);
     } catch (error: any) {
       console.log("Setting on-sale error", error);
       setSaleOpen(false);
