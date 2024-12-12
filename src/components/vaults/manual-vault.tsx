@@ -50,7 +50,7 @@ export default function ManualVault({
   const chainId = useChainId()
   const { isConnected, address } = useAccount();
   const { switchChain } = useSwitchChain()
-
+  
   const { data: totalStaked, isLoading: totalStakedLoading } = useTotalStaked(chainId) as { data: BigNumberish, isLoading: boolean }
   const { data: userInfo, isLoading: userInfoLoading } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
   const { data: pendingLand, isLoading: pendingLandLoading } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
@@ -73,12 +73,16 @@ export default function ManualVault({
   const isVaultsLoading = false // totalStakedLoading || userInfoLoading || pendingLandLoading
 
   function handlePercents(percent: number) {
-    if (depositing) {
-      const bal = BigInt(landBalance) * BigInt(percent) / BigInt(100)
-      setInputValue(formatEther(bal))
+    if (landBalance == 0) {
+      notifyError("You don't have enough balance to perform this action.")
     } else {
-      const bal = BigInt(userInfo[0]) * BigInt(percent) / BigInt(100)
-      setInputValue(formatEther(bal))
+      if (depositing) {
+        const bal = BigInt(landBalance) * BigInt(percent) / BigInt(100)
+        setInputValue(formatEther(bal))
+      } else {
+        const bal = BigInt(userInfo[0]) * BigInt(percent) / BigInt(100)
+        setInputValue(formatEther(bal))
+      }
     }
   }
 
@@ -99,7 +103,7 @@ export default function ManualVault({
     depositVault(amountLS);
   };
 
-  async function updateStatus() {
+  async function updateStatus() {  
     try {
       if (!isConnected) return;
       if (userInfo[0]) {

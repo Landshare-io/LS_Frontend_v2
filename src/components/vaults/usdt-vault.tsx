@@ -102,7 +102,6 @@ export default function Usdtvault({
       setTVL(formatEther(percentageLPInVault))
       setLSRWALPValue(Number(BigInt(totalValueInLP) / BigInt(LSRWALPTotalSupply)))
     }
-
   }
 
   function calculateAPRLSRWA() {
@@ -121,11 +120,14 @@ export default function Usdtvault({
   }, [TVL, price])
 
   function handlePercents(percent: number) {
-    if (depositing) {
-      setInputValue(formatEther(BigInt(balance) * BigInt(percent) / BigInt(100)))
+    if (balance == 0) {
+      notifyError("You don't have enough balance to perform this action.")
     } else {
-
-      setInputValue(formatEther(BigInt(userBalance[0]) * BigInt(percent) / BigInt(100)))
+      if (depositing) {
+        setInputValue(formatEther(BigInt(balance) * BigInt(percent) / BigInt(100)))
+      } else {
+        setInputValue(formatEther(BigInt(userBalance[0]) * BigInt(percent) / BigInt(100)))
+      } 
     }
   }
 
@@ -332,14 +334,13 @@ export default function Usdtvault({
                       onChange={(e) =>
                         setInputValue(
                           e.target.value
-                            .replace(/[^.\d]/g, "")
-                            .replace(/^(\d*\.?)|(\d*)\.?/g, "$1$2")
-                            .replace(/[^\d.]/g, "")
-                            .replace(/(\..*)\./g, "$1")
-                            .replace(/^(\d+\.\d{18})\d+$/g, "$1")
+                          .replace(/[^.\d]/g, "")
+                          .replace(/^(\d*\.?)|(\d*)\.?/g, "$1$2")
+                          .replace(/[^\d.]/g, "")
+                          .replace(/(\..*)\./g, "$1")
+                          .replace(/^(\d+\.\d{18})\d+$/g, "$1")
                         )
                       }
-
                     />
                     <div className="flex w-full justify-between items-center gap-[8px] mt-[12px]">
                       <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
