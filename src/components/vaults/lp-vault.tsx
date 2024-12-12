@@ -181,7 +181,7 @@ export default function LpVault({
 
 
     if (isConnected) {
-      const depositBalance = userInfo[0]
+      const depositBalance = userInfo[1]
       setDepositBalanceLP(depositBalance);
       const rewardsLP = pendingLand
       setReward(rewardsLP);
