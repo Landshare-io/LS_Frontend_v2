@@ -12,12 +12,12 @@ export default function useApprove() {
     writeContract
   } = useWriteContract();
 
-  async function approve(approveAddress: Address, amount: number | BigNumberish) {
+  async function approve(chainId: number, approveAddress: Address, amount: number | BigNumberish) {
     await writeContract({
-      address: HOUSE_NFT_CONTRACT,
+      address: HOUSE_NFT_CONTRACT[chainId],
       abi: HouseNft,
       functionName: "approve",
-      chainId: bsc.id,
+      chainId: chainId,
       args: [approveAddress, amount]
     });
   }
