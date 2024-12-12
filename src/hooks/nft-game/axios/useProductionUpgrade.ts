@@ -22,37 +22,40 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
 
   useEffect(() => {
     (async () => {
-      if (sendTransactionTx) {
-        const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-
-        if (receipt.status) {
-          const { data } = await axios.post('/has-item/buy-item-with-land', {
-            houseId: house.id,
-            itemId: handymanItem.id,
-            hasItemId: handymanItem.hasItemId,
-            txHash: receipt.transactionHash,
-            blockNumber: receipt.blockNumber,
-            nonce: transactionNonce
-          })
-
-          setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
-          refetchLandBalance
-          setHouse((prevState: any) => ({
-            ...prevState,
-            productionUpdgrades: data.productionUpdgrades,
-            lastDurability: data.lastDurability,
-            multiplier: data.multiplier,
-            maxDurability: data.maxDurability
-          }))
-          setIsLoading({ type: -1, loading: false });
-          notifySuccess(`${handymanItem.name} purchased successfully`)
-        } else {
-          setIsLoading({ type: -1, loading: false });
-          notifyError("Buy Addon Error");
+      try {
+        if (sendTransactionTx) {
+          const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+  
+          if (receipt.status) {
+            const { data } = await axios.post('/has-item/buy-item-with-land', {
+              houseId: house.id,
+              itemId: handymanItem.id,
+              hasItemId: handymanItem.hasItemId,
+              txHash: receipt.transactionHash,
+              blockNumber: receipt.blockNumber,
+              nonce: transactionNonce
+            })
+  
+            setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
+            refetchLandBalance
+            setHouse((prevState: any) => ({
+              ...prevState,
+              productionUpdgrades: data.productionUpdgrades,
+              lastDurability: data.lastDurability,
+              multiplier: data.multiplier,
+              maxDurability: data.maxDurability
+            }))
+            setIsLoading({ type: -1, loading: false });
+            notifySuccess(`${handymanItem.name} purchased successfully`)
+          } else {
+            setIsLoading({ type: -1, loading: false });
+            notifyError("Buy Addon Error");
+          }
         }
+      } catch (error) {
+        setIsLoading({ type: -1, loading: false });
+        notifyError("Buy Addon Error");
       }
-      
-      
     })()
   }, [sendTransactionTx])
 
