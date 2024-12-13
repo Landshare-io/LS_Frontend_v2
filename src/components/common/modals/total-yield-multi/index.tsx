@@ -47,7 +47,7 @@ export default function TotalYieldMultiModal({
     }
   };
 
-  if (house.yieldUpgrades.length > 0) {
+  if (house?.yieldUpgrades && house?.yieldUpgrades.length > 0) {
     for (const item of yieldUpdgradesData) {
       const yieldItem = house.yieldUpgrades.filter((yItem: any) => yItem.name == item.title && yItem.specialButtonName == '')[0]
       if (item.title == 'Garden') {
