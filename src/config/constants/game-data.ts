@@ -86,7 +86,7 @@ export const yieldUpdgradesData = [
   }
 ];
 
-export const productionUpdgradesData = [
+export const productionUpgradesData = [
   {
     id: 0,
     title: "Lumber Toolshed",
