@@ -10,7 +10,7 @@ import {
   validateItemDateWithDeadTime,
   validateItemDate
 } from "../../../utils/helpers/validator";
-import { productionUpdgradesData } from "../../../config/constants/game-data";
+import { productionUpgradesData } from "../../../config/constants/game-data";
 import { PREMIUM_NFT_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 let premiumNftsState: any[] = []
@@ -165,7 +165,7 @@ export default function useGetUserGameItem(house: any, chainId: number, address:
     const harvester = house.productionUpgrades.filter((pItem: any) => pItem.name == "Harvester")[0].activeTime
   
     const tempFortItems: any[] = []
-    productionUpdgradesData.filter(item => item.sortingId === 4).map((fort: any) => {
+    productionUpgradesData.filter(item => item.sortingId === 4).map((fort: any) => {
       if (validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == fort.title)[0], oneDayTime)) {
         tempFortItems.push({
           ...fort,
