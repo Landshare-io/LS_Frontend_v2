@@ -4,7 +4,7 @@ import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
 import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
-export const IS_TEST_MODE = true
+export const IS_TEST_MODE = false
 export const MAJOR_WORK_CHAIN = IS_TEST_MODE ? hardhat : bsc
 export const BOLD_INTER_TIGHT = Inter_Tight({
   weight: "700",
