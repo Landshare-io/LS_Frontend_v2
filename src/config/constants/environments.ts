@@ -4,7 +4,7 @@ import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
 import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
-export const IS_TEST_MODE = false
+export const IS_TEST_MODE = true
 export const MAJOR_WORK_CHAIN = IS_TEST_MODE ? hardhat : bsc
 export const BOLD_INTER_TIGHT = Inter_Tight({
   weight: "700",
@@ -45,7 +45,10 @@ export const PROVIDERS: {
   31337: getDefaultProvider(PROVIDER_URLS['31337'])
 }
 export const ADDRESS_BOOK_ID = 731780 // 18c3953f93f00ab7003571dbd4e0a915
-export const HOUSE_NFT_CONTRACT = "0x08116b6B5b561e881b0B980ddCd12cFaB356537b" as Address
+export const HOUSE_NFT_CONTRACT: MULTI_CHAIN_CONTRACT_TYPE = {
+  56: "0x08116b6B5b561e881b0B980ddCd12cFaB356537b",
+  31337: "0x457cCf29090fe5A24c19c1bc95F492168C0EaFdb"
+}
 export const LAND_TOKEN_V1_CONTRACT_ADDRESS = "0x9D986A3f147212327Dd658F712d5264a73a1fdB0" as Address
 export const LP_TOKEN_V1_CONTRACT_ADDRESS = "0x468CDe4aD48cbAfA3cDfb68Fd9f2c114DDfE6c08" as Address
 export const PSC_ROUTER_CONTRACT_ADDRESS = "0x10ED43C718714eb63d5aA57B78B54704E256024E" as Address
@@ -83,7 +86,11 @@ export const LIVE_COIN_API_KEY= '95ce49d3-3e89-475d-b61e-6638a002b1fe'
 export const ZERO_ID_WIDGET_API_KEY = '10000000-0000-0000-0000-7f9a2af16a1c'
 export const ZERO_ID_WIDGET_VERIFIER_URL = 'https://landshare-zeroid-verdict.onrender.com/verdict'
 export const ZERO_ID_WIDGET_ENV = 'zeroid'
-export const ADMIN_WALLET_ADDRESS = "" as Address
+export const ADMIN_WALLET_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
+  56: "0x692d606069f7798fAe4FA51117dA418EFa15A2BA" as Address,
+  97: "0xC0f5Ef4748BCC96D3f7270FE88DBed1396C7B8B8",
+  31337: "0x70997970c51812dc3a010c7d01b50e0d17dc79c8"
+}
 export const PREMIUM_NFT_CONTRACT_ADDRESS: Record<string, MULTI_CHAIN_CONTRACT_TYPE> = {
   "Porcelain Tile": {
     56: '0x7E96B1A21Cc702D495eD9c430A4B87CB1e163ab3' as Address,
