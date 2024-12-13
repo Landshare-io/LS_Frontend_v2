@@ -135,7 +135,7 @@ export default function MarketplaceItem({
         <div>
           <div className="flex justify-between items-end pb-2">
             <div className="w-[50%] text-[15px] font-semibold flex justify-between pr-1 dark:text-text-secondary">
-              <span>Durability</span>
+              <span className="text-[#0b6c96] text-[14px] font-semibold dark:text-text-secondary">Durability</span>
             </div>
             <ReparingStatus
               max={product.maxDurability}
@@ -149,53 +149,51 @@ export default function MarketplaceItem({
             {(Number(product.tokenHarvestLimit) + Number(product.extendedBalance) - Number(product.totalHarvestedToken)).toFixed(2)}
           </div>
         </div>
-        <div className="flex pt-3 w-full justify-end market-buy">
-          <div className="flex px-[5px] active items-center relative border-0">
-            <div className="block text-[14px] text-black-700 items-end justify-center">
-              <div>
-                <span className="text-[14px] font-semibold">
-                  {product.salePrice}
-                </span>
-                <span className="text-[10px] font-semibold ms-1"> LAND</span>
-              </div>
-              <div>
-                <span className="text-[12px] font-normal">
-                  ${(product.salePrice * Number(tokenPriceUSD)).toFixed(2)}
-                </span>
-                <span className="text-[10px] font-normal ml-1">USD</span>
-              </div>
+        <div className="flex px-[5px] pt-3 justify-between items-center">
+          <div className="block text-[14px] text-[#000000b3] items-end justify-center">
+            <div>
+              <span className="text-[14px] font-semibold">
+                {product.salePrice}
+              </span>
+              <span className="text-[10px] font-semibold ms-1"> LAND</span>
             </div>
-            <Button
-              onClick={buyProduct}
-              disabled={
-                isLoading ||
-                product.seller.toLowerCase() == address?.toString().toLowerCase() ||
-                product.state == 1
-              }
-              className={`w-[115px] bg-[#8f8f8f] border-[2px] border-[#8f8f8f] flex items-center justify-center absolute 
-              ${product.seller.toLowerCase() == address?.toString().toLowerCase() ||
-                  product.state == 1
-                  ? "!bg-[#0B6C96] !border-[#0B6C96]"
-                  : ""
-                }`}
-              textClassName={`text-[16px] ${BOLD_INTER_TIGHT.className}`}
-            >
-              {isLoading ? (
-                <ReactLoading
-                  type="spin"
-                  className="me-2 button-spinner"
-                  width="24px"
-                  height="24px"
-                />
-              ) : product.state == 1 ? (
-                "SOLD"
-              ) : product.seller.toLowerCase() == address?.toString().toLowerCase() ? (
-                "OWNED"
-              ) : (
-                "BUY"
-              )}
-            </Button>
+            <div>
+              <span className="text-[12px] font-normal">
+                ${(product.salePrice * Number(tokenPriceUSD)).toFixed(2)}
+              </span>
+              <span className="text-[10px] font-normal ml-1">USD</span>
+            </div>
           </div>
+          <Button
+            onClick={buyProduct}
+            disabled={
+              isLoading ||
+              product.seller.toLowerCase() == address?.toString().toLowerCase() ||
+              product.state == 1
+            }
+            className={`w-[115px] h-[40px] text-[#fff] bg-[#0B6C96] border-[2px] border-[#0B6C96] flex items-center justify-center rounded-[24px] 
+            ${product.seller.toLowerCase() == address?.toString().toLowerCase() ||
+                product.state == 1
+                ? "!bg-[#8f8f8f] !border-[#8f8f8f]"
+                : ""
+              }`}
+            textClassName={`text-[16px] ${BOLD_INTER_TIGHT.className}`}
+          >
+            {isLoading ? (
+              <ReactLoading
+                type="spin"
+                className="me-2 button-spinner"
+                width="24px"
+                height="24px"
+              />
+            ) : product.state == 1 ? (
+              "SOLD"
+            ) : product.seller.toLowerCase() == address?.toString().toLowerCase() ? (
+              "OWNED"
+            ) : (
+              "BUY"
+            )}
+          </Button>
         </div>
       </div>
     </div>
