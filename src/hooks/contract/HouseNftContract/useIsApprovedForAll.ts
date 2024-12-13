@@ -9,7 +9,7 @@ export default function useIsApprovedForAll(chainId: number, address: Address | 
     address: HOUSE_NFT_CONTRACT[chainId],
     abi: HouseNft,
     functionName: "isApprovedForAll",
-    args: [address, ADMIN_WALLET_ADDRESS],
+    args: [address, ADMIN_WALLET_ADDRESS[chainId]],
     chainId: chainId
   })
 
