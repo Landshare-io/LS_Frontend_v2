@@ -16,7 +16,7 @@ export default function useSetApprovalForAll() {
       abi: HouseNft,
       functionName: "setApprovalForAll",
       chainId: chainId,
-      args: [ADMIN_WALLET_ADDRESS, value]
+      args: [ADMIN_WALLET_ADDRESS[chainId], value]
     })
   }
 
