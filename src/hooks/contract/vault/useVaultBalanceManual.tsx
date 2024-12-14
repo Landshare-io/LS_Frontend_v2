@@ -136,9 +136,9 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
     withdraw(0, amount)
   }
 
-  const approveVault = () => {
+  const approveVault = (amount: BigNumberish) => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[chainId], "1000000000000000000000000000000")
+    approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[chainId], amount)
     updateStatus()
   }
 
