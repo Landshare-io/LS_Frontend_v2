@@ -50,6 +50,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
             refetchLandToken()
             refetchAllowanceOfLandTokenOfVault()
             refetchAllowanceOfLandTokenOfMasterChef()
+            refetchUserInfo()
             setScreenLoadingStatus("Deposit Transaction success")
           } else {
             setScreenLoadingStatus("Transaction failed")
