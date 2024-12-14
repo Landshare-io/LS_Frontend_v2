@@ -147,6 +147,11 @@ export default function ManualVault({
     updateStatus()
   }, [inputValue]);
 
+  useEffect(() => {
+    const approvedLANDETH = formatEther(landAllowance);
+    setIsApprovedLandStake(Number(inputValue) > 0 && Number(approvedLANDETH) >= Number(inputValue));
+  }, [landAllowance])
+
   const openCalcModal = async () => {
     setShowModal(true)
     setIsLPVault(false)
@@ -313,7 +318,7 @@ export default function ManualVault({
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => {
                               if (inputValue && Number(inputValue) > Number(0)) {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
@@ -343,13 +348,13 @@ export default function ManualVault({
                   <div className="hidden md:block">
                     <div className="flex w-full mt-[20px]">
                       <div 
-                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(true)}
                       >
                         Deposit
                       </div>
                       <div 
-                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(false)}
                       >
                         Withdraw
@@ -394,7 +399,7 @@ export default function ManualVault({
                               onClick={() => {
                                 if (chainId == MAJOR_WORK_CHAIN.id) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
