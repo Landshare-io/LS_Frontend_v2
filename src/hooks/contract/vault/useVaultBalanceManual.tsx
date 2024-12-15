@@ -18,7 +18,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
   const { setScreenLoadingStatus } = useGlobalContext()
   const { deposit, data: depositTx } = useDeposit(chainId)
   const { withdraw, data: withdrawTx } = useWithdraw(chainId)
-  const { approve, data: approveTx } = useApprove()
+  const { approve, data: approveTx, isError: isApproveError } = useApprove()
   const { data: landTokenV2Balance, refetch: refetchLandToken } = useBalanceOfLandToken({ chainId, address }) as {
     data: BigNumberish,
     refetch: Function
@@ -98,7 +98,9 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
 
   useEffect(() => {
     try {
-      if (approveTx) {
+      if (isApproveError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
             refetchAllowanceOfLandTokenOfVault()
@@ -120,7 +122,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [approveTx, approveStatusData, approveSuccess])
+  }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
   const depositVault = (amount: BigNumberish) => {
     if (Number(formatEther(amount)) > Number(formatEther(landTokenV2Balance))) {
