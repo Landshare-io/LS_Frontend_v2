@@ -139,7 +139,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isHarvestError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
   }, [harvestTx, harvestStatusData, harvestSuccess, isHarvestError])
@@ -164,7 +165,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isWithdrawAllError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
   }, [withdrawAllTx, withdrawAllStatusData, withdrawAllSuccess, isWithdrawAllError])
@@ -199,7 +201,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isTransferError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
   }, [transferTx, transferStatusData, transferSuccess])
@@ -229,7 +232,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isDepositError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
   }, [depositTx, depositStatusData, depositSuccess, isDepositError])
@@ -259,7 +263,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isWithdrawError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
   }, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawError])

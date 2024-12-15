@@ -49,6 +49,7 @@ import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import quickSwap from "../../../public/icons/quickswap-logo.svg"
 import smallicon from "../../../public/icons/rotate-black.svg"
 import 'react-loading-skeleton/dist/skeleton.css';
+import Tooltip from "../common/tooltip";
 
 interface AutoVaultProps {
   title: string
@@ -164,7 +165,7 @@ export default function AutoVault({
       setInputValue("");
       
       setIsDepositing(true)
-      await depositVault(amountLS)
+      depositVault(amountLS)
       setIsDepositing(false)
     } catch (err) {
       console.log('error', err)
@@ -401,8 +402,19 @@ export default function AutoVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                      {chainId != MAJOR_WORK_CHAIN.id ? ccipVaultBalance?.autoReward ?? 0 : vaultBalance?.autoReward ?? 0}</span>
+                      {chainId != MAJOR_WORK_CHAIN.id ? ccipVaultBalance?.autoReward ?? 0 : 
+                      parseFloat(formatEther(vaultBalance?.autoReward || 0)) > 0 &&
+                      parseFloat(formatEther(vaultBalance?.autoReward || 0)) < 0.0001 ? (
+                        <Tooltip content={`Full number: ${formatEther(vaultBalance?.autoReward || 0)}`}>
+                          <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                            {formatEther(vaultBalance?.autoReward || 0).substr(0, 5)}
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                          {formatEther(vaultBalance?.autoReward || 0).substr(0, 5)}
+                        </span>
+                      )}
                   </div>
                 </div>
               </div>
