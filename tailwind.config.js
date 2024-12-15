@@ -31,7 +31,7 @@ module.exports = {
         "button-third": "var(--color-button-third)",
         "button-text-primary": "var(--color-button-text-primary)",
         "button-text-secondary": "var(--color-button-text-secondary)",
-        "landshare-green": "var(--Landshare-green)"
+        "primary-green": "var(--primary-green)"
       },
       screens: {
         xs: "375px",

@@ -36,12 +36,12 @@ export default function HomeRwaHeroSection() {
               </p>
               <div className="hidden md:flex gap-[16px]">
                 <Link href="https://dashboard.landshare.io">
-                  <Button  className="bg-landshare-green text-[#fff] px-[24px] py-[13px] rounded-[100px]">
+                  <Button  className="bg-primary-green text-[#fff] px-[24px] py-[13px] rounded-[100px]">
                     Buy Now
                   </Button>
                 </Link>
                 <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa">
-                  <Button className="px-[24px] py-[13px] rounded-[100px] border-landshare-green hover:bg-landshare-green" textClassName="dark:text-[#fff]" outlined>Learn More</Button>
+                  <Button className="px-[24px] py-[13px] rounded-[100px] border-primary-green hover:bg-primary-green" textClassName="dark:text-[#fff]" outlined>Learn More</Button>
                 </Link>
               </div>
             </div>
@@ -51,10 +51,10 @@ export default function HomeRwaHeroSection() {
             </div>
             <div className="mt-[20px] justify-around w-full flex flex-col gap-2 md:hidden">
               <Link href="/RWA">
-                <Button className="rounded-[100px] py-[13px] w-full bg-landshare-green" textClassName="text-[#fff]">Buy Now</Button>
+                <Button className="rounded-[100px] py-[13px] w-full bg-primary-green" textClassName="text-[#fff]">Buy Now</Button>
               </Link>
               <a href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa">
-                <Button className="rounded-[100px] py-[13px] w-full border-landshare-green hover:bg-landshare-green" textClassName="dark:text-[#fff]" outlined>Learn More</Button>
+                <Button className="rounded-[100px] py-[13px] w-full border-primary-green hover:bg-primary-green" textClassName="dark:text-[#fff]" outlined>Learn More</Button>
               </a>
             </div>
           </div>
@@ -71,12 +71,12 @@ export default function HomeRwaHeroSection() {
               </p>
               <div className="hidden md:flex gap-[16px]">
                 <Link href="https://linktr.ee/landshareio">
-                  <Button  className="text-[#fff] px-[24px] bg-landshare-green py-[13px] rounded-[100px]">
+                  <Button  className="text-[#fff] px-[24px] bg-primary-green py-[13px] rounded-[100px]">
                     Link Tree
                   </Button>
                 </Link>
                 <Link href="https://t.me/landshare">
-                  <Button className="px-[24px] py-[13px] rounded-[100px] border-landshare-green hover:bg-landshare-green" textClassName="dark:text-[#fff]" outlined>Telegram Community</Button>
+                  <Button className="px-[24px] py-[13px] rounded-[100px] border-primary-green hover:bg-primary-green" textClassName="dark:text-[#fff]" outlined>Telegram Community</Button>
                 </Link>
               </div>
             </div>
@@ -86,10 +86,10 @@ export default function HomeRwaHeroSection() {
             </div>
             <div className="mt-[20px] justify-around flex-col w-full flex gap-2 md:hidden">
               <Link href="https://linktr.ee/landshareio">
-                <Button className="rounded-[100px] py-[13px] w-full bg-landshare-green" textClassName="text-[#fff]">Link Tree</Button>
+                <Button className="rounded-[100px] py-[13px] w-full bg-primary-green" textClassName="text-[#fff]">Link Tree</Button>
               </Link>
               <Link href="https://t.me/landshare">
-                <Button className="rounded-[100px] py-[13px] w-full border-landshare-green hover:bg-landshare-green" textClassName="dark:text-[#fff]" outlined>Telegram</Button>
+                <Button className="rounded-[100px] py-[13px] w-full border-primary-green hover:bg-primary-green" textClassName="dark:text-[#fff]" outlined>Telegram</Button>
               </Link>
             </div>
           </div>

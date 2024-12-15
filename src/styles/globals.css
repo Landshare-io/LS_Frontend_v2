@@ -31,7 +31,7 @@
     --title-text-color: #0a0a0a!important;
     --row-title-color: #0a0a0a!important;
     --row-content-color: #0a0a0a!important;
-	--Landshare-green: #61CD81;
+	--primary-green: #61CD81;
   }
 
   .dark,
@@ -53,7 +53,7 @@
     --title-text-color: #f1f1f1!important;
     --row-title-color: #f1f1f1!important;
     --row-content-color: #f1f1f1!important;
-	--Landshare-green: #61CD81;
+	--primary-green: #61CD81;
   }
 }
 

@@ -219,17 +219,18 @@ export default function InvestmentExplain() {
         </div>
         <div className="w-full mt-3">
           <a href="https://dashboard.landshare.io">
-            <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors">
+            <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors">
               <p
                 className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
               >
                 Manual Verification
               </p>
             </Button>
+            <p className="text-xs text-text-secondary text-center mt-1">Recommended for advanced users and large investors</p>
           </a>
           <div onClick={handleLinkClick}>
             <Button
-              className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
+              className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
               disabled
             >
               <p
@@ -238,6 +239,7 @@ export default function InvestmentExplain() {
                 ZeroID Verification
               </p>
             </Button>
+            <p className="text-xs text-text-secondary text-center mt-1">Quick verification - 5 minutes or less!</p>
           </div>
         </div>
       </Modal>
