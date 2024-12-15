@@ -98,10 +98,10 @@ export default function Footer() {
 
   return (
     <>
-      <div className="bg-third dark:bg-primary px-[20px] mlg:px-[40px] pt-[80px] lg:px-[120px] border-top-2 border-primary less-padding">
+      <div className="bg-third dark:bg-primary px-[20px] mlg:px-[40px] pt-[80px] border-top-2 border-primary less-padding">
         <div className="flex justify-between items-start flex-col md:items-center lg:flex-row justify-around gap-[20px] lg:flex-row lg:gap-[80px] xxl:gap-[200px] pb-[40px]">
-          <div className="flex flex-col gap-[20px] basis-[25%] grow-[0.6]">
-            <div className="flex flex-row-reverse justify-between items-center gap-[20px] lg:flex-col">
+          <div className="flex flex-col gap-[20px] basis-[25%] grow-[0.6] ">
+            <div className="flex flex-row-reverse justify-between items-center gap-[20px] min-w-[260px] lg:flex-col">
               <div className="flex w-full justify-between">
                 <Logo showLogoText logoClassName="!w-[52.3px] !h-[54.4px]" />
                 <div className="items-end">
@@ -152,8 +152,8 @@ export default function Footer() {
               </a>
             </div>
           </div>
-          <div className="w-full grid grid-cols-2 gap-y-[25px] mlg:gap-[20px] mlg:max-w-[600px] xl:basis-[50%] xl:grid-cols-4 xl:justify-between grow-[2]">
-            <div className="p-0 flex flex-col gap-[16px]">
+          <div className="w-full grid grid-cols-2 gap-y-[25px] mlg:gap-[20px] md:max-w-[600px] md:basis-[50%] md:grid-cols-4 md:justify-between grow-[2]">
+            <div className="p-0 flex flex-col gap-[16px] o">
               <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
                 Company
               </span>
@@ -178,7 +178,7 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-            <div className="p-0 flex flex-col gap-[16px]">
+            <div className="p-0 flex flex-col gap-[16px] o">
               <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
                 Useful Links
               </span>
@@ -204,7 +204,7 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-            <div className="p-0 flex flex-col gap-[16px]">
+            <div className="p-0 flex flex-col gap-[16px] o">
               <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
                 Token Trackers
               </span>
@@ -229,7 +229,7 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-            <div className="p-0 flex flex-col gap-[16px]">
+            <div className="p-0 flex flex-col gap-[16px] o">
               <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
                 Exchanges
               </span>
