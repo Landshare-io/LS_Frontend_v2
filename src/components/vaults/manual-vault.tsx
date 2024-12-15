@@ -5,6 +5,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { bsc } from "viem/chains";
 import Image from "next/image";
 import Collapse from "../common/collapse";
+import Tooltip from "../common/tooltip";
 import ConnectWallet from "../connect-wallet";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
@@ -200,7 +201,7 @@ export default function ManualVault({
           ) : (
             <>
               <div className="flex flex-col justify-start p-0 gap-[16px]">
-                <div className="flex gap-[8px] hidden">
+                <div className="hidden gap-[8px]">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
                     <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
@@ -218,13 +219,13 @@ export default function ManualVault({
                   </button>
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                  <div className="w-[90px] h-[90px] rounded-[1000px] relative border-primary border-[6px] rounded-[1000px]">
+                  <div className="w-[90px] h-[90px] rounded-[1000px] relative border-primary border-[6px]">
                     <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`text-[18px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {title}
-                      <button className={`hidden md:flex items-center justify-center gap-[4px] text-[14px] leading-[22px] tracking-[0.28px] text-[#61CD81] shrink-0 mt-2 hidden md:block ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
+                      <button className={`hidden md:flex items-center justify-center gap-[4px] text-[14px] leading-[22px] tracking-[0.28px] text-[#61CD81] shrink-0 mt-2 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                         <Image src={details ? up : down} alt="detail" />
                       </button>
                     </div>
@@ -260,9 +261,20 @@ export default function ManualVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                      {formatEther(pendingLand || 0).substr(0, 5)}
-                    </span>
+                    {
+                      parseFloat(formatEther(pendingLand || 0)) > 0 &&
+                      parseFloat(formatEther(pendingLand || 0)) < 0.0001 ? (
+                        <Tooltip content={`Full number: ${formatEther(pendingLand || 0)}`}>
+                          <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                            {formatEther(pendingLand || 0).substr(0, 5)}
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                          {formatEther(pendingLand || 0).substr(0, 5)}
+                        </span>
+                      )
+                    }
                   </div>
                 </div>
                 <div className="block md:hidden">
