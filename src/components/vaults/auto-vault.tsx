@@ -610,20 +610,20 @@ export default function AutoVault({
                   <div className="flex items-start p-0 gap-[8px] w-full rounded-[12px] bg-primary dark:bg-secondary mt-[24px]" style={{ marginTop: "24px" }}>
                     <div className="flex w-full flex-col items-center justify-center p-[16px]">
                       <div className="w-8 h-8 rounded-full bg-third">
-                        <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"><Image className="sub-container-image" src={viewContract} alt="" /></a>
+                        <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-landshare-token-land"><Image className="sub-container-image" src={viewContract} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
                         <span>
                           <a 
                             className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
-                            href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"
+                            href="https://docs.landshare.io/quickstart-guides/how-to-stake-landshare-token-land"
                           >
                             Vault Guide
                           </a>
                         </span>
                         <a
                           className={`${BOLD_INTER_TIGHT.className} text-[12px] leading-[20px] tracking-[0.24px] text-[#61CD81]`}
-                          href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"
+                          href="https://docs.landshare.io/quickstart-guides/how-to-stake-landshare-token-land"
                         >
                           View Details
                         </a>
