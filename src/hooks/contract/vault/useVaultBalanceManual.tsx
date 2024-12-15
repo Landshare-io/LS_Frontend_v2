@@ -16,7 +16,7 @@ import { AUTO_VAULT_V3_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../
 
 export default function useVaultBalanceManual(chainId: number, address: Address | undefined, updateStatus: Function) {
   const { setScreenLoadingStatus } = useGlobalContext()
-  const { deposit, data: depositTx } = useDeposit(chainId)
+  const { deposit, data: depositTx, isError: isDepositError } = useDeposit(chainId)
   const { withdraw, data: withdrawTx, isError: isWithdrawError } = useWithdraw(chainId)
   const { approve, data: approveTx, isError: isApproveError } = useApprove()
   const { data: landTokenV2Balance, refetch: refetchLandToken } = useBalanceOfLandToken({ chainId, address }) as {
@@ -44,7 +44,9 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
 
   useEffect(() => {
     try {
-      if (depositTx) {
+      if (isDepositError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (depositTx) {
         if (depositStatusData) {
           if (depositSuccess) {
             refetchLandToken()
@@ -67,7 +69,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
         setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [depositTx, depositStatusData, depositSuccess])
+  }, [depositTx, depositStatusData, depositSuccess, isDepositError])
 
   useEffect(() => {
     try {
