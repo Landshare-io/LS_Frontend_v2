@@ -16,12 +16,11 @@ import {
 } from "../../config/constants/environments";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
+import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useAutoLandV3 from "../../hooks/contract/AutoVaultV3Contract/useAutoLandV3";
 import useCcipVaultBalance from "../../hooks/contract/CrossChainVault/useCcipVaultBalance";
 import useCalculateHarvestCakeRewards from "../../hooks/contract/CrossChainVault/useCalculateHarvestCakeRewards";
 import useCalculateHarvestCakeRewardsOfAutoVault from "../../hooks/contract/AutoVaultV3Contract/useCalculateHarvestCakeRewards";
-import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useAutoVault from "../../hooks/contract/vault/useAutoVault";
 import useMinTransferAmount from "../../hooks/contract/CcipChainSenderContract/useMinTransferAmount";
 import useAllowanceOfLandToken from "../../hooks/contract/LandTokenContract/useAllowance";
@@ -73,7 +72,7 @@ export default function AutoVault({
   const { theme, notifyError } = useGlobalContext();
   const dispatch = useAppDispatch();
 
-  const { data: lpTokenV2Balance } = useBalanceOfLpTokenV2({ chainId, address }) as { data: BigNumberish }
+  const { data: landBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
   const vaultBalance = useAutoLandV3(chainId, address) as {
     total: BigNumberish;
     totalSharesV3: BigNumberish;
@@ -96,7 +95,7 @@ export default function AutoVault({
     autoLandV3: BigNumberish;
     autoReward: BigNumberish;
   }
-  const { refetch: updateLandTokenV2Balance } = useBalanceOfLandToken({ chainId, address })
+  const { refetch: updateLandTokenV2Balance } = useBalanceOf({ chainId, address })
   const { data: ccipBountyReward } = useCalculateHarvestCakeRewards(chainId) as { data: BigNumberish }
   const { data: bountyReward } = useCalculateHarvestCakeRewardsOfAutoVault(chainId) as { data: BigNumberish }
   const {
@@ -130,11 +129,11 @@ export default function AutoVault({
 
 
   function handlePercents(percent: number) {
-    if (lpTokenV2Balance == 0) {
+    if (landBalance == 0) {
       notifyError("You don't have enough balance to perform this action.")
     } else {
       if (depositing) {
-        const bal = BigInt(lpTokenV2Balance) * BigInt(percent) / BigInt(100)
+        const bal = BigInt(landBalance) * BigInt(percent) / BigInt(100)
         setInputValue(formatEther(bal))
       } else {
         const bal = chainId == MAJOR_WORK_CHAIN.id ? BigInt(vaultBalance.autoLandV3) * BigInt(percent) / BigInt(100) : BigInt(ccipVaultBalance.autoLandV3) * BigInt(percent) / BigInt(100)
@@ -203,9 +202,9 @@ export default function AutoVault({
           Number(formatEther(chainId != MAJOR_WORK_CHAIN.id ? ccipVaultBalance.autoLandV3 ?? 0 : vaultBalance.autoLandV3))
         );
       }
-      if (lpTokenV2Balance) {
+      if (landBalance) {
         SetDepositable(
-          Number(formatEther(lpTokenV2Balance)) >=
+          Number(formatEther(landBalance)) >=
           Number(inputValue)
         );
       }
@@ -221,6 +220,11 @@ export default function AutoVault({
   useEffect(() => {
     updateStatus()
   }, [inputValue]);
+
+  useEffect(() => {
+    const approvedLANDETH = formatEther(autoLandAllowance);
+    setIsApprovedLandStake(Number(inputValue) > 0 && Number(approvedLANDETH) >= Number(inputValue));
+  }, [autoLandAllowance]);
 
   const openCalcModal = async () => {
     setShowModal(true)
@@ -271,7 +275,7 @@ export default function AutoVault({
           ) : (
             <>
               <div className="flex flex-col justify-center p-0 gap-[16px] relative">
-                <div className="flex flex-row gap-[8px] hidden">
+                <div className="hidden">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
                     <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px]" alt="token pair" />
                     <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px]" alt="" />
@@ -299,7 +303,7 @@ export default function AutoVault({
                       View all CCIP Transactions
                     </a>
                   )}
-                  <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
+                  <button className={`flex flex-row items-center justify-center gap-[4px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                     <Image src={details ? up : down}  alt="" />
                   </button>
                 </div>
@@ -311,7 +315,7 @@ export default function AutoVault({
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {title}
-                      <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
+                      <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                         <Image src={details ? up : down} alt="" />
                       </button>
                     </div>
@@ -406,13 +410,13 @@ export default function AutoVault({
               <div className="block md:hidden">
                 <div className="flex w-full mt-[20px]">
                   <div 
-                    className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                    className={`w-full font-medium tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                     onClick={() => setDepositing(true)}
                   >
                     Deposit
                   </div>
                   <div 
-                    className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                    className={`w-full font-medium tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                     onClick={() => setDepositing(false)}
                   >
                     Withdraw
@@ -454,7 +458,7 @@ export default function AutoVault({
                           onClick={() => {
                             if (inputValue && Number(inputValue) > Number(0)) {
                               if (chainId == MAJOR_WORK_CHAIN.id) {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 depositing ? depositHandler() : withdrawHandler()
                               }
@@ -485,7 +489,7 @@ export default function AutoVault({
 
                     )}
                   </div>
-                  <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
+                  <button className={`flex flex-row items-center justify-center gap-[4px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                     {details ? 'Hide' : 'Show'} Details
                     <Image src={details ? up : down} alt="" />
                   </button>
@@ -496,13 +500,13 @@ export default function AutoVault({
                   <div className="hidden md:block">
                     <div className="flex w-full mt-[20px]">
                       <div 
-                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                        className={`w-full font-medium tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(true)}
                       >
                         Deposit
                       </div>
                       <div 
-                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                        className={`w-full font-medium tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(false)}
                       >
                         Withdraw
@@ -546,7 +550,7 @@ export default function AutoVault({
                                 onClick={() => {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     if (chainId == MAJOR_WORK_CHAIN.id) {
-                                      depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                      depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                     } else {
                                       depositing ? depositHandler() : withdrawHandler()
                                     }

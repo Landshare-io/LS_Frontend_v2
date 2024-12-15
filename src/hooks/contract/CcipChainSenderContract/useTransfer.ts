@@ -15,11 +15,12 @@ export default function useTransfer(chainId: number) {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function transfer(chainId: number, amount: BigNumberish, action: number, feeNumber: number, feeAmount: number) {
-    await writeContract({
+    writeContract({
       address: CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId],
       abi: CrossChainSenderAbi,
       functionName: "transfer",
@@ -40,6 +41,7 @@ export default function useTransfer(chainId: number) {
   return {
     transfer,
     isPending,
+    isError,
     data
   }
 }

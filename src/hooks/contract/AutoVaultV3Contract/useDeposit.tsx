@@ -8,11 +8,12 @@ export default function useDeposit(chainId: number) {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function deposit(amount: BigNumberish) {
-    await writeContract({
+    writeContract({
       address: AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id],
       abi: AutoVaultV3Contract,
       functionName: "deposit",
@@ -24,6 +25,7 @@ export default function useDeposit(chainId: number) {
   return {
     deposit,
     isPending,
+    isError,
     data
   }
 }

@@ -9,11 +9,12 @@ export default function useWithdraw(chainId: number) {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function withdraw(amount: BigNumberish) {
-    await writeContract({
+    writeContract({
       address: AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id],
       abi: AutoVaultV3Contract,
       functionName: "withdraw",
@@ -25,6 +26,7 @@ export default function useWithdraw(chainId: number) {
   return {
     withdraw,
     isPending,
+    isError,
     data
   }
 }
