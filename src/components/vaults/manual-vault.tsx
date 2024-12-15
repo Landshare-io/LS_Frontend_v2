@@ -262,18 +262,11 @@ export default function ManualVault({
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     {
-                      parseFloat(formatEther(pendingLand || 0)) > 0 &&
-                      parseFloat(formatEther(pendingLand || 0)) < 0.0001 ? (
-                        <Tooltip content={`Full number: ${formatEther(pendingLand || 0)}`}>
-                          <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                            {formatEther(pendingLand || 0).substr(0, 5)}
-                          </span>
-                        </Tooltip>
-                      ) : (
+                      <Tooltip content={`Full number: ${formatEther(pendingLand || 0)}`}>
                         <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                           {formatEther(pendingLand || 0).substr(0, 5)}
                         </span>
-                      )
+                      </Tooltip>
                     }
                   </div>
                 </div>

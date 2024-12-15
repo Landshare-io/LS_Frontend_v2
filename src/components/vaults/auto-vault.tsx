@@ -48,8 +48,8 @@ import arbitrumIcon from "../../../public/icons/arbitrum.svg";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import quickSwap from "../../../public/icons/quickswap-logo.svg"
 import smallicon from "../../../public/icons/rotate-black.svg"
-import 'react-loading-skeleton/dist/skeleton.css';
 import Tooltip from "../common/tooltip";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface AutoVaultProps {
   title: string
@@ -403,18 +403,12 @@ export default function AutoVault({
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                       {chainId != MAJOR_WORK_CHAIN.id ? ccipVaultBalance?.autoReward ?? 0 : 
-                      parseFloat(formatEther(vaultBalance?.autoReward || 0)) > 0 &&
-                      parseFloat(formatEther(vaultBalance?.autoReward || 0)) < 0.0001 ? (
                         <Tooltip content={`Full number: ${formatEther(vaultBalance?.autoReward || 0)}`}>
                           <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                             {formatEther(vaultBalance?.autoReward || 0).substr(0, 5)}
                           </span>
                         </Tooltip>
-                      ) : (
-                        <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                          {formatEther(vaultBalance?.autoReward || 0).substr(0, 5)}
-                        </span>
-                      )}
+                      }
                   </div>
                 </div>
               </div>
