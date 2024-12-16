@@ -13,9 +13,9 @@ import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environme
 
 export default function useUsdtVault(chainId: number, address: Address | undefined) {
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
-  const { deposit, data: depositTx } = useDeposit(chainId)
-  const { withdraw, data: withdrawTx } = useWithdraw(chainId)
-  const { approve, data: approveTx } = useApprove()
+  const { deposit, data: depositTx, isError: isDepositError } = useDeposit(chainId)
+  const { withdraw, data: withdrawTx, isError: isWithdrawError } = useWithdraw(chainId)
+  const { approve, data: approveTx, isError: isApproveError } = useApprove()
   const { data: rwaLpTokenBalance } = useBalanceOfRwaLp(chainId, address) as {
     data: BigNumberish,
     refetch: Function
@@ -36,7 +36,9 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
 
   useEffect(() => {
     try {
-      if (depositTx) {
+      if (isDepositError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (depositTx) {
         if (depositStatusData) {
           if (depositSuccess) {
             setScreenLoadingStatus("Deposit Transaction success")
@@ -52,14 +54,17 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isDepositError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [depositTx, depositStatusData, depositSuccess])
+  }, [depositTx, depositStatusData, depositSuccess, isDepositError])
 
   useEffect(() => {
     try {
-      if (withdrawTx) {
+      if (isWithdrawError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (withdrawTx) {
         if (withdrawStatusData) {
           if (withdrawSuccess) {
             setScreenLoadingStatus("Withdraw Transaction success")
@@ -75,14 +80,17 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isWithdrawError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [withdrawTx, withdrawStatusData, withdrawSuccess])
+  }, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawError])
 
   useEffect(() => {
     try {
-      if (approveTx) {
+      if (isApproveError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
             setScreenLoadingStatus("Approve Transaction success")
@@ -98,10 +106,11 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isApproveError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [approveTx, approveStatusData, approveSuccess])
+  }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
   const depositVault = (amount: BigNumberish) => {
     if (amount > rwaLpTokenBalance) {
