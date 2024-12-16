@@ -28,7 +28,7 @@ export default function RwaCalculator() {
 
   let totalAnnualReturns =
     ((netRentalPerMonth * 12) / Number(formatEther(totalPropertyValue))) * 100 +
-    appreciation / Number(totalPropertyValue);
+    appreciation / Number(formatEther(totalPropertyValue));
 
   let annualRentReturn = (
     ((netRentalPerMonth * 12) / Number(formatEther(totalPropertyValue))) *
@@ -143,7 +143,7 @@ export default function RwaCalculator() {
               {
                 // Initial investment compound growth over 5 years
                 (
-                  initialInvestment * Math.pow(1 + totalAnnualReturns / 100, 5)
+                  initialInvestment * (totalAnnualReturns / 100) * 5 + initialInvestment
                 ).toLocaleString()
               }
             </p>

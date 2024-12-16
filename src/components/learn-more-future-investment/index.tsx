@@ -62,7 +62,7 @@ export default function MoreInvestment() {
             >
               <Button
                 textClassName="text-[#fff] dark:text-[#fff]"
-                className="w-full md:w-auto px-[24px] py-[13px] border-primary-green hover:bg-primary-green  rounded-[100px]"
+                className="w-full md:w-auto px-[24px] py-[13px] border-primary-green hover:bg-primary-green rounded-[100px]"
                 outlined
               >
                 Whitepaper

@@ -153,7 +153,7 @@ export default function Footer() {
             </div>
           </div>
           <div className="w-full grid grid-cols-2 gap-y-[25px] mlg:gap-[20px] md:max-w-[600px] md:basis-[50%] md:grid-cols-4 md:justify-between grow-[2]">
-            <div className="p-0 flex flex-col gap-[16px] o">
+            <div className="p-0 flex flex-col gap-[16px]">
               <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
                 Company
               </span>
@@ -178,7 +178,7 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-            <div className="p-0 flex flex-col gap-[16px] o">
+            <div className="p-0 flex flex-col gap-[16px]">
               <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
                 Useful Links
               </span>
@@ -204,7 +204,7 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-            <div className="p-0 flex flex-col gap-[16px] o">
+            <div className="p-0 flex flex-col gap-[16px]">
               <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
                 Token Trackers
               </span>
@@ -229,7 +229,7 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-            <div className="p-0 flex flex-col gap-[16px] o">
+            <div className="p-0 flex flex-col gap-[16px]">
               <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
                 Exchanges
               </span>
