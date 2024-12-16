@@ -17,12 +17,12 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
   const { deposit, data: depositTx, isError: isDepositError } = useDeposit(chainId)
   const { withdraw, data: withdrawTx, isError: isWithdrawError } = useWithdraw(chainId)
   const { approve, data: approveTx, isError: isApproveError } = useApprove()
-  const { data: rwaLpTokenBalance } = useBalanceOfRwaLp(chainId, address) as {
+  const { data: rwaLpTokenBalance, refetch: refetchrwaLpTokenBalance } = useBalanceOfRwaLp(chainId, address) as {
     data: BigNumberish,
     refetch: Function
   }
-  const { refetch: refetchLSRWALPAllowance } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { refetch: () => void }
-  const { data: vaultBalanceLsRwa } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish], refetch: Function }
+  const { refetch: refetchLSRWALPAllowance } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { refetch: Function }
+  const { data: vaultBalanceLsRwa, refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish], refetch: Function }
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
     hash: depositTx,
     chainId: chainId
@@ -43,6 +43,8 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
       } else if (depositTx) {
         if (depositStatusData) {
           if (depositSuccess) {
+            refetchrwaLpTokenBalance()
+            refetchUserInfo();
             setScreenLoadingStatus("Deposit Transaction success")
           } else {
             setScreenLoadingStatus("Transaction failed")
