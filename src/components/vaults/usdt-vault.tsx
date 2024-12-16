@@ -364,7 +364,7 @@ export default function Usdtvault({
                           onClick={() => {
                             if (chainId == MAJOR_WORK_CHAIN.id) {
                               if (inputValue && Number(inputValue) > Number(0)) {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
@@ -452,7 +452,7 @@ export default function Usdtvault({
                               onClick={() => {
                                 if (chainId == MAJOR_WORK_CHAIN.id) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }

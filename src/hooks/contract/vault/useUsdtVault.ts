@@ -127,9 +127,9 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
     withdraw(4, amount)
   }
 
-  const approveVault = () => {
+  const approveVault = (amount: BigNumberish) => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id], "1000000000000000000000000000000")
+    approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id], amount)
   }
 
   return {
