@@ -300,7 +300,7 @@ export default function ManualVault({
                     <div className="flex gap-[12px] w-full flex-col md:flex-row">
                       {(typeof address == 'undefined') ? (
                         <div className="flex flex-col items-center">
-                          <ConnectWallet containerClassName="w-[300px]" />
+                          <ConnectWallet connectButtonClassName="w-[300px]" />
                         </div>
                       ) : (
                         <>
@@ -380,7 +380,7 @@ export default function ManualVault({
                       <div className="flex flex-col md:flex-row gap-[12px] w-full justify-center">
                         {(typeof address == 'undefined') ? (
                           <div className="flex flex-col items-center">
-                            <ConnectWallet containerClassName="w-[300px]" />
+                            <ConnectWallet connectButtonClassName="w-[300px]" />
                           </div>
                         ) : (
                           <>

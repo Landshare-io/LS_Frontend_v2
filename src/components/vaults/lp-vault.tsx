@@ -352,7 +352,7 @@ export default function LpVault({
                   <div className="flex gap-[12px] w-full flex-col md:flex-row">
                     {typeof address == 'undefined' ? (
                       <div className="flex flex-col items-center">
-                        <ConnectWallet containerClassName="w-[300px]" />
+                        <ConnectWallet connectButtonClassName="w-[300px]" />
                       </div>
                     ) : (
                       <>
@@ -439,7 +439,7 @@ export default function LpVault({
                     <div className="flex flex-col items-center p-0 gap-[24px] w-full">
                       <div className="flex gap-[12px] w-full flex-col md:flex-row justify-center">
                         {typeof address == 'undefined' ? (
-                          <ConnectWallet containerClassName="w-[300px]" />
+                          <ConnectWallet connectButtonClassName="w-[300px]" />
                         ) : (
                           <>
                             <button

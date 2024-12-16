@@ -854,7 +854,7 @@ export default function SwapToken() {
           ) : (
             <div className="flex flex-col items-center gap-[18px] w-full">
               <div className="w-full">
-                <ConnectWallet containerClassName="w-full mr-0" />
+                <ConnectWallet connectButtonClassName="w-full mr-0" />
               </div>
               <div
                 className="flex !bg-transparent items-center justify-center"
