@@ -71,6 +71,8 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
       } else if (withdrawTx) {
         if (withdrawStatusData) {
           if (withdrawSuccess) {
+            refetchrwaLpTokenBalance()
+            refetchUserInfo();
             setScreenLoadingStatus("Withdraw Transaction success")
           } else {
             setScreenLoadingStatus("Transaction failed")
