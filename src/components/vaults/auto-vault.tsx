@@ -305,9 +305,9 @@ export default function AutoVault({
                     <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-white" alt="" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
-                    <div className={`w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
+                    <div className={`cursor-pointer w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {title}
-                      <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
+                      <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px]  text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                         <Image src={details ? up : down} alt="" />
                       </button>
                     </div>
@@ -476,7 +476,7 @@ export default function AutoVault({
 
                     ) : (
                       <div className="flex flex-col items-center">
-                        <ConnectWallet containerClassName="w-[300px]" />
+                        <ConnectWallet connectButtonClassName="w-[300px]" />
                       </div>
 
                     )}
@@ -534,7 +534,7 @@ export default function AutoVault({
                       <div className="flex gap-[12px] w-full flex-col md:flex-row justify-center">
                         {(typeof address == 'undefined') ?
                           (
-                            <ConnectWallet containerClassName="w-[300px]" />
+                            <ConnectWallet connectButtonClassName="w-[300px]" />
                           ) : (
                             <>
                               <button
