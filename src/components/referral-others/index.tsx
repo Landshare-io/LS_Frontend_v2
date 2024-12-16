@@ -16,39 +16,35 @@ export default function ReferralOthers() {
   const [showCustomizeModal, setShowCustomizeModal] = useState<boolean>(false);
   const [trackingLinkUrl, setTrackingLinkUrl] = useState<string>("");
 
-  useEffect(() => {
-    async function fetchTrackingLink() {
-      try {
-        if(address){
-          const affiliateCode = await Fuul.getAffiliateCode(address);
+  const handleGenerateCode = async () => {
+    try {
+      if(address){
+        const affiliateCode = await Fuul.getAffiliateCode(address);
 
-          if(!affiliateCode){
-            const signature = await signMessage(config, { message: `I confirm that I am creating the ${address} code on Fuul` });
+        if(!affiliateCode){
+          const signature = await signMessage(config, { message: `I confirm that I am creating the ${address} code on Fuul` });
 
-            await Fuul.createAffiliateCode({
-              address: address ?? "",
-              code: address ?? "",
-              signature: signature,
-            })
-          }
-
-          const code = await Fuul.getAffiliateCode(address);
-
-          const link = await Fuul.generateTrackingLink(
-            `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
-            code ?? ""
-          );
-          
-          setTrackingLinkUrl(link);
+          await Fuul.createAffiliateCode({
+            address: address ?? "",
+            code: address ?? "",
+            signature: signature,
+          })
         }
-        
-      } catch (error) {
-        console.error("Error generating tracking link:", error);
-      }
-    }
 
-    fetchTrackingLink();
-  }, [address]);
+        const code = await Fuul.getAffiliateCode(address);
+
+        const link = await Fuul.generateTrackingLink(
+          `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
+          code ?? ""
+        );
+        
+        setTrackingLinkUrl(link);
+      }
+      
+    } catch (error) {
+      console.error("Error generating tracking link:", error);
+    }
+  }
   
 
   const handleCopy = () => {
@@ -65,13 +61,20 @@ export default function ReferralOthers() {
     <div className="w-full flex flex-col bg-third  rounded-2xl p-6 h-fit gap-4 sm:gap-8 shadow-lg">
       <div className="w-full flex justify-between items-center">
         <p className="font-bold text-lg text-text-primary">Refer Others</p>
-        {address &&
+        {address && trackingLinkUrl ?
           <p
               className="text-sm cursor-pointer text-text-primary"
               onClick={handleOpenModal}
             >
             Customize
-          </p>}
+          </p>: 
+          <p
+            className="text-sm cursor-pointer text-text-primary"
+            onClick={handleGenerateCode}
+          >
+            Generate
+          </p>
+          }
       </div>
 
       <ConnectButton.Custom>
