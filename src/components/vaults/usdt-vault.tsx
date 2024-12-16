@@ -13,6 +13,7 @@ import {
   parseEther 
 } from "ethers";
 import numeral from "numeral";
+import Tooltip from "../common/tooltip";
 import Collapse from "../common/collapse";
 import ConnectWallet from "../connect-wallet";
 import { useGlobalContext } from "../../context/GlobalContext";
@@ -308,7 +309,9 @@ export default function Usdtvault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? abbreviateNumber(Number(formatEther(rewardsLSRWALP))) : "0.0"}</span>
+                    <Tooltip content={`Full number: ${formatEther(rewardsLSRWALP || 0)}`}>
+                      <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? formatEther(rewardsLSRWALP).substr(0, 5) : "0.0"}</span>
+                    </Tooltip>
                   </div>
                 </div>
               </div>
