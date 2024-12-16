@@ -187,15 +187,6 @@ export default function ReferralOverview() {
 
         <p className="text-text-secondary text-sm">{approvedInvites * 20}% completed</p>
       </div>
-
-      <div className="flex gap-2">
-        <p className="font-bold text-[#61CD81] text-sm mt-[3px] cursor-pointer">
-          Learn more
-        </p>
-        <p className="font-bold text-[#61CD81] text-sm mt-[3px] cursor-pointer">
-          Stake LSRWA
-        </p>
-      </div>
     </div>
   );
 }
