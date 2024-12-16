@@ -8,6 +8,7 @@ import Logo from '../common/logo';
 import ConnectWallet from '../connect-wallet';
 import MobileNavbar from './mobile';
 import { PAGE } from "../../utils/type";
+import { FiExternalLink } from 'react-icons/fi';
 
 export default function Header() {
   const router = useRouter();
@@ -45,14 +46,15 @@ export default function Header() {
                       href= {page?.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 text-[#0f0a0a] dark:text-[#f1f1f1] font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left ${BOLD_INTER_TIGHT.className}`}
+                      className={`flex no-underline items-center gap-1 capitalize text-[14px] font-medium leading-[20px] relative transition-all duration-300 text-[#0f0a0a] dark:text-[#f1f1f1] font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left `}
                     >
                       {page.name}
+                      <FiExternalLink className="text-text-primary" />
                     </Link>
                   ) : (
                     <Link 
-                      href={page?.path ?? ''} 
-                      className={`text-[#0f0a0a] dark:text-[#f1f1f1] no-underline flex no-underline capitalize text-[14px] font-bold leading-[20px] relative transition-all duration-300 font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left ${BOLD_INTER_TIGHT.className}`}
+                    href={page?.path ?? ''} 
+                    className={`text-[#0f0a0a] dark:text-[#f1f1f1] no-underline flex capitalize text-[14px] font-medium leading-[20px] relative transition-all duration-300 font-inter after:absolute after:content-[' '] after:w-full after:h-[3px] after:top-[100%] after:bg-[#61cd81] after:transition-transform after:scale-x-[0] after:origin-right after:hover:scale-x-[1] after:hover:origin-left  ${ pathname == page.path ? "font-extrabold" : ""} `}
                     >
                       {page.name}
                     </Link>
