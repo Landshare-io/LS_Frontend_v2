@@ -172,9 +172,9 @@ export const AUTO_VAULT_V3_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   97: '' as Address
 }
 export const CCIP_CHAIN_SENDER_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
-  56: '' as Address,
-  97: '' as Address,
-  1: '' as Address,
+  // 56: '' as Address,
+  // 97: '' as Address,
+  // 1: '' as Address,
   11155111: '0xaCBd41a11B8FbE0549E3a4e57258d4aB745888F8',
   137: '0x4166286e9ad3be3E3647389795Be3bCf5d675Fb5',
   80002: '0x21b09f2606A724f8660D7690681826EaD509Ac02',
