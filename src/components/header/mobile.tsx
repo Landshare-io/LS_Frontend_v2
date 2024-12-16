@@ -78,7 +78,6 @@ export default function MobileNavbar() {
             <div className="absolute bottom-[82px] right-[20px] shadow-[0_0_4px_0_rgba(160,167,195,0.2)] rounded-[12px] py-[4px] min-w-[108px] bg-secondary">
               <a
                 href="/migration"
-                target="_blank"
                 rel="noopener noreferrer"
                 className="flex px-[16px] py-[10px] items-center gap-[4px] w-full"
               >
