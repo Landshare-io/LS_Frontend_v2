@@ -10,7 +10,6 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { CCIP_CHAIN_NAME } from "../../config/constants/environments";
 import Timer from "../../components/common/timer";
-import "./CcipTransaction.css"
 
 const breadcrumbItems = [
   {
