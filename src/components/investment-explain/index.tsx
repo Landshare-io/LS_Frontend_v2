@@ -52,7 +52,6 @@ export default function InvestmentExplain() {
   }
 
   const handleLinkClick = (event: any) => {
-    console.log("isWhitelisted", isWhitelisted);
     event.preventDefault(); // Prevent the default link behavior
     setKycopen(false);
     setZeroIDModalOpen(true);
@@ -231,7 +230,6 @@ export default function InvestmentExplain() {
           <div onClick={handleLinkClick}>
             <Button
               className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
-              disabled
             >
               <p
                 className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
@@ -252,7 +250,7 @@ export default function InvestmentExplain() {
         }}
         style={customModalStyles}
         contentLabel="ZeroID Modal"
-        className="zeroid-modal"
+        className="relative"
       >
         <MdCancel
           onClick={() => {
