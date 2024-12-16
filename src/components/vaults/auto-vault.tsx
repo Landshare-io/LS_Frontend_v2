@@ -26,6 +26,7 @@ import useMinTransferAmount from "../../hooks/contract/CcipChainSenderContract/u
 import useAllowanceOfLandToken from "../../hooks/contract/LandTokenContract/useAllowance";
 import useGetApr from "../../hooks/get-apy/useGetApr";
 import useGetApy from "../../hooks/get-apy/useGetApy";
+import useGetLandPrice from "../../hooks/axios/useGetLandPrice";
 import { 
   getTransactions,
   selectIsLoading,
@@ -115,6 +116,7 @@ export default function AutoVault({
   const [isDepositable, SetDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const [isDepositing, setIsDepositing] = useState(false);
+  const { price: tokenPriceData } = useGetLandPrice()
 
   useEffect(() => {
     (async () => {
@@ -228,6 +230,7 @@ export default function AutoVault({
   }, [autoLandAllowance]);
 
   const openCalcModal = async () => {
+    setTokenUsdPrice(tokenPriceData)
     setShowModal(true)
     setShowModalApy(apr.toString().substr(0, 4))
     setIsLPVault(false)

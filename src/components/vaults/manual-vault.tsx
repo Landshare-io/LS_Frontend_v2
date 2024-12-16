@@ -16,6 +16,7 @@ import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLa
 import useGetApr from "../../hooks/get-apy/useGetApr";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useAllowanceOfLandTokenContract from "../../hooks/contract/LandTokenContract/useAllowance";
+import useGetLandPrice from "../../hooks/axios/useGetLandPriceFromCoingecko";
 import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 import Union from "../../../public/green-logo.svg";
 import UnionDark from "../../../public/green-logo.svg";
@@ -34,6 +35,7 @@ interface ManualVaultProps {
   setIsLPVault: Function
   setIsRUSD: Function
   setTokenUsdPrice: Function
+  setShowModalApy: Function
 }
 
 export default function ManualVault({
@@ -41,7 +43,8 @@ export default function ManualVault({
   setShowModal,
   setIsLPVault,
   setIsRUSD,
-  setTokenUsdPrice
+  setTokenUsdPrice,
+  setShowModalApy
 }: ManualVaultProps) {
   const { 
     theme, 
@@ -71,7 +74,8 @@ export default function ManualVault({
   const [isWithdrawable, setIsWithdrawable] = useState(true);
   const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
-  const isVaultsLoading = false // totalStakedLoading || userInfoLoading || pendingLandLoading
+  const { price: tokenPriceUsd } = useGetLandPrice()
+  const isVaultsLoading = totalStakedLoading || userInfoLoading || pendingLandLoading
 
   function handlePercents(percent: number) {
     if (landBalance == 0) {
@@ -86,6 +90,7 @@ export default function ManualVault({
       }
     }
   }
+
 
   const depositHandler = async () => {
     let amountLS = inputValue;
@@ -154,6 +159,8 @@ export default function ManualVault({
   }, [landAllowance])
 
   const openCalcModal = async () => {
+    setShowModalApy(apr.toString().substr(0, 4))
+    setTokenUsdPrice(tokenPriceUsd)
     setShowModal(true)
     setIsLPVault(false)
     setIsRUSD(false)

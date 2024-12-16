@@ -18,6 +18,7 @@ import useLpVault from "../../hooks/contract/vault/useLpVault";
 import usePoolInfo from "../../hooks/contract/MasterchefContract/usePoolInfo";
 import useUserInfo from "../../hooks/contract/MasterchefContract/useUserInfo";
 import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLand";
+import useGetLandPrice from "../../hooks/axios/useGetLandPriceFromCoingecko";
 import { 
   BOLD_INTER_TIGHT,
   LP_TOKEN_V2_CONTRACT_ADDRESS,
@@ -61,11 +62,12 @@ export default function LpVault({
   const { data: totalLANDinLPContract } = useBalanceOfLandToken({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
   const { data: totalLPSupply } = useTotalSupplyOfLpTokenV2(chainId) as { data: BigNumberish }
   const { data: totalBNBinLPContract } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
-  const { data: userInfo } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
-  const { data: pendingLand } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: userInfo } = useUserInfo({ chainId, userInfoId: 1, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
+  const { data: pendingLand } = usePendingLand({ chainId, pendingLandId: 1, address }) as { data: BigNumberish, isLoading: boolean }
   const { data: approvedLAND } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
   const { data: allocPoints } = usePoolInfo(chainId, 1) as { data: any[] };
   const { bnbPrice, coinPrice: coin, price } = useGetPrice(chainId)
+  const { price: tokenPriceData } = useGetLandPrice()
 
   
   const {
@@ -292,7 +294,7 @@ export default function LpVault({
                       <button onClick={() => {
                         setShowModal(true)
                         setShowModalApy(abbreviateNumber(Number(apr.toString().substr(0, 4))))
-                        setTokenUsdPrice(usdValueLP)
+                        setTokenUsdPrice(tokenPriceData)
                         setIsLPVault(true)
                       }}>
                         <Image src={calc} alt="" />
