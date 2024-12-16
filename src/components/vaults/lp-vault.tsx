@@ -36,6 +36,7 @@ import bscIcon from "../../../public/icons/bsc.svg";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import smallicon from "../../../public/icons/bnb.png";
 import 'react-loading-skeleton/dist/skeleton.css';
+import Tooltip from "../common/tooltip";
 
 interface LpVaultProps {
   title: string;
@@ -314,7 +315,9 @@ export default function LpVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{formatEther(rewardLP.toString()).substr(0, 5)}</span>
+                    <Tooltip content={`Full number: ${formatEther(rewardLP || 0)}`}>
+                      <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{formatEther(rewardLP.toString()).substr(0, 5)}</span>
+                    </Tooltip>
                   </div>
                 </div>
               </div>
