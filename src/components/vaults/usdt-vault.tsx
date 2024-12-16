@@ -167,6 +167,8 @@ export default function Usdtvault({
       const approvedLANDETH = formatEther(LSRWALPAllowance);
 
       setIsApprovedLandStake(Number(inputValue) > 0 && Number(approvedLANDETH) >= Number(inputValue))
+    } else {
+      setIsApprovedLandStake(false)
     }
 
     if (userBalance) {
