@@ -13,16 +13,7 @@ import { FiExternalLink } from 'react-icons/fi';
 export default function Header() {
   const router = useRouter();
   const { pathname } = router;
-  const { address } = useAccount()
-  
-  const [truncatedAddress, setTruncatedAddress] = React.useState("Not Connected");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    if (address) {
-      setTruncatedAddress(`${address.slice(0, 6)}...${address.slice(-4)}`);
-    }
-  }, [address]);
 
   const overlayRouteChangeHandler = (path: string) => {
     router.push(path);
