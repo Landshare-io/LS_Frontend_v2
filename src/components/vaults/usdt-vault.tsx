@@ -13,6 +13,7 @@ import {
   parseEther 
 } from "ethers";
 import numeral from "numeral";
+import Tooltip from "../common/tooltip";
 import Collapse from "../common/collapse";
 import ConnectWallet from "../connect-wallet";
 import { useGlobalContext } from "../../context/GlobalContext";
@@ -102,7 +103,6 @@ export default function Usdtvault({
       setTVL(formatEther(percentageLPInVault))
       setLSRWALPValue(Number(BigInt(totalValueInLP) / BigInt(LSRWALPTotalSupply)))
     }
-
   }
 
   function calculateAPRLSRWA() {
@@ -121,11 +121,14 @@ export default function Usdtvault({
   }, [TVL, price])
 
   function handlePercents(percent: number) {
-    if (depositing) {
-      setInputValue(formatEther(BigInt(balance) * BigInt(percent) / BigInt(100)))
+    if (balance == 0) {
+      notifyError("You don't have enough balance to perform this action.")
     } else {
-
-      setInputValue(formatEther(BigInt(userBalance[0]) * BigInt(percent) / BigInt(100)))
+      if (depositing) {
+        setInputValue(formatEther(BigInt(balance) * BigInt(percent) / BigInt(100)))
+      } else {
+        setInputValue(formatEther(BigInt(userBalance[0]) * BigInt(percent) / BigInt(100)))
+      } 
     }
   }
 
@@ -165,6 +168,8 @@ export default function Usdtvault({
       const approvedLANDETH = formatEther(LSRWALPAllowance);
 
       setIsApprovedLandStake(Number(inputValue) > 0 && Number(approvedLANDETH) >= Number(inputValue))
+    } else {
+      setIsApprovedLandStake(false)
     }
 
     if (userBalance) {
@@ -304,7 +309,9 @@ export default function Usdtvault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? abbreviateNumber(Number(formatEther(rewardsLSRWALP))) : "0.0"}</span>
+                    <Tooltip content={`Full number: ${formatEther(rewardsLSRWALP || 0)}`}>
+                      <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? formatEther(rewardsLSRWALP).substr(0, 5) : "0.0"}</span>
+                    </Tooltip>
                   </div>
                 </div>
               </div>
@@ -332,14 +339,13 @@ export default function Usdtvault({
                       onChange={(e) =>
                         setInputValue(
                           e.target.value
-                            .replace(/[^.\d]/g, "")
-                            .replace(/^(\d*\.?)|(\d*)\.?/g, "$1$2")
-                            .replace(/[^\d.]/g, "")
-                            .replace(/(\..*)\./g, "$1")
-                            .replace(/^(\d+\.\d{18})\d+$/g, "$1")
+                          .replace(/[^.\d]/g, "")
+                          .replace(/^(\d*\.?)|(\d*)\.?/g, "$1$2")
+                          .replace(/[^\d.]/g, "")
+                          .replace(/(\..*)\./g, "$1")
+                          .replace(/^(\d+\.\d{18})\d+$/g, "$1")
                         )
                       }
-
                     />
                     <div className="flex w-full justify-between items-center gap-[8px] mt-[12px]">
                       <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
@@ -363,7 +369,7 @@ export default function Usdtvault({
                           onClick={() => {
                             if (chainId == MAJOR_WORK_CHAIN.id) {
                               if (inputValue && Number(inputValue) > Number(0)) {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
@@ -451,7 +457,7 @@ export default function Usdtvault({
                               onClick={() => {
                                 if (chainId == MAJOR_WORK_CHAIN.id) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }

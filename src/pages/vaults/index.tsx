@@ -206,6 +206,7 @@ const StakingPage: NextPage = () => {
                 setIsLPVault={setIsLPVault}
                 setIsRUSD={setIsRUSD}
                 setTokenUsdPrice={setTokenUsdPrice}
+                setShowModalApy={setShowModalApy}
               /> :
               selectedVault === 1 ?
                 <AutoVault
@@ -242,6 +243,7 @@ const StakingPage: NextPage = () => {
                       setShowModal={setShowModal}
                       setIsLPVault={setIsLPVault}
                       setIsRUSD={setIsRUSD}
+                      setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                     />
                     <AutoVault
@@ -268,6 +270,7 @@ const StakingPage: NextPage = () => {
                       setShowModal={setShowModal}
                       setIsLPVault={setIsLPVault}
                       setIsRUSD={setIsRUSD}
+                      setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                     />
                   </>
