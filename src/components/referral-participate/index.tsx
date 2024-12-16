@@ -34,7 +34,7 @@ export default function ReferralParticipate() {
             </p>
             <div className="justify-start items-center flex md:hidden">
               <FaFileLines className="w-6 h-6 text-[#61CD81]" />
-              <div className="flex justify-between items-center grow px-1">
+              <div className="flex justify-between items-center grow w-8 md:w-auto px-1">
                 {Array.from({ length: 10 }, (_, index) => (
                   <div
                     key={index}
@@ -65,7 +65,7 @@ export default function ReferralParticipate() {
           </button>
         </div>
 
-        {/*md right section */}
+        {/*md+ right section */}
         <div className="hidden flex-col justify-between md:flex h-0 md:h-auto flex-grow">
           <p className="max-md:mt-6 text-text-primary font-bold  text-lg">
             KYC Verification

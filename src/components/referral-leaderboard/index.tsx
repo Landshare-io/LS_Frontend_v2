@@ -129,9 +129,6 @@ export default function ReferralLeaderBoard() {
                 </TableHead>
                 <TableHead className="w-1/5">
                   Purchase Volume
-                  <Tooltip tooltipClassName="-translate-x-48 md:-translate-x-24" position="bottom" content="Total purchases made by referred users. Only approved referrals who have completed the 30-day hold period are included here.">
-                    <span className="ms-1 text-[#61CD81] cursor-default">ⓘ</span>
-                  </Tooltip>
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -202,14 +199,15 @@ export default function ReferralLeaderBoard() {
             Your rank: <span>{myRank}</span> 
           </div>
         }
-
+        {leaderboardData && leaderboardData?.length > 10 ? 
         <div className="w-full flex justify-end flex-1">
           <Pagination
             pageCount={pageCount}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-          />
+            />
         </div>
+        : <></>}
       </div>
     </div>
   );

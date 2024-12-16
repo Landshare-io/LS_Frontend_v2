@@ -127,10 +127,10 @@ export default function ReferralEarning() {
   
 
   return (
-    <div className="w-full h-full flex flex-col justify-between bg-third rounded-2xl p-6 shadow-lg">
+    <div className="w-full h-full flex flex-col  justify-between bg-third rounded-2xl p-6 shadow-lg">
       <div className='flex flex-col gap-8 md:gap-3'>
         <p className="font-bold text-lg  text-text-primary">Earnings</p>
-        <div className="">
+        <div className="flex flex-col lg:gap-5">
           <div className=" flex justify-between">
             <p className="text-text-secondary text-sm leading-[28px]">
               Total Earned
@@ -140,8 +140,8 @@ export default function ReferralEarning() {
             {parseFloat(ethers.formatUnits((parseFloat(rewards.availableToClaim) + parseFloat(rewards.claimed)).toString(), 18)).toFixed(2)} USDC
           </p>
         </div>
-
-          <hr className="w-full my-[22px] bg-secondary" />
+    
+        <hr className="w-full my-[22px] bg-secondary" />
 
         <div className="flex justify-between items-center">
           <div>
@@ -173,7 +173,7 @@ export default function ReferralEarning() {
         </div>
       </div>
 
-      <div className="text-sm mt-[60px] md:mt-[66px] text-text-secondary leading-[22px]">
+      <div className="text-sm mt-[60px] md:mt-[6px] text-text-secondary leading-[22px]">
         <p className="text-red-500 dark:text-red-400 font-bold">
           30-Day Holding Requirement
         </p>

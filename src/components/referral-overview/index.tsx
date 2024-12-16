@@ -152,8 +152,10 @@ export default function ReferralOverview() {
           <div>
             <p className="text-sm text-text-secondary font-normal">
               Purchase Volume
+              <Tooltip position="bottom" content="Total purchases made by referred users. Only approved referrals who have completed the 30-day hold period are included here.">
+                <span className="ms-1 text-[#61CD81] cursor-default">ⓘ</span>
+              </Tooltip>
             </p>
-
             <p className="font-bold text-lg text-text-primary">
               {purchaseVolume} LSRWA
             </p>
@@ -179,13 +181,12 @@ export default function ReferralOverview() {
             {remainingInvitations} invites remaining
           </p>
           <Slider percentage={approvedInvites * 20} />
+          <p className="text-text-secondary text-sm">{approvedInvites * 20}% completed</p>
         </div>
         <div className="flex flex-col">
           <p className="text-text-secondary text-base">Earn Bonus</p>
           <p className="text-text-primary font-bold text-lg">10 USDC</p>
         </div>
-
-        <p className="text-text-secondary text-sm">{approvedInvites * 20}% completed</p>
       </div>
     </div>
   );
