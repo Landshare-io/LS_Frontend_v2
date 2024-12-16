@@ -10,6 +10,7 @@ import useBalanceOfRwaLp from "../RwaLpTokenContract/useBalanceOf";
 import useApprove from "../RwaLpTokenContract/useApprove";
 import useUserInfo from "../MasterchefContract/useUserInfo";
 import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+import useAllowance from "../RwaLpTokenContract/useAllowance";
 
 export default function useUsdtVault(chainId: number, address: Address | undefined) {
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
@@ -20,6 +21,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
     data: BigNumberish,
     refetch: Function
   }
+  const { refetch: refetchLSRWALPAllowance } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { refetch: () => void }
   const { data: vaultBalanceLsRwa } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish], refetch: Function }
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
     hash: depositTx,
@@ -93,6 +95,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
       } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
+            refetchLSRWALPAllowance()
             setScreenLoadingStatus("Approve Transaction success")
           } else {
             setScreenLoadingStatus("Transaction failed")
