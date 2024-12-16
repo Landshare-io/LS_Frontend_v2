@@ -1,0 +1,336 @@
+import { useGlobalContext } from "../../../context/GlobalContext";
+
+export const BackIcon = ({ className, fillColor }: { className: string, fillColor: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8 16L9.455 14.545L3.949 9.039L16 9.039L16 6.961L3.948 6.961L9.455 1.455L8 0L0 8L8 16Z"
+      fill={fillColor}
+    />
+  </svg>
+);
+
+export const SquareFootageIcon = ({ className = '', fillColor }: { className?: string, fillColor: string }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16ZM8.93 6.588L7.93 11.293C7.86 11.633 7.959 11.826 8.234 11.826C8.428 11.826 8.721 11.756 8.92 11.58L8.832 11.996C8.545 12.342 7.912 12.594 7.367 12.594C6.664 12.594 6.365 12.172 6.559 11.275L7.297 7.807C7.361 7.514 7.303 7.408 7.01 7.337L6.559 7.256L6.641 6.875L8.931 6.588H8.93ZM8 5.5C7.73478 5.5 7.48043 5.39464 7.29289 5.20711C7.10536 5.01957 7 4.76522 7 4.5C7 4.23478 7.10536 3.98043 7.29289 3.79289C7.48043 3.60536 7.73478 3.5 8 3.5C8.26522 3.5 8.51957 3.60536 8.70711 3.79289C8.89464 3.98043 9 4.23478 9 4.5C9 4.76522 8.89464 5.01957 8.70711 5.20711C8.51957 5.39464 8.26522 5.5 8 5.5Z"
+      fill={fillColor}
+    />
+  </svg>
+);
+
+export const MonthlyExpenseIcon = ({ className = '', fillColor }: { className?: string, fillColor: string }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M8.00002 0.666992C3.95002 0.666992 0.666687 3.95033 0.666687 8.00033C0.666687 12.0503 3.95002 15.3337 8.00002 15.3337C12.05 15.3337 15.3334 12.0503 15.3334 8.00033C15.3334 3.95033 12.05 0.666992 8.00002 0.666992ZM5.80469 6.52899C5.67895 6.40755 5.51055 6.34036 5.33575 6.34188C5.16095 6.34339 4.99375 6.41351 4.87014 6.53711C4.74654 6.66072 4.67642 6.82793 4.6749 7.00272C4.67339 7.17752 4.74058 7.34592 4.86202 7.47166L7.52869 10.1383C7.65371 10.2633 7.82324 10.3335 8.00002 10.3335C8.1768 10.3335 8.34633 10.2633 8.47135 10.1383L11.138 7.47166C11.2595 7.34592 11.3267 7.17752 11.3251 7.00272C11.3236 6.82793 11.2535 6.66072 11.1299 6.53711C11.0063 6.41351 10.8391 6.34339 10.6643 6.34188C10.4895 6.34036 10.3211 6.40755 10.1954 6.52899L8.00002 8.72433L5.80469 6.52899Z"
+      fill={fillColor}
+    />
+  </svg>
+);
+
+export const InfoIcon = () => {
+  const { theme } = useGlobalContext();
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="cursor-pointer"
+    >
+      <path
+        d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V9H11V15ZM11 7H9V5H11V7Z"
+        fill={theme == 'dark' ? "#cbcbcb" : "#000"}
+        fillOpacity="0.5"
+      />
+    </svg>
+  )
+};
+
+export const QuestionIcon = () => {
+  const { theme } = useGlobalContext();
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10 0C8.02219 0 6.08879 0.58649 4.4443 1.6853C2.79981 2.78412 1.51809 4.3459 0.761209 6.17317C0.00433286 8.00043 -0.1937 10.0111 0.192152 11.9509C0.578004 13.8907 1.53041 15.6725 2.92894 17.0711C4.32746 18.4696 6.10929 19.422 8.0491 19.8078C9.98891 20.1937 11.9996 19.9957 13.8268 19.2388C15.6541 18.4819 17.2159 17.2002 18.3147 15.5557C19.4135 13.9112 20 11.9778 20 10C19.997 7.34875 18.9425 4.80695 17.0678 2.93223C15.1931 1.05751 12.6512 0.00298644 10 0V0ZM10 17.7778C8.4617 17.7778 6.95795 17.3216 5.6789 16.467C4.39985 15.6123 3.40296 14.3976 2.81427 12.9764C2.22559 11.5552 2.07157 9.99137 2.37167 8.48263C2.67178 6.97389 3.41254 5.58802 4.50028 4.50028C5.58803 3.41254 6.97389 2.67178 8.48263 2.37167C9.99137 2.07156 11.5552 2.22559 12.9764 2.81427C14.3976 3.40295 15.6124 4.39985 16.467 5.6789C17.3216 6.95795 17.7778 8.4617 17.7778 10C17.7754 12.0621 16.9552 14.039 15.4971 15.4971C14.039 16.9552 12.0621 17.7754 10 17.7778V17.7778ZM11.4814 14.4445C11.4814 14.7375 11.3945 15.0239 11.2317 15.2675C11.0689 15.5112 10.8376 15.7011 10.5668 15.8132C10.2961 15.9253 9.99827 15.9547 9.71089 15.8975C9.42351 15.8403 9.15953 15.6992 8.95234 15.492C8.74516 15.2849 8.60406 15.0209 8.54689 14.7335C8.48973 14.4461 8.51907 14.1482 8.6312 13.8775C8.74333 13.6068 8.93321 13.3755 9.17684 13.2127C9.42047 13.0499 9.7069 12.963 9.99991 12.963C10.3928 12.963 10.7696 13.1191 11.0475 13.3969C11.3253 13.6747 11.4814 14.0516 11.4814 14.4445ZM13.7037 8.1486C13.7026 9.13054 13.312 10.0719 12.6177 10.7663C11.9233 11.4606 10.9819 11.8512 10 11.8523C9.70532 11.8523 9.4227 11.7352 9.21433 11.5269C9.00595 11.3185 8.88889 11.0359 8.88889 10.7412C8.88889 10.4465 9.00595 10.1639 9.21433 9.95552C9.4227 9.74714 9.70532 9.63008 10 9.63008C10.293 9.63008 10.5794 9.54319 10.8231 9.38041C11.0667 9.21762 11.2566 8.98624 11.3687 8.71554C11.4808 8.44483 11.5102 8.14696 11.453 7.85958C11.3959 7.5722 11.2548 7.30822 11.0476 7.10103C10.8404 6.89384 10.5764 6.75275 10.289 6.69559C10.0016 6.63842 9.70377 6.66776 9.43306 6.77989C9.16236 6.89202 8.93098 7.0819 8.7682 7.32553C8.60541 7.56916 8.51852 7.85559 8.51852 8.1486C8.51852 8.44328 8.40146 8.7259 8.19308 8.93427C7.98471 9.14265 7.70209 9.25971 7.40741 9.25971C7.11272 9.25971 6.83011 9.14265 6.62174 8.93427C6.41336 8.7259 6.2963 8.44328 6.2963 8.1486C6.2963 7.16632 6.68651 6.22426 7.38109 5.52969C8.07567 4.83511 9.01772 4.4449 10 4.4449C10.9823 4.4449 11.9243 4.83511 12.6189 5.52969C13.3135 6.22426 13.7037 7.16632 13.7037 8.1486V8.1486Z"
+        fill={theme == 'dark' ? "#cbcbcb" : "#767676"}
+      />
+    </svg>
+  )
+};
+
+export const OpenModalIcon = ({ iconColor }: { iconColor?: string }) => {
+  const { theme } = useGlobalContext();
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 26 26"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="cursor-pointer svg-info"
+    >
+      <path
+        d="M13.2461 0.640625C6.46064 0.640625 0.953583 6.14769 0.953583 12.9332C0.953583 19.7187 6.46064 25.2257 13.2461 25.2257C20.0316 25.2257 25.5387 19.7187 25.5387 12.9332C25.5387 6.14769 20.0316 0.640625 13.2461 0.640625ZM14.4754 19.0794H12.0169V11.7039H14.4754V19.0794ZM14.4754 9.24541H12.0169V6.7869H14.4754V9.24541Z"
+        fill={theme == 'dark' ? "#a0a0a0" : iconColor ? iconColor : "black"}
+        fillOpacity="0.5"
+      />
+    </svg>
+  )
+};
+
+export const PrevLabelIcon = () => (
+  <svg
+    width="20"
+    height="16"
+    viewBox="0 0 20 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      opacity="0.8"
+      d="M19.7071 7.29289C20.0976 7.68342 20.0976 8.31658 19.7071 8.70711L13.3431 15.0711C12.9526 15.4616 12.3195 15.4616 11.9289 15.0711C11.5384 14.6805 11.5384 14.0474 11.9289 13.6569L17.5858 8L11.9289 2.34315C11.5384 1.95262 11.5384 1.31946 11.9289 0.928932C12.3195 0.538408 12.9526 0.538408 13.3431 0.928932L19.7071 7.29289ZM0 7L19 7V9L0 9L0 7Z"
+      fill="#7B7B7B"
+    />
+  </svg>
+);
+
+export const NextLabelIcon = () => (
+  <svg
+    width="20"
+    height="16"
+    viewBox="0 0 20 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      opacity="0.8"
+      d="M19.7071 7.29289C20.0976 7.68342 20.0976 8.31658 19.7071 8.70711L13.3431 15.0711C12.9526 15.4616 12.3195 15.4616 11.9289 15.0711C11.5384 14.6805 11.5384 14.0474 11.9289 13.6569L17.5858 8L11.9289 2.34315C11.5384 1.95262 11.5384 1.31946 11.9289 0.928932C12.3195 0.538408 12.9526 0.538408 13.3431 0.928932L19.7071 7.29289ZM0 7L19 7V9L0 9L0 7Z"
+      fill="#7B7B7B"
+    />
+  </svg>
+);
+
+export const OpenModalICon = ({ iconColor }: { iconColor?: string }) => {
+  const { theme } = useGlobalContext();
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 26 26"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="cursor-pointer svg-info"
+    >
+      <path
+        d="M13.2461 0.640625C6.46064 0.640625 0.953583 6.14769 0.953583 12.9332C0.953583 19.7187 6.46064 25.2257 13.2461 25.2257C20.0316 25.2257 25.5387 19.7187 25.5387 12.9332C25.5387 6.14769 20.0316 0.640625 13.2461 0.640625ZM14.4754 19.0794H12.0169V11.7039H14.4754V19.0794ZM14.4754 9.24541H12.0169V6.7869H14.4754V9.24541Z"
+        fill={theme == 'dark' ? "#a0a0a0" : iconColor ? iconColor : "black"}
+        fillOpacity="0.5"
+      />
+    </svg>
+  )
+};
+
+export const NextIconYieldIcon = () => (
+  <svg
+    width="72"
+    height="71"
+    viewBox="0 0 72 71"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g filter="url(#filter0_d_1806_312)">
+      <circle r="23" transform="matrix(1 0 0 -1 36 31)" fill="white" />
+    </g>
+    <path
+      opacity="0.7"
+      d="M33.5789 37.0527L39.6315 31.0001L33.5789 24.9475"
+      stroke="black"
+      strokeWidth="2.42105"
+    />
+    <defs>
+      <filter
+        id="filter0_d_1806_312"
+        x="0.894736"
+        y="0.736842"
+        width="70.2105"
+        height="70.2105"
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy="4.84211" />
+        <feGaussianBlur stdDeviation="6.05263" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_1806_312"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_1806_312"
+          result="shape"
+        />
+      </filter>
+    </defs>
+  </svg>
+);
+
+export const SlickPrevIcon = () => (
+  <svg
+    width="72"
+    height="71"
+    viewBox="0 0 72 71"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g filter="url(#filter0_d_1806_312)">
+      <circle r="23" transform="matrix(-1 0 0 1 36 31)" fill="white" />
+    </g>
+    <path
+      opacity="0.7"
+      d="M38.4211 24.9473L32.3684 30.9999L38.4211 37.0525"
+      stroke="black"
+      strokeWidth="2.42105"
+    />
+    <defs>
+      <filter
+        id="filter0_d_1806_312"
+        x="0.894736"
+        y="0.736842"
+        width="70.2105"
+        height="70.2105"
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy="4.84211" />
+        <feGaussianBlur stdDeviation="6.05263" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_1806_312"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_1806_312"
+          result="shape"
+        />
+      </filter>
+    </defs>
+  </svg>
+);
+
+export const SelectarrowIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    width="9"
+    height="8"
+    viewBox="0 0 9 8"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M9 0.289062L0 0.289063L4.5 7.96313L9 0.289062Z" fill="#808080" />
+  </svg>
+);
+
+export const NextLabelIconMarketPlaceIcon = () => (
+  <svg
+    width="20"
+    height="16"
+    viewBox="0 0 20 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      opacity="0.8"
+      d="M19.7071 7.29289C20.0976 7.68342 20.0976 8.31658 19.7071 8.70711L13.3431 15.0711C12.9526 15.4616 12.3195 15.4616 11.9289 15.0711C11.5384 14.6805 11.5384 14.0474 11.9289 13.6569L17.5858 8L11.9289 2.34315C11.5384 1.95262 11.5384 1.31946 11.9289 0.928932C12.3195 0.538408 12.9526 0.538408 13.3431 0.928932L19.7071 7.29289ZM0 7L19 7V9L0 9L0 7Z"
+      fill="#7B7B7B"
+    />
+  </svg>
+);
+
+export const PrevLabelIconMarketPlaceIcon = () => (
+  <svg
+    width="20"
+    height="16"
+    viewBox="0 0 20 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ transform: 'rotate(180deg)' }}
+  >
+    <path
+      opacity="0.8"
+      d="M0.292892 7.29289C-0.0976315 7.68342 -0.0976315 8.31658 0.292892 8.70711L6.65685 15.0711C7.04738 15.4616 7.68054 15.4616 8.07107 15.0711C8.46159 14.6805 8.46159 14.0474 8.07107 13.6569L2.41421 8L8.07107 2.34315C8.46159 1.95262 8.46159 1.31946 8.07107 0.928932C7.68054 0.538408 7.04738 0.538408 6.65685 0.928932L0.292892 7.29289ZM20 7L1 7V9L20 9V7Z"
+      fill="#7B7B7B"
+    />
+  </svg>
+);
+
+export const InfoIconMarketPlaceItem = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    className="cursor-pointer"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V9H11V15ZM11 7H9V5H11V7Z"
+      fill="white"
+      fillOpacity="0.5"
+    />
+  </svg>
+);

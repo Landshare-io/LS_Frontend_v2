@@ -2,12 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+#root{
+  height:100vh;
+  background-color: #f6f7f9;
+  font-family: "Inter Tight", "sans-serif";
+}
+
+:root {
+  --font-inter: 'Inter Tight', sans-serif;
+}
+
+@layer base {
+  :root {
+    --color-primary: #f6f7f9;
+    --color-secondary: #ffffff;
+    --color-third: #ffffff;
+    --color-vault-input: #f6f8f9;
+    --color-input-field: linear-gradient(0deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)), #1D4264;
+    --color-text-primary: #0a0a0a;
+    --color-text-secondary: #0a133999;
+    --color-text-third: #9d9fa8;
+    --color-text-fourth: #0a0a0a;
+    --color-button-primary: #ebebeb;
+    --color-button-secondary: #0A1339;
+    --color-button-third:#f6f8f9;
+    --color-button-text-primary: #0A0A0A;
+    --color-button-text-secondary: #ffffff;
+    --title-text-color: #0a0a0a!important;
+    --row-title-color: #0a0a0a!important;
+    --row-content-color: #0a0a0a!important;
+	--primary-green: #61CD81;
+  }
+
+  .dark,
+  :root[class~="dark"] {
+    --color-primary: #2E2E2E;
+    --color-secondary: #3c3c3c;
+    --color-third: #494949;
+    --color-vault-input: #3c3c3c;
+    --color-input-field: #222222;
+    --color-text-primary: #f1f1f1;
+    --color-text-secondary: #cbcbcb;
+    --color-text-third: #c7c8ce;
+    --color-text-fourth: #61CD81;
+    --color-button-primary: #494949;
+    --color-button-secondary: #61CD81;
+    --color-button-third: #222222;
+    --color-button-text-primary: #f1f1f1;
+    --color-button-text-secondary: #3c3c3c;
+    --title-text-color: #f1f1f1!important;
+    --row-title-color: #f1f1f1!important;
+    --row-content-color: #f1f1f1!important;
+	--primary-green: #61CD81;
+  }
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -17,4 +70,101 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.theme-switch {
+	--diameter: 2.5rem;
+	--spacing: 0.3rem;
+	inline-size: 4rem; /* width */
+	block-size: 2.3rem; /* height */
+	border: none;
+	cursor: pointer;
+	color: var(--clr-text);
+	position: relative;
+	border-radius: 100vh;
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-around;
+	transition:
+		background-color 0.4s ease-in-out,
+		color 0.4s ease-in-out;
+
+	margin-right: 20px;
+}
+
+.theme-switch::before {
+	content: '';
+	position: absolute;
+	inset-inline-start: var(--spacing); /* left */
+	inset-block-start: var(--spacing); /* top */
+	border-radius: 100vh;
+	inline-size: 1.7rem; /* width */
+	block-size: 1.7rem; /* height */
+	background: #ffffff;
+	transition: inset-inline-start 0.4s ease-in-out; /* left */
+}
+
+.theme-switch.dark::before {
+	--offset: calc(100% - 2.3rem);
+	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
+}
+
+
+
+.toggle-switch {
+	--diameter: 2rem;
+	--spacing: 0.24rem;
+	inline-size: 3.2rem; /* width */
+	block-size: 1.84rem; /* height */
+	border: none;
+	cursor: pointer;
+	color: var(--clr-text);
+	position: relative;
+	border-radius: 100vh;
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-around;
+	transition:
+		background-color 0.4s ease-in-out,
+		color 0.4s ease-in-out;
+
+	margin-right: 16px;
+}
+
+.toggle-switch::before {
+	content: '';
+	position: absolute;
+	inset-inline-start: var(--spacing); /* left */
+	inset-block-start: var(--spacing); /* top */
+	border-radius: 100vh;
+	inline-size: 1.36rem; /* width */
+	block-size: 1.36rem; /* height */
+	background: #ffffff;
+	transition: inset-inline-start 0.4s ease-in-out; /* left */
+}
+
+.toggle-switch.sale::before {
+	--offset: calc(100% - 1.8rem);
+	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+.slick-dots li.slick-active button:before {
+	color: var(--color-text-primary) !important;
+}
+.dark .slick-dots li button:before {
+	color: gray;
 }

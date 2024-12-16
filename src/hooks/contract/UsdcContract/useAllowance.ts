@@ -1,0 +1,23 @@
+import { useReadContract } from "wagmi";
+import usdcAbi from "../../../abis/USDC.json";
+import { USDC_ADDRESS } from "../../../config/constants/environments";
+import { Address } from "viem";
+
+export default function useAllowance(chainId: number, address: Address | undefined, spender: Address | undefined) {
+  const { data, isError, isLoading, error, refetch } = useReadContract({
+    address: USDC_ADDRESS[chainId],
+    abi: usdcAbi,
+    functionName: "allowance",
+    chainId: chainId,
+    args: [address, spender]
+  })
+
+  if (typeof address == 'undefined') return { data: 0, refetch }
+  if (isLoading) return { data: 0, refetch }
+  if (isError) {
+    console.log('Fetching UsdcContract allowance error', error)
+    return { data: 0, refetch }
+  }
+
+  return { data, refetch }
+}

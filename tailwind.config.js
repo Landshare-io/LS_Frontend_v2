@@ -1,15 +1,25 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,js,tsx}",
-  ],
-  darkMode: "class",
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  darkMode: "selector",
   theme: {
     extend: {
+      backgroundImage: {
+        stripes: `linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.15) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.15) 50%,
+          rgba(255, 255, 255, 0.15) 75%,
+          transparent 75%,
+          transparent
+        )`,
+      },
       colors: {
-        "primary": "var(--color-primary)",
-        "secondary": "var(--color-secondary)",
-        "third": "var(--color-third)",
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        third: "var(--color-third)",
         "vault-input": "var(--color-vault-input)",
         "input-field": "var(--color-input-field)",
         "text-primary": "var(--color-text-primary)",
@@ -21,6 +31,7 @@ module.exports = {
         "button-third": "var(--color-button-third)",
         "button-text-primary": "var(--color-button-text-primary)",
         "button-text-secondary": "var(--color-button-text-secondary)",
+        "primary-green": "var(--primary-green)"
       },
       screens: {
         xs: "375px",
@@ -28,18 +39,30 @@ module.exports = {
         md: "768px",
         mlg: "1024px",
         lg: "1280px",
+        xl: "1440px",
+        xxl: "1680px",
       },
       fontFamily: {
-        interTight: ['Inter Tight', 'sans-serif'],
+        inter: ["var(--font-inter)"],
       },
       keyframes: {
         sparkling: {
-          '0%, 100%': { filter: 'opacity(0.5)' },
-          '50%': { filter: 'opacity(1.1)' },
+          "0%, 100%": { filter: "opacity(0.5)" },
+          "50%": { filter: "opacity(1.1)" },
+        },
+        fadeIn: {
+          "0%": { opacity: 0.3 },
+          "100%": { opacity: 1 },
+        },
+        progress: {
+          "0%": { "background-position": "0 0" },
+          "100%": { "background-position": "1rem 1rem" },
         },
       },
       animation: {
-        sparkling: 'sparkling 3s infinite',
+        sparkling: "sparkling 3s infinite",
+        fadeIn: "fadeIn 1.2s",
+        progress: "progress 1s infinite linear",
       },
     },
   },
