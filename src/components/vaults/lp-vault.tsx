@@ -118,12 +118,7 @@ export default function LpVault({
 
   useEffect(() => {
     updateStatus()
-  }, [inputValue]);
-
-  useEffect(() => {
-    const approvedLANDETH = formatEther(approvedLAND);
-    setIsApproved((Number(inputValue) > 0) && (Number(approvedLANDETH) >= Number(inputValue)))
-  }, [approvedLAND])
+  }, [inputValue, approvedLAND]);
 
   function handlePercents(percent: number) {
     if (lpTokenV2Balance == 0) {

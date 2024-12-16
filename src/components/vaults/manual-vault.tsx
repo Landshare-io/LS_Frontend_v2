@@ -151,12 +151,7 @@ export default function ManualVault({
 
   useEffect(() => {
     updateStatus()
-  }, [inputValue]);
-
-  useEffect(() => {
-    const approvedLANDETH = formatEther(landAllowance);
-    setIsApprovedLandStake(Number(inputValue) > 0 && Number(approvedLANDETH) >= Number(inputValue));
-  }, [landAllowance])
+  }, [inputValue, landAllowance]);
 
   const openCalcModal = async () => {
     setShowModalApy(apr.toString().substr(0, 4))

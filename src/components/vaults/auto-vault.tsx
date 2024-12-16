@@ -222,12 +222,7 @@ export default function AutoVault({
 
   useEffect(() => {
     updateStatus()
-  }, [inputValue]);
-
-  useEffect(() => {
-    const approvedLANDETH = formatEther(autoLandAllowance);
-    setIsApprovedLandStake(Number(inputValue) > 0 && Number(approvedLANDETH) >= Number(inputValue));
-  }, [autoLandAllowance]);
+  }, [inputValue, autoLandAllowance]);
 
   const openCalcModal = async () => {
     setTokenUsdPrice(tokenPriceData)
