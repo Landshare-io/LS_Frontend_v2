@@ -109,9 +109,14 @@ export default function ReferralOthers() {
                 if (!chain.unsupported && connected) {
                   return (
                     <div className="w-full flex justify-between items-center p-2 gap-4 rounded-lg bg-gray-500 bg-opacity-10">
-                      <div className=" truncate break-words text-text-primary">
+                      {trackingLinkUrl ? 
+                      <div className="truncate break-words text-text-primary px-2">
                         {trackingLinkUrl}
-                      </div>
+                      </div> : 
+                      <div className="truncate break-words text-text-secondary px-2">
+                        Your referral link will appear here...
+                      </div>}
+                    
 
                       <div>
                         {showCheck ? (

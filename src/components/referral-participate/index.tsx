@@ -14,7 +14,7 @@ export default function ReferralParticipate() {
 
   return (
     <div className="w-full grid lg:grid-cols-[62%_38%] grid-cols-1 h-fit gap-6">
-      <div className="w-full md:flex bg-third rounded-[32px] p-5 gap-6 shadow-lg min-h-[260px]">
+      <div className="w-full md:flex bg-third rounded-[32px] p-10 gap-6 shadow-lg min-h-[260px]">
         {/* user diagram */}
         <div className="flex gap-4 h-20 md:h-auto items-start">
           <div className="h-20 md:h-full aspect-square shrink-0  bg-[#24BC481A] rounded-lg md:rounded-[32px] ">
@@ -103,7 +103,7 @@ export default function ReferralParticipate() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-between bg-third rounded-[32px] p-5 gap-6 shadow-lg">
+      <div className="flex flex-col justify-between bg-third rounded-[32px] p-10 gap-6 shadow-lg">
         <div>
           <p className="text-text-primary font-bold text-lg">
             How To Get Started
