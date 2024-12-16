@@ -13,7 +13,7 @@ export default function ToggleSwitch({ isSale, className, onClick, disabled }: T
 
   return (
     <button
-      className={`toggle-switch flex gap-[2px] ${isSale ? 'sale' : 'off-sale'} ${isSale ? "bg-[#fff]" : "bg-[#808080]"} ml-4 ${className}`}
+      className={`toggle-switch flex gap-[2px] ${isSale ? 'sale' : 'off-sale'} ${isSale ? "bg-[#808080]" : "bg-[#808080]"} ml-4 ${className}`}
       type="button"
       aria-pressed="false"
       onClick={() => onClick()}

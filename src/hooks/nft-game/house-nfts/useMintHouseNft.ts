@@ -7,29 +7,41 @@ import { useGlobalContext } from "../../../context/GlobalContext"
 import { PROVIDERS } from "../../../config/constants/environments"
 
 export default function useMintHouseNft(chainId: number, address: Address | undefined, setIsLoading: Function) {
+  const [transactionNonce, setTransactionNonce] = useState(0)
   const { notifyError, notifySuccess } = useGlobalContext()
   const { data: balance, refetch: refetchBalance } = useBalanceOfLandToken({ chainId, address })
-  const { sendTransaction, data: sendTransactionTx } = useSendTransaction()
+  const { sendTransaction, data: sendTransactionTx, error: sendTransactionError } = useSendTransaction()
+
+  useEffect(() => {
+    if (transactionNonce) {
+      if (sendTransactionError) {
+        setIsLoading(false);
+        setTransactionNonce(0)
+        return notifyError(`Mint a new house Error`);
+      }
+    }
+  }, [transactionNonce, sendTransactionError])
 
   useEffect(() => {
     (async () => {
-      if (sendTransactionTx) {
-        const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-
-        if (receipt.status) {
-          await refetchBalance()
-
-          setIsLoading(false);
-          return notifySuccess(`Mint a new house successfully`)
-        } else {
-          setIsLoading(false);
-          return notifyError(`Mint a new house Error`);
+      if (transactionNonce) {
+        if (sendTransactionTx) {
+          const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+  
+          if (receipt.status) {
+            await refetchBalance()
+            setTransactionNonce(0)
+            setIsLoading(false);
+            return notifySuccess(`Mint a new house successfully`)
+          } else {
+            setIsLoading(false);
+            setTransactionNonce(0)
+            return notifyError(`Mint a new house Error`);
+          }
         }
       }
-      
-      
     })()
-  }, [sendTransactionTx])
+  }, [transactionNonce, sendTransactionTx])
 
   const mint = async (nftCreditCost: number, harvestAmount: number) => {
     try {
@@ -41,6 +53,7 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
       const feeLandAmount = harvestAmount / 100 * 8;
   
       if (Number(balance) >= Number(feeLandAmount)) {
+        setTransactionNonce(transactionData.nonce)
         sendTransaction(transactionData.transaction)
       } else {
         setIsLoading(false)

@@ -102,7 +102,7 @@ export default function NftItem({ house }: NftItemProps) {
         </div>
         {house.onSale && 
           <h4 
-            className={`bg-[#ec9821] text-[#fff] absolute top-0 right-0 translate-x-[30%] translate-y-0 rotate-45 origin-top-right text-[14px] py-[5px] before:content-[''] before:absolute before:top-0 before:my-0 before:mx-[-1px] before:w-full before:h-full before:bg-[#ec9821] after:content-[''] after:absolute after:top-0 after:my-0 after:mx-[-1px] after:w-full after:h-full after:bg-[#ec9821] ${BOLD_INTER_TIGHT.className}`}
+            className={`bg-[#ec9821] text-[#fff] w-full text-center absolute top-[42%] right-0 translate-x-[30%] translate-y-0 rotate-45 origin-top-right text-[14px] py-[5px] before:content-[''] before:my-0 before:mx-[-1px] before:w-full before:h-full before:bg-[#ec9821] after:content-[''] after:my-0 after:mx-[-1px] after:w-full after:h-full after:bg-[#ec9821] ${BOLD_INTER_TIGHT.className}`}
           >
             On Sale
           </h4>

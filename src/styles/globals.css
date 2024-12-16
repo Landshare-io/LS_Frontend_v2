@@ -144,7 +144,7 @@ a {
 }
 
 .toggle-switch.sale::before {
-	--offset: calc(100% - 2.3rem);
+	--offset: calc(100% - 1.8rem);
 	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
 }
 

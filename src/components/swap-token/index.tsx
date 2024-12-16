@@ -139,7 +139,6 @@ export default function SwapToken() {
   ) as any;
 
   useEffect(() => {
-    console.log(buyTokenAmount.amountOfLAND)
     setUsdcAmount(Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount);
     setBuyLANDAmount(buyTokenAmount[1])
     setBuyUSDCAmount(buyTokenAmount[0])
@@ -339,10 +338,11 @@ export default function SwapToken() {
           style={customModalStyles}
           contentLabel="current-apr Modal"
         >
-          <div className="w-full overflow-y-scroll h-[460px]">
+          <div className="w-full overflow-y-auto h-[460px]">
             <Button
               onClick={() => setIsSwipeluxModalOpen(true)}
               className="h-[115px] flex flex-col justify-center items-center w-full pb-[20px] border-b relative hover:bg-gray-300 transition-colors"
+              textClassName="flex flex-col justify-center items-center"
             >
               <Image src={IconSwipelux} alt="" className="w-[40px]" />
               <div className="text-[24px] font-bold">Swipelux</div>
@@ -389,7 +389,7 @@ export default function SwapToken() {
           <>
             <div className="flex flex-col w-full gap-[4px] min-h-[76px]">
               <div className="flex justify-between items-center">
-                <label className="text-text-secondary">RWA Token</label>
+                <label className="text-text-secondary text-[12px]">RWA Token</label>
                 <div className="flex justify-between items-center gap-[5px]">
                   <label className="text-text-secondary text-[12px] leading-[22px]">
                     Balance:
@@ -427,17 +427,17 @@ export default function SwapToken() {
                   <Image
                     src={IconUSDC}
                     alt="usdc"
-                    className="w-[20px] h-[20px]"
+                    className="w-[18px] h-[18px]"
                   />
                   <span
-                    className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                    className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                   >
                     USDC
                   </span>
                   <Image
                     src={IconArrowDown}
                     alt="arrow down"
-                    className="w-[20px] h-[20px]"
+                    className="w-[18px] h-[18px]"
                   />
                 </div>
                 <div>
@@ -573,7 +573,7 @@ export default function SwapToken() {
           <>
             <div className="flex flex-col w-full gap-[4px] min-h-[76px]">
               <div className="flex justify-between items-center">
-                <label className="text-text-secondary">RWA Token </label>
+                <label className="text-text-secondary text-[12px]">RWA Token </label>
                 {isConnected && (
                   <div className="flex justify-between items-center gap-[5px]">
                     <label className="text-text-secondary text-[12px] leading-[22px]">
@@ -611,15 +611,15 @@ export default function SwapToken() {
 
             <div className="flex min-h-[76px] w-full gap-[16px]">
               <div className="flex flex-col flex-1 w-full gap-[4px] min-h-[76px]">
-                <div className="flex justify-between items-center gap-[5px] ml-[16px]">
+                <div className="flex justify-between items-center gap-[5px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
                     <Image
                       src={IconUSDC}
                       alt="usdc"
-                      className="w-[20px] h-[20px]"
+                      className="w-[18px] h-[18px]"
                     />
                     <span
-                      className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                      className={`text-text-primary text-[14px] leading-[22px] !text-[12px] ${BOLD_INTER_TIGHT.className}`}
                     >
                       USDC
                     </span>
@@ -654,7 +654,7 @@ export default function SwapToken() {
                 <div className="flex justify-between items-center gap-[5px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
                     <span
-                      className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                      className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                     >
                       LAND
                     </span>
@@ -782,7 +782,7 @@ export default function SwapToken() {
                     rel="noopener noreferrer"
                     className="text-decoration-none"
                   >
-                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px]">
+                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81] hover:bg-[#61cd81]">
                       Trade on DS Swap
                     </Button>
                   </a>

@@ -331,7 +331,7 @@ export default function NftDetails({
                 <span className="text-[16px] text-text-primary">On-Sale:</span>
                 <ToggleSwitch 
                   isSale={house.onSale} 
-                  onClick={() => {}} 
+                  onClick={() => onSaleHandler()} 
                   disabled={onSaleLoading}
                 />
               </div>

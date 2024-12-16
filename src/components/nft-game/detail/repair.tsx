@@ -49,11 +49,11 @@ export default function Repair({
               <ReparingCost
                 className="min-w-[316px] gap-[20px]"
                 cost={{
-                  power: house?.repairCost[0] ?? 0,
-                  lumber: house?.repairCost[1] ?? 0,
-                  brick: house?.repairCost[2] ?? 0,
-                  concrete: house?.repairCost[3] ?? 0,
-                  steel: house?.repairCost[4] ?? 0,
+                  power: house?.repairCost ? house?.repairCost[0] ?? 0 : 0,
+                  lumber: house?.repairCost ? house?.repairCost[1] ?? 0 : 0,
+                  brick: house?.repairCost ? house?.repairCost[2] ?? 0 : 0,
+                  concrete: house?.repairCost ? house?.repairCost[3] ?? 0 : 0,
+                  steel: house?.repairCost ? house?.repairCost[4] ?? 0 : 0,
                 }}
               />}
             <RepairButton
@@ -83,11 +83,11 @@ export default function Repair({
             <ReparingCost
               className="min-w-[316px]"
               cost={{
-                power: house.repairCost[0],
-                lumber: house.repairCost[1],
-                brick: house.repairCost[2],
-                concrete: house.repairCost[3],
-                steel: house.repairCost[4],
+                power: house?.repairCost ? house.repairCost[0] : 0,
+                lumber: house?.repairCost ? house.repairCost[1] : 0,
+                brick: house?.repairCost ? house.repairCost[2] : 0,
+                concrete: house?.repairCost ? house.repairCost[3] : 0,
+                steel: house?.repairCost ? house.repairCost[4] : 0,
               }}
             />
           </div>
