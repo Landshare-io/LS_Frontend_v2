@@ -174,8 +174,9 @@ export default function SwapToken() {
       borderRadius: "20px",
     },
     overlay: {
-      background: "#00000080",
-    },
+      background: '#00000080',
+      zIndex: 99999
+    }
   };
 
   function get_information(link: string, callback: any) {
@@ -201,7 +202,6 @@ export default function SwapToken() {
   const { theme } = useGlobalContext();
 
   const handleLinkClick = (event: any) => {
-    console.log("isWhitelisted", isWhitelisted);
     event.preventDefault(); // Prevent the default link behavior
     setKycopen(false);
     setZeroIDModalOpen(true);
@@ -278,25 +278,25 @@ export default function SwapToken() {
               KYC Verification
             </h5>
             <p
-              className={`text-[16px] pt-[10px] leading-[28px] text-center tracking-[2%] ${BOLD_INTER_TIGHT.className} !font-normal`}
+              className='text-[#000000CC] text-[16px] pt-[10px] leading-[28px] text-center tracking-[2%] font-inter font-semibold'
             >
               Complete the KYC process to access RWA Tokens
             </p>
           </div>
           <div className="w-full mt-3">
             <a href="https://dashboard.landshare.io">
-              <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors">
+              <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors">
                 <p
                   className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
                 >
                   Manual Verification
                 </p>
               </Button>
+              <p className="text-xs text-text-secondary text-center mt-1">Recommended for advanced users and large investors</p>
             </a>
             <div onClick={handleLinkClick}>
               <Button
-                className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
-                disabled
+                className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
               >
                 <p
                   className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
@@ -304,6 +304,7 @@ export default function SwapToken() {
                   ZeroID Verification
                 </p>
               </Button>
+              <p className="text-xs text-text-secondary text-center mt-1">Quick verification - 5 minutes or less!</p>
             </div>
           </div>
         </Modal>
@@ -312,11 +313,11 @@ export default function SwapToken() {
           isOpen={isZeroIDModal}
           onRequestClose={() => {
             setZeroIDModalOpen(true),
-              document.body.classList.remove("modal-open");
+            document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
           contentLabel="ZeroID Modal"
-          className="zeroid-modal"
+          className="relative"
         >
           <MdCancel
             onClick={() => {
@@ -331,14 +332,17 @@ export default function SwapToken() {
           isOpen={isBuyModalOpen}
           onRequestClose={() => {
             setIsBuyModalOpen(false),
-              document.body.classList.remove("modal-open");
+            document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
           contentLabel="current-apr Modal"
         >
           <div className="w-full overflow-y-auto h-[460px]">
             <Button
-              onClick={() => setIsSwipeluxModalOpen(true)}
+              onClick={() => {
+                setIsBuyModalOpen(false)
+                setIsSwipeluxModalOpen(true)
+              }}
               className="h-[115px] flex flex-col justify-center items-center w-full pb-[20px] border-b relative hover:bg-gray-300 transition-colors"
               textClassName="flex flex-col justify-center items-center"
             >
@@ -798,14 +802,14 @@ export default function SwapToken() {
                         KYC not verified
                       </span>
                     </div>
-                    <span className="text-text-secondary">
+                    <span className={`text-[14px] text-text-secondary ${BOLD_INTER_TIGHT.className}`}>
                       Complete the KYC process on the dashboard to access RWA
                       Tokens
                     </span>
                     <Button
                       onClick={handlemodalkyc}
                       textClassName="text-[#fff]"
-                      className="w-full mt-[14px] py-[13px] px-[24px] rounded-[100px]"
+                      className="w-full mt-[14px] py-[13px] bg-primary-green px-[24px] rounded-[100px]"
                     >
                       Verify Now
                     </Button>
@@ -820,7 +824,7 @@ export default function SwapToken() {
                     }}
                   >
                     <span
-                      className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
+                      className={`text-[14px] cursor-pointer leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
                     >
                       Get LAND Token
                     </span>
@@ -850,7 +854,7 @@ export default function SwapToken() {
           ) : (
             <div className="flex flex-col items-center gap-[18px] w-full">
               <div className="w-full">
-                <ConnectWallet containerClassName="w-full mr-0" />
+                <ConnectWallet connectButtonClassName="w-full mr-0" />
               </div>
               <div
                 className="flex !bg-transparent items-center justify-center"
@@ -859,7 +863,7 @@ export default function SwapToken() {
                 }}
               >
                 <span
-                  className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
+                  className={`text-[14px] cursor-pointer leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
                 >
                   Get LAND Token
                 </span>

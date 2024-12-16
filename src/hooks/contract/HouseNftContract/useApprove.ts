@@ -9,21 +9,23 @@ export default function useApprove() {
   const {
     data,
     isPending,
+    error,
     writeContract
   } = useWriteContract();
 
-  async function approve(chainId: number, approveAddress: Address, amount: number | BigNumberish) {
+  async function approve(chainId: number, approveAddress: Address, houseId: number) {
     await writeContract({
       address: HOUSE_NFT_CONTRACT[chainId],
       abi: HouseNft,
       functionName: "approve",
       chainId: chainId,
-      args: [approveAddress, amount]
+      args: [approveAddress, houseId]
     });
   }
 
   return {
     approve,
+    error,
     isPending,
     data
   }

@@ -8,7 +8,7 @@ export default function useIsApprovedForAll(chainId: number, contractAddress: Ad
     address: contractAddress,
     abi: PremiumNft,
     functionName: "isApprovedForAll",
-    args: [address, ADMIN_WALLET_ADDRESS],
+    args: [address, ADMIN_WALLET_ADDRESS[chainId]],
     chainId: chainId
   })
 

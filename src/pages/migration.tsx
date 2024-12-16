@@ -55,8 +55,8 @@ const Migration: NextPage = () => {
                   Chain not Supported / Switch to BSC
                 </div>) : (
                   <>
-                    <h1 className={`text-text-primary text-[48px] text-capitalize ${BOLD_INTER_TIGHT.className}`}>Landshare Token Migration</h1>
-                    <p className="text-[18px] mb-[30px] mt-[15px] text-text-primary">
+                    <h1 className={`text-text-primary text-[40px] md:text-[48px] text-capitalize ${BOLD_INTER_TIGHT.className}`}>Landshare Token Migration</h1>
+                    <p className="text-[16px] md:text-[18px] mb-[30px] mt-[15px] text-text-primary">
                       To migrate with us, simply select your vault below and follow
                       the steps. Need help? Check out our detailed guides{" "}
                       <a

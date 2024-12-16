@@ -16,7 +16,7 @@ export default function useApprove() {
       abi: PremiumNft,
       functionName: "approve",
       chainId: chainId,
-      args: [ADMIN_WALLET_ADDRESS, itemId]
+      args: [ADMIN_WALLET_ADDRESS[chainId], itemId]
     })
   }
 
