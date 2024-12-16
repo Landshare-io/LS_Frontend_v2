@@ -9,6 +9,7 @@ import useWithdraw from "../MasterchefContract/useWithdraw";
 import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
 import useBalanceOfLpTokenV2 from "../LpTokenV2Contract/useBalanceOf";
 import useApprove from "../LpTokenV2Contract/useApprove";
+import useAllowance from "../LpTokenV2Contract/useAllowance";
 import useUserInfo from "../MasterchefContract/useUserInfo";
 import usePendingLand from "../MasterchefContract/usePendingLand";
 import useTotalSupply from "../LpTokenV2Contract/useTotalSupply";
@@ -29,6 +30,7 @@ export default function useLpVault(chainId: number, address: Address | undefined
   const { refetch: refetchTotalSupply } = useTotalSupply(chainId)
   const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] })
   const { refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId, address })
+  const { refetch: refetchAllowance } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { refetch: () => void }
 
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
     hash: depositTx,
@@ -122,6 +124,7 @@ export default function useLpVault(chainId: number, address: Address | undefined
             refetchUserInfo()
             refetchPendingLand()
             refetchBalanceOfLandToken()
+            refetchAllowance()
             updateLPFarm()
             updateStatus()
             setScreenLoadingStatus("Approve Transaction success")
@@ -167,9 +170,9 @@ export default function useLpVault(chainId: number, address: Address | undefined
     withdraw(1, amount)
   }
 
-  const approveVault = () => {
+  const approveVault = (amount: BigNumberish) => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(MASTERCHEF_CONTRACT_ADDRESS[bsc.id], lpTokenV2Balance)
+    approve(MASTERCHEF_CONTRACT_ADDRESS[bsc.id], amount)
   }
 
   return {

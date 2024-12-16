@@ -119,6 +119,11 @@ export default function LpVault({
     updateStatus()
   }, [inputValue]);
 
+  useEffect(() => {
+    const approvedLANDETH = formatEther(approvedLAND);
+    setIsApproved((Number(inputValue) > 0) && (Number(approvedLANDETH) >= Number(inputValue)))
+  }, [approvedLAND])
+
   function handlePercents(percent: number) {
     if (lpTokenV2Balance == 0) {
       notifyError("You don't have enough balance to perform this action.")
@@ -367,7 +372,7 @@ export default function LpVault({
                           onClick={() => {
                             if (chainId == MAJOR_WORK_CHAIN.id) {
                               if (inputValue && Number(inputValue) > Number(0)) {
-                                depositing ? isApprovedLP ? depositHandler() : approveVault() : withdrawHandler()
+                                depositing ? isApprovedLP ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
@@ -453,7 +458,7 @@ export default function LpVault({
                               onClick={() => {
                                 if (chainId == MAJOR_WORK_CHAIN.id) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    depositing ? isApprovedLP ? depositHandler() : approveVault() : withdrawHandler()
+                                    depositing ? isApprovedLP ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
