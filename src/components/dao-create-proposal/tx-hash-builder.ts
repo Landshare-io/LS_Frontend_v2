@@ -171,7 +171,7 @@ export default async function txHashBuilder(
 
     const values = [
       {
-        to: MASTERCHEF_CONTRACT_ADDRESS,
+        to: MASTERCHEF_CONTRACT_ADDRESS[MAJOR_WORK_CHAIN.id],
         value: 0,
         data:
           "0x64482f790000000000000000000000000000000000000000000000000000000000000000" +
@@ -181,7 +181,7 @@ export default async function txHashBuilder(
         nonce: 0,
       },
       {
-        to: MASTERCHEF_CONTRACT_ADDRESS,
+        to: MASTERCHEF_CONTRACT_ADDRESS[MAJOR_WORK_CHAIN.id],
         value: 0,
         data:
           "0x64482f790000000000000000000000000000000000000000000000000000000000000001" +
@@ -191,7 +191,7 @@ export default async function txHashBuilder(
         nonce: 0,
       },
       {
-        to: MASTERCHEF_CONTRACT_ADDRESS,
+        to: MASTERCHEF_CONTRACT_ADDRESS[MAJOR_WORK_CHAIN.id],
         value: 0,
         data:
           "0x64482f790000000000000000000000000000000000000000000000000000000000000002" +
