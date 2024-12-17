@@ -62,6 +62,7 @@ export default function Input({
 
   const fillWithMax = () => {
     setValue(max);
+    setError("");
   };
 
   return (
