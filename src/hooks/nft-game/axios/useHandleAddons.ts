@@ -21,55 +21,72 @@ export default function useHandleAddons(chainId: number, address: Address | unde
   const { resource, setResource } = useGetResource()
   const { oneDayTime } = useGetSetting()
   const { refetch: refetchBalance } = useBalanceOfLand({ chainId, address })
-  const { sendTransaction, data: sendTransactionTx } = useSendTransaction()
+  const { sendTransaction, data: sendTransactionTx, error: sendTransactionError } = useSendTransaction()
   const [signNonce, setSignNonce] = useState(0)
   const [handleItem, setHandleItem] = useState<any>({})
 
   useEffect(() => {
-    (async () => {
-      if (sendTransactionTx) {
-        try {
-          const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-  
-          if (receipt.status) {
-            try {
-              const { data } = await axios.post('/has-item/buy-item-with-land', {
-                houseId: house.id,
-                itemId: handleItem.id,
-                hasItemId: handleItem.hasItemId,
-                txHash: receipt.transactionHash,
-                blockNumber: receipt.blockNumber,
-                nonce: signNonce
-              })
+    if (signNonce) {
+      if (sendTransactionError) {
+        setSignNonce(0)
+        setIsLoading({ type: -1, loading: false });
+        notifyError(`Buy ${handleItem.name} Error`);
+      }
+    }
+  }, [signNonce, sendTransactionError])
 
-              refetchBalance()
-              setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
+  useEffect(() => {
+    (async () => {
+      if (signNonce) {
+        if (sendTransactionTx) {
+          try {
+            const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
     
-              setHouse((prevState: any) => ({
-                ...prevState,
-                yieldUpgrades: data.yieldUpgrades,
-                lastDurability: data.lastDurability,
-                multiplier: data.multiplier,
-                maxDurability: data.maxDurability
-              }))
+            if (receipt.status) {
+              try {
+                const { data } = await axios.post('/has-item/buy-item-with-land', {
+                  houseId: house.id,
+                  itemId: handleItem.id,
+                  hasItemId: handleItem.hasItemId,
+                  txHash: receipt.transactionHash,
+                  blockNumber: receipt.blockNumber,
+                  nonce: signNonce
+                })
+  
+                await refetchBalance()
+                setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
+      
+                setHouse((prevState: any) => ({
+                  ...prevState,
+                  yieldUpgrades: data.yieldUpgrades,
+                  lastDurability: data.lastDurability,
+                  multiplier: data.multiplier,
+                  maxDurability: data.maxDurability
+                }))
+                setSignNonce(0)
+                setIsLoading({ type: -1, loading: false });
+                notifySuccess(`${handleItem.name} purchased successfully`)
+              } catch (error: any) {
+                console.log(error)
+                setSignNonce(0)
+                setIsLoading({ type: -1, loading: false });
+                notifyError(error.response.data.message)
+              }
+            } else {
+              setSignNonce(0)
               setIsLoading({ type: -1, loading: false });
-              notifySuccess(`${handleItem.name} purchased successfully`)
-            } catch (error: any) {
-              console.log(error)
-              notifyError(error.response.data.message)
+              notifyError(`Buy ${handleItem.name} Error`);
             }
-          } else {
+          } catch (error: any) {
+            console.log(`Buy ${handleItem.name} Error: `, error);
+            setSignNonce(0)
             setIsLoading({ type: -1, loading: false });
             notifyError(`Buy ${handleItem.name} Error`);
           }
-        } catch (error: any) {
-          console.log(`Buy ${handleItem.name} Error: `, error);
-          setIsLoading({ type: -1, loading: false });
-          notifyError(`Buy ${handleItem.name} Error`);
         }
       }
     })()
-  }, [sendTransactionTx])
+  }, [signNonce, sendTransactionTx])
 
   const handleFireplace = async (isOwn: boolean, item: any, lumberCount: number) => {
     setIsLoading({ type: item.id, loading: true });

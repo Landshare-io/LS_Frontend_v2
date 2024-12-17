@@ -45,7 +45,10 @@ export const PROVIDERS: {
   31337: getDefaultProvider(PROVIDER_URLS['31337'])
 }
 export const ADDRESS_BOOK_ID = 731780 // 18c3953f93f00ab7003571dbd4e0a915
-export const HOUSE_NFT_CONTRACT = "0x08116b6B5b561e881b0B980ddCd12cFaB356537b" as Address
+export const HOUSE_NFT_CONTRACT: MULTI_CHAIN_CONTRACT_TYPE = {
+  56: "0x08116b6B5b561e881b0B980ddCd12cFaB356537b",
+  31337: "0x457cCf29090fe5A24c19c1bc95F492168C0EaFdb"
+}
 export const LAND_TOKEN_V1_CONTRACT_ADDRESS = "0x9D986A3f147212327Dd658F712d5264a73a1fdB0" as Address
 export const LP_TOKEN_V1_CONTRACT_ADDRESS = "0x468CDe4aD48cbAfA3cDfb68Fd9f2c114DDfE6c08" as Address
 export const PSC_ROUTER_CONTRACT_ADDRESS = "0x10ED43C718714eb63d5aA57B78B54704E256024E" as Address
@@ -76,14 +79,18 @@ export const APOLLO_RWA_BUY_URL = "https://api.studio.thegraph.com/query/81176/l
 export const APOLLO_RWA_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa/v0.1.0"
 export const LAND_PRICE_SUBGRAPH_URL = 'https://api.studio.thegraph.com/query/81176/landshare-price/v0.1.0'
 export const LANDSHARE_COST_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=landshare&vs_currencies=usd'
-export const LANDPRICE_URL = 'http://159.203.181.148:5000/land_pricedata/'
-export const LANDMARKET_URL = 'http://159.203.181.148:5000/land_market'
+export const LANDPRICE_URL = 'https://landshare.xyz/land_pricedata/'
+export const LANDMARKET_URL = 'https://landshare.xyz/land_market'
 export const LIVE_COIN_LIST_URL = 'https://api.livecoinwatch.com/coins/list'
 export const LIVE_COIN_API_KEY= '95ce49d3-3e89-475d-b61e-6638a002b1fe'
 export const ZERO_ID_WIDGET_API_KEY = '10000000-0000-0000-0000-7f9a2af16a1c'
 export const ZERO_ID_WIDGET_VERIFIER_URL = 'https://landshare-zeroid-verdict.onrender.com/verdict'
 export const ZERO_ID_WIDGET_ENV = 'zeroid'
-export const ADMIN_WALLET_ADDRESS = "" as Address
+export const ADMIN_WALLET_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
+  56: "0x692d606069f7798fAe4FA51117dA418EFa15A2BA" as Address,
+  97: "0xC0f5Ef4748BCC96D3f7270FE88DBed1396C7B8B8",
+  31337: "0x70997970c51812dc3a010c7d01b50e0d17dc79c8"
+}
 export const PREMIUM_NFT_CONTRACT_ADDRESS: Record<string, MULTI_CHAIN_CONTRACT_TYPE> = {
   "Porcelain Tile": {
     56: '0x7E96B1A21Cc702D495eD9c430A4B87CB1e163ab3' as Address,
@@ -100,21 +107,6 @@ export const PREMIUM_NFT_CONTRACT_ADDRESS: Record<string, MULTI_CHAIN_CONTRACT_T
     97: '' as Address,
     31337: '0x1291Be112d480055DaFd8a610b7d1e203891C274'
   }
-}
-export const PORCELAIN_TILE_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
-  56: '0x7E96B1A21Cc702D495eD9c430A4B87CB1e163ab3' as Address,
-  97: '' as Address,
-  31337: '0x5eb3Bc0a489C5A8288765d2336659EbCA68FCd00'
-}
-export const POOL_TALBE_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
-  56: '0x422FCBc638E3f45E8b5555537A83AB59D9903716' as Address,
-  97: '' as Address,
-  31337: '0x809d550fca64d94Bd9F66E60752A544199cfAC3D'
-}
-export const MARBLE_COUNTEROPS_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
-  56: '0x345E80D12b38E85E0CB205e54FA1A5853c1B91b7' as Address,
-  97: '' as Address,
-  31337: '0x1291Be112d480055DaFd8a610b7d1e203891C274'
 }
 export const API_CONSUMER_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x234fCeB8e266cc0843ea134f378f0157dB4d09dE' as Address,
@@ -195,9 +187,9 @@ export const AUTO_VAULT_V3_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   97: '' as Address
 }
 export const CCIP_CHAIN_SENDER_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
-  56: '' as Address,
-  97: '' as Address,
-  1: '' as Address,
+  // 56: '' as Address,
+  // 97: '' as Address,
+  // 1: '' as Address,
   11155111: '0xaCBd41a11B8FbE0549E3a4e57258d4aB745888F8',
   137: '0x4166286e9ad3be3E3647389795Be3bCf5d675Fb5',
   80002: '0x21b09f2606A724f8660D7690681826EaD509Ac02',

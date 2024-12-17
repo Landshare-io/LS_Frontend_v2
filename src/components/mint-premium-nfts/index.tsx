@@ -29,12 +29,12 @@ export default function PremiumNfts() {
   const [premiumNfts, setPremiumNfts] = useState<any[]>([]);
   const [loader, setLoader] = useState("");
   const { oneDayTime, premiumMintCap } = useGetSetting() as { oneDayTime: number, premiumMintCap: Record<string, number> }
-  const { data: porcelainItems } = useTotalSupply(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Porcelain Tile"][chainId]) as { data: number }
-  const { data: poolTableItems } = useTotalSupply(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Pool Table"][chainId]) as { data: number }
-  const { data: marbleItems } = useTotalSupply(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Marble Countertops"][chainId]) as { data: number }
+  const { data: porcelainItems } = useTotalSupply(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Porcelain Tile"][chainId]) as { data: BigNumberish }
+  const { data: poolTableItems } = useTotalSupply(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Pool Table"][chainId]) as { data: BigNumberish }
+  const { data: marbleItems } = useTotalSupply(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Marble Countertops"][chainId]) as { data: BigNumberish }
   const { data: landTokenBalance } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish }
   const { mint } = useMintPremiumNft(chainId, address, setLoader)
-  const amountMinted: Record<string, number> = {
+  const amountMinted: Record<string, BigNumberish> = {
     "Porcelain Tile": porcelainItems,
     "Pool Table": poolTableItems,
     "Marble Countertops": marbleItems
@@ -78,7 +78,7 @@ export default function PremiumNfts() {
         setLoader("")
         return notifyError("Not enough LAND tokens");
       } else {
-        if (amountMinted[item.name] >= premiumMintCap[item.name]) {
+        if (Number(amountMinted[item.name]) >= Number(premiumMintCap[item.name])) {
           setLoader("");
           notifyError(`${item.name} Nft minted as a max value.`)
         }
@@ -96,7 +96,7 @@ export default function PremiumNfts() {
       {premiumNfts.map((item, index) => (
         <PremiumNft
           key={`mpremium-item-${index}`}
-          amountMinted={amountMinted[item.name]}
+          amountMinted={Number(amountMinted[item.name])}
           mintCap={premiumMintCap[item.name]}
           premiumNft={item}
           loader={loader}

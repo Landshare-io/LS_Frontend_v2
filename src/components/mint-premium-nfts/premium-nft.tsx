@@ -51,7 +51,7 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
             />
             <div className="flex absolute items-end w-full justify-between px-3 bottom-[5px]">
               <div className="text-[#fff] text-[14px] font-semibold align-text-bottom leading-[18px]">
-                Minted: {amountMinted ?? 0} / Limit {mintCap ?? 0}
+                Minted: {Number(amountMinted) ?? 0} / Limit {Number(mintCap) ?? 0}
               </div>
               <div>
                 <div onClick={() => setOpenModal(true)}>

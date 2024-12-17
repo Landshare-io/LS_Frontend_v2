@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import numeral from "numeral";
 import { LANDSHARE_COST_URL } from "../../config/constants/environments";
 
 export default function useGetLandPrice() {
@@ -8,11 +9,17 @@ export default function useGetLandPrice() {
 
   useEffect(() => {
     (async () => {
-      setIsLoading(true)
-      const { data: { landshare: { usd: priceData } } } = await axios.get(LANDSHARE_COST_URL);
-
-      setPrice(priceData)
-      setIsLoading(false)
+      try {
+        setIsLoading(true)
+        const { data: { landshare: { usd: priceData } } } = await axios.get(LANDSHARE_COST_URL);
+  
+        setPrice(Number(numeral(Number(priceData)).format("0.[000]")));
+        setIsLoading(false)
+      } catch (err) {
+        console.log(err)
+        setPrice(1);
+        setIsLoading(false)
+      }
     })()
   }, [])
 

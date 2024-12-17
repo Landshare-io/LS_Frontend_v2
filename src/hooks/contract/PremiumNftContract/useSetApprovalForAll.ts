@@ -16,7 +16,7 @@ export default function useSetApprovalForAll() {
       abi: PremiumNft,
       functionName: "setApprovalForAll",
       chainId: chainId,
-      args: [ADMIN_WALLET_ADDRESS, true]
+      args: [ADMIN_WALLET_ADDRESS[chainId], true]
     })
   }
 

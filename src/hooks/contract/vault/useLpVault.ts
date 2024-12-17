@@ -9,6 +9,7 @@ import useWithdraw from "../MasterchefContract/useWithdraw";
 import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
 import useBalanceOfLpTokenV2 from "../LpTokenV2Contract/useBalanceOf";
 import useApprove from "../LpTokenV2Contract/useApprove";
+import useAllowance from "../LpTokenV2Contract/useAllowance";
 import useUserInfo from "../MasterchefContract/useUserInfo";
 import usePendingLand from "../MasterchefContract/usePendingLand";
 import useTotalSupply from "../LpTokenV2Contract/useTotalSupply";
@@ -17,18 +18,19 @@ import { LP_TOKEN_V2_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../..
 
 export default function useLpVault(chainId: number, address: Address | undefined, updateStatus: Function, updateLPFarm: Function) {
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
-  const { deposit, data: depositTx } = useDeposit(chainId)
-  const { withdraw, data: withdrawTx } = useWithdraw(chainId)
-  const { approve, data: approveTx } = useApprove(chainId)
+  const { deposit, data: depositTx, isError: isDepositError } = useDeposit(chainId)
+  const { withdraw, data: withdrawTx, isError: isWithdrawError } = useWithdraw(chainId)
+  const { approve, data: approveTx, isError: isApproveError } = useApprove(chainId)
   const { data: lpTokenV2Balance, refetch: refetchLpTokenV2 } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as {
     data: BigNumberish,
     refetch: Function
   }
-  const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 0, address })
-  const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 0, address })
+  const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 1, address })
+  const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 1, address })
   const { refetch: refetchTotalSupply } = useTotalSupply(chainId)
   const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] })
   const { refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId, address })
+  const { refetch: refetchAllowance } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { refetch: () => void }
 
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
     hash: depositTx,
@@ -45,7 +47,9 @@ export default function useLpVault(chainId: number, address: Address | undefined
 
   useEffect(() => {
     try {
-      if (depositTx) {
+      if (isDepositError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (depositTx) {
         if (depositStatusData) {
           if (depositSuccess) {
             refetchTotalSupply()
@@ -68,14 +72,17 @@ export default function useLpVault(chainId: number, address: Address | undefined
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isDepositError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [depositTx, depositStatusData, depositSuccess])
+  }, [depositTx, depositStatusData, depositSuccess, isDepositError])
 
   useEffect(() => {
     try {
-      if (withdrawTx) {
+      if (isWithdrawError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (withdrawTx) {
         if (withdrawStatusData) {
           if (withdrawSuccess) {
             refetchTotalSupply()
@@ -98,14 +105,17 @@ export default function useLpVault(chainId: number, address: Address | undefined
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isWithdrawError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [withdrawTx, withdrawStatusData, withdrawSuccess])
+  }, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawError])
 
   useEffect(() => {
     try {
-      if (approveTx) {
+      if (isApproveError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
             refetchTotalSupply()
@@ -114,6 +124,7 @@ export default function useLpVault(chainId: number, address: Address | undefined
             refetchUserInfo()
             refetchPendingLand()
             refetchBalanceOfLandToken()
+            refetchAllowance()
             updateLPFarm()
             updateStatus()
             setScreenLoadingStatus("Approve Transaction success")
@@ -129,10 +140,11 @@ export default function useLpVault(chainId: number, address: Address | undefined
 
     return () => {
       setTimeout(() => {
-        setScreenLoadingStatus("")
+        if (!isApproveError)
+          setScreenLoadingStatus("")
       }, 1000);
     }
-  }, [approveTx, approveStatusData, approveSuccess])
+  }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
   const depositVault = (amount: BigNumberish) => {
     if (amount > lpTokenV2Balance) {
@@ -158,9 +170,9 @@ export default function useLpVault(chainId: number, address: Address | undefined
     withdraw(1, amount)
   }
 
-  const approveVault = () => {
+  const approveVault = (amount: BigNumberish) => {
     setScreenLoadingStatus("Approve Transaction in progress...")
-    approve(MASTERCHEF_CONTRACT_ADDRESS[bsc.id], lpTokenV2Balance)
+    approve(MASTERCHEF_CONTRACT_ADDRESS[bsc.id], amount)
   }
 
   return {

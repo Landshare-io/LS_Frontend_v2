@@ -155,7 +155,7 @@ const StakingPage: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <div className="bg-primary pt-[41px] pb-[25px] px-[20px] lg:px-[120px]">
+      <div className="bg-primary pt-[41px] pb-[25px] px-[20px] lg:px-[0px]">
         <div className="max-w-[1200px] m-auto">
           <Breadcrumb items={breadcrumbItems} />
         </div>
@@ -165,7 +165,7 @@ const StakingPage: NextPage = () => {
           Chain not Supported
         </div>)}
       </div>
-      <div className="bg-primary py-[20px] px-[20px] md:py-[80px] md:px-[40px] lg:px-[120px] pt-0">
+      <div className="bg-primary py-[20px] px-[20px] md:px-[40px] lg:px-[120px] pt-0 pb-20 lg:pb-40">
         <div className="flex flex-col md:justify-between items-center max-w-[1200px] m-auto gap-[12px]">
           <div className="flex items-center m-auto py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-secondary">
             <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-primary">
@@ -206,6 +206,7 @@ const StakingPage: NextPage = () => {
                 setIsLPVault={setIsLPVault}
                 setIsRUSD={setIsRUSD}
                 setTokenUsdPrice={setTokenUsdPrice}
+                setShowModalApy={setShowModalApy}
               /> :
               selectedVault === 1 ?
                 <AutoVault
@@ -242,6 +243,7 @@ const StakingPage: NextPage = () => {
                       setShowModal={setShowModal}
                       setIsLPVault={setIsLPVault}
                       setIsRUSD={setIsRUSD}
+                      setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                     />
                     <AutoVault
@@ -268,6 +270,7 @@ const StakingPage: NextPage = () => {
                       setShowModal={setShowModal}
                       setIsLPVault={setIsLPVault}
                       setIsRUSD={setIsRUSD}
+                      setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                     />
                   </>

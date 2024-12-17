@@ -35,7 +35,7 @@ export default function YouOwn(){
   
   return (
       <section 
-      className="bottom-[73px] md:bottom-0 bg-secondary duration-500 sticky z-[999]  border-t-green-500 border-[1px]  py-3 dark:bg-third ">
+      className="bottom-[73px] md:bottom-0 bg-secondary duration-500 sticky z-[9] border-t-green-500 border-[1px] py-3 dark:bg-third ">
           <div className="flex justify-center">
             <div className="max-w-[1200px] w-[98%] sm:w-[90%] md:w-full">
               <div className="flex flex-col md:flex-row items-center">
@@ -58,7 +58,7 @@ export default function YouOwn(){
                   <div className="flex flex-wrap justify-between gap-3 w-full px-3">
                     <div className="flex items-center w-[150px] lg:w-[120px] relative">
                       <div className="size-[48px] flex items-center">
-                        {theme == 'dark' ? <img src={LandshareLogo_Dark}></img> : <LogoIcon />}
+                        {<LogoIcon />}
                       </div>
                       <span
                         className={`font-bold flex flex-col pl-2 pr-3 text-[16px] text-text-primary`}

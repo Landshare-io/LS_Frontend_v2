@@ -9,11 +9,12 @@ export default function useDeposit(chainId: number) {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function deposit(depositId: number, amount: BigNumberish) {
-    await writeContract({
+    writeContract({
       address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] as Address,
       abi: MasterchefAbi,
       functionName: "deposit",
@@ -25,6 +26,7 @@ export default function useDeposit(chainId: number) {
   return {
     deposit,
     isPending,
+    isError,
     data
   }
 }

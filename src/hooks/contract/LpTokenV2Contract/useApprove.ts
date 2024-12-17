@@ -9,11 +9,12 @@ export default function useApprove(chainId: number) {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function approve(approveAddress: Address, amount: number | BigNumberish) {
-    await writeContract({
+    writeContract({
       address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id],
       abi: LpTokenV2Abi,
       functionName: "approve",
@@ -25,6 +26,7 @@ export default function useApprove(chainId: number) {
   return {
     approve,
     isPending,
+    isError,
     data
   }
 }

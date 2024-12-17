@@ -27,15 +27,15 @@ export default function RwaCalculator() {
   }, [dispatch]);
 
   let totalAnnualReturns =
-    ((netRentalPerMonth * 12) / Number(totalPropertyValue)) * 100 +
-    appreciation / Number(totalPropertyValue);
+    ((netRentalPerMonth * 12) / Number(formatEther(totalPropertyValue))) * 100 +
+    appreciation / Number(formatEther(totalPropertyValue));
 
   let annualRentReturn = (
-    ((netRentalPerMonth * 12) / Number(totalPropertyValue)) *
+    ((netRentalPerMonth * 12) / Number(formatEther(totalPropertyValue))) *
     100
   ).toFixed(2);
 
-  let annualValueGrowth = (appreciation / Number(totalPropertyValue)).toFixed(
+  let annualValueGrowth = (appreciation / Number(formatEther(totalPropertyValue))).toFixed(
     2
   );
 
@@ -86,7 +86,7 @@ export default function RwaCalculator() {
               max="10000"
               value={initialInvestment}
               onChange={(e) => setInitialInvestment(Number(e.target.value))}
-              className="w-full max-w-auto md:max-w-[310px] accent-[#61CD81]"
+              className="w-full max-w-auto cursor-pointer md:max-w-[310px] accent-[#61CD81]"
             />
             <span
               className={`text-[18px] leading-[22px] text-[#61CD81] font-bold `}
@@ -143,7 +143,7 @@ export default function RwaCalculator() {
               {
                 // Initial investment compound growth over 5 years
                 (
-                  initialInvestment * Math.pow(1 + totalAnnualReturns / 100, 5)
+                  initialInvestment * (totalAnnualReturns / 100) * 5 + initialInvestment
                 ).toLocaleString()
               }
             </p>

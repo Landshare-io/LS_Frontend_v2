@@ -10,7 +10,7 @@ import {
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useGetUserGameItem from "../../../hooks/nft-game/axios/useGetUserGameItem";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
-import { productionUpdgradesData } from "../../../config/constants/game-data";
+import { productionUpgradesData } from "../../../config/constants/game-data";
 
 export default function UpgradeListTable({
   house
@@ -141,7 +141,7 @@ export default function UpgradeListTable({
                 </tr>
               </thead>
               <tbody className="dark:bg-third">
-                {productionUpdgradesData.filter((item: any) => item.sortingId === 0).map((item, index) => (
+                {productionUpgradesData.filter((item: any) => item.sortingId === 0).map((item, index) => (
                   <tr className="mx-[10px] h-[30px]" key={`${item.title}-${index}`}>
                     <td className="text-center text-[#0b6c96] dark:text-text-secondary">
                       {item.title}
@@ -358,7 +358,7 @@ export default function UpgradeListTable({
                   </tr>
                 </thead>
                 <tbody className="dark:bg-third">
-                  {productionUpdgradesData.filter(item => item.sortingId === 0).map((item, index) => (
+                  {productionUpgradesData.filter(item => item.sortingId === 0).map((item, index) => (
                     <tr className="mx-[10px] h-[30px]" key={`${item.title}-${index}`}>
                       <td className="text-center text-[#0b6c96]">
                         {item.title}

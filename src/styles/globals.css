@@ -31,6 +31,7 @@
     --title-text-color: #0a0a0a!important;
     --row-title-color: #0a0a0a!important;
     --row-content-color: #0a0a0a!important;
+	--primary-green: #61CD81;
   }
 
   .dark,
@@ -52,6 +53,7 @@
     --title-text-color: #f1f1f1!important;
     --row-title-color: #f1f1f1!important;
     --row-content-color: #f1f1f1!important;
+	--primary-green: #61CD81;
   }
 }
 
@@ -107,6 +109,8 @@ a {
 	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
 }
 
+
+
 .toggle-switch {
 	--diameter: 2rem;
 	--spacing: 0.24rem;
@@ -140,7 +144,7 @@ a {
 }
 
 .toggle-switch.sale::before {
-	--offset: calc(100% - 2.3rem);
+	--offset: calc(100% - 1.8rem);
 	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
 }
 
@@ -156,4 +160,11 @@ a {
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 5px;
+}
+
+.slick-dots li.slick-active button:before {
+	color: var(--color-text-primary) !important;
+}
+.dark .slick-dots li button:before {
+	color: gray;
 }

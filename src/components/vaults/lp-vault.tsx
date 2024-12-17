@@ -18,6 +18,7 @@ import useLpVault from "../../hooks/contract/vault/useLpVault";
 import usePoolInfo from "../../hooks/contract/MasterchefContract/usePoolInfo";
 import useUserInfo from "../../hooks/contract/MasterchefContract/useUserInfo";
 import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLand";
+import useGetLandPrice from "../../hooks/axios/useGetLandPriceFromCoingecko";
 import { 
   BOLD_INTER_TIGHT,
   LP_TOKEN_V2_CONTRACT_ADDRESS,
@@ -35,6 +36,7 @@ import bscIcon from "../../../public/icons/bsc.svg";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import smallicon from "../../../public/icons/bnb.png";
 import 'react-loading-skeleton/dist/skeleton.css';
+import Tooltip from "../common/tooltip";
 
 interface LpVaultProps {
   title: string;
@@ -61,11 +63,12 @@ export default function LpVault({
   const { data: totalLANDinLPContract } = useBalanceOfLandToken({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
   const { data: totalLPSupply } = useTotalSupplyOfLpTokenV2(chainId) as { data: BigNumberish }
   const { data: totalBNBinLPContract } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
-  const { data: userInfo } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
-  const { data: pendingLand } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: userInfo } = useUserInfo({ chainId, userInfoId: 1, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
+  const { data: pendingLand } = usePendingLand({ chainId, pendingLandId: 1, address }) as { data: BigNumberish, isLoading: boolean }
   const { data: approvedLAND } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
   const { data: allocPoints } = usePoolInfo(chainId, 1) as { data: any[] };
   const { bnbPrice, coinPrice: coin, price } = useGetPrice(chainId)
+  const { price: tokenPriceData } = useGetLandPrice()
 
   
   const {
@@ -115,15 +118,19 @@ export default function LpVault({
 
   useEffect(() => {
     updateStatus()
-  }, [inputValue]);
+  }, [inputValue, approvedLAND]);
 
   function handlePercents(percent: number) {
-    if (depositing) {
-      const bal = BigInt(lpTokenV2Balance) * BigInt(percent) / BigInt(100)
-      setInputValue(formatEther(bal))
+    if (lpTokenV2Balance == 0) {
+      notifyError("You don't have enough balance to perform this action.")
     } else {
-      const bal = BigInt(depositBalanceLP) * BigInt(percent) / BigInt(100)
-      setInputValue(formatEther(bal))
+      if (depositing) {
+        const bal = BigInt(lpTokenV2Balance) * BigInt(percent) / BigInt(100)
+        setInputValue(formatEther(bal))
+      } else {
+        const bal = BigInt(depositBalanceLP) * BigInt(percent) / BigInt(100)
+        setInputValue(formatEther(bal))
+      }
     }
   }
 
@@ -257,7 +264,7 @@ export default function LpVault({
                     <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-white" alt="" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
-                    <div className={`w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
+                    <div className={`cursor-pointer w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {title}
                       <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}
                       // disabled={chainId != 56 || chainId != 97}
@@ -288,7 +295,7 @@ export default function LpVault({
                       <button onClick={() => {
                         setShowModal(true)
                         setShowModalApy(abbreviateNumber(Number(apr.toString().substr(0, 4))))
-                        setTokenUsdPrice(usdValueLP)
+                        setTokenUsdPrice(tokenPriceData)
                         setIsLPVault(true)
                       }}>
                         <Image src={calc} alt="" />
@@ -303,7 +310,9 @@ export default function LpVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{formatEther(rewardLP.toString()).substr(0, 5)}</span>
+                    <Tooltip content={`Full number: ${formatEther(rewardLP || 0)}`}>
+                      <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{formatEther(rewardLP.toString()).substr(0, 5)}</span>
+                    </Tooltip>
                   </div>
                 </div>
               </div>
@@ -352,7 +361,7 @@ export default function LpVault({
                   <div className="flex gap-[12px] w-full flex-col md:flex-row">
                     {typeof address == 'undefined' ? (
                       <div className="flex flex-col items-center">
-                        <ConnectWallet containerClassName="w-[300px]" />
+                        <ConnectWallet connectButtonClassName="w-[300px]" />
                       </div>
                     ) : (
                       <>
@@ -361,7 +370,7 @@ export default function LpVault({
                           onClick={() => {
                             if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                               if (inputValue && Number(inputValue) > Number(0)) {
-                                depositing ? isApprovedLP ? depositHandler() : approveVault() : withdrawHandler()
+                                depositing ? isApprovedLP ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
@@ -440,7 +449,7 @@ export default function LpVault({
                     <div className="flex flex-col items-center p-0 gap-[24px] w-full">
                       <div className="flex gap-[12px] w-full flex-col md:flex-row justify-center">
                         {typeof address == 'undefined' ? (
-                          <ConnectWallet containerClassName="w-[300px]" />
+                          <ConnectWallet connectButtonClassName="w-[300px]" />
                         ) : (
                           <>
                             <button
@@ -448,7 +457,7 @@ export default function LpVault({
                               onClick={() => {
                                 if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    depositing ? isApprovedLP ? depositHandler() : approveVault() : withdrawHandler()
+                                    depositing ? isApprovedLP ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }

@@ -8,11 +8,12 @@ export default function useWithdrawAll(chainId: number) {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function withdrawAll() {
-    await writeContract({
+    writeContract({
       address: AUTO_VAULT_V3_CONTRACT_ADDRESS[bsc.id],
       abi: AutoVaultV3Contract,
       functionName: "withdrawAll",
@@ -24,6 +25,7 @@ export default function useWithdrawAll(chainId: number) {
   return {
     withdrawAll,
     isPending,
+    isError,
     data
   }
 }

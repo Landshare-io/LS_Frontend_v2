@@ -56,8 +56,8 @@ export default function ConnectWallet({
                 if (!connected) {
                   return (
                     <Button
-                      className={`text-[#fff] px-[24px] py-[13px] w-full rounded-[100px] bg-[#61cd81] ${interTight.className} ${connectButtonClassName ?? ''}`}
-                      textClassName="hover:dark:text-[#61CD81]"
+                      className={`w-[165px] h-[44px] text-[#fff] rounded-[100px] bg-[#61cd81] ${interTight.className} ${connectButtonClassName ?? ''}`}
+                      textClassName="hover:dark:text-[#61CD81] text-[100%]"
                       onClick={openConnectModal}
                     >
                       Connect Wallet
@@ -69,8 +69,8 @@ export default function ConnectWallet({
                   return (
                     <Button
                       onClick={openChainModal}
-                      className={`text-[#fff] px-[24px] py-[13px] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81] ${interTight.className}`}
-                      textClassName="hover:dark:text-[#61CD81]"
+                      className={`w-[165px] h-[44px] text-[#fff] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81] ${interTight.className}`}
+                      textClassName="hover:dark:text-[#61CD81] text-[100%]"
                     >
                       Wrong network
                     </Button>
@@ -81,8 +81,8 @@ export default function ConnectWallet({
                   return (
                     <Button 
                       onClick={() => checkIsAuthenticated(account?.address)}
-                      className="px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
-                      textClassName="hover:dark:text-[#61CD81]"
+                      className="w-[165px] h-[44px] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
+                      textClassName="hover:dark:text-[#61CD81] text-[100%]"
                     >
                       Login
                     </Button>
@@ -102,8 +102,8 @@ export default function ConnectWallet({
                       </div>
                       <Button
                         onClick={openAccountModal}
-                        className="px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
-                        textClassName="hover:dark:text-[#61CD81]"
+                        className="w-[165px] h-[44px] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
+                        textClassName="hover:dark:text-[#61CD81] text-[100%]"
                       >
                         {account.displayName}
                       </Button>
