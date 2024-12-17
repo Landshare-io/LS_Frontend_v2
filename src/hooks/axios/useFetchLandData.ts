@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { LANDPRICE_URL } from "../../config/constants/environments";
 
 export type PRICE_DATA = {
   prices: any[],
@@ -19,7 +18,7 @@ export default function useFetchLandData(dueTimeStamp: Date, now: number) {
   useEffect(() => {
     (async () => {
       setIsLoading(true)
-      const { data: { data: { data: { quotes: priceData } } } } = await axios.get(LANDPRICE_URL);
+      const { data: { data: { data: { quotes: priceData } } } } = await axios.get('/api/landPriceProxy');
       let market_caps = [];
       let prices = [];
       let total_volumes = [];
