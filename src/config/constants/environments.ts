@@ -79,8 +79,8 @@ export const APOLLO_RWA_BUY_URL = "https://api.studio.thegraph.com/query/81176/l
 export const APOLLO_RWA_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa/v0.1.0"
 export const LAND_PRICE_SUBGRAPH_URL = 'https://api.studio.thegraph.com/query/81176/landshare-price/v0.1.0'
 export const LANDSHARE_COST_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=landshare&vs_currencies=usd'
-export const LANDPRICE_URL = 'http://159.203.181.148:5000/land_pricedata/'
-export const LANDMARKET_URL = 'http://159.203.181.148:5000/land_market'
+export const LANDPRICE_URL = 'https://landshare.xyz/land_pricedata/'
+export const LANDMARKET_URL = 'https://landshare.xyz/land_market'
 export const LIVE_COIN_LIST_URL = 'https://api.livecoinwatch.com/coins/list'
 export const LIVE_COIN_API_KEY= '95ce49d3-3e89-475d-b61e-6638a002b1fe'
 export const ZERO_ID_WIDGET_API_KEY = '10000000-0000-0000-0000-7f9a2af16a1c'
