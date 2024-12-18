@@ -113,7 +113,7 @@ export default function MarketplaceItem({
         <Image
           src={getHouseImageUrl()}
           alt="marketplace-image-house"
-          className="w-full h-auto"
+          className="w-full h-full"
         />
      
         <div className="flex items-end absolute w-full justify-between px-[10px] bottom-[10px]">

@@ -37,7 +37,7 @@ export default function MarketplaceItems({
       ): 
       <div>
         {currentItems.length > 0 ? (
-          <div className="flex flex-row overflow-x-auto pb-5 last:m-0">
+          <div className="flex flex-row overflow-x-auto px-1 pb-5 last:m-0">
             {currentItems.map((product, index) => (
               <div
                 key={`nft-house-item-${index}`}
