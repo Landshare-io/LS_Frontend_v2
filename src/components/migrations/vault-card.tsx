@@ -279,7 +279,7 @@ export default function VaultCard({
       if (Number(currentStep) < 3 && balanceMigration.depositV2) {
         return balanceMigration.depositV2;
       } else if (Number(currentStep) > 3 && userInfoOfMasterchef) {
-        return userInfoOfMasterchef;
+        return userInfoOfMasterchef[0];
       } else {
         return 0;
       }
@@ -287,7 +287,7 @@ export default function VaultCard({
       if (Number(currentStep) < 3 && balanceMigration.depositV3) {
         return balanceMigration.depositV3;
       } else if (Number(currentStep) > 3 && userInfoOfMasterchef) {
-        return userInfoOfMasterchef;
+        return userInfoOfMasterchef[0];
       } else {
         return 0;
       }
@@ -492,8 +492,7 @@ export default function VaultCard({
             <div className="flex flex-col items-center">
               <div className="text-[12px] leading-[18px] relative font-normal">Deposit</div>
               <div className="text-[18px] leading-[27px] relative font-semibold">
-                {formatEther(getDepositBalance().toString())
-                  .substr(0, 8)}
+                {formatEther(getDepositBalance())}
               </div>
             </div>
             <div className="flex flex-col items-center">
