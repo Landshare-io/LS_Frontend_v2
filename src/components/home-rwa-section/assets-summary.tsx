@@ -57,7 +57,7 @@ export default function HomeRwaAssetsSummary() {
             </h1>
           </div>
           <div className="flex flex-col mlg:flex-row w-full lg:gap-x-0 xl:gap-x-[64px] gap-y-[32px]">
-            <div className="flex flex-col flex-1 px-[10px] md:px-[40px] lg:px-0 flex-1">
+            <div className="flex flex-col flex-1 px-[10px] md:px-[40px] lg:px-0">
               <div className="flex items-center gap-[12px] mb-[24px]">
                 <ToggleButton
                   onClick={() => setSelectedGraph('rwa')}
