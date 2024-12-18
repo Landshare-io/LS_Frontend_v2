@@ -73,6 +73,7 @@ export default function MobileNavbar() {
             alt="icon more"
           />
           <span className="font-medium text-[10px] leading-[16px] tracking-[0.02em] min-w-[25px] text-text-secondary">{isMore ? 'Less' : 'More'}</span>
+          
           {isMore ? (
             <div className="absolute bottom-[82px] right-[20px] shadow-[0_0_4px_0_rgba(160,167,195,0.2)] rounded-[12px] py-[4px] min-w-[108px] bg-secondary">
               <a
