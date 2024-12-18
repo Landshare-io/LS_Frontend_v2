@@ -41,7 +41,7 @@ export default function ProductionFacilities() {
         <div className="block md:hidden">
           <Slider {...settings}>
             {facilities.sort((a, b) => a.sortingId - b.sortingId).map((facility, type) => (
-              <div key={`facility-levels-${type}`} className="flex flex-col items-center">
+              <div key={`facility-levels-${type}`} className="flex justify-center">
                 <Facility
                   type={type}
                   isBoosts={false}
