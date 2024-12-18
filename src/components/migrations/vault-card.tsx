@@ -420,59 +420,63 @@ export default function VaultCard({
   function depositInfo() {
     return (
       <>
-        <div className="flex flex-1">
-          Deposit
-        </div>
-        <div className="flex flex-1">
-          <div className="text-[12px] leading-[18px] relative font-normal">
-            {isStakingAutoV2() || isStakingAutoV3() ? "APY" : "APR"}
-            <Image
-              className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
-              onClick={() => {
-                setDetails("APY");
-              }}
-              src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
-              alt="details"
-            />
-            <div
-              ref={wrapperRef}
-              className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
-                details === "APY" ? "block" : "hidden"
-              }`}
-            >
-              <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
-                The Auto LAND Vault automatically redeposits accrued LAND
-                rewards. APY is estimated based on daily compounding with a 2%
-                performance fee. All figures are estimated and by no means
-                represent guaranteed returns.
+        <div className="grid grid-cols-2 w-full">
+          <div className="pl-3">
+            Deposit
+          </div>
+          <div className="grid grid-cols-2">
+            <div className="flex flex-col items-center">
+              <div className="flex text-[12px] leading-[18px] relative font-normal">
+                {isStakingAutoV2() || isStakingAutoV3() ? "APY" : "APR"}
+                <Image
+                  className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
+                  onClick={() => {
+                    setDetails("APY");
+                  }}
+                  src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
+                  alt="details"
+                />
+                <div
+                  ref={wrapperRef}
+                  className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
+                    details === "APY" ? "block" : "hidden"
+                  }`}
+                >
+                  <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
+                    The Auto LAND Vault automatically redeposits accrued LAND
+                    rewards. APY is estimated based on daily compounding with a 2%
+                    performance fee. All figures are estimated and by no means
+                    represent guaranteed returns.
+                  </div>
+                  <Image
+                    className="absolute top-[5px] right-[5px] cursor-pointer"
+                    onClick={() => {
+                      setDetails(0);
+                    }}
+                    src={CloseIcon}
+                    alt="close"
+                  />
+                </div>
               </div>
-              <Image
-                className="absolute top-[5px] right-[5px] cursor-pointer"
-                onClick={() => {
-                  setDetails(0);
-                }}
-                src={CloseIcon}
-                alt="close"
-              />
+              <div className="text-[18px] leading-[27px] relative font-semibold">
+                {abbreviateNumber(Number(isLP() ? APR : getAPY()) || 0) + "%"}
+              </div>
             </div>
-          </div>
-          <div className="text-[18px] leading-[27px] relative font-semibold">
-            {abbreviateNumber(Number(isLP() ? APR : getAPY())) + "%"}
-          </div>
-        </div>
-        <div className="flex flex-1">
-          <div className="text-[12px] leading-[18px] relative font-normal">TVL</div>
-          <div className="text-[18px] leading-[27px] relative font-semibold">
-            {isLP()
-              ? "$" + abbreviateNumber(Number(TVL?.toString().substr(0, 8)))
-              : abbreviateNumber(
-                  Number(formatEther(
-                    (isStakingAutoV2() || isStakingAutoV3()
-                      ? landTokenStakeCurrentDepositTotal
-                      : landTokenStakeCurrentDepositTotal2
-                    ).toString()
-                  ))
-                )}
+            <div className="flex flex-col items-center">
+              <div className="text-[12px] leading-[18px] relative font-normal">TVL</div>
+              <div className="text-[18px] leading-[27px] relative font-semibold">
+                {isLP()
+                  ? "$" + abbreviateNumber(Number(TVL?.toString().substr(0, 8)))
+                  : abbreviateNumber(
+                      Number(formatEther(
+                        (isStakingAutoV2() || isStakingAutoV3()
+                          ? landTokenStakeCurrentDepositTotal
+                          : landTokenStakeCurrentDepositTotal2
+                        ).toString()
+                      ))
+                    )}
+              </div>
+            </div>
           </div>
         </div>
       </>
@@ -482,51 +486,55 @@ export default function VaultCard({
   function withdrawInfo() {
     return (
       <>
-        <div className="flex flex-1"></div>
-        <div className="flex flex-1 flex-col items-center">
-          <div className="text-[12px] leading-[18px] relative font-normal">Deposit</div>
-          <div className="text-[18px] leading-[27px] relative font-semibold">
-            {formatEther(getDepositBalance().toString())
-              .substr(0, 8)}
-          </div>
-        </div>
-        <div className="flex flex-1 flex-col items-center">
-          <div className="flex text-[12px] leading-[18px] relative font-normal">
-            Reward
-            <Image
-              className="ml-[5px] cursor-pointer w-[18px] h-[18px]"
-              onClick={() => {
-                setDetails("Reward");
-              }}
-              src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
-              alt="details"
-            />
-            <div
-              ref={wrapperRef}
-              className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
-                details === "Reward" ? "block" : "hidden"
-              }`}
-            >
-              <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
-                The Auto LAND Vault automatically redeposits accrued LAND
-                rewards. APY is estimated based on daily compounding with a 2%
-                performance fee. All figures are estimated and by no means
-                represent guaranteed returns.
+        <div className="grid grid-cols-2 w-full">
+          <div></div>
+          <div className="grid grid-cols-2">
+            <div className="flex flex-col items-center">
+              <div className="text-[12px] leading-[18px] relative font-normal">Deposit</div>
+              <div className="text-[18px] leading-[27px] relative font-semibold">
+                {formatEther(getDepositBalance().toString())
+                  .substr(0, 8)}
               </div>
-              <Image
-                className="absolute top-2 right-2 cursor-pointer"
-                onClick={() => {
-                  setDetails(0);
-                }}
-                src={CloseIcon}
-                alt="close"
-              />
             </div>
-          </div>
-          <div className="text-[18px] leading-[27px] relative font-semibold">
-            {formatEther(getRewards().toString())
-              .toString()
-              .substr(0, 6)}
+            <div className="flex flex-col items-center">
+              <div className="flex text-[12px] leading-[18px] relative font-normal">
+                Reward
+                <Image
+                  className="ml-[5px] cursor-pointer w-[18px] h-[18px]"
+                  onClick={() => {
+                    setDetails("Reward");
+                  }}
+                  src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
+                  alt="details"
+                />
+                <div
+                  ref={wrapperRef}
+                  className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
+                    details === "Reward" ? "block" : "hidden"
+                  }`}
+                >
+                  <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
+                    The Auto LAND Vault automatically redeposits accrued LAND
+                    rewards. APY is estimated based on daily compounding with a 2%
+                    performance fee. All figures are estimated and by no means
+                    represent guaranteed returns.
+                  </div>
+                  <Image
+                    className="absolute top-2 right-2 cursor-pointer"
+                    onClick={() => {
+                      setDetails(0);
+                    }}
+                    src={CloseIcon}
+                    alt="close"
+                  />
+                </div>
+              </div>
+              <div className="text-[18px] leading-[27px] relative font-semibold">
+                {formatEther(getRewards().toString())
+                  .toString()
+                  .substr(0, 6)}
+              </div>
+            </div>
           </div>
         </div>
       </>
