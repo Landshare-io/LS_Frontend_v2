@@ -89,6 +89,10 @@ export default function VaultCard({
   const [balance, setBalance] = useState("Loading...");
   const [totalLandPerYear, setTotalLandPerYear] = useState<number | BigNumberish>(0);
 
+  useEffect(() => {
+    console.log(currentStep)
+  }, [currentStep])
+
   const { data: balanceOfLandV1, refetch: refetchBalanceOfLandV1 } = useBalanceOfLandTokenV1({ address }) as { data: BigNumberish, refetch: Function }
   const { data: balanceOfLandV2, refetch: refetchBalanceOfLandV2 } = useBalanceOfLandToken({ chainId: bsc.id, address }) as { data: BigNumberish, refetch: Function }
   const { data: balanceOfLpToken, refetch: refetchBalanceOfLpToken } = useBalanceOfLpTokenV1({ address }) as { data: BigNumberish, refetch: Function }
@@ -802,7 +806,7 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep1}
-          className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] disabled:bg-transparent text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+          className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:bg-[#1ee155] hover:duration-500 hover:bg-transparent text-[#ffffff] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 1 || (getDepositBalance() == 0 && !isSkippable())}
         >
           {isSkippable() ? "Skip" : "Withdraw"}
@@ -851,7 +855,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={() => setMinValues(amount)}
-            className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+            className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] text-[#fff] hover:bg-[#1ee155] hover:duration-500 active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != "lp-2"}
           >
             Unpair
@@ -900,7 +904,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={processStep2}
-            className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] text-center capitalize text-[#61cd81] disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+            className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] text-center capitalize bg-[#61cd81] disabled:bg-[#3c3c3b33] text-[#fff] bg:text-[#1ee155] hover:duration-500 hover:bg-[#1ee155] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != 2}
           >
             Migrate
@@ -949,7 +953,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={() => setMinValuesV2(amountSplitedTokens.land)}
-            className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+            className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] text-[#fff] hover:bg-[#1ee155] hover:duration-500 active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != "lp-4"}
           >
             Combine
@@ -997,7 +1001,7 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep3}
-          className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+          className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] text-[#fff] hover:bg-[#1ee155] hover:duration-500 active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 3}
         >
           Approve
@@ -1044,7 +1048,7 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep4}
-          className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+          className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] text-[#fff] hover:duration-500 hover:bg-transparent hover:bg-[#1ee155] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 4}
         >
           Deposit
@@ -1086,7 +1090,7 @@ export default function VaultCard({
           </div>
           <div className="flex flex-col w-full gap-[20px]">
             <div className="relative text-right">
-              <div className={`flex w-full justify-around py-[10px] px-[20px] rounded-[12px] bg-secondary ${
+              <div className={`flex w-full justify-around py-[10px] px-[20px] rounded-[12px] ${
                 currentStep === 1 || currentStep === 2 || currentStep === 3 || currentStep === "lp-4" ? "bg-[#cccccc] text-[#888888]" : ""
               }`}>
                 <input
