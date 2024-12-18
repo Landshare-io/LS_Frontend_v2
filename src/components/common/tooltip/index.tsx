@@ -86,7 +86,7 @@ export default function Tooltip({
       <div
         id="tooltip-content"
         className={`
-          absolute z-50 min-w-[200px] text-wrap h-fit px-3 py-2 text-sm rounded-lg shadow-lg
+          absolute z-50 min-w-[100px] text-wrap h-fit px-3 py-2 text-xs md:text-sm rounded-lg shadow-lg
           bg-gray-800 text-white
           opacity-0 transition-all duration-200
           ${visible ? "opacity-100" : "pointer-events-none"}
