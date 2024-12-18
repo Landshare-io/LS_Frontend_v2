@@ -29,8 +29,8 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
   const [isSuccessMigrate, setIsSuccessMigrate] = useState(isSuccessMigrateState);
   const { isConnected } = useAccount()
   const { refetch: updateLandTokenV2Balance } = useBalanceOf({ chainId: bsc.id, address })
-  const { approve: landTokenApprove, data: landTokenApproveTx } = useApprove()
-  const { swap, data: swapTx } = useSwap()
+  const { approve: landTokenApprove, data: landTokenApproveTx, isError: isApproveError } = useApprove()
+  const { swap, data: swapTx, isError: isSwapError, error: errorSwap } = useSwap()
   const { setScreenLoadingStatus } = useGlobalContext()
 
   const { isSuccess: landTokenApproveSuccess, data: landTokenApproveStatusData } = useWaitForTransactionReceipt({
@@ -60,9 +60,18 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
     isSuccessMigrateState = newIsSuccessMigrate;
     notifySubscribers();
   };
+
+  const clearStatusText = () => {
+    setTimeout(() => {
+      setScreenLoadingStatus("")
+    }, 1000);
+  }
   
   useEffect(() => {
-    if (landTokenApproveTx) {
+    if (isApproveError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      clearStatusText()
+    } else if (landTokenApproveTx) {
       if (landTokenApproveStatusData) {
         if (landTokenApproveSuccess) {
           try {
@@ -73,39 +82,40 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
             setScreenLoadingStatus("Transaction Failed.")
   
             return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
+              clearStatusText()
             }
           }
         }
       }
     }
-  }, [landTokenApproveTx, landTokenApproveStatusData, landTokenApproveSuccess])
+  }, [landTokenApproveTx, landTokenApproveStatusData, landTokenApproveSuccess, isApproveError])
 
   useEffect(() => {
-    if (swapTx) {
+    if (isSwapError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      clearStatusText()
+    } else if (swapTx) {
       if (swapStatusData) {
         if (swapSuccess) {
           try {
             updateIsSuccessMigrate(true)
             updateLandTokenV2Balance()
             setScreenLoadingStatus("Transaction Completed.")
+            clearStatusText()
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
+            clearStatusText()
           }
   
           return () => {
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
+            clearStatusText()
           }
         } else {
           updateIsSuccessMigrate(false)
         }
       }
     }
-  }, [swapTx, swapStatusData, swapSuccess])
+  }, [swapTx, swapStatusData, swapSuccess, isSwapError])
 
   async function tokenMigrate(amount: BigNumberish) {
     if (isConnected == true) {

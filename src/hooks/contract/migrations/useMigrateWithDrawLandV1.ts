@@ -43,31 +43,31 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
   const { data: totalSharesOfAutLandV2 } = useTotalSharesAutoLandV2() as { data: BigNumberish };
   const { data: balanceOfAutLandV2 } = useBalanceOfAutoLandV2() as { data: BigNumberish };
   
-  const { withdraw: withdrawLPFarm, data: withdrawLPFramTx } = useWithdrawLPFarm();
-  const { isSuccess: withdrawLPFramSuccess, data: withdrawLPFramStatusData } = useWaitForTransactionReceipt({
+  const { withdraw: withdrawLPFarm, data: withdrawLPFramTx, isError: isWithdrawLPError } = useWithdrawLPFarm();
+  const { isSuccess: withdrawLPFarmSuccess, data: withdrawLPFarmStatusData } = useWaitForTransactionReceipt({
     hash: withdrawLPFramTx,
     chainId: bsc.id
   });
 
-  const { withdraw: withdrawAutoVaultV1, data: withdrawAutoVaultV1Tx } = useWithdrawAutoVaultV1();
+  const { withdraw: withdrawAutoVaultV1, data: withdrawAutoVaultV1Tx, isError: isWithdrawAutoError } = useWithdrawAutoVaultV1();
   const { isSuccess: withdrawAutoVaultV1Success, data: withdrawAutoVaultV1StatusData } = useWaitForTransactionReceipt({   
     hash: withdrawAutoVaultV1Tx,
     chainId: bsc.id
   });
 
-  const { withdraw: withdrawAutoVaultV2, data: withdrawAutoVaultV2Tx } = useWithdrawAutoVaultV2();
+  const { withdraw: withdrawAutoVaultV2, data: withdrawAutoVaultV2Tx, isError: isWithdrawAutoV2Error } = useWithdrawAutoVaultV2();
   const { isSuccess: withdrawAutoVaultV2Success, data: withdrawAutoVaultV2StatusData } = useWaitForTransactionReceipt({   
     hash: withdrawAutoVaultV2Tx,
     chainId: bsc.id
   });
 
-  const { withdraw: withdrawLandTokenStakeV2, data: withdrawLandTokenStakeV2Tx } = useWithdrawLandTokenStakeV2();
+  const { withdraw: withdrawLandTokenStakeV2, data: withdrawLandTokenStakeV2Tx, isError: isWithdrawLandStakeV2Error } = useWithdrawLandTokenStakeV2();
   const { isSuccess: withdrawLandTokenStakeV2Success, data: withdrawLandTokenStakeV2StatusData } = useWaitForTransactionReceipt({   
     hash: withdrawLandTokenStakeV2Tx,
     chainId: bsc.id
   });
 
-  const { withdraw: withdrawLandTokenStakeV3, data: withdrawLandTokenStakeV3Tx } = useWithdrawLandTokenStakeV3();
+  const { withdraw: withdrawLandTokenStakeV3, data: withdrawLandTokenStakeV3Tx, isError: isWithdrawLandStakeV3Error } = useWithdrawLandTokenStakeV3();
   const { isSuccess: withdrawLandTokenStakeV3Success, data: withdrawLandTokenStakeV3StatusData } = useWaitForTransactionReceipt({   
     hash: withdrawLandTokenStakeV3Tx,
     chainId: bsc.id
@@ -91,120 +91,121 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
     notifySubscribers();
   };
 
+  const clearStatusText = () => {
+    setTimeout(() => {
+      setScreenLoadingStatus("")
+    }, 1000);
+  }
+
   useEffect(() => {
-    if (withdrawLPFramTx) {
-      if (withdrawLPFramStatusData) {
-        if (withdrawLPFramSuccess) {
+    if (isWithdrawLPError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      clearStatusText()
+    } else if (withdrawLPFramTx) {
+      if (withdrawLPFarmStatusData) {
+        if (withdrawLPFarmSuccess) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
+            clearStatusText()
           } catch (error) {
             console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-  
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
-            }
+            clearStatusText()  
+          }
+
+          return () => {
+            clearStatusText()
           }
         }
       }
     }
-  }, [withdrawLPFramTx, withdrawLPFramStatusData, withdrawLPFramSuccess])
+  }, [withdrawLPFramTx, withdrawLPFarmStatusData, withdrawLPFarmSuccess, isWithdrawLPError])
 
   useEffect(() => {
-    if (withdrawAutoVaultV1Tx) {
+    if (isWithdrawAutoError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      clearStatusText()
+    } else if (withdrawAutoVaultV1Tx) {
       if (withdrawAutoVaultV1StatusData) {
         if (withdrawAutoVaultV1Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
+            clearStatusText()
           } catch (error) {
-            console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-  
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
-            }
+            clearStatusText()
           }
         }
       }
     }
-  }, [withdrawAutoVaultV1Tx, withdrawAutoVaultV1StatusData, withdrawAutoVaultV1Success])
+  }, [withdrawAutoVaultV1Tx, withdrawAutoVaultV1StatusData, withdrawAutoVaultV1Success, isWithdrawAutoError])
 
   useEffect(() => {
-    if (withdrawAutoVaultV2Tx) {
+    if (isWithdrawAutoV2Error) {
+      setScreenLoadingStatus("Transaction Failed.")
+      clearStatusText()
+    } else if (withdrawAutoVaultV2Tx) {
       if (withdrawAutoVaultV2StatusData) {
         if (withdrawAutoVaultV2Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
+            clearStatusText()
           } catch (error) {
-            console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-  
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
-            }
+            clearStatusText()
           }
         }
       }
     }
-  }, [withdrawAutoVaultV2Tx, withdrawAutoVaultV2StatusData, withdrawAutoVaultV2Success])
+  }, [withdrawAutoVaultV2Tx, withdrawAutoVaultV2StatusData, withdrawAutoVaultV2Success, isWithdrawAutoV2Error])
 
   useEffect(() => {
-    if (withdrawLandTokenStakeV2Tx) {
+    if (isWithdrawLandStakeV2Error) {
+      setScreenLoadingStatus("Transaction Failed.")
+      clearStatusText()
+    } else if (withdrawLandTokenStakeV2Tx) {
       if (withdrawLandTokenStakeV2StatusData) {
         if (withdrawLandTokenStakeV2Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
+            clearStatusText()
           } catch (error) {
-            console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-  
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
-            }
+            clearStatusText()
           }
         }
       }
     }
-  }, [withdrawLandTokenStakeV2Tx, withdrawLandTokenStakeV2StatusData, withdrawLandTokenStakeV2Success])
+  }, [withdrawLandTokenStakeV2Tx, withdrawLandTokenStakeV2StatusData, withdrawLandTokenStakeV2Success, isWithdrawLandStakeV2Error])
 
   useEffect(() => {
-    if (withdrawLandTokenStakeV3Tx) {
+    if (isWithdrawLandStakeV3Error) {
+      setScreenLoadingStatus("Transaction Failed.")
+      clearStatusText()
+    } else if (withdrawLandTokenStakeV3Tx) {
       if (withdrawLandTokenStakeV3StatusData) {
         if (withdrawLandTokenStakeV3Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
+            clearStatusText()
           } catch (error) {
-            console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-  
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
-            }
+            clearStatusText()
           }
         }
       }
     }
-  }, [withdrawLandTokenStakeV3Tx, withdrawLandTokenStakeV3StatusData, withdrawLandTokenStakeV3Success])
+  }, [withdrawLandTokenStakeV3Tx, withdrawLandTokenStakeV3StatusData, withdrawLandTokenStakeV3Success, isWithdrawLandStakeV3Error])
 
   async function withdrawLP(amount: number) {
     if (isConnected == true) {
@@ -226,7 +227,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessWithdraw(false);
-        console.log("Error, withdraw: ", e);
+        clearStatusText()
       }
       
     }
@@ -247,7 +248,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessWithdraw(false);
-        console.log("Error, withdraw: ", e);
+        clearStatusText()
       }
       
     }
@@ -275,7 +276,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.", false);
         updateIsSuccessWithdraw(false);
-        console.log("Error, withdraw: ", e);
+        clearStatusText()
       }
       
     }
@@ -300,7 +301,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.", false);
         updateIsSuccessWithdraw(false);
-        console.log("Error, withdraw: ", e);
+        clearStatusText()
       }
       
     }
@@ -325,7 +326,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessWithdraw(false);
-        console.log("Error, withdraw: ", e);
+        clearStatusText()
       }
       
     }

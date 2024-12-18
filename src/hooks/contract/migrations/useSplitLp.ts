@@ -44,8 +44,8 @@ export default function useSplitLP({
   const {setScreenLoadingStatus} = useGlobalContext()
   const { isConnected } = useAccount();
   const { data: balance } = useBalanceOf({ address })
-  const { approve, data: approveTx } = useApprove()
-  const { removeLiquidityETH, data: removeLiquidityETHTx } = useRemoveLiquidityETH()
+  const { approve, data: approveTx, isError:isApproveError } = useApprove()
+  const { removeLiquidityETH, data: removeLiquidityETHTx, isError: isRemoveLiquidityError } = useRemoveLiquidityETH()
 
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
@@ -81,9 +81,17 @@ export default function useSplitLP({
     notifySubscribers();
   };
 
+  const clearStatusText = () => {
+    setTimeout(() => {
+      setScreenLoadingStatus("")
+    }, 1000);
+  }
 
   useEffect(() => {
-    if (approveTx) {
+    if (isApproveError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      clearStatusText()
+    } else if (approveTx) {
       if (approveStatusData) {
         if (approveSuccess) {
           try {
@@ -95,23 +103,20 @@ export default function useSplitLP({
               Date.now()
             )
           } catch (error) {
-            console.log("swap error", error)
             setScreenLoadingStatus("Transaction Failed.")
-  
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
-            }
+            clearStatusText()
           }
         }
       }
     }
-  }, [approveSuccess, approveStatusData, approveTx])
+  }, [approveSuccess, approveStatusData, approveTx, isApproveError])
 
   useEffect(() => {
     (async () => {
-      if (removeLiquidityETHTx) {
+      if (isRemoveLiquidityError) {
+        setScreenLoadingStatus("Transaction Failed.")
+        clearStatusText()
+      } else if (removeLiquidityETHTx) {
         if (removeLiquidityStatusData) {
           if (removeLiquiditySuccess) {
             try {
@@ -121,19 +126,16 @@ export default function useSplitLP({
               updateNewAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
               setScreenLoadingStatus("Transaction Completed.")
               updateIsSuccessSplit(true)
+              clearStatusText()
             } catch (error) {
               setScreenLoadingStatus("Transaction Failed.")
-            }
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
+              clearStatusText()
             }
           }
         }
       }
     })()
-  }, [removeLiquiditySuccess, removeLiquidityStatusData, removeLiquidityETHTx])
+  }, [removeLiquiditySuccess, removeLiquidityStatusData, removeLiquidityETHTx, isRemoveLiquidityError])
 
   async function splitLP(amount: string | number, minLand: string | number | bigint, minEth: string | number | bigint) {
     if (isConnected == true) {
@@ -151,7 +153,7 @@ export default function useSplitLP({
       } catch (e) {
         setScreenLoadingStatus("Transaction failed")
         updateIsSuccessSplit(false);
-        console.log("Error, withdraw: ", e);
+        clearStatusText()
       }
    
     }

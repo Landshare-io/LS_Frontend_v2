@@ -30,13 +30,13 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
   const { data: balanceOfLandToken, refetch: refetchLandTokenBalance } = useBalanceOfLandToken({ chainId: bsc.id, address });
   const { data: balanceOfLpToken, refetch: refetchLpTokenBalance } = useBalanceOfLpTokenV2({ chainId: bsc.id, address });
   
-  const { deposit: autoVaultV3Deposit, data: autoVaultV3DepositTx } = useDepositAutoVaultV3(bsc.id)
+  const { deposit: autoVaultV3Deposit, data: autoVaultV3DepositTx, isError:isDepositAutoV3Error } = useDepositAutoVaultV3(bsc.id)
   const { isSuccess: autoVaultV3DepositSuccess, data: autoVaultV3DepositStatusData } = useWaitForTransactionReceipt({   
     hash: autoVaultV3DepositTx,
     chainId: bsc.id
   });
 
-  const { deposit: masterchefDeposit, data: masterchefDepositTx } = useDepositMastchef(bsc.id)
+  const { deposit: masterchefDeposit, data: masterchefDepositTx, isError: isDepositError } = useDepositMastchef(bsc.id)
   const { isSuccess: masterchefDepositSuccess, data: masterchefDepositStatusData } = useWaitForTransactionReceipt({   
     hash: masterchefDepositTx,
     chainId: bsc.id
@@ -61,7 +61,12 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
   };
 
   useEffect(() => {
-    if (autoVaultV3DepositTx) {
+    if (isDepositAutoV3Error) {
+      setScreenLoadingStatus("Transaction Failed.")
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    } else if (autoVaultV3DepositTx) {
       if (autoVaultV3DepositStatusData) {
         if (autoVaultV3DepositSuccess) {
           try {
@@ -82,10 +87,15 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         }
       }
     }
-  }, [autoVaultV3DepositTx, autoVaultV3DepositStatusData, autoVaultV3DepositSuccess])
+  }, [autoVaultV3DepositTx, autoVaultV3DepositStatusData, autoVaultV3DepositSuccess, isDepositAutoV3Error])
 
   useEffect(() => {
-    if (masterchefDepositTx) {
+    if (isDepositError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    } else if (masterchefDepositTx) {
       if (masterchefDepositStatusData) {
         if (masterchefDepositSuccess) {
           try {
@@ -107,7 +117,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         }
       }
     }
-  }, [masterchefDepositTx, masterchefDepositStatusData, masterchefDepositSuccess])
+  }, [masterchefDepositTx, masterchefDepositStatusData, masterchefDepositSuccess, isDepositError])
 
   async function depositAutoLandv2(amount: number) {
     if (isConnected == true) {
