@@ -58,7 +58,7 @@ export default function MarketplacePage() {
 
   return (
     <>
-      <div className="relative max-w-[1200px] m-auto pt-0">
+      <div className="relative max-w-[1200px] m-auto pt-0 bg-primary">
         {(!isConnected && isItemsLoading == false) ? (
           <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
             <ConnectWallet />
@@ -66,10 +66,10 @@ export default function MarketplacePage() {
         ) : (
           <>
             <Topbar isNftList={true} />
-            <div className="flex w-full flex-col items-center md:flex-row overflow-auto flex-wrap items-center justify-between px-2">
+            <div className="flex w-full flex-col md:flex-row overflow-auto flex-wrap items-center justify-between px-2">
               <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>House NFTs</span>
               <div className="border-b-[1px] border-[#00000050] w-full hidden md:block my-3"></div>
-              <div className="flex ms-4 ml-0 flex-nowrap flex-1 justify-end md:justify-start">
+              <div className="grid grid-cols-2">
                 <div className="flex ms-4 sm:ms-1 items-center">
                   <label
                     htmlFor="marketplace-view"
@@ -79,7 +79,7 @@ export default function MarketplacePage() {
                   </label>
                   <div className="relative mr-2">
                     <select
-                      className={`whitespace-nowrap text-ellipsis py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                      className={`w-full whitespace-nowrap text-ellipsis overflow-hidden py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
                       name="marketplace-view"
                       id="marketplace-view"
                       onChange={(e) => changeMarketplaceView(e.target.value)}
