@@ -46,7 +46,8 @@ import {
   MASTERCHEF_CONTRACT_ADDRESS, 
   LP_TOKEN_V1_CONTRACT_ADDRESS,
   AUTO_LAND_V3_CONTRACT_ADDRESS,
-  BOLD_INTER_TIGHT
+  BOLD_INTER_TIGHT,
+  TOKEN_MIGRATE_CONTRACT_ADDRESS
 } from "../../config/constants/environments";
 import DetailsIcon from "../../../public/icons/details.svg";
 import DetailsIconDark from "../../../public/icons/details-dark.svg";
@@ -201,7 +202,7 @@ export default function VaultCard({
     oldAutoBalance,
     address
   });
-  const { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate } = useTokenMigrate({ address });
+  const { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate } = useTokenMigrate({ address: TOKEN_MIGRATE_CONTRACT_ADDRESS });
   const {
     approveLandV2,
     approveLpTokenV2,
