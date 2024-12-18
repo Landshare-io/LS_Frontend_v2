@@ -234,7 +234,7 @@ export default function FinancialSummary() {
                           {Number(formatEther(rwaPrice ?? 0)) === undefined ||
                           isConnected === false
                             ? "0"
-                            : `${parseFloat(balance?.data?.formatted)}`}
+                            : `${parseFloat(balance?.formatted ?? 0)}`}
                         </span>
                       </div>
                     </div>
