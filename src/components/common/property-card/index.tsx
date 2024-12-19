@@ -37,7 +37,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
               <Image src={IconLocation} alt="location" />
               <div className="overflow-hidden text-ellipsis whitespace-nowrap">{property.address}</div>
             </div>
-            <span className={`absolute left-0 top-[20px] shadow-md rounded-r-[15px] leading-[20px] tracking-[0.02em] text-[0.02em] text-[#fff] py-[4px] px-[15px] ${property.type == "Rental Property" ? "bg-[#FF5454]" : "bg-[#3B98EE]"} ${BOLD_INTER_TIGHT.className}`}>
+            <span className={`absolute left-0 top-[20px] shadow-md rounded-r-[15px] leading-[20px] tracking-[0.02em] text-[0.8rem] text-[#fff] py-[4px] px-[15px] ${property.type == "Rental Property" ? "bg-[#FF5454]" : "bg-[#3B98EE]"} ${BOLD_INTER_TIGHT.className}`}>
               {property.type}
             </span>
           </div>
