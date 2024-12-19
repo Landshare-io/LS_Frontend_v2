@@ -99,7 +99,7 @@ export default function PriceGraph({
             setSeries([{
               data: data.concat(filtered)
             }]);
-            change_price = filtered.length > 1 ? (filtered[1][1] != 0 ? (filtered[filtered.length - 1][1] - filtered[1][1]) / filtered[1][1] * 100 : 0) : 0
+            change_price = filtered.length > 1 ? (filtered[0][1] != 0 ? (filtered[filtered.length - 1][1] - filtered[0][1]) / filtered[0][1] * 100 : 0) : 0
           }
           setRecentData({
             pair: "LSRWA / USD",
