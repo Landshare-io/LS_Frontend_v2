@@ -221,7 +221,7 @@ export default function FinancialSummary() {
                         My RWA Balance
                       </span>
                       <div className="flex gap-[8px]">
-                        <div className="w-[32px] h-[32px] py-[6.23px] px-[7px] rounded-[30px] flex justify-center items-center bg-[#F6F7F9]">
+                        <div className="w-[32px] h-[32px] py-[6.23px] px-[7px] rounded-[30px] flex justify-center items-center bg-primary">
                           <Image
                             src={myRwa}
                             alt="refresh"
