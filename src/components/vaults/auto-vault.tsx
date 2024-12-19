@@ -139,7 +139,7 @@ export default function AutoVault({
         const bal = BigInt(landBalance) * BigInt(percent) / BigInt(100)
         setInputValue(formatEther(bal))
       } else {
-        const bal = chainId == MAJOR_WORK_CHAIN.id ? BigInt(vaultBalance.autoLandV3) * BigInt(percent) / BigInt(100) : BigInt(ccipVaultBalance.autoLandV3) * BigInt(percent) / BigInt(100)
+        const bal = (MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? BigInt(vaultBalance.autoLandV3) * BigInt(percent) / BigInt(100) : BigInt(ccipVaultBalance.autoLandV3) * BigInt(percent) / BigInt(100)
         setInputValue(formatEther(bal))
       }
     }
@@ -400,7 +400,7 @@ export default function AutoVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                      {chainId != MAJOR_WORK_CHAIN.id ? ccipVaultBalance?.autoReward ?? 0 : 
+                      {!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? ccipVaultBalance?.autoReward ?? 0 : 
                         <Tooltip content={`Full number: ${formatEther(vaultBalance?.autoReward || 0)}`}>
                           <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                             {formatEther(vaultBalance?.autoReward || 0).substr(0, 5)}
@@ -461,7 +461,7 @@ export default function AutoVault({
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
                             if (inputValue && Number(inputValue) > Number(0)) {
-                              if (chainId == MAJOR_WORK_CHAIN.id) {
+                              if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                 depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 depositing ? depositHandler() : withdrawHandler()
@@ -553,7 +553,7 @@ export default function AutoVault({
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className} ${isDepositing ? 'flex justify-center items-center' : ''}`}
                                 onClick={() => {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    if (chainId == MAJOR_WORK_CHAIN.id) {
+                                    if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                       depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                     } else {
                                       depositing ? depositHandler() : withdrawHandler()
