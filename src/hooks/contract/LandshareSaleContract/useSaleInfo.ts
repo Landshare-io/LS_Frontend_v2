@@ -6,10 +6,10 @@ import { Address } from "viem";
 
 export default function useSaleInfo(chainId: number, address: Address | undefined) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
+    address: LANDSHARE_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareSaleAbi,
     functionName: "saleInfo",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [address]
   })
 
