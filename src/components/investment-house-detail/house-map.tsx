@@ -8,7 +8,7 @@ interface HouseMapProps {
 export default function HouseMap({ houseInfo }: HouseMapProps) {
   return (
     <>
-      <div className="bg-third py-[50px]">
+      <div className="bg-third py-[50px] px-[10px]">
         <div className="max-w-[1200px] mx-auto w-full">
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-[20px]">
             <div className="flex flex-col">

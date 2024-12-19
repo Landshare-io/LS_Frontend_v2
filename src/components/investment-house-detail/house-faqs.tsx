@@ -80,7 +80,7 @@ export default function HouseFaqs() {
     arrowColor: theme == 'dark' ? "#f1f1f1" : "#0a0a0a",
   };
   return (
-    <div className="max-w-[1200px] m-auto py-[30px]">
+    <div className="max-w-[1200px] m-auto py-[30px] px-[10px]">
       <p className="text-[#0a0a0a] text-[30px] border-b">FAQ</p>
       {data.rows.map((faqData: any, index: number) => (
         <Faq answer={faqData.content} question={faqData.title} key={index} />

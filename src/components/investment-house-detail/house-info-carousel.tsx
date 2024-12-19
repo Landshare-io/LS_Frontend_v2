@@ -14,8 +14,8 @@ export default function HouseInfoCarouselComponent({ houseInfo, isLoading }: Hou
   return (
     <>
       {houseInfo?.address ? (
-        <div className="max-w-[1200px] m-auto my-[10px] py-[10px]">
-          <div className="flex mt-[20px] gap-[40px]">
+        <div className="max-w-[1200px] m-auto my-[10px] px-[10px]">
+          <div className="flex flex-col md:flex-row mt-[20px] gap-[40px]">
             <div className="w-full">
               {isLoading ? (
                 <div className="flex justify-center items-center h-100 min-h-[420px]">
