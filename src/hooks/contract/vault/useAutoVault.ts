@@ -187,7 +187,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
               action: transferAction,
               messageId,
               sourceChain: CCIP_CHAIN_ID[chainId],
-              destinationChain: CCIP_CHAIN_ID[MAJOR_WORK_CHAIN.id]
+              destinationChain: CCIP_CHAIN_ID[bsc.id]
             }))
             setScreenLoadingStatus(`${transferAction} Transaction success`)
           } else {
