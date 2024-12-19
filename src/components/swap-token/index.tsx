@@ -27,13 +27,11 @@ import {
   RWA_POOL_CONTRACT_ADDRESS,
   LAND_TOKEN_CONTRACT_ADDRESS,
   BOLD_INTER_TIGHT,
-  LANDSHARE_SALE_CONTRACT_ADDRESS,
   MAJOR_WORK_CHAIN,
 } from "../../config/constants/environments";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
 import useGetLandFee from "../../hooks/contract/LandshareSaleContract/useGetLandFee";
-import useAllowanceOfUsdcContract from "../../hooks/contract/UsdcContract/useAllowance";
 import useBuyTokenView from "../../hooks/contract/LandshareBuySaleContract/useBuyTokenView";
 import useSellTokens from "../../hooks/swap-token/useSellTokens";
 import useBuyTokens from "../../hooks/swap-token/useBuyTokens";
@@ -116,14 +114,10 @@ export default function SwapToken() {
   const secondaryLimit = useGetAllowedToTransfer(chainId, address);
   const isWhitelisted = useIsWhitelistedAddressOfRwa(chainId, address);
   const landFee = useLandFee(chainId) as number;
-  const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
+  const rwaPrice = useGetRwaPrice(chainId);
   const { allTokens } = useGetAllTokens();
   const landFeeAmount = useGetLandFee(chainId, usdcAmount) as number;
-  const { data: usdcAllowance } = useAllowanceOfUsdcContract(
-    chainId,
-    address,
-    LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]
-  ) as { data: BigNumberish };
+
   const { sellTokens } =
     useSellTokens(chainId, address, landFeeAmount, RWATokenAmount);
   const { buyTokens } = useBuyTokens(
@@ -137,10 +131,9 @@ export default function SwapToken() {
     RWATokenAmount,
     USDC_ADDRESS[chainId]
   ) as any;
-  console.log('buyTokenAmount', buyTokenAmount)
 
   useEffect(() => {
-    setUsdcAmount(Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount);
+    setUsdcAmount(Number(rwaPrice ?? 0) * RWATokenAmount);
     setBuyLANDAmount(buyTokenAmount[1])
     setBuyUSDCAmount(buyTokenAmount[0])
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
@@ -403,7 +396,7 @@ export default function SwapToken() {
                     {rwaPrice == undefined || isConnected === false
                       ? "0"
                       : `${parseFloat(balance?.formatted)} ($${(
-                          Number(formatEther(rwaPrice ?? 0)) *
+                          Number((rwaPrice ?? 0)) *
                           parseFloat(balance?.formatted)
                         ).toLocaleString(undefined, {
                           minimumFractionDigits: 2,
@@ -460,7 +453,7 @@ export default function SwapToken() {
                     $
                     {rwaPrice == 0
                       ? "Loading..."
-                      : Number(formatEther(rwaPrice ?? 0)).toLocaleString(
+                      : Number((rwaPrice ?? 0)).toLocaleString(
                           undefined,
                           { minimumFractionDigits: 4 }
                         )}
@@ -471,11 +464,7 @@ export default function SwapToken() {
                 className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
                 placeholder="00.00 USDC"
                 readOnly
-                value={
-                  Number(formatEther(usdcAllowance ?? 0)) == 0
-                    ? ""
-                    : formatEther(usdcAllowance ?? 0)
-                }
+                value={usdcAmount}
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
               />
             </div>
@@ -483,7 +472,7 @@ export default function SwapToken() {
               <>
                 <div className="text-text-primary w-full flex justify-between">
                   <span className="font-medium text-[14px] leading-[22px]">
-                    LAND Fee ({landFee}%)
+                    {chainId == bsc.id ? 'LAND' : ''} Fee ({landFee.toString()}%)
                   </span>
                   <span
                     className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
@@ -491,7 +480,7 @@ export default function SwapToken() {
                     {landFeeAmount
                       ? formatEther(landFeeAmount).toString().substr(0, 12)
                       : 0}{" "}
-                    Land{" "}
+                    {chainId == bsc.id ? 'LAND ' : ' '}
                   </span>
                 </div>
                 <div className="text-text-primary w-full flex justify-between">
@@ -588,7 +577,7 @@ export default function SwapToken() {
                       {rwaPrice == undefined
                         ? "0"
                         : `${parseFloat(balance?.formatted)} ($${(
-                            Number(formatEther(rwaPrice ?? 0)) *
+                            Number((rwaPrice ?? 0)) *
                             parseFloat(balance?.formatted)
                           ).toLocaleString(undefined, {
                             minimumFractionDigits: 2,
@@ -633,9 +622,9 @@ export default function SwapToken() {
                   placeholder="00.00 USDC"
                   readOnly
                   value={
-                    usdcAmount == undefined || RWATokenAmount === 0
+                    buyUSDCAmount == undefined || RWATokenAmount === 0
                       ? ""
-                      : usdcAmount.toString()
+                      : formatEther(buyUSDCAmount.toString())
                   }
                 />
                 {isConnected && (
@@ -716,9 +705,9 @@ export default function SwapToken() {
                             usdcAmount == 0 ? 0 : Number(usdcAmount.toString())
                           ) > Number(poolBalance?.formatted)
                         }
-                        onClick={sellTokens}
+                        onClick={() => sellTokens()}
                         textClassName="text-[#fff]"
-                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px]"
+                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green"
                       >
                         {RWATokenAmount && usdcAmount && landFeeAmount
                           ? RWATokenAmount > parseFloat(balance?.formatted)
@@ -763,7 +752,7 @@ export default function SwapToken() {
                           setIsSTAPshow(true);
                         }}
                         textClassName="text-[#fff]"
-                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px]"
+                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green"
                       >
                         {RWATokenAmount && buyLANDAmount && usdcAmount
                           ? Number(formatEther(buyLANDAmount.toString())) >
@@ -1073,11 +1062,10 @@ export default function SwapToken() {
           </div>
           <div>
             <Button
-              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px]"
+              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px] bg-primary-green"
               onClick={async () => {
                 setIsSTAPshow(false);
-                console.log('buyOrSell', buyOrSell)
-                buyOrSell == "Buy" ? buyTokens() : sellTokens();
+                buyOrSell == "Buy" ? buyTokens(buyUSDCAmount) : sellTokens();
               }}
               disabled={false}
             >
