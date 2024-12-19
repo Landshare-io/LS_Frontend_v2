@@ -6,10 +6,10 @@ import { Address } from "viem";
 
 export default function useGetSaleLimit(chainId: number, address: Address | undefined) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
+    address: LANDSHARE_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareSaleAbi,
     functionName: "getSaleLimit",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [address]
   })
 
