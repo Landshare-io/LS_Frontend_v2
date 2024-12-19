@@ -6,10 +6,10 @@ import { Address } from "viem";
 
 export default function useIsWhitelistedAddress(chainId: number, address: Address | undefined) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
+    address: LANDSHARE_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareSaleAbi,
     functionName: "isWhitelistedAddress",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [address]
   })
 
