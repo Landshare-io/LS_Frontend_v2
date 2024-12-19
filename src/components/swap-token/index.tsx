@@ -43,6 +43,7 @@ import IconGateio from "../../../public/icons/gateio.png";
 import IconMEXC from "../../../public/icons/mexclogo.png";
 import IconUSDC from "../../../public/icons/usdc.png";
 import IconArrowDown from "../../../public/icons/arrow-down.svg";
+import IconArrowDownDark from "../../../public/icons/arrow-down-dark.svg";
 import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
 import IconArrowRightUp from "../../../public/icons/arrow-right-up.svg";
 import IconDashboard from "../../../public/icons/dashboard.svg";
@@ -437,7 +438,7 @@ export default function SwapToken() {
                     USDC
                   </span>
                   <Image
-                    src={IconArrowDown}
+                    src={theme == "dark" ? IconArrowDownDark : IconArrowDown}
                     alt="arrow down"
                     className="w-[18px] h-[18px]"
                   />
