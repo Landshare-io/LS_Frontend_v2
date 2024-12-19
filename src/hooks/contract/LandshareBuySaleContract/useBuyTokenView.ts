@@ -14,6 +14,7 @@ export default function useBuyTokenView(chainId: number, amountOfSecurities: num
     args: [amountOfSecurities, stableCoinAddress]
   })
 
+  if (typeof LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId] == "undefined" || typeof stableCoinAddress == "undefined") return [0, 0]
   if (isLoading) return [0, 0]
   // {
   //   amountOfStableCoin: 0,
