@@ -166,7 +166,7 @@ export default function Footer() {
                   About Us
                 </a>
                 <a
-                  href="https://landshare.io/faqs"
+                  href="https://landshare.io/faq"
                   className="font-normaml text-[14px] leading-[22px]"
                 >
                   FAQ
