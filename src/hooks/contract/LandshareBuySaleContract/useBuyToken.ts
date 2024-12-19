@@ -9,15 +9,17 @@ export default function useBuyToken(chainId: number) {
   const {
     data,
     isPending,
+    isError,
+    error,
     writeContract
   } = useWriteContract();
 
   async function buyToken(amount: number | BigNumberish, usdcAddress: Address) {
     await writeContract({
-      address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id],
+      address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
       abi: LandshareBuySaleAbi,
       functionName: "buyToken",
-      chainId: bsc.id,
+      chainId: chainId,
       args: [amount, usdcAddress]
     });
   }
@@ -25,6 +27,8 @@ export default function useBuyToken(chainId: number) {
   return {
     buyToken,
     isPending,
+    isError,
+    error,
     data
   }
 }
