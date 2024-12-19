@@ -81,16 +81,12 @@ export default function useSplitLP({
     notifySubscribers();
   };
 
-  const clearStatusText = () => {
-    setTimeout(() => {
-      setScreenLoadingStatus("")
-    }, 1000);
-  }
-
   useEffect(() => {
     if (isApproveError) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (approveTx) {
       if (approveStatusData) {
         if (approveSuccess) {
@@ -104,7 +100,9 @@ export default function useSplitLP({
             )
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }
@@ -115,7 +113,9 @@ export default function useSplitLP({
     (async () => {
       if (isRemoveLiquidityError) {
         setScreenLoadingStatus("Transaction Failed.")
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       } else if (removeLiquidityETHTx) {
         if (removeLiquidityStatusData) {
           if (removeLiquiditySuccess) {
@@ -126,10 +126,14 @@ export default function useSplitLP({
               updateNewAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
               setScreenLoadingStatus("Transaction Completed.")
               updateIsSuccessSplit(true)
-              clearStatusText()
+              setTimeout(() => {
+                setScreenLoadingStatus("")
+              }, 1000);
             } catch (error) {
               setScreenLoadingStatus("Transaction Failed.")
-              clearStatusText()
+              setTimeout(() => {
+                setScreenLoadingStatus("")
+              }, 1000);
             }
           }
         }
@@ -153,7 +157,9 @@ export default function useSplitLP({
       } catch (e) {
         setScreenLoadingStatus("Transaction failed")
         updateIsSuccessSplit(false);
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
    
     }

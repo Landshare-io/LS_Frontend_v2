@@ -60,17 +60,13 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
     isSuccessMigrateState = newIsSuccessMigrate;
     notifySubscribers();
   };
-
-  const clearStatusText = () => {
-    setTimeout(() => {
-      setScreenLoadingStatus("")
-    }, 1000);
-  }
   
   useEffect(() => {
     if (isApproveError) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (landTokenApproveTx) {
       if (landTokenApproveStatusData) {
         if (landTokenApproveSuccess) {
@@ -82,7 +78,9 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
             setScreenLoadingStatus("Transaction Failed.")
   
             return () => {
-              clearStatusText()
+              setTimeout(() => {
+                setScreenLoadingStatus("")
+              }, 1000);
             }
           }
         }
@@ -93,7 +91,9 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
   useEffect(() => {
     if (isSwapError) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (swapTx) {
       if (swapStatusData) {
         if (swapSuccess) {
@@ -101,14 +101,20 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
             updateIsSuccessMigrate(true)
             updateLandTokenV2Balance()
             setScreenLoadingStatus("Transaction Completed.")
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
   
           return () => {
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         } else {
           updateIsSuccessMigrate(false)

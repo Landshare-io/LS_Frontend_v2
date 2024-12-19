@@ -91,32 +91,34 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
     notifySubscribers();
   };
 
-  const clearStatusText = () => {
-    setTimeout(() => {
-      setScreenLoadingStatus("")
-    }, 1000);
-  }
-
   useEffect(() => {
     if (isWithdrawLPError) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (withdrawLPFramTx) {
       if (withdrawLPFarmStatusData) {
         if (withdrawLPFarmSuccess) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             console.log("withdraw error", error)
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-            clearStatusText()  
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
 
           return () => {
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }
@@ -126,18 +128,24 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
   useEffect(() => {
     if (isWithdrawAutoError) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (withdrawAutoVaultV1Tx) {
       if (withdrawAutoVaultV1StatusData) {
         if (withdrawAutoVaultV1Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }
@@ -147,18 +155,24 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
   useEffect(() => {
     if (isWithdrawAutoV2Error) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (withdrawAutoVaultV2Tx) {
       if (withdrawAutoVaultV2StatusData) {
         if (withdrawAutoVaultV2Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }
@@ -168,18 +182,24 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
   useEffect(() => {
     if (isWithdrawLandStakeV2Error) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (withdrawLandTokenStakeV2Tx) {
       if (withdrawLandTokenStakeV2StatusData) {
         if (withdrawLandTokenStakeV2Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }
@@ -189,18 +209,24 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
   useEffect(() => {
     if (isWithdrawLandStakeV3Error) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (withdrawLandTokenStakeV3Tx) {
       if (withdrawLandTokenStakeV3StatusData) {
         if (withdrawLandTokenStakeV3Success) {
           try {
             setScreenLoadingStatus("Transaction Completed")
             updateIsSuccessWithdraw(true);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }
@@ -227,7 +253,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessWithdraw(false);
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
       
     }
@@ -248,7 +276,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessWithdraw(false);
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
       
     }
@@ -276,7 +306,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.", false);
         updateIsSuccessWithdraw(false);
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
       
     }
@@ -301,7 +333,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.", false);
         updateIsSuccessWithdraw(false);
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
       
     }
@@ -326,7 +360,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessWithdraw(false);
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
       
     }

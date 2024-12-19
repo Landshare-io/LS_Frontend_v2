@@ -62,27 +62,27 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
     notifySubscribers();
   };
 
-  const clearStatusText = () => {
-    setTimeout(() => {
-      setScreenLoadingStatus("")
-    }, 1000);
-  }
-
   useEffect(() => {
     if (isApproveLandError) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (approveLandTx) {
       if (approveStatusData) {
         if (approveLandSuccess) {
           try {
             setScreenLoadingStatus("Transaction Completed.")
             updateIsSuccessApprove(true);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             updateIsSuccessApprove(false);
             setScreenLoadingStatus("Transaction Failed.")
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }
@@ -93,18 +93,24 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
   useEffect(() => {
     if (isApproveLPError) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (approveLpTx) {
       if (approveLpStatusData) {
         if (approveLpSuccess) {
           try {
             setScreenLoadingStatus("Transaction Completed.")
             updateIsSuccessApprove(true);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             updateIsSuccessApprove(false);
             setScreenLoadingStatus("Transaction Failed.")
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }

@@ -60,16 +60,12 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
     notifySubscribers();
   };
 
-  const clearStatusText = () => {
-    setTimeout(() => {
-      setScreenLoadingStatus("")
-    }, 1000);
-  }
-
   useEffect(() => {
     if (isDepositAutoV3Error) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (autoVaultV3DepositTx) {
       if (autoVaultV3DepositStatusData) {
         if (autoVaultV3DepositSuccess) {
@@ -77,12 +73,16 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
             refetchLandTokenBalance()
             setScreenLoadingStatus("Transaction Completed.")
             updateIsSuccessDeposit(true);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             console.log("deposit error", error)
             updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }
@@ -92,7 +92,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
   useEffect(() => {
     if (isDepositError) {
       setScreenLoadingStatus("Transaction Failed.")
-      clearStatusText()
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     } else if (masterchefDepositTx) {
       if (masterchefDepositStatusData) {
         if (masterchefDepositSuccess) {
@@ -101,12 +103,16 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
             refetchLpTokenBalance()
             setScreenLoadingStatus("Transaction Completed.")
             updateIsSuccessDeposit(true);
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           } catch (error) {
             console.log("deposit error", error)
             updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
-            clearStatusText()
+            setTimeout(() => {
+              setScreenLoadingStatus("")
+            }, 1000);
           }
         }
       }
@@ -125,7 +131,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessDeposit(false);
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
     }
   }
@@ -142,7 +150,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessDeposit(false);
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
     }
   }
@@ -159,7 +169,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessDeposit(false);
-        clearStatusText()
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
     }
   }
