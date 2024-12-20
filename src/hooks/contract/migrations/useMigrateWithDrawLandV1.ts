@@ -154,6 +154,11 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
         }
       }
     }
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
   }, [withdrawAutoVaultV2Tx, withdrawAutoVaultV2StatusData, withdrawAutoVaultV2Success, isWithdrawAutoV2Error])
 
   useEffect(() => {
