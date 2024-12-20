@@ -1,11 +1,25 @@
 import { getDefaultProvider } from "ethers";
-import { bsc, hardhat } from "wagmi/chains";
+import { arbitrum, bsc, bscTestnet, hardhat, polygon, polygonAmoy, arbitrumSepolia } from "wagmi/chains";
+import { plume, plumeTestnet } from "../extra-chains";
 import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
 import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
-export const IS_TEST_MODE = false
-export const MAJOR_WORK_CHAIN = IS_TEST_MODE ? hardhat : bsc
+export const IS_TEST_MODE = true
+export const AUTO_VAULT_MAIN_CHAINS = IS_TEST_MODE ? [bscTestnet, hardhat] : [bsc]
+export const MAJOR_WORK_CHAINS = {
+  '/vaults': {
+    auto: IS_TEST_MODE ? [hardhat, bscTestnet, polygonAmoy, arbitrumSepolia] : [bsc, polygon, arbitrum],
+    manual: IS_TEST_MODE ? [hardhat] : [bsc],
+    lp: IS_TEST_MODE ? [hardhat] : [bsc],
+    usdt: IS_TEST_MODE ? [hardhat] : [bsc]
+  },
+  '/nft': IS_TEST_MODE ? [hardhat] : [bsc],
+  '/marketplace': IS_TEST_MODE ? [hardhat] : [bsc],
+  '/rwa': IS_TEST_MODE ? [hardhat, plumeTestnet] : [bsc, plume],
+  '/dao': IS_TEST_MODE ? [hardhat] : [bsc],
+  '/migration': IS_TEST_MODE ? [hardhat] : [bsc]
+}
 export const BOLD_INTER_TIGHT = Inter_Tight({
   weight: "700",
   style: "normal",
@@ -68,19 +82,19 @@ export const LAND_TOKEN_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   80002: '0xcab0EF91Bee323d1A617c0a027eE753aFd6997E4',
   42161: '0x27Bc2757fAb0b8aB406016D1f71d8123452095d3',
   421614: '0xA8C0c11bf64AF62CDCA6f93D3769B88BdD7cb93D',
-  31337: '0x2B0d36FACD61B71CC05ab8F3D2355ec3631C0dd5'
+  // 31337: '0x2B0d36FACD61B71CC05ab8F3D2355ec3631C0dd5'
 }
 export const SWIPELUX_SETTING = {
   apiKey: '1d1fe8ad-a154-4dc0-a6bd-3fe8939ba7d0'
 };
-export const NFT_GAME_BACKEND_URL = 'http://localhost:3001'
-export const CCIP_BACKEND_URL = 'http://localhost:3002'
+export const NFT_GAME_BACKEND_URL = 'https://landsharenft.xyz'
+export const CCIP_BACKEND_URL = 'https://ccip.landsharenft.xyz'
 export const APOLLO_RWA_BUY_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa-buy/v0.1.0"
 export const APOLLO_RWA_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa/v0.1.0"
 export const LAND_PRICE_SUBGRAPH_URL = 'https://api.studio.thegraph.com/query/81176/landshare-price/v0.1.0'
 export const LANDSHARE_COST_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=landshare&vs_currencies=usd'
-export const LANDPRICE_URL = 'http://159.203.181.148:5000/land_pricedata/'
-export const LANDMARKET_URL = 'http://159.203.181.148:5000/land_market'
+export const LANDPRICE_URL = 'https://landshare.xyz/land_pricedata/'
+export const LANDMARKET_URL = 'https://landshare.xyz/land_market'
 export const LIVE_COIN_LIST_URL = 'https://api.livecoinwatch.com/coins/list'
 export const LIVE_COIN_API_KEY= '95ce49d3-3e89-475d-b61e-6638a002b1fe'
 export const ZERO_ID_WIDGET_API_KEY = '10000000-0000-0000-0000-7f9a2af16a1c'
@@ -137,7 +151,9 @@ export const ASSET_MD_TOKEN_ADDRESS = "0xffbf45A8E54ADa0BbCbC880D13B6629ffD75630
 export const RWA_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x475eD67Bfc62B41c048b81310337c1D75D45aADd' as Address,
   97: '' as Address,
-  31337: '0x99dBE4AEa58E518C50a1c04aE9b48C9F6354612f'
+  98864: '0x31Eed2746BBcc9e67324c006908d26899470f3DD',
+  31337: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+  // 31337: '0x99dBE4AEa58E518C50a1c04aE9b48C9F6354612f': Local nft game
 }
 export const RWA_LP_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x89bad177367736C186F7b41a9fba7b23474A1b35' as Address,
@@ -145,15 +161,21 @@ export const RWA_LP_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
 }
 export const AUTO_REDEEM_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0xcA45Cd5032327DE336363D65Dd3bf90901fd2C15' as Address,
-  97: '' as Address
+  97: '' as Address,
+  98864: '0x8e459068Eb55ED08F51075A4694cb9b197697243',
+  31337: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 }
 export const USDC_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
-  97: '' as Address
+  97: '' as Address,
+  98864: '0xe644F07B1316f28a7F134998e021eA9f7135F351',
+  31337: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 }
 export const USDT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x55d398326f99059fF775485246999027B3197955',
-  97: '' as Address
+  97: '' as Address,
+  98864: '0xe644F07B1316f28a7F134998e021eA9f7135F351',
+  31337: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 }
 export const RWA_POOL_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0xB709b98D9999Cf8C6B49bDcB16F1cca84fe38bc3' as Address,
@@ -161,11 +183,15 @@ export const RWA_POOL_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
 }
 export const LANDSHARE_SALE_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x50ba4cEaF1b1B6FF0745Cc6fA4B7B7587D9cF9C4' as Address,
-  97: '' as Address
+  97: '' as Address,
+  98864: '0x549c9ab85cFBd4F4d416F97002c4614c35FcA62f',
+  31337: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9'
 }
 export const LANDSHARE_BUY_SALE_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x41Cd41C417854988638dBBBA7adA66deE627DC48' as Address,
-  97: '' as Address
+  97: '' as Address,
+  98864: '0xbf294fA382c0A27d721C6caE15B538c109617060',
+  31337: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9'
 }
 export const AUTO_VAULT_V3_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x6233FFEEf97D08Db2c763f389eebD9d738E4d4a3' as Address,

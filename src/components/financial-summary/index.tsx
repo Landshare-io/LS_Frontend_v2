@@ -43,7 +43,6 @@ import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import {
   BOLD_INTER_TIGHT,
   RWA_CONTRACT_ADDRESS,
-  MAJOR_WORK_CHAIN,
 } from "../../config/constants/environments";
 import { getDateStringFromTimestamp } from "../../utils/helpers/convert-date";
 import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";
@@ -93,7 +92,7 @@ export default function FinancialSummary() {
   const { data: balance } = useBalance({
     address: address,
     token: RWA_CONTRACT_ADDRESS[bsc.id],
-    chainId: MAJOR_WORK_CHAIN.id,
+    chainId: bsc.id,
   }) as { data: any };
 
   useEffect(() => {
@@ -460,8 +459,8 @@ export default function FinancialSummary() {
                     <Skeleton className="rounded-lg" width={100} height={18} />
                   ) : (
                     Number(
-                      BigInt(rwaValue) -
-                        BigInt(totalRWATokenBalanceOfReserveWallets)
+                      BigInt(rwaValue ?? 0) -
+                        BigInt(totalRWATokenBalanceOfReserveWallets ?? 0)
                     ).toLocaleString()
                   )}
                 </div>

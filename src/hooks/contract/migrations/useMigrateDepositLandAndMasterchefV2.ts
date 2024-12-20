@@ -30,13 +30,13 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
   const { data: balanceOfLandToken, refetch: refetchLandTokenBalance } = useBalanceOfLandToken({ chainId: bsc.id, address });
   const { data: balanceOfLpToken, refetch: refetchLpTokenBalance } = useBalanceOfLpTokenV2({ chainId: bsc.id, address });
   
-  const { deposit: autoVaultV3Deposit, data: autoVaultV3DepositTx } = useDepositAutoVaultV3(bsc.id)
+  const { deposit: autoVaultV3Deposit, data: autoVaultV3DepositTx, isError:isDepositAutoV3Error } = useDepositAutoVaultV3(bsc.id)
   const { isSuccess: autoVaultV3DepositSuccess, data: autoVaultV3DepositStatusData } = useWaitForTransactionReceipt({   
     hash: autoVaultV3DepositTx,
     chainId: bsc.id
   });
 
-  const { deposit: masterchefDeposit, data: masterchefDepositTx } = useDepositMastchef(bsc.id)
+  const { deposit: masterchefDeposit, data: masterchefDepositTx, isError: isDepositError } = useDepositMastchef(bsc.id)
   const { isSuccess: masterchefDepositSuccess, data: masterchefDepositStatusData } = useWaitForTransactionReceipt({   
     hash: masterchefDepositTx,
     chainId: bsc.id
@@ -61,7 +61,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
   };
 
   useEffect(() => {
-    if (autoVaultV3DepositTx) {
+    if (isDepositAutoV3Error) {
+      setScreenLoadingStatus("Transaction Failed.")
+    } else if (autoVaultV3DepositTx) {
       if (autoVaultV3DepositStatusData) {
         if (autoVaultV3DepositSuccess) {
           try {
@@ -73,19 +75,20 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
             updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
-
-          return () => {
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
-          }
         }
       }
     }
-  }, [autoVaultV3DepositTx, autoVaultV3DepositStatusData, autoVaultV3DepositSuccess])
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [autoVaultV3DepositTx, autoVaultV3DepositStatusData, autoVaultV3DepositSuccess, isDepositAutoV3Error])
 
   useEffect(() => {
-    if (masterchefDepositTx) {
+    if (isDepositError) {
+      setScreenLoadingStatus("Transaction Failed.")
+    } else if (masterchefDepositTx) {
       if (masterchefDepositStatusData) {
         if (masterchefDepositSuccess) {
           try {
@@ -98,16 +101,15 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
             updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
-
-          return () => {
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
-          }
         }
       }
     }
-  }, [masterchefDepositTx, masterchefDepositStatusData, masterchefDepositSuccess])
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [masterchefDepositTx, masterchefDepositStatusData, masterchefDepositSuccess, isDepositError])
 
   async function depositAutoLandv2(amount: number) {
     if (isConnected == true) {
@@ -121,6 +123,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessDeposit(false);
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
     }
   }
@@ -137,6 +142,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessDeposit(false);
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
     }
   }
@@ -153,6 +161,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessDeposit(false);
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
     }
   }

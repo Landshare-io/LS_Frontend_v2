@@ -1,11 +1,11 @@
 import { pack } from "@ethersproject/solidity";
 import { hexDataLength } from "@ethersproject/bytes";
 import { ethers } from "ethers";
+import { bsc } from "viem/chains";
 import { keccak256 } from "@ethersproject/keccak256";
 import stringPadder from "./string-padder";
 import { 
   MULTISEND_ADDRESS,
-  MAJOR_WORK_CHAIN,
   REALITY_MODULE_ADDRESS,
   LAND_TOKEN_CONTRACT_ADDRESS,
   MASTERCHEF_CONTRACT_ADDRESS,
@@ -37,7 +37,7 @@ export default async function txHashBuilder(
     const burnAmount = stringPadder(proposalValue.amountToBurn || "", proposalType);
     try {
       const domain = {
-        chainId: MAJOR_WORK_CHAIN.id,
+        chainId: bsc.id,
         verifyingContract: REALITY_MODULE_ADDRESS,
       };
 
@@ -77,7 +77,7 @@ export default async function txHashBuilder(
     const newFee = stringPadder(proposalValue.autoLandFee || "", proposalType);
 
     const domain = {
-      chainId: MAJOR_WORK_CHAIN.id,
+      chainId: bsc.id,
       verifyingContract: REALITY_MODULE_ADDRESS,
     };
 
@@ -112,7 +112,7 @@ export default async function txHashBuilder(
     const bountyAmount = stringPadder(proposalValue.amountToMarketing || "", proposalType);
 
     const domain = {
-      chainId: MAJOR_WORK_CHAIN.id,
+      chainId: bsc.id,
       verifyingContract: REALITY_MODULE_ADDRESS,
     };
 
@@ -155,7 +155,7 @@ export default async function txHashBuilder(
     ]);
 
     const domain = {
-      chainId: MAJOR_WORK_CHAIN.id,
+      chainId: bsc.id,
       verifyingContract: REALITY_MODULE_ADDRESS,
     };
 
@@ -238,7 +238,7 @@ export default async function txHashBuilder(
     const grantAmount = stringPadder(proposalValue.grantAmount || "", proposalType);
 
     const domain = {
-      chainId: MAJOR_WORK_CHAIN.id,
+      chainId: bsc.id,
       verifyingContract: REALITY_MODULE_ADDRESS,
     };
 

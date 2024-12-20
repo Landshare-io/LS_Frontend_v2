@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { formatEther, parseEther, BigNumberish } from "ethers";
 import { useChainId, useAccount, useSwitchChain } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { bsc } from "viem/chains";
 import Image from "next/image";
 import Collapse from "../common/collapse";
 import Tooltip from "../common/tooltip";
@@ -17,7 +16,7 @@ import useGetApr from "../../hooks/get-apy/useGetApr";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useAllowanceOfLandTokenContract from "../../hooks/contract/LandTokenContract/useAllowance";
 import useGetLandPrice from "../../hooks/axios/useGetLandPriceFromCoingecko";
-import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS, MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import Union from "../../../public/green-logo.svg";
 import UnionDark from "../../../public/green-logo.svg";
 import book from "../../../public/icons/book.svg";
@@ -28,6 +27,8 @@ import viewContract from "../../../public/icons/view-contract.png";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import bscIcon from "../../../public/icons/bsc.svg"
 import 'react-loading-skeleton/dist/skeleton.css';
+
+const MANUAL_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['manual']
 
 interface ManualVaultProps {
   title: string
@@ -403,27 +404,28 @@ export default function ManualVault({
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if (chainId == MAJOR_WORK_CHAIN.id) {
+                                if ((MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  switchChain({ chainId: MAJOR_WORK_CHAIN.id })
+                                  notifyError(`Please switch your chain to ${MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                                  // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                !(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
-                            {chainId == MAJOR_WORK_CHAIN.id && (
+                            {(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawVault(0)}
-                                disabled={(typeof address == 'undefined') || chainId != MAJOR_WORK_CHAIN.id}
+                                disabled={(typeof address == 'undefined') || !(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
                               >
                                 Harvest
                               </button>

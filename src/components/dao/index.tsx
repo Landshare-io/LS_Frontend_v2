@@ -9,11 +9,12 @@ import Breadcrumb from "../common/breadcrumb";
 import DaoCreateProposal from "../dao-create-proposal";
 import DaoProposalsList from "../dao-proposal-list";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { 
   BOLD_INTER_TIGHT, 
   DAO_TREASURY_ADDRESS, 
   MARKETING_TREASURY_ADDRESS,
-  MAJOR_WORK_CHAIN
+  MAJOR_WORK_CHAINS
 } from "../../config/constants/environments";
 import Logo from "../../../public/icons/dao-land.svg";
 import Telegram from "../../../public/icons/dao-telegram.svg";
@@ -31,7 +32,10 @@ const breadcrumbItems = [
   }
 ]
 
+const DAO_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/dao']
+
 export default function DAO() {
+  const { notifyError } = useGlobalContext();
   const chainId = useChainId()
   const { address } = useAccount();
   const [isCreating, setIsCreating] = useState(false);
@@ -52,11 +56,11 @@ export default function DAO() {
 
   const handleClickCreateProposal = async () => {
     if (typeof address == "undefined") {
-      alert("Please connect your wallet.");
+      notifyError("Please connect your wallet.");
     } else if (
-      chainId !== Number(MAJOR_WORK_CHAIN.id)
+      !(DAO_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)
     ) {
-      alert("Please connect to the Binance Smart Chain.");
+      notifyError(`Please switch your chain to ${DAO_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
     } else {
       setIsCreating(true);
     }

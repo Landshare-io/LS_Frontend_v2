@@ -46,7 +46,8 @@ import {
   MASTERCHEF_CONTRACT_ADDRESS, 
   LP_TOKEN_V1_CONTRACT_ADDRESS,
   AUTO_LAND_V3_CONTRACT_ADDRESS,
-  BOLD_INTER_TIGHT
+  BOLD_INTER_TIGHT,
+  TOKEN_MIGRATE_CONTRACT_ADDRESS
 } from "../../config/constants/environments";
 import DetailsIcon from "../../../public/icons/details.svg";
 import DetailsIconDark from "../../../public/icons/details-dark.svg";
@@ -88,6 +89,10 @@ export default function VaultCard({
   const [landBalance, setLandBalance] = useState<any>({ v1: 0, v2: 0, lp: 0, lp2: 0, bnb: 0 });
   const [balance, setBalance] = useState("Loading...");
   const [totalLandPerYear, setTotalLandPerYear] = useState<number | BigNumberish>(0);
+
+  useEffect(() => {
+    console.log(currentStep)
+  }, [currentStep])
 
   const { data: balanceOfLandV1, refetch: refetchBalanceOfLandV1 } = useBalanceOfLandTokenV1({ address }) as { data: BigNumberish, refetch: Function }
   const { data: balanceOfLandV2, refetch: refetchBalanceOfLandV2 } = useBalanceOfLandToken({ chainId: bsc.id, address }) as { data: BigNumberish, refetch: Function }
@@ -197,7 +202,7 @@ export default function VaultCard({
     oldAutoBalance,
     address
   });
-  const { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate } = useTokenMigrate({ address });
+  const { tokenMigrate, isSuccessMigrate, setIsSuccessMigrate } = useTokenMigrate({ address: TOKEN_MIGRATE_CONTRACT_ADDRESS });
   const {
     approveLandV2,
     approveLpTokenV2,
@@ -274,7 +279,7 @@ export default function VaultCard({
       if (Number(currentStep) < 3 && balanceMigration.depositV2) {
         return balanceMigration.depositV2;
       } else if (Number(currentStep) > 3 && userInfoOfMasterchef) {
-        return userInfoOfMasterchef;
+        return userInfoOfMasterchef[0];
       } else {
         return 0;
       }
@@ -282,7 +287,7 @@ export default function VaultCard({
       if (Number(currentStep) < 3 && balanceMigration.depositV3) {
         return balanceMigration.depositV3;
       } else if (Number(currentStep) > 3 && userInfoOfMasterchef) {
-        return userInfoOfMasterchef;
+        return userInfoOfMasterchef[0];
       } else {
         return 0;
       }
@@ -415,59 +420,63 @@ export default function VaultCard({
   function depositInfo() {
     return (
       <>
-        <div className="flex flex-1">
-          Deposit
-        </div>
-        <div className="flex flex-1">
-          <div className="text-[12px] leading-[18px] relative font-normal">
-            {isStakingAutoV2() || isStakingAutoV3() ? "APY" : "APR"}
-            <Image
-              className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
-              onClick={() => {
-                setDetails("APY");
-              }}
-              src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
-              alt="details"
-            />
-            <div
-              ref={wrapperRef}
-              className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
-                details === "APY" ? "block" : "hidden"
-              }`}
-            >
-              <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
-                The Auto LAND Vault automatically redeposits accrued LAND
-                rewards. APY is estimated based on daily compounding with a 2%
-                performance fee. All figures are estimated and by no means
-                represent guaranteed returns.
+        <div className="grid grid-cols-2 w-full">
+          <div className="pl-3">
+            Deposit
+          </div>
+          <div className="grid grid-cols-2">
+            <div className="flex flex-col items-center">
+              <div className="flex text-[12px] leading-[18px] relative font-normal">
+                {isStakingAutoV2() || isStakingAutoV3() ? "APY" : "APR"}
+                <Image
+                  className="ml-[5px] w-[18px] h-[18px] cursor-pointer"
+                  onClick={() => {
+                    setDetails("APY");
+                  }}
+                  src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
+                  alt="details"
+                />
+                <div
+                  ref={wrapperRef}
+                  className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
+                    details === "APY" ? "block" : "hidden"
+                  }`}
+                >
+                  <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
+                    The Auto LAND Vault automatically redeposits accrued LAND
+                    rewards. APY is estimated based on daily compounding with a 2%
+                    performance fee. All figures are estimated and by no means
+                    represent guaranteed returns.
+                  </div>
+                  <Image
+                    className="absolute top-[5px] right-[5px] cursor-pointer"
+                    onClick={() => {
+                      setDetails(0);
+                    }}
+                    src={CloseIcon}
+                    alt="close"
+                  />
+                </div>
               </div>
-              <Image
-                className="absolute top-[5px] right-[5px] cursor-pointer"
-                onClick={() => {
-                  setDetails(0);
-                }}
-                src={CloseIcon}
-                alt="close"
-              />
+              <div className="text-[18px] leading-[27px] relative font-semibold">
+                {abbreviateNumber(Number(isLP() ? APR : getAPY()) || 0) + "%"}
+              </div>
             </div>
-          </div>
-          <div className="text-[18px] leading-[27px] relative font-semibold">
-            {abbreviateNumber(Number(isLP() ? APR : getAPY())) + "%"}
-          </div>
-        </div>
-        <div className="flex flex-1">
-          <div className="text-[12px] leading-[18px] relative font-normal">TVL</div>
-          <div className="text-[18px] leading-[27px] relative font-semibold">
-            {isLP()
-              ? "$" + abbreviateNumber(Number(TVL?.toString().substr(0, 8)))
-              : abbreviateNumber(
-                  Number(formatEther(
-                    (isStakingAutoV2() || isStakingAutoV3()
-                      ? landTokenStakeCurrentDepositTotal
-                      : landTokenStakeCurrentDepositTotal2
-                    ).toString()
-                  ))
-                )}
+            <div className="flex flex-col items-center">
+              <div className="text-[12px] leading-[18px] relative font-normal">TVL</div>
+              <div className="text-[18px] leading-[27px] relative font-semibold">
+                {isLP()
+                  ? "$" + abbreviateNumber(Number(TVL?.toString().substr(0, 8)))
+                  : abbreviateNumber(
+                      Number(formatEther(
+                        (isStakingAutoV2() || isStakingAutoV3()
+                          ? landTokenStakeCurrentDepositTotal
+                          : landTokenStakeCurrentDepositTotal2
+                        ).toString()
+                      ))
+                    )}
+              </div>
+            </div>
           </div>
         </div>
       </>
@@ -477,51 +486,54 @@ export default function VaultCard({
   function withdrawInfo() {
     return (
       <>
-        <div className="flex flex-1"></div>
-        <div className="flex flex-1 flex-col items-center">
-          <div className="text-[12px] leading-[18px] relative font-normal">Deposit</div>
-          <div className="text-[18px] leading-[27px] relative font-semibold">
-            {formatEther(getDepositBalance().toString())
-              .substr(0, 8)}
-          </div>
-        </div>
-        <div className="flex flex-1 flex-col items-center">
-          <div className="flex text-[12px] leading-[18px] relative font-normal">
-            Reward
-            <Image
-              className="ml-[5px] cursor-pointer w-[18px] h-[18px]"
-              onClick={() => {
-                setDetails("Reward");
-              }}
-              src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
-              alt="details"
-            />
-            <div
-              ref={wrapperRef}
-              className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
-                details === "Reward" ? "block" : "hidden"
-              }`}
-            >
-              <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
-                The Auto LAND Vault automatically redeposits accrued LAND
-                rewards. APY is estimated based on daily compounding with a 2%
-                performance fee. All figures are estimated and by no means
-                represent guaranteed returns.
+        <div className="grid grid-cols-2 w-full">
+          <div></div>
+          <div className="grid grid-cols-2">
+            <div className="flex flex-col items-center">
+              <div className="text-[12px] leading-[18px] relative font-normal">Deposit</div>
+              <div className="text-[18px] leading-[27px] relative font-semibold">
+                {formatEther(getDepositBalance())}
               </div>
-              <Image
-                className="absolute top-2 right-2 cursor-pointer"
-                onClick={() => {
-                  setDetails(0);
-                }}
-                src={CloseIcon}
-                alt="close"
-              />
             </div>
-          </div>
-          <div className="text-[18px] leading-[27px] relative font-semibold">
-            {formatEther(getRewards().toString())
-              .toString()
-              .substr(0, 6)}
+            <div className="flex flex-col items-center">
+              <div className="flex text-[12px] leading-[18px] relative font-normal">
+                Reward
+                <Image
+                  className="ml-[5px] cursor-pointer w-[18px] h-[18px]"
+                  onClick={() => {
+                    setDetails("Reward");
+                  }}
+                  src={theme == 'dark' ? DetailsIconDark : DetailsIcon}
+                  alt="details"
+                />
+                <div
+                  ref={wrapperRef}
+                  className={`absolute z-[2] bg-[#ffffffb3] p-[20px] rounded-[16px] backdrop-blur-lg shadow-lg top-[-22px] left-[117px] ${
+                    details === "Reward" ? "block" : "hidden"
+                  }`}
+                >
+                  <div className="relative text-[#000] text-[14px] leading-[21px] w-[200px] md:w-[300px] text-left min-h-[40px]">
+                    The Auto LAND Vault automatically redeposits accrued LAND
+                    rewards. APY is estimated based on daily compounding with a 2%
+                    performance fee. All figures are estimated and by no means
+                    represent guaranteed returns.
+                  </div>
+                  <Image
+                    className="absolute top-2 right-2 cursor-pointer"
+                    onClick={() => {
+                      setDetails(0);
+                    }}
+                    src={CloseIcon}
+                    alt="close"
+                  />
+                </div>
+              </div>
+              <div className="text-[18px] leading-[27px] relative font-semibold">
+                {formatEther(getRewards().toString())
+                  .toString()
+                  .substr(0, 6)}
+              </div>
+            </div>
           </div>
         </div>
       </>
@@ -802,7 +814,7 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep1}
-          className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] disabled:bg-transparent text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+          className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:bg-[#1ee155] hover:duration-500 hover:bg-transparent text-[#ffffff] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 1 || (getDepositBalance() == 0 && !isSkippable())}
         >
           {isSkippable() ? "Skip" : "Withdraw"}
@@ -851,7 +863,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={() => setMinValues(amount)}
-            className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+            className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] text-[#fff] hover:bg-[#1ee155] hover:duration-500 active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != "lp-2"}
           >
             Unpair
@@ -900,7 +912,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={processStep2}
-            className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] text-center capitalize text-[#61cd81] disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+            className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] text-center capitalize bg-[#61cd81] disabled:bg-[#3c3c3b33] text-[#fff] bg:text-[#1ee155] hover:duration-500 hover:bg-[#1ee155] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != 2}
           >
             Migrate
@@ -949,7 +961,7 @@ export default function VaultCard({
         <div>
           <button
             onClick={() => setMinValuesV2(amountSplitedTokens.land)}
-            className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+            className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] text-[#fff] hover:bg-[#1ee155] hover:duration-500 active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
             disabled={currentStep != "lp-4"}
           >
             Combine
@@ -997,7 +1009,7 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep3}
-          className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+          className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] text-[#fff] hover:bg-[#1ee155] hover:duration-500 active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 3}
         >
           Approve
@@ -1044,7 +1056,7 @@ export default function VaultCard({
         </div>
         <button
           onClick={processStep4}
-          className={`cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize text-[#61cd81] text-center disabled:bg-[#3c3c3b33] disabled:text-[#fff] hover:text-[#1ee155] hover:duration-500 hover:bg-transparent active:text-[#06b844] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
+          className={`active:cursor-pointer pl-[4px] text-[18px] leading-[22px] capitalize bg-[#61cd81] text-center disabled:bg-[#3c3c3b33] text-[#fff] hover:duration-500 hover:bg-transparent hover:bg-[#1ee155] active:duration-500 w-[174px] h-[50px] rounded-[12px] diabled:active:bg-transparent disabled:active:text-[#888888] ${BOLD_INTER_TIGHT.className}`}
           disabled={currentStep != 4}
         >
           Deposit
@@ -1086,7 +1098,7 @@ export default function VaultCard({
           </div>
           <div className="flex flex-col w-full gap-[20px]">
             <div className="relative text-right">
-              <div className={`flex w-full justify-around py-[10px] px-[20px] rounded-[12px] bg-secondary ${
+              <div className={`flex w-full justify-around py-[10px] px-[20px] rounded-[12px] ${
                 currentStep === 1 || currentStep === 2 || currentStep === 3 || currentStep === "lp-4" ? "bg-[#cccccc] text-[#888888]" : ""
               }`}>
                 <input
