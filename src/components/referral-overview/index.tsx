@@ -120,9 +120,9 @@ export default function ReferralOverview() {
       <p className="w-full flex justify-between text-text-primary font-bold text-lg leading-7">
         Overview
       </p>
-      <div>
+      <div className="flex flex-col gap-4">
         <div className="flex justify-between">
-          <div className="">
+          <div>
             <div className="text-sm text-text-secondary font-normal flex gap-1">
               <p>
                 Pending invites 
@@ -150,12 +150,12 @@ export default function ReferralOverview() {
 
         <div className="flex justify-between">
           <div>
-            <p className="text-sm text-text-secondary font-normal">
+            <div className="text-sm text-text-secondary font-normal">
               Purchase Volume
               <Tooltip position="bottom" content="Total purchases made by referred users. Only approved referrals who have completed the 30-day hold period are included here.">
                 <span className="ms-1 text-[#61CD81] cursor-default">ⓘ</span>
               </Tooltip>
-            </p>
+            </div>
             <p className="font-bold text-lg text-text-primary">
               {purchaseVolume} LSRWA
             </p>
@@ -167,7 +167,7 @@ export default function ReferralOverview() {
             </p>
 
             <p className="font-bold text-lg text-text-primary">
-              {myLeaderboard ? myLeaderboard[0]?.rank : ""}
+              {myLeaderboard ? myLeaderboard[1]?.rank : "N/A"}
             </p>
           </div>
         </div>

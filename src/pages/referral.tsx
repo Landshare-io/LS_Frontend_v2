@@ -44,8 +44,8 @@ const Referral: NextPage = () => {
               Referrals
             </p>
           </div>
-          <div className="w-full grid lg:grid-cols-[53%_47%] grid-cols-1 gap-[40px]">
-            <div className="flex flex-col gap-[40px] ">
+          <div className="w-full grid lg:grid-cols-[53%_47%] grid-cols-1 gap-[20px]">
+            <div className="flex flex-col gap-[20px] ">
               <ReferralOverview />
               
               <ReferralOthers />

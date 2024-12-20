@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { useWriteContract } from 'wagmi';
 import { getCurrentEpoch } from '../../utils/helpers/generate-epochs';
 import { Fuul } from '@fuul/sdk';
-import { USDC_ADDRESS } from '../../config/constants/environments';
+import { BOLD_INTER_TIGHT, USDC_ADDRESS } from '../../config/constants/environments';
 import { useChainId } from 'wagmi';
 import { Web3Provider } from '@ethersproject/providers';
 import FUULabi from "../../abis/FuulContract.json"
@@ -130,7 +130,7 @@ export default function ReferralEarning() {
     <div className="w-full h-full flex flex-col  justify-between bg-third rounded-2xl p-6 shadow-lg">
       <div className='flex flex-col gap-8 md:gap-3'>
         <p className="font-bold text-lg  text-text-primary">Earnings</p>
-        <div className="flex flex-col lg:gap-5">
+        <div className="flex flex-col gap-2 lg:gap-3">
           <div className=" flex justify-between">
             <p className="text-text-secondary text-sm leading-[28px]">
               Total Earned
@@ -169,7 +169,13 @@ export default function ReferralEarning() {
         >
           {isClaiming ? 'Claiming...' : 'Claim Earnings'}
         </button>
-
+        <div className="flex !bg-transparent items-center justify-center">
+        <span
+         className={`text-[14px] cursor-pointer leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}>
+            Get LAND Token
+        </span>
+        </div>
+        
         </div>
       </div>
 
