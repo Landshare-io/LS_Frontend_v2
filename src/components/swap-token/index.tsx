@@ -257,8 +257,6 @@ export default function SwapToken() {
         </div>
 
         <Modal
-<<<<<<< HEAD
-=======
           isOpen={iskycmodal}
           onRequestClose={() => {
             setKycopen(false), document.body.classList.remove("modal-open");
@@ -328,7 +326,6 @@ export default function SwapToken() {
           <ZeroIDWidget />
         </Modal>
         <Modal
->>>>>>> origin/main
           isOpen={isBuyModalOpen}
           onRequestClose={() => {
             setIsBuyModalOpen(false),

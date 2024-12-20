@@ -156,11 +156,7 @@ const StakingPage: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-<<<<<<< HEAD:src/pages/vaults.tsx
-      <div className="bg-primary pb-[25px] px-[20px] lg:px-[120px]">
-=======
       <div className="bg-primary pt-[41px] pb-[25px] px-[20px] lg:px-[0px]">
->>>>>>> origin/main:src/pages/vaults/index.tsx
         <div className="max-w-[1200px] m-auto">
           <Breadcrumb items={breadcrumbItems} />
         </div>

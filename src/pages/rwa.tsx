@@ -15,7 +15,6 @@ import ConnectWallet from '../components/connect-wallet';
 import { MAJOR_WORK_CHAINS } from '../config/constants/environments';
 import styles from '../styles/Home.module.css';
 import { Fuul } from '@fuul/sdk';
-import { useAccount } from "wagmi";
 import { useSearchParams } from 'next/navigation';
 
 const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
@@ -32,7 +31,6 @@ const breadcrumbItems: BREADCRUMB[] = [
 ]
 
 const RwaPage: NextPage = () => {
-<<<<<<< HEAD
   const searchParams = useSearchParams();
   const {address} = useAccount();
   const referralCode = searchParams.get('af');
@@ -42,10 +40,8 @@ const RwaPage: NextPage = () => {
       Fuul.sendPageview("rwa");
     }
   }, [referralCode]);
-=======
   const { isConnected } = useAccount();
   const chainId = useChainId()
->>>>>>> origin/main
 
   return (
     <div className={`${styles.container}`}>

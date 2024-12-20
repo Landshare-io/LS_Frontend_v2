@@ -87,13 +87,8 @@ export const LAND_TOKEN_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
 export const SWIPELUX_SETTING = {
   apiKey: '1d1fe8ad-a154-4dc0-a6bd-3fe8939ba7d0'
 };
-<<<<<<< HEAD
-export const NFT_GAME_BACKEND_URL = 'http://landsharenft.xyz'
-export const CCIP_BACKEND_URL = 'http://localhost:3002'
-=======
 export const NFT_GAME_BACKEND_URL = 'https://landsharenft.xyz'
 export const CCIP_BACKEND_URL = 'https://ccip.landsharenft.xyz'
->>>>>>> origin/main
 export const APOLLO_RWA_BUY_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa-buy/v0.1.0"
 export const APOLLO_RWA_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa/v0.1.0"
 export const LAND_PRICE_SUBGRAPH_URL = 'https://api.studio.thegraph.com/query/81176/landshare-price/v0.1.0'

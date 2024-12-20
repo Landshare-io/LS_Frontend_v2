@@ -6,18 +6,13 @@ import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
 import useLogin from "../../hooks/nft-game/axios/useLogin";
 import { useGlobalContext } from "../../context/GlobalContext";
-<<<<<<< HEAD
-import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import { useSearchParams } from 'next/navigation';
 import { Fuul } from "@fuul/sdk";
 import { signMessage } from '@wagmi/core';
 import { config } from "../../wagmi";
 import { useAccount } from "wagmi";
-=======
-import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
-
 const NFT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/nft']
->>>>>>> origin/main
 
 const interTight = Inter_Tight({
   weight: "700",

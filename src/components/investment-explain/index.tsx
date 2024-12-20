@@ -1,19 +1,39 @@
 import { useState } from "react";
 import Image from "next/image";
+import { useAccount } from "wagmi";
+import { MdCancel } from "react-icons/md";
+import useIsWhitelistedAddress from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import Button from "../common/button";
+import ZeroIDWidget from "../zero-id-widget";
+import Modal from "react-modal";
 import form from "../../../public/verify-steps/form.svg";
 import swapToken from "../../../public/verify-steps/swap-token.svg";
 import growthTime from "../../../public/verify-steps/growth-time.svg";
+import content from "../../../public/verify-steps/content.svg";
 import arrowLeft from "../../../public/icons/arrow-left.svg";
-import useIsWhitelistedAddress from "../../hooks/contract/LandshareSaleContract/useIsWhitelistedAddress";
-import { useAccount } from "wagmi";
-import KYCModal from "../common/modals/kyc";
 
 export default function InvestmentExplain() {
-  const [iskycmodal, setKycopen] = useState(false);
-  const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
   const { address } = useAccount();
   const isWhitelisted = useIsWhitelistedAddress(56, address);
+  const [iskycmodal, setKycopen] = useState(false);
+  const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
+
+  const customModalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      maxWidth: "400px",
+      width: "90%",
+      height: "fit-content",
+      borderRadius: "20px",
+    },
+    overlay: {
+      background: "#00000080",
+    },
+  };
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -22,8 +42,6 @@ export default function InvestmentExplain() {
     });
   };
 
-<<<<<<< HEAD
-=======
   async function handlemodalkyc() {
     setKycopen(true);
     document.body.style.overflow = "hidden";
@@ -40,7 +58,6 @@ export default function InvestmentExplain() {
     document.body.style.overflow = "hidden";
   };
 
->>>>>>> origin/main
   return (
     <div className="flex flex-col gap-[40px] items-center p-0 mlg:px-[20px] md:pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
       <div className="flex flex-col gap-[10px] items-start lg:items-center">
@@ -174,14 +191,7 @@ export default function InvestmentExplain() {
           <Image src={content} alt="content" className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%]" />
           <p className="text-[14px] leading-[21px] font-medium text-[#fff]">Enhance your investment with Landshare NFTs</p>
         </div> */}
-        <KYCModal 
-          iskycmodal = {iskycmodal}
-          setKycopen = {setKycopen}
-          isZeroIDModal = {isZeroIDModal}
-          setZeroIDModalOpen = {setZeroIDModalOpen}/>
       </div>
-<<<<<<< HEAD
-=======
       <Modal
         isOpen={iskycmodal}
         onRequestClose={() => {
@@ -251,7 +261,6 @@ export default function InvestmentExplain() {
         />
         <ZeroIDWidget />
       </Modal>
->>>>>>> origin/main
     </div>
   );
 }

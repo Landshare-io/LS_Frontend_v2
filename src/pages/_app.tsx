@@ -27,18 +27,15 @@ const interTight = Inter_Tight({
 const client = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
-<<<<<<< HEAD
 
   Fuul.init({
     apiKey: process.env.NEXT_PUBLIC_FUUL_API_KEY ?? ""
   });
   
-=======
   useEffect(() => {
     Modal.setAppElement('#__next'); // Set the root app element for accessibility
   }, []);
 
->>>>>>> origin/main
   return (
     <main className={`${interTight.variable} font-inter`}>
       <WagmiProvider config={config}>
