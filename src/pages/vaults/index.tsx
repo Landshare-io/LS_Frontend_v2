@@ -26,7 +26,7 @@ import CloseIcon from "../../../public/icons/close.svg";
 import CloseIconDark from "../../../public/icons/close-dark.svg";
 import leftRight from "../../../public/icons/left-right.svg";
 import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
-import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import { AUTO_VAULT_MAIN_CHAINS } from "../../config/constants/environments";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -117,7 +117,7 @@ const StakingPage: NextPage = () => {
   ];
 
   useEffect(() => {
-    if (chainId !== MAJOR_WORK_CHAIN.id) {
+    if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
       useSelectedVault(1)
     } else {
       useSelectedVault(0)
@@ -236,7 +236,7 @@ const StakingPage: NextPage = () => {
           </div>
           <div className="hidden mlg:flex mlg:flex-col gap-[32px] w-full">
             {(<>
-                {chainId == MAJOR_WORK_CHAIN.id ? (
+                {(!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) ? (
                   <>
                     <ManualVault
                       title="LAND Token Staking"

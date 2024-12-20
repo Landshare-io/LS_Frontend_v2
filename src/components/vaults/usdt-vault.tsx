@@ -38,12 +38,14 @@ import smallicon from "../../../public/icons/tether.svg"
 import bscIcon from "../../../public/icons/bsc.svg";
 import book from "../../../public/icons/book.svg";
 import { 
-  MAJOR_WORK_CHAIN,
+  MAJOR_WORK_CHAINS,
   BOLD_INTER_TIGHT, 
   RWA_LP_CONTRACT_ADDRESS, 
   MASTERCHEF_CONTRACT_ADDRESS 
 } from "../../config/constants/environments";
 import 'react-loading-skeleton/dist/skeleton.css';
+
+const USDT_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['usdt']
 
 interface UsdtVaultProps {
   title: string
@@ -367,28 +369,29 @@ export default function Usdtvault({
                         <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
-                            if (chainId == MAJOR_WORK_CHAIN.id) {
+                            if ((USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                               if (inputValue && Number(inputValue) > Number(0)) {
                                 depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
                             } else {
-                              switchChain({ chainId: MAJOR_WORK_CHAIN.id })
+                              notifyError(`Please switch your chain to ${USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                              // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                             }
                           }}
                           disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                         >
                           {
-                            chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                            !(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                           }
                         </button>
 
-                        {chainId == MAJOR_WORK_CHAIN.id && (
+                        {(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
                           <button
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => withdrawVault(0)}
-                            disabled={chainId != MAJOR_WORK_CHAIN.id}
+                            disabled={!(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
                           >
                             Harvest
                           </button>
@@ -455,28 +458,29 @@ export default function Usdtvault({
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if (chainId == MAJOR_WORK_CHAIN.id) {
+                                if ((USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  switchChain({ chainId: MAJOR_WORK_CHAIN.id })
+                                  notifyError(`Please switch your chain to ${USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                                  // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                !(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
 
-                            {chainId == MAJOR_WORK_CHAIN.id && (
+                            {(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawVault(0)}
-                                disabled={chainId != MAJOR_WORK_CHAIN.id}
+                                disabled={!(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
                               >
                                 Harvest
                               </button>
