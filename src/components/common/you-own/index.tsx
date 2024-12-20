@@ -55,8 +55,8 @@ export default function YouOwn(){
                   </span>
                 </div>
                 {show && (
-                  <div className="flex flex-wrap justify-between gap-3 w-full px-3">
-                    <div className="flex items-center w-[150px] lg:w-[120px] relative">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 items-center gap-3 w-full px-3">
+                    <div className="flex items-center max-w-[170px] relative">
                       <div className="size-[48px] flex items-center">
                         {<LogoIcon />}
                       </div>
@@ -73,7 +73,7 @@ export default function YouOwn(){
                         +
                       </span>
                     </div>
-                    <div className="flex items-center w-[150px] lg:w-[130px]">
+                    <div className="flex items-center max-w-[170px]">
                       <div className="size-[48px] flex items-center justify-center dark:bg-[#66a6e3]/20 bg-[#1D4264]/15 border-[1px] border-[#1D4264]/40 rounded-full">
                         <Lumber fill="#1D4264" darkFill="#66a6e3" height="24" width="24"/>
                       </div>
@@ -82,7 +82,7 @@ export default function YouOwn(){
                         <span className="text-[14px] text-text-primary font-medium"> Lumber</span>
                       </span>
                     </div>
-                    <div className="flex items-center w-[150px] lg:w-[130px]">
+                    <div className="flex items-center max-w-[170px]">
                       <div className="size-[48px] flex items-center justify-center bg-[#24BC48]/15 border-[1px] border-[#24BC48]/40 rounded-full">
                         <Concrete fill="#24BC48"  height="24" width="24"/>
                       </div>
@@ -91,7 +91,7 @@ export default function YouOwn(){
                         <span className="text-[14px] text-text-primary font-medium"> Concrete</span>
                       </span>
                     </div>
-                    <div className="flex items-center w-[150px] lg:w-[130px]">
+                    <div className="flex items-center max-w-[170px]">
                       <div className="size-[48px] flex items-center justify-center bg-[#A0B71B]/15 border-[1px] border-[#A0B71B]/40 rounded-full">
                         <Steel fill="#A0B71B"  height="24" width="24"/>
                       </div>
@@ -100,7 +100,7 @@ export default function YouOwn(){
                         <span className="fs-xs text-text-primary font-medium"> Steel</span>
                       </span>
                     </div>
-                    <div className="relative flex items-center w-[150px] lg:w-[130px]">
+                    <div className="relative flex items-center max-w-[170px]">
                       <div className="size-[48px] flex items-center justify-center bg-[#CE8B11]/15 border-[1px] border-[#CE8B11]/40 rounded-full">
                         <EnergyIcon fill="#CE8B11"  height="24" width="24"/>
                       </div>
@@ -117,7 +117,7 @@ export default function YouOwn(){
                         +
                       </span>
                     </div>
-                    <div className="flex items-center w-[150px] lg:w-[130px]">
+                    <div className="flex items-center max-w-[170px]">
                       <div className="size-[48px] flex items-center justify-center bg-[#AD61CD]/15 border-[1px] border-[#AD61CD]/40 rounded-full">
                         <Brick fill="#AD61CD"  height="24" width="24"/>
                       </div>
@@ -126,7 +126,7 @@ export default function YouOwn(){
                         <span className="fs-xs text-text-primary font-medium"> Brick</span>
                       </span>
                     </div>
-                    <div className="flex items-center w-[150px] lg:w-[130px]">
+                    <div className="flex items-center max-w-[170px]">
                     <div className="size-[48px] flex items-center justify-center bg-[#33AFB7]/15 border-[1px] border-[#33AFB7]/40 rounded-full">
                       <Credit fill="#33AFB7"  height="24" width="24"/>
                     </div>
