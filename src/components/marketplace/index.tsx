@@ -67,7 +67,7 @@ export default function MarketplacePage() {
           <>
             <Topbar isNftList={true} />
             <div className="flex w-full flex-col md:flex-row overflow-auto flex-wrap items-center justify-between px-2">
-              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>House NFTs</span>
+              <span className={`text-[24px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>House NFTs</span>
               <div className="border-b-[1px] border-[#00000050] w-full hidden md:block my-3"></div>
               <div className="grid grid-cols-2">
                 <div className="flex ms-4 sm:ms-1 items-center">
