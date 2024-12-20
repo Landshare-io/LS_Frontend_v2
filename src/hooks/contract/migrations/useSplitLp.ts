@@ -84,9 +84,6 @@ export default function useSplitLP({
   useEffect(() => {
     if (isApproveError) {
       setScreenLoadingStatus("Transaction Failed.")
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     } else if (approveTx) {
       if (approveStatusData) {
         if (approveSuccess) {
@@ -100,12 +97,14 @@ export default function useSplitLP({
             )
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           }
         }
       }
+    }
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     }
   }, [approveSuccess, approveStatusData, approveTx, isApproveError])
 
@@ -113,9 +112,6 @@ export default function useSplitLP({
     (async () => {
       if (isRemoveLiquidityError) {
         setScreenLoadingStatus("Transaction Failed.")
-        setTimeout(() => {
-          setScreenLoadingStatus("")
-        }, 1000);
       } else if (removeLiquidityETHTx) {
         if (removeLiquidityStatusData) {
           if (removeLiquiditySuccess) {
@@ -126,19 +122,18 @@ export default function useSplitLP({
               updateNewAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
               setScreenLoadingStatus("Transaction Completed.")
               updateIsSuccessSplit(true)
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
             } catch (error) {
               setScreenLoadingStatus("Transaction Failed.")
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
             }
           }
         }
       }
     })()
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
   }, [removeLiquiditySuccess, removeLiquidityStatusData, removeLiquidityETHTx, isRemoveLiquidityError])
 
   async function splitLP(amount: string | number, minLand: string | number | bigint, minEth: string | number | bigint) {

@@ -65,27 +65,24 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
   useEffect(() => {
     if (isApproveLandError) {
       setScreenLoadingStatus("Transaction Failed.")
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     } else if (approveLandTx) {
       if (approveStatusData) {
         if (approveLandSuccess) {
           try {
             setScreenLoadingStatus("Transaction Completed.")
             updateIsSuccessApprove(true);
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           } catch (error) {
             updateIsSuccessApprove(false);
             setScreenLoadingStatus("Transaction Failed.")
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           }
         }
       }
+    }
+
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     }
 
   }, [approveLandTx, approveStatusData, approveLandSuccess, isApproveLandError])
@@ -93,27 +90,24 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
   useEffect(() => {
     if (isApproveLPError) {
       setScreenLoadingStatus("Transaction Failed.")
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     } else if (approveLpTx) {
       if (approveLpStatusData) {
         if (approveLpSuccess) {
           try {
             setScreenLoadingStatus("Transaction Completed.")
             updateIsSuccessApprove(true);
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           } catch (error) {
             updateIsSuccessApprove(false);
             setScreenLoadingStatus("Transaction Failed.")
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           }
         }
       }
+    }
+
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     }
 
   }, [approveLpTx, approveLpStatusData, approveLpSuccess, isApproveLPError])

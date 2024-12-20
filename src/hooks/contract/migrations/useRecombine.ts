@@ -73,9 +73,6 @@ export default function useRecombine({
   useEffect(() => {
     if (isApproveError) {
       setScreenLoadingStatus("Transaction Failed.")
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     } else if (approveTx) {
       if (approveStatusData) {
         if (approveSuccess) {
@@ -84,36 +81,34 @@ export default function useRecombine({
         } else {
           setScreenLoadingStatus("Transaction Failed")
           updateIsSuccessRecombine(false);
-          setTimeout(() => {
-            setScreenLoadingStatus("")
-          }, 1000);
         }
       }
+    }
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     }
   }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
   useEffect(() => {
     if (isAddLiquidityError) {
       setScreenLoadingStatus("Transaction Failed.")
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     } else if (addLiquidityETHTx) {
       if (addLiquidityStatusData) {
         if (addLiquiditySuccess) {
           setScreenLoadingStatus("Transaction success")
           updateIsSuccessRecombine(true);
-          setTimeout(() => {
-            setScreenLoadingStatus("")
-          }, 1000);
         } else {
           setScreenLoadingStatus("Transaction Failed")
           updateIsSuccessRecombine(false);
-          setTimeout(() => {
-            setScreenLoadingStatus("")
-          }, 1000);
         }
       }
+    }
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     }
   }, [addLiquidityETHTx, addLiquidityStatusData, addLiquiditySuccess, isAddLiquidityError])
 

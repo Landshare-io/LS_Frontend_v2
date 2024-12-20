@@ -63,9 +63,6 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
   useEffect(() => {
     if (isDepositAutoV3Error) {
       setScreenLoadingStatus("Transaction Failed.")
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     } else if (autoVaultV3DepositTx) {
       if (autoVaultV3DepositStatusData) {
         if (autoVaultV3DepositSuccess) {
@@ -73,28 +70,24 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
             refetchLandTokenBalance()
             setScreenLoadingStatus("Transaction Completed.")
             updateIsSuccessDeposit(true);
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           } catch (error) {
             console.log("deposit error", error)
             updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           }
         }
       }
+    }
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     }
   }, [autoVaultV3DepositTx, autoVaultV3DepositStatusData, autoVaultV3DepositSuccess, isDepositAutoV3Error])
 
   useEffect(() => {
     if (isDepositError) {
       setScreenLoadingStatus("Transaction Failed.")
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     } else if (masterchefDepositTx) {
       if (masterchefDepositStatusData) {
         if (masterchefDepositSuccess) {
@@ -103,19 +96,18 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
             refetchLpTokenBalance()
             setScreenLoadingStatus("Transaction Completed.")
             updateIsSuccessDeposit(true);
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           } catch (error) {
             console.log("deposit error", error)
             updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           }
         }
       }
+    }
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     }
   }, [masterchefDepositTx, masterchefDepositStatusData, masterchefDepositSuccess, isDepositError])
 

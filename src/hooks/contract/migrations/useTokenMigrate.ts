@@ -64,9 +64,6 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
   useEffect(() => {
     if (isApproveError) {
       setScreenLoadingStatus("Transaction Failed.")
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     } else if (landTokenApproveTx) {
       if (landTokenApproveStatusData) {
         if (landTokenApproveSuccess) {
@@ -76,24 +73,20 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
           } catch (error) {
             console.log("swap error", error)
             setScreenLoadingStatus("Transaction Failed.")
-  
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
-            }
           }
         }
       }
+    }
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     }
   }, [landTokenApproveTx, landTokenApproveStatusData, landTokenApproveSuccess, isApproveError])
 
   useEffect(() => {
     if (isSwapError) {
       setScreenLoadingStatus("Transaction Failed.")
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000);
     } else if (swapTx) {
       if (swapStatusData) {
         if (swapSuccess) {
@@ -101,25 +94,18 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
             updateIsSuccessMigrate(true)
             updateLandTokenV2Balance()
             setScreenLoadingStatus("Transaction Completed.")
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
-          }
-  
-          return () => {
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
           }
         } else {
           updateIsSuccessMigrate(false)
         }
       }
+    }
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
     }
   }, [swapTx, swapStatusData, swapSuccess, isSwapError])
 
