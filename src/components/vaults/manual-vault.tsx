@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { formatEther, parseEther, BigNumberish } from "ethers";
 import { useChainId, useAccount, useSwitchChain } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { bsc } from "viem/chains";
 import Image from "next/image";
 import Collapse from "../common/collapse";
+import Tooltip from "../common/tooltip";
 import ConnectWallet from "../connect-wallet";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
@@ -15,7 +15,8 @@ import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLa
 import useGetApr from "../../hooks/get-apy/useGetApr";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useAllowanceOfLandTokenContract from "../../hooks/contract/LandTokenContract/useAllowance";
-import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import useGetLandPrice from "../../hooks/axios/useGetLandPriceFromCoingecko";
+import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS, MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import Union from "../../../public/green-logo.svg";
 import UnionDark from "../../../public/green-logo.svg";
 import book from "../../../public/icons/book.svg";
@@ -27,12 +28,15 @@ import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import bscIcon from "../../../public/icons/bsc.svg"
 import 'react-loading-skeleton/dist/skeleton.css';
 
+const MANUAL_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['manual']
+
 interface ManualVaultProps {
   title: string
   setShowModal: Function
   setIsLPVault: Function
   setIsRUSD: Function
   setTokenUsdPrice: Function
+  setShowModalApy: Function
 }
 
 export default function ManualVault({
@@ -40,7 +44,8 @@ export default function ManualVault({
   setShowModal,
   setIsLPVault,
   setIsRUSD,
-  setTokenUsdPrice
+  setTokenUsdPrice,
+  setShowModalApy
 }: ManualVaultProps) {
   const { 
     theme, 
@@ -50,7 +55,7 @@ export default function ManualVault({
   const chainId = useChainId()
   const { isConnected, address } = useAccount();
   const { switchChain } = useSwitchChain()
-
+  
   const { data: totalStaked, isLoading: totalStakedLoading } = useTotalStaked(chainId) as { data: BigNumberish, isLoading: boolean }
   const { data: userInfo, isLoading: userInfoLoading } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
   const { data: pendingLand, isLoading: pendingLandLoading } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
@@ -70,17 +75,23 @@ export default function ManualVault({
   const [isWithdrawable, setIsWithdrawable] = useState(true);
   const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
-  const isVaultsLoading = false // totalStakedLoading || userInfoLoading || pendingLandLoading
+  const { price: tokenPriceUsd } = useGetLandPrice()
+  const isVaultsLoading = totalStakedLoading || userInfoLoading || pendingLandLoading
 
   function handlePercents(percent: number) {
-    if (depositing) {
-      const bal = BigInt(landBalance) * BigInt(percent) / BigInt(100)
-      setInputValue(formatEther(bal))
+    if (landBalance == 0) {
+      notifyError("You don't have enough balance to perform this action.")
     } else {
-      const bal = BigInt(userInfo[0]) * BigInt(percent) / BigInt(100)
-      setInputValue(formatEther(bal))
+      if (depositing) {
+        const bal = BigInt(landBalance) * BigInt(percent) / BigInt(100)
+        setInputValue(formatEther(bal))
+      } else {
+        const bal = BigInt(userInfo[0]) * BigInt(percent) / BigInt(100)
+        setInputValue(formatEther(bal))
+      }
     }
   }
+
 
   const depositHandler = async () => {
     let amountLS = inputValue;
@@ -99,7 +110,7 @@ export default function ManualVault({
     depositVault(amountLS);
   };
 
-  async function updateStatus() {
+  async function updateStatus() {  
     try {
       if (!isConnected) return;
       if (userInfo[0]) {
@@ -141,9 +152,11 @@ export default function ManualVault({
 
   useEffect(() => {
     updateStatus()
-  }, [inputValue]);
+  }, [inputValue, landAllowance]);
 
   const openCalcModal = async () => {
+    setShowModalApy(apr.toString().substr(0, 4))
+    setTokenUsdPrice(tokenPriceUsd)
     setShowModal(true)
     setIsLPVault(false)
     setIsRUSD(false)
@@ -191,7 +204,7 @@ export default function ManualVault({
           ) : (
             <>
               <div className="flex flex-col justify-start p-0 gap-[16px]">
-                <div className="flex gap-[8px] hidden">
+                <div className="hidden gap-[8px]">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
                     <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
@@ -209,13 +222,13 @@ export default function ManualVault({
                   </button>
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                  <div className="w-[90px] h-[90px] rounded-[1000px] relative border-primary border-[6px] rounded-[1000px]">
+                  <div className="w-[90px] h-[90px] rounded-[1000px] relative border-primary border-[6px]">
                     <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
-                    <div className={`text-[18px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
+                    <div className={`cursor-pointer text-[16px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {title}
-                      <button className={`hidden md:flex items-center justify-center gap-[4px] text-[14px] leading-[22px] tracking-[0.28px] text-[#61CD81] shrink-0 mt-2 hidden md:block ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
+                      <button className={`hidden md:flex items-center justify-center gap-[4px] text-[14px] leading-[22px] tracking-[0.28px] text-[#61CD81] shrink-0 mt-2 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                         <Image src={details ? up : down} alt="detail" />
                       </button>
                     </div>
@@ -233,8 +246,7 @@ export default function ManualVault({
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{
-                      abbreviateNumber(Number(formatEther(totalStaked)))}</span>
+                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(totalStaked)))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
@@ -251,21 +263,25 @@ export default function ManualVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                      {formatEther(pendingLand || 0).substr(0, 5)}
-                    </span>
+                    {
+                      <Tooltip content={`Full number: ${formatEther(pendingLand || 0)}`}>
+                        <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                          {formatEther(pendingLand || 0).substr(0, 5)}
+                        </span>
+                      </Tooltip>
+                    }
                   </div>
                 </div>
                 <div className="block md:hidden">
                   <div className="flex w-full mt-[20px]">
                     <div 
-                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                       onClick={() => setDepositing(true)}
                     >
                       Deposit
                     </div>
                     <div 
-                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                       onClick={() => setDepositing(false)}
                     >
                       Withdraw
@@ -301,7 +317,7 @@ export default function ManualVault({
                     <div className="flex gap-[12px] w-full flex-col md:flex-row">
                       {(typeof address == 'undefined') ? (
                         <div className="flex flex-col items-center">
-                          <ConnectWallet containerClassName="w-[300px]" />
+                          <ConnectWallet connectButtonClassName="w-[300px]" />
                         </div>
                       ) : (
                         <>
@@ -309,7 +325,7 @@ export default function ManualVault({
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => {
                               if (inputValue && Number(inputValue) > Number(0)) {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
@@ -339,13 +355,13 @@ export default function ManualVault({
                   <div className="hidden md:block">
                     <div className="flex w-full mt-[20px]">
                       <div 
-                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(true)}
                       >
                         Deposit
                       </div>
                       <div 
-                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                        className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(false)}
                       >
                         Withdraw
@@ -381,34 +397,35 @@ export default function ManualVault({
                       <div className="flex flex-col md:flex-row gap-[12px] w-full justify-center">
                         {(typeof address == 'undefined') ? (
                           <div className="flex flex-col items-center">
-                            <ConnectWallet containerClassName="w-[300px]" />
+                            <ConnectWallet connectButtonClassName="w-[300px]" />
                           </div>
                         ) : (
                           <>
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if (chainId == MAJOR_WORK_CHAIN.id) {
+                                if ((MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
-                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault() : withdrawHandler()
+                                    depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  switchChain({ chainId: MAJOR_WORK_CHAIN.id })
+                                  notifyError(`Please switch your chain to ${MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                                  // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                chainId != MAJOR_WORK_CHAIN.id ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                !(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
-                            {chainId == MAJOR_WORK_CHAIN.id && (
+                            {(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawVault(0)}
-                                disabled={(typeof address == 'undefined') || chainId != MAJOR_WORK_CHAIN.id}
+                                disabled={(typeof address == 'undefined') || !(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
                               >
                                 Harvest
                               </button>

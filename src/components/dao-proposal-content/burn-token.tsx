@@ -43,7 +43,7 @@ export default function BurnTokens({
           labelClassName="my-3 text-text-secondary"
           containerClassName="w-full"
           label="Enter the amount of tokens to burn. All token burns are sent to the null address and lower the total supply cap."
-          max={balance}
+          max={formatEther(BigInt(balance))}
         />
         <div className="text-[13px] text-right mt-[10px] mb-[2px] mx-[5px] text-text-secondary">
           Available Balance: <b>{

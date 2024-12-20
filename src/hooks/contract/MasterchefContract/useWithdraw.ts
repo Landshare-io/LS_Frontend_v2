@@ -9,11 +9,12 @@ export default function useWithdraw(chainId: number) {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function withdraw(withdrawId: number, amount: BigNumberish) {
-    await writeContract({
+    writeContract({
       address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] as Address,
       abi: MasterchefAbi,
       functionName: "withdraw",
@@ -25,6 +26,7 @@ export default function useWithdraw(chainId: number) {
   return {
     withdraw,
     isPending,
+    isError,
     data
   }
 }

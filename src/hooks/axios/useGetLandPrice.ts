@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { LANDMARKET_URL } from "../../config/constants/environments";
+import numeral from "numeral";
 
 export default function useGetLandPrice() {
   const [isLoading, setIsLoading] = useState(true);
@@ -10,10 +10,10 @@ export default function useGetLandPrice() {
   useEffect(() => {
     (async () => {
       setIsLoading(true)
-      const { data: { price: priceData } } = await axios.get(LANDMARKET_URL);
+      const { data: { price: priceData } } = await axios.get('/api/landMarketProxy');
       const { data: circulatingSupplyData } = await axios.get('https://api.landshare.io/api/test?q=circulating');
 
-      setPrice(priceData)
+      setPrice(Number(numeral(Number(priceData)).format('0.[000]')))
       setCirculatingSupply(circulatingSupplyData)
       setIsLoading(false)
     })()

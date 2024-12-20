@@ -26,7 +26,7 @@ export default function FundBounty({
         <Input
           proposal={"Add to Marketing Fund"}
           label="Allocate treasury balance to the marketing bounty program. LAND in the marketing fund is used for bounty proposals."
-          max={balance}
+          max={formatEther(BigInt(balance))}
           containerClassName="w-full"
           value={amountToMarketing}
           setValue={setAmountToMarketing}

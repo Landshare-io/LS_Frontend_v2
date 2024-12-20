@@ -9,11 +9,12 @@ import Breadcrumb from "../common/breadcrumb";
 import DaoCreateProposal from "../dao-create-proposal";
 import DaoProposalsList from "../dao-proposal-list";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { 
   BOLD_INTER_TIGHT, 
   DAO_TREASURY_ADDRESS, 
   MARKETING_TREASURY_ADDRESS,
-  MAJOR_WORK_CHAIN
+  MAJOR_WORK_CHAINS
 } from "../../config/constants/environments";
 import Logo from "../../../public/icons/dao-land.svg";
 import Telegram from "../../../public/icons/dao-telegram.svg";
@@ -31,7 +32,10 @@ const breadcrumbItems = [
   }
 ]
 
+const DAO_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/dao']
+
 export default function DAO() {
+  const { notifyError } = useGlobalContext();
   const chainId = useChainId()
   const { address } = useAccount();
   const [isCreating, setIsCreating] = useState(false);
@@ -52,11 +56,11 @@ export default function DAO() {
 
   const handleClickCreateProposal = async () => {
     if (typeof address == "undefined") {
-      alert("Please connect your wallet.");
+      notifyError("Please connect your wallet.");
     } else if (
-      chainId !== Number(MAJOR_WORK_CHAIN.id)
+      !(DAO_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)
     ) {
-      alert("Please connect to the Binance Smart Chain.");
+      notifyError(`Please switch your chain to ${DAO_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
     } else {
       setIsCreating(true);
     }
@@ -192,9 +196,9 @@ export default function DAO() {
                 </div>
               </div>
             </div>
-            <div className="bg-secondary p-[10px] pt-[25px] md:p-[40px] space-y-4 lg:space-y-0 shadow-xl rounded-[14px]">
-              <div className={`flex justify-between pl-[10px] mlg:px-[35px] mlg:pb-[30px] items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
-                <div className="text-text-primary pr-3 font-bold text-[24px] leading-[36px]">
+            <div className="bg-secondary w-full p-[10px] pt-[25px] md:p-[40px] space-y-4 lg:space-y-0 shadow-xl rounded-[14px]">
+              <div className={`flex justify-between pb-[30px] items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
+                <div className="text-text-primary font-bold text-[24px] leading-[36px]">
                   {isViewAll ? `All Proposals` : `Latest Proposals`}
                 </div>
                 <div className="flex gap-[15px]">

@@ -59,8 +59,6 @@ export default function RewardHarvest({
 
     setSelectedOverdrive(item)
     setOpenModal(true)
-    setOpenModal(false)
-    buyOverdrive(selectedOverdrive, setSelectedOverdrive)
   };
 
   const customModalStyles = {
@@ -69,12 +67,14 @@ export default function RewardHarvest({
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "300px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
       padding: 0,
-      border: 0
+      border: 0,
+      display: 'flex',
+      alignItems: 'center',
     },
     overlay: {
       background: '#00000080'
@@ -83,7 +83,7 @@ export default function RewardHarvest({
 
   return (
     <div className="flx flex-col">
-      <div className="flex pb-[20px] mlg:gird mlg:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] lg:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] xl:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] justify-between">
+      <div className="flex pb-[20px] overflow-x-auto md:grid md:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] lg:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] xl:grid-cols-[minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content),minmax(200px,max-content)] justify-between gap-[4rem] mlg:gap-0">
         {boostItemsList.map((item, type) => {
           const isActivatedBoost = boostItem.item == item.id
           return (
@@ -107,7 +107,6 @@ export default function RewardHarvest({
         style={customModalStyles}
         isOpen={openModal}
 				onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
-        className={`flex items-center ${theme == 'dark' ? "dark" : ""}`}
       >
         <div className="p-[20px] max-w-[300px] bg-third">
           <div className="text-[15px] text-center text-text-primary">
@@ -116,7 +115,10 @@ export default function RewardHarvest({
           <div className="flex mt-[20px]">
             <div
               className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
-              onClick={() => buyOverdrive(selectedOverdrive, setSelectedOverdrive)}
+              onClick={() => {
+                setOpenModal(false)
+                buyOverdrive(selectedOverdrive, setSelectedOverdrive)
+              }}
             >
               Yes
             </div>

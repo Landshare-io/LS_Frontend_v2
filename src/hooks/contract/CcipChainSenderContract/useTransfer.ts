@@ -1,11 +1,10 @@
 import { useWriteContract } from "wagmi";
 import { parseUnits } from "ethers";
 import { BigNumberish } from "ethers";
-import { config } from "../../../wagmi";
 import CrossChainSenderAbi from "../../../abis/CrossChainSender.json"
 import { 
   GAS_COSTS,
-  MAJOR_WORK_CHAIN,
+  AUTO_VAULT_MAIN_CHAINS,
   CCIP_CHAIN_ID,
   CCIP_CHAIN_RECEIVER,
   CCIP_CHAIN_SENDER_CONTRACT_ADDRESS 
@@ -15,18 +14,19 @@ export default function useTransfer(chainId: number) {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function transfer(chainId: number, amount: BigNumberish, action: number, feeNumber: number, feeAmount: number) {
-    await writeContract({
+    writeContract({
       address: CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId],
       abi: CrossChainSenderAbi,
       functionName: "transfer",
       chainId: chainId,
       args: [
-        CCIP_CHAIN_ID[MAJOR_WORK_CHAIN.id],
-        CCIP_CHAIN_RECEIVER[MAJOR_WORK_CHAIN.id],
+        CCIP_CHAIN_ID[AUTO_VAULT_MAIN_CHAINS[0].id],
+        CCIP_CHAIN_RECEIVER[AUTO_VAULT_MAIN_CHAINS[0].id],
         amount,
         action,
         feeNumber,
@@ -40,6 +40,7 @@ export default function useTransfer(chainId: number) {
   return {
     transfer,
     isPending,
+    isError,
     data
   }
 }

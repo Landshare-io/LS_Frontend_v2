@@ -13,7 +13,7 @@ export default function useBuyHouse(chainId: number, product: any, address: Addr
   const { approve, data: approveTx } = useApprove()
   const { data: balance, refetch } = useBalanceOf({ chainId, address })
   
-  const { sendTransaction, data: sendTransactionTx } = useSendTransaction()
+  const { sendTransaction, data: sendTransactionTx, error: sendTransactionError } = useSendTransaction()
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: chainId
@@ -41,34 +41,52 @@ export default function useBuyHouse(chainId: number, product: any, address: Addr
   }, [approveTx, approveStatusData, approveSuccess])
 
   useEffect(() => {
-    (async () => {
-      if (sendTransactionTx) {
-        const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+    if (signNonce) {
+      if (sendTransactionError) {
+        setIsLoading(false)
+        setSignNonce(0)
+        notifyError(`Buy House Error`)
+      }
+    }
+  }, [signNonce, sendTransactionError])
 
-        if (receipt.status) {
-          try {
-            const {data} = await axios.post('/house/buy-house-with-land', {
-              houseId: product.id,
-              nonce: signNonce
-            })
-            await refetch()
-            await getProducts({ searchType: "all" });
-          } catch (error: any) {
-            console.log(error)
-            notifyError(error.response.data.message)
+  useEffect(() => {
+    (async () => {
+      if (signNonce) {
+        if (sendTransactionTx) {
+          const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+  
+          if (receipt.status) {
+            try {
+              const {data} = await axios.post('/house/buy-house-with-land', {
+                houseId: product.id,
+                nonce: signNonce
+              })
+              await refetch()
+              await getProducts({ searchType: "all" });
+              setIsLoading(false);
+              setSignNonce(0)
+              notifySuccess("Buy House Success")
+            } catch (error: any) {
+              console.log(error)
+              setIsLoading(false);
+              setSignNonce(0)
+              notifyError(error.response.data.message)
+            }
+          } else {
+            setIsLoading(false);
+            setSignNonce(0)
+            notifyError(`Buy House Error`);
           }
-        } else {
-          setIsLoading(false);
-          notifyError(`Buy House Error`);
         }
       }
     })()
-  }, [sendTransactionTx])
+  }, [signNonce, sendTransactionTx])
 
   const buyProduct = () => {
     if (Number(balance) >= product.salePrice) {
       setIsLoading(true);
-      approve(chainId, ADMIN_WALLET_ADDRESS, parseEther(product.salePrice.toString()))
+      approve(chainId, ADMIN_WALLET_ADDRESS[chainId], parseEther(product.salePrice.toString()))
     } else {
       notifyError("Not Enough LAND Token !");
     }

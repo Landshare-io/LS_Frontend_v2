@@ -191,7 +191,7 @@ export default function NftResource() {
                           href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
                           target="_blank"
                         >
-                          <Button className="text-[16px] font-semibold w-[171px] h-[40px] text-button-text-secondary rounded-[20px]">
+                          <Button className="text-[16px] font-semibold bg-[#61cd81] w-[171px] h-[40px] text-button-text-secondary rounded-[20px]">
                             BUY
                           </Button>
                         </a>
@@ -243,7 +243,7 @@ export default function NftResource() {
                         disabled={isLoading[0]}
                       >
                         {isLoading[0] ? (
-                          <>
+                          <div className='flex justify-center items-center'>
                             <ReactLoading
                               type="spin"
                               className="mr-2 mb-[4px]"
@@ -251,7 +251,7 @@ export default function NftResource() {
                               height="24px"
                             />
                             <span className="font-semibold">Loading</span>
-                          </>
+                          </div>
                         ) : (
                           "BUY"
                         )}
@@ -317,7 +317,7 @@ export default function NftResource() {
                         }
                       >
                         {isLoading[1] ? (
-                          <>
+                          <div className='flex justify-center items-center'>
                             <ReactLoading
                               type="spin"
                               className="mr-2 mb-[4px]"
@@ -325,7 +325,7 @@ export default function NftResource() {
                               height="24px"
                             />
                             <span className="font-semibold">Loading</span>
-                          </>
+                          </div>
                         ) : (
                           "Gather"
                         )}

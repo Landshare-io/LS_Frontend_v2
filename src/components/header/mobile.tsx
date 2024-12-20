@@ -10,6 +10,8 @@ import IconReferral from "../../../public/icons/referral.svg"
 import LandDao from "../../../public/icons/land-dao.svg";
 import DsSwap from "../../../public/icons/ds-swap.svg";
 import LeftRight from "../../../public/icons/left-right.svg"
+import { BsCreditCardFill } from "react-icons/bs";
+import { FiExternalLink } from "react-icons/fi";
 
 export default function MobileNavbar() {
   const [isMore, setIsMore] = useState(false);
@@ -90,7 +92,6 @@ export default function MobileNavbar() {
               </a>
               <a
                 href="/migration"
-                target="_blank"
                 rel="noopener noreferrer"
                 className="flex px-[16px] py-[10px] items-center gap-[4px] w-full"
               >
@@ -113,6 +114,7 @@ export default function MobileNavbar() {
                   className="w-[20px] h-[20px] grayscale"
                 />
                 <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">Dashboard</span>
+                <FiExternalLink className="text-text-secondary" size={12} />
               </a>
               <a
                 href="https://app.dsswap.io/info"
@@ -126,6 +128,7 @@ export default function MobileNavbar() {
                   className="w-[20px] h-[20px] grayscale" 
                 />
                 <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">DS Swap</span>
+                <FiExternalLink className="text-text-secondary" size={12} />
               </a>
               <a
                 href="https://app.transporter.io/?tab=token&token=LAND"
@@ -139,8 +142,19 @@ export default function MobileNavbar() {
                   className="w-[20px] h-[20px] grayscale"
                 />
                 <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">Bridge</span>
+                <FiExternalLink className="text-text-secondary" size={12} />
               </a>
-              
+              <a
+                  href="https://pools.landshare.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex px-[16px] py-[10px] items-center gap-[4px] w-full"
+                >
+                  <BsCreditCardFill className="fill-[#b1b1b1]"/>
+                  <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">Lending</span>
+                  <FiExternalLink className="text-text-secondary" size={12} />
+              </a>
+
             </div>
           ) : null}
         </div>

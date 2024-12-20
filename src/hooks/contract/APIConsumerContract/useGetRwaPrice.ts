@@ -1,14 +1,16 @@
 import { useReadContract } from "wagmi";
+import { parseUnits } from "ethers";
 import { bsc } from "viem/chains";
 import APIConsumerAbi from "../../../abis/APIConsumer.json";
-import { API_CONSUMER_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+import LandshareBuySaleAbi from "../../../abis/LandshareBuySale.json"
+import { API_CONSUMER_CONTRACT_ADDRESS, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useGetRwaPrice(chainId: number) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: API_CONSUMER_CONTRACT_ADDRESS[bsc.id],
-    abi: APIConsumerAbi,
-    functionName: "getRWAPrice",
-    chainId: bsc.id
+    address: chainId == bsc.id ? API_CONSUMER_CONTRACT_ADDRESS[bsc.id] : LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
+    abi: chainId == bsc.id ? APIConsumerAbi : LandshareBuySaleAbi,
+    functionName: chainId == bsc.id ? "getRWAPrice" : "offeringSecurityToUSDPrice",
+    chainId: chainId
   })
 
   if (isLoading) return 0
@@ -17,5 +19,5 @@ export default function useGetRwaPrice(chainId: number) {
     return 0
   }
 
-  return data
+  return chainId == bsc.id ? data : parseUnits((data ?? '0') as string)
 }

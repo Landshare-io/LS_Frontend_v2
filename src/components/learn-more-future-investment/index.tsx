@@ -51,7 +51,7 @@ export default function MoreInvestment() {
             <a target="_blank" href="https://docs.landshare.io">
               <Button
                 textClassName="text-[#fff]"
-                className="w-full md:w-auto px-[24px] py-[13px] rounded-[100px]"
+                className="w-full md:w-auto px-[24px] py-[13px] bg-primary-green rounded-[100px]"
               >
                 View Docs
               </Button>
@@ -62,7 +62,7 @@ export default function MoreInvestment() {
             >
               <Button
                 textClassName="text-[#fff] dark:text-[#fff]"
-                className="w-full md:w-auto px-[24px] py-[13px] rounded-[100px]"
+                className="w-full md:w-auto px-[24px] py-[13px] border-primary-green hover:bg-primary-green rounded-[100px]"
                 outlined
               >
                 Whitepaper

@@ -4,13 +4,13 @@ import { bsc } from 'viem/chains';
 import HouseNft from "../../../abis/HouseNft.json";
 import { HOUSE_NFT_CONTRACT, ADMIN_WALLET_ADDRESS } from "../../../config/constants/environments";
 
-export default function useIsApprovedForAll(address: Address | undefined) {
+export default function useIsApprovedForAll(chainId: number, address: Address | undefined) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: HOUSE_NFT_CONTRACT,
+    address: HOUSE_NFT_CONTRACT[chainId],
     abi: HouseNft,
     functionName: "isApprovedForAll",
-    args: [address, ADMIN_WALLET_ADDRESS],
-    chainId: bsc.id
+    args: [address, ADMIN_WALLET_ADDRESS[chainId]],
+    chainId: chainId
   })
 
   if (isLoading) return { data: false, refetch, isLoading }

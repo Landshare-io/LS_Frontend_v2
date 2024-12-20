@@ -52,12 +52,12 @@ export default function ProductionUpgradeCost({
     <div className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary ${color}`}>
       <div className='flex flex-col px-2'>
         {type == 'toolshed' && (
-          <div className='flex items-center justify-between'>
+          <div className='flex items-center justify-between pt-[12px]'>
             {item.buyReward.slice(2, 7).map((percent: number, index: number) => {
               if (Number(percent) > 0) {
                 return (
-                  <div key={`reduction-percent-${index}`}>
-                    <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>{disabledIcons[index]} repair: </span>
+                  <div className='flex items-center gap-[2px]' key={`reduction-percent-${index}`}>
+                    <span className='flex items-center gap-[2px] text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>{disabledIcons[index]} repair: </span>
                     <span className='font-semibold text-[14px] text-[#323131] text-text-primary'>{`-${percent * 100}%`}</span>
                   </div>
                 )
@@ -66,11 +66,11 @@ export default function ProductionUpgradeCost({
           </div>
         )}
         {type == 'overdrive' && (
-          <div className='d-flex align-items-center justify-content-between'>
+          <div className='flex items-center justify-between pt-[12px]'>
             {item.reductionPercent.map((percent: number, index: number) => {
               if (Number(percent) > 0) {
                 return (
-                  <div key={`reduction-percent-${index}`}>
+                  <div className='flex items-center gap-[2px]' key={`reduction-percent-${index}`}>
                     <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>{disabledIcons[index]} Increase Production: </span>
                     <span className='font-semibold text-[14px] text-[#323131] text-text-primary'>{`${percent}%`}</span>
                   </div>
@@ -80,7 +80,7 @@ export default function ProductionUpgradeCost({
           </div>
         )}
         {type == 'fatification' && (
-          <div className='flex justify-between'>
+          <div className='flex justify-between pt-[12px]'>
             <div>
               <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>Durability: </span>
               <span className='font-semibold text-[14px] text-[#323131] dark:text-text-primary'>{item.buyReward[7] * 100}%</span>
@@ -94,7 +94,7 @@ export default function ProductionUpgradeCost({
           </div>
         )}
         {type == 'harvester' && (
-          <div className='flex justify-start'>
+          <div className='flex justify-start pt-[12px]'>
             <div>
               <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>Harvest Cost: </span>
               <span className='font-semibold text-[14px] text-[#323131] dark:text-text-primary'>-{item.buyReward[11] * 100}%</span>
@@ -102,7 +102,7 @@ export default function ProductionUpgradeCost({
           </div>
         )}
         {type == 'concreteFoundation' && (
-          <div className='flex justify-start'>
+          <div className='flex justify-start pt-[12px]'>
             <div>
               <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>Durability Loss: </span>
               <span className='font-semibold text-[14px] text-[#323131] dark:text-text-primary'>{`-${item.buyReward[7] * 100}`}%</span>
@@ -110,7 +110,7 @@ export default function ProductionUpgradeCost({
           </div>
         )}
         {type == 'Generator' && (
-          <div className='flex justify-start'>
+          <div className='flex justify-start pt-[12px]'>
             <div>
               <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>Repair Power Cost: </span>
               <span className='font-semibold text-[14px] text-[#323131] text-text-primary'>{`-${item.buyReward[2] * 100}`}%</span>
@@ -126,17 +126,17 @@ export default function ProductionUpgradeCost({
             {item.buy.slice(2, 7).map((cost: number, index: number) => {
               if (Number(cost) > 0)
                 return (
-                  <div key={`next-cost-${index}`} className={`min-w-[20px] text-[14px] ${color}`}>
+                  <div key={`next-cost-${index}`} className={`min-w-[20px] text-[14px] flex gap-[2px] items-center`}>
                     {colorType == 0 ? (
-                      <>
+                      <div className='flex items-center gap-[2px]'>
                         {`${cost} `}
                         {disabledIcons[index]}
-                      </>
+                      </div>
                     ) : (
-                      <>
+                      <div className='flex items-center gap-[2px]'>
                         {`${cost} `}
                         {activeIcons[index]}
-                      </>
+                      </div>
                     )}
                   </div>
                 )
@@ -153,14 +153,14 @@ export default function ProductionUpgradeCost({
       </div>
       <Button
         onClick={() => onPurcharse()}
-        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute  ${((isLoading.type > -1) && (isLoading.type != type)) ? 'grey' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
-        disabled={disabled || ((isLoading.type == type) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
+        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] ${((isLoading.type > -1) && (isLoading.type != type)) ? 'grey' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
+        disabled={disabled || ((isLoading.type == item.id) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
       >
-        {((isLoading.type == type) && isLoading.loading) ? (
-          <>
+        {((isLoading.type == item.id) && isLoading.loading) ? (
+          <div className='flex justify-center items-center'>
             <ReactLoading type="spin" className="me-2 mb-[4px]" width="24px" height="24px" />
             <span className="font-semibold text-button-text-secondary">Loading</span>
-          </>
+          </div>
         ) : (
           <span className="font-semibold text-button-text-secondary">{btnLabel}</span>
         )}

@@ -1,24 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useWaitForTransactionReceipt } from 'wagmi';
 import { Address } from 'viem';
+import { formatEther, parseUnits } from 'viem';
 import { bsc } from 'viem/chains';
+import { BigNumberish } from 'ethers';
 import useAllowanceOfUsdcContract from '../contract/UsdcContract/useAllowance';
 import useApproveOfLandContract from '../contract/LandTokenContract/useApprove';
 import useApproveOfUsdcContract from '../contract/UsdcContract/useApprove';
 import useBuyToken from '../contract/LandshareBuySaleContract/useBuyToken';
+import useBalanceOfRwaContract from '../contract/RWAContract/useBalanceOf';
+import useBalanceOfUsdtContract from '../contract/UsdtContract/useBalanceOf';
+import useBalanceOfLandContract from '../contract/LandTokenContract/useBalanceOf';
 import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
 import { LANDSHARE_BUY_SALE_CONTRACT_ADDRESS, USDC_ADDRESS } from '../../config/constants/environments';
-import { BigNumberish } from 'ethers';
+import { useGlobalContext } from '../../context/GlobalContext';
 
 export default function useBuyTokens(chainId: number, address: Address | undefined, landAmount: BigNumberish, amount: number) {
-  const [transactionStatus, setTransactionStatus] = useState('')
+  const { setScreenLoadingStatus } = useGlobalContext()
+  const { refetch: rwaBalanceRefetch } = useBalanceOfRwaContract(chainId, address) as { refetch: Function };
+  const { refetch: usdtBalanceRefetch } = useBalanceOfUsdtContract(chainId, address) as { refetch: Function };
+  const { refetch: landBalanceRefetch } = useBalanceOfLandContract({chainId, address}) as { refetch: Function };
 
   const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]) as {
     data: BigNumberish,
     refetch: Function
   }
 
-  const { approve: approveUsdc, data: usdcApproveTx } = useApproveOfUsdcContract()
+  const { approve: approveUsdc, data: usdcApproveTx, isError: isUsdcApproveError } = useApproveOfUsdcContract()
 
   const { isSuccess: usdcApproveSuccess, data: usdcApproveStatusData } = useWaitForTransactionReceipt({
     hash: usdcApproveTx,
@@ -30,94 +38,124 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     refetch: Function
   }
 
-  const { approve: approveLand, data: landApproveTx } = useApproveOfLandContract()
+  const { approve: approveLand, data: landApproveTx, isError: isLandApproveError } = useApproveOfLandContract()
 
   const { isSuccess: landApproveSuccess, data: landApproveStatusData } = useWaitForTransactionReceipt({
     hash: landApproveTx,
   });
 
-  const { buyToken, data: sellTx } = useBuyToken(chainId)
+  const { buyToken, data: buyTx, isError, error } = useBuyToken(chainId)
 
-  const { isSuccess: sellSuccess, data: sellStatusData } = useWaitForTransactionReceipt({
-    hash: sellTx,
+  const { isSuccess: buySuccess, data: buyStatusData } = useWaitForTransactionReceipt({
+    hash: buyTx,
   });
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (usdcApproveTx) {
-          await usdcAllowanceRefetch()
-          // if (BigInt(usdcAllowance) < amount) {
-          //   window.alert("Please approve sufficient allowance.")
-          //   setTransactionStatus("Insufficient Allowance")
-          // }
+    try {
+      if (isUsdcApproveError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (usdcApproveTx) {
+        usdcAllowanceRefetch()
+        // if (BigInt(usdcAllowance) < amount) {
+        //   window.alert("Please approve sufficient allowance.")
+        //   setScreenLoadingStatus("Insufficient Allowance")
+        // }
 
-          if (usdcApproveStatusData) {
-            if (usdcApproveSuccess) {
-              if (BigInt(landAllowance) < BigInt(amount)) {
-                await approveLand(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], landAmount)
-                await landAllowanceRefetch()
-              }
+        if (usdcApproveStatusData) {
+          if (usdcApproveSuccess) {
+            if (BigInt(landAmount) > BigInt(0)) {
+              approveLand(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], landAmount)
+              landAllowanceRefetch()
+            } else {
+              buyToken(amount, USDC_ADDRESS[chainId])
             }
+          } else {
+            setScreenLoadingStatus("Transaction failed")
           }
         }
-      } catch (error) {
-        setTransactionStatus("Transaction failed")
-        console.log(error)
       }
-    })()
-  }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess])
+    } catch (error) {
+      setScreenLoadingStatus("Transaction failed")
+      console.log(error)
+    }
+
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess, isUsdcApproveError])
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (landApproveTx) {
-          await landAllowanceRefetch()
-          // if (BigInt(landAllowance) < BigInt(landAmount)) {
-          //   window.alert("Please approve sufficient allowance.")
-          //   setTransactionStatus("Insufficient Allowance")
-          // }
+    try {
+      if (isLandApproveError) {
+        setScreenLoadingStatus("Transaction failed")
+      } else if (landApproveTx) {
+        landAllowanceRefetch()
+        // if (BigInt(landAllowance) < BigInt(landAmount)) {
+        //   window.alert("Please approve sufficient allowance.")
+        //   setScreenLoadingStatus("Insufficient Allowance")
+        // }
 
-          if (landApproveStatusData) {
-            if (landApproveSuccess) {
-              await buyToken(amount, USDC_ADDRESS[chainId])
-            }
+        if (landApproveStatusData) {
+          if (landApproveSuccess) {
+            buyToken(amount, USDC_ADDRESS[chainId])
           }
         }
-      } catch (error) {
-        setTransactionStatus("Transaction failed")
-        console.log(error)
       }
-    })()
-  }, [landApproveTx, landApproveStatusData, landApproveSuccess])
+    } catch (error) {
+      setScreenLoadingStatus("Transaction failed")
+      console.log(error)
+    }
+
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [landApproveTx, landApproveStatusData, landApproveSuccess, isLandApproveError])
 
   useEffect(() => {
-    if (sellTx) {
-      if (sellStatusData) {
-        if (sellSuccess) {
-          setTransactionStatus("Transaction Successful")
+    if (isError) {
+      setScreenLoadingStatus("Transaction failed")
+    } else if (buyTx) {
+      if (buyStatusData) {
+        if (buySuccess) {
+          usdcAllowanceRefetch()
+          landAllowanceRefetch()
+          rwaBalanceRefetch()
+          usdtBalanceRefetch()
+          landBalanceRefetch()
+          setScreenLoadingStatus("Transaction Successful")
         } else {
-          setTransactionStatus("Transaction failed")
+          setScreenLoadingStatus("Transaction failed")
         }
       }
     }
-  }, [sellTx, sellStatusData, sellSuccess])
 
-  const buyTokens = async () => {
+    return () => {
+      setTimeout(() => {
+        if (!isLandApproveError)
+          setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [buyTx, buyStatusData, buySuccess, isError])
+
+  const buyTokens = async (buyUSDCAmount: BigNumberish) => {
     try {
-      setTransactionStatus("Transaction Pending...")
-      if (BigInt(usdcAllowance) < amount) {
-        await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], amount);
-        await usdcAllowanceRefetch()
+      setScreenLoadingStatus("Transaction Pending...")
+      if (Number(formatEther(BigInt(usdcAllowance))) < Number(formatEther(BigInt(buyUSDCAmount)))) {
+        await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], buyUSDCAmount);
+      } else {
+        buyToken(amount, USDC_ADDRESS[chainId])
       }
     } catch (error) {
       console.error(error);
-      setTransactionStatus('Transaction failed')
+      setScreenLoadingStatus('Transaction failed')
     }
   };
 
   return {
-    buyTokens,
-    transactionStatus
+    buyTokens
   };
 }

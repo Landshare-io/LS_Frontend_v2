@@ -15,7 +15,7 @@ import NftItem from "./nft/nft-item";
 import InputCost from "../common/input-cost";
 import { BigNumberish, formatEther } from "ethers";
 import Button from "../common/button";
-import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import useGetHouses from "../../hooks/nft-game/axios/useGetHouses";
 import useBalanceOfAsset from "../../hooks/contract/RWAContract/useBalanceOf";
 import useBalanceOfLand from "../../hooks/contract/LandTokenContract/useBalanceOf";
@@ -33,6 +33,7 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+const NFT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/nft']
 
 export default function InventoryPage() {
 	const chainId = useChainId()
@@ -54,7 +55,7 @@ export default function InventoryPage() {
 	const { data: landTokenBalance, refetch: refetchLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
 	const { data: stakedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
 	const { isLoading: isLoginLoading } = useLogin()
-	const { userReward } = useGetResource()
+	const { userReward, getResources } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
 	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost } = useGetSetting()
 	const { handleBuyHouseSlots } = useHandleBuyHouseSlots(chainId, address, setUserActivatedSlots, setBuyHouseSlotLoading)
@@ -94,6 +95,7 @@ export default function InventoryPage() {
   const getHousesList = async () => {
     setIsLoading(true);
     await getHouses();
+    await getResources();
     setTimeout(() => {
       setIsLoading(false);
     }, 1500)
@@ -196,6 +198,7 @@ export default function InventoryPage() {
     }
 
     if (userReward[4] > 0.1) {
+      setDepositLoading(false);
       return notifyError("Harvest rewards before deposit");
     }
 
@@ -336,7 +339,7 @@ export default function InventoryPage() {
               ) : (
                 <>
                   {
-                    chainId == MAJOR_WORK_CHAIN.id ? (
+                    (NFT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
                       <>
                         <Topbar isNftList={true} />
                         <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
@@ -377,7 +380,7 @@ export default function InventoryPage() {
                                             <p>{`Add New Slot (${buySlotCost} LAND)`}</p>
                                           </div>
                                           <Button
-                                            className={`w-auto px-4 py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className} ${buyHouseSlotLoading
+                                            className={`w-auto px-4 py-2 bg-[#61cd81] rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className} ${buyHouseSlotLoading
                                               ? "flex justify-center items-center"
                                               : ""
                                               }`}
@@ -385,7 +388,7 @@ export default function InventoryPage() {
                                             disabled={buyHouseSlotLoading || houseSlots === userActivatedSlots}
                                           >
                                             {buyHouseSlotLoading ? (
-                                              <>
+                                              <div className='flex justify-center items-center'>
                                                 <ReactLoading
                                                   type="spin"
                                                   className="me-2 mb-[4px]"
@@ -393,7 +396,7 @@ export default function InventoryPage() {
                                                   height="24px"
                                                 />
                                                 <span className="font-semibold">Loading</span>
-                                              </>
+                                              </div>
                                             ) : (
                                               "Buy House Slot"
                                             )}
@@ -412,7 +415,7 @@ export default function InventoryPage() {
                                     RWA Tokens Deposited:
                                   </span>
                                   <span className={`font-normal text-[16px] ${theme == 'dark' ? "text-white" : "text-black"}`}>
-                                    {depositedBalance}{" "}
+                                    {stakedBalance.toString()}{" "}
                                     {"LSRWA"}
                                   </span>
                                 </div>
@@ -430,7 +433,7 @@ export default function InventoryPage() {
                                     <div className="mt-2 pt-3 flex justify-between gap-[20px]">
                                       <Button
                                         onClick={handleDeposit}
-                                        className={`w-full py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                                        className={`w-full py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || depositLoading) &&
                                           	" bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
@@ -443,7 +446,7 @@ export default function InventoryPage() {
                                         }
                                       >
                                         {depositLoading ? (
-                                          <>
+                                          <div className='flex justify-center items-center'>
                                             <ReactLoading
                                               type="spin"
                                               className="me-2 mb-[4px]"
@@ -453,14 +456,14 @@ export default function InventoryPage() {
                                             <span className="font-semibold">
                                               Loading
                                             </span>
-                                          </>
+                                          </div>
                                         ) : (
                                           "Deposit"
                                         )}
                                       </Button>
                                       <Button
                                         onClick={handleWithdraw}
-                                        className={`w-full py-2 rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                                        className={`w-full py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || withdrawLoading) &&
                                           " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
@@ -473,7 +476,7 @@ export default function InventoryPage() {
                                         }
                                       >
                                         {withdrawLoading ? (
-                                          <>
+                                          <div className='flex justify-center items-center'>
                                             <ReactLoading
                                               type="spin"
                                               className="me-2 mb-[4px]"
@@ -483,7 +486,7 @@ export default function InventoryPage() {
                                             <span className="font-semibold">
                                               Loading
                                             </span>
-                                          </>
+                                          </div>
                                         ) : (
                                           "Withdraw"
                                         )}
@@ -552,9 +555,9 @@ export default function InventoryPage() {
                               selectedResource={selectedResource}
                               setSelectedResource={setSelectedResource}
                             />
-                            <div className="flex pt-5 pb-5 lg:pb-4 justify-start lg:justify-end">
+                            <div className="flex pt-5 pb-5 lg:pb-4 justify-start md:justify-end">
                               <div
-                                className={`flex h-[40px] w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
+                                className={`flex h-[40px] w-full md:w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
                               >
                                 <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
                                   Cost:{" "}
@@ -564,7 +567,7 @@ export default function InventoryPage() {
                                 </span>
                                 <Button
                                   onClick={handleHarvest}
-                                  className={`h-[40px] w-[159px] text-[16px] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
+                                  className={`h-[40px] w-[159px] text-[16px] bg-[#61cd81] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
                           					${harvestLoading
                                       ? "flex justify-center items-center"
                                       : ""
@@ -572,7 +575,7 @@ export default function InventoryPage() {
                                   disabled={harvestLoading}
                                 >
                                   {harvestLoading ? (
-                                    <>
+                                    <div className='flex justify-center items-center'>
                                       <ReactLoading
                                         type="spin"
                                         className="me-2 mb-[4px]"
@@ -580,7 +583,7 @@ export default function InventoryPage() {
                                         height="24px"
                                       />
                                       <span className="font-semibold">Loading</span>
-                                    </>
+                                    </div>
                                   ) : (
                                     "Harvest"
                                   )}
@@ -597,7 +600,7 @@ export default function InventoryPage() {
                       </>
                     ) : (
                       <div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling] h-[calc(100vh-25rem)]">
-                        Chain not Supported / Switch to BSC
+                        {`Please switch your chain to ${NFT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}
                       </div>
                     )
                   }

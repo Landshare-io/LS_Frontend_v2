@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BigNumberish, formatEther } from "ethers";
+import { BigNumberish, formatUnits, formatEther } from "ethers";
 import Image from "next/image";
 import Link from "next/link";
 import Modal from "react-modal";
@@ -27,13 +27,11 @@ import {
   RWA_POOL_CONTRACT_ADDRESS,
   LAND_TOKEN_CONTRACT_ADDRESS,
   BOLD_INTER_TIGHT,
-  LANDSHARE_SALE_CONTRACT_ADDRESS,
-  MAJOR_WORK_CHAIN,
+  MAJOR_WORK_CHAINS,
 } from "../../config/constants/environments";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
 import useGetLandFee from "../../hooks/contract/LandshareSaleContract/useGetLandFee";
-import useAllowanceOfUsdcContract from "../../hooks/contract/UsdcContract/useAllowance";
 import useBuyTokenView from "../../hooks/contract/LandshareBuySaleContract/useBuyTokenView";
 import useSellTokens from "../../hooks/swap-token/useSellTokens";
 import useBuyTokens from "../../hooks/swap-token/useBuyTokens";
@@ -52,6 +50,8 @@ import IconClose from "../../../public/icons/close.svg";
 import "react-loading-skeleton/dist/skeleton.css";
 import Tooltip from "../common/tooltip";
 import KYCModal from "../common/modals/kyc";
+
+const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 export default function SwapToken() {
   const { isConnected, address } = useAccount();
@@ -119,15 +119,11 @@ export default function SwapToken() {
   const landFee = useLandFee(chainId) as number;
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
   const { allTokens } = useGetAllTokens();
-  const landFeeAmount = useGetLandFee(chainId, usdcAmount) as BigNumberish;
-  const { data: usdcAllowance } = useAllowanceOfUsdcContract(
-    chainId,
-    address,
-    LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]
-  ) as { data: BigNumberish };
-  const { sellTokens, transactionStatus: sellTransactionStatus } =
+  const landFeeAmount = useGetLandFee(chainId, usdcAmount) as number;
+
+  const { sellTokens } =
     useSellTokens(chainId, address, landFeeAmount, RWATokenAmount);
-  const { buyTokens, transactionStatus: buyTransactionStatus } = useBuyTokens(
+  const { buyTokens } = useBuyTokens(
     chainId,
     address,
     buyLANDAmount,
@@ -140,10 +136,9 @@ export default function SwapToken() {
   ) as any;
 
   useEffect(() => {
-    console.log(rwaPrice, RWATokenAmount, Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount)
     setUsdcAmount(Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount);
-    setBuyLANDAmount(buyTokenAmount.amountOfLAND)
-    setBuyUSDCAmount(buyTokenAmount.amountOfStableCoin)
+    setBuyLANDAmount(buyTokenAmount[1])
+    setBuyUSDCAmount(buyTokenAmount[0])
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
 
   useEffect(() => {
@@ -176,8 +171,9 @@ export default function SwapToken() {
       borderRadius: "20px",
     },
     overlay: {
-      background: "#00000080",
-    },
+      background: '#00000080',
+      zIndex: 99999
+    }
   };
 
   function get_information(link: string, callback: any) {
@@ -203,7 +199,6 @@ export default function SwapToken() {
   const { theme } = useGlobalContext();
 
   const handleLinkClick = (event: any) => {
-    console.log("isWhitelisted", isWhitelisted);
     event.preventDefault(); // Prevent the default link behavior
     setKycopen(false);
     setZeroIDModalOpen(true);
@@ -262,18 +257,94 @@ export default function SwapToken() {
         </div>
 
         <Modal
+<<<<<<< HEAD
+=======
+          isOpen={iskycmodal}
+          onRequestClose={() => {
+            setKycopen(false), document.body.classList.remove("modal-open");
+          }}
+          style={customModalStyles}
+          contentLabel="Modal"
+        >
+          <MdCancel
+            onClick={handleclosemodal}
+            className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
+          />
+          <div className="w-full">
+            <h5
+              className={` text-[1.5rem] leading-[1.334] text-center ${BOLD_INTER_TIGHT.className}`}
+            >
+              KYC Verification
+            </h5>
+            <p
+              className='text-[#000000CC] text-[16px] pt-[10px] leading-[28px] text-center tracking-[2%] font-inter font-semibold'
+            >
+              Complete the KYC process to access RWA Tokens
+            </p>
+          </div>
+          <div className="w-full mt-3">
+            <a href="https://dashboard.landshare.io">
+              <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors">
+                <p
+                  className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
+                >
+                  Manual Verification
+                </p>
+              </Button>
+              <p className="text-xs text-text-secondary text-center mt-1">Recommended for advanced users and large investors</p>
+            </a>
+            <div onClick={handleLinkClick}>
+              <Button
+                className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
+              >
+                <p
+                  className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
+                >
+                  ZeroID Verification
+                </p>
+              </Button>
+              <p className="text-xs text-text-secondary text-center mt-1">Quick verification - 5 minutes or less!</p>
+            </div>
+          </div>
+        </Modal>
+
+        <Modal
+          isOpen={isZeroIDModal}
+          onRequestClose={() => {
+            setZeroIDModalOpen(true),
+            document.body.classList.remove("modal-open");
+          }}
+          style={customModalStyles}
+          contentLabel="ZeroID Modal"
+          className="relative"
+        >
+          <MdCancel
+            onClick={() => {
+              setZeroIDModalOpen(false);
+              document.body.style.overflow = "auto";
+            }}
+            className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
+          />
+          <ZeroIDWidget />
+        </Modal>
+        <Modal
+>>>>>>> origin/main
           isOpen={isBuyModalOpen}
           onRequestClose={() => {
             setIsBuyModalOpen(false),
-              document.body.classList.remove("modal-open");
+            document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
           contentLabel="current-apr Modal"
         >
-          <div className="w-full overflow-y-scroll h-[460px]">
+          <div className="w-full overflow-y-auto h-[460px]">
             <Button
-              onClick={() => setIsSwipeluxModalOpen(true)}
+              onClick={() => {
+                setIsBuyModalOpen(false)
+                setIsSwipeluxModalOpen(true)
+              }}
               className="h-[115px] flex flex-col justify-center items-center w-full pb-[20px] border-b relative hover:bg-gray-300 transition-colors"
+              textClassName="flex flex-col justify-center items-center"
             >
               <Image src={IconSwipelux} alt="" className="w-[40px]" />
               <div className="text-[24px] font-bold">Swipelux</div>
@@ -320,7 +391,7 @@ export default function SwapToken() {
           <>
             <div className="flex flex-col w-full gap-[4px] min-h-[76px]">
               <div className="flex justify-between items-center">
-                <label className="text-text-secondary">RWA Token</label>
+                <label className="text-text-secondary text-[12px]">RWA Token</label>
                 <div className="flex justify-between items-center gap-[5px]">
                   <label className="text-text-secondary text-[12px] leading-[22px]">
                     Balance:
@@ -358,17 +429,17 @@ export default function SwapToken() {
                   <Image
                     src={IconUSDC}
                     alt="usdc"
-                    className="w-[20px] h-[20px]"
+                    className="w-[18px] h-[18px]"
                   />
                   <span
-                    className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                    className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                   >
                     USDC
                   </span>
                   <Image
                     src={IconArrowDown}
                     alt="arrow down"
-                    className="w-[20px] h-[20px]"
+                    className="w-[18px] h-[18px]"
                   />
                 </div>
                 <div>
@@ -399,11 +470,7 @@ export default function SwapToken() {
                 className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
                 placeholder="00.00 USDC"
                 readOnly
-                value={
-                  Number(formatEther(usdcAllowance)) == 0
-                    ? ""
-                    : formatEther(usdcAllowance)
-                }
+                value={usdcAmount}
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
               />
             </div>
@@ -411,7 +478,7 @@ export default function SwapToken() {
               <>
                 <div className="text-text-primary w-full flex justify-between">
                   <span className="font-medium text-[14px] leading-[22px]">
-                    LAND Fee ({landFee}%)
+                    {chainId == bsc.id ? 'LAND' : ''} Fee ({landFee.toString()}%)
                   </span>
                   <span
                     className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
@@ -419,7 +486,7 @@ export default function SwapToken() {
                     {landFeeAmount
                       ? formatEther(landFeeAmount).toString().substr(0, 12)
                       : 0}{" "}
-                    Land{" "}
+                    {chainId == bsc.id ? 'LAND ' : ' '}
                   </span>
                 </div>
                 <div className="text-text-primary w-full flex justify-between">
@@ -504,7 +571,7 @@ export default function SwapToken() {
           <>
             <div className="flex flex-col w-full gap-[4px] min-h-[76px]">
               <div className="flex justify-between items-center">
-                <label className="text-text-secondary">RWA Token </label>
+                <label className="text-text-secondary text-[12px]">RWA Token </label>
                 {isConnected && (
                   <div className="flex justify-between items-center gap-[5px]">
                     <label className="text-text-secondary text-[12px] leading-[22px]">
@@ -542,15 +609,15 @@ export default function SwapToken() {
 
             <div className="flex min-h-[76px] w-full gap-[16px]">
               <div className="flex flex-col flex-1 w-full gap-[4px] min-h-[76px]">
-                <div className="flex justify-between items-center gap-[5px] ml-[16px]">
+                <div className="flex justify-between items-center gap-[5px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
                     <Image
                       src={IconUSDC}
                       alt="usdc"
-                      className="w-[20px] h-[20px]"
+                      className="w-[18px] h-[18px]"
                     />
                     <span
-                      className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                      className={`text-text-primary text-[14px] leading-[22px] !text-[12px] ${BOLD_INTER_TIGHT.className}`}
                     >
                       USDC
                     </span>
@@ -563,7 +630,7 @@ export default function SwapToken() {
                   value={
                     buyUSDCAmount == undefined || RWATokenAmount === 0
                       ? ""
-                      : formatEther(buyUSDCAmount.toString())
+                      : formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)
                   }
                 />
                 {isConnected && (
@@ -585,7 +652,7 @@ export default function SwapToken() {
                 <div className="flex justify-between items-center gap-[5px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
                     <span
-                      className={`text-text-primary text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                      className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                     >
                       LAND
                     </span>
@@ -621,7 +688,7 @@ export default function SwapToken() {
         )}
         <div className="w-full">
           {isConnected ? (
-            chainId == MAJOR_WORK_CHAIN.id ? (
+            (RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
               <>
                 {isWhitelisted && (
                   <>
@@ -644,9 +711,9 @@ export default function SwapToken() {
                             usdcAmount == 0 ? 0 : Number(usdcAmount.toString())
                           ) > Number(poolBalance?.formatted)
                         }
-                        onClick={sellTokens}
+                        onClick={() => sellTokens()}
                         textClassName="text-[#fff]"
-                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px]"
+                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green"
                       >
                         {RWATokenAmount && usdcAmount && landFeeAmount
                           ? RWATokenAmount > parseFloat(balance?.formatted)
@@ -682,8 +749,9 @@ export default function SwapToken() {
                             )
                           ) > parseFloat(landBalance?.formatted) ||
                           Number(
-                            formatEther(
-                              buyUSDCAmount ? buyUSDCAmount.toString() : 0
+                            formatUnits(
+                              buyUSDCAmount ? buyUSDCAmount.toString() : 0,
+                              chainId == bsc.id ? 18 : 6
                             )
                           ) > parseFloat(USDCBalance?.formatted)
                         }
@@ -691,13 +759,13 @@ export default function SwapToken() {
                           setIsSTAPshow(true);
                         }}
                         textClassName="text-[#fff]"
-                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px]"
+                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green"
                       >
                         {RWATokenAmount && buyLANDAmount && usdcAmount
                           ? Number(formatEther(buyLANDAmount.toString())) >
                             parseFloat(landBalance?.formatted)
                             ? "Insufficient LAND Balance"
-                            : Number(formatEther(buyUSDCAmount.toString())) >
+                            : Number(formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)) >
                               parseFloat(USDCBalance?.formatted)
                             ? "Insufficient USDC Balance"
                             : buyOrSell
@@ -713,7 +781,7 @@ export default function SwapToken() {
                     rel="noopener noreferrer"
                     className="text-decoration-none"
                   >
-                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px]">
+                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81] hover:bg-[#61cd81]">
                       Trade on DS Swap
                     </Button>
                   </a>
@@ -731,14 +799,14 @@ export default function SwapToken() {
                         KYC not verified
                       </span>
                     </div>
-                    <span className="text-text-secondary">
+                    <span className={`text-[14px] text-text-secondary ${BOLD_INTER_TIGHT.className}`}>
                       Complete the KYC process on the dashboard to access RWA
                       Tokens
                     </span>
                     <Button
                       onClick={handlemodalkyc}
                       textClassName="text-[#fff]"
-                      className="w-full mt-[14px] py-[13px] px-[24px] rounded-[100px]"
+                      className="w-full mt-[14px] py-[13px] bg-primary-green px-[24px] rounded-[100px]"
                     >
                       Verify Now
                     </Button>
@@ -753,7 +821,7 @@ export default function SwapToken() {
                     }}
                   >
                     <span
-                      className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
+                      className={`text-[14px] cursor-pointer leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
                     >
                       Get LAND Token
                     </span>
@@ -783,7 +851,7 @@ export default function SwapToken() {
           ) : (
             <div className="flex flex-col items-center gap-[18px] w-full">
               <div className="w-full">
-                <ConnectWallet containerClassName="w-full mr-0" />
+                <ConnectWallet connectButtonClassName="w-full mr-0" />
               </div>
               <div
                 className="flex !bg-transparent items-center justify-center"
@@ -792,7 +860,7 @@ export default function SwapToken() {
                 }}
               >
                 <span
-                  className={`text-[14px] leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
+                  className={`text-[14px] cursor-pointer leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
                 >
                   Get LAND Token
                 </span>
@@ -1001,10 +1069,10 @@ export default function SwapToken() {
           </div>
           <div>
             <Button
-              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px]"
+              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px] bg-primary-green"
               onClick={async () => {
                 setIsSTAPshow(false);
-                buyOrSell == "Buy" ? buyTokens() : sellTokens();
+                buyOrSell == "Buy" ? buyTokens(buyUSDCAmount) : sellTokens();
               }}
               disabled={false}
             >

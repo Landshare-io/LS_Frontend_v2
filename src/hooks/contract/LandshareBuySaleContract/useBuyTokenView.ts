@@ -7,23 +7,26 @@ import { Address } from "viem";
 
 export default function useBuyTokenView(chainId: number, amountOfSecurities: number | BigNumberish, stableCoinAddress: Address) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[bsc.id],
+    address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareBuySaleAbi,
     functionName: "buyTokenView",
-    chainId: bsc.id,
+    chainId: chainId,
     args: [amountOfSecurities, stableCoinAddress]
   })
 
-  if (isLoading) return {
-    amountOfStableCoin: 0,
-    amountOfLAND: 0
-  }
+  if (typeof LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId] == "undefined" || typeof stableCoinAddress == "undefined") return [0, 0]
+  if (isLoading) return [0, 0]
+  // {
+  //   amountOfStableCoin: 0,
+  //   amountOfLAND: 0
+  // }
   if (isError) {
     console.log('Fetching LandshareBuySaleContract buyTokenView error', error)
-    return {
-      amountOfStableCoin: 0,
-      amountOfLAND: 0
-    }
+    return [0, 0]
+    // {
+    //   amountOfStableCoin: 0,
+    //   amountOfLAND: 0
+    // }
   }
 
   return data

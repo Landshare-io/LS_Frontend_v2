@@ -5,7 +5,7 @@ function Dropdown({ children }: { children: JSX.Element[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const handleClickOutside = (event: any) => {
+  const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setIsOpen(false);
     }
@@ -16,15 +16,21 @@ function Dropdown({ children }: { children: JSX.Element[] }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const clonedChildren = children.map((child) => {
+  const clonedChildren = children.map((child, index: number) => {
     if (child.type === Dropdown.Toggle) {
       return React.cloneElement(child, {
-        onClick: () => setIsOpen(!isOpen),
+        key: `dropdown-toggle-${index}`,
+        onClick: (e: React.MouseEvent) => {
+          e.stopPropagation();
+          setIsOpen((prev) => !prev);
+        },
         isOpen,
       });
     }
     if (child.type === Dropdown.Menu) {
-      return React.cloneElement(child, { isOpen });
+      return isOpen
+        ? React.cloneElement(child, { key: `dropdown-menu-${index}` })
+        : null;
     }
     return child;
   });
@@ -33,9 +39,10 @@ function Dropdown({ children }: { children: JSX.Element[] }) {
 }
 
 // Dropdown.Toggle component
-Dropdown.Toggle = function Toggle({ children }: { children: JSX.Element[] }) {
+Dropdown.Toggle = function Toggle({ children, onClick }: { children: JSX.Element, onClick: React.MouseEventHandler<HTMLButtonElement> }) {
   return (
     <button
+      onClick={onClick}
       className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
     >
       {children}

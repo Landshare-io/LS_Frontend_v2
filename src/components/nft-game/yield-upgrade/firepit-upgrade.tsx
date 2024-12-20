@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactModal from "react-modal";
+import Image from "next/image";
 import ReactLoading from "react-loading";
 import numeral from "numeral";
 import Tooltip from "../../common/tooltip";
@@ -52,13 +53,13 @@ export default function FirepitUpgrade({
     (10 - Number(Math.ceil(durationDate))).toString()
   );
   const colors = [
-    "grey",
-    "green",
-    "yellow",
-    "blue",
-    "dark-blue",
-    "light-yellow",
-    "light-blue",
+    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f] disabled:!bg-[#8f8f8f]",
+    "border-[2px] border-[#61cd81] bg-[#61cd81] disabled:!bg-[#61cd81]",
+    "border-[2px] border-[#f1b258] bg-[#f1b258] disabled:!bg-[#f1b258]",
+    "border-[2px] border-[#40bef6] bg-[#40bef6] disabled:!bg-[#40bef6]",
+    "border-[2px] border-[#0b6c96] bg-[#0b6c96] disabled:!bg-[#0b6c96]",
+    "border-[2px] border-[#f9c710] bg-[#f9c710] disabled:!bg-[#f9c710]",
+    "border-[2px] border-[#1eceae] bg-[#1eceae] disabled:!bg-[#1eceae]",
   ];
   const customModalStyles = {
     content: {
@@ -66,7 +67,7 @@ export default function FirepitUpgrade({
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "600px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -117,14 +118,14 @@ export default function FirepitUpgrade({
     );
 
   return (
-    <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px]">
+    <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[20px] md:mr-0 rounded-[20px] overflow-hidden">
       <div className="bg-[#fff]">
-        <div className="flex flex-col items-center bg-gradient-to-b from-[#0ed14500] to-[#3a9c5652]">
+        <div className="flex flex-col items-center bg-gradient-to-b from-[#689D77] to-[#3a9c5652]">
           <div className="bg-[#00000030] w-full flex justify-center h-[49px] py-[8px]">
             <span className="text-[16px] text-white font-semibold">{item.name}</span>
           </div>
           <div className="flex flex-col w-full h-[210px] relative">
-            <img
+            <Image
               className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] h-[180px] w-auto"
               src={item.imgUrl}
               alt={item.name}
@@ -151,7 +152,7 @@ export default function FirepitUpgrade({
                 </div>
               </div>
             ) : (
-              <div className="px-[12px] bottom-0 flex w-full justify-between items-end px-3 py-1 absolute">
+              <div className="px-[12px] bottom-0 flex w-full justify-end items-end px-3 py-1 absolute">
                 {(btnTitle == "SALVAGE" && durationDate == 0) && (
                   <Tooltip content="No lumber loaded. Multiplier not active.">
                     <div>
@@ -171,7 +172,7 @@ export default function FirepitUpgrade({
         </div>
         <div className="bg-[#6f8e9d66] py-[13px] px-[12px]">
           <div
-            className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary ${colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}`}
+            className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary pt-[12px] ${colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}`}
           >
             <div className="flex flex-col px-[10px]">
               <div className="flex items-center">
@@ -200,7 +201,7 @@ export default function FirepitUpgrade({
                       </div>
                       <div className="flex justify-start items-center">
                         <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] me-1 dark:text-text-secondary">Remain:</span>
-                        <div className="min-w-[20px] mt-1 text-[14px] font-normal dark:text-text-primary">
+                        <div className="flex gap-[2px] items-center min-w-[20px] mt-1 text-[14px] font-normal dark:text-text-primary">
                           {`${numeral(Number(durationDate)).format("0.[00]")} `}
                           {activeIcons[1]}
                         </div>
@@ -209,7 +210,7 @@ export default function FirepitUpgrade({
                   )}
                 </div>
               </div>
-              <div className="border-b-[1px] border-[#00000050] w-full my-1"></div>
+              <div className="border-b-[1px] border-[#00000050] w-full my-[8px]"></div>
               <div>
                 {btnTitle === "BUY" && (
                   <div className="flex items-center">
@@ -224,15 +225,15 @@ export default function FirepitUpgrade({
                                 className="min-w-[20px] mt-1 text-[14px] font-normal dark:text-text-primary"
                               >
                                 {colorType == 0 ? (
-                                  <>
+                                  <div className="flex gap-[2px] items-center">
                                     {`${cost} `}
                                     {disabledIcons[index]}
-                                  </>
+                                  </div>
                                 ) : (
-                                  <>
+                                  <div className="flex gap-[2px] items-center">
                                     {`${cost} `}
                                     {activeIcons[index]}
-                                  </>
+                                  </div>
                                 )}
                               </div>
                             );
@@ -262,15 +263,15 @@ export default function FirepitUpgrade({
                               className={`min-w-[20px] text-[14px] font-normal dark:text-text-primary`}// ${colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}
                             >
                               {((btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType) == 0 ? (
-                                <>
+                                <div className="flex gap-[2px] items-center">
                                   {`${cost} `}
                                   {disabledIcons[index]}
-                                </>
+                                </div>
                               ) : (
-                                <>
+                                <div className="flex gap-[2px] items-center">
                                   {`${cost} `}
                                   {activeIcons[index]}
-                                </>
+                                </div>
                               )}
                             </div>
                           );
@@ -289,7 +290,7 @@ export default function FirepitUpgrade({
                 {btnTitle != "BUY" && Number(lumberCount) > 0 && (
                   <div className="flex justify-start items-center">
                     <span className="text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] mr-1">Cost:</span>
-                    <div className="min-w-[20px] font-semibold text-text-secondary mt-1 text-[14px] font-normal">
+                    <div className="flex gap-[2px] items-center min-w-[20px] font-semibold text-text-secondary mt-1 text-[14px] font-normal">
                       {`${numeral(Number(lumberCount)).format("0.[00]")} `}
                       {activeIcons[1]}
                     </div>
@@ -305,7 +306,7 @@ export default function FirepitUpgrade({
                   onPurcharse(btnTitle != "BUY" ? Number(lumberCount) : 0)
                 }
               }}
-              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute text-button-text-secondary
+              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute text-button-text-secondary rounded-[20px]
               ${((isLoading.type > -1) && (isLoading.type != item.id)) ? 'grey' : colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}
               ${isLoading.type == item.id && isLoading.loading
                   ? "d-flex justify-content-center align-items-center"
@@ -316,7 +317,7 @@ export default function FirepitUpgrade({
               }
             >
               {isLoading.type == item.id && isLoading.loading ? (
-                <>
+                <div className='flex justify-center items-center'>
                   <ReactLoading
                     type="spin"
                     className="mr-2 mb-[4px]"
@@ -324,7 +325,7 @@ export default function FirepitUpgrade({
                     height="24px"
                   />
                   <span className="font-semibold">Loading</span>
-                </>
+                </div>
               ) : (
                 <span className="font-semibold text-button-text-secondary">
                   {Number(lumberCount) == 0 ? 'SALVAGE' : (havingItem == -1 ? 'BUY' : 'LOAD')}
@@ -340,7 +341,7 @@ export default function FirepitUpgrade({
         style={customModalStyles}
       >
         <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 text-[14px] font-normal">{`Add an outdoor fireplace to your property, increasing yields by x${item.buyReward[9]}. Must load lumber to activate yield multiplier, with 1 lumber being burned per day. Up to 10 lumber can be loaded at one time.`}</span>
+          <span className="my-2 mx-3 text-[14px] pt-1 font-normal">{`Add an outdoor fireplace to your property, increasing yields by x${item.buyReward[9]}. Must load lumber to activate yield multiplier, with 1 lumber being burned per day. Up to 10 lumber can be loaded at one time.`}</span>
         </div>
       </ReactModal>
     </div>

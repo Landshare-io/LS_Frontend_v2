@@ -10,17 +10,33 @@ import {
   validateItemDateWithDeadTime,
   validateItemDate
 } from "../../../utils/helpers/validator";
-import { productionUpdgradesData } from "../../../config/constants/game-data";
+import { productionUpgradesData } from "../../../config/constants/game-data";
 import { PREMIUM_NFT_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
+let premiumNftsState: any[] = []
+let yieldUpgradesState: any[] = []
+let fortificationItemsState: any[] = []
+let hasConcreteFoundationState = false
+let hasFireplaceState = false
+let hasHarvesterState = false
+let hasGeneratorState = false
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 export default function useGetUserGameItem(house: any, chainId: number, address: Address | undefined) {
-  const [premiumNfts, setPremiumNfts] = useState<any[]>([]);
-  const [yieldUpgrades, setYieldUpgrades] = useState<any[]>([])
-  const [fortificationItems, setFortificationItems] = useState<any[]>([])
-  const [hasConcreteFoundation, setHasConcreteFoundation] = useState(false)
-  const [hasFireplace, setHasFireplace] = useState(false)
-  const [hasHarvester, setHasHarvester] = useState(false)
-  const [hasGenerator, setHasGenerator] = useState(false)
+  const [premiumNfts, setPremiumNfts] = useState<any[]>(premiumNftsState);
+  const [yieldUpgrades, setYieldUpgrades] = useState<any[]>(yieldUpgradesState)
+  const [fortificationItems, setFortificationItems] = useState<any[]>(fortificationItemsState)
+  const [hasConcreteFoundation, setHasConcreteFoundation] = useState(hasConcreteFoundationState)
+  const [hasFireplace, setHasFireplace] = useState(hasFireplaceState)
+  const [hasHarvester, setHasHarvester] = useState(hasHarvesterState)
+  const [hasGenerator, setHasGenerator] = useState(hasGeneratorState)
   const {
     yieldUpgradesList,
     premiumUpgradesList
@@ -29,6 +45,60 @@ export default function useGetUserGameItem(house: any, chainId: number, address:
   const porcelainItems = useGetItemsByOwner(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Porcelain Tile"][chainId], address)
   const poolTableItems = useGetItemsByOwner(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Pool Table"][chainId], address)
   const marbleItems = useGetItemsByOwner(chainId, PREMIUM_NFT_CONTRACT_ADDRESS["Marble Countertops"][chainId], address)
+
+  useEffect(() => {
+    // Subscribe on mount
+    const update = () => {
+      setPremiumNfts(premiumNftsState)
+      setYieldUpgrades(yieldUpgradesState)
+      setFortificationItems(fortificationItemsState)
+      setHasConcreteFoundation(hasConcreteFoundationState)
+      setHasFireplace(hasFireplaceState)
+      setHasHarvester(hasHarvesterState)
+      setHasGenerator(hasGeneratorState)
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updatePremiumNfts = (newPremiumNfts: any[]) => {
+    premiumNftsState = newPremiumNfts;
+    notifySubscribers();
+  };
+
+  const updateYieldUpgrades = (newYieldUpgrades: any[]) => {
+    yieldUpgradesState = newYieldUpgrades;
+    notifySubscribers();
+  };
+
+  const updateFortificationItems = (newFortificationItems: any[]) => {
+    fortificationItemsState = newFortificationItems;
+    notifySubscribers();
+  };
+
+  const updateHasConcreteFoundation = (newHasConcreteFoundation: boolean) => {
+    hasConcreteFoundationState = newHasConcreteFoundation;
+    notifySubscribers();
+  };
+
+  const updateHasFireplace = (newHasFireplace: boolean) => {
+    hasFireplaceState = newHasFireplace;
+    notifySubscribers();
+  };
+
+  const updateHasHarvester = (newHasHarvester: boolean) => {
+    hasHarvesterState = newHasHarvester;
+    notifySubscribers();
+  };
+
+  const updateHasGenerator = (newHasGenerator: boolean) => {
+    hasGeneratorState = newHasGenerator;
+    notifySubscribers();
+  };
 
   const gettingItems = async () => {
     if (!house.premiumUpgrades) return;
@@ -95,7 +165,7 @@ export default function useGetUserGameItem(house: any, chainId: number, address:
     const harvester = house.productionUpgrades.filter((pItem: any) => pItem.name == "Harvester")[0].activeTime
   
     const tempFortItems: any[] = []
-    productionUpdgradesData.filter(item => item.sortingId === 4).map((fort: any) => {
+    productionUpgradesData.filter(item => item.sortingId === 4).map((fort: any) => {
       if (validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == fort.title)[0], oneDayTime)) {
         tempFortItems.push({
           ...fort,
@@ -111,13 +181,13 @@ export default function useGetUserGameItem(house: any, chainId: number, address:
       }
     })
   
-    setPremiumNfts(premiumUpgrades)
-    setYieldUpgrades(tempYieldUpgrades)
-    setHasConcreteFoundation(concreteFoundation)
-    setHasFireplace(fireplace)
-    setHasGenerator(generator)
-    setHasHarvester(harvester)
-    setFortificationItems(tempFortItems)
+    updatePremiumNfts(premiumUpgrades)
+    updateYieldUpgrades(tempYieldUpgrades)
+    updateHasConcreteFoundation(concreteFoundation)
+    updateHasFireplace(fireplace)
+    updateHasGenerator(generator)
+    updateHasHarvester(harvester)
+    updateFortificationItems(tempFortItems)
   }
 
   useEffect(() => {

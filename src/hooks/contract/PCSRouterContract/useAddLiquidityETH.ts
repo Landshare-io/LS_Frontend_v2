@@ -9,11 +9,12 @@ export default function useAddLiquidityETH() {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function addLiquidityETH(amount: BigNumberish | number, address: Address | undefined, minEth: string | number | BigNumberish) {
-    await writeContract({
+    writeContract({
       address: PSC_ROUTER_CONTRACT_ADDRESS,
       abi: PscRouter,
       functionName: "addLiquidityETH",
@@ -33,6 +34,7 @@ export default function useAddLiquidityETH() {
   return {
     addLiquidityETH,
     isPending,
+    isError,
     data
   }
 }

@@ -7,11 +7,13 @@ export default function useSwap() {
   const {
     data,
     isPending,
+    isError,
+    error,
     writeContract
   } = useWriteContract();
 
   async function swap() {
-    await writeContract({
+    writeContract({
       address: TOKEN_MIGRATE_CONTRACT_ADDRESS,
       abi: TokenMigrateAbi,
       functionName: "swap",
@@ -23,6 +25,8 @@ export default function useSwap() {
   return {
     swap,
     isPending,
+    isError,
+    error,
     data
   }
 }

@@ -102,7 +102,7 @@ export default function NftItem({ house }: NftItemProps) {
         </div>
         {house.onSale && 
           <h4 
-            className={`bg-[#ec9821] text-[#fff] absolute top-0 right-0 translate-x-[30%] translate-y-0 rotate-45 origin-top-right text-[14px] py-[5px] before:content-[''] before:absolute before:top-0 before:my-0 before:mx-[-1px] before:w-full before:h-full before:bg-[#ec9821] after:content-[''] after:absolute after:top-0 after:my-0 after:mx-[-1px] after:w-full after:h-full after:bg-[#ec9821] ${BOLD_INTER_TIGHT.className}`}
+            className={`bg-[#ec9821] text-[#fff] w-full text-center absolute top-[42%] right-0 translate-x-[30%] translate-y-0 rotate-45 origin-top-right text-[14px] py-[5px] before:content-[''] before:my-0 before:mx-[-1px] before:w-full before:h-full before:bg-[#ec9821] after:content-[''] after:my-0 after:mx-[-1px] after:w-full after:h-full after:bg-[#ec9821] ${BOLD_INTER_TIGHT.className}`}
           >
             On Sale
           </h4>
@@ -141,22 +141,22 @@ export default function NftItem({ house }: NftItemProps) {
         <div className="m-auto d-flex justify-content-center pt-2">
           {house.isActivated ? (
             <Button
-              className="w-[131px] h-[40px] text-[16px] rounded-[100px] font-semibold cursor-pointer text-button-text-secondary rounded-[20px]"
+              className="w-[131px] h-[40px] text-[16px] bg-[#61cd81] rounded-[100px] font-semibold cursor-pointer text-button-text-secondary rounded-[20px]"
               onClick={() => router.push(`/nft/${house.id}`)}
             >
               MANAGE
             </Button>
           ) : (
             <Button
-              className={`w-[131px] h-[40px] text-[16px] font-semibold cursor-pointer rounded-[20px] text-button-text-secondary ${isActivating
+              className={`w-[131px] h-[40px] text-[16px] bg-[#61cd81] font-semibold cursor-pointer rounded-[20px] text-button-text-secondary ${isActivating
                 ? "flex justify-center items-center"
                 : ""
                 }`}
-              onClick={() => activate(house)}
+              onClick={async () => await activate(house)}
               disabled={isActivating || house.onSale}
             >
               {isActivating ? (
-                <>
+                <div className='flex justify-center items-center'>
                   <ReactLoading
                     type="spin"
                     className="mr-2 mb-[4px]"
@@ -164,7 +164,7 @@ export default function NftItem({ house }: NftItemProps) {
                     height="24px"
                   />
                   <span className="font-semibold">Loading</span>
-                </>
+                </div>
               ) : (
                 "Activate"
               )}

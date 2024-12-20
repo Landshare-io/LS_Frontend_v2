@@ -60,7 +60,7 @@ export default function Proposal({ proposal }: { proposal: any }) {
 
   return (
     <>
-      <div className="proposal-card border-[2px] border-[#e5e7eb]  dark:border-[#494949] hover:border-[#6e6e6e] cursor-pointer duration-500 rounded-[14px] p-[24px]" key={proposal.id}>
+      <div className="border-[2px] border-[#e5e7eb] dark:border-[#494949] hover:border-[#6e6e6e] cursor-pointer duration-500 rounded-[14px] p-[24px]">
         <div className="flex justify-between mb-[0.75rem]">
           <div className="flex items-center">
             <img
@@ -80,7 +80,7 @@ export default function Proposal({ proposal }: { proposal: any }) {
           </div>
         </div>
         <div className="my-[8px] text-[22px] leading-[32px] font-semibold text-[#61cd81] tracking-wide">{proposal.title}</div>
-        <div className="text-[17px] leading-[28px] font-normal break-words mb-[8px] line-clamp-2 text-text-secondary">{proposal.body}</div>
+        <div className="max-w-[750px] text-[17px] leading-[28px] font-normal break-words mb-[8px] overflow-hidden line-clamp-2 text-text-secondary">{proposal.body}</div>
         <div className="flex flex-col gap-[5px]">
           {sumScores ? (
             proposal.choices.map((choice: string, index: number) => (

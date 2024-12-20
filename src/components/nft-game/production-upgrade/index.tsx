@@ -5,7 +5,7 @@ import { Carousel } from "react-responsive-carousel";
 import YieldUpgrade from "./yield-upgrade";
 import FireplaceUpgrade from "./fireplace-upgrade";
 import HireHandymanUpgrade from "./hirehandyman-upgrade";
-import { productionUpdgradesData } from "../../../config/constants/game-data";
+import { productionUpgradesData } from "../../../config/constants/game-data";
 import { 
   validateItemDate,
   getItemDuration
@@ -14,6 +14,7 @@ import useProductionUpgrade from "../../../hooks/nft-game/axios/useProductionUpg
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
 import carouselIcon from "../../../../public/icons/carousel-icon.png";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 
 interface ProductionUpdgradeProps {
@@ -54,7 +55,7 @@ export default function ProductionUpgrade ({
 
   return (
     <div className="max-w-[1200px] px-0 my-5">
-      <div className="flex flex-col md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] justify-between gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] md:gap-[70px]">
+      <div className="flex flex-col md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] justify-between gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)]">
         <div className="relative flex justify-center toolshed-carousel w-[257px] mr-[10px] sm:mr-[40px]">
           <span
             onClick={() =>
@@ -66,12 +67,13 @@ export default function ProductionUpgrade ({
           </span>
           <Carousel
             width={257}
+            showIndicators={false}
             showStatus={false}
             showThumbs={false}
             showArrows={false}
             selectedItem={toolshedIndex}
           >
-            {productionUpdgradesData.filter((item: any) => item.sortingId === 0).map((item: any, index: number) => {
+            {productionUpgradesData.filter((item: any) => item.sortingId === 0).map((item: any, index: number) => {
               const toolshed = {
                 ...item,
                 ...house.productionUpgrades.filter((pItem: any) => pItem.name == item.title)[0],
@@ -111,7 +113,7 @@ export default function ProductionUpgrade ({
             onClick={() =>
               handleToolshedSelect(toolshedIndex < 3 ? toolshedIndex + 1 : 3)
             }
-            className="d-flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer right-[-5px] absolute justify-center items-center"
+            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer right-[-5px] absolute justify-center items-center rotate-180"
           >
             <Image src={carouselIcon} alt="Carousel next icon" />
           </span>
@@ -119,7 +121,7 @@ export default function ProductionUpgrade ({
         <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <FireplaceUpgrade
             item={{
-              ...productionUpdgradesData.filter((item: any) => item.title == "Firepit")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Firepit")[0],
               ...(
                 hasFireplace ? 
                   house.productionUpgrades.filter((pItem: any) => pItem.name == "Firepit" && pItem.specialButtonName == 'BURN')[0] :
@@ -141,7 +143,7 @@ export default function ProductionUpgrade ({
         <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
-              ...productionUpdgradesData.filter((item: any) => item.title == "Concrete Foundation")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Concrete Foundation")[0],
               ...(
                 hasConcreteFoundation ? 
                   house.productionUpgrades.filter((pItem: any) => pItem.name == "Concrete Foundation" && pItem.specialButtonName == 'REPAIR')[0] :
@@ -165,14 +167,14 @@ export default function ProductionUpgrade ({
         <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
-              ...productionUpdgradesData.filter((item: any) => item.title == "Harvester")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Harvester")[0],
               ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Harvester")[0],
               type: 'harvester'
             }}
             colorType={!house.onSale && house.isActivated && isOwn ? (hasHarvester ? 3 : 1) : 0}
             btnTitle={hasHarvester ? "OWNED" : "BUY"}
             onPurcharse={() => buyProductionOfUser({
-              ...productionUpdgradesData.filter((item: any) => item.title == "Harvester")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Harvester")[0],
               ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Harvester")[0],
               type: 'harvester'
             }, oneDayTime)}
@@ -181,7 +183,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        {productionUpdgradesData.filter((item: any) => item.sortingId === 4).map((fort: any, index: number) => {
+        {productionUpgradesData.filter((item: any) => item.sortingId === 4).map((fort: any, index: number) => {
           const item = {
             ...fort,
             ...house.productionUpgrades.filter((pItem: any) => pItem.name == fort.title)[0],
@@ -220,7 +222,7 @@ export default function ProductionUpgrade ({
         <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <HireHandymanUpgrade
             item={{
-              ...productionUpdgradesData.filter((item: any) => item.title == "Hire Handman")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Hire Handman")[0],
               ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handman")[0],
             }}
             colorType={
@@ -236,7 +238,7 @@ export default function ProductionUpgrade ({
                 : "BUY"
             }
             onPurcharse={() => hireHandymanAction({
-              ...productionUpdgradesData.filter((item: any) => item.title == "Hire Handman")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Hire Handman")[0],
               ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handman")[0],
             }, isOwn, oneDayTime)}
             disabled={
@@ -260,7 +262,7 @@ export default function ProductionUpgrade ({
         <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
-              ...productionUpdgradesData.filter((item: any) => item.title == "Generator")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Generator")[0],
               ...(
                   house.productionUpgrades.filter((pItem: any) => pItem.name == "Generator" && pItem.specialButtonName == '')[0]
               ),
@@ -269,7 +271,7 @@ export default function ProductionUpgrade ({
             colorType={!house.onSale && house.isActivated && isOwn ? (hasGenerator ? 3 : 1) : 0}
             btnTitle={hasGenerator ? 'OWN' : 'BUY'}
             onPurcharse={hasGenerator ? () => {} : () => buyProductionItem({
-              ...productionUpdgradesData.filter((item: any) => item.title == "Generator")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Generator")[0],
               ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Generator")[0],
               type: "Generator"
             }, oneDayTime)}

@@ -93,10 +93,10 @@ export default function FacilityContent({
             disabled={((isLoading.type == type) && isLoading.loading) || !activated || ((isLoading.type > -1) && (isLoading.type != type))}
           >
             {((isLoading.type == type) && isLoading.loading) ? (
-              <>
+              <div className='flex justify-center items-center'>
                 <ReactLoading type="spin" className="mr-2 mb-[4px]" width="24px" height="24px" />
                 <span className="font-semibold">Loading</span>
-              </>
+              </div>
             ) : (
               <>
                 <span className="text-[16px] font-semibold">{nextLevel == 1 ? 'BUY' : 'UPGRADE'}</span>

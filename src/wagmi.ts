@@ -6,16 +6,19 @@ import {
   polygon,
   bscTestnet,
   sepolia,
-  polygonAmoy
+  polygonAmoy,
+  hardhat
 } from 'wagmi/chains';
 import {
   metaMaskWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets';
+import { IS_TEST_MODE } from './config/constants/environments';
+import { plume, plumeTestnet } from './config/extra-chains';
 
 export const config = getDefaultConfig({
   appName: 'Landshare v2',
-  projectId: 'YOUR_PROJECT_ID',
+  projectId: '4f656a05b513be8ae06173f4b9262692',
   wallets: [
     {
       groupName: 'Recommended',
@@ -26,21 +29,21 @@ export const config = getDefaultConfig({
     bsc,
     polygon,
     arbitrum,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [bscTestnet, sepolia, polygonAmoy] : []),
+    plume,
+    ...(IS_TEST_MODE ? [bscTestnet, sepolia, polygonAmoy, plumeTestnet, hardhat] : []),
   ],
   ssr: true,
   transports: {
     [bsc.id]: http(),
     [polygon.id]: http(),
     [arbitrum.id]: http(),
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? {
+    [plume.id]: http(),
+    ...(IS_TEST_MODE ? {
       [bscTestnet.id]: http(), 
       [sepolia.id]: http(), 
-      [polygonAmoy.id]: http()
+      [polygonAmoy.id]: http(),
+      [plumeTestnet.id]: http(), 
+      [hardhat.id]: http()
     } : {} as Record<number, typeof http>),
   },
 });
-
-export const supportChainIds = [
-  bsc.id, polygon.id, arbitrum.id, ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [bscTestnet.id, sepolia.id, polygonAmoy.id] : []),
-]

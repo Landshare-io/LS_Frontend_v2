@@ -35,7 +35,7 @@ export default function TotalYieldMultiModal({
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "800px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -47,7 +47,7 @@ export default function TotalYieldMultiModal({
     }
   };
 
-  if (house.yieldUpgrades.length > 0) {
+  if (house?.yieldUpgrades && house?.yieldUpgrades.length > 0) {
     for (const item of yieldUpdgradesData) {
       const yieldItem = house.yieldUpgrades.filter((yItem: any) => yItem.name == item.title && yItem.specialButtonName == '')[0]
       if (item.title == 'Garden') {
@@ -130,8 +130,8 @@ export default function TotalYieldMultiModal({
     >
       <div>
         <div className="flex w-full px-3 py-4 items-center justify-between">
-          <h3 className="m-0 text-[18px] text-black-800">Total Annual Yields </h3>
-          <h1 className="m-0 text-[36px] font-semibold text-green">x{ numeral(house.multiplier).format("0.[00]").toString()} LAND</h1>
+          <h3 className="m-0 text-[18px] text-[#000000cc]">Total Annual Yields </h3>
+          <h1 className="m-0 text-[36px] font-semibold text-[#61cd81]">x{ numeral(house.multiplier).format("0.[00]").toString()} LAND</h1>
         </div>
         <div className="border-b-[1px] border-[#cccccc]"></div>
       </div>
@@ -166,11 +166,11 @@ export default function TotalYieldMultiModal({
                             className="flex flex-col px-2"
                             key={`addon-detail-show-${index}`}
                           >
-                            <div className="h-[168px] bg-gradient-tp-b from-[#555b8c] to-[#0e45d14a] overflow-hidden rounded-[10px] flex items-center justify-center">
-                              <img className="h-[150px]" src={showAddonItem.imgUrl} alt={showAddonItem.title} />
+                            <div className="h-[168px] bg-gradient-to-b from-[#555b8c] to-[#0e45d14a] overflow-hidden rounded-[10px] flex items-center justify-center">
+                              <Image className="w-[150px] h-[150px]" src={showAddonItem.imgUrl} alt={showAddonItem.title} />
                             </div>
-                            <div className="font-semibold mt-1">{showAddonItem.title}</div>
-                            <div className="mt-2 font-semibold text-green text-[1.1rem]">
+                            <div className="font-semibold mt-1 text-[1rem]">{showAddonItem.title}</div>
+                            <div className="mt-2 font-semibold text-[#61cd81] text-[1.1rem]">
                               {`+ ${Number(showAddonItem.multiplier)} LAND / Year`}
                             </div>
                           </div>
@@ -182,11 +182,11 @@ export default function TotalYieldMultiModal({
                             className="flex flex-col px-2 addon-detail-show"
                             key={`addon-detail-show-${index}`}
                           >
-                            <div className="h-[168px] bg-gradient-tp-b from-[#555b8c] to-[#0e45d14a] overflow-hidden rounded-[10px] flex items-center justify-center">
-                              <img className="h-[150px]" src={showAddonItem.imgUrl} alt={showAddonItem.title} />
+                            <div className="h-[168px] bg-gradient-to-b from-[#555b8c] to-[#0e45d14a] overflow-hidden rounded-[10px] flex items-center justify-center">
+                              <Image className="w-[150px] h-[150px]" src={showAddonItem.imgUrl} alt={showAddonItem.title} />
                             </div>
-                            <div className="font-semibold mt-1">{showAddonItem.title}</div>
-                            <div className="mt-2 font-semibold text-green text-[1.1rem]">
+                            <div className="font-semibold mt-1 text-[1rem]">{showAddonItem.title}</div>
+                            <div className="mt-2 font-semibold text-[#61cd81] text-[1.1rem]">
                               {`+ ${Number(showAddonItem.multiplier)} LAND / Year`}
                             </div>
                           </div>
@@ -206,11 +206,11 @@ export default function TotalYieldMultiModal({
                           className="flex flex-col px-2"
                           key={`addon-detail-show-${index}`}
                         >
-                          <div className="h-[168px] bg-gradient-tp-b from-[#555b8c] to-[#0e45d14a] overflow-hidden rounded-[10px] flex items-center justify-center">
-                            <img className="h-[150px]" src={showAddonItem.imgUrl} alt={showAddonItem.title} />
+                          <div className="h-[168px] bg-gradient-to-b from-[#555b8c] to-[#0e45d14a] overflow-hidden rounded-[10px] flex items-center justify-center">
+                            <Image className="w-[150px] h-[150px]" src={showAddonItem.imgUrl} alt={showAddonItem.title} />
                           </div>
-                          <div className="font-semibold mt-1">{showAddonItem.title}</div>
-                          <div className="mt-2 font-semibold text-green text-[1.1rem]">
+                          <div className="font-semibold mt-1 text-[1rem]">{showAddonItem.title}</div>
+                          <div className="mt-2 font-semibold text-[#61cd81] text-[1.1rem]">
                             {`+ ${Number(showAddonItem.multiplier)} LAND / Year`}
                           </div>
                         </div>
@@ -222,11 +222,11 @@ export default function TotalYieldMultiModal({
                           className="flex flex-col px-2"
                           key={`addon-detail-show-${index}`}
                         >
-                          <div className="h-[168px] bg-gradient-tp-b from-[#555b8c] to-[#0e45d14a] overflow-hidden rounded-[10px] flex items-center justify-center">
-                            <img  className="h-[150px]"src={showAddonItem.imgUrl} alt={showAddonItem.title} />
+                          <div className="h-[168px] bg-gradient-to-b from-[#555b8c] to-[#0e45d14a] overflow-hidden rounded-[10px] flex items-center justify-center">
+                            <Image  className="w-[150px] h-[150px]"src={showAddonItem.imgUrl} alt={showAddonItem.title} />
                           </div>
-                          <div className="font-semibold mt-1">{showAddonItem.title}</div>
-                          <div className="mt-2 font-semibold text-green text-[1.1rem]">
+                          <div className="font-semibold mt-1 text-[1rem]">{showAddonItem.title}</div>
+                          <div className="mt-2 font-semibold text-[#61cd81] text-[1.1rem]">
                             {`+ ${Number(showAddonItem.multiplier)} LAND / Year`}
                           </div>
                         </div>

@@ -6,43 +6,47 @@ import useLogin from "./useLogin";
 import { validateResource } from "../../../utils/helpers/validator";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
-export default function useHandleFacilities(address: Address | undefined) {
+export default function useHandleFacilities(address: Address | undefined, setIsLoading: Function) {
   const { checkIsAuthenticated } = useLogin()
   const { facilities, setFacilities } = useGetUserData()
-  const { resource, setResource, setMaxPowerLimit } = useGetResource()
+  const { resource, setResource, maxPowerLimit, setMaxPowerLimit } = useGetResource()
   const { notifyError, notifySuccess } = useGlobalContext()
 
   const buyOrUpgradeFacility = async (type: number) => {
     if (!facilities[type].nextFacility) return notifyError(`Your ${facilities[type].currentFacility.name} level is max.`)
 
     if (await validateResource(resource, facilities[type].nextFacility?.buy.slice(2, 7))) {
+      setIsLoading({ type: type, loading: true });
       try {
         const { data } = await axios.post('/has-item/upgrade-facility', {
           nextFacilityId: facilities[type].nextFacility.id,
           currentHasItemId: facilities[type].hasFacilityId
         })
 
-        setFacilities((prevState) => ([
-          ...prevState.slice(0, type),
+        setFacilities([
+          ...facilities.slice(0, type),
           {
-            ...prevState[type],
+            ...facilities[type],
             currentFacility: data.currentFacility,
             nextFacility: data.nextFacility,
             hasFacilityId: data.hasFacilityId,
           },
-          ...prevState.slice(type + 1)
-        ]))
+          ...facilities.slice(type + 1)
+        ])
 
         setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
-        setMaxPowerLimit((prevState) => type == 0 ? data.currentFacility.rewardLimit[2] : prevState)
+        setMaxPowerLimit(type == 0 ? data.currentFacility.rewardLimit[2] : maxPowerLimit)
+        setIsLoading({ type: -1, loading: false });
         return notifySuccess(`Upgraded ${data.currentFacility.name} successfully!`)
       } catch (error: any) {
+        setIsLoading({ type: -1, loading: false });
         if (error.response?.data.status == 401) {
           checkIsAuthenticated(address)
         } else
           return notifyError(error.response.data.message);
       }
     } else {
+      setIsLoading({ type: -1, loading: false });
       return notifyError('Insufficient resources.')
     }
   }

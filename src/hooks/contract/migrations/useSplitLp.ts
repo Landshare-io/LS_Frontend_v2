@@ -15,6 +15,20 @@ import {
   PSC_ROUTER_CONTRACT_ADDRESS 
 } from "../../../config/constants/environments";
 
+let isSuccessSplitState = false
+let amountSplitedTokensState = {
+  bnb: 0,
+  land: 0,
+}
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 interface useSplitLPProps {
   address: Address | undefined
 }
@@ -22,19 +36,16 @@ interface useSplitLPProps {
 export default function useSplitLP({
   address
 }: useSplitLPProps) {
-  const [isSuccessSplit, setIsSuccessSplit] = useState(false);
+  const [isSuccessSplit, setIsSuccessSplit] = useState(isSuccessSplitState);
   const [removeLiquidityETHAmount, setRemoveLiquidityETHAmount] = useState<string | number>(0)
   const [removeLiquidityETHMinLand, setRemoveLiquidityETHMinLand] = useState<string | number | bigint>(0)
   const [removeLiquidityETHMinEth, setRemoveLiquidityETHMinEth] = useState<string | number | bigint>(0)
-  const [amountSplitedTokens, setAmountSplitedTokens] = useState({
-    bnb: 0,
-    land: 0,
-  });
+  const [amountSplitedTokens, setAmountSplitedTokens] = useState(amountSplitedTokensState);
   const {setScreenLoadingStatus} = useGlobalContext()
   const { isConnected } = useAccount();
   const { data: balance } = useBalanceOf({ address })
-  const { approve, data: approveTx } = useApprove()
-  const { removeLiquidityETH, data: removeLiquidityETHTx } = useRemoveLiquidityETH()
+  const { approve, data: approveTx, isError:isApproveError } = useApprove()
+  const { removeLiquidityETH, data: removeLiquidityETHTx, isError: isRemoveLiquidityError } = useRemoveLiquidityETH()
 
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
@@ -47,7 +58,33 @@ export default function useSplitLP({
   });
 
   useEffect(() => {
-    if (approveTx) {
+    // Subscribe on mount
+    const update = () => {
+      setAmountSplitedTokens(amountSplitedTokensState)
+      setIsSuccessSplit(isSuccessSplitState)
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updateIsSuccessSplit = (newUpdateIsSuccessSplit: any) => {
+    isSuccessSplitState = newUpdateIsSuccessSplit;
+    notifySubscribers();
+  };
+
+  const updateNewAmountSplitedTokens = (newAmountSplitedTokens: any) => {
+    amountSplitedTokensState = newAmountSplitedTokens;
+    notifySubscribers();
+  };
+
+  useEffect(() => {
+    if (isApproveError) {
+      setScreenLoadingStatus("Transaction Failed.")
+    } else if (approveTx) {
       if (approveStatusData) {
         if (approveSuccess) {
           try {
@@ -59,45 +96,45 @@ export default function useSplitLP({
               Date.now()
             )
           } catch (error) {
-            console.log("swap error", error)
             setScreenLoadingStatus("Transaction Failed.")
-  
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
-            }
           }
         }
       }
     }
-  }, [approveSuccess, approveStatusData, approveTx])
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [approveSuccess, approveStatusData, approveTx, isApproveError])
 
   useEffect(() => {
     (async () => {
-      if (removeLiquidityETHTx) {
+      if (isRemoveLiquidityError) {
+        setScreenLoadingStatus("Transaction Failed.")
+      } else if (removeLiquidityETHTx) {
         if (removeLiquidityStatusData) {
           if (removeLiquiditySuccess) {
             try {
               const receiptTx = await PROVIDERS[bsc.id].getTransactionReceipt(removeLiquidityETHTx);
               const amountLand = receiptTx.args.amount0;
               const amountBNB = receiptTx.args.amount1;
-              setAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
+              updateNewAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
               setScreenLoadingStatus("Transaction Completed.")
-              setIsSuccessSplit(true)
+              updateIsSuccessSplit(true)
             } catch (error) {
               setScreenLoadingStatus("Transaction Failed.")
-            }
-            return () => {
-              setTimeout(() => {
-                setScreenLoadingStatus("")
-              }, 1000);
             }
           }
         }
       }
     })()
-  }, [removeLiquiditySuccess, removeLiquidityStatusData, removeLiquidityETHTx])
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [removeLiquiditySuccess, removeLiquidityStatusData, removeLiquidityETHTx, isRemoveLiquidityError])
 
   async function splitLP(amount: string | number, minLand: string | number | bigint, minEth: string | number | bigint) {
     if (isConnected == true) {
@@ -114,12 +151,14 @@ export default function useSplitLP({
         
       } catch (e) {
         setScreenLoadingStatus("Transaction failed")
-        setIsSuccessSplit(false);
-        console.log("Error, withdraw: ", e);
+        updateIsSuccessSplit(false);
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
    
     }
   }
 
-  return { splitLP, isSuccessSplit, amountSplitedTokens, setIsSuccessSplit };
+  return { splitLP, isSuccessSplit, amountSplitedTokens, setIsSuccessSplit: updateIsSuccessSplit };
 }

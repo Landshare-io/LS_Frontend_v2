@@ -5,10 +5,10 @@ export const PAGES: PAGE[] = [
     name: "Vaults",
     path: "/vaults",
   },
-  // {
-  //   name: "NFT",
-  //   path: "/nft/inventory",
-  // },
+  {
+    name: "NFT",
+    path: "/nft/inventory",
+  },
   {
     name: "Real World Assets",
     path: "/rwa",
@@ -28,6 +28,10 @@ export const PAGES: PAGE[] = [
   {
     name: "Bridge",
     url: "https://app.transporter.io/?tab=token&token=LAND",
+  },
+  {
+    name: "Lending",
+    url: "https://pools.landshare.io",
   },
 ];
 

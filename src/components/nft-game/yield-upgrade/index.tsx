@@ -37,7 +37,7 @@ export default function YieldUpgrades({
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "300px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -119,7 +119,7 @@ export default function YieldUpgrades({
       {house.yieldUpgrades.length < 1 ? (
         <></>
       ) : (
-        <div className="flex flex-col md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between" style={{ rowGap: "45px" }}>
+        <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between" style={{ rowGap: "45px" }}>
           {yieldUpdgradesData.map((item: any) => {
             let yieldItem, havingItem
             if (item.title == 'Garden') {
@@ -229,7 +229,7 @@ export default function YieldUpgrades({
           </div>
           <div className="flex mt-[20px]">
             <div
-              className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[1px] border-[#00a8f3] bg-[#00a8f3] cursor-pointer"
+              className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[1px] border-[#00a8f3] bg-[#00a8f3] cursor-pointer text-white"
               onClick={() => {
                 setOpenSalvageModal(false);
                 salvageAddon(isOwn, salvageAddonId, hasAddonId);

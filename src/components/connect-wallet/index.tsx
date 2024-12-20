@@ -6,12 +6,18 @@ import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
 import useLogin from "../../hooks/nft-game/axios/useLogin";
 import { useGlobalContext } from "../../context/GlobalContext";
+<<<<<<< HEAD
 import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
 import { useSearchParams } from 'next/navigation';
 import { Fuul } from "@fuul/sdk";
 import { signMessage } from '@wagmi/core';
 import { config } from "../../wagmi";
 import { useAccount } from "wagmi";
+=======
+import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
+
+const NFT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/nft']
+>>>>>>> origin/main
 
 const interTight = Inter_Tight({
   weight: "700",
@@ -100,8 +106,8 @@ export default function ConnectWallet({
                 if (!connected) {
                   return (
                     <Button
-                      className={`text-[#fff] px-[24px] py-[13px] w-full rounded-[100px] ${interTight.className} ${connectButtonClassName ?? ''}`}
-                      textClassName="hover:dark:text-[#61CD81]"
+                      className={`w-[165px] h-[44px] text-[#fff] rounded-[100px] bg-[#61cd81] ${interTight.className} ${connectButtonClassName ?? ''}`}
+                      textClassName="hover:dark:text-[#61CD81] text-[100%]"
                       onClick={openConnectModal}
                     >
                       Connect Wallet
@@ -113,20 +119,20 @@ export default function ConnectWallet({
                   return (
                     <Button
                       onClick={openChainModal}
-                      className={`text-[#fff] px-[24px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81] ${interTight.className}`}
-                      textClassName="hover:dark:text-[#61CD81]"
+                      className={`w-[165px] h-[44px] text-[#fff] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] hover:text-[#61CD81] ${interTight.className}`}
+                      textClassName="hover:dark:text-[#61CD81] text-[100%]"
                     >
                       Wrong network
                     </Button>
                   );
                 }
 
-                if (pathname.includes('/nft') && chain.id == MAJOR_WORK_CHAIN.id && !isAuthenticated) {
+                if (pathname.includes('/nft') && (NFT_MAJOR_WORK_CHAIN.map(chains => chains.id) as number[]).includes(chain.id) && !isAuthenticated) {
                   return (
                     <Button 
                       onClick={() => checkIsAuthenticated(account?.address)}
-                      className="px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
-                      textClassName="hover:dark:text-[#61CD81]"
+                      className="w-[165px] h-[44px] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
+                      textClassName="hover:dark:text-[#61CD81] text-[100%]"
                     >
                       Login
                     </Button>
@@ -146,8 +152,8 @@ export default function ConnectWallet({
                       </div>
                       <Button
                         onClick={openAccountModal}
-                        className="px-[44px] py-[13px] rounded-[100px] transition ease-in-out delay-400 hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
-                        textClassName="hover:dark:text-[#61CD81]"
+                        className="w-[165px] h-[44px] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
+                        textClassName="hover:dark:text-[#61CD81] text-[100%]"
                       >
                         {account.displayName}
                       </Button>

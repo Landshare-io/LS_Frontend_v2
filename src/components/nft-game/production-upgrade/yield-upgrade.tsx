@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
+import Image from "next/image";
 import YieldUpgradeCost from "./yield-upgrade-cost";
 import ProductionUpgradeCost from "./production-upgrade-cost";
 import { OpenModalICon } from "../../common/icons/index";
@@ -51,7 +52,7 @@ export default function YieldUpgrade({
     "Jacuzzi Tub": `Add a Jacuzzi Tub to your bathroom, increasing yields by x${
       item.buyReward[9] ?? ""
     }. Increases concrete repair cost by 1 per 10% repaired.`,
-    "Steel Siding": `Install steel siding to your property, increasing yields by x${
+    "Steel Sliding": `Install steel siding to your property, increasing yields by x${
       item.buyReward[9] ?? ""
     }. Requires a concrete fortification. Increases steel repair cost by 1 per 10% repaired.`,
     "Steel Application": `Modernize your kitchen with steel appliances, increasing LAND yields by x${
@@ -107,13 +108,13 @@ export default function YieldUpgrade({
     "Generator": `Reduce the power repair cost by ${item.buyReward[2] * 100}.`
   };
   const colors = [
-    "grey",
-    "green",
-    "yellow",
-    "blue",
-    "dark-blue",
-    "light-yellow",
-    "light-blue",
+    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f] disabled:!bg-[#8f8f8f]",
+    "border-[2px] border-[#61cd81] bg-[#61cd81] disabled:!bg-[#61cd81]",
+    "border-[2px] border-[#f1b258] bg-[#f1b258] disabled:!bg-[#f1b258]",
+    "border-[2px] border-[#40bef6] bg-[#40bef6] disabled:!bg-[#40bef6]",
+    "border-[2px] border-[#0b6c96] bg-[#0b6c96] disabled:!bg-[#0b6c96]",
+    "border-[2px] border-[#f9c710] bg-[#f9c710] disabled:!bg-[#f9c710]",
+    "border-[2px] border-[#1eceae] bg-[#1eceae] disabled:!bg-[#1eceae]",
   ];
 
   const customModalStyles = {
@@ -122,7 +123,7 @@ export default function YieldUpgrade({
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "600px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -200,25 +201,25 @@ export default function YieldUpgrade({
   return (
     <>
       <div
-        className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px]"
+        className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[20px] md:mr-0 rounded-[20px] overflow-hidden"
       >
         <div className="bg-[#fff]">
           <div
-            className={`flex flex-col items-center ${type}`}
+            className={`flex flex-col items-center bg-gradient-to-b ${type == 'production' ? 'from-[#68819D] to-[#4da3a942]' : 'from-[#689D77] to-[#3a9c5652]'}`}
           >
             <div className="bg-[#00000033] w-full flex justify-center h-[49px] py-[8px]">
               <span className="text-[16px] text-white font-semibold">{item.name}</span>
             </div>
             <div className="flex flex-col w-full h-[210px] relative">
-              <img
-                className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] h-[18px] w-auto"
+              <Image
+                className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] h-[180px] w-auto"
                 src={item.imgUrl}
                 alt={item.name}
               />
               {durationDay ? (
                 item.name === "Garden" ? (
                   item.isBought ? (
-                    <div className="px-[12px] bottom-0 flex w-full justify-between items-end py-1 absolute">
+                    <div className="px-[12px] bottom-0 flex w-full justify-between items-end py-1 absolute bottom-[5px] right-[5px]">
                       <div className={`text-[0.8rem] text-white font-semibold ${type}`}>
                         {fertilizeDateNode} <br />
                         {durationDateNode}
@@ -235,7 +236,7 @@ export default function YieldUpgrade({
                             <div>
                               {/* svg icons must be wrapped around a div */}
                               <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                                x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-[5px] right-[5px]">
+                                x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-0 right-[5px]">
                                 <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                               </svg>
                             </div>
@@ -247,7 +248,7 @@ export default function YieldUpgrade({
                       </div>
                     </div>
                   ) : (
-                    <div className="px-[12px] flex w-full justify-end px-4 py-1 absolute">
+                    <div className="px-[12px] flex w-full justify-end px-4 py-1 absolute bottom-[5px] right-[5px]">
                       {message && (
                         <Tooltip content={(
                           <>
@@ -259,7 +260,7 @@ export default function YieldUpgrade({
                           <div>
                             {/* svg icons must be wrapped around a div */}
                             <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-[5px] right-[5px]">
+                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-0 right-[5px]">
                               <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                             </svg>
                           </div>
@@ -287,7 +288,7 @@ export default function YieldUpgrade({
                           <div>
                             {/* svg icons must be wrapped around a div */}
                             <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-[5px] right-[5px]">
+                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-0 right-[5px]">
                               <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                             </svg>
                           </div>
@@ -312,7 +313,7 @@ export default function YieldUpgrade({
                       <div>
                         {/* svg icons must be wrapped around a div */}
                         <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                          x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-[5px] right-[5px]">
+                          x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-0 right-[5px]">
                           <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                         </svg>
                       </div>
@@ -344,7 +345,7 @@ export default function YieldUpgrade({
                 onPurcharse={onPurcharse}
                 disabled={disabled}
                 isLoading={isLoading}
-                type={item.id}
+                type={item.type}
                 item={item}
                 colorType={colorType}
               />
@@ -363,7 +364,7 @@ export default function YieldUpgrade({
         style={customModalStyles}
       >
         <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 text-[14px]">
+          <span className="my-2 mx-3 pt-1 text-[14px]">
             {descriptions[item.name] ?? ""}
           </span>
         </div>

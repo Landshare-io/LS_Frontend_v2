@@ -70,7 +70,7 @@ export default function PriceGraph({
 
   useEffect(() => {
     (async () => {
-      if (rwaGraphData.length === 0) return;
+      if (rwaGraphData.length === 0 || landGraphData.prices.length === 0) return;
 
       const now = Date.now()
       switch (type) {
@@ -216,7 +216,7 @@ export default function PriceGraph({
             <span className="text-[14px] leading-[22px] tracking-[0.02em] text-[#CBCBCB]">
               {new Date(recentData.date).toDateString()}
             </span>
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-col gap-2 justify-between">
               {showBuyButton && (
                 <Button 
                   onClick={handleClick} 
@@ -293,7 +293,7 @@ export default function PriceGraph({
           }
         </div>
       </div>
-      <div className="mr-[-22px] md:mr-0 md:ml-[-15px]" id="chart-timeline">
+      <div className="mr-[-22px] md:mr-0 md:ml-[-15px] pr-[30px] md:pr-0" id="chart-timeline">
         <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
           {isLoading || isLandGraphDataLoading || isLandPriceDataLoading ?
             <Skeleton className="rounded-lg ml-2 w-full" height={300} /> :

@@ -47,9 +47,9 @@ export default function NftMint() {
           ) : (
             <>
               <Topbar isNftList={true} />
-              <span className={`text-[14px] ${BOLD_INTER_TIGHT.className}`}>Mint House NFTs</span>
+              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Mint House NFTs</span>
               <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-4 my-3`}></div>
-              <div className='flex overflow-x-auto pb-[20px] lg:grid lg:gird-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] justify-between gap-[4rem] pb-5 mb-5'>
+              <div className='flex overflow-x-auto pb-[20px] lg:grid lg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] justify-between gap-[4rem] pb-5 mb-5'>
                 {houseTypes.map((product, index) => (
                   <div
                     key={`nft-house-item-${index}`}
@@ -60,7 +60,7 @@ export default function NftMint() {
                 ))}
               </div>
 
-              <span className={`text-[14px] ${BOLD_INTER_TIGHT.className}`}>Premium Upgrades</span>
+              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Premium Upgrades</span>
               <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-4 my-3`}></div>
               <PremiumNfts />
             </>

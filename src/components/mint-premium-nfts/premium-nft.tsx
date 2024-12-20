@@ -38,7 +38,7 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
 
   return (
     <>
-      <div className="flex flex-col animate-[fadeIn] duration-1200 rounded-[15px] overflow-hidden w-[257px]">
+      <div className="flex flex-col animate-[fadeIn] duration-1200 rounded-[15px] overflow-hidden min-w-[257px]">
         <div className='bg-gradient-to-b from-[#68819D] to-[#4da3a942]'>
           <div className="flex flex-col items-center justif-center bg-[#00000033] h-[49px] py-[8px]">
             <span className="font-semibold text-white text-[20px]">{premiumNft.name}</span>
@@ -51,7 +51,7 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
             />
             <div className="flex absolute items-end w-full justify-between px-3 bottom-[5px]">
               <div className="text-[#fff] text-[14px] font-semibold align-text-bottom leading-[18px]">
-                Minted: {amountMinted ?? 0} / Limit {mintCap ?? 0}
+                Minted: {Number(amountMinted) ?? 0} / Limit {Number(mintCap) ?? 0}
               </div>
               <div>
                 <div onClick={() => setOpenModal(true)}>
@@ -88,15 +88,15 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
             </div>
             <Button
               onClick={() => onSubmit()}
-              className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
+              className={`w-full bottom-[-1px] h-[45px] text-[18px] bg-[#61cd81] font-semibold absolute rounded-[20px] ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
               textClassName='text-[#fff]'
               disabled
             >
               {(loader == premiumNft.name) ? (
-                <>
+                <div className='flex justify-center items-center'>
                   <ReactLoading type="spin" className="mr-2 mb-[4px]" width="24px" height="24px" />
                   <span className="font-semibold">Loading</span>
-                </>
+                </div>
               ) : (
                 <span className="font-semibold">Mint</span>
               )}

@@ -1,6 +1,6 @@
 import stringPadder from "./string-padder"
+import { bsc } from "viem/chains"
 import { 
-  MAJOR_WORK_CHAIN,
   LAND_TOKEN_CONTRACT_ADDRESS,
   REALITY_MODULE_ADDRESS,
   MULTISEND_ADDRESS,
@@ -18,7 +18,7 @@ export default function ProposalBuilder(proposalType: string, proposalValues: an
         "safeSnap": {
             "safes": [
               {
-                "network": MAJOR_WORK_CHAIN.id,
+                "network": bsc.id,
                 "realityAddress": REALITY_MODULE_ADDRESS,
                 "txs": [
                   {
@@ -68,7 +68,7 @@ export default function ProposalBuilder(proposalType: string, proposalValues: an
         "safeSnap":{
           "safes":[
               {
-                "network": MAJOR_WORK_CHAIN.id,
+                "network": bsc.id,
                 "realityAddress": REALITY_MODULE_ADDRESS,
                 "txs":[
                   {
@@ -118,7 +118,7 @@ export default function ProposalBuilder(proposalType: string, proposalValues: an
         "safeSnap": {
           "safes": [
             {
-              "network": MAJOR_WORK_CHAIN.id,
+              "network": bsc.id,
               "realityAddress": REALITY_MODULE_ADDRESS,
               "txs": [
                 {
@@ -171,7 +171,7 @@ export default function ProposalBuilder(proposalType: string, proposalValues: an
         "safeSnap": {
           "safes": [
             {
-              "network": MAJOR_WORK_CHAIN.id,
+              "network": bsc.id,
               "realityAddress": REALITY_MODULE_ADDRESS,
               "txs": [
                 {
@@ -250,7 +250,7 @@ export default function ProposalBuilder(proposalType: string, proposalValues: an
         "safeSnap": {
           "safes": [
             {
-              "network": MAJOR_WORK_CHAIN.id,
+              "network": bsc.id,
               "realityAddress": REALITY_MODULE_ADDRESS,
               "txs": [
                 {

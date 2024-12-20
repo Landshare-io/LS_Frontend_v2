@@ -22,7 +22,7 @@ export default function GamePremiumNfts({
   return (
     <>
       {premiumNfts.length > 0 ? (
-        <div className="flex pb-[20px] flex-row overflow-x-scroll mlg:grid mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justigy-between gap-[4rem] my-5">
+        <div className="flex mb-[40px] pb-[50px] flex-row overflow-x-scroll md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between w-full gap-[4rem] mlg:gap-0 my-5">
           {premiumNfts.map((item, index) => (
             <PremiumNft
               key={`premium-item-${index}`}
@@ -31,11 +31,11 @@ export default function GamePremiumNfts({
               onSubmit={() => item.hasNft ? detachPremiumNftHandler(item) : attachePremiumNftHandler(item)}
             />
           ))}
-          <div className="w-[257px] h-[380px] text-center">
-            <h2 className="text-text-primary">Need More Upgrades?</h2>
-            <p className="text-text-secondary">Check Our Marketplace</p>
+          <div className="flex flex-col items-center min-w-[257px] h-[380px] text-center">
+            <h2 className="text-[1.4rem] mt-[35%] text-text-primary">Need More Upgrades?</h2>
+            <p className="text-[0.875rem] mt-[10px] text-text-secondary">Check Our Marketplace</p>
             <Button
-              className={`w-auto px-4 py-2 rounded-md text-[16px] ${BOLD_INTER_TIGHT.className}`}
+              className={`w-auto px-4 py-2 mt-[8px] rounded-[20px] text-[16px] bg-[#6c757d] text-white ${BOLD_INTER_TIGHT.className}`}
               onClick={() => router.push("/marketplace")}
             >
               GO TO MARKETPLACE
@@ -43,12 +43,12 @@ export default function GamePremiumNfts({
           </div>
         </div>
       ) : (
-        <div className="d-flex justify-content-center">
-          <div className="w-[257px] h-[380px] text-center">
-            <h2>Need More Upgrades?</h2>
-            <p>Check Our Marketplace</p>
+        <div className="flex justify-center">
+          <div className="flex flex-col items-center min-w-[257px] h-[380px] text-center">
+            <h2 className="text-[1.4rem] mt-[35%] text-text-primary">Need More Upgrades?</h2>
+            <p className="text-[0.875rem] mt-[10px] text-text-secondary">Check Our Marketplace</p>
             <Button
-              className={`w-auto px-4 py-2 rounded-md text-[16px] ${BOLD_INTER_TIGHT.className}`}
+              className={`w-auto px-4 py-2 mt-[8px] rounded-[20px] text-[16px] bg-[#6c757d] text-white ${BOLD_INTER_TIGHT.className}`}
               onClick={() => router.push("/marketplace")}
             >
               GO TO MARKETPLACE

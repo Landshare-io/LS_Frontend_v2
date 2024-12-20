@@ -7,8 +7,9 @@ interface IconProps {
 
 export const BackIcon = () => {
   const { theme } = useGlobalContext();
-  return (<svg
-    className="back-icon"
+  return (
+  <svg
+    className="w-[12px] h-[12px] sm:w-[16px] sm:h-[16px]"
     viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +25,7 @@ export const NextIcon = () => {
   const { theme } = useGlobalContext();
   return (
     <svg
-      className="back-icon next-icon"
+      className="w-[12px] h-[12px] sm:w-[16px] sm:h-[16px] rotate-180"
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -266,8 +267,8 @@ export const BlackChargeIcon = () => (
 
 export const LogoIcon = () => (
   <svg
-    width="30"
-    height="32"
+    width="48"
+    height="48"
     viewBox="0 0 30 32"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

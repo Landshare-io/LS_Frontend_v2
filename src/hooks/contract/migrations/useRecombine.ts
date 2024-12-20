@@ -14,6 +14,16 @@ import useAddLiquidityETH from "../PCSRouterContract/useAddLiquidityETH";
 import { PSC_ROUTER_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { BigNumberish } from "ethers";
 
+let isSuccessRecombineState = false
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 interface useRecombineProps {
   address: Address | undefined
 }
@@ -23,64 +33,84 @@ export default function useRecombine({
 }: useRecombineProps) {
   const { setScreenLoadingStatus } = useGlobalContext()
   const { isConnected } = useAccount();
-  const [isSuccessRecombine, setIsSuccessRecombine] = useState(false);
+  const [isSuccessRecombine, setIsSuccessRecombine] = useState(isSuccessRecombineState);
   const [LandAmount, setLandAmount] = useState<number | string | BigNumberish>(0)
   const [minGas, setMinGas] = useState<number | string | BigNumberish>(0)
 
   const { data: balanceBNB } = useBalance({ chainId: bsc.id, address }) as { data: BigNumberish }
   const { data: balanceLandV2 } = useBalanceOfLandToken({ chainId: bsc.id, address }) as { data: BigNumberish }
   const { data: landAllowance } = useAllowanceOfLandToken(bsc.id, address, PSC_ROUTER_CONTRACT_ADDRESS) as { data: BigNumberish }
-  const { approve, data: approveTx } = useApproveLandToken()
+  const { approve, data: approveTx, isError: isApproveError } = useApproveLandToken()
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: bsc.id
   });
 
-  const { addLiquidityETH, data: addLiquidityETHTx } = useAddLiquidityETH()
+  const { addLiquidityETH, data: addLiquidityETHTx, isError: isAddLiquidityError } = useAddLiquidityETH()
   const { isSuccess: addLiquiditySuccess, data: addLiquidityStatusData } = useWaitForTransactionReceipt({
     hash: addLiquidityETHTx,
     chainId: bsc.id
   })
 
   useEffect(() => {
-    if (approveTx) {
+    // Subscribe on mount
+    const update = () => {
+      setIsSuccessRecombine(isSuccessRecombineState);
+    };
+    subscribers.add(update);
+
+    // Cleanup on unmount
+    return () => {
+      subscribers.delete(update);
+    };
+  }, []);
+
+  const updateIsSuccessRecombine = (newIsSuccessRecombine: boolean) => {
+    isSuccessRecombineState = newIsSuccessRecombine;
+    notifySubscribers();
+  };
+
+  useEffect(() => {
+    if (isApproveError) {
+      setScreenLoadingStatus("Transaction Failed.")
+    } else if (approveTx) {
       if (approveStatusData) {
         if (approveSuccess) {
           setScreenLoadingStatus("Transaction 2 of 2 Pending...")
           addLiquidityETH(LandAmount, address, minGas)
         } else {
           setScreenLoadingStatus("Transaction Failed")
-          setIsSuccessRecombine(false);
-  
-          return () => {
-            setTimeout(() => {
-              setScreenLoadingStatus("")
-            }, 1000);
-          }
+          updateIsSuccessRecombine(false);
         }
       }
     }
-  }, [approveTx, approveStatusData, approveSuccess])
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
   useEffect(() => {
-    if (addLiquidityETHTx) {
+    if (isAddLiquidityError) {
+      setScreenLoadingStatus("Transaction Failed.")
+    } else if (addLiquidityETHTx) {
       if (addLiquidityStatusData) {
         if (addLiquiditySuccess) {
           setScreenLoadingStatus("Transaction success")
-          setIsSuccessRecombine(true);
+          updateIsSuccessRecombine(true);
         } else {
           setScreenLoadingStatus("Transaction Failed")
-          setIsSuccessRecombine(false);
-        }
-  
-        return () => {
-          setTimeout(() => {
-            setScreenLoadingStatus("")
-          }, 1000);
+          updateIsSuccessRecombine(false);
         }
       }
     }
-  }, [addLiquidityETHTx, addLiquidityStatusData, addLiquiditySuccess])
+    return () => {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 1000);
+    }
+  }, [addLiquidityETHTx, addLiquidityStatusData, addLiquiditySuccess, isAddLiquidityError])
 
   async function recombine(
     amountBNB: string | number | BigNumberish,
@@ -107,10 +137,12 @@ export default function useRecombine({
         }
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
-        setIsSuccessRecombine(false);
-        console.log("Error, withdraw: ", e);
+        updateIsSuccessRecombine(false);
+        setTimeout(() => {
+          setScreenLoadingStatus("")
+        }, 1000);
       }
     }
   }
-  return { recombine, isSuccessRecombine, setIsSuccessRecombine };
+  return { recombine, isSuccessRecombine, setIsSuccessRecombine: updateIsSuccessRecombine };
 }
