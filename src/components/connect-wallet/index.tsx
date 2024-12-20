@@ -6,7 +6,9 @@ import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
 import useLogin from "../../hooks/nft-game/axios/useLogin";
 import { useGlobalContext } from "../../context/GlobalContext";
-import { MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
+
+const NFT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/nft']
 
 const interTight = Inter_Tight({
   weight: "700",
@@ -77,7 +79,7 @@ export default function ConnectWallet({
                   );
                 }
 
-                if (pathname.includes('/nft') && (MAJOR_WORK_CHAIN.map(chains => chains.id) as number[]).includes(chain.id) && !isAuthenticated) {
+                if (pathname.includes('/nft') && (NFT_MAJOR_WORK_CHAIN.map(chains => chains.id) as number[]).includes(chain.id) && !isAuthenticated) {
                   return (
                     <Button 
                       onClick={() => checkIsAuthenticated(account?.address)}

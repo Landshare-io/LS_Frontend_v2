@@ -23,7 +23,7 @@ import {
   BOLD_INTER_TIGHT,
   LP_TOKEN_V2_CONTRACT_ADDRESS,
   MASTERCHEF_CONTRACT_ADDRESS,
-  MAJOR_WORK_CHAIN
+  MAJOR_WORK_CHAINS
 } from "../../config/constants/environments";
 import Union from "../../../public/green-logo.svg";
 import UnionDark from "../../../public/green-logo.svg";
@@ -37,6 +37,8 @@ import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import smallicon from "../../../public/icons/bnb.png";
 import 'react-loading-skeleton/dist/skeleton.css';
 import Tooltip from "../common/tooltip";
+
+const LP_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['lp']
 
 interface LpVaultProps {
   title: string;
@@ -368,28 +370,28 @@ export default function LpVault({
                         <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
-                            if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
+                            if ((LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                               if (inputValue && Number(inputValue) > Number(0)) {
                                 depositing ? isApprovedLP ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
                                 notifyError('Please enter an amount')
                               }
                             } else {
-                              notifyError(`Please switch your chain to ${MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                              notifyError(`Please switch your chain to ${LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
                               // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                             }
                           }}
                           disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                         >
                           {
-                            !(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                            !(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                           }
                         </button>
-                        {(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
+                        {(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
                           <button
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                             onClick={() => withdrawVault(depositBalanceLP, 0)}
-                            disabled={!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
+                            disabled={!(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
                           >
                             Harvest
                           </button>
@@ -455,28 +457,28 @@ export default function LpVault({
                             <button
                               className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                               onClick={() => {
-                                if ((MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
+                                if ((LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     depositing ? isApprovedLP ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                   } else {
                                     notifyError('Please enter an amount')
                                   }
                                 } else {
-                                  notifyError(`Please switch your chain to ${MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                                  notifyError(`Please switch your chain to ${LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
                                   // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                !(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                !(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
-                            {(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
+                            {(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
                               <button
                                 className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => withdrawVault(depositBalanceLP, 0)}
-                                disabled={!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
+                                disabled={!(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)}
                               >
                                 Harvest
                               </button>

@@ -15,7 +15,7 @@ import NftItem from "./nft/nft-item";
 import InputCost from "../common/input-cost";
 import { BigNumberish, formatEther } from "ethers";
 import Button from "../common/button";
-import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAIN } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import useGetHouses from "../../hooks/nft-game/axios/useGetHouses";
 import useBalanceOfAsset from "../../hooks/contract/RWAContract/useBalanceOf";
 import useBalanceOfLand from "../../hooks/contract/LandTokenContract/useBalanceOf";
@@ -33,6 +33,7 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+const NFT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/nft']
 
 export default function InventoryPage() {
 	const chainId = useChainId()
@@ -338,7 +339,7 @@ export default function InventoryPage() {
               ) : (
                 <>
                   {
-                    (MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
+                    (NFT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
                       <>
                         <Topbar isNftList={true} />
                         <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
@@ -599,7 +600,7 @@ export default function InventoryPage() {
                       </>
                     ) : (
                       <div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling] h-[calc(100vh-25rem)]">
-                        Chain not Supported / Switch to BSC
+                        {`Please switch your chain to ${NFT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}
                       </div>
                     )
                   }

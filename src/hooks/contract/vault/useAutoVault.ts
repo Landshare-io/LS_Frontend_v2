@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useWaitForTransactionReceipt, useBalance } from "wagmi";
 import { BigNumberish } from "ethers";
-import { bsc, bscTestnet } from "viem/chains";
+import { bsc } from "viem/chains";
 import { Address, formatEther } from "viem";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useDeposit from "../AutoVaultV3Contract/useDeposit";
@@ -22,15 +22,13 @@ import useWithdraw from "../AutoVaultV3Contract/useWithdraw";
 import useHarvest from "../AutoVaultV3Contract/useHarvest";
 import { 
   PROVIDERS,
-  MAJOR_WORK_CHAIN,
+  AUTO_VAULT_MAIN_CHAINS,
   CCIP_CHAIN_SENDER_CONTRACT_ADDRESS, 
   GAS_COSTS, 
   CCIP_CHAIN_ID, 
   LP_TOKEN_V2_CONTRACT_ADDRESS, 
-  AUTO_VAULT_V3_CONTRACT_ADDRESS,
-  IS_TEST_MODE
+  AUTO_VAULT_V3_CONTRACT_ADDRESS
 } from "../../../config/constants/environments";
-
 
 export default function useAutoVault(chainId: number, address: Address | undefined) {
   const [isCcipDeposit, setIsCcipDeposit] = useState(false)
@@ -187,7 +185,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
               action: transferAction,
               messageId,
               sourceChain: CCIP_CHAIN_ID[chainId],
-              destinationChain: CCIP_CHAIN_ID[bsc.id]
+              destinationChain: CCIP_CHAIN_ID[AUTO_VAULT_MAIN_CHAINS[0].id]
             }))
             setScreenLoadingStatus(`${transferAction} Transaction success`)
           } else {
@@ -278,13 +276,13 @@ export default function useAutoVault(chainId: number, address: Address | undefin
       return
     }
 
-    if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
+    if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
       notifyError('Insufficient Funds for Gas')
       return
     }
 
     
-    if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
+    if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
       if (ccipAllowance < amount) {
         setIsCcipDeposit(true)
         approveLand(chainId, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId], amount)
@@ -300,10 +298,10 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
   const withdrawVault = (amount: BigNumberish) => {
     // check withdraw all
-    if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
+    if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
       setTransferAction('Withdraw All')
       if (amount == 0 || amount == ccipAutoLandV3) {
-        if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
+        if ((!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
           notifyError('Insufficient Funds for Gas')
           return
         }
@@ -318,8 +316,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     }
 
     setTransferAction('Withdraw')
-    if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
-      if (!(MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
+    if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
+      if ((!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
         notifyError('Insufficient Funds for Gas')
         return
       }

@@ -43,7 +43,6 @@ import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import {
   BOLD_INTER_TIGHT,
   RWA_CONTRACT_ADDRESS,
-  MAJOR_WORK_CHAIN,
 } from "../../config/constants/environments";
 import { getDateStringFromTimestamp } from "../../utils/helpers/convert-date";
 import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";

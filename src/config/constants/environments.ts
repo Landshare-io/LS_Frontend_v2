@@ -1,11 +1,25 @@
 import { getDefaultProvider } from "ethers";
-import { bsc, bscTestnet, hardhat } from "wagmi/chains";
+import { arbitrum, bsc, bscTestnet, hardhat, polygon, polygonAmoy, arbitrumSepolia } from "wagmi/chains";
+import { plume, plumeTestnet } from "../extra-chains";
 import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
 import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
 export const IS_TEST_MODE = true
-export const MAJOR_WORK_CHAIN = IS_TEST_MODE ? [bscTestnet, hardhat] : [bsc]
+export const AUTO_VAULT_MAIN_CHAINS = IS_TEST_MODE ? [bscTestnet, hardhat] : [bsc]
+export const MAJOR_WORK_CHAINS = {
+  '/vaults': {
+    auto: IS_TEST_MODE ? [hardhat, bscTestnet, polygonAmoy, arbitrumSepolia] : [bsc, polygon, arbitrum],
+    manual: IS_TEST_MODE ? [hardhat] : [bsc],
+    lp: IS_TEST_MODE ? [hardhat] : [bsc],
+    usdt: IS_TEST_MODE ? [hardhat] : [bsc]
+  },
+  '/nft': IS_TEST_MODE ? [hardhat] : [bsc],
+  '/marketplace': IS_TEST_MODE ? [hardhat] : [bsc],
+  '/rwa': IS_TEST_MODE ? [hardhat, plumeTestnet] : [bsc, plume],
+  '/dao': IS_TEST_MODE ? [hardhat] : [bsc],
+  '/migration': IS_TEST_MODE ? [hardhat] : [bsc]
+}
 export const BOLD_INTER_TIGHT = Inter_Tight({
   weight: "700",
   style: "normal",

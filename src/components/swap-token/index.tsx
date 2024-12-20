@@ -27,7 +27,7 @@ import {
   RWA_POOL_CONTRACT_ADDRESS,
   LAND_TOKEN_CONTRACT_ADDRESS,
   BOLD_INTER_TIGHT,
-  MAJOR_WORK_CHAIN,
+  MAJOR_WORK_CHAINS,
 } from "../../config/constants/environments";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
@@ -49,6 +49,8 @@ import IconInfoGray from "../../../public/icons/info-gray.svg";
 import IconClose from "../../../public/icons/close.svg";
 import "react-loading-skeleton/dist/skeleton.css";
 import Tooltip from "../common/tooltip";
+
+const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 export default function SwapToken() {
   const { isConnected, address } = useAccount();
@@ -682,7 +684,7 @@ export default function SwapToken() {
         )}
         <div className="w-full">
           {isConnected ? (
-            (MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
+            (RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
               <>
                 {isWhitelisted && (
                   <>
