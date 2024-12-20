@@ -9,6 +9,7 @@ export default function useApprove(chainId: number) {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
@@ -25,6 +26,7 @@ export default function useApprove(chainId: number) {
   return {
     approve,
     isPending,
+    isError,
     data
   }
 }

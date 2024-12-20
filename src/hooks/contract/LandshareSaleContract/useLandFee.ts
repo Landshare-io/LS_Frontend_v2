@@ -5,10 +5,10 @@ import { LANDSHARE_SALE_CONTRACT_ADDRESS } from "../../../config/constants/envir
 
 export default function useLandFee(chainId: number) {
   const { data, isError, isLoading, error } = useReadContract({
-    address: LANDSHARE_SALE_CONTRACT_ADDRESS[bsc.id],
+    address: LANDSHARE_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareSaleAbi,
     functionName: "landFee",
-    chainId: bsc.id
+    chainId: chainId
   })
 
   if (isLoading) return false
