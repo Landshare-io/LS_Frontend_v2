@@ -9,6 +9,7 @@ export default function useRemoveLiquidityETH() {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
@@ -25,6 +26,7 @@ export default function useRemoveLiquidityETH() {
   return {
     removeLiquidityETH,
     isPending,
+    isError,
     data
   }
 }

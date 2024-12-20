@@ -9,11 +9,12 @@ export default function useWithdraw() {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
   async function withdraw(amount: BigNumberish) {
-    await writeContract({
+    writeContract({
       address: LAND_TOKEN_STAKE_V3_CONTRACT_ADDRESS,
       abi: LandStakingV3,
       functionName: "withdraw",
@@ -25,6 +26,7 @@ export default function useWithdraw() {
   return {
     withdraw,
     isPending,
+    isError,
     data
   }
 }
