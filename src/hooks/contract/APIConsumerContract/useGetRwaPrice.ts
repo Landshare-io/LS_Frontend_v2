@@ -19,5 +19,5 @@ export default function useGetRwaPrice(chainId: number) {
     return 0
   }
 
-  return chainId == bsc.id ? data : parseUnits((data ?? '0') as string)
+  return chainId == bsc.id ? data : parseUnits((data ?? 0).toString())
 }
