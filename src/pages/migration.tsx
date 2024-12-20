@@ -52,7 +52,7 @@ const Migration: NextPage = () => {
             </div>
           ) : (
             <div>
-              {(MIGRATION_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
+              {!(MIGRATION_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
                 <div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
                   {`Please switch your chain to ${MIGRATION_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}
                 </div>

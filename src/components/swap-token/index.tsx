@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BigNumberish, formatEther } from "ethers";
+import { BigNumberish, formatUnits, formatEther } from "ethers";
 import Image from "next/image";
 import Link from "next/link";
 import Modal from "react-modal";
@@ -626,7 +626,7 @@ export default function SwapToken() {
                   value={
                     buyUSDCAmount == undefined || RWATokenAmount === 0
                       ? ""
-                      : formatEther(buyUSDCAmount.toString())
+                      : formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)
                   }
                 />
                 {isConnected && (
@@ -745,8 +745,9 @@ export default function SwapToken() {
                             )
                           ) > parseFloat(landBalance?.formatted) ||
                           Number(
-                            formatEther(
-                              buyUSDCAmount ? buyUSDCAmount.toString() : 0
+                            formatUnits(
+                              buyUSDCAmount ? buyUSDCAmount.toString() : 0,
+                              chainId == bsc.id ? 18 : 6
                             )
                           ) > parseFloat(USDCBalance?.formatted)
                         }
@@ -760,7 +761,7 @@ export default function SwapToken() {
                           ? Number(formatEther(buyLANDAmount.toString())) >
                             parseFloat(landBalance?.formatted)
                             ? "Insufficient LAND Balance"
-                            : Number(formatEther(buyUSDCAmount.toString())) >
+                            : Number(formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)) >
                               parseFloat(USDCBalance?.formatted)
                             ? "Insufficient USDC Balance"
                             : buyOrSell

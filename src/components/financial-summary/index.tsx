@@ -459,8 +459,8 @@ export default function FinancialSummary() {
                     <Skeleton className="rounded-lg" width={100} height={18} />
                   ) : (
                     Number(
-                      BigInt(rwaValue) -
-                        BigInt(totalRWATokenBalanceOfReserveWallets)
+                      BigInt(rwaValue ?? 0) -
+                        BigInt(totalRWATokenBalanceOfReserveWallets ?? 0)
                     ).toLocaleString()
                   )}
                 </div>

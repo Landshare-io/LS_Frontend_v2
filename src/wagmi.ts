@@ -47,7 +47,3 @@ export const config = getDefaultConfig({
     } : {} as Record<number, typeof http>),
   },
 });
-
-export const supportChainIds = [
-  bsc.id, polygon.id, arbitrum.id, plume.id, ...(IS_TEST_MODE ? [bscTestnet.id, sepolia.id, polygonAmoy.id, plumeTestnet.id, hardhat.id] : []),
-]
