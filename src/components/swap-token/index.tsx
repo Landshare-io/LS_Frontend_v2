@@ -116,7 +116,7 @@ export default function SwapToken() {
   const secondaryLimit = useGetAllowedToTransfer(chainId, address);
   const isWhitelisted = useIsWhitelistedAddressOfRwa(chainId, address);
   const landFee = useLandFee(chainId) as number;
-  const rwaPrice = useGetRwaPrice(chainId);
+  const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
   const { allTokens } = useGetAllTokens();
   const landFeeAmount = useGetLandFee(chainId, usdcAmount) as number;
 
@@ -135,7 +135,7 @@ export default function SwapToken() {
   ) as any;
 
   useEffect(() => {
-    setUsdcAmount(Number(rwaPrice ?? 0) * RWATokenAmount);
+    setUsdcAmount(Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount);
     setBuyLANDAmount(buyTokenAmount[1])
     setBuyUSDCAmount(buyTokenAmount[0])
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
@@ -398,7 +398,7 @@ export default function SwapToken() {
                     {rwaPrice == undefined || isConnected === false
                       ? "0"
                       : `${parseFloat(balance?.formatted)} ($${(
-                          Number((rwaPrice ?? 0)) *
+                          Number(formatEther(rwaPrice ?? 0)) *
                           parseFloat(balance?.formatted)
                         ).toLocaleString(undefined, {
                           minimumFractionDigits: 2,
@@ -455,7 +455,7 @@ export default function SwapToken() {
                     $
                     {rwaPrice == 0
                       ? "Loading..."
-                      : Number((rwaPrice ?? 0)).toLocaleString(
+                      : Number(formatEther(rwaPrice ?? 0)).toLocaleString(
                           undefined,
                           { minimumFractionDigits: 4 }
                         )}
@@ -579,7 +579,7 @@ export default function SwapToken() {
                       {rwaPrice == undefined
                         ? "0"
                         : `${parseFloat(balance?.formatted)} ($${(
-                            Number((rwaPrice ?? 0)) *
+                            Number(formatEther(rwaPrice ?? 0)) *
                             parseFloat(balance?.formatted)
                           ).toLocaleString(undefined, {
                             minimumFractionDigits: 2,

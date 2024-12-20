@@ -1,5 +1,5 @@
 import { useReadContract } from "wagmi";
-import { BigNumberish, formatEther } from "ethers";
+import { parseUnits } from "ethers";
 import { bsc } from "viem/chains";
 import APIConsumerAbi from "../../../abis/APIConsumer.json";
 import LandshareBuySaleAbi from "../../../abis/LandshareBuySale.json"
@@ -19,5 +19,5 @@ export default function useGetRwaPrice(chainId: number) {
     return 0
   }
 
-  return chainId == bsc.id ? formatEther((data) as BigNumberish) : data
+  return chainId == bsc.id ? data : parseUnits((data ?? '0') as string)
 }
