@@ -49,7 +49,6 @@ import IconInfoGray from "../../../public/icons/info-gray.svg";
 import IconClose from "../../../public/icons/close.svg";
 import "react-loading-skeleton/dist/skeleton.css";
 import Tooltip from "../common/tooltip";
-import KYCModal from "../common/modals/kyc";
 
 const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
@@ -1082,12 +1081,6 @@ export default function SwapToken() {
         isOpen={isSwipeluxModalOpen}
         setIsOpen={setIsSwipeluxModalOpen}
       />
-      
-      <KYCModal 
-        iskycmodal = {iskycmodal}
-        setKycopen = {setKycopen}
-        isZeroIDModal = {isZeroIDModal}
-        setZeroIDModalOpen = {setZeroIDModalOpen}/>
     </div>
   );
 }
