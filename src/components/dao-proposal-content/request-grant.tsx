@@ -50,7 +50,7 @@ export default function RequestGrant({
         <Input
           proposal={"Request Grant"}
           label={labelInput()}
-          max={balance}
+          max={formatEther(BigInt(balance))}
           labelClassName="w-full"
           value={grantAmount}
           setValue={setGrantAmount}
