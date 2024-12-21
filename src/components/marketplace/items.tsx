@@ -60,7 +60,7 @@ export default function MarketplaceItems({
             <ReactPaginate
               previousLabel={<PrevLabelIconMarketPlaceIcon />}
               nextLabel={<NextLabelIconMarketPlaceIcon />}
-              containerClassName={"flex gap-5 items-center"}
+              containerClassName={"text-text-primary flex gap-5 items-center"}
               activeClassName={"text-green-600 font-bold"}
               breakLabel="..."
               onPageChange={handlePageClick}
