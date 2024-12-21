@@ -23,7 +23,7 @@ export default function ReferralOverview() {
       try {
         if (address) {
           const total_conversions = await Fuul.getPayoutsLeaderboard({
-            currency_address :  USDC_ADDRESS[chainId],
+            currency_address: USDC_ADDRESS[chainId],
             user_address: address,
             from: current_epoch?.start_date
               ? new Date(current_epoch.start_date)
@@ -34,11 +34,13 @@ export default function ReferralOverview() {
             user_type: "affiliate",
             fields: "referred_volume",
           });
-          
+
           let totalPurchaseAmountSum = 0;
 
-          total_conversions.results.forEach((result, index)=> {
-            totalPurchaseAmountSum += result?.referred_volume ? Number(result.referred_volume) / Math.pow(10, 12) : 0;
+          total_conversions.results.forEach((result, index) => {
+            totalPurchaseAmountSum += result?.referred_volume
+              ? Number(result.referred_volume) / Math.pow(10, 12)
+              : 0;
           });
 
           setPurchaseVolume(Number(totalPurchaseAmountSum.toFixed(2)));
@@ -56,20 +58,24 @@ export default function ReferralOverview() {
       try {
         const { results: conversions } = await Fuul.getUserPayoutsByConversion({
           user_address: address ?? "",
-          from: current_epoch?.start_date ? new Date(current_epoch.start_date) : new Date(),
-          to: current_epoch?.end_date ? new Date(current_epoch.end_date) : new Date(),
+          from: current_epoch?.start_date
+            ? new Date(current_epoch.start_date)
+            : new Date(),
+          to: current_epoch?.end_date
+            ? new Date(current_epoch.end_date)
+            : new Date(),
         });
 
         let pendingCount = 0;
         let approvedCount = 0;
 
         conversions.map((conversion) => {
-          if(conversion.conversion_name === "Purchase"){
+          if (conversion.conversion_name === "Purchase") {
             pendingCount++;
-          }else if(conversion.conversion_name === "Purchase and hold") {
+          } else if (conversion.conversion_name === "Purchase and hold") {
             approvedCount++;
           }
-        })
+        });
 
         setPendingInvites(pendingCount);
         setApprovedInvites(approvedCount <= 5 ? approvedCount : 5);
@@ -88,12 +94,16 @@ export default function ReferralOverview() {
     const fetchData = async () => {
       try {
         const res = await Fuul.getPayoutsLeaderboard({
-          currency_address :  USDC_ADDRESS[chainId],
-          user_address : address,
-          user_type : 'affiliate',
-          fields: 'referred_volume,referred_users',
-          from: current_epoch?.start_date ? new Date(current_epoch.start_date) : undefined,
-          to: current_epoch?.end_date ? new Date(current_epoch.end_date) : undefined,
+          currency_address: USDC_ADDRESS[chainId],
+          user_address: address,
+          user_type: "affiliate",
+          fields: "referred_volume,referred_users",
+          from: current_epoch?.start_date
+            ? new Date(current_epoch.start_date)
+            : undefined,
+          to: current_epoch?.end_date
+            ? new Date(current_epoch.end_date)
+            : undefined,
         });
 
         const formattedData = res?.results?.map((item: any) => ({
@@ -124,9 +134,7 @@ export default function ReferralOverview() {
         <div className="flex justify-between">
           <div>
             <div className="text-sm text-text-secondary font-normal flex gap-1">
-              <p>
-                Pending invites 
-              </p>
+              <p>Pending Invites</p>
               <Tooltip content="These are users you’ve referred who bought at least 50 LSRWA tokens but haven’t yet completed the 30-day holding period.">
                 <span className="text-[#61CD81] cursor-default">ⓘ</span>
               </Tooltip>
@@ -152,7 +160,10 @@ export default function ReferralOverview() {
           <div>
             <div className="text-sm text-text-secondary font-normal">
               Purchase Volume
-              <Tooltip position="bottom" content="Total purchases made by referred users. Only approved referrals who have completed the 30-day hold period are included here.">
+              <Tooltip
+                position="bottom"
+                content="Total purchases made by referred users. Only approved referrals who have completed the 30-day hold period are included here."
+              >
                 <span className="ms-1 text-[#61CD81] cursor-default">ⓘ</span>
               </Tooltip>
             </div>
@@ -167,7 +178,9 @@ export default function ReferralOverview() {
             </p>
 
             <p className="font-bold text-lg text-text-primary">
-              {myLeaderboard ? myLeaderboard[1]?.rank : "N/A"}
+              {myLeaderboard && myLeaderboard[1]?.rank
+                ? myLeaderboard[1]?.rank
+                : "N/A"}
             </p>
           </div>
         </div>
@@ -181,7 +194,9 @@ export default function ReferralOverview() {
             {remainingInvitations} invites remaining
           </p>
           <Slider percentage={approvedInvites * 20} />
-          <p className="text-text-secondary text-sm">{approvedInvites * 20}% completed</p>
+          <p className="text-text-secondary text-sm">
+            {approvedInvites * 20}% completed
+          </p>
         </div>
         <div className="flex flex-col">
           <p className="text-text-secondary text-base">Earn Bonus</p>

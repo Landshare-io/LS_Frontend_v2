@@ -6,29 +6,31 @@ import { FaCheck } from "react-icons/fa";
 import ReferralCustomizeModal from "../referral-customize";
 import { Fuul } from "@fuul/sdk";
 import { useAccount } from "wagmi";
-import { signMessage } from '@wagmi/core';
+import { signMessage } from "@wagmi/core";
 import { config } from "../../wagmi";
 
 export default function ReferralOthers() {
   const { theme } = useGlobalContext();
-  const {address} = useAccount();
+  const { address } = useAccount();
   const [showCheck, setShowCheck] = useState(false);
   const [showCustomizeModal, setShowCustomizeModal] = useState<boolean>(false);
   const [trackingLinkUrl, setTrackingLinkUrl] = useState<string>("");
 
   const handleGenerateCode = async () => {
     try {
-      if(address){
+      if (address) {
         const affiliateCode = await Fuul.getAffiliateCode(address);
 
-        if(!affiliateCode){
-          const signature = await signMessage(config, { message: `I confirm that I am creating the ${address} code on Fuul` });
+        if (!affiliateCode) {
+          const signature = await signMessage(config, {
+            message: `I confirm that I am creating the ${address} code on Fuul`,
+          });
 
           await Fuul.createAffiliateCode({
             address: address ?? "",
             code: address ?? "",
             signature: signature,
-          })
+          });
         }
 
         const code = await Fuul.getAffiliateCode(address);
@@ -37,15 +39,13 @@ export default function ReferralOthers() {
           `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
           code ?? ""
         );
-        
+
         setTrackingLinkUrl(link);
       }
-      
     } catch (error) {
       console.error("Error generating tracking link:", error);
     }
-  }
-  
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(trackingLinkUrl);
@@ -61,20 +61,21 @@ export default function ReferralOthers() {
     <div className="w-full flex flex-col bg-third  rounded-2xl p-6 h-fit gap-4 sm:gap-8 shadow-lg">
       <div className="w-full flex justify-between items-center">
         <p className="font-bold text-lg text-text-primary">Refer Others</p>
-        {address && trackingLinkUrl ?
+        {address && trackingLinkUrl ? (
           <p
-              className="text-sm cursor-pointer text-text-primary"
-              onClick={handleOpenModal}
-            >
+            className="text-sm cursor-pointer text-text-primary"
+            onClick={handleOpenModal}
+          >
             Customize
-          </p>: 
+          </p>
+        ) : (
           <p
             className="text-sm cursor-pointer text-text-primary"
             onClick={handleGenerateCode}
           >
             Generate
           </p>
-          }
+        )}
       </div>
 
       <ConnectButton.Custom>
@@ -108,29 +109,26 @@ export default function ReferralOthers() {
 
                 if (!chain.unsupported && connected) {
                   return (
-                    <div className="w-full flex justify-between items-center p-2 gap-4 rounded-lg bg-gray-500 bg-opacity-10">
-                      {trackingLinkUrl ? 
-                      <div className="truncate break-words text-text-primary px-2">
-                        {trackingLinkUrl}
-                      </div> : 
-                      <div className="truncate break-words text-text-secondary px-2">
-                        Your referral link will appear here...
-                      </div>}
-                    
+                    <div className="w-full flex justify-between items-center p-2 gap-4 rounded-lg bg-gray-400 bg-opacity-10">
+                      {trackingLinkUrl ? (
+                        <div className="truncate break-words text-text-primary px-2">
+                          {trackingLinkUrl}
+                        </div>
+                      ) : (
+                        <div className="truncate break-words text-primary-green px-2">
+                          Your referral link will appear here...
+                        </div>
+                      )}
 
                       <div>
                         {showCheck ? (
                           <FaCheck
-                            className={`cursor-pointer ${
-                              theme === `dark` ? "text-white" : ""
-                            }`}
+                            className={`cursor-pointer text-primary-green transition-opacity`}
                           />
                         ) : (
                           <IoCopy
                             onClick={handleCopy}
-                            className={`cursor-pointer ${
-                              theme === `dark` ? "text-white" : ""
-                            }`}
+                            className={`cursor-pointer text-primary-green transition-opacity`}
                           />
                         )}
                       </div>
