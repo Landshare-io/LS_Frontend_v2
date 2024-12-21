@@ -37,11 +37,11 @@ export default function MarketplaceItems({
       ): 
       <div>
         {currentItems.length > 0 ? (
-          <div className="flex flex-row flex-nowrap overflow-auto md:grid md:grid-cols-3 lg:grid-cols-4 px-1 pb-5 last:m-0">
+          <div className="flex flex-row overflow-auto md:grid md:grid-cols-3 lg:grid-cols-4 px-1 pb-5 last:m-0">
             {currentItems.map((product, index) => (
               <div
                 key={`nft-house-item-${index}`}
-                className="w-[251px] m-[20px]"
+                className="min-w-[251px] m-[20px]"
               >
                 <MarketplaceItem
                   product={product}
