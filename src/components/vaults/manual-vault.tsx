@@ -76,7 +76,7 @@ export default function ManualVault({
   const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const { price: tokenPriceUsd } = useGetLandPrice()
-  const isVaultsLoading = totalStakedLoading || userInfoLoading || pendingLandLoading
+  const isVaultsLoading = false // totalStakedLoading || userInfoLoading || pendingLandLoading
 
   function handlePercents(percent: number) {
     if (landBalance == 0) {
@@ -410,13 +410,12 @@ export default function ManualVault({
                                   }
                                 } else {
                                   notifyError(`Please switch your chain to ${MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
-                                  // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                !(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                !(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch your network' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
                             {(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (

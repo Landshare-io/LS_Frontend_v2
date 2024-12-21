@@ -852,7 +852,7 @@ export default function SwapToken() {
                   </span>
                 </div>
                 <span className="text-text-secondary">
-                  Please swtich your network to the BSC.
+                  {`Please switch your chain to ${RWA_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}
                 </span>
               </div>
             )

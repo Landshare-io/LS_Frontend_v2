@@ -83,9 +83,6 @@ export default function DAO() {
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
-      {/* {chain?.unsupported && (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
-        Chain not Supported / Switch to BSC
-      </div>)} */}
       {initialLoad ? (
         <div className="flex w-full min-h-[70vh] h-full items-center justify-center bg-primary">
           <ReactLoading type="bars" color="#61cd81" />

@@ -162,8 +162,8 @@ const StakingPage: NextPage = () => {
         </div>
       </div>
       <div className="bg-primary">
-        {isConnected && !(VAULT_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) && (<div className="flex flex-col justify-center items-center text-center py-5 min-h-[60vh] text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
-          Chain not Supported
+        {isConnected && !(VAULT_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) && (<div className="flex flex-col justify-center items-center text-center py-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
+          {`Please switch your chain to ${VAULT_MAJOR_CHAINS.map(chain => chain.name).join(', ')}`}
         </div>)}
       </div>
       <div className="bg-primary py-[20px] px-[20px] md:px-[40px] lg:px-[120px] pt-0 pb-20 lg:pb-40">
