@@ -17,7 +17,7 @@ const Nft: NextPage = () => {
   }, [address])
 
   return (
-    <div>
+    <div className='bg-primary'>
       {!(NFT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
         <div className="min-h-[600px] flex flex-col justify-center items-center text-center mt-10 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
           {`Please switch your chain to ${NFT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}

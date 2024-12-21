@@ -57,7 +57,7 @@ export default function HomeRwaAssetsSummary() {
             </h1>
           </div>
           <div className="flex flex-col mlg:flex-row w-full lg:gap-x-0 xl:gap-x-[64px] gap-y-[32px]">
-            <div className="flex flex-col flex-1 px-[10px] md:px-[40px] lg:px-0 flex-1">
+            <div className="flex flex-col flex-1 px-[10px] md:px-[40px] lg:px-0">
               <div className="flex items-center gap-[12px] mb-[24px]">
                 <ToggleButton
                   onClick={() => setSelectedGraph('rwa')}
@@ -113,7 +113,7 @@ export default function HomeRwaAssetsSummary() {
             </div>
           </div>
           <div className="flex md:hidden gap-[24px] mt-[12px] w-full pr-0 lg:pr-[450px] overflow-hidden">
-            <div className="w-full mt-0 md:w-[430px] md:mt-[56px] md:overflow-visible md:p-[20px]">
+            <div className="w-full mt-0 md:w-[430px] md:mt-[56px] md:overflow-visible p-[20px]">
               <div className="flex items-center justify-center">
                 <Carousel
                   activeIndex={activeIndex}
@@ -157,7 +157,7 @@ export default function HomeRwaAssetsSummary() {
                 setActiveIndex={setActiveIndex}
                 count={3}
                 paused={paused}
-                carouselControlClass="px-[10px] md:px-[40px] mb-[20px]"
+                carouselControlClass="px-[10px] md:px-[40px] my-[20px]"
               />
             </div>
           </div>

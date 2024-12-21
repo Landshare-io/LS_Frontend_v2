@@ -308,7 +308,6 @@ export const PrevLabelIconMarketPlaceIcon = () => (
     viewBox="0 0 20 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    style={{ transform: 'rotate(180deg)' }}
   >
     <path
       opacity="0.8"

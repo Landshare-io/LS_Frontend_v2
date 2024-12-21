@@ -20,11 +20,12 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const router = useRouter();
   const { pathname } = router;
-  const isFooterNotVisible = NOT_VISIBLE_FOOTER_PAGES.map((notAllowedPath: string) =>
-    pathname.startsWith(notAllowedPath)
+  let isFooterNotVisible = false
+  NOT_VISIBLE_FOOTER_PAGES.map((notAllowedPath: string) =>
+    isFooterNotVisible ||= pathname.startsWith(notAllowedPath)
   );
 
-  if (isFooterNotVisible[0]) return null;
+  if (isFooterNotVisible) return null;
 
   function getSPKey(type: string, SPdata: any) {
     const accessData = {
@@ -165,7 +166,7 @@ export default function Footer() {
                   About Us
                 </a>
                 <a
-                  href="https://landshare.io/faqs"
+                  href="https://landshare.io/faq"
                   className="font-normaml text-[14px] leading-[22px]"
                 >
                   FAQ

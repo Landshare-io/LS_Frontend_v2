@@ -49,6 +49,7 @@ import arbitrumIcon from "../../../public/icons/arbitrum.svg";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import quickSwap from "../../../public/icons/quickswap-logo.svg"
 import smallicon from "../../../public/icons/rotate-black.svg"
+import smallicondark from "../../../public/icons/rotate-dark.svg"
 import Tooltip from "../common/tooltip";
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -282,7 +283,7 @@ export default function AutoVault({
                 <div className="hidden">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
                     <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px]" alt="token pair" />
-                    <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px]" alt="" />
+                    <Image src={theme == 'dark' ? smallicondark : smallicon} className="border-primary border-[6px] rounded-[1000px]" alt="" />
                   </div>
                   <div className={`text-[16px] leading-[28px] overflow-hidden text-ellipsis shrink-1 text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                     {title}
@@ -312,14 +313,14 @@ export default function AutoVault({
                   </button>
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                  <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
+                  <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] relative">
                     <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px] w-[90px] h-[90px] absolute left-0 top-0" alt="token pair" />
-                    <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-white" alt="" />
+                    <Image src={theme == 'dark' ? smallicondark : smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-secondary" alt="" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`cursor-pointer w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                       {title}
-                      <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px]  text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
+                      <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                         <Image src={details ? up : down} alt="" />
                       </button>
                     </div>
