@@ -73,7 +73,7 @@ export default function Input({
           className={`w-full border-[1px] border-[#e1e1e1] rounded-[12px] py-[5px] px-[10px] text-[14px] text-[#000] focus:border-[#cdcdcd] outline-0 ${error == "" ? "" : "border-[#d45050]"}`}
           value={value}
           onChange={handleChangeValue}
-          step={".01"}
+          // step={".01"}
         />
         {error != "" && <div className="absolute left-0 botton-[-15px] text-[11px] text-[#d45050]">{error}</div>}
         {max != null && (

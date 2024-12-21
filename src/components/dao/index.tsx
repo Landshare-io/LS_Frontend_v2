@@ -38,7 +38,7 @@ export default function DAO() {
   const { notifyError } = useGlobalContext();
   const chainId = useChainId()
   const { address } = useAccount();
-  const [isCreating, setIsCreating] = useState(false);
+  const [isCreating, setIsCreating] = useState(true);
   const [isViewAll, setIsViewAll] = useState(false);
   const [refreshCount, setRefreshCount] = useState(0);
   const [initialLoad, setInitialLoad] = useState(true);

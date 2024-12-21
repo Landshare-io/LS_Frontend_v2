@@ -21,7 +21,7 @@ export default function stringPadder(input: string, proposalType: string): strin
   } else if (proposalType === "Change Vault Allocation") {
     output = BigInt(input);
   } else {
-    output = input !== "" ? BigInt(parseEther(input).toString()) : BigInt(0);
+    output = input !== "" ? BigInt(parseEther(input.toString()).toString()) : BigInt(0);
   }
 
   let hexOutput = hexlify(bigintToUint8Array(output)).slice(2);
