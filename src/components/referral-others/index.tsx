@@ -8,6 +8,7 @@ import { Fuul } from "@fuul/sdk";
 import { useAccount } from "wagmi";
 import { signMessage } from "@wagmi/core";
 import { config } from "../../wagmi";
+import Button from "../common/button";
 
 export default function ReferralOthers() {
   const { theme } = useGlobalContext();
@@ -69,12 +70,13 @@ export default function ReferralOthers() {
             Customize
           </p>
         ) : (
-          <p
-            className="text-sm cursor-pointer text-text-primary"
+          <Button
+            className={`w-fit h-[44px] px-8 text-[#fff] rounded-[100px] bg-[#61cd81]`}
+            textClassName="hover:dark:text-[#61CD81] text-[100%]"
             onClick={handleGenerateCode}
           >
             Generate
-          </p>
+          </Button>
         )}
       </div>
 

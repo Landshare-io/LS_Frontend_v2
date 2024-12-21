@@ -6,6 +6,7 @@ import { HiIdentification } from "react-icons/hi2";
 import { IoLink, IoPersonAdd } from "react-icons/io5";
 import { MdArrowOutward } from "react-icons/md";
 import KYCModal from "../common/modals/kyc";
+import Button from "../common/button";
 
 export default function ReferralParticipate() {
   const router = useRouter();
@@ -55,14 +56,15 @@ export default function ReferralParticipate() {
             LSRWA security tokens.
           </p>
 
-          <button
-            className="w-fit bg-[#61CD81] px-6 py-[13px] rounded-[100px] text-white"
+          <Button
+            className={`w-fit h-[44px] px-8 text-[#fff] rounded-[100px] bg-[#61cd81]`}
+            textClassName="hover:dark:text-[#61CD81] text-[100%]"
             onClick={() => {
               setKycopen(true);
             }}
           >
             Verify now
-          </button>
+          </Button>
         </div>
 
         {/*md+ right section */}
@@ -92,14 +94,15 @@ export default function ReferralParticipate() {
             LSRWA security tokens.
           </p>
 
-          <button
-            className="w-fit bg-[#61CD81] px-6 py-[13px] rounded-[100px] text-white"
+          <Button
+            className={`w-fit h-[44px] px-8 text-[#fff] rounded-[100px] bg-[#61cd81]`}
+            textClassName="hover:dark:text-[#61CD81] text-[100%]"
             onClick={() => {
               setKycopen(true);
             }}
           >
             Verify now
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -136,12 +139,13 @@ export default function ReferralParticipate() {
           </div>
         </div>
         <div className="flex items-center gap-6">
-          <button
+          <Button
+            className={`min-w-fit h-[44px] px-8 text-[#fff] rounded-[100px] bg-[#61cd81]`}
+            textClassName="hover:dark:text-[#61CD81] text-[100%]"
             onClick={() => router.push("rwa")}
-            className="bg-[#61CD81] px-6 py-[13px] rounded-[100px] text-white"
           >
             Buy LSRWA
-          </button>
+          </Button>
 
           <a
             href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa"

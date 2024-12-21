@@ -250,7 +250,12 @@ export default function ReferralLeaderBoard() {
       <div className="w-full flex justify-between items-center">
         {myRank > 0 && (
           <div className="flex-1 text-text-primary font-bold text-base">
-            Your rank: <span>{myRank}</span>
+            Your rank:{" "}
+            <span>
+              {myLeaderboard && myLeaderboard[1]?.rank
+                ? myLeaderboard[1]?.rank
+                : "N/A"}
+            </span>
           </div>
         )}
         {leaderboardData && leaderboardData?.length > 10 ? (
