@@ -124,7 +124,7 @@ export default function Facility({
 
   return (
     <>
-      <div className="flex flex-col max-w-[300px] overflow-hidden rounded-[15px] animate-[fadeIn] duration-300">
+      <div className="m-auto flex flex-col max-w-[300px] overflow-hidden rounded-[15px] animate-[fadeIn] duration-300">
         <div className="flex items-center justify-between py-[11px] px-[16px] bg-[#162246]">
           <span className="text-[16px] font-semibold leading-[24px] text-[#ffffff]">{facilities[type].currentFacility?.name || facilities[type].nextFacility?.name}</span>
           {facilities[type].currentFacility?.level ? (
@@ -185,7 +185,7 @@ export default function Facility({
           </div>
         </div>
       </div>
-      <div className="text-center w-[300px]">
+      <div className="text-center w-full">
         {facilities[type].currentFacility?.level ? (
           facilities[type].currentFacility?.level > facilities[type].maxLevel ? (
             <span className="mt-[9px] text-[#8f8f8f] text-[18px] font-semibold">

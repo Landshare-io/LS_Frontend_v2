@@ -9,6 +9,7 @@ export default function useWithdraw() {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
@@ -25,6 +26,7 @@ export default function useWithdraw() {
   return {
     withdraw,
     isPending,
+    isError,
     data
   }
 }

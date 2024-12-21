@@ -37,11 +37,11 @@ export default function MarketplaceItems({
       ): 
       <div>
         {currentItems.length > 0 ? (
-          <div className="flex flex-row overflow-x-auto pb-[20px] pb-5 last:m-0">
+          <div className="flex flex-row overflow-auto md:grid md:grid-cols-3 lg:grid-cols-4 px-1 pb-5 last:m-0">
             {currentItems.map((product, index) => (
               <div
                 key={`nft-house-item-${index}`}
-                className="w-[251px] mr-[20px]"
+                className="min-w-[251px] m-[20px]"
               >
                 <MarketplaceItem
                   product={product}
@@ -56,12 +56,12 @@ export default function MarketplaceItems({
           </div>
         }
         {pageCount > 1 && (
-          <div className="flex justify-center mb-5">
+          <div className="flex justify-center mt-[20px] mb-[100px] md:mt-0 md:mb-5">
             <ReactPaginate
               previousLabel={<PrevLabelIconMarketPlaceIcon />}
               nextLabel={<NextLabelIconMarketPlaceIcon />}
-              containerClassName={"pagination"}
-              activeClassName={"active"}
+              containerClassName={"text-text-primary flex gap-5 items-center"}
+              activeClassName={"text-green-600 font-bold"}
               breakLabel="..."
               onPageChange={handlePageClick}
               marginPagesDisplayed={1}

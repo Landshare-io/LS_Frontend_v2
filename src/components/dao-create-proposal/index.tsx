@@ -91,7 +91,7 @@ export default function DaoCreateProposal({
 
   return (
     <div>
-      <div className="flex flex-col mlg:flex-row w-full h-full fixed z-[101] top-0 left-0 overflow-hidden bg-[#00000080] backdrop-blur-sm">
+      <div className="flex flex-col mlg:flex-row w-full h-full fixed z-[100] top-0 left-0 overflow-hidden bg-[#00000080] backdrop-blur-sm">
         <div className="fixed z-[3] top-[50%] left-[50%] w-[calc(100vw-20px)] h-[85vh] md:w-[400px] md:h-[515px] border-[1px] border-[#fff] rounded-[10px] p-[20px] flex-col translate-x-[-50%] translate-y-[-50%] bg-secondary">
           <Image src={closeIcon} alt="close icon" onClick={() => close()} className="absolute top-[10px] right-[10px] w-[20px] hover:scale-x-110 hover:scale-y-110 hover:duration-300 hover:cursor-pointer" />
           <h1 className={`text-[28px] leading-[42px] mb-[2px] tracking-normal capitalize text-text-primary ${BOLD_INTER_TIGHT.className}`}>Create Proposal</h1>

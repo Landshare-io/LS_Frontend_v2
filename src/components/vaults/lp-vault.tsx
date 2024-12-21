@@ -384,7 +384,7 @@ export default function LpVault({
                           disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                         >
                           {
-                            !(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                            !(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch your network' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                           }
                         </button>
                         {(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (
@@ -471,7 +471,7 @@ export default function LpVault({
                               disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                !(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                !(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch your network' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLP ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
                             {(LP_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (

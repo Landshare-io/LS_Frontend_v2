@@ -16,7 +16,7 @@ export default function Faq({
     <div className="border-b border-gray-300 py-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full text-left flex justify-between items-center py-2 text-lg font-medium text-gray-800 focus:outline-none"
+        className="w-full text-left flex justify-between items-center py-2 text-lg font-medium text-text-secondary focus:outline-none"
       >
         <span>{question}</span>
         <div className={`${isOpen ? 'transform rotate-180' : ''} transition-transform duration-200`}>
@@ -24,7 +24,7 @@ export default function Faq({
         </div>
       </button>
       <div
-        className={`mt-2 text-gray-600 text-sm transition-max-height duration-300 ease-in-out ${
+        className={`mt-2 text-text-third text-sm transition-max-height duration-300 ease-in-out ${
           isOpen ? 'max-h-screen' : 'max-h-0 overflow-hidden'
         }`}
       >

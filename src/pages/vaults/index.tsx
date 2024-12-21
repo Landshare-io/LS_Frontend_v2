@@ -14,7 +14,6 @@ import AutoVault from "../../components/vaults/auto-vault";
 import LPVault from "../../components/vaults/lp-vault";
 import Usdtvault from "../../components/vaults/usdt-vault";
 import { useGlobalContext } from "../../context/GlobalContext";
-import { supportChainIds } from "../../wagmi";
 import useGetPrice from "../../hooks/get-apy/useGetPrice";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import coinStack from "../../../public/icons/coin-stacked.svg"
@@ -26,7 +25,7 @@ import CloseIcon from "../../../public/icons/close.svg";
 import CloseIconDark from "../../../public/icons/close-dark.svg";
 import leftRight from "../../../public/icons/left-right.svg";
 import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
-import { AUTO_VAULT_MAIN_CHAINS } from "../../config/constants/environments";
+import { AUTO_VAULT_MAIN_CHAINS, MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -40,6 +39,8 @@ const breadcrumbItems = [
     url: '/vaults'
   }
 ]
+
+const VAULT_MAJOR_CHAINS = MAJOR_WORK_CHAINS['/vaults']['auto']
 
 const StakingPage: NextPage = () => {
   const { theme } = useGlobalContext();
@@ -161,8 +162,8 @@ const StakingPage: NextPage = () => {
         </div>
       </div>
       <div className="bg-primary">
-        {isConnected && !supportChainIds.includes(chainId) && (<div className="flex flex-col justify-center items-center text-center py-5 mx-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
-          Chain not Supported
+        {isConnected && !(VAULT_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) && (<div className="flex flex-col justify-center items-center text-center py-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
+          {`Please switch your chain to ${VAULT_MAJOR_CHAINS.map(chain => chain.name).join(', ')}`}
         </div>)}
       </div>
       <div className="bg-primary py-[20px] px-[20px] md:px-[40px] lg:px-[120px] pt-0 pb-20 lg:pb-40">
@@ -337,11 +338,11 @@ const StakingPage: NextPage = () => {
             </div>
             <div className="flex flex-col items-start p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
               <span>Staked for</span>
-              <div className="flex items-start p-0 gap-[4px] w-full rounded-[100px] bg-primary">
+              <div className="flex p-0 w-full rounded-[100px] bg-primary">
                 <button
                   className={timeframe === "1d" ? 
-                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
-                   : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                    "flex justify-center items-center py-[5px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                   : "flex justify-center items-center py-[5px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
                   onClick={() => {
                     setTimeframe("1d")
                     setRewardPercent(Number(numeral(showModalApy / 365).format('0.[00000]')))
@@ -351,8 +352,8 @@ const StakingPage: NextPage = () => {
                 </button>
                 <button
                   className={timeframe === "7d" ? 
-                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]" 
-                   : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                    "flex justify-center items-center py-[5px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]" 
+                   : "flex justify-center items-center py-[5px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
                   onClick={() => {
                     setTimeframe("7d")
                     setRewardPercent(Number(numeral(showModalApy / 365 * 7).format('0.[00000]')))
@@ -362,8 +363,8 @@ const StakingPage: NextPage = () => {
                 </button>
                 <button
                   className={timeframe === "30d" ? 
-                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
-                   : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                    "flex justify-center items-center py-[5px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                   : "flex justify-center items-center py-[5px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
                   onClick={() => {
                     setTimeframe("30d")
                     setRewardPercent(Number(numeral(showModalApy / 12).format('0.[00000]')))
@@ -373,8 +374,8 @@ const StakingPage: NextPage = () => {
                 </button>
                 <button
                   className={timeframe === "3m" ? 
-                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
-                   : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                    "flex justify-center items-center py-[5px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                   : "flex justify-center items-center py-[5px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
                   onClick={() => {
                     setTimeframe("3m")
                     setRewardPercent(Number(numeral(showModalApy / 4).format('0.[00000]')))
@@ -384,8 +385,8 @@ const StakingPage: NextPage = () => {
                 </button>
                 <button
                   className={timeframe === "6m" ? 
-                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
-                     : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                    "flex justify-center items-center py-[5px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                     : "flex justify-center items-center py-[5px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
                   onClick={() => {
                     setTimeframe("6m")
                     setRewardPercent(Number(numeral(showModalApy / 2).format('0.[00000]')))
@@ -395,8 +396,8 @@ const StakingPage: NextPage = () => {
                 </button>
                 <button
                   className={timeframe === "1y" ? 
-                    "flex justify-center items-center py-[5px] px-[16px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
-                     : "flex justify-center items-center py-[5px] px-[16px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
+                    "flex justify-center items-center py-[5px] w-full h-[32px] bg-[#0A1339] dark:bg-[#61CD81] rounded-[52px] font-semibold text-[14px] leading-[22px] tracking-[0.02em] text-[#fff] dark:text-[#2e2e2e]"
+                     : "flex justify-center items-center py-[5px] w-full font-medium text-[14px] leading-[22px] tracking-[0.02em]"}
                   onClick={() => {
                     setTimeframe("1y")
                     setRewardPercent(Number(numeral(showModalApy).format('0.[00000]')))
