@@ -39,6 +39,7 @@ export default function ReferralLeaderBoard() {
           currency_address: USDC_ADDRESS[chainId],
           page: currentPage,
           page_size: pageSize,
+          user_type:'affiliate',
           fields: "referred_volume,referred_users",
           from: current_epoch?.start_date
             ? new Date(current_epoch.start_date)
@@ -74,6 +75,7 @@ export default function ReferralLeaderBoard() {
         const res = await Fuul.getPayoutsLeaderboard({
           currency_address: USDC_ADDRESS[chainId],
           user_address: address,
+          user_type:'affiliate',
           fields: "referred_volume,referred_users", 
           from: current_epoch?.start_date
             ? new Date(current_epoch.start_date)
