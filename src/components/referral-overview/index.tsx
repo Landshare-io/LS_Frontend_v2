@@ -94,6 +94,7 @@ export default function ReferralOverview() {
       try {
         const res = await Fuul.getPayoutsLeaderboard({
           currency_address: USDC_ADDRESS[chainId],
+          user_address: address,
           fields: "referred_volume,referred_users",
           from: current_epoch?.start_date
             ? new Date(current_epoch.start_date)
