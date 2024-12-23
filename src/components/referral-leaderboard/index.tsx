@@ -161,6 +161,7 @@ export default function ReferralLeaderBoard() {
                   account,
                   referred_volume,
                   referred_users,
+                  total_amount
                 } = data;
                 const accountDisplay = `${account.slice(
                   0,
@@ -175,7 +176,7 @@ export default function ReferralLeaderBoard() {
                     >
                       <TableCell className="rounded-l-xl">{rank}</TableCell>
                       <TableCell>{accountDisplay}</TableCell>
-                      <TableCell>{referred_volume.toFixed(2)}</TableCell>
+                      <TableCell>{total_amount.toFixed(2)}</TableCell>
                       <TableCell>{referred_users}</TableCell>
                       <TableCell className="rounded-r-xl">
                         {(referred_volume / Math.pow(10, 12)).toFixed(2)}
@@ -192,7 +193,7 @@ export default function ReferralLeaderBoard() {
                         {accountDisplay}
                       </TableCell>
                       <TableCell className="border-y border-[#0B6C9680]">
-                        {referred_volume.toFixed(2)}
+                        {total_amount.toFixed(2)}
                       </TableCell>
                       <TableCell className="border-y border-[#0B6C9680]">
                         {referred_users}
