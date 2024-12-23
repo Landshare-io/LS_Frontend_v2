@@ -31,7 +31,6 @@ export default function ReferralOverview() {
             to: current_epoch?.end_date
               ? new Date(current_epoch.end_date)
               : undefined,
-            user_type: "affiliate",
             fields: "referred_volume",
           });
 
@@ -72,7 +71,7 @@ export default function ReferralOverview() {
         conversions.map((conversion) => {
           if (conversion.conversion_name === "Purchase") {
             pendingCount++;
-          } else if (conversion.conversion_name === "Purchase and hold") {
+          } else if (conversion.conversion_name === "Buy and Hold TEST") {
             approvedCount++;
           }
         });
@@ -95,8 +94,6 @@ export default function ReferralOverview() {
       try {
         const res = await Fuul.getPayoutsLeaderboard({
           currency_address: USDC_ADDRESS[chainId],
-          user_address: address,
-          user_type: "affiliate",
           fields: "referred_volume,referred_users",
           from: current_epoch?.start_date
             ? new Date(current_epoch.start_date)
@@ -178,9 +175,9 @@ export default function ReferralOverview() {
             </p>
 
             <p className="font-bold text-lg text-text-primary">
-              {myLeaderboard && myLeaderboard[1]?.rank
-                ? myLeaderboard[1]?.rank
-                : "N/A"}
+              {myLeaderboard && myLeaderboard[0]?.rank
+                ? myLeaderboard[0]?.rank
+                : ""}
             </p>
           </div>
         </div>

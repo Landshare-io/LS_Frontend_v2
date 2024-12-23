@@ -39,7 +39,6 @@ export default function ReferralLeaderBoard() {
           currency_address: USDC_ADDRESS[chainId],
           page: currentPage,
           page_size: pageSize,
-          user_type: "affiliate",
           fields: "referred_volume,referred_users",
           from: current_epoch?.start_date
             ? new Date(current_epoch.start_date)
@@ -75,8 +74,7 @@ export default function ReferralLeaderBoard() {
         const res = await Fuul.getPayoutsLeaderboard({
           currency_address: USDC_ADDRESS[chainId],
           user_address: address,
-          user_type: "affiliate",
-          fields: "referred_volume,referred_users",
+          fields: "referred_volume,referred_users", 
           from: current_epoch?.start_date
             ? new Date(current_epoch.start_date)
             : undefined,
@@ -161,9 +159,8 @@ export default function ReferralLeaderBoard() {
                 const {
                   rank,
                   account,
-                  total_amount,
-                  referred_users,
                   referred_volume,
+                  referred_users,
                 } = data;
                 const accountDisplay = `${account.slice(
                   0,
@@ -178,7 +175,7 @@ export default function ReferralLeaderBoard() {
                     >
                       <TableCell className="rounded-l-xl">{rank}</TableCell>
                       <TableCell>{accountDisplay}</TableCell>
-                      <TableCell>{total_amount.toFixed(2)}</TableCell>
+                      <TableCell>{referred_volume.toFixed(2)}</TableCell>
                       <TableCell>{referred_users}</TableCell>
                       <TableCell className="rounded-r-xl">
                         {(referred_volume / Math.pow(10, 12)).toFixed(2)}
@@ -195,7 +192,7 @@ export default function ReferralLeaderBoard() {
                         {accountDisplay}
                       </TableCell>
                       <TableCell className="border-y border-[#0B6C9680]">
-                        {total_amount.toFixed(2)}
+                        {referred_volume.toFixed(2)}
                       </TableCell>
                       <TableCell className="border-y border-[#0B6C9680]">
                         {referred_users}
@@ -252,9 +249,9 @@ export default function ReferralLeaderBoard() {
           <div className="flex-1 text-text-primary font-bold text-base">
             Your rank:{" "}
             <span>
-              {myLeaderboard && myLeaderboard[1]?.rank
-                ? myLeaderboard[1]?.rank
-                : "N/A"}
+              {myLeaderboard && myLeaderboard[0]?.rank
+                ? myLeaderboard[0]?.rank
+                : ""}
             </span>
           </div>
         )}

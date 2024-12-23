@@ -42,7 +42,6 @@ export default function ReferralEarning() {
             to: current_epoch?.end_date
               ? new Date(current_epoch.end_date)
               : undefined,
-            user_type: "affiliate",
             fields: "referred_volume",
           });
 
