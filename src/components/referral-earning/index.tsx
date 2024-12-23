@@ -111,7 +111,7 @@ export default function ReferralEarning() {
       {
         projectAddress: "0x5c41b8814315988163e308c4734AC3FAF7092A10",
         currency: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
-        amount: ethers.parseEther(rewards.availableToClaim.toString()),
+        amount: rewards.availableToClaim.toString(),
         tokenIds: [],
         amounts: [],
       },
