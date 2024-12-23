@@ -82,7 +82,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
 
   }, [approveLandTx, approveStatusData, approveLandSuccess, isApproveLandError])
@@ -107,7 +107,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
 
   }, [approveLpTx, approveLpStatusData, approveLpSuccess, isApproveLPError])

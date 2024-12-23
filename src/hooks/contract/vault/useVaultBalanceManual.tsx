@@ -45,7 +45,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
   useEffect(() => {
     try {
       if (isDepositError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (depositTx) {
         if (depositStatusData) {
           if (depositSuccess) {
@@ -53,28 +53,28 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
             refetchAllowanceOfLandTokenOfVault()
             refetchAllowanceOfLandTokenOfMasterChef()
             refetchUserInfo()
-            setScreenLoadingStatus("Deposit Transaction success")
+            setScreenLoadingStatus("Transaction Successful.")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [depositTx, depositStatusData, depositSuccess, isDepositError])
 
   useEffect(() => {
     try {
       if (isWithdrawError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (withdrawTx) {
         if (withdraswStatusData) {
           if (withdrawSuccess) {
@@ -84,26 +84,26 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
             refetchPendingLand()
             setScreenLoadingStatus("Withdraw Transaction success")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [withdrawTx, withdraswStatusData, withdrawSuccess, isWithdrawError])
 
   useEffect(() => {
     try {
       if (isApproveError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
@@ -112,19 +112,19 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
     
             setScreenLoadingStatus("Approve Transaction success")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
@@ -134,7 +134,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
       return;
     }
 
-    setScreenLoadingStatus("Deposit Transaction in progress...")
+    setScreenLoadingStatus("Transaction Pending...")
     deposit(0, amount)
   }
 

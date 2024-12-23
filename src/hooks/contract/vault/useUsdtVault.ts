@@ -39,20 +39,20 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isDepositError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (depositTx) {
         if (depositStatusData) {
           if (depositSuccess) {
             refetchrwaLpTokenBalance()
             refetchUserInfo();
-            setScreenLoadingStatus("Deposit Transaction success")
+            setScreenLoadingStatus("Transaction Successful.")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -67,7 +67,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isWithdrawError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (withdrawTx) {
         if (withdrawStatusData) {
           if (withdrawSuccess) {
@@ -75,12 +75,12 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
             refetchUserInfo();
             setScreenLoadingStatus("Withdraw Transaction success")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -95,19 +95,19 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isApproveError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
             refetchLSRWALPAllowance()
             setScreenLoadingStatus("Approve Transaction success")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -125,7 +125,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
       return;
     }
 
-    setScreenLoadingStatus("Deposit Transaction in progress...")
+    setScreenLoadingStatus("Transaction Pending...")
     deposit(4, amount)
   }
 

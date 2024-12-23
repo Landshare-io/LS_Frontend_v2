@@ -11,7 +11,7 @@ export default function LoadingStatus() {
   }
   return (
     <div  className="w-full h-screen fixed top-0 bg-[#ffffff7d] z-50 flex flex-col justify-center items-center">
-      <div className="text-center whitespace-pre-line text-[48px] font-bold">
+      <div className="text-center whitespace-pre-line text-[32px] font-bold">
         {screenLoadingStatus ? screenLoadingStatus : "..."}
       </div>
     </div>

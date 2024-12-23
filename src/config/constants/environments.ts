@@ -5,7 +5,7 @@ import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
 import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
-export const IS_TEST_MODE = true
+export const IS_TEST_MODE = false
 export const AUTO_VAULT_MAIN_CHAINS = IS_TEST_MODE ? [bscTestnet, hardhat] : [bsc]
 export const MAJOR_WORK_CHAINS = {
   '/vaults': {
