@@ -133,7 +133,7 @@ export default function ReferralParticipate() {
           </div>
 
           <div className="flex justify-between text-sm text-text-primary py-[10px] font-medium">
-            <p className="flex-1 text-start">Pass Key</p>
+            <p className="flex-1 text-start">Pass KYC</p>
             <p>Generate Invite Link</p>
             <p className="flex-1 text-end">Refer Friends</p>
           </div>
