@@ -53,7 +53,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isUsdcApproveError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (usdcApproveTx) {
         usdcAllowanceRefetch()
         // if (BigInt(usdcAllowance) < amount) {
@@ -70,26 +70,26 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
               buyToken(amount, USDC_ADDRESS[chainId])
             }
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess, isUsdcApproveError])
 
   useEffect(() => {
     try {
       if (isLandApproveError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (landApproveTx) {
         landAllowanceRefetch()
         // if (BigInt(landAllowance) < BigInt(landAmount)) {
@@ -104,20 +104,20 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [landApproveTx, landApproveStatusData, landApproveSuccess, isLandApproveError])
 
   useEffect(() => {
     if (isError) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
     } else if (buyTx) {
       if (buyStatusData) {
         if (buySuccess) {
@@ -128,7 +128,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
           landBalanceRefetch()
           setScreenLoadingStatus("Transaction Successful")
         } else {
-          setScreenLoadingStatus("Transaction failed")
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }
@@ -151,7 +151,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
       }
     } catch (error) {
       console.error(error);
-      setScreenLoadingStatus('Transaction failed')
+      setScreenLoadingStatus('Transaction Failed.')
     }
   };
 

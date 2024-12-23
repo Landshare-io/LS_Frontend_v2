@@ -111,7 +111,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [withdrawLPFramTx, withdrawLPFarmStatusData, withdrawLPFarmSuccess, isWithdrawLPError])
 
@@ -134,7 +134,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [withdrawAutoVaultV1Tx, withdrawAutoVaultV1StatusData, withdrawAutoVaultV1Success, isWithdrawAutoError])
 
@@ -157,7 +157,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [withdrawAutoVaultV2Tx, withdrawAutoVaultV2StatusData, withdrawAutoVaultV2Success, isWithdrawAutoV2Error])
 
@@ -180,7 +180,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [withdrawLandTokenStakeV2Tx, withdrawLandTokenStakeV2StatusData, withdrawLandTokenStakeV2Success, isWithdrawLandStakeV2Error])
 
@@ -203,7 +203,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [withdrawLandTokenStakeV3Tx, withdrawLandTokenStakeV3StatusData, withdrawLandTokenStakeV3Success, isWithdrawLandStakeV3Error])
 

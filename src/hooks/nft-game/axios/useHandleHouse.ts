@@ -72,7 +72,7 @@ export default function useHandleHouse(
         }
       } catch (error) {
         setOnSaleLoading(false)
-        notifyError("Transaction failed")
+        notifyError("Transaction Failed.")
         console.log(error)
       }
     })()
@@ -166,7 +166,7 @@ export default function useHandleHouse(
         }
       } catch (error) {
         setOnSaleLoading(false)
-        notifyError("Transaction failed")
+        notifyError("Transaction Failed.")
         console.log(error)
       }
     })()

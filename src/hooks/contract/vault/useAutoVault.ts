@@ -86,7 +86,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isApproveError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (approveLandTx) {
         if (approveStatusData) {
           if (approveLandSuccess && !isCcipDeposit) {
@@ -95,18 +95,18 @@ export default function useAutoVault(chainId: number, address: Address | undefin
             refetchUserInfo()
             refetchPendingLand()
             refetchBalanceOfLandToken()
-            setScreenLoadingStatus("Approve Transaction success")
+            setScreenLoadingStatus("Approve Transaction Complete.")
           } else if (approveLandSuccess && isCcipDeposit) {
             setScreenLoadingStatus("Transaction in progress...")
             setIsCcipDeposit(false)
             transfer(chainId, depositAmount, 0, 0, 500000)
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }        
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -121,18 +121,18 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isHarvestError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (harvestTx) {
         if (harvestStatusData) {
           if (harvestSuccess) {
-            setScreenLoadingStatus("Claim Harvest Transaction success")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
-            setScreenLoadingStatus("Claim Harvest Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -147,18 +147,18 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isWithdrawAllError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed..")
       } else if (withdrawAllTx) {
         if (withdrawAllStatusData) {
           if (withdrawAllSuccess) {
-            setScreenLoadingStatus("Deposit Transaction success")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed..")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed..")
       console.log(error)
     }
 
@@ -173,7 +173,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isTransferError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed..")
       } else if (transferTx) {
         if (transferStatusData) {
           if (transferSuccess) {
@@ -187,14 +187,14 @@ export default function useAutoVault(chainId: number, address: Address | undefin
               sourceChain: CCIP_CHAIN_ID[chainId],
               destinationChain: CCIP_CHAIN_ID[AUTO_VAULT_MAIN_CHAINS[0].id]
             }))
-            setScreenLoadingStatus(`${transferAction} Transaction success`)
+            setScreenLoadingStatus(`${transferAction} Transaction Complete.`)
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -209,7 +209,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isDepositError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (depositTx) {
         if (depositStatusData) {
           if (depositSuccess) {
@@ -218,14 +218,14 @@ export default function useAutoVault(chainId: number, address: Address | undefin
             refetchUserInfo()
             refetchPendingLand()
             refetchBalanceOfLandToken()
-            setScreenLoadingStatus("Deposit Transaction success")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -240,7 +240,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isWithdrawError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (withdrawTx) {
         if (withdrawStatusData) {
           if (withdrawSuccess) {
@@ -249,14 +249,14 @@ export default function useAutoVault(chainId: number, address: Address | undefin
             refetchUserInfo()
             refetchPendingLand()
             refetchBalanceOfLandToken()
-            setScreenLoadingStatus("Withdraw Transaction success")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -287,10 +287,10 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         setIsCcipDeposit(true)
         approveLand(chainId, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId], amount)
       }
-      setScreenLoadingStatus("Deposit Transaction in progress...")
+      setScreenLoadingStatus("Transaction Pending...")
       transfer(chainId, amount, 0, 0, 500000)
     } else {
-      setScreenLoadingStatus("Deposit Transaction in progress...")
+      setScreenLoadingStatus("Transaction Pending...")
       deposit(amount)
     }
   }
@@ -305,12 +305,12 @@ export default function useAutoVault(chainId: number, address: Address | undefin
           notifyError('Insufficient Funds for Gas')
           return
         }
-        setScreenLoadingStatus("Withdraw All Transaction in progress...")
+        setScreenLoadingStatus("Transaction Pending...")
         transfer(chainId, 1, 2, 0, 750000) // withdraw all of ccip
       }
     } else {
       if (amount == 0 || amount == autoLandV3) {
-        setScreenLoadingStatus("Withdraw All Transaction in progress...")
+        setScreenLoadingStatus("Transaction Pending...")
         withdrawAll()
       }
     }
@@ -323,21 +323,21 @@ export default function useAutoVault(chainId: number, address: Address | undefin
       }
 
       const withdrawAmount = BigInt(amount) * BigInt(totalSharesV3) / BigInt(total)
-      setScreenLoadingStatus("Withdraw Transaction in progress...")
+      setScreenLoadingStatus("Transaction Pending...")
       transfer(chainId, withdrawAmount, 1, 0, 750000)
     } else {
-      setScreenLoadingStatus("Withdraw Transaction in progress...")
+      setScreenLoadingStatus("Transaction Pending...")
       withdraw(amount)
     }
   }
 
   const approveVault = (amount: BigNumberish) => {
-    setScreenLoadingStatus("Approve Transaction in progress...")
+    setScreenLoadingStatus("Transaction Pending...")
     approveLand(chainId, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId], amount)
   }
 
   const clainBounty = () => {
-    setScreenLoadingStatus("Claim Harvest Transaction in progress...")
+    setScreenLoadingStatus("Transaction Pending...")
     harvest()
   }
 

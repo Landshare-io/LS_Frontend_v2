@@ -104,7 +104,7 @@ export default function useSplitLP({
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [approveSuccess, approveStatusData, approveTx, isApproveError])
 
@@ -132,7 +132,7 @@ export default function useSplitLP({
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [removeLiquiditySuccess, removeLiquidityStatusData, removeLiquidityETHTx, isRemoveLiquidityError])
 
@@ -150,7 +150,7 @@ export default function useSplitLP({
         approve(PSC_ROUTER_CONTRACT_ADDRESS, amount)
         
       } catch (e) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
         updateIsSuccessSplit(false);
         setTimeout(() => {
           setScreenLoadingStatus("")

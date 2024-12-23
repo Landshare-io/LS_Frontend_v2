@@ -87,7 +87,7 @@ export default function useRecombine({
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
@@ -108,7 +108,7 @@ export default function useRecombine({
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [addLiquidityETHTx, addLiquidityStatusData, addLiquiditySuccess, isAddLiquidityError])
 
