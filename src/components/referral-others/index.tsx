@@ -37,7 +37,7 @@ export default function ReferralOthers() {
         const code = await Fuul.getAffiliateCode(address);
 
         const link = await Fuul.generateTrackingLink(
-          `${process.env.NEXT_PUBLIC_FUUL_API_URL}`,
+          `${window.location.origin + '/rwa'}`,
           code ?? ""
         );
 

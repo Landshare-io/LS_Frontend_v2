@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from 'next/router';
+import { useAccount } from "wagmi";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
@@ -11,7 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import { Fuul } from "@fuul/sdk";
 import { signMessage } from '@wagmi/core';
 import { config } from "../../wagmi";
-import { useAccount } from "wagmi";
+
 const NFT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/nft']
 
 const interTight = Inter_Tight({
@@ -46,10 +47,10 @@ export default function ConnectWallet({
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
-
     const formattedDate = `${day}-${month} ${year} ${hours}:${minutes}:${seconds}`;
+
     return `Accept affiliate on ${formattedDate}`;
-}
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,9 +64,9 @@ export default function ConnectWallet({
             signature: signature,
             message: message
           });
-      } catch (error) {
-        console.error("Error signing message:", error);
-      }
+        } catch (error) {
+          console.error("Error signing message:", error);
+        }
       }
     }
 

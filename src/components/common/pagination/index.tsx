@@ -1,4 +1,5 @@
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
+
 interface PaginationProps {
   pageCount: number;
   currentPage: number;

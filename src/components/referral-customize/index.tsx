@@ -53,7 +53,7 @@ export default function ReferralCustomizeModal({
         });
 
         setTrackingprettyCode(
-          process.env.NEXT_PUBLIC_FUUL_API_URL + "?af=" + prettyCode
+          window.location.origin + '/rwa' + "?af=" + prettyCode
         );
 
         setPrettyCode("");
