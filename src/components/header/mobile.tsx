@@ -6,6 +6,7 @@ import IconRWA from "../../../public/icons/home.svg";
 import IconDashboard from "../../../public/icons/dashboard.svg";
 import IconCube from "../../../public/icons/cube.svg";
 import IconMenu from "../../../public/icons/menu.svg";
+import IconReferral from "../../../public/icons/referral.svg"
 import LandDao from "../../../public/icons/land-dao.svg";
 import DsSwap from "../../../public/icons/ds-swap.svg";
 import LeftRight from "../../../public/icons/left-right.svg"
@@ -74,8 +75,21 @@ export default function MobileNavbar() {
             alt="icon more"
           />
           <span className="font-medium text-[10px] leading-[16px] tracking-[0.02em] min-w-[25px] text-text-secondary">{isMore ? 'Less' : 'More'}</span>
+          
           {isMore ? (
             <div className="absolute bottom-[82px] right-[20px] shadow-[0_0_4px_0_rgba(160,167,195,0.2)] rounded-[12px] py-[4px] min-w-[108px] bg-secondary">
+              <a
+                href="/referral"
+                rel="noopener noreferrer"
+                className="flex px-[16px] py-[10px] items-center gap-[4px] w-full"
+              >
+                <Image
+                  src={IconReferral}
+                  alt="migration"
+                  className="w-[20px] h-[20px] grayscale"
+                />
+                <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">Referral</span>
+              </a>
               <a
                 href="/migration"
                 rel="noopener noreferrer"

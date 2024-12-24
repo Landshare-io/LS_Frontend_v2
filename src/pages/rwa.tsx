@@ -1,7 +1,10 @@
+import { useEffect } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useChainId, useAccount } from 'wagmi';
 import { HiMiniLockOpen } from "react-icons/hi2";
+import { Fuul } from '@fuul/sdk';
+import { useSearchParams } from 'next/navigation';
 import Breadcrumb from '../components/common/breadcrumb';
 import { BREADCRUMB } from '../utils/type';
 import PriceGraph from '../components/price-line-chart';
@@ -10,11 +13,7 @@ import SwapToken from '../components/swap-token';
 import BeneficalAssets from '../components/benefical-assets';
 import InvestmentExplain from '../components/investment-explain';
 import RwaCalculator from '../components/rwa-calculator';
-import ConnectWallet from '../components/connect-wallet';
-import { MAJOR_WORK_CHAINS } from '../config/constants/environments';
 import styles from '../styles/Home.module.css';
-
-const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 const breadcrumbItems: BREADCRUMB[] = [
   {
@@ -28,6 +27,15 @@ const breadcrumbItems: BREADCRUMB[] = [
 ]
 
 const RwaPage: NextPage = () => {
+  const searchParams = useSearchParams();
+  const {address} = useAccount();
+  const referralCode = searchParams.get('af');
+
+  useEffect(() => {
+    if(referralCode){
+      Fuul.sendPageview("rwa");
+    }
+  }, [referralCode]);
   const { isConnected } = useAccount();
   const chainId = useChainId()
 
@@ -41,7 +49,7 @@ const RwaPage: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <div className="bg-primary pt-[41px] pb-[25px] px-[20px] lg:px-[120px]">
+      <div className="bg-primary pb-[25px] px-[20px] lg:px-[120px]">
         <div className="max-w-[1200px] m-auto">
           <Breadcrumb items={breadcrumbItems} />
         </div>

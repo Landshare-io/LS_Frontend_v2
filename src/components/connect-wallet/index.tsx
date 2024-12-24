@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from 'next/router';
+import { useAccount } from "wagmi";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
 import useLogin from "../../hooks/nft-game/axios/useLogin";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
+import { useSearchParams } from 'next/navigation';
+import { Fuul } from "@fuul/sdk";
+import { signMessage } from '@wagmi/core';
+import { config } from "../../wagmi";
 
 const NFT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/nft']
 
@@ -26,9 +31,48 @@ export default function ConnectWallet({
   connectButtonClassName
 }: ConnectWalletProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { pathname } = router;
   const { checkIsAuthenticated } = useLogin()
   const { isAuthenticated } = useGlobalContext()
+  const referralCode = searchParams.get('af');
+  const {isConnected, address} = useAccount();
+
+  const formatAffiliateAcceptance = (date : any) => {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    const day = date.getDate();
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const formattedDate = `${day}-${month} ${year} ${hours}:${minutes}:${seconds}`;
+
+    return `Accept affiliate on ${formattedDate}`;
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isConnected && address && referralCode) {
+        const message = formatAffiliateAcceptance(new Date());
+        try {
+          const signature = await signMessage(config, { message });
+
+          await Fuul.sendConnectWallet({
+            address: address,
+            signature: signature,
+            message: message
+          });
+        } catch (error) {
+          console.error("Error signing message:", error);
+        }
+      }
+    }
+
+    fetchData();
+  }, [isConnected, address, referralCode])
+    
 
   return (
     <>

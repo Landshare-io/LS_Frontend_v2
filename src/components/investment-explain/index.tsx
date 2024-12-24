@@ -1,21 +1,24 @@
 import { useState } from "react";
 import Image from "next/image";
-import { useAccount } from "wagmi";
+import Modal from "react-modal";
+import { useAccount, useChainId } from "wagmi";
 import { MdCancel } from "react-icons/md";
 import useIsWhitelistedAddress from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import Button from "../common/button";
+import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import ZeroIDWidget from "../zero-id-widget";
-import Modal from "react-modal";
 import form from "../../../public/verify-steps/form.svg";
 import swapToken from "../../../public/verify-steps/swap-token.svg";
 import growthTime from "../../../public/verify-steps/growth-time.svg";
-import content from "../../../public/verify-steps/content.svg";
 import arrowLeft from "../../../public/icons/arrow-left.svg";
 
+const RWA_MAJOR_CHAINS = MAJOR_WORK_CHAINS["/rwa"];
+
 export default function InvestmentExplain() {
+  const chainId = useChainId();
   const { address } = useAccount();
-  const isWhitelisted = useIsWhitelistedAddress(56, address);
+  const isWhitelisted = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
 
@@ -98,7 +101,7 @@ export default function InvestmentExplain() {
           />
           <button
             className="!bg-[#fff] !text-[#000] w-full hover:bg-slate-200 transition-all hover:-translate-y-1 w-full rounded-[100px] py-[10px] text-[16px]  leading-[24px] font-bold"
-            onClick={() => setKycopen(true)}
+            onClick={() => handlemodalkyc()}
           >
             {isWhitelisted ? "Complete" : "Verify now"}
           </button>
