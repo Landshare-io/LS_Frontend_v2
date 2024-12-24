@@ -15,7 +15,7 @@ export default function ReferralParticipate() {
 
   return (
     <div className="w-full grid lg:grid-cols-[62%_38%] grid-cols-1 h-fit gap-6">
-      <div className="w-full md:flex bg-third rounded-[32px] p-10 gap-6 shadow-lg min-h-[260px]">
+      <div className="w-full md:flex bg-third rounded-[32px] p-8 lg:p-10 gap-6 shadow-lg min-h-[260px]">
         {/* user diagram */}
         <div className="flex gap-4 h-20 md:h-auto items-start">
           <div className="h-20 md:h-full aspect-square shrink-0  bg-[#24BC481A] rounded-lg md:rounded-[32px] ">
@@ -51,7 +51,7 @@ export default function ReferralParticipate() {
         </div>
         <div className="h-[150px] flex md:hidden flex-col justify-between pt-6">
           <p className="text-text-secondary text-sm">
-            Identity verification is required for both the referrer and referee
+            Identity verification is required for referee
             to participate in Landshare's Referral Program and engage with the
             LSRWA security tokens.
           </p>
@@ -89,7 +89,7 @@ export default function ReferralParticipate() {
           </div>
 
           <p className="text-text-secondary text-sm">
-            Identity verification is required for both the referrer and referee
+            Identity verification is required for referee
             to participate in Landshare's Referral Program and engage with the
             LSRWA security tokens.
           </p>
@@ -106,16 +106,15 @@ export default function ReferralParticipate() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-between bg-third rounded-[32px] p-10 gap-6 shadow-lg">
+      <div className="flex flex-col justify-between bg-third rounded-[32px] p-8 lg:p-10 gap-6 shadow-lg">
         <div>
           <p className="text-text-primary font-bold text-lg">
             How To Get Started
           </p>
 
           <p className="text-text-secondary text-sm mt-[29px]">
-            The verification process is fast and simple. Once you complete the
-            steps, you'll be able to generate a unique invitation link, as well
-            as buy or sell LSRWA tokens whenever you like.
+            The verification process is fast and simple. Once your referees complete the
+            KYC process, share you unique affiliate link with them. After they purchase and hold LSRWA, you'll both earn USDC.
           </p>
 
           <div className="w-full flex justify-start items-center mt-[29px]">
@@ -134,18 +133,12 @@ export default function ReferralParticipate() {
 
           <div className="flex justify-between text-sm text-text-primary py-[10px] font-medium">
             <p className="flex-1 text-start">Pass KYC</p>
-            <p>Generate Invite Link</p>
-            <p className="flex-1 text-end">Refer Friends</p>
+            <p>Share Link</p>
+            <p className="flex-1 text-end">Refer & Earn</p>
           </div>
         </div>
         <div className="flex items-center gap-6">
-          <Button
-            className={`min-w-fit h-[44px] px-8 text-[#fff] rounded-[100px] bg-[#61cd81]`}
-            textClassName="hover:dark:text-[#61CD81] text-[100%]"
-            onClick={() => router.push("rwa")}
-          >
-            Buy LSRWA
-          </Button>
+         
 
           <a
             href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa"
