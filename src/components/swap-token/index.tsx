@@ -178,9 +178,9 @@ export default function SwapToken() {
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "460px",
       width: "90%",
-      height: "fit-content",
+      height: "90%",
       borderRadius: "20px",
       background: theme == "dark" ? "#2E2E2E" : "#f6f7f9"
     },
@@ -1009,7 +1009,7 @@ export default function SwapToken() {
         style={customModalStyles}
       >
         <div className="flex w-full justify-between items-center pl-4 z-10">
-          <div className={`text-[16px] md:text-[24px] text-text-secondary ${BOLD_INTER_TIGHT.className}`}>
+          <div className={`text-[16px] md:text-[20px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
             Security Token Purchase Agreement
           </div>
           <div className="flex justify-end px-[16px] pt-[16px] pb-3">
@@ -1021,7 +1021,7 @@ export default function SwapToken() {
             />
           </div>
         </div>
-        <div className="pt-0 p-3 flex flex-col space-y-4">
+        <div className="pt-0 p-3 flex flex-col h-[90%] space-y-4">
           <div className="w-full google-doc-content overflow-x-hidden overflow-y-scroll">
             {!isSTPALoding ? (
               <></>
@@ -1054,7 +1054,7 @@ export default function SwapToken() {
               acceptance of the terms outlined in the STPA. To obtain a duly
               signed copy of the STPA, kindly complete the purchase process
               through the{" "}
-              <a href="https://dashboard.landshare.io" target="_blank">
+              <a className="underline font-bold" href="https://dashboard.landshare.io" target="_blank">
                 Landshare Dashboard
               </a>
               .
