@@ -48,7 +48,7 @@ export default function useLpVault(chainId: number, address: Address | undefined
   useEffect(() => {
     try {
       if (isDepositError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (depositTx) {
         if (depositStatusData) {
           if (depositSuccess) {
@@ -59,14 +59,14 @@ export default function useLpVault(chainId: number, address: Address | undefined
             refetchPendingLand()
             refetchBalanceOfLandToken()
             updateLPFarm()
-            setScreenLoadingStatus("Deposit Transaction success")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -81,7 +81,7 @@ export default function useLpVault(chainId: number, address: Address | undefined
   useEffect(() => {
     try {
       if (isWithdrawError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (withdrawTx) {
         if (withdrawStatusData) {
           if (withdrawSuccess) {
@@ -92,14 +92,14 @@ export default function useLpVault(chainId: number, address: Address | undefined
             refetchPendingLand()
             refetchBalanceOfLandToken()
             updateLPFarm()
-            setScreenLoadingStatus("Withdraw Transaction success")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -114,7 +114,7 @@ export default function useLpVault(chainId: number, address: Address | undefined
   useEffect(() => {
     try {
       if (isApproveError) {
-        setScreenLoadingStatus("Transaction failed")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
@@ -127,14 +127,14 @@ export default function useLpVault(chainId: number, address: Address | undefined
             refetchAllowance()
             updateLPFarm()
             updateStatus()
-            setScreenLoadingStatus("Approve Transaction success")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
-            setScreenLoadingStatus("Transaction failed")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction failed")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
 
@@ -152,7 +152,7 @@ export default function useLpVault(chainId: number, address: Address | undefined
       return;
     }
 
-    setScreenLoadingStatus("Deposit Transaction in progress...")
+    setScreenLoadingStatus("Transaction Pending...")
     deposit(1, amount)
   }
 
@@ -166,12 +166,12 @@ export default function useLpVault(chainId: number, address: Address | undefined
       return;
     }
 
-    setScreenLoadingStatus("Withdraw Transaction in progress...")
+    setScreenLoadingStatus("Transaction Pending...")
     withdraw(1, amount)
   }
 
   const approveVault = (amount: BigNumberish) => {
-    setScreenLoadingStatus("Approve Transaction in progress...")
+    setScreenLoadingStatus("Transaction Pending...")
     approve(MASTERCHEF_CONTRACT_ADDRESS[bsc.id], amount)
   }
 

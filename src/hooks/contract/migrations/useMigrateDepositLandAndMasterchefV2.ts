@@ -81,7 +81,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [autoVaultV3DepositTx, autoVaultV3DepositStatusData, autoVaultV3DepositSuccess, isDepositAutoV3Error])
 
@@ -107,7 +107,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [masterchefDepositTx, masterchefDepositStatusData, masterchefDepositSuccess, isDepositError])
 
@@ -118,7 +118,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         return;
       }
       try {
-        setScreenLoadingStatus("Transaction is Pending...")
+        setScreenLoadingStatus("Transaction Pending...")
         autoVaultV3Deposit(amount);
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
@@ -137,7 +137,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         return;
       }
       try {
-        setScreenLoadingStatus("Transaction is Pending...")
+        setScreenLoadingStatus("Transaction Pending...")
         masterchefDeposit(0, amount)
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
@@ -156,7 +156,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         return;
       }
       try {
-        setScreenLoadingStatus("Transaction is Pending...")
+        setScreenLoadingStatus("Transaction Pending...")
         masterchefDeposit(1, amount);
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");

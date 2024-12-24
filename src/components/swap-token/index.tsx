@@ -41,12 +41,14 @@ import IconGateio from "../../../public/icons/gateio.png";
 import IconMEXC from "../../../public/icons/mexclogo.png";
 import IconUSDC from "../../../public/icons/usdc.png";
 import IconArrowDown from "../../../public/icons/arrow-down.svg";
+import IconArrowDownDark from "../../../public/icons/arrow-down-dark.svg";
 import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
 import IconArrowRightUp from "../../../public/icons/arrow-right-up.svg";
 import IconDashboard from "../../../public/icons/dashboard.svg";
 import IconInfo from "../../../public/icons/info.svg";
 import IconInfoGray from "../../../public/icons/info-gray.svg";
 import IconClose from "../../../public/icons/close.svg";
+import IconCloseDark from "../../../public/icons/close-dark.svg";
 import "react-loading-skeleton/dist/skeleton.css";
 import Tooltip from "../common/tooltip";
 
@@ -148,15 +150,27 @@ export default function SwapToken() {
           var docElement = document.createElement("div");
           docElement.innerHTML = text;
           docElement.classList.add("bg-primary");
-          docElement.classList.add("dark:bg-secondary");
           docElement.classList.add("text-text-primary");
+          docElement.classList.add("w-full");
           var container = document.getElementById("doc") as Element;
           container.appendChild(docElement);
+          var docContent = docElement.getElementsByClassName("doc-content");
+          docContent[0] instanceof HTMLElement && (docContent[0].style.padding = "10px", docContent[0].style.background = theme == "dark" ? "#2E2E2E" : "#f6f7f9");
+          var paragraphs = docContent[0].getElementsByTagName("p");
+          for (var i = 0; i < paragraphs.length; i++) {
+              var spans = paragraphs[i].getElementsByTagName("span");
+              for (var j = 0; j < spans.length; j++) {
+                spans[j].style.color = theme == "dark" ? "#f1f1f1" : "#0a0a0a";
+                spans[j].style.background = "transparent";
+              }
+          }
           setIsSTPALoading(false);
         }
       );
     }
   }, [isSTAPShow]);
+
+  const { theme } = useGlobalContext();
 
   const customModalStyles = {
     content: {
@@ -168,6 +182,7 @@ export default function SwapToken() {
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
+      background: theme == "dark" ? "#2E2E2E" : "#f6f7f9"
     },
     overlay: {
       background: '#00000080',
@@ -194,8 +209,6 @@ export default function SwapToken() {
     setKycopen(false);
     document.body.style.overflow = "auto";
   }
-
-  const { theme } = useGlobalContext();
 
   const handleLinkClick = (event: any) => {
     event.preventDefault(); // Prevent the default link behavior
@@ -433,7 +446,7 @@ export default function SwapToken() {
                     USDC
                   </span>
                   <Image
-                    src={IconArrowDown}
+                    src={theme == "dark" ? IconArrowDownDark : IconArrowDown}
                     alt="arrow down"
                     className="w-[18px] h-[18px]"
                   />
@@ -754,8 +767,7 @@ export default function SwapToken() {
                         onClick={() => {
                           setIsSTAPshow(true);
                         }}
-                        textClassName="text-[#fff]"
-                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green"
+                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green hover:bg-white"
                       >
                         {RWATokenAmount && buyLANDAmount && usdcAmount
                           ? Number(formatEther(buyLANDAmount.toString())) >
@@ -840,7 +852,7 @@ export default function SwapToken() {
                   </span>
                 </div>
                 <span className="text-text-secondary">
-                  Please swtich your network to the BSC.
+                  {`Please switch your chain to ${RWA_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}
                 </span>
               </div>
             )
@@ -996,13 +1008,13 @@ export default function SwapToken() {
         }}
         style={customModalStyles}
       >
-        <div className="flex w-full justify-between items-center pl-4 z-10 bg-secondary">
-          <div className={`text-[16px] md:text-[24px] ${BOLD_INTER_TIGHT.className}`}>
+        <div className="flex w-full justify-between items-center pl-4 z-10">
+          <div className={`text-[16px] md:text-[24px] text-text-secondary ${BOLD_INTER_TIGHT.className}`}>
             Security Token Purchase Agreement
           </div>
           <div className="flex justify-end px-[16px] pt-[16px] pb-3">
             <Image
-              src={IconClose}
+              src={theme == "dark" ? IconCloseDark : IconClose}
               alt="icon close"
               className="w-[24px] h-[24px] cursor-pointer"
               onClick={() => setIsSTAPshow(false)}
@@ -1010,7 +1022,7 @@ export default function SwapToken() {
           </div>
         </div>
         <div className="pt-0 p-3 flex flex-col space-y-4">
-          <div className="w-full google-doc-content overflow-x-hidden overflow-y-scroll bg-secondary">
+          <div className="w-full google-doc-content overflow-x-hidden overflow-y-scroll">
             {!isSTPALoding ? (
               <></>
             ) : (
@@ -1032,12 +1044,12 @@ export default function SwapToken() {
               </SkeletonTheme>
             )}
             <div
-              className="z-10 relative h-[300px] w-full bg-secondary text-text-secondary"
+              className="z-10 relative h-[300px] w-full text-text-secondary"
               id="doc"
             ></div>
           </div>
           <div className="">
-            <span className="text-[13px] leading-[24px] text-[#0a133999] mt-[5px] pr-[15px] text-text-secondary">
+            <span className="text-[13px] leading-[24px] mt-[5px] pr-[15px] text-text-secondary">
               By finalizing the purchase of RWA Tokens, you hereby affirm your
               acceptance of the terms outlined in the STPA. To obtain a duly
               signed copy of the STPA, kindly complete the purchase process
@@ -1057,7 +1069,7 @@ export default function SwapToken() {
               />
               <label
                 htmlFor="custom-checkbox"
-                className="pl-[25px] before:content-[''] before:inline-block before:absolute before:w-[20px] before:h-[20px] before:left-0 before:border before:border-gray-700 before:rounded before:bg-white before:transition before:ease-in-out peer-checked:before:bg-red-500 text-[16px] font-bold text-black-700 cursor-pointer"
+                className="pl-[25px] before:content-[''] before:inline-block before:absolute before:w-[20px] before:h-[20px] before:left-0 before:border before:border-gray-700 before:rounded before:bg-white before:transition before:ease-in-out peer-checked:before:bg-red-500 text-[16px] font-bold text-text-primary cursor-pointer"
               >
                 Acknowledge and sign
               </label>
@@ -1065,7 +1077,7 @@ export default function SwapToken() {
           </div>
           <div>
             <Button
-              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px] bg-primary-green"
+              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px] bg-primary-green hover:bg-white"
               onClick={async () => {
                 setIsSTAPshow(false);
                 buyOrSell == "Buy" ? buyTokens(buyUSDCAmount) : sellTokens();

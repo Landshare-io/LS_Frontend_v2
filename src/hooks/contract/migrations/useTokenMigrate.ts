@@ -80,7 +80,7 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [landTokenApproveTx, landTokenApproveStatusData, landTokenApproveSuccess, isApproveError])
 
@@ -105,7 +105,7 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
     return () => {
       setTimeout(() => {
         setScreenLoadingStatus("")
-      }, 1000);
+      }, 2000);
     }
   }, [swapTx, swapStatusData, swapSuccess, isSwapError])
 

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -20,12 +21,13 @@ export default function Tooltip({
   disabled = false,
 }: TooltipProps) {
   const [visible, setVisible] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout>();
   const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const touchDevice =
+    const touchDevice = 
       "ontouchstart" in window || navigator.maxTouchPoints > 0;
     setIsTouchDevice(touchDevice);
 
@@ -36,12 +38,59 @@ export default function Tooltip({
     };
   }, []);
 
-  const positionClasses = {
-    top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-    bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-    left: "right-full top-1/2 -translate-y-1/2 mr-2",
-    right: "left-full top-1/2 -translate-y-1/2 ml-2",
-  };
+  useEffect(() => {
+    if (!visible || !triggerRef.current) return;
+
+    const updatePosition = () => {
+      const triggerElement = triggerRef.current;
+      if (!triggerElement) return;
+
+      const rect = triggerElement.getBoundingClientRect();
+      const tooltipElement = document.getElementById("tooltip");
+      if (!tooltipElement) return;
+
+      const tooltipRect = tooltipElement.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const EDGE_PADDING = 16; // Padding from viewport edges
+
+      let top = 0;
+      let left = 0;
+
+      switch (position) {
+        case "top":
+          top = rect.top - tooltipRect.height - 8;
+          left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+          break;
+        case "bottom":
+          top = rect.bottom + 8;
+          left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+          break;
+        case "left":
+          top = rect.top + rect.height / 2 - tooltipRect.height / 2;
+          left = rect.left - tooltipRect.width - 8;
+          break;
+        case "right":
+          top = rect.top + rect.height / 2 - tooltipRect.height / 2;
+          left = rect.right + 8;
+          break;
+      }
+
+      // Ensure left position stays within viewport bounds with padding
+      const maxLeft = viewportWidth - tooltipRect.width - EDGE_PADDING;
+      left = Math.max(EDGE_PADDING, Math.min(left, maxLeft));
+
+      setTooltipPosition({ top, left });
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
+    };
+  }, [visible, position]);
 
   const handleMouseEnter = () => {
     if (disabled || isTouchDevice) return;
@@ -72,31 +121,32 @@ export default function Tooltip({
   };
 
   return (
-    <div
-      className={`relative inline-flex items-center ${tooltipContainerClassName}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      ref={triggerRef}
-      role="tooltip"
-      aria-describedby={visible ? "tooltip-content" : undefined}
-    >
+    <>
       <div
-        id="tooltip-content"
-        className={`
-          absolute z-50 min-w-[200px] text-wrap h-fit px-3 py-2 text-sm rounded-lg shadow-lg
-          bg-gray-800 text-white
-          opacity-0 transition-all duration-200
-          ${visible ? "opacity-100" : "pointer-events-none"}
-          ${positionClasses[position]}
-          ${tooltipClassName}
-        `}
+        ref={triggerRef}
+        className={`inline-block ${tooltipContainerClassName}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       >
-        {content}
+        {children}
       </div>
-      {children}
-    </div>
+      {visible &&
+        createPortal(
+          <div
+            id="tooltip"
+            className={`fixed z-50 w-[280px] px-2 py-1 text-sm text-white bg-gray-800 rounded shadow-lg pointer-events-none ${tooltipClassName}`}
+            style={{
+              top: tooltipPosition.top,
+              left: tooltipPosition.left,
+            }}
+          >
+            {content}
+          </div>,
+          document.body
+        )}
+    </>
   );
 }

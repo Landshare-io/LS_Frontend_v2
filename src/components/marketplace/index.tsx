@@ -66,10 +66,10 @@ export default function MarketplacePage() {
         ) : (
           <>
             <Topbar isNftList={true} />
-            <div className="flex w-full flex-col items-center md:flex-row overflow-auto flex-wrap items-center justify-between px-2">
-              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>House NFTs</span>
+            <div className="flex w-full flex-col md:flex-row overflow-auto flex-wrap items-center justify-between px-2">
+              <span className={`text-[24px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>House NFTs</span>
               <div className="border-b-[1px] border-[#00000050] w-full hidden md:block my-3"></div>
-              <div className="flex ms-4 ml-0 flex-nowrap flex-1 justify-end md:justify-start">
+              <div className="grid grid-cols-2">
                 <div className="flex ms-4 sm:ms-1 items-center">
                   <label
                     htmlFor="marketplace-view"
@@ -79,13 +79,13 @@ export default function MarketplacePage() {
                   </label>
                   <div className="relative mr-2">
                     <select
-                      className={`whitespace-nowrap text-ellipsis py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                      className={`cursor-pointer w-full whitespace-nowrap text-ellipsis overflow-hidden py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
                       name="marketplace-view"
                       id="marketplace-view"
                       onChange={(e) => changeMarketplaceView(e.target.value)}
                     >
-                      <option value="all">Available NFTs</option>
-                      <option value="mine">My NFTs</option>
+                      <option value="all" className="text-black">Available NFTs</option>
+                      <option value="mine" className="text-black">My NFTs</option>
                     </select>
                     <SelectarrowIcon className="absolute right-[4px] top-[50%] translate-y-[-50%]" />
                   </div>
@@ -99,13 +99,13 @@ export default function MarketplacePage() {
                   </label>
                   <div className="relative mr-2">
                     <select
-                      className={`whitespace-nowrap text-ellipsis py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                      className={`cursor-pointer whitespace-nowrap text-ellipsis py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
                       name="marketplace-sort"
                       id="marketplace-sort"
                       onChange={(e) => changeMarketplaceSort(e.target.value)}
                     >
-                      <option value="date">Date</option>
-                      <option value="price">Price</option>
+                      <option value="date" className="text-black">Date</option>
+                      <option value="price" className="text-black">Price</option>
                     </select>
                     <SelectarrowIcon className="absolute right-[4px] top-[50%] translate-y-[-50%]" />
                   </div>

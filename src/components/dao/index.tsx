@@ -83,9 +83,6 @@ export default function DAO() {
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
-      {/* {chain?.unsupported && (<div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
-        Chain not Supported / Switch to BSC
-      </div>)} */}
       {initialLoad ? (
         <div className="flex w-full min-h-[70vh] h-full items-center justify-center bg-primary">
           <ReactLoading type="bars" color="#61cd81" />
@@ -99,7 +96,7 @@ export default function DAO() {
               balance={balanceGnosis.toString()}
             />
           )}
-          <div className="flex flex-col lg:flex-row gap-[40px] max-w-[1200px] w-full m-auto mb-10">
+          <div className="flex flex-col lg:flex-row gap-[40px] max-w-[1200px] w-full m-auto pb-10">
             <div className="bg-secondary flex flex-row lg:flex-col items-end justify-around p-[10px] mlg:min-w-[251px] lg:h-[478px] rounded-[14px] shadow-xl md:items-center mlg:justify-between mlg:p-[20px]">
               <div className="flex flex-col items-center">
                 <Image alt="logo" src={Logo} className="w-[75px] sm:w-[100px] md:w-[130px] m-[5px]" />
@@ -156,7 +153,7 @@ export default function DAO() {
                     <div className="text-[12px] leading-[14px] md:text-[15px] md:leading-[22px] text-[#838383]">Marketing</div>
                   </div>
                 </div>
-                <div className="flex items-start justify-end gap-[17px] md:w-auto md:justify-start mlg:w-full mlg:gap-[20px] items-center">
+                <div className="flex justify-end gap-[17px] md:w-auto md:justify-start mlg:w-full mlg:gap-[20px] items-center">
                   <a 
                     href="http://t.me/landshare" 
                     target="_blank"

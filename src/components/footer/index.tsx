@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { NOT_VISIBLE_FOOTER_PAGES } from "../../config/constants/pages";
-// import toast, { Toaster } from 'react-hot-toast';
-
+import { useGlobalContext } from "../../context/GlobalContext";
 import Logo from "../common/logo";
 import SwitchTheme from "../common/switch-theme";
 import { ADDRESS_BOOK_ID } from "../../config/constants/environments";
@@ -19,12 +18,14 @@ import IconArrowRight from "../../../public/icons/arrow-right.svg";
 export default function Footer() {
   const [email, setEmail] = useState("");
   const router = useRouter();
+  const { notifySuccess } = useGlobalContext()
   const { pathname } = router;
-  const isFooterNotVisible = NOT_VISIBLE_FOOTER_PAGES.map((notAllowedPath: string) =>
-    pathname.startsWith(notAllowedPath)
+  let isFooterNotVisible = false
+  NOT_VISIBLE_FOOTER_PAGES.map((notAllowedPath: string) =>
+    isFooterNotVisible ||= pathname.startsWith(notAllowedPath)
   );
 
-  if (isFooterNotVisible[0]) return null;
+  if (isFooterNotVisible) return null;
 
   function getSPKey(type: string, SPdata: any) {
     const accessData = {
@@ -93,13 +94,13 @@ export default function Footer() {
     };
 
     getSPKey("new-user", emailData);
-    // toast.success("Subscribed your email successfully.")
+    notifySuccess("Subscribed your email successfully.")
   };
 
   return (
     <>
-      <div className="bg-third dark:bg-primary px-[20px] mlg:px-[40px] pt-[80px] border-top-2 border-primary less-padding">
-        <div className="flex justify-between items-start flex-col md:items-center lg:flex-row justify-around gap-[20px] lg:flex-row lg:gap-[80px] xxl:gap-[200px] pb-[40px]">
+      <div className="bg-third dark:bg-primary px-[20px] mlg:px-[40px] pt-[80px] border-top-2 border-primary less-padding flex justify-center">
+        <div className="max-w-[1280px] flex items-start flex-col md:items-center justify-center gap-[20px] lg:flex-row lg:gap-[40px] xxl:gap-[100px] pb-[40px]">
           <div className="flex flex-col gap-[20px] basis-[25%] grow-[0.6] ">
             <div className="flex flex-row-reverse justify-between items-center gap-[20px] min-w-[260px] lg:flex-col">
               <div className="flex w-full justify-between">
@@ -165,7 +166,7 @@ export default function Footer() {
                   About Us
                 </a>
                 <a
-                  href="https://landshare.io/faqs"
+                  href="https://landshare.io/faq"
                   className="font-normaml text-[14px] leading-[22px]"
                 >
                   FAQ

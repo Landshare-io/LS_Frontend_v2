@@ -216,7 +216,7 @@ export default function PriceGraph({
             <span className="text-[14px] leading-[22px] tracking-[0.02em] text-[#CBCBCB]">
               {new Date(recentData.date).toDateString()}
             </span>
-            <div className="flex flex-col gap-2 justify-between">
+            <div className="flex gap-2 justify-between">
               {showBuyButton && (
                 <Button 
                   onClick={handleClick} 
@@ -293,7 +293,7 @@ export default function PriceGraph({
           }
         </div>
       </div>
-      <div className="mr-[-22px] md:mr-0 md:ml-[-15px] pr-[30px] md:pr-0" id="chart-timeline">
+      <div className="mr-[-22px] md:mr-0 ml-[-15px] pr-[25px] md:pr-0" id="chart-timeline">
         <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
           {isLoading || isLandGraphDataLoading || isLandPriceDataLoading ?
             <Skeleton className="rounded-lg ml-2 w-full" height={300} /> :

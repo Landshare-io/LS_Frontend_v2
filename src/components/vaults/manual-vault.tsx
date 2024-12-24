@@ -76,7 +76,7 @@ export default function ManualVault({
   const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const { price: tokenPriceUsd } = useGetLandPrice()
-  const isVaultsLoading = totalStakedLoading || userInfoLoading || pendingLandLoading
+  const isVaultsLoading = false // totalStakedLoading || userInfoLoading || pendingLandLoading
 
   function handlePercents(percent: number) {
     if (landBalance == 0) {
@@ -246,7 +246,7 @@ export default function ManualVault({
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(totalStaked)))}</span>
+                    <span className={`text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(totalStaked)))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
@@ -259,17 +259,15 @@ export default function ManualVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
-                    <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(userInfo[0])))}</span>
+                    <span className={`text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(userInfo[0])))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
-                    {
-                      <Tooltip content={`Full number: ${formatEther(pendingLand || 0)}`}>
-                        <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                          {formatEther(pendingLand || 0).substr(0, 5)}
-                        </span>
-                      </Tooltip>
-                    }
+                    <Tooltip content={`Full number: ${formatEther(pendingLand || 0)}`}>
+                      <span className={`cursor-pointer text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                        {formatEther(pendingLand || 0).substr(0, 5)}
+                      </span>
+                    </Tooltip>
                   </div>
                 </div>
                 <div className="block md:hidden">
@@ -412,13 +410,12 @@ export default function ManualVault({
                                   }
                                 } else {
                                   notifyError(`Please switch your chain to ${MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
-                                  // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }
                               }}
                               disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable}
                             >
                               {
-                                !(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch to BSC' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                !(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch your network' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                               }
                             </button>
                             {(MANUAL_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) && (

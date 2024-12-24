@@ -44,7 +44,7 @@ export default function FacilityContent({
   return (
     <>
       {nextLevel > maxLevel ? (
-        <div className={`flex w-full h-[130px] rounded-[25px] bg-[#fff] justify-center items-center ${color}`}>
+        <div className={`flex w-full h-[130px] rounded-[25px] bg-transparent justify-center items-center ${color}`}>
           <span className={`my-3 text-[#1eceae] text-[16px] ${BOLD_INTER_TIGHT.className}`}>LEVEL {maxLevel}</span>
         </div>
       ) : (

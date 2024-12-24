@@ -113,7 +113,7 @@ export default function MarketplaceItem({
         <Image
           src={getHouseImageUrl()}
           alt="marketplace-image-house"
-          className="w-full h-auto"
+          className="w-full h-full"
         />
      
         <div className="flex items-end absolute w-full justify-between px-[10px] bottom-[10px]">
@@ -171,11 +171,11 @@ export default function MarketplaceItem({
               product.seller.toLowerCase() == address?.toString().toLowerCase() ||
               product.state == 1
             }
-            className={`w-[115px] h-[40px] text-[#fff] bg-[#0B6C96] border-[2px] border-[#0B6C96] flex items-center justify-center rounded-[24px] 
-            ${product.seller.toLowerCase() == address?.toString().toLowerCase() ||
-                product.state == 1
+            className={`w-[115px] h-[40px] text-[#fff] hover:text-primary-green bg-primary-green hover:bg-transparent border-[2px] border-primary-green flex items-center justify-center rounded-[24px] 
+            ${product.seller.toLowerCase() == address?.toString().toLowerCase() ?
+                (product.state == 1
                 ? "!bg-[#8f8f8f] !border-[#8f8f8f]"
-                : ""
+                : "hover:text-[#0B6C96] bg-[#0B6C96] border-[#0B6C96]") : ""
               }`}
             textClassName={`text-[16px] ${BOLD_INTER_TIGHT.className}`}
           >

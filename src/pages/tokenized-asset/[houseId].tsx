@@ -35,7 +35,7 @@ const MarketPlace: NextPage = () => {
 
   return (
     <div className="bg-primary">
-      <div className="max-w-[1200px] m-auto">
+      <div className="max-w-[1200px] m-auto p-[10px]">
         <Link
           className="flex items-center hover:cursor-pointer border-b-[2px] border-b-transparent hover:border-b-[#e5e5e5] w-fit"
           href="/rwa"

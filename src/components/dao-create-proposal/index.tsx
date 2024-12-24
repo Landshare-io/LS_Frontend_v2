@@ -92,9 +92,10 @@ export default function DaoCreateProposal({
   return (
     <div>
       <div className="flex flex-col mlg:flex-row w-full h-full fixed z-[100] top-0 left-0 overflow-hidden bg-[#00000080] backdrop-blur-sm">
-        <div className="fixed z-[3] top-[50%] left-[50%] w-[calc(100vw-20px)] h-[85vh] md:w-[400px] md:h-[515px] border-[1px] border-[#fff] rounded-[10px] p-[20px] flex-col translate-x-[-50%] translate-y-[-50%] bg-secondary">
+        <div className="fixed z-[3] top-[50%] left-[50%] w-[90%] md:w-[400px] border-[1px] border-[#fff] rounded-[10px] p-[20px] flex-col translate-x-[-50%] translate-y-[-50%] bg-secondary">
           <Image src={closeIcon} alt="close icon" onClick={() => close()} className="absolute top-[10px] right-[10px] w-[20px] hover:scale-x-110 hover:scale-y-110 hover:duration-300 hover:cursor-pointer" />
           <h1 className={`text-[28px] leading-[42px] mb-[2px] tracking-normal capitalize text-text-primary ${BOLD_INTER_TIGHT.className}`}>Create Proposal</h1>
+          <div className="min-h-[400px] h-[50vh] overflow-y-auto md:h-auto">
           {submit ? (
             <>
               <div className="mt-1 text-text-secondary">
@@ -150,7 +151,7 @@ export default function DaoCreateProposal({
 
               {proposal === "Select Proposal" ? (
                 <>
-                  <div className="flex flex-col mt-[70px] justify-center items-center">
+                  <div className="flex flex-col my-[70px] justify-center items-center">
                     <div className="w-full text-center pr-[10px] text-[18px] text-text-secondary">Available Balance:</div>
                     <div className="w-full text-center pr-[10px] mt-[5px] text-[28px] mt-1 text-text-secondary">
                       <b>
@@ -169,6 +170,7 @@ export default function DaoCreateProposal({
               )}
             </>
           )}
+          </div>
         </div>
       </div>
     </div>
