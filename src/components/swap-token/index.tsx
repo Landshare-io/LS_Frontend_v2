@@ -767,7 +767,7 @@ export default function SwapToken() {
                         onClick={() => {
                           setIsSTAPshow(true);
                         }}
-                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green hover:bg-white"
+                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green text-white"
                       >
                         {RWATokenAmount && buyLANDAmount && usdcAmount
                           ? Number(formatEther(buyLANDAmount.toString())) >
@@ -789,7 +789,7 @@ export default function SwapToken() {
                     rel="noopener noreferrer"
                     className="text-decoration-none"
                   >
-                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81] hover:bg-[#61cd81]">
+                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81]">
                       Trade on DS Swap
                     </Button>
                   </a>
