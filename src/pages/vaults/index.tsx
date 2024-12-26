@@ -304,7 +304,7 @@ const StakingPage: NextPage = () => {
       >
         <div className={`flex items-center justify-between w-inherit pt-[24px] px-[24px] pb-[16px] rounded-t-[16px] text-[18px] leading-[28px] tracking-[0.36px] bg-primary text-text-primary ${BOLD_INTER_TIGHT.className}`}>
           <span>ROI Calculator</span>
-          <Image src={theme == 'dark' ? CloseIconDark : CloseIcon} alt="" className="close" onClick={() => setShowModal(false)} />
+          <Image src={theme == 'dark' ? CloseIconDark : CloseIcon} alt="" className="close cursor-pointer" onClick={() => setShowModal(false)} />
         </div>
         <div className="flex flex-col py-[16px] px-[24px] gap-[32px] w-full bg-secondary">
           <div className="flex flex-col gap-[16px]">
