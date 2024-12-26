@@ -413,7 +413,7 @@ const StakingPage: NextPage = () => {
             <div className="flex flex-col items-start p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
               <span>ROI at current rate</span>
               <div className="flex items-center justify-between py-[13px] px-[16px] gap-[8px] w-full rounded-[12px] outline-0 bg-primary">
-                <div className="text-[14px] font-medium leading-[22px] tracking-[0.28px] text-[#9d9fa8]">
+                <div className="text-[14px] font-medium min-w-fit leading-[22px] tracking-[0.28px] text-[#9d9fa8]">
                   {
                     rewardPercent / 100 * Number(numeral(usdAmount / price).format('0.[00000]'))
                   }
