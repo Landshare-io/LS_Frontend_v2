@@ -144,7 +144,9 @@ const StakingPage: NextPage = () => {
     setRewardPercent(Number(numeral(showModalApy).format('0.[00000]')))
   }, [roiInputCalculValue, isShowUsdPrice]);
 
-
+  useEffect(() => {
+    setIsShowUsdPrice(isRUSD)
+  }, [isRUSD]);
 
   return (
     <div>
