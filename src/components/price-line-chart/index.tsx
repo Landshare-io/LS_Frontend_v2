@@ -293,7 +293,7 @@ export default function PriceGraph({
           }
         </div>
       </div>
-      <div className="mr-[-22px] md:mr-0 ml-[-15px] pr-[25px] md:pr-0" id="chart-timeline">
+      <div className="mr-[-22px] md:mr-0 ml-[-15px] pr-[25px] md:pr-0 h-[300px]" id="chart-timeline">
         <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
           {isLoading || isLandGraphDataLoading || isLandPriceDataLoading ?
             <Skeleton className="rounded-lg ml-2 w-full" height={300} /> :
