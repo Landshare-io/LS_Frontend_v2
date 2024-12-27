@@ -304,7 +304,7 @@ const StakingPage: NextPage = () => {
       >
         <div className={`flex items-center justify-between w-inherit pt-[24px] px-[24px] pb-[16px] rounded-t-[16px] text-[18px] leading-[28px] tracking-[0.36px] bg-primary text-text-primary ${BOLD_INTER_TIGHT.className}`}>
           <span>ROI Calculator</span>
-          <Image src={theme == 'dark' ? CloseIconDark : CloseIcon} alt="" className="close" onClick={() => setShowModal(false)} />
+          <Image src={theme == 'dark' ? CloseIconDark : CloseIcon} alt="" className="close cursor-pointer" onClick={() => setShowModal(false)} />
         </div>
         <div className="flex flex-col py-[16px] px-[24px] gap-[32px] w-full bg-secondary">
           <div className="flex flex-col gap-[16px]">
@@ -411,13 +411,13 @@ const StakingPage: NextPage = () => {
             <div className="flex flex-col items-start p-0 gap-[4px] w-full text-[12px] leading-[20px] tracking-[0.02em] text-text-third">
               <span>ROI at current rate</span>
               <div className="flex items-center justify-between py-[13px] px-[16px] gap-[8px] w-full rounded-[12px] outline-0 bg-primary">
-                <div className="text-[14px] font-medium leading-[22px] tracking-[0.28px] text-[#9d9fa8]">
+                <div className="flex flex-shrink-0 text-[14px] font-medium leading-[22px] tracking-[0.28px] text-[#9d9fa8]">
                   {
                     rewardPercent / 100 * Number(numeral(usdAmount / price).format('0.[00000]'))
                   }
                   {" "} LAND
                 </div>
-                <div className="light-text">{numeral(rewardPercent / 100 * usdAmount).format('0.[000]')} USD  ({rewardPercent}%) </div>
+                <div className="flex flex-shrink-0 light-text">{numeral(rewardPercent / 100 * usdAmount).format('0.[000]')} USD  ({rewardPercent}%) </div>
               </div>
             </div>
           </div>
