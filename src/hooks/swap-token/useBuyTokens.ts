@@ -146,8 +146,6 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
       setScreenLoadingStatus("Transaction Pending...")
       if (Number(formatEther(BigInt(usdcAllowance))) < Number(formatEther(BigInt(buyUSDCAmount)))) {
         await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], buyUSDCAmount);
-      } else if (Number(formatEther(BigInt(landAllowance))) < Number(formatEther(BigInt(landAmount)))) {
-        await approveLand(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], landAmount)
       } else {
         buyToken(amount, USDC_ADDRESS[chainId])
       }

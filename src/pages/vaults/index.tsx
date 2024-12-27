@@ -415,7 +415,7 @@ const StakingPage: NextPage = () => {
               <div className="flex items-center justify-between py-[13px] px-[16px] gap-[8px] w-full rounded-[12px] outline-0 bg-primary">
                 <div className="text-[14px] font-medium min-w-fit leading-[22px] tracking-[0.28px] text-[#9d9fa8]">
                   {
-                    rewardPercent / 100 * Number(numeral(usdAmount / price).format('0.[00000]'))
+                    numeral(rewardPercent / 100 * Number(numeral(usdAmount / price).format('0.[00000]'))).format('0.[00000]')
                   }
                   {" "} LAND
                 </div>

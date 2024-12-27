@@ -180,7 +180,7 @@ export default function SwapToken() {
       overflow: "hidden",
       maxWidth: "460px",
       width: "90%",
-      height: "90%",
+      height: "fit-content",
       borderRadius: "20px",
       background: theme == "dark" ? "#2E2E2E" : "#f6f7f9"
     },
@@ -1021,7 +1021,7 @@ export default function SwapToken() {
             />
           </div>
         </div>
-        <div className="pt-0 p-3 flex flex-col h-[90%] space-y-4">
+        <div className="pt-0 p-3 flex flex-col space-y-4">
           <div className="w-full google-doc-content overflow-x-hidden overflow-y-scroll">
             {!isSTPALoding ? (
               <></>
