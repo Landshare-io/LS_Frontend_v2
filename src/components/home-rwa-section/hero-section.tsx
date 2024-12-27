@@ -54,7 +54,7 @@ export default function HomeRwaHeroSection() {
                 <Button className="rounded-[100px] py-[13px] w-full bg-primary-green" textClassName="text-[#fff]">Buy Now</Button>
               </Link>
               <a href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa">
-                <Button className="rounded-[100px] py-[13px] w-full border-primary-green hover:bg-primary-green" textClassName="dark:text-[#fff]" outlined>Learn More</Button>
+                <Button className="rounded-[100px] py-[13px] w-full border-primary-green hover:bg-primary-green hover:text-white" textClassName="dark:text-[#fff]" outlined>Learn More</Button>
               </a>
             </div>
           </div>
@@ -76,7 +76,7 @@ export default function HomeRwaHeroSection() {
                   </Button>
                 </Link>
                 <Link href="https://t.me/landshare">
-                  <Button className="px-[24px] py-[13px] rounded-[100px] border-primary-green hover:bg-primary-green" textClassName="dark:text-[#fff]" outlined>Telegram Community</Button>
+                  <Button className="px-[24px] py-[13px] rounded-[100px] border-primary-green hover:bg-primary-green hover:text-white" textClassName="dark:text-[#fff]" outlined>Telegram Community</Button>
                 </Link>
               </div>
             </div>

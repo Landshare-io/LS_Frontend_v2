@@ -46,7 +46,7 @@ export default function BeneficalAssets() {
                   assets by holding the Landshare RWA Token.
                 </p>
                 <a
-                  href="#"
+                  href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/lsrwa-tokenization-model"
                   className="text-sm text-[#61CD81] hover:text-[#4ea869] font-medium "
                 >
                   Learn more
