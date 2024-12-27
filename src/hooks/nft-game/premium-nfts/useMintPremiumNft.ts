@@ -34,13 +34,27 @@ export default function useMintPremiumNft(chainId: number, address: Address | un
           const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
   
           if (receipt.status) {
-            await refetchBalance()
-            await prRefetch()
-            await ptRefetch()
-            await mcRefetch()
-            setTransactionNonce(0)
-            setLoader("");
-            notifySuccess(`Mint ${premiumItem.name} successfully`)
+
+            const { data } = await axios.post('/has-item/mint-premium-nft', {
+              itemId: premiumItem.id,
+              txHash: receipt.transactionHash,
+              blockNumber: receipt.blockNumber,
+              nonce: premiumItem.nonce
+            })
+
+            if (data) {
+              await refetchBalance()
+              await prRefetch()
+              await ptRefetch()
+              await mcRefetch()
+              setTransactionNonce(0)
+              setLoader("");
+              notifySuccess(`Mint ${premiumItem.name} successfully`)
+            } else {
+              setLoader("");
+              setTransactionNonce(0)
+              notifyError(`Mint ${premiumItem.name} Error`);
+            }
           } else {
             setLoader("");
             setTransactionNonce(0)

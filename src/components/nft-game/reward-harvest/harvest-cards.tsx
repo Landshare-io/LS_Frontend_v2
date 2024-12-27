@@ -129,7 +129,7 @@ export default function HarvestCards({
   };
 
   return (
-    <div className="w-[200px] mb-[20px] border-[1px] border-[#00000033] pt-[17px] bg-gradient-to-b from-[#9e9e9e33] to-[#d9d9d933] duration-300 hover:shadow-2xl rounded-[10px]">
+    <div className="min-w-[200px] mb-[20px] border-[1px] border-[#00000033] pt-[17px] bg-gradient-to-b from-[#9e9e9e33] to-[#d9d9d933] duration-300 hover:shadow-2xl rounded-[10px]">
       <div className="pl-[10px] cursor-pointer">
         <FormCheck
           type="checkbox"

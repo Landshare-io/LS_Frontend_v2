@@ -39,7 +39,7 @@ export default function Repair({
             <InputCost
               width={70}
               value={displayPercent}
-              changeRepairAmount={() => changeRepairAmount(house, setHouse, setDisplayPercent, displayPercent)}
+              changeRepairAmount={(v: number) => setDisplayPercent(v)}
               calcMaxAmount={calcMaxAmount}
             />
           </div>
@@ -75,7 +75,7 @@ export default function Repair({
             <InputCost
               width={70}
               value={displayPercent}
-              changeRepairAmount={() => changeRepairAmount(house, setHouse, setDisplayPercent, displayPercent)}
+              changeRepairAmount={(v: number) => setDisplayPercent(v)}
               calcMaxAmount={calcMaxAmount}
             />
           </div>
