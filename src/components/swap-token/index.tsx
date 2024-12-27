@@ -178,7 +178,7 @@ export default function SwapToken() {
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "460px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
@@ -767,7 +767,7 @@ export default function SwapToken() {
                         onClick={() => {
                           setIsSTAPshow(true);
                         }}
-                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green hover:bg-white"
+                        className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green text-white"
                       >
                         {RWATokenAmount && buyLANDAmount && usdcAmount
                           ? Number(formatEther(buyLANDAmount.toString())) >
@@ -789,7 +789,7 @@ export default function SwapToken() {
                     rel="noopener noreferrer"
                     className="text-decoration-none"
                   >
-                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81] hover:bg-[#61cd81]">
+                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81]">
                       Trade on DS Swap
                     </Button>
                   </a>
@@ -1009,7 +1009,7 @@ export default function SwapToken() {
         style={customModalStyles}
       >
         <div className="flex w-full justify-between items-center pl-4 z-10">
-          <div className={`text-[16px] md:text-[24px] text-text-secondary ${BOLD_INTER_TIGHT.className}`}>
+          <div className={`text-[16px] md:text-[20px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
             Security Token Purchase Agreement
           </div>
           <div className="flex justify-end px-[16px] pt-[16px] pb-3">
@@ -1054,7 +1054,7 @@ export default function SwapToken() {
               acceptance of the terms outlined in the STPA. To obtain a duly
               signed copy of the STPA, kindly complete the purchase process
               through the{" "}
-              <a href="https://dashboard.landshare.io" target="_blank">
+              <a className="underline font-bold" href="https://dashboard.landshare.io" target="_blank">
                 Landshare Dashboard
               </a>
               .

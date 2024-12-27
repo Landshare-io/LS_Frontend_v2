@@ -51,7 +51,7 @@ export default function Tooltip({
 
       const tooltipRect = tooltipElement.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
-      const EDGE_PADDING = 16; // Padding from viewport edges
+      const EDGE_PADDING = 16;
 
       let top = 0;
       let left = 0;
@@ -75,7 +75,6 @@ export default function Tooltip({
           break;
       }
 
-      // Ensure left position stays within viewport bounds with padding
       const maxLeft = viewportWidth - tooltipRect.width - EDGE_PADDING;
       left = Math.max(EDGE_PADDING, Math.min(left, maxLeft));
 
@@ -94,30 +93,15 @@ export default function Tooltip({
 
   const handleMouseEnter = () => {
     if (disabled || isTouchDevice) return;
-    timeoutRef.current = setTimeout(() => setVisible(true), delay);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setVisible(true);
   };
 
   const handleMouseLeave = () => {
     if (disabled || isTouchDevice) return;
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    setVisible(false);
-  };
-
-  const handleTouchStart = () => {
-    if (disabled) return;
-    setVisible(!visible);
-  };
-
-  const handleFocus = () => {
-    if (disabled) return;
-    setVisible(true);
-  };
-
-  const handleBlur = () => {
-    if (disabled) return;
-    setVisible(false);
+    timeoutRef.current = setTimeout(() => setVisible(false), delay);
   };
 
   return (
@@ -127,9 +111,9 @@ export default function Tooltip({
         className={`inline-block ${tooltipContainerClassName}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onTouchStart={() => setVisible(!visible)}
+        onFocus={() => setVisible(true)}
+        onBlur={() => setVisible(false)}
       >
         {children}
       </div>
@@ -137,11 +121,16 @@ export default function Tooltip({
         createPortal(
           <div
             id="tooltip"
-            className={`fixed z-50 w-[280px] px-2 py-1 text-sm text-white bg-gray-800 rounded shadow-lg pointer-events-none ${tooltipClassName}`}
+            className={`fixed z-50 w-[280px] px-2 py-1 text-sm text-white bg-gray-800 rounded shadow-lg pointer-events-auto ${tooltipClassName}`}
             style={{
               top: tooltipPosition.top,
               left: tooltipPosition.left,
             }}
+            onMouseEnter={() => {
+              if (timeoutRef.current) clearTimeout(timeoutRef.current);
+              setVisible(true);
+            }}
+            onMouseLeave={handleMouseLeave}
           >
             {content}
           </div>,

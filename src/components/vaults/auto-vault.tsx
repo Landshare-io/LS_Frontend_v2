@@ -164,7 +164,7 @@ export default function AutoVault({
       }
 
       amountLS = parseEther(amountLS).toString(); //convert to wei
-      if (BigInt(minTransferAmount) > BigInt(amountLS)) {
+      if (BigInt(minTransferAmount || 0) > BigInt(amountLS)) {
         return notifyError(`Minimum transfer amount is ${formatEther(minTransferAmount.toString())} LAND`);
       }
 
@@ -192,7 +192,7 @@ export default function AutoVault({
       return;
     }
     amountLS = parseEther(amountLS).toString(); //convert to wei
-    if (BigInt(minTransferAmount) > BigInt(amountLS)) {
+    if (BigInt(minTransferAmount || 0) > BigInt(amountLS)) {
       setInputValue("");
       notifyError(`Minimum transfer amount is ${formatEther(minTransferAmount.toString())} LAND`);
       return;
