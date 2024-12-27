@@ -55,7 +55,7 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
     hash: approveTx,
     chainId: chainId
   });
-  const { isSuccess: premiumNftApproveSuccess, data: premiumNftApproveStatusData } = useWaitForTransactionReceipt({
+  const { isSuccess: premiumNftApproveSuccess, data: premiumNftApproveStatusData, error } = useWaitForTransactionReceipt({
     hash: premiumNftApproveTx,
     chainId: chainId
   });
@@ -101,7 +101,7 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
   useEffect(() => {
     if (typeof address == 'undefined') return
     gettingPremiumItems()
-  }, [address])
+  }, [address, house])
 
   useEffect(() => {
     (async () => {
@@ -109,7 +109,7 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
         if (premiumNftApproveStatusData) {
           if (premiumNftApproveSuccess) {
             try {
-              const receipt = await PROVIDERS[chainId].getTransactionReceipt(approveTx);
+              const receipt = await PROVIDERS[chainId].getTransactionReceipt(premiumNftApproveTx);
 
               if (receipt.status) {
                 const amount = parseUnits(premiumAttachPrice.toString(), 18)
@@ -262,7 +262,7 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
             return notifyError(`No ${item.name} NFT Found`);
           } else {
             setAttachStatus('attach-premium-nft-house')
-            premiumNftApprove(chainId, item.name, nftId)
+            premiumNftApprove(chainId, PREMIUM_NFT_CONTRACT_ADDRESS[item.name][chainId], nftId)
           }
         }
       } else {

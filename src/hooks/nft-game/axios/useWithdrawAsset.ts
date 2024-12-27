@@ -32,7 +32,8 @@ export default function useWithdrawAsset(chainId: number, address: Address | und
               await axios.post('/house/withdraw-asset-token', {
                 houseId: -1
               })
-    
+              
+              refetch()
               getUserData()
               setDepositLoading(false);
               setWithdrawLoading(false)

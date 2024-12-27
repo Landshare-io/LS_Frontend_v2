@@ -49,7 +49,7 @@ export default function PremiumNft({
           </div>
           <div className='w-full h-[210px] relative'>
             <div className="flex absolute items-end w-full justify-center px-3 text-center top-[5px] text-[10px]">
-              <div className="text-[14px] text-[#fff] font-semibold leading-[24px]">
+              <div className="text-[14px] text-[#fff] font-semibold leading-[24px] z-10">
                 {remainingTime ? `Next Refurbish: ${remainingTime}` : ''}
               </div>
             </div>

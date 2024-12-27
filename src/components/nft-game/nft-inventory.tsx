@@ -262,7 +262,7 @@ export default function InventoryPage() {
     slidesToShow: 3,
     slidesToScroll: 1,
     dots: true,
-    arrows: true,
+    arrows: false,
     responsive: [
       {
         breakpoint: 1200,
@@ -310,7 +310,8 @@ export default function InventoryPage() {
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      width: "90%",
+      width: "fit-content",
+      minWidth: "400px",
       height: "fit-content",
       borderRadius: "20px",
       padding: 0,
@@ -346,7 +347,7 @@ export default function InventoryPage() {
                           <span className={`text-[16px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
                           <div className="border-b-[1px] border-[#00000050] block w-full mb-4 my-3"></div>
                           <div className="flex flex-col w-full pb-3">
-                            <div className="flex flex-col gap-[30px] md:flex-row items-center justify-between mb-5">
+                            <div className="flex flex-col gap-[30px] md:gap-0 md:flex-row items-center justify-between mb-5">
                               <div className="w-full my-[20px] md:w-[75%]">
                                 {(houseItems?.length > 0) ? (
                                   <Slider {...settings}>
@@ -380,7 +381,7 @@ export default function InventoryPage() {
                                             <p>{`Add New Slot (${buySlotCost} LAND)`}</p>
                                           </div>
                                           <Button
-                                            className={`w-auto px-4 py-2 bg-[#61cd81] rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className} ${buyHouseSlotLoading
+                                            className={`w-auto h-[40px] px-4 py-2 bg-[#61cd81] rounded-[24px] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className} ${buyHouseSlotLoading
                                               ? "flex justify-center items-center"
                                               : ""
                                               }`}
@@ -433,7 +434,7 @@ export default function InventoryPage() {
                                     <div className="mt-2 pt-3 flex justify-between gap-[20px]">
                                       <Button
                                         onClick={handleDeposit}
-                                        className={`w-full py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                                        className={`w-full h-[40px] py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || depositLoading) &&
                                           	" bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
@@ -463,7 +464,7 @@ export default function InventoryPage() {
                                       </Button>
                                       <Button
                                         onClick={handleWithdraw}
-                                        className={`w-full py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                                        className={`w-full h-[40px] py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
                                 					${((houseItems.filter((house: any) => house.isActivated).length < 1) || withdrawLoading) &&
                                           " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }

@@ -226,7 +226,7 @@ export default function YieldUpgrade({
                       </div>
                       <div>
                         {message && (
-                          <Tooltip content={(
+                          <Tooltip tooltipContainerClassName="absolute top-1 left-4" content={(
                             <>
                               Missing Dependency: <br />
                               {message}.<br />
@@ -236,7 +236,7 @@ export default function YieldUpgrade({
                             <div>
                               {/* svg icons must be wrapped around a div */}
                               <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                                x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-0 right-[5px]">
+                                x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer">
                                 <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                               </svg>
                             </div>
@@ -250,7 +250,7 @@ export default function YieldUpgrade({
                   ) : (
                     <div className="px-[12px] flex w-full justify-end px-4 py-1 absolute bottom-[5px] right-[5px]">
                       {message && (
-                        <Tooltip content={(
+                        <Tooltip tooltipContainerClassName="absolute top-1 left-4" content={(
                           <>
                             Missing Dependency: <br />
                             {message}.<br />
@@ -260,7 +260,7 @@ export default function YieldUpgrade({
                           <div>
                             {/* svg icons must be wrapped around a div */}
                             <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-0 right-[5px]">
+                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer">
                               <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                             </svg>
                           </div>
@@ -278,7 +278,7 @@ export default function YieldUpgrade({
                     </div>
                     <div>
                       {message && (
-                        <Tooltip content={(
+                        <Tooltip tooltipContainerClassName="absolute top-1 left-4" content={(
                           <>
                             Missing Dependency: <br />
                             {message}.<br />
@@ -288,7 +288,7 @@ export default function YieldUpgrade({
                           <div>
                             {/* svg icons must be wrapped around a div */}
                             <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-0 right-[5px]">
+                              x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer">
                               <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                             </svg>
                           </div>
@@ -301,9 +301,9 @@ export default function YieldUpgrade({
                   </div>
                 )
               ) : (
-                <div className="px-[12px] bottom-0 flex w-full justify-end px-4 py-1 absolute">
+                <div className="px-[12px] bottom-0 flex w-full flex justify-end px-4 py-1 absolute">
                   {message && (
-                    <Tooltip content={(
+                    <Tooltip tooltipContainerClassName="absolute top-1 left-4" content={(
                       <>
                         Missing Dependency: <br />
                         {message}.<br />
@@ -313,7 +313,7 @@ export default function YieldUpgrade({
                       <div>
                         {/* svg icons must be wrapped around a div */}
                         <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg"
-                          x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer absolute bottom-0 right-[5px]">
+                          x="0px" y="0px" width="26px" height="26px" viewBox="0 0 20 16" className="cursor-pointer">
                           <path fill="#D61F33" opacity="0.7" d="M10,0L0,16h20L10,0z M11,13.908H9v-2h2V13.908z M9,10.908v-6h2v6H9z"/>
                         </svg>
                       </div>
