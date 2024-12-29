@@ -85,6 +85,19 @@ export default function useGetHouse(houseId: number | string) {
   const getHouse = async () => {
     if (!isAuthenticated) return
     if (typeof houseId === "undefined" || houseId === '') return
+    setIsLoading(true);
+    const { data } = await axios.get(`/house/detail/${houseId}`)
+
+    updateHouse((prevState: any) => ({
+      ...prevState,
+      ...data
+    }));
+    setIsLoading(false);
+  }
+
+  const getHouseWithoutLoading = async () => {
+    if (!isAuthenticated) return
+    if (typeof houseId === "undefined" || houseId === '') return
     const { data } = await axios.get(`/house/detail/${houseId}`)
 
     updateHouse((prevState: any) => ({
@@ -96,7 +109,7 @@ export default function useGetHouse(houseId: number | string) {
   return {
     house,
     setHouse: updateHouse,
-    getHouse,
+    getHouse: getHouseWithoutLoading,
     isLoading,
     setIsLoading
   }
