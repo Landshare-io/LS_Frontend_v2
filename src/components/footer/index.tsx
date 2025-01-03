@@ -191,7 +191,7 @@ export default function Footer() {
                   BSC Scan
                 </a>
                 <a
-                  href="https://landshare.medium.com/landshare-roadmap-q3-q4-2024-preview-630f74d736e7"
+                  href="https://landshare.medium.com/landshares-2025-roadmap-7362048b3719"
                   className="font-normaml text-[14px] leading-[22px]"
                 >
                   Roadmap
