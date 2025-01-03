@@ -78,11 +78,6 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         }
       }
     }
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [autoVaultV3DepositTx, autoVaultV3DepositStatusData, autoVaultV3DepositSuccess, isDepositAutoV3Error])
 
   useEffect(() => {
@@ -104,11 +99,6 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         }
       }
     }
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [masterchefDepositTx, masterchefDepositStatusData, masterchefDepositSuccess, isDepositError])
 
   async function depositAutoLandv2(amount: number) {
@@ -123,9 +113,6 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessDeposit(false);
-        setTimeout(() => {
-          setScreenLoadingStatus("")
-        }, 1000);
       }
     }
   }
@@ -142,9 +129,6 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessDeposit(false);
-        setTimeout(() => {
-          setScreenLoadingStatus("")
-        }, 1000);
       }
     }
   }
@@ -161,9 +145,6 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessDeposit(false);
-        setTimeout(() => {
-          setScreenLoadingStatus("")
-        }, 1000);
       }
     }
   }

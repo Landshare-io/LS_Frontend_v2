@@ -116,9 +116,6 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
     if (score < 100) {
       window.alert("Not enough voting power.");
       setScreenLoadingStatus("Transaction Failed.");
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000)
       return;
     }
 
@@ -142,17 +139,10 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
     } catch (e) {
       console.log(e);
       setScreenLoadingStatus("Transaction Failed.");
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 1000)
       if (onError) onError(e as Error);
     }
 
     setScreenLoadingStatus("Transaction Success.");
-
-    setTimeout(() => {
-      setScreenLoadingStatus("")
-    }, 1000)
   }
 
   return {

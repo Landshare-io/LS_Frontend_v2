@@ -78,12 +78,6 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess, isUsdcApproveError])
 
   useEffect(() => {
@@ -107,12 +101,6 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [landApproveTx, landApproveStatusData, landApproveSuccess, isLandApproveError])
 
   useEffect(() => {
@@ -131,13 +119,6 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
           setScreenLoadingStatus("Transaction Failed.")
         }
       }
-    }
-
-    return () => {
-      setTimeout(() => {
-        if (!isLandApproveError)
-          setScreenLoadingStatus("")
-      }, 1000);
     }
   }, [buyTx, buyStatusData, buySuccess, isError])
 

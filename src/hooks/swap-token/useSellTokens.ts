@@ -92,12 +92,6 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [rwaApproveTx, rwaApproveStatusData, rwaApproveSuccess, isRwaApproveError])
 
   useEffect(() => {
@@ -119,12 +113,6 @@ export default function useSellTokens(chainId: number, address: Address | undefi
     } catch (error) {
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
-    }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
     }
   }, [landApproveTx, landApproveStatusData, landApproveSuccess, isLandApproveError])
 
@@ -148,12 +136,6 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess, isUsdcApproveError])
 
   useEffect(() => {
@@ -171,17 +153,12 @@ export default function useSellTokens(chainId: number, address: Address | undefi
         }
       }
     }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [sellTx, sellStatusData, sellSuccess, isError])
 
   const sellTokens = async () => {
     try {
       if (Number(rwaAllowance ?? 0) < amount) {
+        setScreenLoadingStatus('Transaction is Pending...')
         await approveRWA(LANDSHARE_SALE_CONTRACT_ADDRESS[chainId], amount);
       }
     } catch (error) {

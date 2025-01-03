@@ -49,8 +49,7 @@ export default function ManualVault({
 }: ManualVaultProps) {
   const { 
     theme, 
-    notifyError,
-    setScreenLoadingStatus
+    notifyError
   } = useGlobalContext();
   const chainId = useChainId()
   const { isConnected, address } = useAccount();
