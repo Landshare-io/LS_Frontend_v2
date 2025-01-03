@@ -78,13 +78,6 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
         }
       }
     }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
-
   }, [approveLandTx, approveStatusData, approveLandSuccess, isApproveLandError])
 
   useEffect(() => {
@@ -103,13 +96,6 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
         }
       }
     }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
-
   }, [approveLpTx, approveLpStatusData, approveLpSuccess, isApproveLPError])
 
   async function approveLandV2(approveAddress: Address) {

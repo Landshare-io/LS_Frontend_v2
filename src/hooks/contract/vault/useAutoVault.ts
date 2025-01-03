@@ -109,13 +109,6 @@ export default function useAutoVault(chainId: number, address: Address | undefin
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        if (!isApproveError)
-          setScreenLoadingStatus("")
-      }, 1000);
-    }
   }, [approveLandTx, approveStatusData, approveLandSuccess, isApproveError])
 
   useEffect(() => {
@@ -135,38 +128,24 @@ export default function useAutoVault(chainId: number, address: Address | undefin
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        if (!isHarvestError)
-          setScreenLoadingStatus("")
-      }, 1000);
-    }
   }, [harvestTx, harvestStatusData, harvestSuccess, isHarvestError])
 
   useEffect(() => {
     try {
       if (isWithdrawAllError) {
-        setScreenLoadingStatus("Transaction Failed..")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (withdrawAllTx) {
         if (withdrawAllStatusData) {
           if (withdrawAllSuccess) {
             setScreenLoadingStatus("Transaction Complete.")
           } else {
-            setScreenLoadingStatus("Transaction Failed..")
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
     } catch (error) {
-      setScreenLoadingStatus("Transaction Failed..")
+      setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
-    }
-
-    return () => {
-      setTimeout(() => {
-        if (!isWithdrawAllError)
-          setScreenLoadingStatus("")
-      }, 1000);
     }
   }, [withdrawAllTx, withdrawAllStatusData, withdrawAllSuccess, isWithdrawAllError])
 
@@ -197,13 +176,6 @@ export default function useAutoVault(chainId: number, address: Address | undefin
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        if (!isTransferError)
-          setScreenLoadingStatus("")
-      }, 1000);
-    }
   }, [transferTx, transferStatusData, transferSuccess])
 
   useEffect(() => {
@@ -228,13 +200,6 @@ export default function useAutoVault(chainId: number, address: Address | undefin
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        if (!isDepositError)
-          setScreenLoadingStatus("")
-      }, 1000);
-    }
   }, [depositTx, depositStatusData, depositSuccess, isDepositError])
 
   useEffect(() => {
@@ -258,13 +223,6 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     } catch (error) {
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
-    }
-
-    return () => {
-      setTimeout(() => {
-        if (!isWithdrawError)
-          setScreenLoadingStatus("")
-      }, 1000);
     }
   }, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawError])
 

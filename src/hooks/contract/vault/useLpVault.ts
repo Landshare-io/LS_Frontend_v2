@@ -69,13 +69,6 @@ export default function useLpVault(chainId: number, address: Address | undefined
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        if (!isDepositError)
-          setScreenLoadingStatus("")
-      }, 1000);
-    }
   }, [depositTx, depositStatusData, depositSuccess, isDepositError])
 
   useEffect(() => {
@@ -101,13 +94,6 @@ export default function useLpVault(chainId: number, address: Address | undefined
     } catch (error) {
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
-    }
-
-    return () => {
-      setTimeout(() => {
-        if (!isWithdrawError)
-          setScreenLoadingStatus("")
-      }, 1000);
     }
   }, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawError])
 
@@ -136,13 +122,6 @@ export default function useLpVault(chainId: number, address: Address | undefined
     } catch (error) {
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
-    }
-
-    return () => {
-      setTimeout(() => {
-        if (!isApproveError)
-          setScreenLoadingStatus("")
-      }, 1000);
     }
   }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 

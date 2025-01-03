@@ -45,7 +45,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
           if (depositSuccess) {
             refetchrwaLpTokenBalance()
             refetchUserInfo();
-            setScreenLoadingStatus("Transaction Successful.")
+            setScreenLoadingStatus("Transaction success.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -54,13 +54,6 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
     } catch (error) {
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
-    }
-
-    return () => {
-      setTimeout(() => {
-        if (!isDepositError)
-          setScreenLoadingStatus("")
-      }, 1000);
     }
   }, [depositTx, depositStatusData, depositSuccess, isDepositError])
 
@@ -83,13 +76,6 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        if (!isWithdrawError)
-          setScreenLoadingStatus("")
-      }, 1000);
-    }
   }, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawError])
 
   useEffect(() => {
@@ -109,13 +95,6 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
     } catch (error) {
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
-    }
-
-    return () => {
-      setTimeout(() => {
-        if (!isApproveError)
-          setScreenLoadingStatus("")
-      }, 1000);
     }
   }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 

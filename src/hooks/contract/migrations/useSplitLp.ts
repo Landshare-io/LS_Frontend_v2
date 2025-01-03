@@ -101,11 +101,6 @@ export default function useSplitLP({
         }
       }
     }
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [approveSuccess, approveStatusData, approveTx, isApproveError])
 
   useEffect(() => {
@@ -129,11 +124,6 @@ export default function useSplitLP({
         }
       }
     })()
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [removeLiquiditySuccess, removeLiquidityStatusData, removeLiquidityETHTx, isRemoveLiquidityError])
 
   async function splitLP(amount: string | number, minLand: string | number | bigint, minEth: string | number | bigint) {
@@ -152,9 +142,6 @@ export default function useSplitLP({
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.")
         updateIsSuccessSplit(false);
-        setTimeout(() => {
-          setScreenLoadingStatus("")
-        }, 1000);
       }
    
     }

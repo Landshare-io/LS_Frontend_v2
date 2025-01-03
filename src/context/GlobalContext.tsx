@@ -54,6 +54,14 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     setTheme(storedTheme);
   }, []);
 
+  useEffect(() => {
+    if (screenLoadingStatus.includes('Failed') || screenLoadingStatus.includes('Complete') || screenLoadingStatus.includes('success') || screenLoadingStatus.includes('Success')) {
+      setTimeout(() => {
+        setScreenLoadingStatus("")
+      }, 2000);
+    }
+  }, [screenLoadingStatus])
+
   const notifySuccess = (message: string) =>
     setAlertModal({ show: true, type: "success", message });
   const notifyError = (message: string) =>
