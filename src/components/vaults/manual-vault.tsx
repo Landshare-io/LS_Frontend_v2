@@ -264,7 +264,7 @@ export default function ManualVault({
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     <Tooltip content={`Full number: ${formatEther(pendingLand || 0)}`}>
-                      <span className={`cursor-pointer text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                      <span className={`cursor-pointer text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                         {formatEther(pendingLand || 0).substr(0, 5)}
                       </span>
                     </Tooltip>
