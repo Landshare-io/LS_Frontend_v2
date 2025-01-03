@@ -246,12 +246,12 @@ export default function ManualVault({
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
-                    <span className={`text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(totalStaked)))}</span>
+                    <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(totalStaked)))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
                     <div className={`flex items-center p-0 gap-[4px] text-[14px] leading-[22px] tracking-[0.02em] text-[#0A0A0A] ${BOLD_INTER_TIGHT.className}`}>
-                      <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{apr.toString().substr(0, 4) + "%"}</span>
+                      <span className={`text-text-primary text-[13px] md:text-[14px] ${BOLD_INTER_TIGHT.className}`}>{apr.toString().substr(0, 4) + "%"}</span>
                       <button onClick={() => openCalcModal()}>
                         <Image src={calc} alt="" />
                       </button>
