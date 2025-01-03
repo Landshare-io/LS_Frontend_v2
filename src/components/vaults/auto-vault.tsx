@@ -282,7 +282,7 @@ export default function AutoVault({
             <>
               <div className="flex flex-col justify-center p-0 gap-[8px] relative">
                 <div className="hidden">
-                  <div className="size- rounded-[1000px] shrink-0">
+                  <div className="size-[48px] rounded-[1000px] shrink-0">
                     <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary size-[90px] border-[6px] rounded-[1000px]" alt="token pair" />
                     <Image src={theme == 'dark' ? smallicondark : smallicon} className="border-primary border-[6px] rounded-[1000px]" alt="" />
                   </div>

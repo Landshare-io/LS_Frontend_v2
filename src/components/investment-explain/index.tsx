@@ -17,10 +17,11 @@ const RWA_MAJOR_CHAINS = MAJOR_WORK_CHAINS["/rwa"];
 
 export default function InvestmentExplain() {
   const chainId = useChainId();
-  const { address } = useAccount();
+  const {address} = useAccount();
   const isWhitelisted = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
+
 
   const customModalStyles = {
     content: {
@@ -62,11 +63,11 @@ export default function InvestmentExplain() {
   };
 
   return (
-    <div className="flex flex-col gap-[40px] items-center p-0 mlg:px-[20px] md:pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
+    <div className="flex flex-col gap-[40px] items-center p-0 mlg:px-[20px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
       <div className="flex flex-col gap-[10px] items-start lg:items-center">
         <h2
           id="target-element"
-          className={` text-text-primary lg:text-center text-[32px] md:text-[40px] lg:text-[56px] font-bold`}
+          className={` text-text-primary lg:text-center text-[32px] leading-[36px] md:leading-normal md:text-[40px] lg:text-[56px] font-bold`}
         >
           Effortless Property Investment in 3 Steps
         </h2>
@@ -100,7 +101,8 @@ export default function InvestmentExplain() {
             className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%]"
           />
           <button
-            className="!bg-[#fff] !text-[#000] w-full hover:bg-slate-200 transition-all hover:-translate-y-1 w-full rounded-[100px] py-[10px] text-[16px]  leading-[24px] font-bold"
+            disabled={isWhitelisted as boolean}
+            className={`w-full rounded-[100px] py-[10px] text-[16px] leading-[24px] font-bold ${isWhitelisted ? "cursor-not-allowed bg-[#d9dce7] text-[#fff]" : "cursor-pointer !text-[#000] hover:bg-slate-200 transition-all hover:-translate-y-1 bg-[#fff]"}`}
             onClick={() => handlemodalkyc()}
           >
             {isWhitelisted ? "Complete" : "Verify now"}

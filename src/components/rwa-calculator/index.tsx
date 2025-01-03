@@ -56,7 +56,7 @@ export default function RwaCalculator() {
           <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-primary">
             <IoIosTrendingUp className="w-[24px] h-[24px] text-[#24BC48]" />
           </div>
-          <span className="text-[14px] leading-[22px] tracking-[0.02em] font-bold text-text-primary">
+          <span className="text-[14px] leading-[22px] capitalize tracking-[0.02em] font-bold text-text-primary">
             Estimate your potential earnings
           </span>
         </div>

@@ -76,12 +76,12 @@ const RwaPage: NextPage = () => {
       <div className="bg-primary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
         <RwaCalculator />
       </div>
-      <div className="bg-secondary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
-        <div className="flex items-center w-fit mx-auto mb-[30px] py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-primary">
+      <div className="flex flex-col gap-[24px] md:gap-[36px] bg-secondary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
+        <div className="flex items-center w-fit md:mx-auto py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-primary">
           <div className="flex justify-center items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-secondary">
             <HiMiniLockOpen className="w-[18px] h-[24px] text-[#24BC48]" />
           </div>
-          <span className="text-[14px] leading-[22px] tracking-[0.02em] font-semibold text-text-primary">Unlock your opportunity</span>
+          <span className="text-[14px] leading-[22px] tracking-[0.02em] capitalize font-semibold text-text-primary">Unlock your opportunity</span>
         </div>
         <InvestmentExplain />
       </div>
