@@ -67,19 +67,6 @@ export default function FinancialPropertyCard({
       <div className="flex flex-col gap-[10px] text-center">
         <span className="text-text-secondary justify-start font-medium text-[14px] leading-[22px] md:min-w-[180px] md:justify-start flex gap-1 items-center relative">
           {title}
-          {tips[title] != "" && (
-            <>
-              <Tooltip content={tips[title]}>
-                <div>
-                  {/* svg icons must be wrapped around a div */}
-                  <BsInfoCircle
-                    id="tooltip-icon"
-                    className="w-4 h-4 cursor-pointer z-50"
-                  />
-                </div>
-              </Tooltip>
-            </>
-          )}
         </span>
         <SkeletonTheme
           baseColor={`${theme == "dark" ? "#31333b" : "#dbdde0"}`}
