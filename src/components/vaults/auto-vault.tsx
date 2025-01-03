@@ -390,12 +390,12 @@ export default function AutoVault({
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
-                    <span className={`text-[13px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(vaultBalance?.total?.toString() ?? 0)))}</span>
+                    <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(vaultBalance?.total?.toString() ?? 0)))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APY</span>
                     <div className="flex items-center gap-[4px] text-bold text-[14px] leading-[22px] text-[#0A0A0A]">
-                      <span className={`text-[13px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(apy?.toString() ?? 0)) + "%"}</span>
+                      <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(apy?.toString() ?? 0)) + "%"}</span>
                       <button onClick={() => openCalcModal()}>
                         <Image src={calc} alt="" />
                       </button>
@@ -403,13 +403,13 @@ export default function AutoVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
-                    <span className={`text-[13px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? abbreviateNumber(Number(formatEther(vaultBalance.autoLandV3.toString()))) : abbreviateNumber(Number(formatEther((ccipVaultBalance?.autoLandV3 ?? 0).toString())))}</span>
+                    <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? abbreviateNumber(Number(formatEther(vaultBalance.autoLandV3.toString()))) : abbreviateNumber(Number(formatEther((ccipVaultBalance?.autoLandV3 ?? 0).toString())))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                       {!(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? ccipVaultBalance?.autoReward ?? 0 : 
                         <Tooltip content={`Full number: ${formatEther(vaultBalance?.autoReward || 0)}`}>
-                          <span className={`text-[13px] leading-[22px] tracking-[0.02em] cursor-pointer text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                          <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] cursor-pointer text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                             {formatEther(vaultBalance?.autoReward || 0).substr(0, 5)}
                           </span>
                         </Tooltip>
@@ -557,7 +557,7 @@ export default function AutoVault({
                           ) : (
                             <>
                               <button
-                                className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[13px] leading-[22px] ${BOLD_INTER_TIGHT.className} ${isDepositing ? 'flex justify-center items-center' : ''}`}
+                                className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[13px] md:text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className} ${isDepositing ? 'flex justify-center items-center' : ''}`}
                                 onClick={() => {
                                   if (inputValue && Number(inputValue) > Number(0)) {
                                     if ((AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {

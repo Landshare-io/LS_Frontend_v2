@@ -227,7 +227,7 @@ export default function UpgradeListTable({
               className={
                 selTab == 0
                   ? "flex-1 justify-center p-[5px] bg-[#0b6c96] text-[#fff] m-[5px] rounded-[5px] flex items-center text-center text-[13px]"
-                  : "flex-1 justify-center p-[5px] rounded-[5px] text-[#858585] flex items-center text-center text-[13px] cursor-pointer mlg:text-[#fff]"
+                  : "flex-1 justify-center p-[5px] rounded-[5px] text-[#858585] flex items-center text-center text-[13px] md:text-[14px] cursor-pointer mlg:text-[#fff]"
               }
               onClick={() => setSelTab(0)}
             >
@@ -246,8 +246,8 @@ export default function UpgradeListTable({
             <div
               className={
                 selTab == 2
-                  ? "flex-1 justify-center p-[5px] bg-[#0b6c96] text-[#fff] m-[5px] rounded-[5px] flex items-center text-center text-[13px]"
-                  : "flex-1 justify-center p-[5px] rounded-[5px] text-[#858585] flex items-center text-center text-[13px] cursor-pointer mlg:text-[#fff] text-text-secondary"
+                  ? "flex-1 justify-center p-[5px] bg-[#0b6c96] text-[#fff] m-[5px] rounded-[5px] flex items-center text-center text-[13px] md:text-[14px]"
+                  : "flex-1 justify-center p-[5px] rounded-[5px] text-[#858585] flex items-center text-center text-[13px] md:text-[14px] cursor-pointer mlg:text-[#fff] text-text-secondary"
               }
               onClick={() => setSelTab(2)}
             >
