@@ -77,11 +77,6 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
         }
       }
     }
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [landTokenApproveTx, landTokenApproveStatusData, landTokenApproveSuccess, isApproveError])
 
   useEffect(() => {
@@ -101,11 +96,6 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
           updateIsSuccessMigrate(false)
         }
       }
-    }
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
     }
   }, [swapTx, swapStatusData, swapSuccess, isSwapError])
 

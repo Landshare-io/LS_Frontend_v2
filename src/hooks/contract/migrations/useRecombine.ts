@@ -84,11 +84,6 @@ export default function useRecombine({
         }
       }
     }
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
   useEffect(() => {
@@ -104,11 +99,6 @@ export default function useRecombine({
           updateIsSuccessRecombine(false);
         }
       }
-    }
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
     }
   }, [addLiquidityETHTx, addLiquidityStatusData, addLiquiditySuccess, isAddLiquidityError])
 
@@ -133,14 +123,11 @@ export default function useRecombine({
           setScreenLoadingStatus("Transaction 2 of 1 Pending...")
           approve(bsc.id, PSC_ROUTER_CONTRACT_ADDRESS, amountLandV2);
         } else {
-          setScreenLoadingStatus("")
+          setScreenLoadingStatus("Transaction Failed")
         }
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessRecombine(false);
-        setTimeout(() => {
-          setScreenLoadingStatus("")
-        }, 1000);
       }
     }
   }

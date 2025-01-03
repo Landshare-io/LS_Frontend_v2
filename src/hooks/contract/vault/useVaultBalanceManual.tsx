@@ -63,12 +63,6 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [depositTx, depositStatusData, depositSuccess, isDepositError])
 
   useEffect(() => {
@@ -92,12 +86,6 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
-    }
   }, [withdrawTx, withdraswStatusData, withdrawSuccess, isWithdrawError])
 
   useEffect(() => {
@@ -119,12 +107,6 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
     } catch (error) {
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
-    }
-
-    return () => {
-      setTimeout(() => {
-        setScreenLoadingStatus("")
-      }, 2000);
     }
   }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
