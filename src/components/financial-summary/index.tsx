@@ -142,7 +142,7 @@ export default function FinancialSummary() {
     <>
       <div className="flex flex-col w-full gap-[24px]">
         <div className="hidden md:flex gap-[24px]">
-          <div className="flex flex-col items-start justify-center w-full px-[24px] pt-[24px] pb-[8px] bg-third rounded-[16px] gap-[8px]">
+          <div className="flex flex-col items-start justify-center w-full py-[32px] px-[24px] bg-third rounded-[16px] gap-[8px]">
             <div className="flex justify-start flex-row gap-8 w-full">
               <div className="flex flex-col gap-[10px]">
                 <span className="font-medium text-[14px] leading-[22px] text-text-secondary">
@@ -163,7 +163,7 @@ export default function FinancialSummary() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-start items-center w-full">
+            <div className="flex justify-start items-center w-full ">
               <input
                 type="checkbox"
                 onChange={() => onAutoRedeem()}
