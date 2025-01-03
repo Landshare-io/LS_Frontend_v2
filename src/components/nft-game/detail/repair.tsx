@@ -39,7 +39,10 @@ export default function Repair({
             <InputCost
               width={70}
               value={displayPercent}
-              changeRepairAmount={(v: number) => setDisplayPercent(v)}
+              changeRepairAmount={async (v: number) => {
+                setDisplayPercent(v)
+                await changeRepairAmount(house, setHouse, setDisplayPercent, v)
+              }}
               calcMaxAmount={calcMaxAmount}
             />
           </div>
@@ -75,7 +78,10 @@ export default function Repair({
             <InputCost
               width={70}
               value={displayPercent}
-              changeRepairAmount={(v: number) => setDisplayPercent(v)}
+              changeRepairAmount={async (v: number) => {
+                setDisplayPercent(v)
+                await changeRepairAmount(house, setHouse, setDisplayPercent, v)
+              }}
               calcMaxAmount={calcMaxAmount}
             />
           </div>
