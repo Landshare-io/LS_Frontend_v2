@@ -222,8 +222,8 @@ export default function ManualVault({
                   </button>
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                  <div className="w-[90px] h-[90px] rounded-[1000px] relative border-primary border-[6px]">
-                    <Image src={theme == 'dark' ? UnionDark : Union} className="size-[90px]" alt="token pair" />
+                  <div className="size-[90px] rounded-[1000px] relative border-primary border-[6px]">
+                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                     <div className={`cursor-pointer text-[16px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
