@@ -50,12 +50,13 @@ import useOptIn from "../../hooks/contract/AutoRedeemContract/useOptIn";
 import useBalanceOf from "../../hooks/contract/RWAContract/useBalanceOf";
 import "react-loading-skeleton/dist/skeleton.css";
 import Tooltip from "../common/tooltip";
+import CloseIcon from "../../../public/icons/close.svg";
 
 export default function FinancialSummary() {
   const { theme } = useGlobalContext();
   const chainId = useChainId();
   const [openMonthlyExpences, setOpenMonthlyExpences] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useAppDispatch();
   const { address, isConnected } = useAccount();
@@ -478,6 +479,15 @@ export default function FinancialSummary() {
           <div className="font-bold text-[22px] mb-2 text-text-primary">
             Finance Log
           </div>
+
+          <Image
+            className="absolute top-4 right-4 cursor-pointer"
+            onClick={() => {
+              setIsModalOpen(false)
+            }}
+            src={CloseIcon}
+            alt="close"
+          />
           {financeLogs.map((log: any) => {
             return (
               <div className="border-b pt-2 pb-1" key={log.id}>
