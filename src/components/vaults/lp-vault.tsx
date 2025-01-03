@@ -240,7 +240,7 @@ export default function LpVault({
               <div className="flex flex-col justify-center p-0 gap-[16px]">
                 <div className="flex flex-row gap-[8px] hidden">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
-                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" className="size-[90px]"/>
                     <Image src={smallicon} alt="small-icon" />
                   </div>
                   <div className={`text-[16px] leading-[28px] overflow-hidden text-ellipsis shrink-1 text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
@@ -262,7 +262,7 @@ export default function LpVault({
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
                   <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] relative">
-                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px] w-[90px] h-[90px] absolute left-0 top-0" alt="token pair" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px] size-[90px] absolute left-0 top-0" alt="token pair" />
                     <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-white" alt="" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
