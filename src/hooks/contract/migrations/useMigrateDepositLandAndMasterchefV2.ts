@@ -68,7 +68,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
         if (autoVaultV3DepositSuccess) {
           try {
             refetchLandTokenBalance()
-            setScreenLoadingStatus("Transaction Completed.")
+            setScreenLoadingStatus("Transaction Complete.")
             updateIsSuccessDeposit(true);
           } catch (error) {
             console.log("deposit error", error)
@@ -89,7 +89,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
           try {
             refetchLandTokenBalance()
             refetchLpTokenBalance()
-            setScreenLoadingStatus("Transaction Completed.")
+            setScreenLoadingStatus("Transaction Complete.")
             updateIsSuccessDeposit(true);
           } catch (error) {
             console.log("deposit error", error)

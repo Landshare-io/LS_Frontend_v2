@@ -92,7 +92,7 @@ export default function useRecombine({
     } else if (addLiquidityETHTx) {
       if (addLiquidityStatusData) {
         if (addLiquiditySuccess) {
-          setScreenLoadingStatus("Transaction success")
+          setScreenLoadingStatus("Transaction Complete.")
           updateIsSuccessRecombine(true);
         } else {
           setScreenLoadingStatus("Transaction Failed")

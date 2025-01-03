@@ -114,7 +114,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
           rwaBalanceRefetch()
           usdtBalanceRefetch()
           landBalanceRefetch()
-          setScreenLoadingStatus("Transaction Successful")
+          setScreenLoadingStatus("Transaction Complete.")
         } else {
           setScreenLoadingStatus("Transaction Failed.")
         }

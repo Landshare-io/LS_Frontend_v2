@@ -147,7 +147,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
           rwaBalanceRefetch()
           usdtBalanceRefetch()
           landBalanceRefetch()
-          setScreenLoadingStatus("Transaction Successful")
+          setScreenLoadingStatus("Transaction Complete.")
         } else {
           setScreenLoadingStatus("Transaction Failed.")
         }
@@ -158,7 +158,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
   const sellTokens = async () => {
     try {
       if (Number(rwaAllowance ?? 0) < amount) {
-        setScreenLoadingStatus('Transaction is Pending...')
+        setScreenLoadingStatus('Transaction Pending...')
         await approveRWA(LANDSHARE_SALE_CONTRACT_ADDRESS[chainId], amount);
       }
     } catch (error) {

@@ -53,7 +53,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
             refetchAllowanceOfLandTokenOfVault()
             refetchAllowanceOfLandTokenOfMasterChef()
             refetchUserInfo()
-            setScreenLoadingStatus("Transaction Successful.")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -76,7 +76,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
             refetchTotalStaked()
             refetchUserInfo()
             refetchPendingLand()
-            setScreenLoadingStatus("Withdraw Transaction success")
+            setScreenLoadingStatus("Withdraw Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -98,7 +98,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
             refetchAllowanceOfLandTokenOfVault()
             refetchAllowanceOfLandTokenOfMasterChef()
     
-            setScreenLoadingStatus("Approve Transaction success")
+            setScreenLoadingStatus("Approve Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -121,12 +121,12 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
   }
 
   const withdrawVault = (amount: BigNumberish) => {
-    setScreenLoadingStatus("Withdraw Transaction in progress...")
+    setScreenLoadingStatus("Withdraw Transaction Pending...")
     withdraw(0, amount)
   }
 
   const approveVault = (amount: BigNumberish) => {
-    setScreenLoadingStatus("Approve Transaction in progress...")
+    setScreenLoadingStatus("Approve Transaction Pending...")
     approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[chainId], amount)
     updateStatus()
   }

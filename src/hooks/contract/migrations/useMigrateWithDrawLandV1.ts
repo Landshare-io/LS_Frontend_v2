@@ -98,7 +98,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       if (withdrawLPFarmStatusData) {
         if (withdrawLPFarmSuccess) {
           try {
-            setScreenLoadingStatus("Transaction Completed")
+            setScreenLoadingStatus("Transaction Complete.")
             updateIsSuccessWithdraw(true);
           } catch (error) {
             console.log("withdraw error", error)
@@ -117,7 +117,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       if (withdrawAutoVaultV1StatusData) {
         if (withdrawAutoVaultV1Success) {
           try {
-            setScreenLoadingStatus("Transaction Completed")
+            setScreenLoadingStatus("Transaction Complete.")
             updateIsSuccessWithdraw(true);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
@@ -135,7 +135,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       if (withdrawAutoVaultV2StatusData) {
         if (withdrawAutoVaultV2Success) {
           try {
-            setScreenLoadingStatus("Transaction Completed")
+            setScreenLoadingStatus("Transaction Complete.")
             updateIsSuccessWithdraw(true);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
@@ -153,7 +153,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       if (withdrawLandTokenStakeV2StatusData) {
         if (withdrawLandTokenStakeV2Success) {
           try {
-            setScreenLoadingStatus("Transaction Completed")
+            setScreenLoadingStatus("Transaction Complete.")
             updateIsSuccessWithdraw(true);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
@@ -171,7 +171,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       if (withdrawLandTokenStakeV3StatusData) {
         if (withdrawLandTokenStakeV3Success) {
           try {
-            setScreenLoadingStatus("Transaction Completed")
+            setScreenLoadingStatus("Transaction Complete.")
             updateIsSuccessWithdraw(true);
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
@@ -197,7 +197,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       }
 
       try {
-        setScreenLoadingStatus("Transaction is in progress...")
+        setScreenLoadingStatus("Transaction Pending...")
         withdrawLPFarm(amount);
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
@@ -217,7 +217,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       }
 
       try {
-        setScreenLoadingStatus("Transaction is in progress...")
+        setScreenLoadingStatus("Transaction Pending...")
         withdrawAutoVaultV1(amount)
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");
@@ -244,10 +244,10 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       }
 
       try {
-        setScreenLoadingStatus("Transaction is in progress...")
+        setScreenLoadingStatus("Transaction Pending...")
         withdrawAutoVaultV2(amount)
       } catch (e) {
-        setScreenLoadingStatus("Transaction Failed.", false);
+        setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessWithdraw(false);
       }
       
@@ -268,10 +268,10 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       }
 
       try {
-        setScreenLoadingStatus("Transaction is in progress...")
+        setScreenLoadingStatus("Transaction Pending...")
         withdrawLandTokenStakeV2(amount);
       } catch (e) {
-        setScreenLoadingStatus("Transaction Failed.", false);
+        setScreenLoadingStatus("Transaction Failed.");
         updateIsSuccessWithdraw(false);
       }
       
@@ -292,7 +292,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
       }
 
       try {
-        setScreenLoadingStatus("Transaction is in progress...")
+        setScreenLoadingStatus("Transaction Pending...")
         withdrawLandTokenStakeV3(amount);
       } catch (e) {
         setScreenLoadingStatus("Transaction Failed.");

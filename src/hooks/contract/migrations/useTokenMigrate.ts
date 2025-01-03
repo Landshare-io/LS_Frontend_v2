@@ -88,7 +88,7 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
           try {
             updateIsSuccessMigrate(true)
             updateLandTokenV2Balance()
-            setScreenLoadingStatus("Transaction Completed.")
+            setScreenLoadingStatus("Transaction Complete.")
           } catch (error) {
             setScreenLoadingStatus("Transaction Failed.")
           }

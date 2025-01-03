@@ -115,7 +115,7 @@ export default function useSplitLP({
               const amountLand = receiptTx.args.amount0;
               const amountBNB = receiptTx.args.amount1;
               updateNewAmountSplitedTokens({ bnb: amountBNB, land: amountLand });
-              setScreenLoadingStatus("Transaction Completed.")
+              setScreenLoadingStatus("Transaction Complete.")
               updateIsSuccessSplit(true)
             } catch (error) {
               setScreenLoadingStatus("Transaction Failed.")

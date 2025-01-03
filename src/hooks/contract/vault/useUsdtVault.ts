@@ -45,7 +45,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
           if (depositSuccess) {
             refetchrwaLpTokenBalance()
             refetchUserInfo();
-            setScreenLoadingStatus("Transaction success.")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -66,7 +66,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
           if (withdrawSuccess) {
             refetchrwaLpTokenBalance()
             refetchUserInfo();
-            setScreenLoadingStatus("Withdraw Transaction success")
+            setScreenLoadingStatus("Withdraw Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -86,7 +86,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
         if (approveStatusData) {
           if (approveSuccess) {
             refetchLSRWALPAllowance()
-            setScreenLoadingStatus("Approve Transaction success")
+            setScreenLoadingStatus("Approve Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -118,12 +118,12 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
       return;
     }
 
-    setScreenLoadingStatus("Withdraw Transaction in progress...")
+    setScreenLoadingStatus("Withdraw Transaction Pending...")
     withdraw(4, amount)
   }
 
   const approveVault = (amount: BigNumberish) => {
-    setScreenLoadingStatus("Approve Transaction in progress...")
+    setScreenLoadingStatus("Approve Transaction Pending...")
     approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id], amount)
   }
 

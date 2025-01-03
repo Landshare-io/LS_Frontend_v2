@@ -69,7 +69,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
       if (approveStatusData) {
         if (approveLandSuccess) {
           try {
-            setScreenLoadingStatus("Transaction Completed.")
+            setScreenLoadingStatus("Transaction Complete.")
             updateIsSuccessApprove(true);
           } catch (error) {
             updateIsSuccessApprove(false);
@@ -87,7 +87,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
       if (approveLpStatusData) {
         if (approveLpSuccess) {
           try {
-            setScreenLoadingStatus("Transaction Completed.")
+            setScreenLoadingStatus("Transaction Complete.")
             updateIsSuccessApprove(true);
           } catch (error) {
             updateIsSuccessApprove(false);
@@ -101,7 +101,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
   async function approveLandV2(approveAddress: Address) {
     if (isConnected == true) {
       try {
-        setScreenLoadingStatus("Transaction is in progress...")
+        setScreenLoadingStatus("Transaction Pending...")
         approveLand(bsc.id, approveAddress, landTokenV2Balance);
       } catch (e) {
         updateIsSuccessApprove(false);
@@ -113,7 +113,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
   async function approveLpTokenV2(approveAddress: Address) {
     if (isConnected == true) {
       try {
-        setScreenLoadingStatus("Transaction is in progress...")
+        setScreenLoadingStatus("Transaction Pending...")
         approveLp(approveAddress, lpTokenV2Balance);
       } catch (e) {
         updateIsSuccessApprove(false);

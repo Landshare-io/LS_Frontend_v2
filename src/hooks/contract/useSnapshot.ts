@@ -92,7 +92,7 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
       );
     }
 
-    setScreenLoadingStatus('Transaction Start');
+    setScreenLoadingStatus('Transaction Pending...');
 
     let score: number = 0;
     try {
@@ -142,7 +142,7 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
       if (onError) onError(e as Error);
     }
 
-    setScreenLoadingStatus("Transaction Success.");
+    setScreenLoadingStatus("Transaction Complete.");
   }
 
   return {
