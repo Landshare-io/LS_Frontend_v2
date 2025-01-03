@@ -19,12 +19,12 @@ export default function BeneficalAssets() {
   return (
     <>
       <div className="flex flex-col gap-[12px] md:gap-[40px] items-center p-0 mlg:px-[20px] md:pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
-        <div className="w-full flex items-start mb-6 md:mb-0">
+        <div className="w-full flex items-start mb-0">
           <div className="flex items-center w-fit py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-primary ">
             <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-secondary">
               <IoIosHome className="w-[24px] h-[24px] text-[#61CD81]" />
             </div>
-            <span className="text-[14px] leading-[22px] tracking-[0.02em] font-semibold text-text-primary">
+            <span className="text-[14px] capitalize leading-[22px] tracking-[0.02em] font-semibold text-text-primary">
               Assets of the future
             </span>
           </div>
