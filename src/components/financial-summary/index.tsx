@@ -56,7 +56,7 @@ export default function FinancialSummary() {
   const { theme } = useGlobalContext();
   const chainId = useChainId();
   const [openMonthlyExpences, setOpenMonthlyExpences] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useAppDispatch();
   const { address, isConnected } = useAccount();
