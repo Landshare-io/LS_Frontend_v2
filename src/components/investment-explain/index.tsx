@@ -63,7 +63,7 @@ export default function InvestmentExplain() {
   };
 
   return (
-    <div className="flex flex-col gap-[40px] items-center p-0 mlg:px-[20px] md:pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
+    <div className="flex flex-col gap-[40px] items-center p-0 mlg:px-[20px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
       <div className="flex flex-col gap-[10px] items-start lg:items-center">
         <h2
           id="target-element"
