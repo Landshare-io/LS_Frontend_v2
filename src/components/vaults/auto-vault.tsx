@@ -280,7 +280,7 @@ export default function AutoVault({
             </SkeletonTheme>
           ) : (
             <>
-              <div className="flex flex-col justify-center p-0 gap-[16px] relative">
+              <div className="flex flex-col justify-center p-0 gap-[8px] relative">
                 <div className="hidden">
                   <div className="size- rounded-[1000px] shrink-0">
                     <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary size-[90px] border-[6px] rounded-[1000px]" alt="token pair" />
