@@ -82,7 +82,7 @@ export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
               LSRWA Holders Earn
             </span>
             <span className={`text-[#fff] text-[18px] leading-[22px] tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}>
-             $ {numeral((asset?.grossRent - (asset?.insurance + asset?.tax + asset?.management * asset?.grossRent * 12) / 12) * 12).format('0,0')}
+             ${numeral((asset?.grossRent - (asset?.insurance + asset?.tax + asset?.management * asset?.grossRent * 12) / 12) * 12).format('0,0')}
             </span>
           </div>
         </div>
