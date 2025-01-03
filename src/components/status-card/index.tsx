@@ -43,7 +43,7 @@ export default function StatusCard() {
   useEffect(() => {
     dispatch(getData())
     const totalBNBValueinLpContract = Number(formatEther(totalBNBinLp)) * Number(bnbPrice);
-    const totalLANDValueinLpContract = Number(formatEther(landAmountInLp)) * Number(coin) * Number(bnbPrice);
+    const totalLANDValueinLpContract = Number(formatEther(landAmountInLp ?? 0)) * Number(coin) * Number(bnbPrice);
     const totalUSDValue = totalBNBValueinLpContract + totalLANDValueinLpContract;
     const percentageOfLPInVault = Number((totalLpInVault)) / Number((totalLpSupply));
     const USDValueinVault = percentageOfLPInVault * totalUSDValue;

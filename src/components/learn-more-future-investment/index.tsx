@@ -58,7 +58,8 @@ export default function MoreInvestment() {
             </a>
             <a
               target="_blank"
-              href="https://uploads-ssl.webflow.com/649664b4d452680d2964b449/654d29c8dd036fc324fd3393_Whitepaper.pdf"
+              href="https://docs.landshare.io/"
+              // href="https://uploads-ssl.webflow.com/649664b4d452680d2964b449/654d29c8dd036fc324fd3393_Whitepaper.pdf"
             >
               <Button
                 textClassName="text-[#fff] dark:text-[#fff]"
