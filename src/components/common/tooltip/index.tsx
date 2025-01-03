@@ -25,6 +25,7 @@ export default function Tooltip({
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout>();
   const triggerRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const touchDevice = 
@@ -38,6 +39,38 @@ export default function Tooltip({
     };
   }, []);
 
+  // Add click outside handler for mobile
+  useEffect(() => {
+    if (!visible || !isTouchDevice) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const target = e.target as Node;
+      // Check if the click is outside both the trigger and tooltip
+      if (
+        triggerRef.current && 
+        tooltipRef.current &&
+        !triggerRef.current.contains(target) && 
+        !tooltipRef.current.contains(target)
+      ) {
+        setVisible(false);
+      }
+    };
+
+    const handleScroll = () => {
+      if (isTouchDevice) {
+        setVisible(false);
+      }
+    };
+
+    document.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('scroll', handleScroll, true);
+
+    return () => {
+      document.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [visible, isTouchDevice]);
+
   useEffect(() => {
     if (!visible || !triggerRef.current) return;
 
@@ -45,10 +78,10 @@ export default function Tooltip({
       const triggerElement = triggerRef.current;
       if (!triggerElement) return;
 
-      const rect = triggerElement.getBoundingClientRect();
-      const tooltipElement = document.getElementById("tooltip");
+      const tooltipElement = tooltipRef.current;
       if (!tooltipElement) return;
 
+      const rect = triggerElement.getBoundingClientRect();
       const tooltipRect = tooltipElement.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
       const EDGE_PADDING = 16;
@@ -104,6 +137,11 @@ export default function Tooltip({
     timeoutRef.current = setTimeout(() => setVisible(false), delay);
   };
 
+  const handleTouch = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    setVisible(!visible);
+  };
+
   return (
     <>
       <div
@@ -111,7 +149,7 @@ export default function Tooltip({
         className={`inline-block ${tooltipContainerClassName}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={() => setVisible(!visible)}
+        onTouchStart={handleTouch}
         onFocus={() => setVisible(true)}
         onBlur={() => setVisible(false)}
       >
@@ -120,7 +158,7 @@ export default function Tooltip({
       {visible &&
         createPortal(
           <div
-            id="tooltip"
+            ref={tooltipRef}
             className={`fixed z-50 w-[280px] px-2 py-1 text-sm text-white bg-gray-800 rounded shadow-lg pointer-events-auto ${tooltipClassName}`}
             style={{
               top: tooltipPosition.top,
@@ -131,6 +169,7 @@ export default function Tooltip({
               setVisible(true);
             }}
             onMouseLeave={handleMouseLeave}
+            onTouchStart={(e) => e.stopPropagation()}
           >
             {content}
           </div>,
