@@ -313,7 +313,7 @@ export default function AutoVault({
                     <Image src={details ? up : down}  alt="" />
                   </button>
                 </div>
-                <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
+                <div className="flex items-center p-0 justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
                   <div className="size-[90px] shrink-0 rounded-[1000px] relative">
                     <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px]  absolute left-0 top-0" alt="token pair" />
                     <Image src={theme == 'dark' ? smallicondark : smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-secondary" alt="" />
