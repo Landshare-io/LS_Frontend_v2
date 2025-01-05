@@ -50,6 +50,7 @@ import useOptIn from "../../hooks/contract/AutoRedeemContract/useOptIn";
 import useBalanceOf from "../../hooks/contract/RWAContract/useBalanceOf";
 import "react-loading-skeleton/dist/skeleton.css";
 import Tooltip from "../common/tooltip";
+import CloseIcon from "../../../public/icons/close.svg";
 
 export default function FinancialSummary() {
   const { theme } = useGlobalContext();
@@ -141,7 +142,7 @@ export default function FinancialSummary() {
     <>
       <div className="flex flex-col w-full gap-[24px]">
         <div className="hidden md:flex gap-[24px]">
-          <div className="flex flex-col items-start justify-center w-full px-[24px] pt-[24px] pb-[8px] bg-third rounded-[16px] gap-[8px]">
+          <div className="flex flex-col items-start justify-center w-full py-[32px] px-[24px] bg-third rounded-[16px] gap-[8px]">
             <div className="flex justify-start flex-row gap-8 w-full">
               <div className="flex flex-col gap-[10px]">
                 <span className="font-medium text-[14px] leading-[22px] text-text-secondary">
@@ -162,7 +163,7 @@ export default function FinancialSummary() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-start items-center w-full">
+            <div className="flex justify-start items-center w-full ">
               <input
                 type="checkbox"
                 onChange={() => onAutoRedeem()}
@@ -478,6 +479,15 @@ export default function FinancialSummary() {
           <div className="font-bold text-[22px] mb-2 text-text-primary">
             Finance Log
           </div>
+
+          <Image
+            className="absolute top-4 right-4 cursor-pointer"
+            onClick={() => {
+              setIsModalOpen(false)
+            }}
+            src={CloseIcon}
+            alt="close"
+          />
           {financeLogs.map((log: any) => {
             return (
               <div className="border-b pt-2 pb-1" key={log.id}>
