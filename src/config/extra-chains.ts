@@ -20,7 +20,7 @@ export const plumeTestnet = defineChain({
     default: {
       name: 'Blockscout',
       url: 'https://test-explorer.plumenetwork.xyz',
-      apiUrl: 'https://test-explorer.plumenetwork.xyz/api\?',
+      apiUrl: 'https://test-explorer.plumenetwork.xyz/api/v2\?',
     },
   },
   testnet: true,
@@ -36,13 +36,13 @@ export const plume = defineChain({
     symbol: 'ETH',
   },
   rpcUrls: {
-    default: { http: ['https://phoenix-rpc.plumenetwork.xyz'] },
+    default: { http: ['https://rpc.plumenetwork.xyz'] },
   },
   blockExplorers: {
     default: {
       name: 'BscScan',
-      url: 'https://phoenix-explorer.plumenetwork.xyz/',
-      apiUrl: 'https://phoenix-explorer.plumenetwork.xyz/api',
+      url: 'https://explorer.plumenetwork.xyz/',
+      apiUrl: 'https://explorer.plumenetwork.xyz/api/v2',
     },
   },
   contracts: {
