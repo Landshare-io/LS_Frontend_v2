@@ -65,34 +65,21 @@ export default function FinancialPropertyCard({
       } ${className} w-full py-[32px] px-[24px] gap-[10px] h-[160px] rounded-[16px] min-w-max flex flex-col justify-center items-center md:items-start`}
     >
       <div className="flex flex-col gap-[10px] text-center">
-        <span className="text-text-secondary justify-center font-medium text-[14px] leading-[22px] min-w-[180px] md:justify-start flex gap-1 items-center relative">
+        <span className="text-text-secondary justify-start font-medium text-[14px] leading-[22px] md:min-w-[180px] md:justify-start flex gap-1 items-center relative">
           {title}
-          {tips[title] != "" && (
-            <>
-              <Tooltip content={tips[title]}>
-                <div>
-                  {/* svg icons must be wrapped around a div */}
-                  <BsInfoCircle
-                    id="tooltip-icon"
-                    className="w-4 h-4 cursor-pointer z-50"
-                  />
-                </div>
-              </Tooltip>
-            </>
-          )}
         </span>
         <SkeletonTheme
           baseColor={`${theme == "dark" ? "#31333b" : "#dbdde0"}`}
           highlightColor={`${theme == "dark" ? "#52545e" : "#f6f7f9"}`}
         >
           <div className="flex gap-[8px]">
-            <div className="bg-primary w-[32px] h-[32px] py-[6.23px] px-[7px] flex items-center justify-center rounded-full">
+            <div className="bg-primary h-[32px] flex items-center justify-start rounded-full">
               <Image
                 src={
                   iconUrl[title] ? iconUrl[title] : iconUrl["Est. Appreciation"]
                 }
                 alt="refresh"
-                className="w-[18px]"
+                className="size-[18px]"
               />
             </div>
             {currentLoading == true ||
@@ -101,7 +88,7 @@ export default function FinancialPropertyCard({
               <Skeleton className="rounded-lg" width={100} height={28} />
             ) : (
               <span
-                className={`text-text-primary text-[24px] leading-[30px] ${BOLD_INTER_TIGHT.className}`}
+                className={`w-fit text-text-primary text-[24px] leading-[30px] ${BOLD_INTER_TIGHT.className}`}
               >
                 {value}
               </span>

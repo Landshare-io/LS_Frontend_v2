@@ -185,7 +185,7 @@ const StakingPage: NextPage = () => {
           <div className="flex mlg:hidden justify-between p-0 h-[132px] w-full gap-[20px] mb-[20px]">
             <Slider {...sliderSettings} centerPadding="10px" className="w-full">
               {vaults.map((vault) => (
-                <div key={vault.index} className="px-[10px] bg-transparent">
+                <div key={vault.index} className="px-[5px] bg-transparent">
                   <button
                     className={selectedVault === vault.index ? 
                       `bg-[#0A1339] text-[#fff] text-[10px] leading-[16px] tracking-[0.02em] flex flex-col justify-center items-center py-[12px] px-[8px] gap-[4px] h-[112px] w-full rounded-[12px] ${BOLD_INTER_TIGHT.className}` : 

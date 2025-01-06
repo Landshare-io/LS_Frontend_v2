@@ -205,7 +205,7 @@ export default function ManualVault({
               <div className="flex flex-col justify-start p-0 gap-[16px]">
                 <div className="hidden gap-[8px]">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
-                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" className="size-[90px]"/>
                   </div>
                   <div className={`leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                     {title}
@@ -221,7 +221,7 @@ export default function ManualVault({
                   </button>
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                  <div className="w-[90px] h-[90px] rounded-[1000px] relative border-primary border-[6px]">
+                  <div className="size-[90px] rounded-[1000px] relative border-primary border-[6px]">
                     <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
@@ -245,12 +245,12 @@ export default function ManualVault({
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
-                    <span className={`text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(totalStaked)))}</span>
+                    <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(totalStaked)))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
                     <div className={`flex items-center p-0 gap-[4px] text-[14px] leading-[22px] tracking-[0.02em] text-[#0A0A0A] ${BOLD_INTER_TIGHT.className}`}>
-                      <span className={`text-text-primary ${BOLD_INTER_TIGHT.className}`}>{apr.toString().substr(0, 4) + "%"}</span>
+                      <span className={`text-text-primary text-[13px] md:text-[14px] ${BOLD_INTER_TIGHT.className}`}>{apr.toString().substr(0, 4) + "%"}</span>
                       <button onClick={() => openCalcModal()}>
                         <Image src={calc} alt="" />
                       </button>
@@ -258,93 +258,93 @@ export default function ManualVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
-                    <span className={`text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(userInfo[0])))}</span>
+                    <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(formatEther(userInfo[0])))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     <Tooltip content={`Full number: ${formatEther(pendingLand || 0)}`}>
-                      <span className={`cursor-pointer text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                      <span className={`cursor-pointer text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                         {formatEther(pendingLand || 0).substr(0, 5)}
                       </span>
                     </Tooltip>
                   </div>
                 </div>
-                <div className="block md:hidden">
-                  <div className="flex w-full mt-[20px]">
-                    <div 
-                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
-                      onClick={() => setDepositing(true)}
-                    >
-                      Deposit
-                    </div>
-                    <div 
-                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
-                      onClick={() => setDepositing(false)}
-                    >
-                      Withdraw
-                    </div>
+              </div>
+              <div className="block md:hidden">
+                <div className="flex w-full mt-[20px]">
+                  <div 
+                    className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                    onClick={() => setDepositing(true)}
+                  >
+                    Deposit
                   </div>
-                  <div className="flex flex-col justify-center pt-[12px] pb-[24px]">
-                    <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
-                    <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
-                      <input className="w-full bg-vault-input rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
-                        value={inputValue}
-                        onChange={(e) =>
-                          setInputValue(
-                            e.target.value
-                              .replace(/[^.\d]/g, "")
-                              .replace(/^(\d*\.?)|(\d*)\.?/g, "$1$2")
-                              .replace(/[^\d.]/g, "")
-                              .replace(/(\..*)\./g, "$1")
-                              .replace(/^(\d+\.\d{18})\d+$/g, "$1")
-                          )
-                        }
+                  <div 
+                    className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                    onClick={() => setDepositing(false)}
+                  >
+                    Withdraw
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center pt-[12px] pb-[24px]">
+                  <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
+                  <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
+                    <input className="w-full bg-vault-input rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
+                      value={inputValue}
+                      onChange={(e) =>
+                        setInputValue(
+                          e.target.value
+                            .replace(/[^.\d]/g, "")
+                            .replace(/^(\d*\.?)|(\d*)\.?/g, "$1$2")
+                            .replace(/[^\d.]/g, "")
+                            .replace(/(\..*)\./g, "$1")
+                            .replace(/^(\d+\.\d{18})\d+$/g, "$1")
+                        )
+                      }
 
-                      />
-                      <div className="flex w-full justify-between items-center gap-[8px] mt-[12px]">
-                        <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
-                        <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
-                        <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
-                        <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
-                        <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(100)}>100%</button>
+                    />
+                    <div className="flex w-full justify-between items-center gap-[8px] mt-[12px]">
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(10)}>10%</button>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(25)}>25%</button>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(50)}>50%</button>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(75)}>75%</button>
+                      <button className="py-[2px] px-[8px] sm:px-[10px] md:py-[3px] md:px-[16px] border border-[#61CD81] rounded-[52px] text-[12px] leading-[20px] text-[#61cd81]" onClick={() => handlePercents(100)}>100%</button>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center p-0 gap-[24px] w-full">
+                  <div className="flex gap-[12px] w-full flex-col md:flex-row">
+                    {(typeof address == 'undefined') ? (
+                      <div className="flex flex-col items-center">
+                        <ConnectWallet connectButtonClassName="w-[300px]" />
                       </div>
-                    </div>
+                    ) : (
+                      <>
+                        <button
+                          className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                          onClick={() => {
+                            if (inputValue && Number(inputValue) > Number(0)) {
+                              depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
+                            } else {
+                              notifyError('Please enter an amount')
+                            }
+                          }}
+                          disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
+                        >
+                          {inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"}
+                        </button>
+                        <button 
+                          className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
+                          onClick={() => withdrawVault(0)}
+                        >
+                          Harvest
+                        </button>
+                      </>
+                    )}
                   </div>
-                  <div className="flex flex-col items-center p-0 gap-[24px] w-full">
-                    <div className="flex gap-[12px] w-full flex-col md:flex-row">
-                      {(typeof address == 'undefined') ? (
-                        <div className="flex flex-col items-center">
-                          <ConnectWallet connectButtonClassName="w-[300px]" />
-                        </div>
-                      ) : (
-                        <>
-                          <button
-                            className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
-                            onClick={() => {
-                              if (inputValue && Number(inputValue) > Number(0)) {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
-                              } else {
-                                notifyError('Please enter an amount')
-                              }
-                            }}
-                            disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
-                          >
-                            {inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"}
-                          </button>
-                          <button 
-                            className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
-                            onClick={() => withdrawVault(0)}
-                          >
-                            Harvest
-                          </button>
-                        </>
-                      )}
-                    </div>
-                    <button className={`flex items-center gap-[4px] text-[14px] leading-[22px] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
-                      {details ? 'Hide' : 'Show'} Details
-                      <Image src={details ? up : down} className="w-[20px] h-[20px]" alt="details" />
-                    </button>
-                  </div>
+                  <button className={`flex items-center gap-[4px] text-[14px] leading-[22px] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
+                    {details ? 'Hide' : 'Show'} Details
+                    <Image src={details ? up : down} className="w-[20px] h-[20px]" alt="details" />
+                  </button>
                 </div>
               </div>
               <div className="w-full">

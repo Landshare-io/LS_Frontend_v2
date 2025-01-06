@@ -248,7 +248,7 @@ export default function Usdtvault({
               <div className="flex flex-col justify-center p-0 gap-[16px]">
                 <div className="flex flex-row gap-[8px] hidden">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
-                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
+                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" className="size-[90px]"/>
                   </div>
                   <div className={`text-[16px] leading-[28px] overflow-hidden text-ellipsis shrink-1 text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                     {title}
@@ -265,8 +265,8 @@ export default function Usdtvault({
 
                 </div>
                 <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                  <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] relative">
-                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px] w-[90px] h-[90px] absolute left-0 top-0" alt="token pair" />
+                  <div className="size-[90px] shrink-0 rounded-[1000px] relative">
+                    <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px] size-fit absolute left-0 top-0" alt="token pair" />
                     <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-white" alt="" />
                   </div>
                   <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
@@ -291,12 +291,12 @@ export default function Usdtvault({
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
-                    <span className={`text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{"$" + abbreviateNumber(Number(TVL))}</span>
+                    <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{"$" + abbreviateNumber(Number(TVL))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
                     <div className="flex items-center gap-[4px] text-bold text-[14px] leading-[22px] text-[#0A0A0A]">
-                      <span className={`text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(APY?.toString() ?? 0)) + "%"}</span>
+                      <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{abbreviateNumber(Number(APY?.toString() ?? 0)) + "%"}</span>
                       <button onClick={() => openCalcModal()}>
                         <Image src={calc} alt="" />
                       </button>
@@ -305,14 +305,14 @@ export default function Usdtvault({
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
                     <div className="d-flex align-items-center">
-                      <span className={`text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{userBalance ? Number(userBalance[0]) > 0 ? Number(formatEther(userBalance[0])).toExponential(2) : 0.0 : "0.0"} </span>
+                      <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{userBalance ? Number(userBalance[0]) > 0 ? Number(formatEther(userBalance[0])).toExponential(2) : 0.0 : "0.0"} </span>
                     </div>
 
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
                     <Tooltip content={`Full number: ${formatEther(rewardsLSRWALP || 0)}`}>
-                      <span className={`text-[14px] leading-[22px] tracking-[0.02em] cursor-pointer text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? formatEther(rewardsLSRWALP).substr(0, 5) : "0.0"}</span>
+                      <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] cursor-pointer text-text-primary ${BOLD_INTER_TIGHT.className}`}>{rewardsLSRWALP ? formatEther(rewardsLSRWALP).substr(0, 5) : "0.0"}</span>
                     </Tooltip>
                   </div>
                 </div>
