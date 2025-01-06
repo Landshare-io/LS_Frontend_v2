@@ -17,7 +17,7 @@ export default function MarketplacePage() {
     getProducts,
     products,
   } = useGetMarketplaceItems(setIsItemsLoading)
-  const { checkIsAuthenticated } = useLogin()
+  const { checkIsAuthenticated, isLoading: isLoginLoading } = useLogin()
   const {
     theme,
     isAuthenticated
@@ -59,7 +59,7 @@ export default function MarketplacePage() {
   return (
     <>
       <div className="relative max-w-[1200px] m-auto pt-0">
-        {(!isConnected && isItemsLoading == false) ? (
+        {(!isLoginLoading && !isConnected && isItemsLoading == false) ? (
           <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
             <ConnectWallet />
           </div>
@@ -122,7 +122,7 @@ export default function MarketplacePage() {
           </>
         )}
       </div>
-      {isConnected && (
+      {isConnected && !isLoginLoading && (
         <YouOwn />
       )}
     </>

@@ -13,6 +13,7 @@ import YieldUpgrades from "../yield-upgrade";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import ConnectWallet from "../../connect-wallet";
 import useGetHouse from "../../../hooks/nft-game/axios/useGetHouse";
+import useLogin from "../../../hooks/nft-game/axios/useLogin";
 
 const NftPage = () => {
   const { isConnected } = useAccount();
@@ -22,6 +23,7 @@ const NftPage = () => {
 
   const router = useRouter()
   const { houseId } = router.query as { houseId: string };
+  const { isLoading: isLoginLoading } = useLogin();
   const { house, setHouse, getHouse, isLoading: isPageLoading } = useGetHouse(houseId);
 
 
@@ -76,14 +78,14 @@ const NftPage = () => {
 
   return (
     <>
-      {isPageLoading ? (
+      {isLoginLoading || isPageLoading ? (
         <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
           <ReactLoading type="bars" color="#61cd81" />
         </div>
       ) : (
         <>
           <div className="relative max-w-[1200px] px-0 m-auto flex flex-col pt-0 bg-primary">
-            {(!isAuthenticated) ? (
+            {(!isConnected || !isAuthenticated) ? (
               <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
                 <ConnectWallet />
               </div>

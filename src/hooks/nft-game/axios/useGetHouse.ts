@@ -44,6 +44,7 @@ let houseState = {
   deadTime: null,
   isActivated: false,
 }
+let houseLoading = true
 
 // Subscribers to update all components on state change
 const subscribers = new Set<Function>();
@@ -55,13 +56,14 @@ const notifySubscribers = () => {
 
 export default function useGetHouse(houseId: number | string) {
   const { isAuthenticated } = useGlobalContext();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [house, setHouse] = useState(houseState);
 
   useEffect(() => {
     // Subscribe on mount
     const update = () => {
       setHouse(houseState);
+      setIsLoading(houseLoading);
     };
     subscribers.add(update);
 
@@ -71,8 +73,13 @@ export default function useGetHouse(houseId: number | string) {
     };
   }, []);
 
-  const updateHouse = (newHouse: any) => {
-    houseState = newHouse;
+  const updateHouse = (newLoading: any) => {
+    houseState = newLoading;
+    notifySubscribers();
+  };
+
+  const updateIsLoading = (newHouse: any) => {
+    houseLoading = newHouse;
     notifySubscribers();
   };
 
@@ -85,14 +92,13 @@ export default function useGetHouse(houseId: number | string) {
   const getHouse = async () => {
     if (!isAuthenticated) return
     if (typeof houseId === "undefined" || houseId === '') return
-    setIsLoading(true);
     const { data } = await axios.get(`/house/detail/${houseId}`)
 
     updateHouse((prevState: any) => ({
       ...prevState,
       ...data
     }));
-    setIsLoading(false);
+    updateIsLoading(false);
   }
 
   const getHouseWithoutLoading = async () => {
@@ -111,6 +117,6 @@ export default function useGetHouse(houseId: number | string) {
     setHouse: updateHouse,
     getHouse: getHouseWithoutLoading,
     isLoading,
-    setIsLoading
+    setIsLoading: updateIsLoading
   }
 }

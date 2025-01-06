@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 import numeral from "numeral";
 import ReactModal from "react-modal";
@@ -282,7 +282,6 @@ export default function InventoryPage() {
     ],
   };
 
-  const slider = useRef();
   const activatedHouses = houseItems.filter((house: any) => house.isActivated);
   const activatedHousesLength = activatedHouses.length;
 
