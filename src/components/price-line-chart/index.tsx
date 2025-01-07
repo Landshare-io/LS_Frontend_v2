@@ -71,7 +71,7 @@ export default function PriceGraph({
   function takeEveryNth(data: any[], n: number) {
     return data.filter((_, index) => index % n === 0);
   }
-  const interval = 25; // Take every 20th point
+  const interval = 25; // Take every 25th point
 
   useEffect(() => {
     (async () => {
