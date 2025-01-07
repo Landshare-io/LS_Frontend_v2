@@ -123,12 +123,16 @@ export default function LpVault({
   }, [inputValue, approvedLAND]);
 
   function handlePercents(percent: number) {
-    if (lpTokenV2Balance == 0) {
-      notifyError("You don't have enough balance to perform this action.")
-    } else {
-      if (depositing) {
+    if (depositing) {
+      if (lpTokenV2Balance == 0) {
+        notifyError("You don't have enough balance to perform this action.")
+      } else {
         const bal = BigInt(lpTokenV2Balance) * BigInt(percent) / BigInt(100)
         setInputValue(formatEther(bal))
+      }
+    } else {
+      if (depositBalanceLP == 0) {
+        notifyError("You don't have enough balance to perform this action.")
       } else {
         const bal = BigInt(depositBalanceLP) * BigInt(percent) / BigInt(100)
         setInputValue(formatEther(bal))

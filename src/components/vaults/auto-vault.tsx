@@ -136,12 +136,16 @@ export default function AutoVault({
 
 
   function handlePercents(percent: number) {
-    if (landBalance == 0) {
-      notifyError("You don't have enough balance to perform this action.")
-    } else {
-      if (depositing) {
+    if (depositing) {
+      if (landBalance == 0) {
+        notifyError("You don't have enough balance to perform this action.")
+      } else {
         const bal = BigInt(landBalance) * BigInt(percent) / BigInt(100)
         setInputValue(formatEther(bal))
+      }
+    } else {
+      if (((chainId == bsc.id) && (vaultBalance.autoLandV3 == 0)) || ((chainId != bsc.id) && (ccipVaultBalance.autoLandV3 == 0))) {
+        notifyError("You don't have enough balance to perform this action.")
       } else {
         const bal = chainId == bsc.id ? BigInt(vaultBalance.autoLandV3) * BigInt(percent) / BigInt(100) : BigInt(ccipVaultBalance.autoLandV3) * BigInt(percent) / BigInt(100)
         setInputValue(formatEther(bal))

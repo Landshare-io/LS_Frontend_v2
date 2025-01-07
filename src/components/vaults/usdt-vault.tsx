@@ -123,14 +123,20 @@ export default function Usdtvault({
   }, [TVL, price])
 
   function handlePercents(percent: number) {
-    if (balance == 0) {
-      notifyError("You don't have enough balance to perform this action.")
-    } else {
-      if (depositing) {
-        setInputValue(formatEther(BigInt(balance) * BigInt(percent) / BigInt(100)))
+    if (depositing) {
+      if (balance == 0) {
+        notifyError("You don't have enough balance to perform this action.")
       } else {
-        setInputValue(formatEther(BigInt(userBalance[0]) * BigInt(percent) / BigInt(100)))
-      } 
+        const bal = BigInt(balance) * BigInt(percent) / BigInt(100)
+        setInputValue(formatEther(bal))
+      }
+    } else {
+      if (userBalance[0] == 0) {
+        notifyError("You don't have enough balance to perform this action.")
+      } else {
+        const bal = BigInt(userBalance[0]) * BigInt(percent) / BigInt(100)
+        setInputValue(formatEther(bal))
+      }
     }
   }
 

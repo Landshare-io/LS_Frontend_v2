@@ -78,12 +78,16 @@ export default function ManualVault({
   const isVaultsLoading = false // totalStakedLoading || userInfoLoading || pendingLandLoading
 
   function handlePercents(percent: number) {
-    if (landBalance == 0) {
-      notifyError("You don't have enough balance to perform this action.")
-    } else {
-      if (depositing) {
+    if (depositing) {
+      if (landBalance == 0) {
+        notifyError("You don't have enough balance to perform this action.")
+      } else {
         const bal = BigInt(landBalance) * BigInt(percent) / BigInt(100)
         setInputValue(formatEther(bal))
+      }
+    } else {
+      if (userInfo[0] == 0) {
+        notifyError("You don't have enough balance to perform this action.")
       } else {
         const bal = BigInt(userInfo[0]) * BigInt(percent) / BigInt(100)
         setInputValue(formatEther(bal))
