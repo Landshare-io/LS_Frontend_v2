@@ -284,9 +284,9 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         return
       }
 
-      const withdrawAmount = BigInt(amount) * BigInt(totalSharesV3) / BigInt(total)
+      // const withdrawAmount = BigInt(amount) * BigInt(totalSharesV3) / BigInt(total)
       setScreenLoadingStatus("Transaction Pending...")
-      transfer(chainId, withdrawAmount, 1, 0, 750000)
+      transfer(chainId, amount, 1, 0, 750000)
     } else {
       setScreenLoadingStatus("Transaction Pending...")
       withdraw(amount)
