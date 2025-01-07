@@ -3,7 +3,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { BigNumberish, formatEther, parseEther } from "ethers";
 import { useChainId, useAccount } from "wagmi";
 import ReactLoading from "react-loading";
-import { bsc } from "viem/chains";
+import { bsc, polygon } from "viem/chains";
 import Collapse from "../common/collapse";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
@@ -633,7 +633,7 @@ export default function AutoVault({
                       </div>
                     </div>
                     <div className="flex w-full flex-col items-center justify-center p-[16px]">
-                      {(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? (
+                      {chainId == polygon.id ? (
                         <>
                           <div className="w-8 h-8 rounded-full bg-third">
                             <a href="https://quickswap.exchange/#/swap?currency0=ETH&currency1=0xC03E6ad83dE7C58c9166fF08D66B960d78e64105&swapIndex=0"><Image className="w-[32px] h-[32px]" src={quickSwap} alt="" /></a>
