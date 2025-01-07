@@ -67,6 +67,11 @@ export default function PriceGraph({
       document.body.classList.add('modal-open');
     }
   };
+  // function that takes every n point in the prices array to reduce the number of points so the graph becomes clear
+  function takeEveryNth(data: any[], n: number) {
+    return data.filter((_, index) => index % n === 0);
+  }
+  const interval = 25; // Take every 20th point
 
   useEffect(() => {
     (async () => {
@@ -75,10 +80,11 @@ export default function PriceGraph({
       const now = Date.now()
       switch (type) {
         case 'land':
+          const reducedData = takeEveryNth(landGraphData.prices, interval);
           setSelection("one_week")
           setIsLoading(true);
           setSeries([{
-            data: landGraphData?.prices ?? []
+            data: reducedData ?? []
           }])
           setRecentData({
             pair: "LAND / USD",
