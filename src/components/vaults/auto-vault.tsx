@@ -195,16 +195,19 @@ export default function AutoVault({
       setInputValue("")
       return;
     }
-    amountLS = parseEther(amountLS).toString(); //convert to wei
+
+    amountLS = (parseEther(amountLS) * BigInt(vaultBalance.totalSharesV3) / BigInt(vaultBalance.total)).toString()  ; //convert to wei
     if (BigInt(minTransferAmount || 0) > BigInt(amountLS)) {
       setInputValue("");
       notifyError(`Minimum transfer amount is ${formatEther(minTransferAmount.toString())} LAND`);
       return;
     }
 
+
+
     // SETTING INPUT VALUE EMPTY
     setInputValue("");
-    withdrawVault(amountLS)
+    withdrawVault(amountLS, parseEther(inputValue))
   };
 
   async function updateStatus() {
@@ -490,7 +493,7 @@ export default function AutoVault({
                           }
                         </button>
                         <button
-                          className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`} onClick={() => withdrawVault(0)}
+                          className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`} onClick={() => withdrawVault(0,0)}
                           disabled={typeof address == 'undefined'}
                         >
                           Harvest

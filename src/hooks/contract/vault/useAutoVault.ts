@@ -44,7 +44,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     address,
     chainId
   })
-  const { data: ccipAllowance } = useAllowanceOfLandToken(chainId, address, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { data: ccipAllowance, refetch: refetchAllowance } = useAllowanceOfLandToken(chainId, address, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish, refetch: Function }
   const { approve: approveLand, data: approveLandTx, isError: isApproveError } = useApproveLandToken()
   const { isSuccess: approveLandSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveLandTx,
@@ -55,7 +55,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     total,
     autoLandV3: ccipAutoLandV3 
   } = useCcipVaultBalance(chainId, address) as { totalSharesV3: BigNumberish, total: BigNumberish, autoLandV3: BigNumberish }
-  const { autoLandV3 } = useAutoLandV3(chainId, address) as { autoLandV3: BigNumberish }
+  const { autoLandV3, refetch: refetchAutoLandV3 } = useAutoLandV3(chainId, address) as { autoLandV3: BigNumberish, refetch: Function }
   const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 0, address })
   const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 0, address })
   const { refetch: refetchTotalSupply } = useTotalSupply(chainId)
@@ -95,6 +95,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
             refetchUserInfo()
             refetchPendingLand()
             refetchBalanceOfLandToken()
+            refetchAllowance()
             setScreenLoadingStatus("Approve Transaction Complete.")
           } else if (approveLandSuccess && isCcipDeposit) {
             setScreenLoadingStatus("Transaction in progress...")
@@ -138,6 +139,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         if (withdrawAllStatusData) {
           if (withdrawAllSuccess) {
             setScreenLoadingStatus("Transaction Complete.")
+            refetchAutoLandV3()
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -190,6 +192,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
             refetchUserInfo()
             refetchPendingLand()
             refetchBalanceOfLandToken()
+            refetchAutoLandV3()
             setScreenLoadingStatus("Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
@@ -214,6 +217,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
             refetchUserInfo()
             refetchPendingLand()
             refetchBalanceOfLandToken()
+            refetchAutoLandV3()
             setScreenLoadingStatus("Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
@@ -254,7 +258,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   }
 
 
-  const withdrawVault = (amount: BigNumberish) => {
+  const withdrawVault = (amount: BigNumberish, rawInput: BigNumberish) => {
     // check withdraw all
     if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
       setTransferAction('Withdraw All')
@@ -267,7 +271,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         transfer(chainId, 1, 2, 0, 750000) // withdraw all of ccip
       }
     } else {
-      if (amount == 0 || amount == autoLandV3) {
+      if (rawInput == 0 || rawInput == autoLandV3) {
         setScreenLoadingStatus("Transaction Pending...")
         withdrawAll()
       }
@@ -280,9 +284,9 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         return
       }
 
-      const withdrawAmount = BigInt(amount) * BigInt(totalSharesV3) / BigInt(total)
+      // const withdrawAmount = BigInt(amount) * BigInt(totalSharesV3) / BigInt(total)
       setScreenLoadingStatus("Transaction Pending...")
-      transfer(chainId, withdrawAmount, 1, 0, 750000)
+      transfer(chainId, amount, 1, 0, 750000)
     } else {
       setScreenLoadingStatus("Transaction Pending...")
       withdraw(amount)
