@@ -25,7 +25,7 @@ export default function ReparingCost({ cost, className }: RepairingCostProps) {
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <div className="flex flex-col px-3">
+            <div className="flex flex-col px-3 text-text-primary">
               <ReparingCostList cost={cost} />
             </div>
           </Dropdown.Menu>
