@@ -15,7 +15,7 @@ export default function MainTabs({ tabItems }: MainTabs) {
           <button
             key={`${tabItem.id}-${index}`}
             onClick={() => setActiveTab(tabItem.id)}
-            className={`px-4 py-2 text-[14px] md:text-[20px] font-medium border-b-[1px] ${BOLD_INTER_TIGHT.className} ${
+            className={`whitespace-nowrap px-4 py-2 text-[14px] md:text-[20px] font-medium border-b-[1px] ${BOLD_INTER_TIGHT.className} ${
               activeTab === tabItem.id
                 ? "border-[#000000] text-[#000]"
                 : "text-[#000000b3] hover:text-[#000] hover:border-[#000000]"

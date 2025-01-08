@@ -61,8 +61,8 @@ export default function FinancialPropertyCard({
   return (
     <div
       className={`${
-        page == "rwa" ? "bg-third" : "bg-third md:bg-secondary"
-      } ${className} w-full py-[32px] px-[24px] gap-[10px] h-[160px] rounded-[16px] min-w-max flex flex-col justify-center items-center md:items-start`}
+        page == "rwa" ? "dark:bg-third" : "dark:bg-third md:bg-secondary"
+      } ${className} bg-primary w-full py-[32px] px-[24px] gap-[10px] h-[160px] rounded-[16px] min-w-max flex flex-col justify-center items-center md:items-start`}
     >
       <div></div>
       <div className="flex flex-col gap-[10px] text-center">
@@ -74,7 +74,8 @@ export default function FinancialPropertyCard({
           highlightColor={`${theme == "dark" ? "#52545e" : "#f6f7f9"}`}
         >
           <div className="flex gap-[8px]">
-            <div className="bg-primary w-[32px] h-[32px] flex items-center justify-center rounded-full">
+            <div className="md:bg-primary bg-secondary h-[32px] flex items-center justify-start rounded-full">
+
               <Image
                 src={
                   iconUrl[title] ? iconUrl[title] : iconUrl["Est. Appreciation"]
