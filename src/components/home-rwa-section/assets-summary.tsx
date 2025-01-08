@@ -43,8 +43,8 @@ export default function HomeRwaAssetsSummary() {
   }, [dispatch]);
 
   return (
-    <div className="pt-[30px] pb-[40px] px-0 md:pl-0 md:pr-0 lg:py-[80px] lg:px-[120px] bg-secondary">
-      <div className="flex flex-col items-start md:flex-row justify-between md:items-center gap-[10px] xl:gap-[20px] 2xl:gap-[100px] pt-[100px] pr-0 max-w-[1200px] m-auto">
+    <div className="pb-[40px] px-0 md:pl-0 md:pr-0 lg:py-[80px] lg:px-[120px] bg-secondary">
+      <div className="flex flex-col items-start md:flex-row justify-between md:items-center gap-[10px] xl:gap-[20px] 2xl:gap-[100px] pt-[70px] pr-0 max-w-[1200px] m-auto">
         <div className="flex flex-col items-start w-full gap-6">
           <div className="px-[10px] md:px-[40px] flex flex-col gap-3 lg:px-0">
             <FeatureBadge
