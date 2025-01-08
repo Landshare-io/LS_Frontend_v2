@@ -35,7 +35,7 @@ export default function YouOwn(){
           <div className="flex justify-center">
             <div className="max-w-[1200px] w-[98%] sm:w-[90%] md:w-full">
               <div className="flex flex-col md:flex-row items-center">
-                <div className="flex justify-between mb-2">
+                <div className="flex justify-between">
                   <span
                     className={`min-w-[120px] inline-block font-semibold ${show ? "text-left" : "text-center"} text-text-primary pr-10 md:pr-0`}
                     >
