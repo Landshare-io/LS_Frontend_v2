@@ -432,10 +432,10 @@ export default function NftDetails({
                             }}
                           />
                         </div>
-                        <div className="flex mt-2 md:mt-0 justify-center">
+                        <div className="flex mt-2 md:mt-0 justify-center max-md:w-[263px] max-md:mx-auto">
                           <Button
                             onClick={handleDeposit}
-                            className={`w-auto mr-3 px-4 py-2 rounded-[24px] bg-[#61cd81] text-[24px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                            className={`w-auto mr-3 px-4 py-2 rounded-[24px] bg-[#61cd81] text-[24px] text-button-text-secondary max-md:grow ${BOLD_INTER_TIGHT.className}
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] hover:text-[#fff] "
                               }
@@ -465,7 +465,7 @@ export default function NftDetails({
                           </Button>
                           <Button
                             onClick={handleWithdraw}
-                            className={`w-auto px-4 py-2 rounded-[24px] text-[24px] bg-[#61cd81] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                            className={`w-auto px-4 py-2 rounded-[24px] text-[24px] bg-[#61cd81] text-button-text-secondary max-md:grow ${BOLD_INTER_TIGHT.className}
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] hover:text-[#fff] "
                               }
