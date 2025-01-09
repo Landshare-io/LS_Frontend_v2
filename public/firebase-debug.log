@@ -1,0 +1,47 @@
+[debug] [2025-01-04T18:19:30.596Z] ----------------------------------------------------------------------
+[debug] [2025-01-04T18:19:30.601Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\himyn\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2025-01-04T18:19:30.602Z] CLI Version:   12.3.1
+[debug] [2025-01-04T18:19:30.602Z] Platform:      win32
+[debug] [2025-01-04T18:19:30.602Z] Node Version:  v22.12.0
+[debug] [2025-01-04T18:19:30.602Z] Time:          Sat Jan 04 2025 12:19:30 GMT-0600 (Central Standard Time)
+[debug] [2025-01-04T18:19:30.603Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-01-04T18:19:30.686Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-01-04T18:19:30.687Z] > authorizing via signed-in user (jordanfriske87@gmail.com)
+[debug] [2025-01-04T18:19:30.687Z] [iam] checking project landshare-test for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-01-04T18:19:30.689Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/landshare-test:testIamPermissions [none]
+[debug] [2025-01-04T18:19:30.690Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/landshare-test:testIamPermissions x-goog-quota-user=projects/landshare-test
+[debug] [2025-01-04T18:19:30.690Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/landshare-test:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-01-04T18:19:32.004Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/landshare-test:testIamPermissions 200
+[debug] [2025-01-04T18:19:32.004Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/landshare-test:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-01-04T18:19:32.005Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/landshare-test [none]
+[debug] [2025-01-04T18:19:32.660Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/landshare-test 200
+[debug] [2025-01-04T18:19:32.660Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/landshare-test {"projectId":"landshare-test","projectNumber":"287581504107","displayName":"Landshare Test","name":"projects/landshare-test","resources":{"hostingSite":"landshare-test"},"state":"ACTIVE","etag":"1_f3b684bd-7513-4c1f-bc2c-e523f8c838d6"}
+[debug] [2025-01-04T18:19:38.033Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/landshare-test/sites pageToken=&pageSize=10
+[debug] [2025-01-04T18:19:39.829Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/landshare-test/sites 200
+[debug] [2025-01-04T18:19:39.829Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/landshare-test/sites {"sites":[{"name":"projects/landshare-test/sites/landshare-test","defaultUrl":"https://landshare-test.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2025-01-04T18:19:39.830Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/landshare-test/sites 
+[debug] [2025-01-04T18:19:40.543Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/landshare-test/sites 200
+[debug] [2025-01-04T18:19:40.543Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/landshare-test/sites {"sites":[{"name":"projects/landshare-test/sites/landshare-test","defaultUrl":"https://landshare-test.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2025-01-04T18:19:40.543Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/landshare-test/webApps/-/config [none]
+[debug] [2025-01-04T18:19:41.328Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/landshare-test/webApps/-/config 200
+[debug] [2025-01-04T18:19:41.328Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/landshare-test/webApps/-/config {"projectId":"landshare-test","storageBucket":"landshare-test.firebasestorage.app","apiKey":"AIzaSyBPkZSvjds_R9qwme0EQIgIVW33TAwrLYU","authDomain":"landshare-test.firebaseapp.com","messagingSenderId":"287581504107"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2025-01-04T18:21:15.018Z] TypeError: Cannot destructure property 'customConfig' of '(intermediate value)(intermediate value)(intermediate value)' as it is null.
+    at loadConfig (C:\Users\himyn\Desktop\Landshare App 2.0\LS_Frontend_v2\node_modules\next\dist\server\config.js:654:41)
+    at getConfig (C:\Users\himyn\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:386:28)
+    at build (C:\Users\himyn\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\next\index.js:62:65)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async prepareFrameworks (C:\Users\himyn\AppData\Roaming\npm\node_modules\firebase-tools\lib\frameworks\index.js:211:33)
+    at async deploy (C:\Users\himyn\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:55:13)
+[error] 
+[error] Error: An unexpected error has occurred.
