@@ -131,7 +131,7 @@ export default function TotalYieldMultiModal({
       <div>
         <div className="flex w-full px-3 py-4 items-center justify-between">
           <h3 className="m-0 text-[18px] text-[#000000cc]">Total Annual Yields </h3>
-          <h1 className="m-0 text-[36px] font-semibold text-[#61cd81]">x{ numeral(house.multiplier).format("0.[00]").toString()} LAND</h1>
+          <h1 className="m-0 text-[32px] sm:text-[36px] font-semibold text-[#61cd81]">x{ numeral(house.multiplier).format("0.[00]").toString()} LAND</h1>
         </div>
         <div className="border-b-[1px] border-[#cccccc]"></div>
       </div>

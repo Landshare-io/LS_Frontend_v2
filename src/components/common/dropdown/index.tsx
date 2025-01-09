@@ -53,7 +53,7 @@ Dropdown.Toggle = function Toggle({ children, onClick }: { children: JSX.Element
 // Dropdown.Menu component
 Dropdown.Menu = function Menu({ children }: { children: JSX.Element }) {
   return (
-    <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+    <div className="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
       <div className="py-1">{children}</div>
     </div>
   );

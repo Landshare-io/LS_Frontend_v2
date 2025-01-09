@@ -23,7 +23,7 @@ export default function ReparingCostList({ cost }: { cost: any }) {
       {Object.keys(cost).map((key: string) => (
         <div
           key={key}
-          className="flex grow p-1 items-center text-[14px] text-text-secondary"
+          className="flex justify-center p-1 items-center text-[14px] text-text-secondary"
         >
           <span className={`pr-[2px] ${BOLD_INTER_TIGHT.className}`}>{Math.ceil(cost[key] * 10) / 10}</span>
           {icons[key]}

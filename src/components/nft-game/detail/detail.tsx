@@ -382,8 +382,8 @@ export default function NftDetails({
                 <div className="flex flex-grow ml-0 lg:ml-[1.5rem]">
                   <div className="flex flex-col w-full">
                     <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
-                    <div className="flex flex-col md:flex-row py-3 justify-between">
-                      <div className="text-[16px] mb-0 font-normal flex flex-nowrap items-center justify-start text-text-secondary">
+                    <div className="flex flex-col md:flex-row py-3 justify-between max-md:-mt-6">
+                      <div className="text-[16px] mb-0 font-normal flex flex-nowrap items-center justify-start text-text-secondary max-md:translate-y-6">
                         Durability
                         <div
                           onClick={() => setDurabilityModal(true)}
@@ -399,7 +399,7 @@ export default function NftDetails({
                             now={house.lastDurability}
                           />
                         </div>
-                        <span className="text-[12px] font-normal text-text-secondary pl-2 font-semibold">
+                        <span className="text-[12px] text-text-secondary pl-2 font-semibold hidden md:block">
                           MAX {house.maxDurability} %
                         </span>
                       </div>
@@ -432,10 +432,10 @@ export default function NftDetails({
                             }}
                           />
                         </div>
-                        <div className="flex mt-2 md:mt-0 justify-center">
+                        <div className="flex mt-2 md:mt-0 justify-center max-md:w-[263px] max-md:mx-auto">
                           <Button
                             onClick={handleDeposit}
-                            className={`w-auto mr-3 px-4 py-2 rounded-[24px] bg-[#61cd81] text-[24px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                            className={`w-auto mr-3 px-4 py-2 rounded-[24px] bg-[#61cd81] text-[24px] text-button-text-secondary max-md:grow ${BOLD_INTER_TIGHT.className}
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] hover:text-[#fff] "
                               }
@@ -465,7 +465,7 @@ export default function NftDetails({
                           </Button>
                           <Button
                             onClick={handleWithdraw}
-                            className={`w-auto px-4 py-2 rounded-[24px] text-[24px] bg-[#61cd81] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
+                            className={`w-auto px-4 py-2 rounded-[24px] text-[24px] bg-[#61cd81] text-button-text-secondary max-md:grow ${BOLD_INTER_TIGHT.className}
                             ${(!house.isActivated || !isOwn || house.onSale) &&
                               " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] hover:text-[#fff] "
                               }
