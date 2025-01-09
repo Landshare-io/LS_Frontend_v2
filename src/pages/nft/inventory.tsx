@@ -13,7 +13,7 @@ const Inventory: NextPage = () => {
   const { checkIsAuthenticated } = useLogin()
 
   useEffect(() => {
-    if (typeof address != "undefined") checkIsAuthenticated(address)
+    checkIsAuthenticated(address)
   }, [address])
 
   return (

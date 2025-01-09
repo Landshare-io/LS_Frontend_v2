@@ -54,7 +54,7 @@ export default function InventoryPage() {
 	const { data: maxAssetTokenBalance, refetch: refetchDepositAmount } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
 	const { data: landTokenBalance, refetch: refetchLandAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish, refetch: Function }
 	const { data: stakedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
-	const { isLoading: isLoginLoading } = useLogin()
+	const { isLoading: isLoginLoading, checkIsAuthenticated } = useLogin()
 	const { userReward, getResources } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
 	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost } = useGetSetting()
@@ -63,7 +63,7 @@ export default function InventoryPage() {
 	const { nftCredits, totalCredits } = useGetNftCredits(address)
 	const { withdrawAssetTokenHandler } = useWithdrawAsset(chainId, address, setDepositLoading, setWithdrawLoading)
 	const { data: tradingLimit } = useSecondaryTradingLimitOf(chainId, address) as { data: BigNumberish, refetch: Function }
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [totalHarvestCost, setTotalHarvestCost] = useState(0);
   const [selectedResource, setSelectedResource] = useState([false, false, false, false, false])
   const [showItemsModal, setShowItemsModal] = useState(false)
@@ -119,6 +119,15 @@ export default function InventoryPage() {
       return () => clearInterval(interval);
     })()
   }, [isAuthenticated, isLoginLoading, isConnected]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !isConnected) setIsLoading(false)
+    else setIsLoading(true)
+  }, [isAuthenticated, isConnected])
+
+  useEffect(() => {
+    checkIsAuthenticated(address)
+  }, [address])
 
 	const calcDepositMax = async () => {
     await refetchDepositAmount()
@@ -332,7 +341,7 @@ export default function InventoryPage() {
         ) : (
           <>
             <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px]">
-              {(!isConnected || !isAuthenticated) ? (
+              {(!isLoginLoading && (!isConnected || !isAuthenticated)) ? (
                 <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
                   <ConnectWallet />
                 </div>

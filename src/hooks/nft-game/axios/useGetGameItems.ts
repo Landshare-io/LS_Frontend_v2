@@ -90,7 +90,7 @@ export default function useGetGameItems() {
         }
       }
     } catch (error: any) {
-      console.log(error.response.data.message, error)
+      // console.log(error.response.data.message, error)
     }
   }
 

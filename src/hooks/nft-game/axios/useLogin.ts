@@ -76,6 +76,11 @@ export default function useLogin() {
 
   const loginToBackend = async (needNotify: boolean, address: Address | string | undefined) => {
     try {
+      if (typeof address == 'undefined') {
+        updateIsLoading(false);
+        return false
+      }
+      updateIsLoading(true)
       setWalletAddress(address)
       setShowNotify(needNotify)
       const { data: messageData } = await axios.post(`${NFT_GAME_BACKEND_URL}/auth/get-nonce`);
@@ -92,6 +97,10 @@ export default function useLogin() {
 
   const checkIsAuthenticated = async (address: Address | string | undefined) => {
     try {
+      if (typeof address == 'undefined') {
+        updateIsLoading(false);
+        return false
+      }
       if (localStorage.getItem("jwtToken-v2")) {
         const { data } = await backendAxios.get('/user/is-loggedin')
         if (data.success) {

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from 'next/router';
 import { useAccount } from "wagmi";
+import ReactLoading from "react-loading";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Inter_Tight } from 'next/font/google';
 import Button from "../common/button";
@@ -33,7 +34,7 @@ export default function ConnectWallet({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { pathname } = router;
-  const { checkIsAuthenticated } = useLogin()
+  const { checkIsAuthenticated, isLoading } = useLogin()
   const { isAuthenticated } = useGlobalContext()
   const referralCode = searchParams.get('af');
   const {isConnected, address} = useAccount();
@@ -129,8 +130,19 @@ export default function ConnectWallet({
                       onClick={() => checkIsAuthenticated(account?.address)}
                       className="w-[165px] h-[44px] rounded-[100px] transition ease-in-out delay-400 bg-[#61cd81] hover:bg-transparent border-[1px] border-[#61CD81] text-[#fff] hover:text-[#61CD81]"
                       textClassName="hover:dark:text-[#61CD81] text-[100%]"
+                      disabled={isLoading}
                     >
-                      Login
+                      {isLoading ? (
+                        <div className='flex justify-center items-center'>
+                          <ReactLoading
+                            type="spin"
+                            className="me-2 mb-[4px]"
+                            width="24px"
+                            height="24px"
+                          />
+                          <span className="font-semibold">Loading</span>
+                        </div>
+                      ) : "Login"}
                     </Button>
                   );
                 } else {

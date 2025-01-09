@@ -35,8 +35,10 @@ export default function useGetItem(itemName: string) {
   useEffect(() => {
     if (itemName) {
       const fetchItem = async () => {
-        const { data } = await axios.post(`/item/one`, { name: itemName });
-        updateItemData(data);
+        try {
+          const { data } = await axios.post(`/item/one`, { name: itemName });
+          updateItemData(data);
+        } catch (e) {}
       };
       fetchItem();
     }

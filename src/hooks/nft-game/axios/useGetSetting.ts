@@ -167,7 +167,7 @@ export default function useGetSetting() {
         "Marble Countertops": mcCap,
       })
     } catch (error: any) {
-      console.log(error.response.data.message, error)
+      // console.log(error.response.data.message, error)
     }
   }
 

@@ -16,16 +16,20 @@ import useGetHouse from "../../../hooks/nft-game/axios/useGetHouse";
 import useLogin from "../../../hooks/nft-game/axios/useLogin";
 
 const NftPage = () => {
-  const { isConnected } = useAccount();
+  const [isLoading, setIsLoading] = useState(true);
+  const { isConnected, address } = useAccount();
   const {
     isAuthenticated,
   } = useGlobalContext();
 
   const router = useRouter()
   const { houseId } = router.query as { houseId: string };
-  const { isLoading: isLoginLoading } = useLogin();
-  const { house, setHouse, getHouse, isLoading: isPageLoading } = useGetHouse(houseId);
+  const { isLoading: isLoginLoading, checkIsAuthenticated } = useLogin();
+  const { house, setHouse, getHouse } = useGetHouse(houseId);
 
+  useEffect(() => {
+    checkIsAuthenticated(address)
+  }, [address])
 
   const tabItems = [
     {
@@ -64,28 +68,38 @@ const NftPage = () => {
     },
   ];
 
+  const getHousesData = async () => {
+    setIsLoading(true);
+    getHouse();
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500)
+  }
 
   useEffect(() => {
+    if (!isAuthenticated || !isConnected) setIsLoading(false)
+    else setIsLoading(true)
+  }, [isAuthenticated, isConnected])
+
+  useEffect(() => {
+    if (!isConnected) return;
+    if (isLoginLoading) return;
     if (!isAuthenticated) return;
-    if (!house.isActivated) return;
 
-    // const interval = setInterval(() => {
-    getHouse();
-    // }, 60000);
-
-    // return () => clearInterval(interval);
-  }, [isAuthenticated]);
+    getHousesData();
+  }, [isAuthenticated, isLoginLoading, isConnected]);
 
   return (
     <>
-      {isLoginLoading || isPageLoading ? (
+      {isLoginLoading || isLoading ? (
         <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
           <ReactLoading type="bars" color="#61cd81" />
         </div>
       ) : (
         <>
           <div className="relative max-w-[1200px] px-0 m-auto flex flex-col pt-0 bg-primary">
-            {(!isConnected || !isAuthenticated) ? (
+            {(!isLoginLoading && (!isConnected || !isAuthenticated)) ? (
               <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
                 <ConnectWallet />
               </div>

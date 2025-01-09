@@ -36,8 +36,10 @@ export default function useCheckHasItem(item: any, houseId: number | string) {
     if (typeof houseId === "undefined" || houseId === '') return
     if (typeof item !== 'undefined' && typeof item.id !== 'undefined') {
       const fetchItem = async () => {
-        const { data } = await axios.get(`/has-item/find-item-and-house-and-user?itemId=${item.id}&houseId=${houseId}`);
-        updateHasItem(data);
+        try {
+          const { data } = await axios.get(`/has-item/find-item-and-house-and-user?itemId=${item.id}&houseId=${houseId}`);
+          updateHasItem(data);
+        } catch (error: any) {}
       };
       fetchItem();
     }
