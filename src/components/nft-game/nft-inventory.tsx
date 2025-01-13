@@ -362,7 +362,7 @@ export default function InventoryPage() {
                                     {activatedHousesLength > 0 &&
                                       activatedHouses.map((houseItem, idx) => (
                                         <div
-                                          className="flex justify-center pr-[20px] md:pr-[40px]"
+                                          className="flex justify-center md:pr-[40px]"
                                           key={`activated-house-item-${idx}`}
                                         >
                                           <NftItem house={houseItem} />
@@ -371,7 +371,7 @@ export default function InventoryPage() {
 
                                     {Array.from({ length: userActivatedSlots - activatedHousesLength }).map((_, index) => (
                                       <div
-                                        className="flex justify-center pr-[20px] md:pr-[40px]"
+                                        className="flex justify-center md:pr-[40px]"
                                         key={`user-activated-slots-${index}`}
                                         onClick={() => setShowItemsModal(true)}
                                       >
@@ -383,7 +383,7 @@ export default function InventoryPage() {
                                     ))}
 
                                     {Number(houseSlots) - Number(userActivatedSlots) > 0 && (
-                                      <div className="flex justify-center pr-[20px] md:pr-[40px]">
+                                      <div className="flex justify-center md:pr-[40px]">
                                         <div className="h-[378px] p-[16px] items-center justify-center text-cener border-[2px] border-dotted border-[#61cd81] w-[251px] cursor-pointer m-auto animate-[fadeIn] overflow-hidden duration-300 rounded-[16px] shadow-md flex flex-col gap-[20px]">
                                           <div>
                                             <p>{`Add New Slot (${buySlotCost} LAND)`}</p>
