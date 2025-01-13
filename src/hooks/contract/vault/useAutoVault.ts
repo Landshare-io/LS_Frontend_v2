@@ -86,6 +86,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isApproveError) {
+        setIsCcipDeposit(false)
         setScreenLoadingStatus("Transaction Failed.")
       } else if (approveLandTx) {
         if (approveStatusData) {
@@ -102,11 +103,13 @@ export default function useAutoVault(chainId: number, address: Address | undefin
             setIsCcipDeposit(false)
             transfer(chainId, depositAmount, 0, 0, 500000)
           } else {
+            setIsCcipDeposit(false)
             setScreenLoadingStatus("Transaction Failed.")
           }        
         }
       }
     } catch (error) {
+      setIsCcipDeposit(false)
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
@@ -154,7 +157,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isTransferError) {
-        setScreenLoadingStatus("Transaction Failed..")
+        setScreenLoadingStatus("Transaction Failed.")
       } else if (transferTx) {
         if (transferStatusData) {
           if (transferSuccess) {

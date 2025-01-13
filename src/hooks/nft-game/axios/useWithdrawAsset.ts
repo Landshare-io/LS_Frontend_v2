@@ -14,7 +14,7 @@ export default function useWithdrawAsset(chainId: number, address: Address | und
   const [depositAmount, setDepositAmount] = useState<BigNumberish>(0)
   const { resource } = useGetResource()
   const {notifyError, notifySuccess} = useGlobalContext()
-  const { withdraw, data: withdrawTx } = useWithdrawOfAssetStake(chainId)
+  const { withdraw, data: withdrawTx, isError: isWithdrawTxError } = useWithdrawOfAssetStake(chainId)
   const { refetch } = useStakedBalance(chainId, address)
   const { getUserData } = useGetUserData()
 
@@ -26,7 +26,10 @@ export default function useWithdrawAsset(chainId: number, address: Address | und
   useEffect(() => {
     (async () => {
       try {
-        if (withdrawTx) {
+        if (isWithdrawTxError) {
+          setWithdrawLoading(false)
+          notifySuccess(`Withdraw failed`);
+        } else if (withdrawTx) {
           if (withdrawStatusData) {
             if (withdrawSuccess) {
               await axios.post('/house/withdraw-asset-token', {
@@ -38,6 +41,9 @@ export default function useWithdrawAsset(chainId: number, address: Address | und
               setDepositLoading(false);
               setWithdrawLoading(false)
               notifySuccess(`${depositAmount} LSRWA withdrawn successfully!`);
+            } else {
+              setWithdrawLoading(false)
+              notifySuccess(`Withdraw failed`);
             }
           }
         }
@@ -47,7 +53,7 @@ export default function useWithdrawAsset(chainId: number, address: Address | und
         notifyError(error.response.data.message);
       }
     })()
-  }, [withdrawTx, withdrawStatusData, withdrawSuccess])
+  }, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawTxError])
 
   const withdrawAssetTokenHandler = async (withdrawStakedCost: string, amount: BigNumberish) => {
     const withdrawCost = withdrawStakedCost.split(',')

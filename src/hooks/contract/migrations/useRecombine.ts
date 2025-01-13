@@ -72,6 +72,7 @@ export default function useRecombine({
 
   useEffect(() => {
     if (isApproveError) {
+      updateIsSuccessRecombine(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (approveTx) {
       if (approveStatusData) {
@@ -88,6 +89,7 @@ export default function useRecombine({
 
   useEffect(() => {
     if (isAddLiquidityError) {
+      updateIsSuccessRecombine(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (addLiquidityETHTx) {
       if (addLiquidityStatusData) {

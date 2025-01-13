@@ -10,6 +10,7 @@ export default function useApprove() {
     data,
     isPending,
     error,
+    isError,
     writeContract
   } = useWriteContract();
 
@@ -27,6 +28,7 @@ export default function useApprove() {
     approve,
     error,
     isPending,
+    isError,
     data
   }
 }

@@ -46,16 +46,20 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
   const { isConnected } = useAccount();
   const { isAuthenticated, notifyError, notifySuccess } = useGlobalContext()
   const { data: landTokenBalance, refetch } = useBalanceOf({ chainId, address })
-  const { approve, data: approveTx } = useApproveOfLandToken()
-  const { approve: premiumNftApprove, data: premiumNftApproveTx } = useApproveOfPremiumNft()
-  const { sendTransaction, data: sendTransactionTx, error: sendTransactionError } = useSendTransaction()
+  const { approve, data: approveTx, isError: isApproveTxError } = useApproveOfLandToken()
+  const { approve: premiumNftApprove, data: premiumNftApproveTx, isError: isPremiumNftApproveTxError } = useApproveOfPremiumNft()
+  const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
   const { getHouse } = useGetHouse(house.id)
 
+  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    hash: sendTransactionTx,
+    chainId: chainId
+  });
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: chainId
   });
-  const { isSuccess: premiumNftApproveSuccess, data: premiumNftApproveStatusData, error } = useWaitForTransactionReceipt({
+  const { isSuccess: premiumNftApproveSuccess, data: premiumNftApproveStatusData } = useWaitForTransactionReceipt({
     hash: premiumNftApproveTx,
     chainId: chainId
   });
@@ -105,7 +109,10 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
 
   useEffect(() => {
     (async () => {
-      if (premiumNftApproveTx) {
+      if (isPremiumNftApproveTxError) {
+        setLoader('');
+        notifyError('Approve Error');
+      } else if (premiumNftApproveTx) {
         if (premiumNftApproveStatusData) {
           if (premiumNftApproveSuccess) {
             try {
@@ -122,15 +129,21 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
               setLoader('')
               notifyError('Approve Error');
             }
+          } else {
+            setLoader('');
+            notifyError('Approve Error');
           }
         }
       }
     })()
-  }, [premiumNftApproveSuccess, premiumNftApproveStatusData, premiumNftApproveTx])
+  }, [premiumNftApproveSuccess, premiumNftApproveStatusData, premiumNftApproveTx, isPremiumNftApproveTxError])
 
   useEffect(() => {
     (async () => {
-      if (approveTx) {
+      if (isApproveTxError) {
+        setLoader('');
+        notifyError('Approve Error');
+      } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
             try {
@@ -154,61 +167,66 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
               setLoader('')
               notifyError('Approve Error');
             }
+          } else {
+            setLoader('');
+            notifyError('Approve Error');
           }
         }
       }
     })()
-  }, [approveSuccess, approveStatusData, approveTx])
-
-  useEffect(() => {
-    if (transactionNonce) {
-      if (sendTransactionError) {
-        setLoader('')
-        setTransactionNonce(0)
-        notifyError(`Attach ${premiumNft.name} failed`);
-      }
-    }
-  }, [transactionNonce, sendTransactionError])
+  }, [approveSuccess, approveStatusData, approveTx, isApproveTxError])
 
   useEffect(() => {
     (async () => {
       if (transactionNonce) {
-        if (sendTransactionTx) {
-          const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-  
-          if (receipt.status) {
-            try {
-              await axios.post(`/has-premium-nft/${attachStatus}`, 
-              attachStatus == 'reattach-premium-nft-house' ? {
-                hasItemId: premiumNft.hasItemId,
-                houseId: house.id
-              } : {
-                itemId: premiumNft.id,
-                houseId: house.id,
-                nftId: premiumNftId,
-                nonce: transactionNonce
-              })
-  
-              await refetch()
-              await getHouse()
-              await gettingPremiumItems();
-              setLoader('')
-              setTransactionNonce(0)
-              notifySuccess(`Attach ${premiumNft.name} successfully`);
-            } catch (error: any) {
-              console.log(error)
+        if (isSendTransactionError) {
+          setLoader('');
+          setTransactionNonce(0)
+          notifyError(`Attach ${premiumNft.name} failed`);
+        } else if (sendTransactionTx) {
+          if (sendTxData) {
+            if (sendTxSuccess) {
+              const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+      
+              if (receipt.status) {
+                try {
+                  await axios.post(`/has-premium-nft/${attachStatus}`, 
+                  attachStatus == 'reattach-premium-nft-house' ? {
+                    hasItemId: premiumNft.hasItemId,
+                    houseId: house.id
+                  } : {
+                    itemId: premiumNft.id,
+                    houseId: house.id,
+                    nftId: premiumNftId,
+                    nonce: transactionNonce
+                  })
+      
+                  await refetch()
+                  await getHouse()
+                  await gettingPremiumItems();
+                  setLoader('')
+                  setTransactionNonce(0)
+                  notifySuccess(`Attach ${premiumNft.name} successfully`);
+                } catch (error: any) {
+                  console.log(error)
+                  setTransactionNonce(0)
+                  notifyError(`Attach ${premiumNft.name} failed`);
+                }
+              } else {
+                setLoader('');
+                setTransactionNonce(0)
+                notifyError(`Attach ${premiumNft.name} failed`);
+              }
+            } else {
+              setLoader('');
               setTransactionNonce(0)
               notifyError(`Attach ${premiumNft.name} failed`);
             }
-          } else {
-            setLoader('');
-            setTransactionNonce(0)
-            notifyError(`Attach ${premiumNft.name} failed`);
           }
         }
       }
     })()
-  }, [transactionNonce, sendTransactionTx])
+  }, [transactionNonce, sendTransactionTx, sendTxData, sendTxSuccess, isSendTransactionError])
 
   const gettingPremiumItems = async () => {
     if (!house.premiumUpgrades) return;

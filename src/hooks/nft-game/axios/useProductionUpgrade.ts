@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDisconnect, useChainId } from "wagmi";
 import { BigNumberish } from "ethers";
 import { Address } from "viem";
-import { useSendTransaction } from "wagmi";
+import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import axios from "./nft-game-axios";
 import useGetResource from "./useGetResource";
 import useBalanceOfLandToken from "../../contract/LandTokenContract/useBalanceOf";
@@ -17,52 +17,58 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
   const chainId = useChainId()
   const { notifyError, notifySuccess } = useGlobalContext()
   const { resource, setResource, maxPowerLimit } = useGetResource()
-  const { sendTransaction, data: sendTransactionTx, error: sendTransactionError } = useSendTransaction()
+  const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
+  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    hash: sendTransactionTx,
+    chainId: chainId
+  });
   const { data: landTokenBalance, refetch: refetchLandBalance } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish, refetch: Function }
-
-  useEffect(() => {
-    if (transactionNonce) {
-      if (sendTransactionError) {
-        setIsLoading({ type: -1, loading: false });
-        setTransactionNonce(0)
-        notifyError("Buy Addon Error");
-      }
-    }
-  }, [transactionNonce, sendTransactionError])
 
   useEffect(() => {
     (async () => {
       try {
         if (transactionNonce) {
-          if (sendTransactionTx) {
-            const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-    
-            if (receipt.status) {
-              const { data } = await axios.post('/has-item/buy-item-with-land', {
-                houseId: house.id,
-                itemId: handymanItem.id,
-                hasItemId: handymanItem.hasItemId,
-                txHash: receipt.transactionHash,
-                blockNumber: receipt.blockNumber,
-                nonce: transactionNonce
-              })
-    
-              setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
-              await refetchLandBalance()
-              setHouse((prevState: any) => ({
-                ...prevState,
-                productionUpgrades: data.productionUpgrades,
-                lastDurability: data.lastDurability,
-                multiplier: data.multiplier,
-                maxDurability: data.maxDurability
-              }))
-              setTransactionNonce(0)
-              setIsLoading({ type: -1, loading: false });
-              notifySuccess(`${handymanItem.name} purchased successfully`)
-            } else {
-              setIsLoading({ type: -1, loading: false });
-              setTransactionNonce(0)
-              notifyError("Buy Addon Error");
+          if (isSendTransactionError) {
+            setIsLoading({ type: -1, loading: false });
+            setTransactionNonce(0)
+            notifyError("Buy Addon Error");
+          } else if (sendTransactionTx) {
+            if (sendTxData) {
+              if (sendTxSuccess) {
+                const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+        
+                if (receipt.status) {
+                  const { data } = await axios.post('/has-item/buy-item-with-land', {
+                    houseId: house.id,
+                    itemId: handymanItem.id,
+                    hasItemId: handymanItem.hasItemId,
+                    txHash: receipt.transactionHash,
+                    blockNumber: receipt.blockNumber,
+                    nonce: transactionNonce
+                  })
+        
+                  setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
+                  await refetchLandBalance()
+                  setHouse((prevState: any) => ({
+                    ...prevState,
+                    productionUpgrades: data.productionUpgrades,
+                    lastDurability: data.lastDurability,
+                    multiplier: data.multiplier,
+                    maxDurability: data.maxDurability
+                  }))
+                  setTransactionNonce(0)
+                  setIsLoading({ type: -1, loading: false });
+                  notifySuccess(`${handymanItem.name} purchased successfully`)
+                } else {
+                  setIsLoading({ type: -1, loading: false });
+                  setTransactionNonce(0)
+                  notifyError("Buy Addon Error");
+                }
+              } else {
+                setIsLoading({ type: -1, loading: false });
+                setTransactionNonce(0)
+                notifyError("Buy Addon Error");
+              }
             }
           }
         }
@@ -72,7 +78,7 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
         notifyError("Buy Addon Error");
       }
     })()
-  }, [transactionNonce, sendTransactionTx])
+  }, [transactionNonce, sendTransactionTx, sendTxData, sendTxSuccess])
 
   const buyToolshed = async (toolshed: any) => {
     setIsLoading({ type: toolshed.id, loading: true });

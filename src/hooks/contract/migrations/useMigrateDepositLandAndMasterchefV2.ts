@@ -62,6 +62,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
 
   useEffect(() => {
     if (isDepositAutoV3Error) {
+      updateIsSuccessDeposit(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (autoVaultV3DepositTx) {
       if (autoVaultV3DepositStatusData) {
@@ -75,6 +76,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
             updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
+        } else {
+          updateIsSuccessDeposit(false);
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }
@@ -82,6 +86,7 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
 
   useEffect(() => {
     if (isDepositError) {
+      updateIsSuccessDeposit(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (masterchefDepositTx) {
       if (masterchefDepositStatusData) {
@@ -96,6 +101,9 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
             updateIsSuccessDeposit(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
+        } else {
+          updateIsSuccessDeposit(false);
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }

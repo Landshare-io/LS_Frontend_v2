@@ -63,6 +63,7 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
   
   useEffect(() => {
     if (isApproveError) {
+      updateIsSuccessMigrate(false)
       setScreenLoadingStatus("Transaction Failed.")
     } else if (landTokenApproveTx) {
       if (landTokenApproveStatusData) {
@@ -72,8 +73,12 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
             swap()
           } catch (error) {
             console.log("swap error", error)
+            updateIsSuccessMigrate(false)
             setScreenLoadingStatus("Transaction Failed.")
           }
+        } else {
+          updateIsSuccessMigrate(false)
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }
@@ -81,6 +86,7 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
 
   useEffect(() => {
     if (isSwapError) {
+      updateIsSuccessMigrate(false)
       setScreenLoadingStatus("Transaction Failed.")
     } else if (swapTx) {
       if (swapStatusData) {
@@ -90,10 +96,12 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
             updateLandTokenV2Balance()
             setScreenLoadingStatus("Transaction Complete.")
           } catch (error) {
+            updateIsSuccessMigrate(false)
             setScreenLoadingStatus("Transaction Failed.")
           }
         } else {
           updateIsSuccessMigrate(false)
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }

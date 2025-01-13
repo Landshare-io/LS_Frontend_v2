@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Address } from "viem"
-import { useSendTransaction } from "wagmi";
+import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import axios from "../axios/nft-game-axios"
 import useBalanceOfLandToken from "../../contract/LandTokenContract/useBalanceOf"
 import { useGlobalContext } from "../../../context/GlobalContext"
@@ -10,38 +10,44 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
   const [transactionNonce, setTransactionNonce] = useState(0)
   const { notifyError, notifySuccess } = useGlobalContext()
   const { data: balance, refetch: refetchBalance } = useBalanceOfLandToken({ chainId, address })
-  const { sendTransaction, data: sendTransactionTx, error: sendTransactionError } = useSendTransaction()
-
-  useEffect(() => {
-    if (transactionNonce) {
-      if (sendTransactionError) {
-        setIsLoading(false);
-        setTransactionNonce(0)
-        return notifyError(`Mint a new house Error`);
-      }
-    }
-  }, [transactionNonce, sendTransactionError])
+  const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
+  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    hash: sendTransactionTx,
+    chainId: chainId
+  });
 
   useEffect(() => {
     (async () => {
-      if (transactionNonce) {
+      if (isSendTransactionError) {
+        setIsLoading(false);
+        setTransactionNonce(0)
+        return notifyError(`Mint a new house Error`);
+      } else if (transactionNonce) {
         if (sendTransactionTx) {
-          const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-  
-          if (receipt.status) {
-            await refetchBalance()
-            setTransactionNonce(0)
-            setIsLoading(false);
-            return notifySuccess(`Mint a new house successfully`)
-          } else {
-            setIsLoading(false);
-            setTransactionNonce(0)
-            return notifyError(`Mint a new house Error`);
+          if (sendTxData) {
+            if (sendTxSuccess) {
+              const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+      
+              if (receipt.status) {
+                await refetchBalance()
+                setTransactionNonce(0)
+                setIsLoading(false);
+                return notifySuccess(`Mint a new house successfully`)
+              } else {
+                setIsLoading(false);
+                setTransactionNonce(0)
+                return notifyError(`Mint a new house Error`);
+              }
+            } else {
+              setIsLoading(false);
+              setTransactionNonce(0)
+              return notifyError(`Mint a new house Error`);
+            }
           }
         }
       }
     })()
-  }, [transactionNonce, sendTransactionTx])
+  }, [transactionNonce, sendTransactionTx, sendTxData, sendTxSuccess, isSendTransactionError])
 
   const mint = async (nftCreditCost: number, harvestAmount: number) => {
     try {

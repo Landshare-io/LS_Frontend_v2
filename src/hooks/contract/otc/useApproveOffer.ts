@@ -9,8 +9,8 @@ import { SWAPCAT_ADDRESS } from "../../../config/constants/environments"
 
 export default function useApproveOffer(buyOffer: Function, setIsSwapping: Function) {
   const [offeringId, setOfferingId] = useState<string>('');
-  const { approve, data: approveTx } = useApprove()
-  const { approve: approveMd, data: approveMdTx } = useApproveOfMd()
+  const { approve, data: approveTx, isError: isApproveError } = useApprove()
+  const { approve: approveMd, data: approveMdTx, isError: isApproveMdError } = useApproveOfMd()
   const { notifyError } = useGlobalContext()
 
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
@@ -24,7 +24,10 @@ export default function useApproveOffer(buyOffer: Function, setIsSwapping: Funct
 
   useEffect(() => {
     (async () => {
-      if (approveTx) {
+      if (isApproveError) {
+        notifyError("Approve Error");
+        setIsSwapping([false, false]);
+      } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
             buyOffer(offeringId);
@@ -35,11 +38,14 @@ export default function useApproveOffer(buyOffer: Function, setIsSwapping: Funct
         }
       }
     })()
-  }, [approveTx, approveStatusData, approveSuccess])
+  }, [isApproveError, approveTx, approveStatusData, approveSuccess])
 
   useEffect(() => {
     (async () => {
-      if (approveMdTx) {
+      if (isApproveMdError) {
+        notifyError("Approve Error");
+        setIsSwapping([false, false]);
+      } else if (approveMdTx) {
         if (approveMdStatusData) {
           if (approveMdSuccess) {
             buyOffer(offeringId);
@@ -50,7 +56,7 @@ export default function useApproveOffer(buyOffer: Function, setIsSwapping: Funct
         }
       }
     })()
-  }, [approveMdTx, approveMdStatusData, approveMdSuccess])
+  }, [isApproveMdError, approveMdTx, approveMdStatusData, approveMdSuccess])
 
   const approveAsset = (offerID: string, tokenType: string, amount: BigNumberish | number) => {
     try {

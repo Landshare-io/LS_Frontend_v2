@@ -10,10 +10,15 @@ import { ADMIN_WALLET_ADDRESS, PROVIDERS } from "../../../config/constants/envir
 export default function useBuyHouse(chainId: number, product: any, address: Address | undefined, setIsLoading: Function, getProducts: Function) {
   const [signNonce, setSignNonce] = useState(0)
   const { notifyError, notifySuccess } = useGlobalContext()
-  const { approve, data: approveTx } = useApprove()
+  const { approve, data: approveTx, isError: isApproveError } = useApprove()
   const { data: balance, refetch } = useBalanceOf({ chainId, address })
   
-  const { sendTransaction, data: sendTransactionTx, error: sendTransactionError } = useSendTransaction()
+  const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
+
+  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    hash: sendTransactionTx,
+    chainId: chainId
+  });
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     hash: approveTx,
     chainId: chainId
@@ -21,7 +26,9 @@ export default function useBuyHouse(chainId: number, product: any, address: Addr
 
   useEffect(() => {
     (async () => {
-      if (approveTx) {
+      if (isApproveError) {
+        notifyError(`Approve Error`)
+      } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
             try {
@@ -34,54 +41,58 @@ export default function useBuyHouse(chainId: number, product: any, address: Addr
             } catch (error: any) {
               notifyError(error.response.data.message);
             }
+          } else {
+            notifyError(`Approve Error`)
           }
         }
       }
     })()
-  }, [approveTx, approveStatusData, approveSuccess])
-
-  useEffect(() => {
-    if (signNonce) {
-      if (sendTransactionError) {
-        setIsLoading(false)
-        setSignNonce(0)
-        notifyError(`Buy House Error`)
-      }
-    }
-  }, [signNonce, sendTransactionError])
+  }, [isApproveError, approveTx, approveStatusData, approveSuccess])
 
   useEffect(() => {
     (async () => {
       if (signNonce) {
-        if (sendTransactionTx) {
-          const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-  
-          if (receipt.status) {
-            try {
-              const {data} = await axios.post('/house/buy-house-with-land', {
-                houseId: product.id,
-                nonce: signNonce
-              })
-              await refetch()
-              await getProducts({ searchType: "all" });
+        if (isSendTransactionError) {
+          setIsLoading(false);
+          setSignNonce(0)
+          notifyError(`Buy House Error`);
+        } else if (sendTransactionTx) {
+          if (sendTxData) {
+            if (sendTxSuccess) {
+              const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+      
+              if (receipt.status) {
+                try {
+                  const {data} = await axios.post('/house/buy-house-with-land', {
+                    houseId: product.id,
+                    nonce: signNonce
+                  })
+                  await refetch()
+                  await getProducts({ searchType: "all" });
+                  setIsLoading(false);
+                  setSignNonce(0)
+                  notifySuccess("Buy House Success")
+                } catch (error: any) {
+                  console.log(error)
+                  setIsLoading(false);
+                  setSignNonce(0)
+                  notifyError(error.response.data.message)
+                }
+              } else {
+                setIsLoading(false);
+                setSignNonce(0)
+                notifyError(`Buy House Error`);
+              }
+            } else {
               setIsLoading(false);
               setSignNonce(0)
-              notifySuccess("Buy House Success")
-            } catch (error: any) {
-              console.log(error)
-              setIsLoading(false);
-              setSignNonce(0)
-              notifyError(error.response.data.message)
+              notifyError(`Buy House Error`);
             }
-          } else {
-            setIsLoading(false);
-            setSignNonce(0)
-            notifyError(`Buy House Error`);
           }
         }
       }
     })()
-  }, [signNonce, sendTransactionTx])
+  }, [isSendTransactionError, signNonce, sendTransactionTx, sendTxData, sendTxSuccess])
 
   const buyProduct = () => {
     if (Number(balance) >= product.salePrice) {

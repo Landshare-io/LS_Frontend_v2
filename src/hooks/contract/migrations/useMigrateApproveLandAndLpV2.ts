@@ -64,6 +64,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
 
   useEffect(() => {
     if (isApproveLandError) {
+      updateIsSuccessApprove(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (approveLandTx) {
       if (approveStatusData) {
@@ -75,6 +76,9 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
             updateIsSuccessApprove(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
+        } else {
+          updateIsSuccessApprove(false);
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }
@@ -82,6 +86,7 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
 
   useEffect(() => {
     if (isApproveLPError) {
+      updateIsSuccessApprove(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (approveLpTx) {
       if (approveLpStatusData) {
@@ -93,6 +98,9 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
             updateIsSuccessApprove(false);
             setScreenLoadingStatus("Transaction Failed.")
           }
+        } else {
+          updateIsSuccessApprove(false);
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }

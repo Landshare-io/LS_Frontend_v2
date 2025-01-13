@@ -12,8 +12,8 @@ import useGetUserData from "./useGetUserData";
 
 export default function useStake(chainId: number, address: Address | undefined, setDepositLoading: Function) {
   const [depositAmount, setDepositAmount] = useState<BigNumberish>(0)
-  const { approve, data: approveTx } = useApprove(chainId)
-  const { deposit, data: depositTx } = useDeposit(chainId)
+  const { approve, data: approveTx, isError: isApproveTxError } = useApprove(chainId)
+  const { deposit, data: depositTx, isError: isDepositTxError } = useDeposit(chainId)
   const { notifyError, notifySuccess } = useGlobalContext()
   const { refetch: refetchStakedAmount } = useStakedBalance(chainId, address)
   const { getUserData } = useGetUserData()
@@ -29,7 +29,10 @@ export default function useStake(chainId: number, address: Address | undefined, 
 
   useEffect(() => {
     (async () => {
-      if (approveTx) {
+      if (isApproveTxError) {
+        setDepositLoading(false)
+        notifyError("Deposit error")
+      } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
             try {
@@ -38,16 +41,22 @@ export default function useStake(chainId: number, address: Address | undefined, 
               setDepositLoading(false)
               notifyError(error.response.data.message);
             }
+          } else {
+            setDepositLoading(false)
+            notifyError("Deposit failed")
           }
         }
       }
     })()
-  }, [approveTx, approveStatusData, approveSuccess])
+  }, [approveTx, approveStatusData, approveSuccess, isApproveTxError])
 
   useEffect(() => {
     (async () => {
       try {
-        if (depositTx) {
+        if (isDepositTxError) {
+          setDepositLoading(false);
+          notifyError("Deposit failed");
+        } else if (depositTx) {
           if (depositStatusData) {
             if (depositSuccess) {
               const { data } = await axios.post('/house/deposit-asset-token', {
@@ -64,6 +73,9 @@ export default function useStake(chainId: number, address: Address | undefined, 
                 setDepositLoading(false);
                 notifyError("Deposit failed");
               }
+            } else {
+              setDepositLoading(false);
+              notifyError("Deposit failed");
             }
           }
         }
@@ -72,7 +84,7 @@ export default function useStake(chainId: number, address: Address | undefined, 
       notifyError(error.response.data.message);
     }
     })()
-  }, [depositTx, depositStatusData, depositSuccess])
+  }, [depositTx, depositStatusData, depositSuccess, isDepositTxError])
   
 
   const stake = async (amount: BigNumberish) => {

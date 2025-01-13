@@ -9,6 +9,7 @@ export default function useApprove() {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
@@ -25,6 +26,7 @@ export default function useApprove() {
   return {
     approve,
     isPending,
+    isError,
     data
   }
 }

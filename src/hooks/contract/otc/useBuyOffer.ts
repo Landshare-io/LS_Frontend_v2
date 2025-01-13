@@ -5,7 +5,7 @@ import useBuy from "../SwapCatContract/useBuy";
 import { useGlobalContext } from "../../../context/GlobalContext";
 
 export default function useBuyOffer(setIsSwapping: Function, getOfferAmounts: Function, completeRequest: Function) {
-  const { buy, data: buyTx } = useBuy()
+  const { buy, data: buyTx, isError: isBuyError } = useBuy()
   const { notifyError, notifySuccess } = useGlobalContext();
 
   const { isSuccess: buySuccess, data: buyStatusData } = useWaitForTransactionReceipt({
@@ -15,7 +15,10 @@ export default function useBuyOffer(setIsSwapping: Function, getOfferAmounts: Fu
 
   useEffect(() => {
     (async () => {
-      if (buyTx) {
+      if (isBuyError) {
+        notifyError("Swap Error");
+        setIsSwapping([false, false]);
+      } else if (buyTx) {
         if (buyStatusData) {
           if (buySuccess) {
             const totalOfferAmount = await getOfferAmounts();
@@ -33,7 +36,7 @@ export default function useBuyOffer(setIsSwapping: Function, getOfferAmounts: Fu
         }
       }
     })()
-  }, [buyTx, buySuccess, buyStatusData])
+  }, [isBuyError, buyTx, buySuccess, buyStatusData])
 
 
   const buyOffer = async (offerId: number) => {

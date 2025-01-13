@@ -84,6 +84,7 @@ export default function useSplitLP({
   useEffect(() => {
     if (isApproveError) {
       setScreenLoadingStatus("Transaction Failed.")
+      updateIsSuccessSplit(false)
     } else if (approveTx) {
       if (approveStatusData) {
         if (approveSuccess) {
@@ -96,8 +97,12 @@ export default function useSplitLP({
               Date.now()
             )
           } catch (error) {
+            updateIsSuccessSplit(false)
             setScreenLoadingStatus("Transaction Failed.")
           }
+        } else {
+          updateIsSuccessSplit(false)
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }
@@ -106,6 +111,7 @@ export default function useSplitLP({
   useEffect(() => {
     (async () => {
       if (isRemoveLiquidityError) {
+        updateIsSuccessSplit(false)
         setScreenLoadingStatus("Transaction Failed.")
       } else if (removeLiquidityETHTx) {
         if (removeLiquidityStatusData) {
@@ -118,8 +124,12 @@ export default function useSplitLP({
               setScreenLoadingStatus("Transaction Complete.")
               updateIsSuccessSplit(true)
             } catch (error) {
+              updateIsSuccessSplit(false)
               setScreenLoadingStatus("Transaction Failed.")
             }
+          } else {
+            updateIsSuccessSplit(false)
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }

@@ -94,6 +94,8 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
         if (landApproveStatusData) {
           if (landApproveSuccess) {
             buyToken(amount, USDC_ADDRESS[chainId])
+          } else {
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }

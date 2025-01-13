@@ -94,6 +94,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
   useEffect(() => {
     if (isWithdrawLPError) {
       setScreenLoadingStatus("Transaction Failed.")
+      updateIsSuccessWithdraw(false);
     } else if (withdrawLPFramTx) {
       if (withdrawLPFarmStatusData) {
         if (withdrawLPFarmSuccess) {
@@ -105,6 +106,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
           }
+        } else {
+          updateIsSuccessWithdraw(false);
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }
@@ -112,6 +116,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
 
   useEffect(() => {
     if (isWithdrawAutoError) {
+      updateIsSuccessWithdraw(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (withdrawAutoVaultV1Tx) {
       if (withdrawAutoVaultV1StatusData) {
@@ -123,6 +128,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
           }
+        } else {
+          updateIsSuccessWithdraw(false);
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }
@@ -130,6 +138,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
 
   useEffect(() => {
     if (isWithdrawAutoV2Error) {
+      updateIsSuccessWithdraw(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (withdrawAutoVaultV2Tx) {
       if (withdrawAutoVaultV2StatusData) {
@@ -141,6 +150,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
           }
+        } else {
+          updateIsSuccessWithdraw(false);
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }
@@ -148,6 +160,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
 
   useEffect(() => {
     if (isWithdrawLandStakeV2Error) {
+      updateIsSuccessWithdraw(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (withdrawLandTokenStakeV2Tx) {
       if (withdrawLandTokenStakeV2StatusData) {
@@ -159,6 +172,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
           }
+        } else {
+          updateIsSuccessWithdraw(false);
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }
@@ -166,6 +182,7 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
 
   useEffect(() => {
     if (isWithdrawLandStakeV3Error) {
+      updateIsSuccessWithdraw(false);
       setScreenLoadingStatus("Transaction Failed.")
     } else if (withdrawLandTokenStakeV3Tx) {
       if (withdrawLandTokenStakeV3StatusData) {
@@ -177,6 +194,9 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
             setScreenLoadingStatus("Transaction Failed.")
             updateIsSuccessWithdraw(false);
           }
+        } else {
+          updateIsSuccessWithdraw(false);
+          setScreenLoadingStatus("Transaction Failed.")
         }
       }
     }

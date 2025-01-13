@@ -85,6 +85,8 @@ export default function useSellTokens(chainId: number, address: Address | undefi
                 sellRwa(amount)
               }
             }
+          } else {
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
@@ -107,6 +109,8 @@ export default function useSellTokens(chainId: number, address: Address | undefi
           // }
           if (landApproveSuccess) {
             sellRwa(amount)
+          } else {
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }
@@ -129,6 +133,8 @@ export default function useSellTokens(chainId: number, address: Address | undefi
           // }
           if (usdcApproveSuccess) {
             sellRwa(amount)
+          } else {
+            setScreenLoadingStatus("Transaction Failed.")
           }
         }
       }

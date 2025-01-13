@@ -7,6 +7,7 @@ export default function useSetApprovalForAll() {
   const {
     data,
     isPending,
+    isError,
     writeContract
   } = useWriteContract();
 
@@ -23,6 +24,7 @@ export default function useSetApprovalForAll() {
   return {
     setApprovalForAll,
     isPending,
+    isError,
     data
   }
 }

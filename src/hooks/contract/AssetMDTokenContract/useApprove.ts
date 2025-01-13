@@ -8,6 +8,7 @@ import { ASSET_MD_TOKEN_ADDRESS } from "../../../config/constants/environments";
 export default function useApprove() {
   const {
     data,
+    isError,
     isPending,
     writeContract
   } = useWriteContract();
@@ -25,6 +26,7 @@ export default function useApprove() {
   return {
     approve,
     isPending,
+    isError,
     data
   }
 }

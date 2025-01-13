@@ -7,7 +7,8 @@ export default function useWithdraw(chainId: number) {
   const {
     data,
     isPending,
-    writeContract
+    writeContract,
+    isError
   } = useWriteContract();
 
   async function withdraw(amount: BigNumberish) {
@@ -23,6 +24,7 @@ export default function useWithdraw(chainId: number) {
   return {
     withdraw,
     isPending,
-    data
+    data,
+    isError
   }
 }

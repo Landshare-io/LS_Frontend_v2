@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Address } from "viem"
-import { useSendTransaction } from "wagmi";
+import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import axios from "./nft-game-axios"
 import useBalanceOfLand from "../../contract/LandTokenContract/useBalanceOf"
 import { useGlobalContext } from "../../../context/GlobalContext";
@@ -9,52 +9,55 @@ import { PROVIDERS } from "../../../config/constants/environments";
 export default function useHandleBuyHouseSlots(chainId: number, address: Address | undefined, setUserActivatedSlots: Function, setBuyHouseSlotLoading: Function) {
   const { notifyError, notifySuccess } = useGlobalContext()
   const { refetch: refetchBalance } = useBalanceOfLand({ chainId, address })
-  const { sendTransaction, data: sendTransactionTx, error: sendTransactionError } = useSendTransaction()
+  const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
   const [signNonce, setSignNonce] = useState(0)
 
-  useEffect(() => {
-    if (signNonce) {
-      if (sendTransactionError) {
-        setSignNonce(0)
-        setBuyHouseSlotLoading(false)
-        notifyError("Buy House Slot Error");
-      }
-    }
-  }, [signNonce, sendTransactionError])
+  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    hash: sendTransactionTx,
+    chainId: chainId
+  });
 
   useEffect(() => {
     (async () => {
       if (signNonce) {
-        if (sendTransactionTx) {
-          try {
-            const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-    
-            if (receipt.status) {
-              const { data } = await axios.post('/has-item/buy-house-slot', {
-                txHash: receipt.transactionHash,
-                blockNumber: receipt.blockNumber,
-                nonce: signNonce
-              })
-              await refetchBalance()
-              setUserActivatedSlots(data.activatedSlots)
-              setBuyHouseSlotLoading(false)
-              setSignNonce(0)
-              notifySuccess(`New house slot purchased successfully!`)
-            } else {
-              setSignNonce(0)
-              setBuyHouseSlotLoading(false)
-              notifyError("Buy House Slot Error");
+        if (isSendTransactionError) {
+          setSignNonce(0)
+          setBuyHouseSlotLoading(false)
+          notifyError("Buy House Slot Error");
+        } else if (sendTransactionTx) {
+          if (sendTxData) {
+            if (sendTxSuccess) {
+              try {
+                const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+        
+                if (receipt.status) {
+                  const { data } = await axios.post('/has-item/buy-house-slot', {
+                    txHash: receipt.transactionHash,
+                    blockNumber: receipt.blockNumber,
+                    nonce: signNonce
+                  })
+                  await refetchBalance()
+                  setUserActivatedSlots(data.activatedSlots)
+                  setBuyHouseSlotLoading(false)
+                  setSignNonce(0)
+                  notifySuccess(`New house slot purchased successfully!`)
+                } else {
+                  setSignNonce(0)
+                  setBuyHouseSlotLoading(false)
+                  notifyError("Buy House Slot Error");
+                }
+              } catch (error: any) {
+                console.log("Buy House Slot Error: ", error.response.data.message);
+                setSignNonce(0)
+                setBuyHouseSlotLoading(false)
+                notifyError(error.response.data.message);
+              }
             }
-          } catch (error: any) {
-            console.log("Buy House Slot Error: ", error.response.data.message);
-            setSignNonce(0)
-            setBuyHouseSlotLoading(false)
-            notifyError(error.response.data.message);
           }
         }
       }
     })()
-  }, [signNonce, sendTransactionTx])
+  }, [isSendTransactionError, signNonce, sendTransactionTx, sendTxData, sendTxSuccess])
 
   const handleBuyHouseSlots = async () => {
     try {

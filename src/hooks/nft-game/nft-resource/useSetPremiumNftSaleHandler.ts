@@ -24,8 +24,8 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
     "Pool Table": isApprovedForAllOfPool,
     "Marble Countertops": isApprovedForAllOfMarble
   }
-  const { setApprovalForAll, data: setApprovalForAllTx } = useSetApprovalForAll()
-  const { approve, data: approveTx } = useApprove()
+  const { setApprovalForAll, data: setApprovalForAllTx, isError: isSetApprovalForAllTxError } = useSetApprovalForAll()
+  const { approve, data: approveTx, isError: isApproveTxError } = useApprove()
   const { getPremiumNfts } = useGetPremiumNfts(chainId, address)
 
 
@@ -40,7 +40,10 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
 
 
   useEffect(() => {
-    if (setApprovalForAllTx) {
+    if (isSetApprovalForAllTxError) {
+      setIsLoading('')
+      notifyError("Transaction Failed")
+    } else if (setApprovalForAllTx) {
       if (setApprovalForAllStatusData) {
         if (setApprovalForAllSuccess) {
           approve(chainId, premiumNftAddress, premiumNftData.onChainId)
@@ -50,11 +53,14 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
         }
       }
     }
-  }, [setApprovalForAllTx, setApprovalForAllStatusData, setApprovalForAllSuccess])
+  }, [setApprovalForAllTx, setApprovalForAllStatusData, setApprovalForAllSuccess, isSetApprovalForAllTxError])
 
   useEffect(() => {
     (async () => {
-      if (approveTx) {
+      if (isApproveTxError) {
+        setIsLoading('')
+        notifyError("Transaction Failed")
+      } else if (approveTx) {
         if (approveStatusData) {
           if (approveSuccess) {
             try {
@@ -78,7 +84,7 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
         }
       }
     })()
-  }, [approveTx, approveStatusData, approveSuccess])
+  }, [approveTx, approveStatusData, approveSuccess, isApproveTxError])
 
 
   const setPremiumNftsOnSale = (contractName: string, item: any, price: number) => {

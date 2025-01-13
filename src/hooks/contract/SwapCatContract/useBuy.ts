@@ -6,6 +6,7 @@ import { SWAPCAT_ADDRESS } from "../../../config/constants/environments";
 export default function useBuy() {
   const {
     data,
+    isError,
     isPending,
     writeContract
   } = useWriteContract();
@@ -22,6 +23,7 @@ export default function useBuy() {
 
   return {
     buy,
+    isError,
     isPending,
     data
   }
