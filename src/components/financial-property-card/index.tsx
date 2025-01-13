@@ -60,9 +60,9 @@ export default function FinancialPropertyCard({
 
   return (
     <div
-      className={`${
-        page == "rwa" ? "dark:bg-third" : "dark:bg-third md:bg-secondary"
-      } ${className} bg-primary w-full py-[32px] px-[24px] gap-[10px] h-[160px] rounded-[16px] min-w-max flex flex-col justify-center items-center md:items-start`}
+      className={`${className} ${
+        page == "rwa" ? "dark:bg-third" : "dark:bg-third"
+      } bg-secondary w-full py-[32px] px-[24px] gap-[10px] h-[160px] rounded-[16px] min-w-max flex flex-col justify-center items-center md:items-start`}
     >
       <div></div>
       <div className="flex flex-col gap-[10px] text-center">

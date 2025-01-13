@@ -118,7 +118,7 @@ export default function HomeRwaAssetsSummary() {
             </div>
           </div>
           <div className="flex md:hidden gap-[24px] mt-[12px] w-full pr-0 lg:pr-[450px] overflow-hidden">
-            <div className="w-full mt-0 md:w-[430px] md:mt-[56px] md:overflow-visible p-[20px]">
+            <div className="w-full mt-0 md:w-[430px] md:mt-[56px] md:overflow-visible p-[20px] translate-y-5">
               <div className="flex items-center justify-center">
                 <Carousel
                   activeIndex={activeIndex}
@@ -126,30 +126,36 @@ export default function HomeRwaAssetsSummary() {
                   setPaused={setPaused}
                 >
                   <CarouselItem
+                    variant="allowShadow"
                     activeIndex={activeIndex}
                     containerClassName="w-fit"
                   >
                     <FinancialPropertyCard
+                         className="shadow-lg border-[1px] border-primary-green"
                          title={selectedGraph == 'land' ? "Market Cap" : "Rental Yield"}
                          value={selectedGraph == 'land' ? "$" + (circulatingSupply * landPrice).toLocaleString() : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"}
                          loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
                     />
                   </CarouselItem>
                   <CarouselItem
+                    variant="allowShadow"
                     activeIndex={activeIndex}
                     containerClassName="w-fit"
                   >
                     <FinancialPropertyCard
+                       className="shadow-lg border-[1px] border-primary-green"
                        title={selectedGraph == 'land' ? "Circulating Supply" : "Est. Appreciation"}
                        value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
                        loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
                     />
                   </CarouselItem>
                   <CarouselItem
+                    variant="allowShadow"
                     activeIndex={activeIndex}
                     containerClassName="w-fit"
                   >
                     <FinancialPropertyCard
+                        className="shadow-lg border-[1px] border-primary-green"
                         title={selectedGraph == 'land' ? "Burned Amount" : "Ann. Return"}
                         value={selectedGraph == 'land' ? Number.parseFloat(formatEther(burnedAmount).toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
                         loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
@@ -171,12 +177,12 @@ export default function HomeRwaAssetsSummary() {
                 title={selectedGraph == 'land' ? "Market Cap" : "Rental Yield"}
                 value={selectedGraph == 'land' ? "$" + (circulatingSupply * landPrice).toLocaleString() : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100).toFixed(3) + "%"}
                 loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
-              />
+                />
             <FinancialPropertyCard
-               title={selectedGraph == 'land' ? "Circulating Supply" : "Est. Appreciation"}
-               value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
-               loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
-             />
+                title={selectedGraph == 'land' ? "Circulating Supply" : "Est. Appreciation"}
+                value={selectedGraph == 'land' ? circulatingSupply?.toLocaleString() : (appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
+                loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
+                />
             <FinancialPropertyCard
              title={selectedGraph == 'land' ? "Burned Amount" : "Ann. Return"}
              value={selectedGraph == 'land' ? Number.parseFloat(formatEther(burnedAmount).toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
