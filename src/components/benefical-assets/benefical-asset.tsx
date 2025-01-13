@@ -34,7 +34,7 @@ export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
             <img
               src={asset?.pictures[0]}
               alt="property image"
-              className="relative w-[400px] h-[280px] sm:h-[280px] rounded-t-[24px] object-cover md:h-[250px] md:w-full object-center"
+              className="relative w-[380px] h-[250px] sm:h-[250px] rounded-t-[24px] object-cover md:h-[250px] md:w-full object-center"
             />
             <div className="absolute flex items-center gap-[7.13px] text-[12px] leading-[20px] tracking-[0.02em] text-[#fff] bottom-[5px] left-[5px]">
               <Image src={IconLocation} alt="location" className="w-auto" />
