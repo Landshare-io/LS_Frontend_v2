@@ -90,7 +90,7 @@ export default function MobileNavbar() {
                 />
                 <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">Referral</span>
               </a>
-              <a
+              {/* <a
                 href="/migration"
                 rel="noopener noreferrer"
                 className="flex px-[16px] py-[10px] items-center gap-[4px] w-full"
@@ -101,7 +101,7 @@ export default function MobileNavbar() {
                   className="w-[20px] h-[20px] grayscale"
                 />
                 <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">Migration</span>
-              </a>
+              </a> */}
               <a
                 href="https://dashboard.landshare.io"
                 target="_blank"

@@ -17,10 +17,10 @@ export const PAGES: PAGE[] = [
     name: "DAO",
     path: "/dao",
   },
-  {
-    name: "Migration",
-    path: "/migration",
-  },
+  // {
+  //   name: "Migration",
+  //   path: "/migration",
+  // },
   {
     name: "Swap",
     url: "https://app.dsswap.io/info",
