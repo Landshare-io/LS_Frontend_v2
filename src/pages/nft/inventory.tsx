@@ -12,9 +12,6 @@ const Inventory: NextPage = () => {
   const { address } = useAccount()
   const { checkIsAuthenticated } = useLogin()
 
-  useEffect(() => {
-    checkIsAuthenticated(address)
-  }, [address])
 
   return (
     <div>
