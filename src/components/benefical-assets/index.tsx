@@ -18,7 +18,8 @@ export default function BeneficalAssets() {
 
   return (
     <>
-      <div className="flex flex-col gap-[12px] md:gap-[40px] items-center p-0 mlg:px-[20px] md:pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
+      <div className="flex flex-col gap-[12px] md:gap-[20px] items-center p-0 mlg:px-[20px] md:pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
+  
         <div className="w-full flex items-start mb-0">
           <div className="flex items-center w-fit py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-primary ">
             <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-secondary">
@@ -29,7 +30,7 @@ export default function BeneficalAssets() {
             </span>
           </div>
         </div>
-        <div className="w-full h-fit flex flex-col md:flex-row md:justify-between">
+        <div className="w-full h-fit flex flex-col md:flex-row md:justify-between mb-1">
           <h2 className="text-text-primary font-bold text-[32px] leading-normal md:text-[40px] lg:text-[56px]">
             Our Current Assets
           </h2>
@@ -37,7 +38,7 @@ export default function BeneficalAssets() {
             <div className="flex flex-col md:flex-row gap-1 md:items-start ">
               <IoIosInformationCircleOutline
                 size={22}
-                className="hidden md:block"
+                className="hidden lg:block"
                 color="#61CD81"
               />
               <div>
@@ -55,7 +56,7 @@ export default function BeneficalAssets() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col p-0 items-center mlg:w-full mlg:grid mlg:grid-cols-[minmax(381px,max-content),minmax(381px,max-content)] xl:grid-cols-[minmax(381px,max-content),minmax(381px,max-content),minmax(381px,max-content)] justify-between gap-y-[32px] md:gap-y-[40px]">
+        <div className="flex flex-col p-0 items-center mlg:w-full mlg:grid mlg:grid-cols-[minmax(0,95%),minmax(0,95%)] lg:grid-cols-[minmax(381px,max-content),minmax(381px,max-content),minmax(381px,max-content)] justify-between gap-y-[40px] md:gap-y-[40px]">
           {propertiesRentalData.map((asset, index) => (
             <BeneficalAsset
               key={`benefical-asset-rental-${index}`}
