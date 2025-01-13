@@ -46,9 +46,9 @@ export default function Repair({
               calcMaxAmount={calcMaxAmount}
             />
           </div>
-          <div className={`flex pr-[130px] pl-[20px] w-full h-[46px] relative rounded-[2rem] ${house.isActivated && !house.onSale ? "border-[2px] border-[#61cd81]" : "border-[2px] border-[#8f8f8f]"}`}>
+          <div className={`flex items-center pr-[130px] pl-[20px] w-full h-[46px] relative rounded-[2rem] ${house.isActivated && !house.onSale ? "border-[2px] border-[#61cd81]" : "border-[2px] border-[#8f8f8f]"}`}>
             {isLoading ? <>
-              <span className="font-semibold" style={{ marginLeft: "20px" }}>Loading</span></> :
+              <div className="font-semibold" style={{ marginLeft: "20px" }}>Loading</div></> :
               <ReparingCost
                 className="min-w-[316px] gap-[20px]"
                 cost={{
