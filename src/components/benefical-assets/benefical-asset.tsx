@@ -26,19 +26,15 @@ export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
   }
 
   return (
-    <Link className="relative cursor-pointer w-[311px] sm:w-[361px] md:w-[381px]" href={`/tokenized-asset/${asset?.id}`}>
+    <Link className="relative cursor-pointer " href={`/tokenized-asset/${asset?.id}`}>
       <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
-        <div
-          className={`absolute w-[120px] h-[28px] right-0 top-[16px] z-10 rounded-l-[50px] rounded-r-[20px] text-[12px] leading-[20px] text-right tracking-[0.02em] text-[#fff] flex justify-center items-center ${type == "Rental Property" ? "bg-[#FF5454]" : "bg-[#3B98EE]"} ${BOLD_INTER_TIGHT.className}`}
-        >
-          {type}
-        </div>
-        <div className="w-[300px] sm:w-[350px] rounded-[24px] md:w-[370px] border-[1px] border-[#e6e7eb] dark:border-[#6e6e6e] bg-secondary overflow-hidden">
+     
+        <div className=" rounded-[24px] md:w-[370px] border-[1px] border-[#e6e7eb] dark:border-[#6e6e6e] bg-secondary overflow-hidden">
           <div className="relative">
             <img
               src={asset?.pictures[0]}
               alt="property image"
-              className="relative w-full h-[220px] sm:h-[240px] rounded-t-[24px] object-cover md:h-[250px] object-center"
+              className="relative w-[380px] h-[250px] sm:h-[250px] rounded-t-[24px] object-cover md:h-[250px] md:w-full object-center"
             />
             <div className="absolute flex items-center gap-[7.13px] text-[12px] leading-[20px] tracking-[0.02em] text-[#fff] bottom-[5px] left-[5px]">
               <Image src={IconLocation} alt="location" className="w-auto" />

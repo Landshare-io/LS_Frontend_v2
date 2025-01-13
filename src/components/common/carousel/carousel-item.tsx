@@ -5,6 +5,7 @@ interface CarouselItemProps {
   containerClassName?: string;
   activeIndex: number;
   active?: boolean;
+  variant?: "allowShadow";
 }
 
 const CarouselItem = ({
@@ -12,12 +13,15 @@ const CarouselItem = ({
   containerClassName,
   active,
   activeIndex,
+  variant
 }: CarouselItemProps) => {
   return (
     <div
       className={`inline-block w-full p-0 whitespace-nowrap duration-300 ${
         active ? "visible" : ""
-      } ${containerClassName}`}
+      } 
+      ${variant == "allowShadow" ? "p-2" : "" } 
+      ${containerClassName}`}
       style={{
         transform: `translateX(-${activeIndex * 100}%)`,
       }}
