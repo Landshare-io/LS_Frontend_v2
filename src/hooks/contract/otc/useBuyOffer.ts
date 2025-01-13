@@ -3,12 +3,14 @@ import { useWaitForTransactionReceipt } from "wagmi";
 import { bsc } from "viem/chains";
 import useBuy from "../SwapCatContract/useBuy";
 import { useGlobalContext } from "../../../context/GlobalContext";
+import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useBuyOffer(setIsSwapping: Function, getOfferAmounts: Function, completeRequest: Function) {
   const { buy, data: buyTx, isError: isBuyError } = useBuy()
   const { notifyError, notifySuccess } = useGlobalContext();
 
   const { isSuccess: buySuccess, data: buyStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: buyTx,
     chainId: bsc.id
   });

@@ -13,7 +13,7 @@ import useGetSetting from "./useGetSetting";
 import useGetResource from "./useGetResource";
 import useBalanceOfLand from "../../contract/LandTokenContract/useBalanceOf"
 import { useGlobalContext } from "../../../context/GlobalContext";
-import { PROVIDERS } from "../../../config/constants/environments";
+import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useHandleAddons(chainId: number, address: Address | undefined, house: any, setHouse: Function, setIsLoading: Function) {
   const { disconnect } = useDisconnect()
@@ -26,6 +26,7 @@ export default function useHandleAddons(chainId: number, address: Address | unde
   const [handleItem, setHandleItem] = useState<any>({})
 
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
   });

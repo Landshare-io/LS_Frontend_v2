@@ -27,7 +27,8 @@ import {
   GAS_COSTS, 
   CCIP_CHAIN_ID, 
   LP_TOKEN_V2_CONTRACT_ADDRESS, 
-  AUTO_VAULT_V3_CONTRACT_ADDRESS
+  AUTO_VAULT_V3_CONTRACT_ADDRESS,
+  TRANSACTION_CONFIRMATIONS_COUNT
 } from "../../../config/constants/environments";
 
 export default function useAutoVault(chainId: number, address: Address | undefined) {
@@ -47,6 +48,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   const { data: ccipAllowance, refetch: refetchAllowance } = useAllowanceOfLandToken(chainId, address, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish, refetch: Function }
   const { approve: approveLand, data: approveLandTx, isError: isApproveError } = useApproveLandToken()
   const { isSuccess: approveLandSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveLandTx,
     chainId: chainId
   });
@@ -63,22 +65,27 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   const { data: landTokenBalance, refetch: refetchBalanceOfLandToken } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish, refetch: Function }
   const { transfer, data: transferTx, isError: isTransferError } = useTransfer(chainId)
   const { isSuccess: transferSuccess, refetch: refetchTransferTx, data: transferStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: transferTx,
     chainId: chainId
   });
   const { isSuccess: withdrawAllSuccess, data: withdrawAllStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: withdrawAllTx,
     chainId: chainId
   });
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: depositTx,
     chainId: chainId
   });
   const { isSuccess: withdrawSuccess, data: withdrawStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: withdrawTx,
     chainId: chainId
   });
   const { isSuccess: harvestSuccess, data: harvestStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: harvestTx,
     chainId: chainId
   });

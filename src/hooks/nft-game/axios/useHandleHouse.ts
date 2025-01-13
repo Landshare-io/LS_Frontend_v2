@@ -18,7 +18,7 @@ import useApprove from "../../contract/HouseNftContract/useApprove";
 import useBalanceOfLand from "../../contract/LandTokenContract/useBalanceOf";
 import useGetNftCredits from "../apollo/useGetNftCredits";
 import useGetHouse from "./useGetHouse";
-import { ADMIN_WALLET_ADDRESS, PROVIDERS } from "../../../config/constants/environments";
+import { ADMIN_WALLET_ADDRESS, PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useHandleHouse(
   house: any, 
@@ -49,14 +49,17 @@ export default function useHandleHouse(
   const { getHouse } = useGetHouse(house.id)
 
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
   });
   const { isSuccess: approveForAllSuccess, data: approveForAllStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: setApprovalForAllTx,
     chainId: chainId
   });
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: chainId
   });

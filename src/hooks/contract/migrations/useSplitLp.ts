@@ -12,7 +12,8 @@ import { useGlobalContext } from "../../../context/GlobalContext";
 import { 
   PROVIDERS,
   LAND_TOKEN_V1_CONTRACT_ADDRESS,
-  PSC_ROUTER_CONTRACT_ADDRESS 
+  PSC_ROUTER_CONTRACT_ADDRESS,
+  TRANSACTION_CONFIRMATIONS_COUNT
 } from "../../../config/constants/environments";
 
 let isSuccessSplitState = false
@@ -48,11 +49,13 @@ export default function useSplitLP({
   const { removeLiquidityETH, data: removeLiquidityETHTx, isError: isRemoveLiquidityError } = useRemoveLiquidityETH()
 
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: bsc.id
   });
 
   const { isSuccess: removeLiquiditySuccess, data: removeLiquidityStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: removeLiquidityETHTx,
     chainId: bsc.id
   });

@@ -4,7 +4,7 @@ import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import axios from "../axios/nft-game-axios"
 import useBalanceOfLandToken from "../../contract/LandTokenContract/useBalanceOf"
 import { useGlobalContext } from "../../../context/GlobalContext"
-import { PROVIDERS } from "../../../config/constants/environments"
+import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments"
 
 export default function useMintHouseNft(chainId: number, address: Address | undefined, setIsLoading: Function) {
   const [transactionNonce, setTransactionNonce] = useState(0)
@@ -12,6 +12,7 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
   const { data: balance, refetch: refetchBalance } = useBalanceOfLandToken({ chainId, address })
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
   });

@@ -14,7 +14,11 @@ import useUserInfo from "../MasterchefContract/useUserInfo";
 import usePendingLand from "../MasterchefContract/usePendingLand";
 import useTotalSupply from "../LpTokenV2Contract/useTotalSupply";
 import useBalanceOfWBNB from "../WBNBTokenContract/useBalanceOf";
-import { LP_TOKEN_V2_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { 
+  LP_TOKEN_V2_CONTRACT_ADDRESS, 
+  MASTERCHEF_CONTRACT_ADDRESS,
+  TRANSACTION_CONFIRMATIONS_COUNT
+} from "../../../config/constants/environments";
 
 export default function useLpVault(chainId: number, address: Address | undefined, updateStatus: Function, updateLPFarm: Function) {
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
@@ -33,14 +37,17 @@ export default function useLpVault(chainId: number, address: Address | undefined
   const { refetch: refetchAllowance } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { refetch: () => void }
 
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: depositTx,
     chainId: chainId
   });
   const { isSuccess: withdrawSuccess, data: withdrawStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: withdrawTx,
     chainId: chainId
   });
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: chainId
   });

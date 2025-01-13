@@ -4,12 +4,13 @@ import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import axios from "../axios/nft-game-axios";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useGetResource from "../axios/useGetResource";
-import { PROVIDERS } from "../../../config/constants/environments";
+import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useBuyPowerWithLandToken(chainId: number, refetchBalance: Function, setIsLoading: Function) {
   const { notifySuccess, notifyError, isAuthenticated } = useGlobalContext()
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
   });

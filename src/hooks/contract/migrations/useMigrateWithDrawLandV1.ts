@@ -17,6 +17,7 @@ import useWithdrawAutoVaultV2 from "../AutoLandV2Contract/useWithdraw";
 import useWithdrawLandTokenStakeV2 from "../LandTokenStakeV2/useWithdraw";
 import useWithdrawLandTokenStakeV3 from "../LandTokenStakeV3/useWithdraw";
 import { useGlobalContext } from "../../../context/GlobalContext";
+import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 let isSuccessWithdrawState = false
 
@@ -45,30 +46,35 @@ export default function useMigrateWithDrawLandv1({ oldAutoBalance, address }: us
   
   const { withdraw: withdrawLPFarm, data: withdrawLPFramTx, isError: isWithdrawLPError } = useWithdrawLPFarm();
   const { isSuccess: withdrawLPFarmSuccess, data: withdrawLPFarmStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: withdrawLPFramTx,
     chainId: bsc.id
   });
 
   const { withdraw: withdrawAutoVaultV1, data: withdrawAutoVaultV1Tx, isError: isWithdrawAutoError } = useWithdrawAutoVaultV1();
   const { isSuccess: withdrawAutoVaultV1Success, data: withdrawAutoVaultV1StatusData } = useWaitForTransactionReceipt({   
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: withdrawAutoVaultV1Tx,
     chainId: bsc.id
   });
 
   const { withdraw: withdrawAutoVaultV2, data: withdrawAutoVaultV2Tx, isError: isWithdrawAutoV2Error } = useWithdrawAutoVaultV2();
   const { isSuccess: withdrawAutoVaultV2Success, data: withdrawAutoVaultV2StatusData } = useWaitForTransactionReceipt({   
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: withdrawAutoVaultV2Tx,
     chainId: bsc.id
   });
 
   const { withdraw: withdrawLandTokenStakeV2, data: withdrawLandTokenStakeV2Tx, isError: isWithdrawLandStakeV2Error } = useWithdrawLandTokenStakeV2();
   const { isSuccess: withdrawLandTokenStakeV2Success, data: withdrawLandTokenStakeV2StatusData } = useWaitForTransactionReceipt({   
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: withdrawLandTokenStakeV2Tx,
     chainId: bsc.id
   });
 
   const { withdraw: withdrawLandTokenStakeV3, data: withdrawLandTokenStakeV3Tx, isError: isWithdrawLandStakeV3Error } = useWithdrawLandTokenStakeV3();
-  const { isSuccess: withdrawLandTokenStakeV3Success, data: withdrawLandTokenStakeV3StatusData } = useWaitForTransactionReceipt({   
+  const { isSuccess: withdrawLandTokenStakeV3Success, data: withdrawLandTokenStakeV3StatusData } = useWaitForTransactionReceipt({ 
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,  
     hash: withdrawLandTokenStakeV3Tx,
     chainId: bsc.id
   });

@@ -7,7 +7,7 @@ import { useGlobalContext } from "../../../context/GlobalContext";
 import useApprove from "../../contract/RWAContract/useApprove";
 import useDeposit from "../../contract/AssetStakeContract/useDeposit";
 import useStakedBalance from "../../contract/AssetStakeContract/useStakedBalance";
-import { ASSET_STAKE_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { ASSET_STAKE_CONTRACT_ADDRESS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 import useGetUserData from "./useGetUserData";
 
 export default function useStake(chainId: number, address: Address | undefined, setDepositLoading: Function) {
@@ -19,10 +19,12 @@ export default function useStake(chainId: number, address: Address | undefined, 
   const { getUserData } = useGetUserData()
 
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: chainId
   });
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: depositTx,
     chainId: chainId
   });
@@ -89,6 +91,7 @@ export default function useStake(chainId: number, address: Address | undefined, 
 
   const stake = async (amount: BigNumberish) => {
     try {
+      setDepositLoading(true)
       setDepositAmount(amount)
       approve(ASSET_STAKE_CONTRACT_ADDRESS[chainId], amount)
     } catch (error: any) {

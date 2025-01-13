@@ -5,7 +5,7 @@ import axios from "./nft-game-axios";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useApprove from "../../contract/LandTokenContract/useApprove";
 import useBalanceOf from "../../contract/LandTokenContract/useBalanceOf";
-import { ADMIN_WALLET_ADDRESS, PROVIDERS } from "../../../config/constants/environments";
+import { ADMIN_WALLET_ADDRESS, PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useBuyHouse(chainId: number, product: any, address: Address | undefined, setIsLoading: Function, getProducts: Function) {
   const [signNonce, setSignNonce] = useState(0)
@@ -16,10 +16,12 @@ export default function useBuyHouse(chainId: number, product: any, address: Addr
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
 
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
   });
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: chainId
   });

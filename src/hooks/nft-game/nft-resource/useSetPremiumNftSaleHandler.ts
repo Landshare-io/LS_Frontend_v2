@@ -7,7 +7,7 @@ import useIsApprovedForAll from "../../contract/PremiumNftContract/useIsApproveF
 import useApprove from "../../contract/PremiumNftContract/useApprove";
 import useGetPremiumNfts from "../premium-nfts/useGetPremiumNfts";
 import { useGlobalContext } from "../../../context/GlobalContext";
-import { PREMIUM_NFT_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { PREMIUM_NFT_CONTRACT_ADDRESS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useSetPremiumNftSaleHandler(chainId: number, address: Address | undefined) {
   const { notifyError, notifySuccess, isAuthenticated } = useGlobalContext()
@@ -30,10 +30,12 @@ export default function useSetPremiumNftSaleHandler(chainId: number, address: Ad
 
 
   const { isSuccess: setApprovalForAllSuccess, data: setApprovalForAllStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: setApprovalForAllTx,
     chainId: chainId
   });
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: chainId
   });

@@ -10,6 +10,7 @@ import { BigNumberish } from "ethers";
 import useBalanceOf from "../LandTokenContract/useBalanceOf";
 import useApprove from "../LandTokenV1Contract/useApprove";
 import useSwap from "../TokenMigrateContract/useSwap";
+import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 let isSuccessMigrateState = false
 
@@ -34,11 +35,13 @@ export default function useTokenMigrate({ address }: useTokenMigrateProps) {
   const { setScreenLoadingStatus } = useGlobalContext()
 
   const { isSuccess: landTokenApproveSuccess, data: landTokenApproveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: landTokenApproveTx,
     chainId: bsc.id
   });
 
   const { isSuccess: swapSuccess, data: swapStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: swapTx,
     chainId: bsc.id
   });

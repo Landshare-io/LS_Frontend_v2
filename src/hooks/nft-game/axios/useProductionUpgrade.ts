@@ -8,7 +8,7 @@ import useGetResource from "./useGetResource";
 import useBalanceOfLandToken from "../../contract/LandTokenContract/useBalanceOf";
 import { validateResource, validateItemDate, validateDependency } from "../../../utils/helpers/validator";
 import { useGlobalContext } from "../../../context/GlobalContext";
-import { PROVIDERS } from "../../../config/constants/environments";
+import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useProductionUpgrade(house: any, setHouse: Function, address: Address | undefined, setIsLoading: Function) {
   const [handymanItem, setHandymanItem] = useState<any>({})
@@ -19,6 +19,7 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
   const { resource, setResource, maxPowerLimit } = useGetResource()
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
   });

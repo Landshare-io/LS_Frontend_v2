@@ -13,7 +13,11 @@ import useBalanceOfUsdtContract from '../contract/UsdtContract/useBalanceOf';
 import useBalanceOfRwaContract from '../contract/RWAContract/useBalanceOf';
 import useBalanceOfLandContract from '../contract/LandTokenContract/useBalanceOf';
 import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
-import { RWA_CONTRACT_ADDRESS, LANDSHARE_SALE_CONTRACT_ADDRESS } from '../../config/constants/environments';
+import { 
+  RWA_CONTRACT_ADDRESS, 
+  LANDSHARE_SALE_CONTRACT_ADDRESS,
+  TRANSACTION_CONFIRMATIONS_COUNT
+} from '../../config/constants/environments';
 import { useGlobalContext } from '../../context/GlobalContext';
 
 export default function useSellTokens(chainId: number, address: Address | undefined, landFeeAmount: BigNumberish, amount: number) {
@@ -35,6 +39,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
   const { approve: approveRWA, data: rwaApproveTx, isError: isRwaApproveError } = useApproveOfRwaContract(chainId)
 
   const { isSuccess: rwaApproveSuccess, data: rwaApproveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: rwaApproveTx,
     chainId: chainId
   });
@@ -42,6 +47,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
   const { approve: approveLand, data: landApproveTx, isError: isLandApproveError } = useApproveOfLandContract()
 
   const { isSuccess: landApproveSuccess, data: landApproveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: landApproveTx,
   });
 
@@ -53,6 +59,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
   const { approve: approveUsdc, data: usdcApproveTx, isError: isUsdcApproveError } = useApproveOfUsdcContract()
 
   const { isSuccess: usdcApproveSuccess, data: usdcApproveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: usdcApproveTx,
     chainId: chainId
   });
@@ -60,6 +67,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
   const { sellRwa, data: sellTx, isError } = useSellRwa(chainId)
 
   const { isSuccess: sellSuccess, data: sellStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sellTx,
   });
 

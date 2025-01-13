@@ -5,7 +5,7 @@ import { bsc } from "viem/chains";
 import useApprove from "../AssetTokenContract/useApprove"
 import useApproveOfMd from "../AssetMDTokenContract/useApprove"
 import { useGlobalContext } from "../../../context/GlobalContext";
-import { SWAPCAT_ADDRESS } from "../../../config/constants/environments"
+import { SWAPCAT_ADDRESS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments"
 
 export default function useApproveOffer(buyOffer: Function, setIsSwapping: Function) {
   const [offeringId, setOfferingId] = useState<string>('');
@@ -14,10 +14,12 @@ export default function useApproveOffer(buyOffer: Function, setIsSwapping: Funct
   const { notifyError } = useGlobalContext()
 
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: bsc.id
   });
   const { isSuccess: approveMdSuccess, data: approveMdStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveMdTx,
     chainId: bsc.id
   });

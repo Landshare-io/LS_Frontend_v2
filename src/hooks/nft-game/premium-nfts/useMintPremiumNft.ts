@@ -5,7 +5,11 @@ import axios from "../axios/nft-game-axios"
 import useBalanceOf from "../../contract/LandTokenContract/useBalanceOf"
 import useTotalSupply from "../../contract/PremiumNftContract/useTotalSupply"
 import { useGlobalContext } from "../../../context/GlobalContext"
-import { PREMIUM_NFT_CONTRACT_ADDRESS, PROVIDERS } from "../../../config/constants/environments"
+import { 
+  PREMIUM_NFT_CONTRACT_ADDRESS, 
+  PROVIDERS,
+  TRANSACTION_CONFIRMATIONS_COUNT
+} from "../../../config/constants/environments"
 
 export default function useMintPremiumNft(chainId: number, address: Address | undefined, setLoader: Function) {
   const [premiumItem, setPremiumItem] = useState<any>({})
@@ -13,6 +17,7 @@ export default function useMintPremiumNft(chainId: number, address: Address | un
   const { notifyError, notifySuccess } = useGlobalContext()
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
   });

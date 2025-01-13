@@ -4,7 +4,7 @@ import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import axios from "./nft-game-axios"
 import useBalanceOfLand from "../../contract/LandTokenContract/useBalanceOf"
 import { useGlobalContext } from "../../../context/GlobalContext";
-import { PROVIDERS } from "../../../config/constants/environments";
+import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useHandleBuyHouseSlots(chainId: number, address: Address | undefined, setUserActivatedSlots: Function, setBuyHouseSlotLoading: Function) {
   const { notifyError, notifySuccess } = useGlobalContext()
@@ -13,6 +13,7 @@ export default function useHandleBuyHouseSlots(chainId: number, address: Address
   const [signNonce, setSignNonce] = useState(0)
 
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
   });

@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import { useWaitForTransactionReceipt } from "wagmi";
 import { formatEther, BigNumberish } from "ethers";
 import { Address } from "viem";
-import { bsc } from "viem/chains";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useDeposit from "../MasterchefContract/useDeposit";
 import useWithdraw from "../MasterchefContract/useWithdraw";
@@ -12,7 +11,11 @@ import useApprove from "../LandTokenContract/useApprove";
 import useTotalStaked from "../MasterchefContract/useTotalStaked";
 import useUserInfo from "../MasterchefContract/useUserInfo";
 import usePendingLand from "../MasterchefContract/usePendingLand";
-import { AUTO_VAULT_V3_CONTRACT_ADDRESS, MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { 
+  AUTO_VAULT_V3_CONTRACT_ADDRESS, 
+  MASTERCHEF_CONTRACT_ADDRESS,
+  TRANSACTION_CONFIRMATIONS_COUNT
+} from "../../../config/constants/environments";
 
 export default function useVaultBalanceManual(chainId: number, address: Address | undefined, updateStatus: Function) {
   const { setScreenLoadingStatus } = useGlobalContext()
@@ -30,14 +33,17 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
   const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 0, address })
 
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: depositTx,
     chainId: chainId
   });
   const { isSuccess: withdrawSuccess, data: withdraswStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: withdrawTx,
     chainId: chainId
   });
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: chainId
   });

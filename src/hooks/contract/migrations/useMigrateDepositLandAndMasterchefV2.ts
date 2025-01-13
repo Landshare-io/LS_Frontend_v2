@@ -8,6 +8,7 @@ import useBalanceOfLpTokenV2 from "../LpTokenV2Contract/useBalanceOf";
 import useDepositAutoVaultV3 from "../AutoVaultV3Contract/useDeposit";
 import useDepositMastchef from "../MasterchefContract/useDeposit";
 import { useGlobalContext } from "../../../context/GlobalContext";
+import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 let isSuccessDepositState = false
 
@@ -32,12 +33,14 @@ export default function useMigrateDepositLandAndLpV2({ address }: useMigrateDepo
   
   const { deposit: autoVaultV3Deposit, data: autoVaultV3DepositTx, isError:isDepositAutoV3Error } = useDepositAutoVaultV3(bsc.id)
   const { isSuccess: autoVaultV3DepositSuccess, data: autoVaultV3DepositStatusData } = useWaitForTransactionReceipt({   
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: autoVaultV3DepositTx,
     chainId: bsc.id
   });
 
   const { deposit: masterchefDeposit, data: masterchefDepositTx, isError: isDepositError } = useDepositMastchef(bsc.id)
   const { isSuccess: masterchefDepositSuccess, data: masterchefDepositStatusData } = useWaitForTransactionReceipt({   
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: masterchefDepositTx,
     chainId: bsc.id
   });

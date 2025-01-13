@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { bsc } from "viem/chains";
 import { Address } from "viem";
+import { BigNumberish } from "ethers";
 import { 
   useBalance, 
   useAccount,
@@ -11,8 +12,7 @@ import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
 import useAllowanceOfLandToken from "../LandTokenContract/useAllowance";
 import useApproveLandToken from "../LandTokenContract/useApprove";
 import useAddLiquidityETH from "../PCSRouterContract/useAddLiquidityETH";
-import { PSC_ROUTER_CONTRACT_ADDRESS } from "../../../config/constants/environments";
-import { BigNumberish } from "ethers";
+import { PSC_ROUTER_CONTRACT_ADDRESS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 let isSuccessRecombineState = false
 
@@ -42,12 +42,14 @@ export default function useRecombine({
   const { data: landAllowance } = useAllowanceOfLandToken(bsc.id, address, PSC_ROUTER_CONTRACT_ADDRESS) as { data: BigNumberish }
   const { approve, data: approveTx, isError: isApproveError } = useApproveLandToken()
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: bsc.id
   });
 
   const { addLiquidityETH, data: addLiquidityETHTx, isError: isAddLiquidityError } = useAddLiquidityETH()
   const { isSuccess: addLiquiditySuccess, data: addLiquidityStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: addLiquidityETHTx,
     chainId: bsc.id
   })

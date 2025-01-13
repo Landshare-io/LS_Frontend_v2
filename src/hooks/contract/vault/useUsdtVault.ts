@@ -9,7 +9,7 @@ import useWithdraw from "../MasterchefContract/useWithdraw";
 import useBalanceOfRwaLp from "../RwaLpTokenContract/useBalanceOf";
 import useApprove from "../RwaLpTokenContract/useApprove";
 import useUserInfo from "../MasterchefContract/useUserInfo";
-import { MASTERCHEF_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+import { MASTERCHEF_CONTRACT_ADDRESS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 import useAllowance from "../RwaLpTokenContract/useAllowance";
 
 export default function useUsdtVault(chainId: number, address: Address | undefined) {
@@ -24,14 +24,17 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
   const { refetch: refetchLSRWALPAllowance } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { refetch: Function }
   const { data: vaultBalanceLsRwa, refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish], refetch: Function }
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: depositTx,
     chainId: chainId
   });
   const { isSuccess: withdrawSuccess, data: withdrawStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: withdrawTx,
     chainId: chainId
   });
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: chainId
   });

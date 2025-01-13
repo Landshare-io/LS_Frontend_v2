@@ -266,3 +266,5 @@ export const GAS_COSTS: {
   421614: 0.0001,
   11155111: 0.1
 }
+
+export const TRANSACTION_CONFIRMATIONS_COUNT = 5

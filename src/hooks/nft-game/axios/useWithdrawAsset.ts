@@ -9,6 +9,7 @@ import useWithdrawOfAssetStake from "../../contract/AssetStakeContract/useWithdr
 import useStakedBalance from "../../contract/AssetStakeContract/useStakedBalance";
 import useGetUserData from "./useGetUserData";
 import { useGlobalContext } from "../../../context/GlobalContext";
+import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useWithdrawAsset(chainId: number, address: Address | undefined, setDepositLoading: Function, setWithdrawLoading: Function) {
   const [depositAmount, setDepositAmount] = useState<BigNumberish>(0)
@@ -19,6 +20,7 @@ export default function useWithdrawAsset(chainId: number, address: Address | und
   const { getUserData } = useGetUserData()
 
   const { isSuccess: withdrawSuccess, data: withdrawStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     chainId,
     hash: withdrawTx,
   })

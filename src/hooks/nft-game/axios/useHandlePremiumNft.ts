@@ -21,7 +21,12 @@ import {
   getHasPremiumNftIds,
   getPremiumNftAbleItem
 } from "../../../utils/helpers/validator"
-import { PREMIUM_NFT_CONTRACT_ADDRESS, PROVIDERS, ADMIN_WALLET_ADDRESS } from "../../../config/constants/environments"
+import { 
+  PREMIUM_NFT_CONTRACT_ADDRESS, 
+  PROVIDERS, 
+  ADMIN_WALLET_ADDRESS,
+  TRANSACTION_CONFIRMATIONS_COUNT
+} from "../../../config/constants/environments"
 import marble from "../../../../public/img/marketplace-property/marble.png";
 import pool from "../../../../public/img/marketplace-property/pool.png";
 import windfarm from "../../../../public/img/marketplace-property/tile.png";
@@ -52,14 +57,17 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
   const { getHouse } = useGetHouse(house.id)
 
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
   });
   const { isSuccess: approveSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveTx,
     chainId: chainId
   });
   const { isSuccess: premiumNftApproveSuccess, data: premiumNftApproveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: premiumNftApproveTx,
     chainId: chainId
   });

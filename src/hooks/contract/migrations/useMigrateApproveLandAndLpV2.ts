@@ -9,6 +9,7 @@ import useApproveLandToken from "../LandTokenContract/useApprove";
 import useBalanceOfLpTokenV2 from "../LpTokenV2Contract/useBalanceOf";
 import useApproveOfLpTokenV2 from "../LpTokenV2Contract/useApprove";
 import { useGlobalContext } from "../../../context/GlobalContext";
+import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 let isSuccessApproveState = false
 
@@ -34,12 +35,14 @@ export default function useMigrateApproveLandAndLpV2({ address }: useMigrateAppr
 
   const { approve: approveLand, data: approveLandTx, isError: isApproveLandError } = useApproveLandToken()
   const { isSuccess: approveLandSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveLandTx,
     chainId: bsc.id
   });
 
   const { approve: approveLp, data: approveLpTx, isError: isApproveLPError } = useApproveOfLpTokenV2(bsc.id)
   const { isSuccess: approveLpSuccess, data: approveLpStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveLpTx,
     chainId: bsc.id
   });

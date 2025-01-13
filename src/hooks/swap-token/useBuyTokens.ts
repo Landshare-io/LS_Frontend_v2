@@ -12,7 +12,11 @@ import useBalanceOfRwaContract from '../contract/RWAContract/useBalanceOf';
 import useBalanceOfUsdtContract from '../contract/UsdtContract/useBalanceOf';
 import useBalanceOfLandContract from '../contract/LandTokenContract/useBalanceOf';
 import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
-import { LANDSHARE_BUY_SALE_CONTRACT_ADDRESS, USDC_ADDRESS } from '../../config/constants/environments';
+import { 
+  LANDSHARE_BUY_SALE_CONTRACT_ADDRESS, 
+  USDC_ADDRESS,
+  TRANSACTION_CONFIRMATIONS_COUNT
+} from '../../config/constants/environments';
 import { useGlobalContext } from '../../context/GlobalContext';
 
 export default function useBuyTokens(chainId: number, address: Address | undefined, landAmount: BigNumberish, amount: number) {
@@ -29,6 +33,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
   const { approve: approveUsdc, data: usdcApproveTx, isError: isUsdcApproveError } = useApproveOfUsdcContract()
 
   const { isSuccess: usdcApproveSuccess, data: usdcApproveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: usdcApproveTx,
     chainId: chainId
   });
@@ -41,12 +46,14 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
   const { approve: approveLand, data: landApproveTx, isError: isLandApproveError } = useApproveOfLandContract()
 
   const { isSuccess: landApproveSuccess, data: landApproveStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: landApproveTx,
   });
 
   const { buyToken, data: buyTx, isError, error } = useBuyToken(chainId)
 
   const { isSuccess: buySuccess, data: buyStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: buyTx,
   });
 
