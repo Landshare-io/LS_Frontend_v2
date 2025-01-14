@@ -55,7 +55,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (screenLoadingStatus.includes('Failed') || screenLoadingStatus.includes('Complete') || screenLoadingStatus.includes('success') || screenLoadingStatus.includes('Success')) {
+    if (screenLoadingStatus.includes('fail') || screenLoadingStatus.includes('Failed') || screenLoadingStatus.includes('Complete') || screenLoadingStatus.includes('success') || screenLoadingStatus.includes('Success')) {
       setTimeout(() => {
         setScreenLoadingStatus("")
       }, 2000);

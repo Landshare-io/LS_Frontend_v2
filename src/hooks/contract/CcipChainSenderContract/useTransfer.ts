@@ -32,8 +32,8 @@ export default function useTransfer(chainId: number) {
         feeNumber,
         feeAmount,
       ],
-      value: parseUnits(GAS_COSTS[chainId].toString(), 18),
-      gas: BigInt("1000000")
+      // value: parseUnits(GAS_COSTS[chainId].toString(), 18),
+      // gas: BigInt("1000000")
     })
   }
 

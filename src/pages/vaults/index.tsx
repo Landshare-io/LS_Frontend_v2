@@ -239,7 +239,7 @@ const StakingPage: NextPage = () => {
           </div>
           <div className="hidden mlg:flex mlg:flex-col gap-[32px] w-full">
             {(<>
-                {(!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) ? (
+                {(!(VAULT_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) ? (
                   <>
                     <ManualVault
                       title="LAND Token Staking"

@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react"
-import { useWaitForTransactionReceipt, useBalance } from "wagmi";
+import axios from "axios";
+import { 
+  useWaitForTransactionReceipt,
+  useBalance 
+} from "wagmi";
 import { BigNumberish } from "ethers";
 import { bsc } from "viem/chains";
 import { Address, formatEther } from "viem";
@@ -108,7 +112,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
           } else if (approveLandSuccess && isCcipDeposit) {
             setScreenLoadingStatus("Transaction in progress...")
             setIsCcipDeposit(false)
-            transfer(chainId, depositAmount, 0, 0, 500000)
+            transfer(chainId, depositAmount, 0, 1, 500000)
           } else {
             setIsCcipDeposit(false)
             setScreenLoadingStatus("Transaction Failed.")
@@ -162,33 +166,35 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   }, [withdrawAllTx, withdrawAllStatusData, withdrawAllSuccess, isWithdrawAllError])
 
   useEffect(() => {
-    try {
-      if (isTransferError) {
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (transferTx) {
-        if (transferStatusData) {
-          if (transferSuccess) {
-            const receiptTx = PROVIDERS[chainId].getTransactionReceipt(transferTx);
-            const messageId = receiptTx?.events.filter((item: any) => item.hasOwnProperty('args')).map((item: any) => item.args)[0][0]
-            dispatch(updateCcipTransaction({
-              walletAddress: address,
-              status: 'PENDING',
-              action: transferAction,
-              messageId,
-              sourceChain: CCIP_CHAIN_ID[chainId],
-              destinationChain: CCIP_CHAIN_ID[AUTO_VAULT_MAIN_CHAINS[0].id]
-            }))
-            setScreenLoadingStatus(`${transferAction} Transaction Complete.`)
-          } else {
-            setScreenLoadingStatus("Transaction Failed.")
+    (async () => {
+      try {
+        if (transferTx && isTransferError) {
+          setScreenLoadingStatus("Transaction Failed.")
+        } else if (transferTx) {
+          if (transferStatusData) {
+            if (transferSuccess) {
+              const { data } = await axios.get(`/api/ccipMessageProxy/${transferTx}`);
+              const messageId = data.transactionHash[0].messageId
+              dispatch(updateCcipTransaction({
+                walletAddress: address,
+                status: 'PENDING',
+                action: transferAction,
+                messageId,
+                sourceChain: CCIP_CHAIN_ID[chainId],
+                destinationChain: CCIP_CHAIN_ID[AUTO_VAULT_MAIN_CHAINS[0].id]
+              }))
+              setScreenLoadingStatus(`${transferAction} Transaction Complete.`)
+            } else {
+              setScreenLoadingStatus("Transaction Failed.")
+            }
           }
         }
+      } catch (error) {
+        setScreenLoadingStatus("Transaction Failed.")
+        console.log(error)
       }
-    } catch (error) {
-      setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
-    }
-  }, [transferTx, transferStatusData, transferSuccess])
+    })()
+  }, [transferTx, transferStatusData, transferSuccess, isTransferError])
 
   useEffect(() => {
     try {
@@ -260,7 +266,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         approveLand(chainId, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId], amount)
       }
       setScreenLoadingStatus("Transaction Pending...")
-      transfer(chainId, amount, 0, 0, 500000)
+      transfer(chainId, amount, 0, 1, 500000)
     } else {
       setScreenLoadingStatus("Transaction Pending...")
       deposit(amount)
@@ -296,7 +302,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
       // const withdrawAmount = BigInt(amount) * BigInt(totalSharesV3) / BigInt(total)
       setScreenLoadingStatus("Transaction Pending...")
-      transfer(chainId, amount, 1, 0, 750000)
+      transfer(chainId, amount, 1, 1, 750000)
     } else {
       setScreenLoadingStatus("Transaction Pending...")
       withdraw(amount)
