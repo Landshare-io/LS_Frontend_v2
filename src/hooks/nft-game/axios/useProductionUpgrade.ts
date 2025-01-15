@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDisconnect, useChainId } from "wagmi";
-import { BigNumberish } from "ethers";
+import { BigNumberish, formatEther } from "ethers";
 import { Address } from "viem";
 import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import axios from "./nft-game-axios";
@@ -218,7 +218,7 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       const amount = item.buy[1]
 
       if (await validateResource(resource, item.buy.slice(2, 7))) {
-        if (amount > landTokenBalance) {
+        if (Number(amount) > Number(formatEther(landTokenBalance.toString()))) {
           setIsLoading({ type: -1, loading: false });
           return notifyError("Not enough LAND tokens");
         } else {
