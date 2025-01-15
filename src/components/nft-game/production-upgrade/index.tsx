@@ -222,30 +222,30 @@ export default function ProductionUpgrade ({
         <div className="w-[257px] mr-[10px] sm:mr-[40px]">
           <HireHandymanUpgrade
             item={{
-              ...productionUpgradesData.filter((item: any) => item.title == "Hire Handman")[0],
-              ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handman")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Hire Handyman")[0],
+              ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handyman")[0],
             }}
             colorType={
               !house.onSale && house.isActivated && isOwn
-                ? validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handman")[0], oneDayTime)
+                ? validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handyman")[0], oneDayTime)
                   ? 3
                   : 1
                 : 0
             }
             btnTitle={
-              validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handman")[0], oneDayTime)
+              validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handyman")[0], oneDayTime)
                 ? "ON COOLDOWN"
                 : "BUY"
             }
             onPurcharse={() => hireHandymanAction({
-              ...productionUpgradesData.filter((item: any) => item.title == "Hire Handman")[0],
-              ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handman")[0],
+              ...productionUpgradesData.filter((item: any) => item.title == "Hire Handyman")[0],
+              ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handyman")[0],
             }, isOwn, oneDayTime)}
             disabled={
               house.onSale ||
               !house.isActivated ||
               !isOwn ||
-              (validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handman")[0], oneDayTime)
+              (validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handyman")[0], oneDayTime)
                 ? true
                 : false) ||
               house.currentDurability == 100
@@ -254,7 +254,7 @@ export default function ProductionUpgrade ({
             houseMaxDurability={house.maxDurability}
             houseDurability={house.currentDurability}
             duration={Math.floor(
-              (Number(Date.parse(house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handman")[0])) - Date.now())
+              (Number(Date.parse(house.productionUpgrades.filter((pItem: any) => pItem.name == "Hire Handyman")[0])) - Date.now())
             )}
             isLoading={isLoading}
           />

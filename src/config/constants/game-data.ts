@@ -149,7 +149,7 @@ export const productionUpgradesData = [
   },
   {
     id: 10,
-    title: "Hire Handman",
+    title: "Hire Handyman",
     imgUrl: Handyman,
     sortingId: 5
   },
