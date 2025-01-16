@@ -64,6 +64,7 @@ export const firebasePropertiesRentalSlice = createAppSlice({
       {
         pending: (state) => {
           state.loading = true;
+          return state
         },
         fulfilled: (state, action) => {
           state.loading = false;
@@ -76,9 +77,11 @@ export const firebasePropertiesRentalSlice = createAppSlice({
           state.capRate = action?.payload?.capRate ?? 0;
           state.appreciation = action?.payload?.appreciation ?? 0;
           state.netRentalPerMonth = action?.payload?.netRentalPerMonth ?? 0;
+          return state
         },
         rejected: (state) => {
           state.loading = false;
+          return state
         },
       },
     ),

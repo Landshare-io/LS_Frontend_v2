@@ -50,6 +50,7 @@ export const APIConsumerCcipTransactionsSlice = createAppSlice({
       {
         pending: (state) => {
           state.isLoading = true;
+          return state;
         },
         fulfilled: (state, action) => {
           state.isLoading = false;
@@ -57,9 +58,11 @@ export const APIConsumerCcipTransactionsSlice = createAppSlice({
           state.ccipTransactions = action.payload.ccipTransactions;
           state.ccipPendingTransactions = action.payload.ccipPendingTransactions;
           state.lastPendingCcipTransaction = action.payload.lastPendingCcipTransaction;
+          return state;
         },
         rejected: (state) => {
           state.isLoading = false;
+          return state;
         },
       },
     ),
@@ -77,6 +80,7 @@ export const APIConsumerCcipTransactionsSlice = createAppSlice({
       {
         pending: (state) => {
           state.isLoading = true;
+          return state;
         },
         fulfilled: (state, action) => {
           state.isLoading = false;
@@ -84,9 +88,11 @@ export const APIConsumerCcipTransactionsSlice = createAppSlice({
           state.ccipTransactions = state.ccipTransactions + 1;
           state.ccipPendingTransactions = state.ccipPendingTransactions + 1;
           state.lastPendingCcipTransaction = action.payload.lastPendingCcipTransaction;
+          return state;
         },
         rejected: (state) => {
           state.isLoading = false;
+          return state;
         },
       },
     )

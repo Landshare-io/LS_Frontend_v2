@@ -22,13 +22,16 @@ export const apiConsumerContractSlice = createAppSlice({
       {
         pending: (state) => {
           state.status = "loading";
+          return state;
         },
         fulfilled: (state, action) => {
           state.status = "idle";
           state.getTotalValue = action?.payload ?? 0;
+          return state;
         },
         rejected: (state) => {
           state.status = "failed";
+          return state;
         },
       },
     ),

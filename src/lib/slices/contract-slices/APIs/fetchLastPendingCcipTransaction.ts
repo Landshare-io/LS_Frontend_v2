@@ -7,7 +7,7 @@ export const fetchLastPendingCcipTransaction = async (address: Address) => {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
-  const { data } = await response.json();
+  const data = await response.json();
 
   return data;
 };

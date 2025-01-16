@@ -27,13 +27,16 @@ export const firebasePropertyRentalSlice = createAppSlice({
       {
         pending: (state) => {
           state.loading = true;
+          return state;
         },
         fulfilled: (state, action) => {
           state.loading = false;
           state.propertyRentalData = action.payload?.propertyRentalData as never[];
+          return state
         },
         rejected: (state) => {
           state.loading = false;
+          return state
         },
       },
     ),

@@ -9,7 +9,8 @@ export const updateCcipTransaction = async (data: any) => {
 }
 
 export const getCcipTransactions = async (address: Address | undefined, newOffset: number, itemsPerPage: number) => {
-  const { data } = await axios.get(`/ccip-transaction/all/${address}?skip=${newOffset}&take=${itemsPerPage}`)
+  if (typeof address == "undefined") return
+  const { data } = await axios.get(`${CCIP_BACKEND_URL}/ccip-transaction/all/${address}?skip=${newOffset}&take=${itemsPerPage}`)
 
-  return data.data
+  return data
 }

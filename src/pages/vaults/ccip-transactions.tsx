@@ -37,10 +37,11 @@ export default function CcipTransactions() {
   const [isPageLoading, setIsPageLoading] = useState(true)
 
   const getTransactionData = async (newOffset: any) => {
+    if (typeof address == "undefined") return
     setIsPageLoading(true)
     const { data } = await getCcipTransactions(address, newOffset, itemsPerPage)
 
-    setCcipTransactions(data.data)
+    setCcipTransactions(data)
     setPageCount(Math.ceil(data.count / itemsPerPage))
     setItemOffset(newOffset)
     setCcipTransactionsCount(data.count)
@@ -54,7 +55,7 @@ export default function CcipTransactions() {
 
   useEffect(() => {
     getTransactionData(0)
-  }, [])
+  }, [address])
 
   return (
     <div className={`pb-5 lg:pb-0 ${theme == 'dark' ? "dark" : ""}`}>
