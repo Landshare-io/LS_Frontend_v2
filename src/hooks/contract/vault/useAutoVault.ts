@@ -274,11 +274,11 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   }
 
 
-  const withdrawVault = (amount: BigNumberish) => {
+  const withdrawVault = (amount: BigNumberish, rawInput: BigNumberish) => {
     // check withdraw all
     if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
       setTransferAction('Withdraw All')
-      if (amount == 0 || amount >= ccipAutoLandV3) {
+      if (rawInput  == 0 || rawInput  >= ccipAutoLandV3) {
         if ((!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
           notifyError('Insufficient Funds for Gas')
           return
@@ -287,7 +287,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         transfer(chainId, 1, 2, 1, 750000) // withdraw all of ccip
       }
     } else {
-      if (amount == 0 || amount >= autoLandV3) {
+      if (rawInput  == 0 || rawInput >= autoLandV3) {
         setScreenLoadingStatus("Transaction Pending...")
         withdrawAll()
       }
