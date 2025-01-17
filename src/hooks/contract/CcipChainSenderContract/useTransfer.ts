@@ -15,6 +15,7 @@ export default function useTransfer(chainId: number) {
     data,
     isPending,
     isError,
+    error,
     writeContract
   } = useWriteContract();
 
@@ -41,6 +42,7 @@ export default function useTransfer(chainId: number) {
     transfer,
     isPending,
     isError,
+    error,
     data
   }
 }

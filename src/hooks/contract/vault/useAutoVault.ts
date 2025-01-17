@@ -168,7 +168,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     (async () => {
       try {
-        if (isTransferError) {
+        if (transferTx && isTransferError) {
           setScreenLoadingStatus("Transaction Failed.")
         } else if (transferTx) {
           if (transferStatusData) {
