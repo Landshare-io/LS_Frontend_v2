@@ -415,7 +415,7 @@ export default function AutoVault({
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
-                    <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? abbreviateNumber(Number(formatEther((ccipVaultBalance?.autoLandV3 ?? 0).toString()))) : abbreviateNumber(Number(formatEther(vaultBalance.autoLandV3.toString())))}</span>
+                    <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? abbreviateNumber(Number(formatEther((ccipVaultBalance?.autoLandV3 ?? 0).toString()))) : abbreviateNumber(Number(formatEther(vaultBalance.autoLandV3.toString())))}</span>
                   </div>
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                     <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Rewards</span>
