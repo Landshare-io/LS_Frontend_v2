@@ -207,7 +207,7 @@ export default function AutoVault({
 
     // SETTING INPUT VALUE EMPTY
     setInputValue("");
-    withdrawVault(amountLS, parseEther(inputValue))
+    withdrawVault(amountLS)
   };
 
   async function updateStatus() {
@@ -493,7 +493,7 @@ export default function AutoVault({
                           }
                         </button>
                         <button
-                          className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`} onClick={() => withdrawVault(0,0)}
+                          className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`} onClick={() => withdrawVault(0)}
                           disabled={typeof address == 'undefined'}
                         >
                           Harvest

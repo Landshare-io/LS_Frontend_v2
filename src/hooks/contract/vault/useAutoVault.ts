@@ -168,7 +168,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     (async () => {
       try {
-        if (transferTx && isTransferError) {
+        if (isTransferError) {
           setScreenLoadingStatus("Transaction Failed.")
         } else if (transferTx) {
           if (transferStatusData) {
@@ -274,20 +274,20 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   }
 
 
-  const withdrawVault = (amount: BigNumberish, rawInput: BigNumberish) => {
+  const withdrawVault = (amount: BigNumberish) => {
     // check withdraw all
     if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
       setTransferAction('Withdraw All')
-      if (amount == 0 || amount == ccipAutoLandV3) {
+      if (amount == 0 || amount >= ccipAutoLandV3) {
         if ((!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
           notifyError('Insufficient Funds for Gas')
           return
         }
         setScreenLoadingStatus("Transaction Pending...")
-        transfer(chainId, 1, 2, 0, 750000) // withdraw all of ccip
+        transfer(chainId, 1, 2, 1, 750000) // withdraw all of ccip
       }
     } else {
-      if (rawInput == 0 || rawInput == autoLandV3) {
+      if (amount == 0 || amount >= autoLandV3) {
         setScreenLoadingStatus("Transaction Pending...")
         withdrawAll()
       }
