@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import axios from "axios";
-import { 
+import {
   useWaitForTransactionReceipt,
-  useBalance 
+  useBalance
 } from "wagmi";
 import { BigNumberish } from "ethers";
 import { bsc } from "viem/chains";
@@ -24,13 +24,13 @@ import useTransfer from "../CcipChainSenderContract/useTransfer";
 import useWithdrawAll from "../AutoVaultV3Contract/useWithdrawAll";
 import useWithdraw from "../AutoVaultV3Contract/useWithdraw";
 import useHarvest from "../AutoVaultV3Contract/useHarvest";
-import { 
+import {
   PROVIDERS,
   AUTO_VAULT_MAIN_CHAINS,
-  CCIP_CHAIN_SENDER_CONTRACT_ADDRESS, 
-  GAS_COSTS, 
-  CCIP_CHAIN_ID, 
-  LP_TOKEN_V2_CONTRACT_ADDRESS, 
+  CCIP_CHAIN_SENDER_CONTRACT_ADDRESS,
+  GAS_COSTS,
+  CCIP_CHAIN_ID,
+  LP_TOKEN_V2_CONTRACT_ADDRESS,
   AUTO_VAULT_V3_CONTRACT_ADDRESS,
   TRANSACTION_CONFIRMATIONS_COUNT
 } from "../../../config/constants/environments";
@@ -40,7 +40,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   const [depositAmount, setDepositAmount] = useState<BigNumberish>(0)
   const [transferAction, setTransferAction] = useState('')
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
-  const { deposit, data: depositTx, isError: isDepositError} = useDeposit(chainId)
+  const { deposit, data: depositTx, isError: isDepositError } = useDeposit(chainId)
   const { withdraw, data: withdrawTx, isError: isWithdrawError } = useWithdraw(chainId)
   const dispatch = useAppDispatch()
   const { withdrawAll, data: withdrawAllTx, isError: isWithdrawAllError } = useWithdrawAll(chainId)
@@ -56,10 +56,10 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     hash: approveLandTx,
     chainId: chainId
   });
-  const { 
+  const {
     totalSharesV3,
     total,
-    autoLandV3: ccipAutoLandV3 
+    autoLandV3: ccipAutoLandV3
   } = useCcipVaultBalance(chainId, address) as { totalSharesV3: BigNumberish, total: BigNumberish, autoLandV3: BigNumberish }
   const { autoLandV3, refetch: refetchAutoLandV3 } = useAutoLandV3(chainId, address) as { autoLandV3: BigNumberish, refetch: Function }
   const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 0, address })
@@ -116,7 +116,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
           } else {
             setIsCcipDeposit(false)
             setScreenLoadingStatus("Transaction Failed.")
-          }        
+          }
         }
       }
     } catch (error) {
@@ -259,7 +259,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
       return
     }
 
-    
+
     if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
       if (ccipAllowance < amount) {
         setIsCcipDeposit(true)
@@ -274,38 +274,34 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   }
 
 
-  const withdrawVault = (amount: BigNumberish) => {
+  const withdrawVault = (amount: BigNumberish, rawInput: BigNumberish) => {
     // check withdraw all
+
+    
     if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
-      setTransferAction('Withdraw All')
-      if (amount == 0 || amount >= ccipAutoLandV3) {
-        if ((!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
-          notifyError('Insufficient Funds for Gas')
-          return
-        }
+   
+      if (rawInput == 0 || rawInput >= ccipAutoLandV3) {
+        setTransferAction('Withdraw All')
+        
         setScreenLoadingStatus("Transaction Pending...")
+
         transfer(chainId, 1, 2, 1, 750000) // withdraw all of ccip
+      } else {
+        setTransferAction('Withdraw')
+        // const withdrawAmount = BigInt(amount) * BigInt(totalSharesV3) / BigInt(total)
+        setScreenLoadingStatus("Transaction Pending...")
+        transfer(chainId, amount, 1, 1, 750000)
       }
     } else {
-      if (amount == 0 || amount >= autoLandV3) {
+      if (rawInput == 0 || rawInput >= autoLandV3) {
+      
         setScreenLoadingStatus("Transaction Pending...")
         withdrawAll()
+      } else {
+    
+        setScreenLoadingStatus("Transaction Pending...")
+        withdraw(amount)
       }
-    }
-
-    setTransferAction('Withdraw')
-    if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
-      if ((!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) && (Number(GAS_COSTS[chainId]) > Number(formatEther(BigInt(gasBalance?.value ?? 0))))) {
-        notifyError('Insufficient Funds for Gas')
-        return
-      }
-
-      // const withdrawAmount = BigInt(amount) * BigInt(totalSharesV3) / BigInt(total)
-      setScreenLoadingStatus("Transaction Pending...")
-      transfer(chainId, amount, 1, 1, 750000)
-    } else {
-      setScreenLoadingStatus("Transaction Pending...")
-      withdraw(amount)
     }
   }
 
