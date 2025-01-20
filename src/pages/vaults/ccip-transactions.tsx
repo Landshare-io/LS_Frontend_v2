@@ -109,8 +109,8 @@ export default function CcipTransactions() {
                         {truncatedMessageId}
                       </a>
                     </td>
-                    <td className="px-6 py-4">{CCIP_CHAIN_NAME[transaction.sourceChain]}</td>
-                    <td className="px-6 py-4">{CCIP_CHAIN_NAME[transaction.destinationChain]}</td>
+                    <td className="px-6 py-4">{CCIP_CHAIN_NAME[Number(transaction.sourceChain)]}</td>
+                    <td className="px-6 py-4">{CCIP_CHAIN_NAME[Number(transaction.destinationChain)]}</td>
                     <td className="px-6 py-4">
                       {transaction.status == 'PENDING' ? (
                         <Timer countTime={new Date(transaction.createDateTime).getTime() + transaction.estimateTime - new Date().getTime()} />
