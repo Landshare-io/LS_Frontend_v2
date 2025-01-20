@@ -11,7 +11,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Landshare</title>
         <meta
-          content="app.landshare.io"
+          content="Tokenized Real Estate RWA Ecosystem"
           name="description"
         />
         <link href="/favicon.ico" rel="icon" />
