@@ -21,10 +21,10 @@ export const PAGES: PAGE[] = [
   //   name: "Migration",
   //   path: "/migration",
   // },
-  {
-    name: "Referral",
-    path: "/referral",
-  },
+  // {
+  //   name: "Referral",
+  //   path: "/referral",
+  // },
   {
     name: "Swap",
     url: "https://app.dsswap.io/info",

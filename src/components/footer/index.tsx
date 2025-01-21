@@ -305,7 +305,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="font-normal text-[14px] leading-[22px] text-center p-[20px] text-[#141414F5] dark:text-[#dbdbdbf5] bg-button-third">
-        © 2024 Landshare LLC. All rights reserved.
+        © 2025 Landshare LLC. All rights reserved.
       </div>
     </>
   );

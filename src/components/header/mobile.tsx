@@ -78,7 +78,7 @@ export default function MobileNavbar() {
           
           {isMore ? (
             <div className="absolute bottom-[82px] right-[20px] shadow-[0_0_4px_0_rgba(160,167,195,0.2)] rounded-[12px] py-[4px] min-w-[108px] bg-secondary">
-              <a
+              {/* <a
                 href="/referral"
                 rel="noopener noreferrer"
                 className="flex px-[16px] py-[10px] items-center gap-[4px] w-full"
@@ -89,7 +89,7 @@ export default function MobileNavbar() {
                   className="w-[20px] h-[20px] grayscale"
                 />
                 <span className="text-[12px] font-medium spacing-[20px] tracking-[0.24px] text-text-secondary">Referral</span>
-              </a>
+              </a> */}
               {/* <a
                 href="/migration"
                 rel="noopener noreferrer"
