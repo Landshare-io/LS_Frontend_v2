@@ -12,6 +12,8 @@ import {
 import {
   metaMaskWallet,
   walletConnectWallet,
+  injectedWallet,
+  braveWallet
 } from '@rainbow-me/rainbowkit/wallets';
 import { IS_TEST_MODE } from './config/constants/environments';
 import { plume, plumeTestnet } from './config/extra-chains';
@@ -22,7 +24,7 @@ export const config = getDefaultConfig({
   wallets: [
     {
       groupName: 'Recommended',
-      wallets: [metaMaskWallet, walletConnectWallet],
+      wallets: [injectedWallet, metaMaskWallet, walletConnectWallet, braveWallet],
     }
   ],
   chains: [
