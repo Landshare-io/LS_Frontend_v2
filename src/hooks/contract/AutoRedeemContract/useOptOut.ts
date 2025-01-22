@@ -12,10 +12,10 @@ export default function useOptOut(chainId: number) {
 
   async function onOptOut() {
     await writeContract({
-      address: AUTO_REDEEM_CONTRACT_ADDRESS[bsc.id],
+      address: AUTO_REDEEM_CONTRACT_ADDRESS[chainId],
       abi: AutoRedeemAbi,
       functionName: "optOut",
-      chainId: bsc.id
+      chainId: chainId
     });
   }
 

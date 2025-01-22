@@ -5,12 +5,12 @@ import AutoRedeemAbi from "../../../abis/AutoRedeem.json";
 import { AUTO_REDEEM_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 
 export default function useIsOptedIn(chainId: number, address: Address | undefined) {
-  const { data, isError, isLoading, error } = useReadContract({
-    address: AUTO_REDEEM_CONTRACT_ADDRESS[bsc.id],
+  const { data, isError, isLoading, error, refetch } = useReadContract({
+    address: AUTO_REDEEM_CONTRACT_ADDRESS[chainId],
     abi: AutoRedeemAbi,
     functionName: "isOptedIn",
     args: [address],
-    chainId: bsc.id
+    chainId: chainId
   })
 
   if (typeof address == 'undefined') return false
@@ -20,5 +20,5 @@ export default function useIsOptedIn(chainId: number, address: Address | undefin
     return false
   }
 
-  return data
+  return { data, refetch }
 }

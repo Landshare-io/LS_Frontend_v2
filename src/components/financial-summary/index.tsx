@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useChainId } from "wagmi";
+import { useWaitForTransactionReceipt } from "wagmi";
 import Modal from "react-modal";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,6 +44,7 @@ import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import {
   BOLD_INTER_TIGHT,
   RWA_CONTRACT_ADDRESS,
+  TRANSACTION_CONFIRMATIONS_COUNT
 } from "../../config/constants/environments";
 import { getDateStringFromTimestamp } from "../../utils/helpers/convert-date";
 import useOptOut from "../../hooks/contract/AutoRedeemContract/useOptOut";
@@ -67,7 +69,7 @@ export default function FinancialSummary() {
   const totalRWATokenBalanceOfReserveWallets = useReserveRwa(
     chainId
   ) as BigNumberish;
-  let isAutoRedeem = useIsOptedIn(chainId, address) as boolean;
+  const { data: isAutoRedeem, refetch: redeemRefetch } = useIsOptedIn(chainId, address) as { data: boolean, refetch: Function };
   const { data: rwaBalance } = useBalanceOf(chainId, address) as {
     data: number;
   };
@@ -76,11 +78,21 @@ export default function FinancialSummary() {
     isPending: isOptOutPending,
     onOptOut,
   } = useOptOut(chainId);
+  const { isSuccess: optOutSuccess } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
+    hash: optOutData,
+    chainId: chainId
+  });
   const {
     data: optInData,
     isPending: isOptInPending,
     onOptIn,
   } = useOptIn(chainId);
+  const { isSuccess: optInSuccess } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
+    hash: optInData,
+    chainId: chainId
+  });
   const financeLogs = useAppSelector(selectFinancialLogs);
   const isSummaryLoading = useAppSelector(selectLoadingStatus);
   const grossRentPerMonth = useAppSelector(selectGrossRentPerMonth);
@@ -97,14 +109,12 @@ export default function FinancialSummary() {
   }) as { data: any };
 
   useEffect(() => {
-    if (optOutData && isOptOutPending) {
-      isAutoRedeem = !isAutoRedeem;
-    }
+    if (isOptOutPending || isOptInPending) return
 
-    if (optInData && isOptInPending) {
-      isAutoRedeem = !isAutoRedeem;
+    if (optInSuccess || optOutSuccess) {
+      redeemRefetch();
     }
-  }, [optOutData, isOptOutPending, optInData, isOptInPending]);
+  }, [optInSuccess, optOutSuccess, isOptOutPending, isOptInPending]);
 
   useEffect(() => {
     dispatch(getFinancialLogsData());

@@ -12,10 +12,10 @@ export default function useOptIn(chainId: number) {
 
   async function onOptIn() {
     await writeContract({
-      address: AUTO_REDEEM_CONTRACT_ADDRESS[bsc.id],
+      address: AUTO_REDEEM_CONTRACT_ADDRESS[chainId],
       abi: AutoRedeemAbi,
       functionName: "optIn",
-      chainId: bsc.id
+      chainId: chainId
     });
   }
 
