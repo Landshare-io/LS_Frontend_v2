@@ -205,7 +205,13 @@ export default function ReferralEarning() {
           </button>
           <div className="flex !bg-transparent items-center justify-center">
             <button
-              onClick={() => scrollToElement()}
+              onClick={() =>
+                window.open(
+                  "https://docs.landshare.io/platform-features/referral-program",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
               className={`text-[14px] cursor-pointer leading-[22px] text-[#61cd81] ${BOLD_INTER_TIGHT.className}`}
             >
               Learn how to participate

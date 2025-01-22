@@ -56,14 +56,14 @@ const Referral: NextPage = () => {
 
           <ReferralLeaderBoard />
 
-          <p
+          {/* <p
             id="how-to-participate"
             className="mt-12 mb-6 text-text-primary font-bold text-2xl"
           >
             How To Participate
           </p>
 
-          <ReferralParticipate />
+          <ReferralParticipate /> */}
         </div>
       </div>
     </div>
