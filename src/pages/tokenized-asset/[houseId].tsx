@@ -37,7 +37,7 @@ const MarketPlace: NextPage = () => {
   return (
     <>
     <Helmet>
-      <title>Landshare - {houseInfo.address}</title>
+      <title>{`Landshare - ${houseInfo.address}`}</title>
     </Helmet>
     <div className="bg-primary">
       <div className="max-w-[1200px] m-auto p-[10px]">
