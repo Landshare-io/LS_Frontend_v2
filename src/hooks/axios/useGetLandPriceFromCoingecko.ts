@@ -11,9 +11,14 @@ export default function useGetLandPrice() {
     (async () => {
       try {
         setIsLoading(true)
-        const { data: { landshare: { usd: priceData } } } = await axios.get(LANDSHARE_COST_URL);
+        
+        try{
+          const { data: { landshare: { usd: priceData } } } = await axios.get(LANDSHARE_COST_URL);
+          setPrice(Number(numeral(Number(priceData)).format("0.[000]")));
+        } catch (e) {
+          console.error("Error occurred while fetching data: ", e);
+        }
   
-        setPrice(Number(numeral(Number(priceData)).format("0.[000]")));
         setIsLoading(false)
       } catch (err) {
         console.log(err)
