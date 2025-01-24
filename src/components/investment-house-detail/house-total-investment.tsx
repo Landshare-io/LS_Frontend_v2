@@ -12,7 +12,7 @@ interface HouseTotalInvestMentProps {
 export default function HouseTotalInvestMent({ houseInfo, isLoading, propertyValue }: HouseTotalInvestMentProps) {
   return (
     <>
-      <div className="bg-third py-[40px] flex flex-col text-center justify-center">
+      <div className="bg-third py-[25px] flex flex-col text-center justify-center">
         <div className="max-w-[1200px] m-auto">
           {isLoading == true ? (
             <ReactLoading
@@ -23,7 +23,7 @@ export default function HouseTotalInvestMent({ houseInfo, isLoading, propertyVal
               color="#61CD81"
             />
           ) : (
-            <div className="flex flex-col gap-[20px] text-center items-center">
+            <div className="flex flex-col gap-[15px] text-center items-center">
               <h2 className="text-[20px] font-semibold md:text-[28px] text-text-primary">
                 Property Value: ${Number(formatEther(propertyValue)).toLocaleString()}
               </h2>
