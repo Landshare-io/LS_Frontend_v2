@@ -24,8 +24,8 @@ export default function Faq({
         </div>
       </button>
       <div
-        className={`mt-2 text-text-third text-sm transition-max-height duration-300 ease-in-out ${
-          isOpen ? 'max-h-screen' : 'max-h-0 overflow-hidden'
+        className={`text-text-third text-sm transition-max-height duration-100 ease-in-out ${
+          isOpen ? 'max-h-screen mt-1' : 'max-h-0 overflow-hidden'
         }`}
       >
         {answer}
