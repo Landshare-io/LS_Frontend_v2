@@ -4,6 +4,7 @@ import Link from "next/link";
 import { bsc } from "viem/chains";
 import { BigNumberish } from "ethers";
 import type { NextPage } from 'next';
+import { Helmet } from "react-helmet";
 import { BackIcon } from "../../components/common/icons";
 import { useGlobalContext } from "../../context/GlobalContext";
 import HouseInfoCarouselComponent from "../../components/investment-house-detail/house-info-carousel";
@@ -34,6 +35,10 @@ const MarketPlace: NextPage = () => {
 
 
   return (
+    <>
+    <Helmet>
+      <title>Landshare - {houseInfo.address}</title>
+    </Helmet>
     <div className="bg-primary">
       <div className="max-w-[1200px] m-auto p-[10px]">
         <Link
@@ -49,6 +54,7 @@ const MarketPlace: NextPage = () => {
       <HouseFaqs />
       <HouseMap houseInfo={houseInfo} />
     </div>
+    </>
   );
 };
 
