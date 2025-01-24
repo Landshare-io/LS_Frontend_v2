@@ -8,25 +8,29 @@ export default function useGetAllTokens() {
   useEffect(() => {
     (async () => {
       setIsLoading(true)
-      const res = await fetch(
-        new Request(LIVE_COIN_LIST_URL),
-        {
-          method: "POST",
-          headers: new Headers({
-            "content-type": "application/json",
-            "x-api-key": LIVE_COIN_API_KEY,
-          }),
-          body: JSON.stringify({
-            currency: "USD",
-            sort: "rank",
-            order: "ascending",
-            offset: 0,
-            limit: 50,
-            meta: true,
-          }),
-        }
-      );
-      setAllTokens(await res.json());
+      try{
+        const res = await fetch(
+          new Request(LIVE_COIN_LIST_URL),
+          {
+            method: "POST",
+            headers: new Headers({
+              "content-type": "application/json",
+              "x-api-key": LIVE_COIN_API_KEY,
+            }),
+            body: JSON.stringify({
+              currency: "USD",
+              sort: "rank",
+              order: "ascending",
+              offset: 0,
+              limit: 50,
+              meta: true,
+            }),
+          }
+        );
+        setAllTokens(await res.json());
+      }catch(err){
+        console.log(err)
+      }
       setIsLoading(false)
     })()
   }, [])
