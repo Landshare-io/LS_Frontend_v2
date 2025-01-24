@@ -4,7 +4,6 @@ import Link from "next/link";
 import { bsc } from "viem/chains";
 import { BigNumberish } from "ethers";
 import type { NextPage } from 'next';
-import { Helmet } from "react-helmet";
 import { BackIcon } from "../../components/common/icons";
 import { useGlobalContext } from "../../context/GlobalContext";
 import HouseInfoCarouselComponent from "../../components/investment-house-detail/house-info-carousel";
