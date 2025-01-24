@@ -24,7 +24,7 @@ export default function HouseTotalInvestMent({ houseInfo, isLoading, propertyVal
             />
           ) : (
             <div className="flex flex-col gap-[20px] text-center items-center">
-              <h2 className="text-[20px] font-semibold md:text-[28px] md:leading-[54px] text-text-primary">
+              <h2 className="text-[20px] font-semibold md:text-[28px] text-text-primary">
                 Property Value: ${Number(formatEther(propertyValue)).toLocaleString()}
               </h2>
               <p className="text-[16px] md:text-[18px] font-semibold text-text-secondary ">
