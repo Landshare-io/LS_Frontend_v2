@@ -7,6 +7,7 @@ export default function useGetAllTokens() {
 
   useEffect(() => {
     (async () => {
+      try {
       setIsLoading(true)
       const res = await fetch(
         new Request(LIVE_COIN_LIST_URL),
@@ -27,6 +28,9 @@ export default function useGetAllTokens() {
         }
       );
       setAllTokens(await res.json());
+    } catch (e) {
+      console.error("Error occurred while fetching data: ", e);
+    }
       setIsLoading(false)
     })()
   }, [])
