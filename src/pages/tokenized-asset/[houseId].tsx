@@ -4,7 +4,6 @@ import Link from "next/link";
 import { bsc } from "viem/chains";
 import { BigNumberish } from "ethers";
 import type { NextPage } from 'next';
-import { Helmet } from "react-helmet";
 import { BackIcon } from "../../components/common/icons";
 import { useGlobalContext } from "../../context/GlobalContext";
 import HouseInfoCarouselComponent from "../../components/investment-house-detail/house-info-carousel";
@@ -18,6 +17,7 @@ import {
 } from "../../lib/slices/firebase-slices/properties-rental-item";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import usePropertyValues from "../../hooks/contract/APIConsumerContract/useGetPropertyValues";
+import Head from "next/head";
 
 
 const MarketPlace: NextPage = () => {
@@ -36,9 +36,9 @@ const MarketPlace: NextPage = () => {
 
   return (
     <>
-    <Helmet>
+    <Head>
       <title>{`Landshare - ${houseInfo.address}`}</title>
-    </Helmet>
+    </Head>
     <div className="bg-primary">
       <div className="max-w-[1200px] m-auto p-[10px]">
         <Link
