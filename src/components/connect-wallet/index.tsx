@@ -34,7 +34,7 @@ export default function ConnectWallet({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { pathname } = router;
-  const { checkIsAuthenticated, isLoading } = useLogin()
+  const { checkIsAuthenticated, isLoading, logout } = useLogin()
   const { isAuthenticated } = useGlobalContext()
   const referralCode = searchParams.get('af');
   const {isConnected, address} = useAccount();
@@ -55,18 +55,21 @@ export default function ConnectWallet({
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isConnected && address && referralCode) {
-        const message = formatAffiliateAcceptance(new Date());
-        try {
-          const signature = await signMessage(config, { message });
-
-          await Fuul.sendConnectWallet({
-            address: address,
-            signature: signature,
-            message: message
-          });
-        } catch (error) {
-          console.error("Error signing message:", error);
+      if (isConnected && address) {
+        logout(address)
+        if (referralCode) {
+          const message = formatAffiliateAcceptance(new Date());
+          try {
+            const signature = await signMessage(config, { message });
+  
+            await Fuul.sendConnectWallet({
+              address: address,
+              signature: signature,
+              message: message
+            });
+          } catch (error) {
+            console.error("Error signing message:", error);
+          }
         }
       }
     }

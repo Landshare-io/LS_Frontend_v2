@@ -28,6 +28,24 @@ export default function useHouseActivate(setIsActivating: Function) {
       return notifyError("You have already activated this house type");
     }
 
+    const hTypeItems: number[] = []
+    if (house.type == 1 || house.type == 2) {
+      hTypeItems.push(1)
+      hTypeItems.push(2)
+    } else if (house.type == 3 || house.type == 4) {
+      hTypeItems.push(3)
+      hTypeItems.push(4)
+    } else if (house.type == 5 || house.type == 6) {
+      hTypeItems.push(5)
+      hTypeItems.push(6)
+    }
+
+    console.log('=================', houses)
+    if (houses.filter(hItem => hTypeItems.includes(hItem.type) && hItem.isActivated).length > 0) {
+      setIsActivating(false)
+      return notifyError("You have already activated this house type");
+    }
+
     try {
       await axios.patch(`/house/${house.id}`, {
         isActivated: true,

@@ -16,6 +16,16 @@ const notifySubscribers = () => {
   subscribers.forEach((callback) => callback());
 };
 
+function parseJwt(token: string) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
+
 export default function useLogin() {
   const { notifyError, notifySuccess, setIsAuthenticated } = useGlobalContext()
   const [isLoading, setIsLoading] = useState(true)
@@ -74,6 +84,18 @@ export default function useLogin() {
     })()
   }, [signMessageData])
 
+  const logout = (address: string) => {
+    const jwtToken = localStorage.getItem('jwtToken-v2')
+    if (jwtToken) {
+      const payloadJwtToken = parseJwt(jwtToken)
+
+      if (address != payloadJwtToken.walletAddress) {
+        localStorage.removeItem('jwtToken-v2')
+        setIsAuthenticated(false)
+      }
+    }
+  }
+
   const loginToBackend = async (needNotify: boolean, address: Address | string | undefined) => {
     try {
       if (typeof address == 'undefined') {
@@ -123,6 +145,7 @@ export default function useLogin() {
   }
 
   return {
+    logout,
     isLoading,
     loginToBackend,
     checkIsAuthenticated
