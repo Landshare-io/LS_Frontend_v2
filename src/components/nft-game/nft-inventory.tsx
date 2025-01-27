@@ -317,18 +317,19 @@ export default function InventoryPage() {
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      overflow: "hidden",
-      width: "fit-content",
-      minWidth: "400px",
+      overflowX: "auto", // Allow horizontal scrolling
+      overflowY: "hidden", // Disable vertical scrolling if not needed
+      width: "90vw",
+    
       height: "fit-content",
       borderRadius: "20px",
       padding: 0,
       border: 0,
-      maxWidth: '800px'
+      maxWidth: "800px",
     },
     overlay: {
-      background: '#00000080'
-    }
+      background: "#00000080",
+    },
   };
 
   return (
@@ -621,7 +622,7 @@ export default function InventoryPage() {
               isOpen={showItemsModal}
 							onRequestClose={() => { setShowItemsModal(!showItemsModal), document.body.classList.remove('modal-open'); }}
             >
-              <div className='px-3 py-5 bg-primary'>
+              <div className='px-3 py-7 bg-primary overflow-auto'>
                 <NftItems
                   houseItems={houseItems.filter((house: any) => !house.isActivated)}
                 />
