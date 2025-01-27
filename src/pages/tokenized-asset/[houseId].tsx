@@ -17,6 +17,7 @@ import {
 } from "../../lib/slices/firebase-slices/properties-rental-item";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import usePropertyValues from "../../hooks/contract/APIConsumerContract/useGetPropertyValues";
+import Head from "next/head";
 
 
 const MarketPlace: NextPage = () => {
@@ -34,6 +35,10 @@ const MarketPlace: NextPage = () => {
 
 
   return (
+    <>
+    <Head>
+      <title>{`Landshare - ${houseInfo.address}`}</title>
+    </Head>
     <div className="bg-primary">
       <div className="max-w-[1200px] m-auto p-[10px]">
         <Link
@@ -49,6 +54,7 @@ const MarketPlace: NextPage = () => {
       <HouseFaqs />
       <HouseMap houseInfo={houseInfo} />
     </div>
+    </>
   );
 };
 

@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Carousel } from "react-responsive-carousel";
-import CircleLoader from "../common/circle-loader";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import styles from "./investment-house-detail.module.css";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 interface HouseInfoCarouselComponentProps {
   houseInfo: any
@@ -11,6 +12,8 @@ interface HouseInfoCarouselComponentProps {
 }
 
 export default function HouseInfoCarouselComponent({ houseInfo, isLoading }: HouseInfoCarouselComponentProps) {
+  const { theme } = useGlobalContext();
+
   return (
     <>
       {houseInfo?.address ? (
@@ -18,9 +21,9 @@ export default function HouseInfoCarouselComponent({ houseInfo, isLoading }: Hou
           <div className="flex flex-col md:flex-row mt-[20px] gap-[40px]">
             <div className="w-full">
               {isLoading ? (
-                <div className="flex justify-center items-center h-100 min-h-[420px]">
-                  <CircleLoader />
-                </div>
+                <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
+                  <Skeleton className="rounded-lg h-full min-h-[420px] w-full" />
+                </SkeletonTheme>
               ) : (
                 <div className={styles.carouselContainer}>
                   <Carousel>

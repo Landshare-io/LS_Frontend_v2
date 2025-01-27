@@ -16,7 +16,7 @@ export default function HouseMap({ houseInfo }: HouseMapProps) {
                 About {houseInfo?.cityName}
               </h2>
               <p
-                className="text-text-secondary flex flex-col text-[16px] gap-[20px]"
+                className="text-text-secondary flex flex-col text-[16px] gap-[20px] py-[10px] leading-none lg:leading-[30px]"
                 dangerouslySetInnerHTML={{ __html: houseInfo?.aboutCity }}
               ></p>
             </div>
