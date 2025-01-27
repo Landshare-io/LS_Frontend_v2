@@ -46,7 +46,6 @@ interface LpVaultProps {
   setIsLPVault: Function;
   setShowModalApy: Function;
   setTokenUsdPrice: Function;
-  setLPTokenUsdPrice: Function;
 }
 
 export default function LpVault({
@@ -54,8 +53,7 @@ export default function LpVault({
   setShowModal,
   setIsLPVault,
   setShowModalApy,
-  setTokenUsdPrice,
-  setLPTokenUsdPrice
+  setTokenUsdPrice
 }: LpVaultProps) {
   const chainId = useChainId();
   const { isConnected, address } = useAccount();
