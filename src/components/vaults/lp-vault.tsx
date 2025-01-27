@@ -46,6 +46,7 @@ interface LpVaultProps {
   setIsLPVault: Function;
   setShowModalApy: Function;
   setTokenUsdPrice: Function;
+  setLPTokenUsdPrice: Function;
 }
 
 export default function LpVault({
@@ -53,7 +54,8 @@ export default function LpVault({
   setShowModal,
   setIsLPVault,
   setShowModalApy,
-  setTokenUsdPrice
+  setTokenUsdPrice,
+  setLPTokenUsdPrice
 }: LpVaultProps) {
   const chainId = useChainId();
   const { isConnected, address } = useAccount();
@@ -302,6 +304,7 @@ export default function LpVault({
                         setShowModal(true)
                         setShowModalApy(abbreviateNumber(Number(apr.toString().substr(0, 4))))
                         setTokenUsdPrice(tokenPriceData)
+                        setLPTokenUsdPrice((Number(formatEther(totalLANDinLPContract?.toString() || '0')) + Number(formatEther(totalBNBinLPContract?.toString() || '0'))) / Number(formatEther(totalLPSupply?.toString() || '0')))
                         setIsLPVault(true)
                       }}>
                         <Image src={calc} alt="" />
