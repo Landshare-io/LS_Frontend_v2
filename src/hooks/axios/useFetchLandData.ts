@@ -9,16 +9,16 @@ export type PRICE_DATA = {
 
 export default function useFetchLandData(dueTimeStamp: Date, now: number) {
   const [isLoading, setIsLoading] = useState(true);
-  const [price, setPrice] = useState<PRICE_DATA>({ 
-    prices: [], 
-    market_caps: [], 
+  const [price, setPrice] = useState<PRICE_DATA>({
+    prices: [],
+    market_caps: [],
     total_volumes: []
   });
 
   useEffect(() => {
     (async () => {
       setIsLoading(true)
-      try{
+      try {
         const { data: { data: { data: { quotes: priceData } } } } = await axios.get('/api/landPriceProxy');
         let market_caps = [];
         let prices = [];
@@ -41,9 +41,10 @@ export default function useFetchLandData(dueTimeStamp: Date, now: number) {
         }
         let returnData = { prices: prices, market_caps: market_caps, total_volumes: total_volumes };
         setPrice(returnData);
-      }catch(err){
-        console.log(err);
+      } catch (e) {
+        console.error("Error occurred while fetching data: ", e);
       }
+      
       setIsLoading(false)
     })()
   }, [])
