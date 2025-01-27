@@ -8,39 +8,41 @@ export default function useFetchRwa() {
   
   useEffect(() => {
     (async () => {
-      const pricesQuery = `
-        query{
-          valueUpdateds {
-            blockTimestamp
-            value
-            id
+      try {
+        const pricesQuery = `
+          query{
+            valueUpdateds {
+              blockTimestamp
+              value
+              id
+            }
           }
-        }
-      `;
-      const client = new ApolloClient({
-        uri: LAND_PRICE_SUBGRAPH_URL,
-        cache: new InMemoryCache(),
-      });
-      const rwaData = await client
-        .query({
-          query: gql(pricesQuery),
-        })
-      if (rwaData) {
-        const returnData: any[] = [];
-        rwaData.data.valueUpdateds.filter((value: any) => Number(value.blockTimestamp) > 1702900000).sort((a: any, b: any) => {
-          return Number(a.blockTimestamp) - Number(b.blockTimestamp);
-        }).map((data: any) => {
-          returnData.push([
-            Number(data.blockTimestamp) * 1000,
-            parseFloat(Number(formatEther(data.value)).toFixed(6))
-          ])
+        `;
+        const client = new ApolloClient({
+          uri: LAND_PRICE_SUBGRAPH_URL,
+          cache: new InMemoryCache(),
         });
-        returnData.push([
-          Date.now(),
-          returnData[returnData.length - 1][1]
-        ]);
-        setRwaData(returnData);
-      }
+        const rwaData = await client
+          .query({
+            query: gql(pricesQuery),
+          })
+        if (rwaData) {
+          const returnData: any[] = [];
+          rwaData.data.valueUpdateds.filter((value: any) => Number(value.blockTimestamp) > 1702900000).sort((a: any, b: any) => {
+            return Number(a.blockTimestamp) - Number(b.blockTimestamp);
+          }).map((data: any) => {
+            returnData.push([
+              Number(data.blockTimestamp) * 1000,
+              parseFloat(Number(formatEther(data.value)).toFixed(6))
+            ])
+          });
+          returnData.push([
+            Date.now(),
+            returnData[returnData.length - 1][1]
+          ]);
+          setRwaData(returnData);
+        }
+      } catch (e) { console.log(e) }
     })()
   }, [])
 

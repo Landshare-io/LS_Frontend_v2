@@ -41,9 +41,9 @@ export default function useGetApr(chainId: number) {
     return 0
   }
 
-  const annualLand = data[0].result * toBigInt("10512000");
-  const totalLandPerYear = annualLand * data[1].result[1] / data[2].result;
-  const apr = ((Number(totalLandPerYear) / Number(data[3].result)) * 100).toFixed(2);
+  const annualLand = (data[0].result ?? 0) * toBigInt("10512000");
+  const totalLandPerYear = annualLand * (data[1].result[1] ?? 0) / (data[2].result ?? 0);
+  const apr = ((Number(totalLandPerYear) / Number(data[3].result ?? 0)) * 100).toFixed(2);
 
   return apr
 }

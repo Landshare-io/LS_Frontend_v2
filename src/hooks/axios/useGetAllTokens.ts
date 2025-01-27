@@ -7,9 +7,8 @@ export default function useGetAllTokens() {
 
   useEffect(() => {
     (async () => {
-      try {
       setIsLoading(true)
-      try{
+      try {
         const res = await fetch(
           new Request(LIVE_COIN_LIST_URL),
           {
@@ -29,31 +28,9 @@ export default function useGetAllTokens() {
           }
         );
         setAllTokens(await res.json());
-      }catch(err){
-        console.log(err)
+      } catch (e) {
+        console.error("Error occurred while fetching data: ", e);
       }
-      const res = await fetch(
-        new Request(LIVE_COIN_LIST_URL),
-        {
-          method: "POST",
-          headers: new Headers({
-            "content-type": "application/json",
-            "x-api-key": LIVE_COIN_API_KEY,
-          }),
-          body: JSON.stringify({
-            currency: "USD",
-            sort: "rank",
-            order: "ascending",
-            offset: 0,
-            limit: 50,
-            meta: true,
-          }),
-        }
-      );
-      setAllTokens(await res.json());
-    } catch (e) {
-      console.error("Error occurred while fetching data: ", e);
-    }
       setIsLoading(false)
     })()
   }, [])
