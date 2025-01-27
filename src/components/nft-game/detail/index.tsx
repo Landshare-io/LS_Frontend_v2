@@ -119,10 +119,11 @@ const NftPage = () => {
               </>
             )}
           </div>
-          {isConnected && isAuthenticated && (
-            <YouOwn />
-          )}
         </>
+      )}
+
+      {isConnected && isAuthenticated && (
+        <YouOwn />
       )}
     </>
   );

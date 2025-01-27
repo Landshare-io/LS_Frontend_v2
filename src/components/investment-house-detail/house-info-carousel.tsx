@@ -18,7 +18,7 @@ export default function HouseInfoCarouselComponent({ houseInfo, isLoading }: Hou
     <>
       {houseInfo?.address ? (
         <div className="max-w-[1200px] m-auto my-[10px] px-[10px]">
-          <div className="flex flex-col md:flex-row mt-[20px] gap-[40px]">
+          <div className="flex flex-col md:flex-row mt-[20px] sm:gap-[40px]">
             <div className="w-full">
               {isLoading ? (
                 <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
@@ -37,7 +37,7 @@ export default function HouseInfoCarouselComponent({ houseInfo, isLoading }: Hou
               )}
             </div>
             <div className="flex flex-col w-full">
-              <div className="flex gap-[15px] text-[16px] text-text-secondary">
+              <div className="hidden sm:flex gap-[15px] text-[16px] text-text-secondary">
                 <span>Home</span>
                 <span>{houseInfo?.address}</span>
               </div>
