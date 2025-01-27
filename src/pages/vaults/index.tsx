@@ -28,7 +28,6 @@ import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
 import { AUTO_VAULT_MAIN_CHAINS, MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { BigNumberish } from "ethers";
 
 const breadcrumbItems = [
   {
@@ -55,7 +54,6 @@ const StakingPage: NextPage = () => {
   const [timeframe, setTimeframe] = useState("1y");
   const [roiShowDetails, setRoiShowDetails] = useState(false);
   const [tokenUsdPrice, setTokenUsdPrice] = useState(0)
-  const [lpTokenUsdPrice, setLPTokenUsdPrice] = useState(0)
   const [tokenAmount, setTokenAmount] = useState(0)
   const [usdAmount, setUsdAmount] = useState(0)
   const [roiInputCalculValue, setRoiInputCalculValue] = useState("")
@@ -227,7 +225,6 @@ const StakingPage: NextPage = () => {
                     setShowModal={setShowModal}
                     setShowModalApy={setShowModalApy}
                     setTokenUsdPrice={setTokenUsdPrice}
-                    setLPTokenUsdPrice={setLPTokenUsdPrice}
                     setIsLPVault={setIsLPVault}
                   /> :
                   <Usdtvault
@@ -287,7 +284,6 @@ const StakingPage: NextPage = () => {
                   setShowModal={setShowModal}
                   setShowModalApy={setShowModalApy}
                   setTokenUsdPrice={setTokenUsdPrice}
-                  setLPTokenUsdPrice={setLPTokenUsdPrice}
                   setIsLPVault={setIsLPVault}
                 />
                 <Usdtvault
@@ -336,8 +332,8 @@ const StakingPage: NextPage = () => {
                 </div>
                 <div className="light-text nowrap">
                   {isShowUsdPrice ?
-                    isRUSD ? Number(Number(roiInputCalculValue) / ((isLPVault ? lpTokenUsdPrice : tokenUsdPrice) ?? 1)).toExponential(2) : numeral(Number(Number(roiInputCalculValue) / ((isLPVault ? lpTokenUsdPrice : tokenUsdPrice) ?? 1))).format('0.00') :
-                    numeral(Number(roiInputCalculValue) * (isLPVault ? lpTokenUsdPrice : tokenUsdPrice)).format('0.00')
+                    isRUSD ? Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1)).toExponential(2) : numeral(Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1))).format('0.00') :
+                    numeral(Number(roiInputCalculValue) * tokenUsdPrice).format('0.00')
                   } {isShowUsdPrice ? isLPVault ? 'LAND-BNB LP' : isRUSD ? 'LSRWA-USDT LP' : 'LAND' : 'USD'}
                 </div>
               </div>
