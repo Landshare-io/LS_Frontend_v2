@@ -4,12 +4,14 @@ import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import axios from "../axios/nft-game-axios"
 import useBalanceOfLandToken from "../../contract/LandTokenContract/useBalanceOf"
 import { useGlobalContext } from "../../../context/GlobalContext"
+import useGetNftCredits from "../apollo/useGetNftCredits";
 import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments"
 
 export default function useMintHouseNft(chainId: number, address: Address | undefined, setIsLoading: Function) {
   const [transactionNonce, setTransactionNonce] = useState(0)
   const [ableHarvestAmount, setAbleHarvestAmount] = useState(0)
   const [productType, setProductType] = useState(-1)
+  const { setNftCredits, nftCredits } = useGetNftCredits(address)
   const { notifyError, notifySuccess } = useGlobalContext()
   const { data: balance, refetch: refetchBalance } = useBalanceOfLandToken({ chainId, address })
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
@@ -50,6 +52,7 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
                   setIsLoading(false);
                   setAbleHarvestAmount(0)
                   setProductType(-1)
+                  setNftCredits(nftCredits - ableHarvestAmount * 4)
                   return notifySuccess(`Mint a new house successfully`)
                 } else {
                   setIsLoading(false);

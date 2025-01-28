@@ -5,10 +5,38 @@ import axios from "../axios/nft-game-axios";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { APOLLO_RWA_BUY_URL, APOLLO_RWA_URL } from "../../../config/constants/environments";
 
+let nftCreditsState = 0
+
+// Subscribers to update all components on state change
+const subscribers = new Set<Function>();
+
+// Helper to update all subscribers
+const notifySubscribers = () => {
+  subscribers.forEach((callback) => callback());
+};
+
 export default function useGetNftCredits(address: Address | undefined) {
   const { isAuthenticated } = useGlobalContext()
-  const [nftCredits, setNftCredits] = useState(0)
+  const [nftCredits, setNftCredits] = useState(nftCreditsState)
   const [totalCredits, setTotalCredits] = useState(0)
+
+  useEffect(() => {
+      // Subscribe on mount
+      const update = () => {
+        setNftCredits(nftCreditsState);
+      };
+      subscribers.add(update);
+  
+      // Cleanup on unmount
+      return () => {
+        subscribers.delete(update);
+      };
+    }, []);
+  
+    const updateHasGarden = (newNftCredits: number) => {
+      nftCreditsState = newNftCredits;
+      notifySubscribers();
+    };
 
   useEffect(() => {
     if (address) {
@@ -61,7 +89,7 @@ export default function useGetNftCredits(address: Address | undefined) {
 
       // Set the calculated NFTCredits
       setTotalCredits(totalNftCreditAmount1)
-      setNftCredits(nftCredits);
+      updateHasGarden(nftCredits);
     }).catch(err => {
       console.log(err.response?.data.message, err);
     });
@@ -70,6 +98,7 @@ export default function useGetNftCredits(address: Address | undefined) {
   return {
     nftCredits,
     totalCredits,
-    getNftCredits
+    getNftCredits,
+    setNftCredits: updateHasGarden
   }
 }
