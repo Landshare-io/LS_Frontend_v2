@@ -61,7 +61,7 @@ interface AutoVaultProps {
   setShowModal: Function
   setShowModalApy: Function
   setIsLPVault: Function
-  setIsRUSD: Function
+  setIsShowUsdPrice: Function
   setTokenUsdPrice: Function
 }
 
@@ -70,7 +70,7 @@ export default function AutoVault({
   setShowModal,
   setShowModalApy,
   setIsLPVault,
-  setIsRUSD,
+  setIsShowUsdPrice,
   setTokenUsdPrice
 }: AutoVaultProps) {
   const chainId = useChainId();
@@ -246,9 +246,9 @@ export default function AutoVault({
   const openCalcModal = async () => {
     setTokenUsdPrice(tokenPriceData)
     setShowModal(true)
-    setShowModalApy(apr.toString().substr(0, 4))
+    setShowModalApy(abbreviateNumber(Number(apy?.toString() ?? 0)))
     setIsLPVault(false)
-    setIsRUSD(false)
+    setIsShowUsdPrice(false)
   }
 
   return (

@@ -34,7 +34,7 @@ interface ManualVaultProps {
   title: string
   setShowModal: Function
   setIsLPVault: Function
-  setIsRUSD: Function
+  setIsShowUsdPrice: Function
   setTokenUsdPrice: Function
   setShowModalApy: Function
 }
@@ -43,7 +43,7 @@ export default function ManualVault({
   title,
   setShowModal,
   setIsLPVault,
-  setIsRUSD,
+  setIsShowUsdPrice,
   setTokenUsdPrice,
   setShowModalApy
 }: ManualVaultProps) {
@@ -162,7 +162,7 @@ export default function ManualVault({
     setTokenUsdPrice(tokenPriceUsd)
     setShowModal(true)
     setIsLPVault(false)
-    setIsRUSD(false)
+    setIsShowUsdPrice(false)
   }
 
   return (

@@ -60,7 +60,6 @@ const StakingPage: NextPage = () => {
   const [isShowUsdPrice, setIsShowUsdPrice] = useState(false)
   const [rewardPercent, setRewardPercent] = useState(0)
   const [isLPVault, setIsLPVault] = useState(false)
-  const [isRUSD, setIsRUSD] = useState(false)
 
   const customModalStyles = {
     content: {
@@ -144,10 +143,6 @@ const StakingPage: NextPage = () => {
     setRewardPercent(Number(numeral(showModalApy).format('0.[00000]')))
   }, [roiInputCalculValue, isShowUsdPrice]);
 
-  useEffect(() => {
-    setIsShowUsdPrice(isRUSD)
-  }, [isRUSD]);
-
   return (
     <div>
       <Head>
@@ -207,7 +202,7 @@ const StakingPage: NextPage = () => {
                 title="LAND Token Staking"
                 setShowModal={setShowModal}
                 setIsLPVault={setIsLPVault}
-                setIsRUSD={setIsRUSD}
+                setIsShowUsdPrice={setIsShowUsdPrice}
                 setTokenUsdPrice={setTokenUsdPrice}
                 setShowModalApy={setShowModalApy}
               /> :
@@ -218,7 +213,7 @@ const StakingPage: NextPage = () => {
                   setShowModalApy={setShowModalApy}
                   setTokenUsdPrice={setTokenUsdPrice}
                   setIsLPVault={setIsLPVault}
-                  setIsRUSD={setIsRUSD}
+                  setIsShowUsdPrice={setIsShowUsdPrice}
                 /> : selectedVault === 2 ?
                   <LPVault
                     title={"LAND-BNB LP"}
@@ -226,6 +221,7 @@ const StakingPage: NextPage = () => {
                     setShowModalApy={setShowModalApy}
                     setTokenUsdPrice={setTokenUsdPrice}
                     setIsLPVault={setIsLPVault}
+                    setIsShowUsdPrice={setIsShowUsdPrice}
                   /> :
                   <Usdtvault
                     title={"LSRWA-USDT LP"}
@@ -233,7 +229,7 @@ const StakingPage: NextPage = () => {
                     setShowModalApy={setShowModalApy}
                     setTokenUsdPrice={setTokenUsdPrice}
                     setIsLPVault={setIsLPVault}
-                    setIsRUSD={setIsRUSD}
+                    setIsShowUsdPrice={setIsShowUsdPrice}
                   />
             )}
           </div>
@@ -245,7 +241,7 @@ const StakingPage: NextPage = () => {
                       title="LAND Token Staking"
                       setShowModal={setShowModal}
                       setIsLPVault={setIsLPVault}
-                      setIsRUSD={setIsRUSD}
+                      setIsShowUsdPrice={setIsShowUsdPrice}
                       setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                     />
@@ -255,7 +251,7 @@ const StakingPage: NextPage = () => {
                       setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                       setIsLPVault={setIsLPVault}
-                      setIsRUSD={setIsRUSD}
+                      setIsShowUsdPrice={setIsShowUsdPrice}
                     />
                   </>
                 ) : (
@@ -266,13 +262,13 @@ const StakingPage: NextPage = () => {
                       setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                       setIsLPVault={setIsLPVault}
-                      setIsRUSD={setIsRUSD}
+                      setIsShowUsdPrice={setIsShowUsdPrice}
                     />
                     <ManualVault
                       title="LAND Token Staking"
                       setShowModal={setShowModal}
                       setIsLPVault={setIsLPVault}
-                      setIsRUSD={setIsRUSD}
+                      setIsShowUsdPrice={setIsShowUsdPrice}
                       setShowModalApy={setShowModalApy}
                       setTokenUsdPrice={setTokenUsdPrice}
                     />
@@ -285,6 +281,7 @@ const StakingPage: NextPage = () => {
                   setShowModalApy={setShowModalApy}
                   setTokenUsdPrice={setTokenUsdPrice}
                   setIsLPVault={setIsLPVault}
+                  setIsShowUsdPrice={setIsShowUsdPrice}
                 />
                 <Usdtvault
                   title={"LSRWA-USDT LP"}
@@ -292,7 +289,7 @@ const StakingPage: NextPage = () => {
                   setShowModalApy={setShowModalApy}
                   setTokenUsdPrice={setTokenUsdPrice}
                   setIsLPVault={setIsLPVault}
-                  setIsRUSD={setIsRUSD}
+                  setIsShowUsdPrice={setIsShowUsdPrice}
                 />
               </>
             )}
@@ -324,7 +321,7 @@ const StakingPage: NextPage = () => {
                   />
                   <input
                     type="text"
-                    placeholder={isShowUsdPrice ? '0.00 USD' : isLPVault ? '0.00 LAND-BNB LP' : isRUSD ? "0.00 LSRWA-USDT" : '0.00 LAND'}
+                    placeholder={isShowUsdPrice ? '0.00 USD' : isLPVault ? '0.00 LAND-BNB LP' : isShowUsdPrice ? "0.00 LSRWA-USDT" : '0.00 LAND'}
                     className="w-full outline-0 ml-[8px] text-[14px] bg-primary placeholder:text-[#9d9fa8]"
                     value={roiInputCalculValue}
                     onChange={(e) => setRoiInputCalculValue(e.target.value)}
@@ -332,9 +329,9 @@ const StakingPage: NextPage = () => {
                 </div>
                 <div className="light-text nowrap">
                   {isShowUsdPrice ?
-                    isRUSD ? Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1)).toExponential(2) : numeral(Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1))).format('0.00') :
+                    isShowUsdPrice ? Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1)).toExponential(2) : numeral(Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1))).format('0.00') :
                     numeral(Number(roiInputCalculValue) * tokenUsdPrice).format('0.00')
-                  } {isShowUsdPrice ? isLPVault ? 'LAND-BNB LP' : isRUSD ? 'LSRWA-USDT LP' : 'LAND' : 'USD'}
+                  } {isShowUsdPrice ? isLPVault ? 'LAND-BNB LP' : isShowUsdPrice ? 'LSRWA-USDT LP' : 'LAND' : 'USD'}
                 </div>
               </div>
             </div>

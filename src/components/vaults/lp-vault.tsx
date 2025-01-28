@@ -46,6 +46,7 @@ interface LpVaultProps {
   setIsLPVault: Function;
   setShowModalApy: Function;
   setTokenUsdPrice: Function;
+  setIsShowUsdPrice: Function;
 }
 
 export default function LpVault({
@@ -53,7 +54,8 @@ export default function LpVault({
   setShowModal,
   setIsLPVault,
   setShowModalApy,
-  setTokenUsdPrice
+  setTokenUsdPrice,
+  setIsShowUsdPrice
 }: LpVaultProps) {
   const chainId = useChainId();
   const { isConnected, address } = useAccount();
@@ -291,21 +293,19 @@ export default function LpVault({
                   <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                     <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                       <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">TVL</span>
-                      <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{!isNaN(tvl) ? "$" + abbreviateNumber(Number(tvl.toString().substr(0, 8))) :
-                        <Skeleton className="rounded-lg h-full w-full min-w-[50px] min-h-[25px]" />}
+                      <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{isNaN(tvl) ? "0" : "$" + abbreviateNumber(Number(tvl.toString().substr(0, 8)))}
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                       <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">APR</span>
                       <div className="flex items-center gap-[4px] text-bold text-[14px] leading-[22px] text-[#0A0A0A]">
-                        <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{!isNaN(apr) ? abbreviateNumber(Number(Number(apr).toFixed(0))) + "%" :
-                          <Skeleton className="rounded-lg h-full w-full min-w-[50px] min-h-[25px]" />}
+                        <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{isNaN(apr) ? "0" : abbreviateNumber(Number(Number(apr).toFixed(0))) + "%"}
                         </span>
                         <button onClick={() => {
                           setShowModal(true)
                           setShowModalApy(abbreviateNumber(Number(apr.toString().substr(0, 4))))
-                          setTokenUsdPrice(tokenPriceData)
-                          setLPTokenUsdPrice((Number(formatEther(totalLANDinLPContract?.toString() || '0')) + Number(formatEther(totalBNBinLPContract?.toString() || '0'))) / Number(formatEther(totalLPSupply?.toString() || '0')))
+                          setTokenUsdPrice((Number(formatEther(totalLANDinLPContract?.toString() || '0')) + Number(formatEther(totalBNBinLPContract?.toString() || '0'))) / Number(formatEther(totalLPSupply?.toString() || '0')))
+                          setIsShowUsdPrice(false)
                           setIsLPVault(true)
                         }}>
                           <Image src={calc} alt="" />

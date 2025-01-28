@@ -53,7 +53,7 @@ interface UsdtVaultProps {
   setShowModal: Function
   setShowModalApy: Function
   setIsLPVault: Function
-  setIsRUSD: Function
+  setIsShowUsdPrice: Function
 }
 
 export default function Usdtvault({
@@ -62,7 +62,7 @@ export default function Usdtvault({
   setShowModal,
   setShowModalApy,
   setIsLPVault,
-  setIsRUSD
+  setIsShowUsdPrice
 }: UsdtVaultProps) {
   const { theme, notifyError } = useGlobalContext();
   const { isConnected, address } = useAccount()
@@ -207,7 +207,7 @@ export default function Usdtvault({
     setShowModal(true)
     setShowModalApy(abbreviateNumber(Number(APY?.toString() ?? 0)))
     setIsLPVault(false)
-    setIsRUSD(true);
+    setIsShowUsdPrice(true);
   }
 
   return (
@@ -299,7 +299,7 @@ export default function Usdtvault({
                         */}
                         {TVL !== undefined && TVL !== null && !isNaN(Number(TVL))
                           ? `$${abbreviateNumber(Number(TVL))}`
-                          : <Skeleton className="rounded-lg h-full w-full min-w-[50px] min-h-[25px]" />}
+                          : "0"}
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
@@ -310,7 +310,7 @@ export default function Usdtvault({
                           */}
                           {APY !== undefined && APY !== null && !isNaN(Number(APY))
                             ? `$${abbreviateNumber(Number(APY))}`
-                            : <Skeleton className="rounded-lg h-full w-full min-w-[50px] min-h-[25px]" />}
+                            : "0"}
                         </span>
                         <button onClick={() => openCalcModal()}>
                           <Image src={calc} alt="" />
