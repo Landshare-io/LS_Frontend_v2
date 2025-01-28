@@ -144,7 +144,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
           </div>
         </div>
         <Button
-          onClick={() => mintNewHouse(nftCreditCost, harvestAmount)}
+          onClick={() => mintNewHouse(nftCreditCost, harvestAmount, product.type)}
           disabled={
             isLoading ||
             Number(nftCreditCost) < 400 ||

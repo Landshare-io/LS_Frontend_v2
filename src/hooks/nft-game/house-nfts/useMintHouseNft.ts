@@ -8,6 +8,8 @@ import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/cons
 
 export default function useMintHouseNft(chainId: number, address: Address | undefined, setIsLoading: Function) {
   const [transactionNonce, setTransactionNonce] = useState(0)
+  const [ableHarvestAmount, setAbleHarvestAmount] = useState(0)
+  const [productType, setProductType] = useState(-1)
   const { notifyError, notifySuccess } = useGlobalContext()
   const { data: balance, refetch: refetchBalance } = useBalanceOfLandToken({ chainId, address })
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
@@ -22,6 +24,8 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
       if (isSendTransactionError) {
         setIsLoading(false);
         setTransactionNonce(0)
+        setAbleHarvestAmount(0)
+        setProductType(-1)
         return notifyError(`Mint a new house Error`);
       } else if (transactionNonce) {
         if (sendTransactionTx) {
@@ -30,18 +34,42 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
               const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
       
               if (receipt.status) {
-                await refetchBalance()
-                setTransactionNonce(0)
-                setIsLoading(false);
-                return notifySuccess(`Mint a new house successfully`)
+                const { data } = await axios.post('/house/add-new-house', {
+                  assetAmount: ableHarvestAmount * 4,
+                  txHash: receipt.transactionHash,
+                  blockNumber: receipt.blockNumber,
+                  nonce: transactionNonce,
+                  houseType: (
+                    productType == 1 ? (ableHarvestAmount >= 500 ? 2 : 1) :
+                      productType == 2 ? (ableHarvestAmount >= 500 ? 4 : 3) : (ableHarvestAmount >= 500 ? 6 : 5))
+                })
+
+                if (data) {
+                  await refetchBalance()
+                  setTransactionNonce(0)
+                  setIsLoading(false);
+                  setAbleHarvestAmount(0)
+                  setProductType(-1)
+                  return notifySuccess(`Mint a new house successfully`)
+                } else {
+                  setIsLoading(false);
+                  setTransactionNonce(0)
+                  setAbleHarvestAmount(0)
+                  setProductType(-1)
+                  return notifyError(`Mint a new house Error`);
+                }
               } else {
                 setIsLoading(false);
                 setTransactionNonce(0)
+                setAbleHarvestAmount(0)
+                setProductType(-1)
                 return notifyError(`Mint a new house Error`);
               }
             } else {
               setIsLoading(false);
               setTransactionNonce(0)
+              setAbleHarvestAmount(0)
+              setProductType(-1)
               return notifyError(`Mint a new house Error`);
             }
           }
@@ -50,9 +78,11 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
     })()
   }, [transactionNonce, sendTransactionTx, sendTxData, sendTxSuccess, isSendTransactionError])
 
-  const mint = async (nftCreditCost: number, harvestAmount: number) => {
+  const mint = async (nftCreditCost: number, harvestAmount: number, type: number) => {
     try {
       setIsLoading(true)
+      setAbleHarvestAmount(harvestAmount)
+      setProductType(type)
       const { data: transactionData } = await axios.post('/house/get-transaction-for-house-mint', {
         assetAmount: nftCreditCost
       })
