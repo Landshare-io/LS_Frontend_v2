@@ -317,8 +317,7 @@ export default function InventoryPage() {
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      overflowX: "auto", // Allow horizontal scrolling
-      overflowY: "hidden", // Disable vertical scrolling if not needed
+   
       width: "90vw",
     
       height: "fit-content",
