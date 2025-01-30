@@ -5,6 +5,7 @@ import { useSignMessage } from "wagmi";
 import { Address } from "viem";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { NFT_GAME_BACKEND_URL } from "../../../config/constants/environments";
+import useGetUserData from "./useGetUserData";
 
 let isLoadingState = true
 
@@ -33,6 +34,7 @@ export default function useLogin() {
   const [showNotify, setShowNotify] = useState(false)
   const { signMessage, data: signMessageData } = useSignMessage()
   const [walletAddress, setWalletAddress] = useState<Address | string | undefined>()
+  const { getUserData } = useGetUserData()
 
   useEffect(() => {
     // Subscribe on mount
@@ -64,6 +66,7 @@ export default function useLogin() {
         
           if (data.access_token) {
             localStorage.setItem('jwtToken-v2', data.access_token);
+            await getUserData();
             setIsAuthenticated(true);
             updateIsLoading(false);
             if (showNotify) return notifySuccess("Login successfully")
@@ -126,6 +129,7 @@ export default function useLogin() {
       if (localStorage.getItem("jwtToken-v2")) {
         const { data } = await backendAxios.get('/user/is-loggedin')
         if (data.success) {
+          await getUserData()
           setIsAuthenticated(true)
           updateIsLoading(false)
           return true

@@ -58,11 +58,11 @@ export default function useGetUserData() {
     }
   }
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      getUserData()
-    }
-  }, [isAuthenticated])
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     getUserData()
+  //   }
+  // }, [isAuthenticated])
 
   return {
     userData,
