@@ -309,7 +309,7 @@ export default function Usdtvault({
                           {/* {abbreviateNumber(Number(APY?.toString() ?? 0)) + "%"}
                           */}
                           {APY !== undefined && APY !== null && !isNaN(Number(APY))
-                            ? `$${abbreviateNumber(Number(APY))}`
+                            ? `${abbreviateNumber(Number(APY))}%`
                             : "0"}
                         </span>
                         <button onClick={() => openCalcModal()}>
