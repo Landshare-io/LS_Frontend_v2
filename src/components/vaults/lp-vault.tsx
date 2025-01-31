@@ -19,7 +19,7 @@ import usePoolInfo from "../../hooks/contract/MasterchefContract/usePoolInfo";
 import useUserInfo from "../../hooks/contract/MasterchefContract/useUserInfo";
 import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLand";
 import useGetLandPrice from "../../hooks/axios/useGetLandPriceFromCoingecko";
-import { 
+import {
   BOLD_INTER_TIGHT,
   LP_TOKEN_V2_CONTRACT_ADDRESS,
   MASTERCHEF_CONTRACT_ADDRESS,
@@ -74,7 +74,7 @@ export default function LpVault({
   const { bnbPrice, coinPrice: coin, price } = useGetPrice(chainId)
   const { price: tokenPriceData } = useGetLandPrice()
 
-  
+
   const {
     depositVault,
     withdrawVault,
@@ -245,7 +245,7 @@ export default function LpVault({
                 <div className="flex flex-col justify-center p-0 gap-[16px]">
                   <div className="flex flex-row gap-[8px] hidden">
                     <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
-                      <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" className="size-[90px]"/>
+                      <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" className="size-[90px]" />
                       <Image src={smallicon} alt="small-icon" />
                     </div>
                     <div className={`text-[16px] leading-[28px] overflow-hidden text-ellipsis shrink-1 text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
@@ -304,7 +304,7 @@ export default function LpVault({
                         <button onClick={() => {
                           setShowModal(true)
                           setShowModalApy(abbreviateNumber(Number(apr.toString().substr(0, 4))))
-                          setTokenUsdPrice((Number(formatEther(totalLANDinLPContract?.toString() || '0')) + Number(formatEther(totalBNBinLPContract?.toString() || '0'))) / Number(formatEther(totalLPSupply?.toString() || '0')))
+                          setTokenUsdPrice((Number(formatEther(totalLANDinLPContract?.toString() || '0')) * Number(tokenPriceData) + Number(formatEther(totalBNBinLPContract?.toString() || '0')) * Number(bnbPrice)) / Number(formatEther(totalLPSupply?.toString() || '0')))
                           setIsShowUsdPrice(false)
                           setIsLPVault(true)
                         }}>
@@ -328,13 +328,13 @@ export default function LpVault({
                 </div>
                 <div className="block md:hidden">
                   <div className="flex w-full mt-[20px]">
-                    <div 
+                    <div
                       className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                       onClick={() => setDepositing(true)}
                     >
                       Deposit
                     </div>
-                    <div 
+                    <div
                       className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                       onClick={() => setDepositing(false)}
                     >
@@ -417,13 +417,13 @@ export default function LpVault({
                   <Collapse isOpen={details}>
                     <div className="hidden md:block">
                       <div className="flex w-full mt-[20px]">
-                        <div 
+                        <div
                           className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                           onClick={() => setDepositing(true)}
                         >
                           Deposit
                         </div>
-                        <div 
+                        <div
                           className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                           onClick={() => setDepositing(false)}
                         >
@@ -505,8 +505,8 @@ export default function LpVault({
                         </div>
                         <div className="flex flex-col mt-[8px] items-center text-text-primary">
                           <span>
-                            <a 
-                              className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`} 
+                            <a
+                              className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
                               href="https://docs.landshare.io/quickstart-guides/how-to-stake-land-bnb-lp-tokens"
                             >
                               Vault Guide
@@ -523,13 +523,13 @@ export default function LpVault({
                       <div className="flex w-full flex-col items-center justify-center p-[16px]">
                         <div className="w-8 h-8 rounded-full bg-third">
                           <a href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C">
-                          <Image className="w-[32px] h-[32px] p-[6px]" src={pcsBunny} alt="" /></a>
+                            <Image className="w-[32px] h-[32px] p-[6px]" src={pcsBunny} alt="" /></a>
                         </div>
                         <div className="flex flex-col mt-[8px] items-center text-text-primary">
                           <span>
-                            <a 
+                            <a
                               href="https://pancakeswap.finance/v2/add/0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C/BNB"
-                              className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`} 
+                              className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
                             >
                               Get LAND-BNB LP
                             </a>
