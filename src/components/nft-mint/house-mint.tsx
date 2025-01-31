@@ -96,7 +96,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             </Tooltip>
           </div>
           <input
-            className={`max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] text-[#000] mr-1 ${
+            className={`max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] ${theme == 'dark' ? 'text-[#dee2e6]' : 'text-[#000]'} mr-1 ${
               theme == "dark" ? "bg-gray-600" : ""
             }`}
             step="1"
