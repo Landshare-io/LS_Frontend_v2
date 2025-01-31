@@ -104,7 +104,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
             refetchAllowanceOfLandTokenOfVault()
             refetchAllowanceOfLandTokenOfMasterChef()
     
-            setScreenLoadingStatus("Approve Transaction Complete.")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -132,7 +132,7 @@ export default function useVaultBalanceManual(chainId: number, address: Address 
   }
 
   const approveVault = (amount: BigNumberish) => {
-    setScreenLoadingStatus("Approve Transaction Pending...")
+    setScreenLoadingStatus("Transaction Pending...")
     approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[chainId], amount)
     updateStatus()
   }

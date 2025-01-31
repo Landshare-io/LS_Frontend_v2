@@ -86,7 +86,7 @@ export default function AutoVault({
     autoReward: BigNumberish;
   }
   const minTransferAmount = useMinTransferAmount(chainId) as BigNumberish
-  const { data: autoLandAllowance } = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+  const { data: autoLandAllowance, refetch: updateApporvalStatus } = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish, refetch: Function }
 
   const ccipTransactions = useAppSelector(selectCcipTransactionCounts)
   const ccipPendingTransactions = useAppSelector(selectCcipPendingTransactions)
@@ -109,7 +109,7 @@ export default function AutoVault({
     withdrawVault,
     clainBounty,
     approveVault
-  } = useAutoVault(chainId, address)
+  } = useAutoVault(chainId, address, updateApporvalStatus)
 
   const isVaultsLoading = false // need to update
 
@@ -230,7 +230,7 @@ export default function AutoVault({
           Number(inputValue)
         );
       }
-
+   
       const approvedLANDETH = formatEther(autoLandAllowance);
       setIsApprovedLandStake(Number(inputValue) > 0 && Number(approvedLANDETH) >= Number(inputValue));
     } catch (e) {
@@ -483,7 +483,7 @@ export default function AutoVault({
                               if (!(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                 depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               } else {
-                                depositing ? depositHandler() : withdrawHandler()
+                                depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                               }
                             } else {
                               notifyError('Please enter an amount')
@@ -575,7 +575,7 @@ export default function AutoVault({
                                     if (!(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
                                       depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                     } else {
-                                      depositing ? depositHandler() : withdrawHandler()
+                                      depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
                                     }
                                   } else {
                                     notifyError('Please enter an amount')
