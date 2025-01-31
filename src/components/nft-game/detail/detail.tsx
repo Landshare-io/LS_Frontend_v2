@@ -87,10 +87,12 @@ export default function NftDetails({
       height: "fit-content",
       borderRadius: "20px",
       padding: 0,
-      border: 0
+      border: 0,
+      background: 'transparent'
     },
     overlay: {
-      background: '#00000080'
+      background: '#00000080',
+      zIndex: 99999
     }
   };
   const chainId = useChainId()

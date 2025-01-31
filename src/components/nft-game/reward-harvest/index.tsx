@@ -73,11 +73,11 @@ export default function RewardHarvest({
       borderRadius: "20px",
       padding: 0,
       border: 0,
-      display: 'flex',
-      alignItems: 'center',
+      background: 'transparent'
     },
     overlay: {
-      background: '#00000080'
+      background: '#00000080',
+      zIndex: 99999
     }
   };
 
