@@ -665,7 +665,7 @@ export default function InventoryPage() {
             >
               <div className="p-[20px] max-w-[300px] bg-third">
                 <div className="text-[15px] text-center text-text-primary">
-                  Withdraw will reset all reward
+                  Withdrawing will reset all rewards. Continue? 
                 </div>
                 <div className="flex mt-[20px]">
                   <div
