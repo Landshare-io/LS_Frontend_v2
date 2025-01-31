@@ -36,7 +36,7 @@ import {
   AUTO_VAULT_V3_CONTRACT_ADDRESS,
   TRANSACTION_CONFIRMATIONS_COUNT
 } from "../../../config/constants/environments";
-import { escape } from "querystring";
+
 
 export default function useAutoVault(chainId: number, address: Address | undefined, updateApporvalStatus: Function) {
   const [isCcipDeposit, setIsCcipDeposit] = useState(false)
