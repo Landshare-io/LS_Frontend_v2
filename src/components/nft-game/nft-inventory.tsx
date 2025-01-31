@@ -300,17 +300,19 @@ export default function InventoryPage() {
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "400px",
+      maxWidth: "300px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
       padding: 0,
-      border: 0
+      border: 0,
+      display: 'flex',
+      alignItems: 'center',
     },
     overlay: {
       background: '#00000080'
     }
-  };
+  }
 
   const modalStyles = {
     content: {

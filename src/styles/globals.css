@@ -165,13 +165,20 @@ a {
 .slick-dots li.slick-active button:before {
 	color: var(--color-text-primary) !important;
 }
+
 .dark .slick-dots li button:before {
 	color: gray;
 }
+
 .no-scrollbar::-webkit-scrollbar {
 	display: none;
 }
+
 .no-scrollbar {
 	-ms-overflow-style: none;
 	scrollbar-width: none;
+}
+
+.ReactModal__Content {
+	position: fixed;
 }
