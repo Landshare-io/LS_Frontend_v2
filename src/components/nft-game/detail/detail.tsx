@@ -695,7 +695,7 @@ export default function NftDetails({
       >
         <div className="max-w-[300px] p-[20px] bg-third">
           <div className="text-[15px] text-center text-text-primary">
-            Withdraw will reset all reward
+            Withdrawing will reset all rewards. Continue?
           </div>
           <div className="flex mt-[20px]">
             <div
