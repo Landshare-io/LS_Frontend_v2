@@ -157,7 +157,7 @@ export default function HomeRwaAssetsSummary() {
                     <FinancialPropertyCard
                         className="shadow-lg border-[1px] border-primary-green"
                         title={selectedGraph == 'land' ? "Burned Amount" : "Ann. Return"}
-                        value={selectedGraph == 'land' ? Number.parseFloat(formatEther(burnedAmount).toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
+                        value={selectedGraph == 'land' ? Number.parseFloat(formatEther(burnedAmount)).toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
                         loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
                       />
                   </CarouselItem>
@@ -185,7 +185,7 @@ export default function HomeRwaAssetsSummary() {
                 />
             <FinancialPropertyCard
              title={selectedGraph == 'land' ? "Burned Amount" : "Ann. Return"}
-             value={selectedGraph == 'land' ? Number.parseFloat(formatEther(burnedAmount).toString()).toFixed(3) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
+             value={selectedGraph == 'land' ? Number.parseFloat(formatEther(burnedAmount)).toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : (netRentalPerMonth * 12 / Number(formatEther(totalPropertyValue)) * 100 + appreciation / Number(formatEther(totalPropertyValue))).toFixed(3) + "%"}
              loading={selectedGraph == 'land' ? isLoading : isRwaLoading}
            />
           </div>
