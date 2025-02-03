@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React from "react";
 import Link from "next/link";
 import { formatEther, BigNumberish } from "ethers";
 import ReactLoading from "react-loading";
@@ -9,24 +9,34 @@ interface HouseTotalInvestMentProps {
   propertyValue: BigNumberish
 }
 
-function calculateRentalYield(houseInfo : any, propertyValue: BigNumberish) {
-  if (!houseInfo || !propertyValue || propertyValue === 0 
-      || isNaN(houseInfo?.grossRent) 
-      || isNaN(houseInfo?.management) 
-      || isNaN(houseInfo?.insurance) 
-      || isNaN(houseInfo?.tax)) {
-      return 'Invalid input values';
+function calculateRentalYield(houseInfo: any, propertyValue: BigNumberish) {
+  if (
+    !houseInfo ||
+    !propertyValue ||
+    propertyValue === 0 ||
+    isNaN(houseInfo?.grossRent) ||
+    isNaN(houseInfo?.management) ||
+    isNaN(houseInfo?.insurance) ||
+    isNaN(houseInfo?.tax)
+  ) {
+    return "Invalid input values";
   }
 
-  let value = houseInfo.grossRent * (1 - houseInfo.management) * 12 - houseInfo.insurance - houseInfo.tax;
+  let value =
+    houseInfo.grossRent * (1 - houseInfo.management) * 12 -
+    houseInfo.insurance -
+    houseInfo.tax;
   value = value / Number(formatEther(propertyValue));
   value = value * 100;
 
   return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
-} 
+}
 
-
-export default function HouseTotalInvestMent({ houseInfo, isLoading, propertyValue }: HouseTotalInvestMentProps) {
+export default function HouseTotalInvestMent({
+  houseInfo,
+  isLoading,
+  propertyValue,
+}: HouseTotalInvestMentProps) {
   return (
     <>
       <div className="bg-third py-[25px] flex flex-col text-center justify-center">
@@ -47,7 +57,8 @@ export default function HouseTotalInvestMent({ houseInfo, isLoading, propertyVal
               <p className="text-[16px] md:text-[18px] font-semibold text-text-secondary ">
                 Rental Yield: {calculateRentalYield(houseInfo, propertyValue)}%
               </p>
-              <Link href="/rwa"
+              <Link
+                href="/rwa"
                 className="w-fit text-[17px] bg-[#61cd81] rounded-[50px] duration-300 font-semibold md:text-[20px] py-[5px] px-[20px] border-[2px] border-[#61CD81] text-button-text-secondary hover:bg-transparent hover:text-[#61CD81]"
               >
                 Trade on RWA Portal

@@ -1,6 +1,7 @@
 import React from "react";
 import Faq from "../common/faq";
 import { useGlobalContext } from "../../context/GlobalContext";
+import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 const data = {
   title: "FAQ",
@@ -38,7 +39,7 @@ const data = {
     {
       title: "What is annual return?",
       content:
-        "The annual return is the 1-year ROI when accounting for both Rental Yield and appreciation. All financial information is estimated for your information only, and is subject to change at any time."
+        "The annual return is the 1-year ROI when accounting for both Rental Yield and appreciation. All financial information is estimated for your information only, and is subject to change at any time.",
     },
     {
       title: "How do I sell my RWA Tokens?",
@@ -64,27 +65,30 @@ const data = {
   ],
 };
 
-
-
-
 export default function HouseFaqs() {
   const { theme } = useGlobalContext();
   const styles = {
-    bgColor: 'light-gray',
+    bgColor: "light-gray",
     rowTitleTextSize: "18px",
     rowContentTextSize: "15px",
     rowContentPaddingTop: "10px",
     rowContentPaddingBottom: "10px",
 
     // rowContentColor: 'grey',
-    arrowColor: theme == 'dark' ? "#f1f1f1" : "#0a0a0a",
+    arrowColor: theme == "dark" ? "#f1f1f1" : "#0a0a0a",
   };
   return (
-    <div className="max-w-[1200px] m-auto py-[30px] px-[10px]">
-      <p className="text-text-primary text-[30px] border-b">FAQ</p>
-      {data.rows.map((faqData: any, index: number) => (
-        <Faq answer={faqData.content} question={faqData.title} key={index} />
-      ))}
+    <div className="max-w-[1200px] m-auto py-[50px] space-y-4 px-[10px]">
+      <h2
+        className={`text-text-primary leading-normal text-[18px] md:text-[32px] ${BOLD_INTER_TIGHT.className}`}
+      >
+        House FAQs{" "}
+      </h2>
+      <div className="flex flex-col gap-6">
+        {data.rows.map((faqData: any, index: number) => (
+          <Faq answer={faqData.content} question={faqData.title} key={index} />
+        ))}
+      </div>
     </div>
   );
 }
