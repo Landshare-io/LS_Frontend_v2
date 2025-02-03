@@ -96,11 +96,7 @@ export default function LpVault({
 
   useEffect(() => {
     updateLPFarm();
-  }, [])
-
-  useEffect(() => {
-    updateLPFarm();
-  }, [totalBNBinLPContract, bnbPrice, totalLANDinLPContract, totalLPSupply, totalLPInVault, allocPoints, price]);
+  }, [totalBNBinLPContract, bnbPrice, totalLANDinLPContract, totalLPSupply, totalLPInVault, allocPoints, price, userInfo]);
 
   async function updateStatus() {
     setIsWithdrawable(
