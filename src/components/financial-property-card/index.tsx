@@ -74,7 +74,7 @@ export default function FinancialPropertyCard({
           highlightColor={`${theme == "dark" ? "#52545e" : "#f6f7f9"}`}
         >
           <div className="flex gap-[8px]">
-            <div className="md:bg-primary bg-secondary h-[32px] flex items-center justify-start rounded-full">
+            <div className="md:bg-primary bg-secondary h-[32px] w-[32px] flex items-center text-center justify-center rounded-full">
 
               <Image
                 src={

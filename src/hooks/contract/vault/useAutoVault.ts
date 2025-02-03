@@ -20,6 +20,8 @@ import useCcipVaultBalance from "../CrossChainVault/useCcipVaultBalance";
 import useAutoLandV3 from "../AutoVaultV3Contract/useAutoLandV3";
 import useAllowanceOfLandToken from "../LandTokenContract/useAllowance";
 import useApproveLandToken from "../LandTokenContract/useApprove";
+
+
 import useTransfer from "../CcipChainSenderContract/useTransfer";
 import useWithdrawAll from "../AutoVaultV3Contract/useWithdrawAll";
 import useWithdraw from "../AutoVaultV3Contract/useWithdraw";
@@ -35,7 +37,8 @@ import {
   TRANSACTION_CONFIRMATIONS_COUNT
 } from "../../../config/constants/environments";
 
-export default function useAutoVault(chainId: number, address: Address | undefined) {
+
+export default function useAutoVault(chainId: number, address: Address | undefined, updateApporvalStatus: Function) {
   const [isCcipDeposit, setIsCcipDeposit] = useState(false)
   const [depositAmount, setDepositAmount] = useState<BigNumberish>(0)
   const [transferAction, setTransferAction] = useState('')
@@ -51,6 +54,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   })
   const { data: ccipAllowance, refetch: refetchAllowance } = useAllowanceOfLandToken(chainId, address, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish, refetch: Function }
   const { approve: approveLand, data: approveLandTx, isError: isApproveError } = useApproveLandToken()
+
   const { isSuccess: approveLandSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveLandTx,
@@ -108,7 +112,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
             refetchPendingLand()
             refetchBalanceOfLandToken()
             refetchAllowance()
-            setScreenLoadingStatus("Approve Transaction Complete.")
+            updateApporvalStatus()
+            setScreenLoadingStatus("Transaction Complete.")
           } else if (approveLandSuccess && isCcipDeposit) {
             setScreenLoadingStatus("Transaction in progress...")
             setIsCcipDeposit(false)
@@ -307,7 +312,10 @@ export default function useAutoVault(chainId: number, address: Address | undefin
 
   const approveVault = (amount: BigNumberish) => {
     setScreenLoadingStatus("Transaction Pending...")
-    approveLand(chainId, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId], amount)
+ 
+      approveLand(chainId, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId], amount)
+      updateApporvalStatus()
+    
   }
 
   const clainBounty = () => {

@@ -89,7 +89,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
         if (approveStatusData) {
           if (approveSuccess) {
             refetchLSRWALPAllowance()
-            setScreenLoadingStatus("Approve Transaction Complete.")
+            setScreenLoadingStatus("Transaction Complete.")
           } else {
             setScreenLoadingStatus("Transaction Failed.")
           }
@@ -126,7 +126,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
   }
 
   const approveVault = (amount: BigNumberish) => {
-    setScreenLoadingStatus("Approve Transaction Pending...")
+    setScreenLoadingStatus("Transaction Pending...")
     approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id], amount)
   }
 
