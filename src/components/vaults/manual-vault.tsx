@@ -47,14 +47,14 @@ export default function ManualVault({
   setTokenUsdPrice,
   setShowModalApy
 }: ManualVaultProps) {
-  const { 
-    theme, 
+  const {
+    theme,
     notifyError
   } = useGlobalContext();
   const chainId = useChainId()
   const { isConnected, address } = useAccount();
   const { switchChain } = useSwitchChain()
-  
+
   const { data: totalStaked, isLoading: totalStakedLoading } = useTotalStaked(chainId) as { data: BigNumberish, isLoading: boolean }
   const { data: userInfo, isLoading: userInfoLoading } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
   const { data: pendingLand, isLoading: pendingLandLoading } = usePendingLand({ chainId, pendingLandId: 0, address }) as { data: BigNumberish, isLoading: boolean }
@@ -62,7 +62,7 @@ export default function ManualVault({
   const { data: landBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
   const { data: landAllowance } = useAllowanceOfLandTokenContract(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
 
-  const { 
+  const {
     depositVault,
     withdrawVault,
     approveVault
@@ -113,7 +113,7 @@ export default function ManualVault({
     depositVault(amountLS);
   };
 
-  async function updateStatus() {  
+  async function updateStatus() {
     try {
       if (!isConnected) return;
       if (userInfo[0]) {
@@ -172,13 +172,13 @@ export default function ManualVault({
           {isVaultsLoading ? (
             <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
               <div className="flex justify-center items-center m-auto flex-col w-full">
-                <div className="flex flex-col justify-start p-0 gap-[16px] w-full">
+                <div className="flex flex-col justify-center p-0 gap-[16px] w-full">
                   <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]">
-                    <div className="w-full h-[100px] rounded-[1000px] relative">
+                    <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
                       <Skeleton circle={true} width={90} height={90} />
                     </div>
                     <div className="flex flex-col justify-center items-start p-0 gap-[8px] w-full">
-                      <div className={`text-[18px] overflow-hidden text-ellipsis leading-[28px] w-full ${BOLD_INTER_TIGHT.className}`}>
+                      <div className={`w-full overflow-hidden text-ellipsis leading-[28px] ${BOLD_INTER_TIGHT.className}`}>
                         <Skeleton height={28} />
                       </div>
                       <div className="w-full">
@@ -209,7 +209,7 @@ export default function ManualVault({
               <div className="flex flex-col justify-start p-0 gap-[16px]">
                 <div className="hidden gap-[8px]">
                   <div className="w-[48px] h-[48px] rounded-[1000px] shrink-0">
-                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" className="size-[90px]"/>
+                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" className="size-[90px]" />
                   </div>
                   <div className={`leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                     {title}
@@ -276,13 +276,13 @@ export default function ManualVault({
               </div>
               <div className="block md:hidden">
                 <div className="flex w-full mt-[20px]">
-                  <div 
+                  <div
                     className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                     onClick={() => setDepositing(true)}
                   >
                     Deposit
                   </div>
-                  <div 
+                  <div
                     className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                     onClick={() => setDepositing(false)}
                   >
@@ -336,7 +336,7 @@ export default function ManualVault({
                         >
                           {inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"}
                         </button>
-                        <button 
+                        <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => withdrawVault(0)}
                         >
@@ -355,13 +355,13 @@ export default function ManualVault({
                 <Collapse isOpen={details}>
                   <div className="hidden md:block">
                     <div className="flex w-full mt-[20px]">
-                      <div 
+                      <div
                         className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(true)}
                       >
                         Deposit
                       </div>
-                      <div 
+                      <div
                         className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${!depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
                         onClick={() => setDepositing(false)}
                       >
@@ -442,7 +442,7 @@ export default function ManualVault({
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
                         <span>
-                          <a 
+                          <a
                             href="https://docs.landshare.io/quickstart-guides/how-to-stake-landshare-token-land"
                             className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
                           >
@@ -463,7 +463,7 @@ export default function ManualVault({
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">
                         <span>
-                          <a 
+                          <a
                             href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
                             className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
                           >

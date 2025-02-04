@@ -216,38 +216,40 @@ export default function Usdtvault({
         <div className="w-full">
           <div className="p-[12px] flex flex-col md:p-[24px] w-full rounded-[24px] bg-third">
             {isVaultsLoading ? (
-              <div className="flex justify-center items-center m-auto flex-col w-full">
-                <div className="flex flex-col justify-center p-0 gap-[16px] w-full">
-                  <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]">
-                    <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
-                      <Skeleton circle={true} width={100} height={100} />
-                    </div>
-                    <div className="flex flex-col justify-center items-start p-0 gap-[8px] w-full">
-                      <div className={`w-full overflow-hidden text-ellipsis leading-[28px] ${BOLD_INTER_TIGHT.className}`}>
-                        <Skeleton height={28} />
+              <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
+                <div className="flex justify-center items-center m-auto flex-col w-full">
+                  <div className="flex flex-col justify-center p-0 gap-[16px] w-full">
+                    <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]">
+                      <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
+                        <Skeleton circle={true} width={90} height={90} />
                       </div>
-                      <div className="w-full">
-                        <Skeleton height={26} />
+                      <div className="flex flex-col justify-center items-start p-0 gap-[8px] w-full">
+                        <div className={`w-full overflow-hidden text-ellipsis leading-[28px] ${BOLD_INTER_TIGHT.className}`}>
+                          <Skeleton height={28} />
+                        </div>
+                        <div className="w-full">
+                          <Skeleton height={26} />
+                        </div>
                       </div>
-                    </div>
 
-                  </div>
-                  <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
-                    <div className="md:w-1/4 w-full">
-                      <Skeleton height={46} />
                     </div>
-                    <div className="md:w-1/4 w-full">
-                      <Skeleton height={46} />
-                    </div>
-                    <div className="md:w-1/4 w-full">
-                      <Skeleton height={46} />
-                    </div>
-                    <div className="md:w-1/4 w-full">
-                      <Skeleton height={46} />
+                    <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
+                      <div className="md:w-1/4 w-full">
+                        <Skeleton height={46} />
+                      </div>
+                      <div className="md:w-1/4 w-full">
+                        <Skeleton height={46} />
+                      </div>
+                      <div className="md:w-1/4 w-full">
+                        <Skeleton height={46} />
+                      </div>
+                      <div className="md:w-1/4 w-full">
+                        <Skeleton height={46} />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </SkeletonTheme>
             ) : (
               <>
                 <div className="flex flex-col justify-center p-0 gap-[16px]">
