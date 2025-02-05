@@ -113,7 +113,6 @@ export default function PriceGraph({
             change_price: change_price,
             date: now
           });
-          console.log(rwaGraphData)
           setIsLoading(false);
           break;
       }
