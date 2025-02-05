@@ -53,83 +53,89 @@ export default function useLpVault(chainId: number, address: Address | undefined
   });
 
   useEffect(() => {
-    try {
-      if (isDepositError) {
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (depositTx) {
-        if (depositStatusData) {
-          if (depositSuccess) {
-            refetchTotalSupply()
-            refetchBalanceOfWBNB()
-            refetchLpTokenV2()
-            refetchUserInfo()
-            refetchPendingLand()
-            refetchBalanceOfLandToken()
-            updateLPFarm()
-            setScreenLoadingStatus("Transaction Complete.")
-          } else {
-            setScreenLoadingStatus("Transaction Failed.")
+    (async () => {
+      try {
+        if (isDepositError) {
+          setScreenLoadingStatus("Transaction Failed.")
+        } else if (depositTx) {
+          if (depositStatusData) {
+            if (depositSuccess) {
+              await refetchTotalSupply()
+              await refetchBalanceOfWBNB()
+              await refetchLpTokenV2()
+              await refetchUserInfo()
+              await refetchPendingLand()
+              await refetchBalanceOfLandToken()
+              await updateLPFarm()
+              setScreenLoadingStatus("Transaction Complete.")
+            } else {
+              setScreenLoadingStatus("Transaction Failed.")
+            }
           }
         }
+      } catch (error) {
+        setScreenLoadingStatus("Transaction Failed.")
+        console.log(error)
       }
-    } catch (error) {
-      setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
-    }
+    })()
   }, [depositTx, depositStatusData, depositSuccess, isDepositError])
 
   useEffect(() => {
-    try {
-      if (isWithdrawError) {
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (withdrawTx) {
-        if (withdrawStatusData) {
-          if (withdrawSuccess) {
-            refetchTotalSupply()
-            refetchBalanceOfWBNB()
-            refetchLpTokenV2()
-            refetchUserInfo()
-            refetchPendingLand()
-            refetchBalanceOfLandToken()
-            updateLPFarm()
-            setScreenLoadingStatus("Transaction Complete.")
-          } else {
-            setScreenLoadingStatus("Transaction Failed.")
+    (async () => {
+      try {
+        if (isWithdrawError) {
+          setScreenLoadingStatus("Transaction Failed.")
+        } else if (withdrawTx) {
+          if (withdrawStatusData) {
+            if (withdrawSuccess) {
+              await refetchTotalSupply()
+              await refetchBalanceOfWBNB()
+              await refetchLpTokenV2()
+              await refetchUserInfo()
+              await refetchPendingLand()
+              await refetchBalanceOfLandToken()
+              await updateLPFarm()
+              setScreenLoadingStatus("Transaction Complete.")
+            } else {
+              setScreenLoadingStatus("Transaction Failed.")
+            }
           }
         }
+      } catch (error) {
+        setScreenLoadingStatus("Transaction Failed.")
+        console.log(error)
       }
-    } catch (error) {
-      setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
-    }
+    })()
   }, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawError])
 
   useEffect(() => {
-    try {
-      if (isApproveError) {
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (approveTx) {
-        if (approveStatusData) {
-          if (approveSuccess) {
-            refetchTotalSupply()
-            refetchBalanceOfWBNB()
-            refetchLpTokenV2()
-            refetchUserInfo()
-            refetchPendingLand()
-            refetchBalanceOfLandToken()
-            refetchAllowance()
-            updateLPFarm()
-            updateStatus()
-            setScreenLoadingStatus("Transaction Complete.")
-          } else {
-            setScreenLoadingStatus("Transaction Failed.")
+    (async () => {
+      try {
+        if (isApproveError) {
+          setScreenLoadingStatus("Transaction Failed.")
+        } else if (approveTx) {
+          if (approveStatusData) {
+            if (approveSuccess) {
+              await refetchTotalSupply()
+              await refetchBalanceOfWBNB()
+              await refetchLpTokenV2()
+              await refetchUserInfo()
+              await refetchPendingLand()
+              await refetchBalanceOfLandToken()
+              await refetchAllowance()
+              await updateLPFarm()
+              await updateStatus()
+              setScreenLoadingStatus("Transaction Complete.")
+            } else {
+              setScreenLoadingStatus("Transaction Failed.")
+            }
           }
         }
+      } catch (error) {
+        setScreenLoadingStatus("Transaction Failed.")
+        console.log(error)
       }
-    } catch (error) {
-      setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
-    }
+    })()
   }, [approveTx, approveStatusData, approveSuccess, isApproveError])
 
   const depositVault = (amount: BigNumberish) => {
