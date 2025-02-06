@@ -115,142 +115,201 @@ export default function YieldUpgrades({
   };
 
   return (
-    <div className="max-w-[1200px] px-0 my-5">
-      {house.yieldUpgrades.length < 1 ? (
-        <></>
-      ) : (
-        <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between" style={{ rowGap: "45px" }}>
-          {yieldUpdgradesData.map((item: any) => {
-            let yieldItem, havingItem
-            if (item.title == 'Garden') {
-              if (validateItemDate(house.yieldUpgrades.filter((yItem: any) => yItem.name == item.title && yItem.specialButtonName == '')[0], oneDayTime)) {
-                yieldItem = {
-                  ...house.yieldUpgrades.filter((yItem: any) => yItem.name == item.title && yItem.specialButtonName == 'FERTILIZE')[0],
-                  isBought: true,
-                  gardenDurationTime: getItemDuration(house.yieldUpgrades.filter((yItem: any) => yItem.name == item.title && yItem.specialButtonName == '')[0], oneDayTime)
-                }
-                havingItem = true
-              } else {
-                yieldItem = {
-                  ...house.yieldUpgrades.filter((yItem: any) => yItem.name == item.title && yItem.specialButtonName == '')[0],
-                  isBought: false,
-                  gardenDurationTime: 0
-                }
-                havingItem = false
-              }
-            } else {
-              yieldItem = house.yieldUpgrades.filter((yItem: any) => yItem.name == item.title)[0]
-              havingItem = validateItemDate(yieldItem, oneDayTime)
-            }
+		<div className='max-w-[1200px] px-0 my-5'>
+			{house.yieldUpgrades.length < 1 ? (
+				<></>
+			) : (
+				<div
+					className='flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between'
+					style={{ rowGap: '45px' }}
+				>
+					{yieldUpdgradesData.map((item: any) => {
+						let yieldItem, havingItem;
+						if (item.title == 'Garden') {
+							if (
+								validateItemDate(
+									house.yieldUpgrades.filter(
+										(yItem: any) =>
+											yItem.name == item.title && yItem.specialButtonName == ''
+									)[0],
+									oneDayTime
+								)
+							) {
+								yieldItem = {
+									...house.yieldUpgrades.filter(
+										(yItem: any) =>
+											yItem.name == item.title &&
+											yItem.specialButtonName == 'FERTILIZE'
+									)[0],
+									isBought: true,
+									gardenDurationTime: getItemDuration(
+										house.yieldUpgrades.filter(
+											(yItem: any) =>
+												yItem.name == item.title &&
+												yItem.specialButtonName == ''
+										)[0],
+										oneDayTime
+									),
+								};
+								havingItem = true;
+							} else {
+								yieldItem = {
+									...house.yieldUpgrades.filter(
+										(yItem: any) =>
+											yItem.name == item.title && yItem.specialButtonName == ''
+									)[0],
+									isBought: false,
+									gardenDurationTime: 0,
+								};
+								havingItem = false;
+							}
+						} else {
+							yieldItem = house.yieldUpgrades.filter(
+								(yItem: any) => yItem.name == item.title
+							)[0];
+							havingItem = validateItemDate(yieldItem, oneDayTime);
+						}
 
-            const dependencyItems = getDependencyItem(house, yieldItem.id, oneDayTime)
+						const dependencyItems = getDependencyItem(
+							house,
+							yieldItem.id,
+							oneDayTime
+						);
 
-            if (item.title == 'Fireplace') {
-              havingItem = validateItemDateWithDeadTime(yieldItem)
+						if (item.title == 'Fireplace') {
+							havingItem = validateItemDateWithDeadTime(yieldItem);
 
-              return (
-                <div
-                  key={`yield-upgrade-${yieldItem.id}`}
-                  className="w-[257px] mr-[10px] sm:mr-[40px]"
-                >
-                  <FirepitUpgrade
-                    item={{
-                      ...yieldItem,
-                      imgUrl: item.imgUrl,
-                      dependencyItems: dependencyItems
-                    }}
-                    type="yield"
-                    btnTitle={
-                      havingItem == 1 ? 'BURN' : (havingItem == 0 ? 'BURN' : 'BUY')
-                    }
-                    colorType={
-                      (!house.isActivated || house.onSale) ? 0 :
-                        (havingItem == 1 ? 2 : (havingItem == 0 ? 2 : 1))
-                      }
-                    onPurcharse={
-                      (lumberCount: number) => handleFireplace(isOwn, yieldItem, lumberCount)
-                    }
-                    disabled={house.onSale || !house.isActivated}
-                    salvageItem={() => confirmSalvageAddon(yieldItem.id, yieldItem.hasItemId)}
-                    isLoading={isLoading}
-                  />
-                </div>
-              )
-            } else {
-              return (
-                <div
-                  key={`yield-upgrade-${yieldItem.id}`}
-                  className="w-[257px] mr-[10px] sm:mr-[40px]"
-                >
-                  <YieldUpgrade
-                    item={{
-                      ...yieldItem,
-                      imgUrl: item.imgUrl,
-                      dependencyItems: dependencyItems
-                    }}
-                    type="yield"
-                    btnTitle={
-                      havingItem ? 
-                        (yieldItem.name == 'Garden' ? 
-                          yieldItem.specialButtonName : 
-                          (yieldItem.name == 'Trees' ? 'OWNED' : 'SALVAGE'))
-                        : 'BUY'
-                    }
-                    disabled={house.onSale || !house.isActivated}
-                    colorType={
-                      (!house.isActivated || house.onSale) ? 0 :
-                      (havingItem ? 
-                        (yieldItem.name == 'Garden' ? 2 : 3) 
-                        : 1)
-                    }
-                    onPurcharse={
-                      havingItem ? 
-                        yieldItem.name == 'Garden' ? () => fertilizeGardenAction(isOwn, yieldItem) : 
-                        (yieldItem.name == 'Trees' ? () => {} : () => confirmSalvageAddon(yieldItem.id, yieldItem.hasItemId))
-                        : (yieldItem.name == 'Trees' ? () => buyTreeAddon(yieldItem) : () => buyAddon(isOwn, yieldItem))
-                    }
-                    isLoading={isLoading}
-                  />
-                </div>
-              )
-            }
-          })}
-        </div>
-      )}
-      
-      <ReactModal
-        isOpen={openSalvageModal}
-        onRequestClose={() => { setOpenSalvageModal(!openSalvageModal), document.body.classList.remove('modal-open'); }}
-        style={customModalStyles}
-      >
-        <div className="w-[300px] p-[20px]">
-          <div className="text-[15px] text-center">
-            Warning: Salvaging will remove this upgrade. Proceed?
-          </div>
-          <div className="flex mt-[20px]">
-            <div
-              className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[1px] border-[#00a8f3] bg-[#00a8f3] cursor-pointer text-white"
-              onClick={() => {
-                setOpenSalvageModal(false);
-                salvageAddon(isOwn, salvageAddonId, hasAddonId);
-              }}
-            >
-              Yes
-            </div>
-            <div
-              className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[1px] border-[#00a8f3] bg-transparent cursor-pointer"
-              onClick={() => {
-                setIsLoading({ type: -1, loading: false });
-                setOpenSalvageModal(false);
-                setSalvageAddonId(-1);
-                setHasAddonId(-1);
-              }}
-            >
-              No
-            </div>
-          </div>
-        </div>
-      </ReactModal>
-    </div>
-  );
+							return (
+								<div
+									key={`yield-upgrade-${yieldItem.id}`}
+									className='w-[257px] mr-[10px] sm:mr-[40px]'
+								>
+									<FirepitUpgrade
+										item={{
+											...yieldItem,
+											imgUrl: item.imgUrl,
+											dependencyItems: dependencyItems,
+										}}
+										type='yield'
+										btnTitle={
+											havingItem == 1
+												? 'BURN'
+												: havingItem == 0
+												? 'BURN'
+												: 'BUY'
+										}
+										colorType={
+											!house.isActivated || house.onSale
+												? 0
+												: havingItem == 1
+												? 2
+												: havingItem == 0
+												? 2
+												: 1
+										}
+										onPurcharse={(lumberCount: number) =>
+											handleFireplace(isOwn, yieldItem, lumberCount)
+										}
+										disabled={house.onSale || !house.isActivated}
+										salvageItem={() =>
+											confirmSalvageAddon(yieldItem.id, yieldItem.hasItemId)
+										}
+										isLoading={isLoading}
+									/>
+								</div>
+							);
+						} else {
+							return (
+								<div
+									key={`yield-upgrade-${yieldItem.id}`}
+									className='w-[257px] mr-[10px] sm:mr-[40px]'
+								>
+									<YieldUpgrade
+										item={{
+											...yieldItem,
+											imgUrl: item.imgUrl,
+											dependencyItems: dependencyItems,
+										}}
+										type='yield'
+										btnTitle={
+											havingItem
+												? yieldItem.name == 'Garden'
+													? yieldItem.specialButtonName
+													: yieldItem.name == 'Trees'
+													? 'OWNED'
+													: 'SALVAGE'
+												: 'BUY'
+										}
+										disabled={house.onSale || !house.isActivated}
+										colorType={
+											!house.isActivated || house.onSale
+												? 0
+												: havingItem
+												? yieldItem.name == 'Garden'
+													? 2
+													: 3
+												: 1
+										}
+										onPurcharse={
+											havingItem
+												? yieldItem.name == 'Garden'
+													? () => fertilizeGardenAction(isOwn, yieldItem)
+													: yieldItem.name == 'Trees'
+													? () => {}
+													: () =>
+															confirmSalvageAddon(
+																yieldItem.id,
+																yieldItem.hasItemId
+															)
+												: yieldItem.name == 'Trees'
+												? () => buyTreeAddon(yieldItem)
+												: () => buyAddon(isOwn, yieldItem)
+										}
+										isLoading={isLoading}
+									/>
+								</div>
+							);
+						}
+					})}
+				</div>
+			)}
+
+			<ReactModal
+				isOpen={openSalvageModal}
+				onRequestClose={() => {
+					setOpenSalvageModal(!openSalvageModal),
+						document.body.classList.remove('modal-open');
+				}}
+				style={customModalStyles}
+			>
+				<div className='w-[300px] bg-white dark:bg-[#49545b] dark:text-white p-[20px]'>
+					<div className='text-[15px] text-center'>
+						Warning: Salvaging will remove this upgrade. Proceed?
+					</div>
+					<div className='flex mt-[20px]'>
+						<div
+							className='flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[1px] border-[#00a8f3]  bg-[#00a8f3] cursor-pointer text-white'
+							onClick={() => {
+								setOpenSalvageModal(false);
+								salvageAddon(isOwn, salvageAddonId, hasAddonId);
+							}}
+						>
+							Yes
+						</div>
+						<div
+							className='flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[1px] border-[#00a8f3] bg-transparent cursor-pointer'
+							onClick={() => {
+								setIsLoading({ type: -1, loading: false });
+								setOpenSalvageModal(false);
+								setSalvageAddonId(-1);
+								setHasAddonId(-1);
+							}}
+						>
+							No
+						</div>
+					</div>
+				</div>
+			</ReactModal>
+		</div>
+	);
 };

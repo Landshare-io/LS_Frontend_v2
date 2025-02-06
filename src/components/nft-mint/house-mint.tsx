@@ -81,7 +81,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
           <div className="mb-1"></div>
         </div>
       </div>
-      <div className="bg-[#6f8e9d66] p-[12px] flex flex-col p-3">
+      <div className="bg-[#6f8e9d66] flex flex-col p-3">
         <div className="flex justify-between items-center">
           <div className="text-[#0b6c96] text-[18px] font-semibold flex items-center">
             <span className="pr-1 text-[14px] text-text-secondary">NFT Credit Cost</span>

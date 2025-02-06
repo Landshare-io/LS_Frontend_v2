@@ -106,7 +106,7 @@ export default function HarvestCards({
               ? "1"
               : "0.6",
       }}
-      className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%] w-auto"
+      className="absolute bg-slate-100 text-white translate-x-[-50%] translate-y-[-50%] left-[50%] top-[40%] w-auto"
       src={landTokenStakingImg}
     />
   ];
