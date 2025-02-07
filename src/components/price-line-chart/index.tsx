@@ -234,12 +234,12 @@ export default function PriceGraph({
 							<Skeleton className="rounded-lg" height={28} />
 						</SkeletonTheme>
 					) : (
-							<div className="flex gap-[10px]">
-								<span className={`text-text-primary ${BOLD_INTER_TIGHT.className} text-[24px] leading-[30px]`}>
-									${type == "land" ? landPrice.toFixed(5) : recentData?.price?.toFixed(5)}
+						<div className="flex gap-[10px]">
+							<span className={`text-text-primary ${BOLD_INTER_TIGHT.className} text-[24px] leading-[30px]`}>
+								${type == "land" ? landPrice.toFixed(5) : recentData?.price?.toFixed(5)}
 							</span>
-								<span className={`text-[14px] leading-[22px] tracking-[0.02em] ${recentData.change_price >= 0 ? "text-[#74cc50]" : "text-[#e93838]"} ${BOLD_INTER_TIGHT.className}`}>
-									{recentData.change_price >= 0 ? "+ " : ""}{recentData.change_price.toFixed(2)}%
+							<span className={`text-[14px] leading-[22px] tracking-[0.02em] ${recentData.change_price >= 0 ? "text-[#74cc50]" : "text-[#e93838]"} ${BOLD_INTER_TIGHT.className}`}>
+								{recentData.change_price >= 0 ? "+ " : ""}{recentData.change_price.toFixed(2)}%
 							</span>
 						</div>
 					)}
@@ -329,7 +329,7 @@ export default function PriceGraph({
 						<ApexChart
 							options={options}
 							series={series}
-								type="area"
+							type="area"
 							height={300}
 						/>
 					)}
