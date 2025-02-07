@@ -2,96 +2,96 @@ import React from 'react'
 import ReactLoading from 'react-loading';
 import Button from '../../common/button';
 import {
-  ChargeIcon,
-  BrickIcon,
-  LumberIcon,
-  ConcreteIcon,
-  SteelIcon
+	ChargeIcon,
+	BrickIcon,
+	LumberIcon,
+	ConcreteIcon,
+	SteelIcon
 } from '../../common/icons/nft';
 import useGetSetting from '../../../hooks/nft-game/axios/useGetSetting';
 import { validateItemDate } from '../../../utils/helpers/validator';
 import { useGlobalContext } from '../../../context/GlobalContext';
 
 interface YieldUpgradeCostProps {
-  color: string
-  btnLabel: string
-  onPurcharse: Function
-  disabled?: boolean
-  isLoading?: any
-  type: string
-  item: any
-  colorType: number
+	color: string
+	btnLabel: string
+	onPurcharse: Function
+	disabled?: boolean
+	isLoading?: any
+	type: string
+	item: any
+	colorType: number
 }
 
 export default function YieldUpgradeCost({
-  onPurcharse,
-  disabled,
-  isLoading,
-  type,
-  item,
-  colorType,
-  color,
-  btnLabel = '',
+	onPurcharse,
+	disabled,
+	isLoading,
+	type,
+	item,
+	colorType,
+	color,
+	btnLabel = '',
 }: YieldUpgradeCostProps) {
-  const { theme } = useGlobalContext();
-  const {
-    oneDayTime
-  } = useGetSetting()
-  const disabledIcons = [
-    <ChargeIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
-    <LumberIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
-    <BrickIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
-    <ConcreteIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
-    <SteelIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />
-  ]
-  const activeIcons = [
-    <ChargeIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
-    <LumberIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
-    <BrickIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
-    <ConcreteIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
-    <SteelIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />
-  ]
-  const cost = validateItemDate(item, oneDayTime) ?
-    (item.name == 'Garden' ? item.buy :
-      (item.name == 'Trees' ? item.buy : item.sell)) : item.buy
+	const { theme } = useGlobalContext();
+	const {
+		oneDayTime
+	} = useGetSetting()
+	const disabledIcons = [
+		<ChargeIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
+		<LumberIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
+		<BrickIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
+		<ConcreteIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
+		<SteelIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />
+	]
+	const activeIcons = [
+		<ChargeIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
+		<LumberIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
+		<BrickIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
+		<ConcreteIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />,
+		<SteelIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263238"} />
+	]
+	const cost = validateItemDate(item, oneDayTime) ?
+		(item.name == 'Garden' ? item.buy :
+			(item.name == 'Trees' ? item.buy : item.sell)) : item.buy
 
-  const yieldCostContent = [];
+	const yieldCostContent = [];
 
-  if (cost[1]) {
-    yieldCostContent.push((
-      <div className='min-w-[20px] font-semibold mt-1 text-[14px]'>
-        {item.buy[1]} LAND
-      </div>
-    ))
-  }
-  cost.slice(2, 7).map((cost: number, index: number) => {
-    if (Number(cost) > 0)
-      yieldCostContent.push((
-        <div key={`next-cost-${index}`}
-          className={`min-w-[20px] font-semibold mt-1 text-[14px] ${item.name == 'Finished Basement' ? 'fs-13' : ''}`}>
-          {colorType == 0 ? (
-            <div className='flex gap-[2px] items-center'>
-              {`${Number(cost)} `}
-              {disabledIcons[index]}
-            </div>
-          ) : (
-            <div className='flex gap-[2px] items-center'>
-              {`${Number(cost)} `}
-              {activeIcons[index]}
-            </div>
-          )}
-        </div>
-      ));
-  });
-  cost.slice(2, 7).map((cost: number, index: number) => {
-    if (Number(cost) <= 0)
-      yieldCostContent.push((
-        <div key={`next-empty-${index}`} className='min-w-[20px]'>
-        </div>
-      ));
-  })
+	if (cost[1]) {
+		yieldCostContent.push((
+			<div className='min-w-[20px] font-semibold mt-1 text-[14px]'>
+				{item.buy[1]} LAND
+			</div>
+		))
+	}
+	cost.slice(2, 7).map((cost: number, index: number) => {
+		if (Number(cost) > 0)
+			yieldCostContent.push((
+				<div key={`next-cost-${index}`}
+					className={`min-w-[20px] font-semibold mt-1 text-[14px] ${item.name == 'Finished Basement' ? 'fs-13' : ''}`}>
+					{colorType == 0 ? (
+						<div className='flex gap-[2px] items-center'>
+							{`${Number(cost)} `}
+							{disabledIcons[index]}
+						</div>
+					) : (
+						<div className='flex gap-[2px] items-center'>
+							{`${Number(cost)} `}
+							{activeIcons[index]}
+						</div>
+					)}
+				</div>
+			));
+	});
+	cost.slice(2, 7).map((cost: number, index: number) => {
+		if (Number(cost) <= 0)
+			yieldCostContent.push((
+				<div key={`next-empty-${index}`} className='min-w-[20px]'>
+				</div>
+			));
+	})
 
-  return (
+	return (
 		<div
 			className={`flex flex-col w-full h-[130px] rounded-[25px] !bg-[#ffffff] dark:!bg-[#2e2e2e] relative pt-[12px] ${color}`}
 		>
@@ -165,15 +165,13 @@ export default function YieldUpgradeCost({
 			</div>
 			<Button
 				onClick={() => onPurcharse()}
-				className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] ${
-					isLoading.type > -1 && isLoading.type != type
-						? 'border-[2px] border-[#8f8f8f] bg-[#8f8f8f]'
-						: color
-				} ${
-					isLoading.type == type && isLoading.loading
+				className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] ${isLoading.type > -1 && isLoading.type != type
+					? 'border-[2px] border-[#8f8f8f] bg-[#8f8f8f]'
+					: color
+					} ${isLoading.type == type && isLoading.loading
 						? 'flex justify-center items-center'
 						: ''
-				}`}
+					}`}
 				disabled={
 					disabled ||
 					(isLoading.type == type && isLoading.loading) ||

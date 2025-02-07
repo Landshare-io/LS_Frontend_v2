@@ -6,11 +6,11 @@ import { useGlobalContext } from "../../../context/GlobalContext";
 import YieldUpgrade from "../production-upgrade/yield-upgrade";
 import FirepitUpgrade from "./firepit-upgrade";
 import {
-  validateResource,
-  validateItemDate,
-  getItemDuration,
-  getDependencyItem,
-  validateItemDateWithDeadTime
+	validateResource,
+	validateItemDate,
+	getItemDuration,
+	getDependencyItem,
+	validateItemDateWithDeadTime
 } from "../../../utils/helpers/validator";
 import { yieldUpdgradesData } from "../../../config/constants/game-data";
 import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
@@ -20,101 +20,101 @@ import useHandleAddons from "../../../hooks/nft-game/axios/useHandleAddons";
 import useBalanceOfLand from "../../../hooks/contract/LandTokenContract/useBalanceOf"
 
 interface YieldUpdgradesProps {
-  house: any
-  setHouse: Function
+	house: any
+	setHouse: Function
 }
 
 export default function YieldUpgrades({
-  house,
-  setHouse
+	house,
+	setHouse
 }: YieldUpdgradesProps) {
-  const chainId = useChainId();
-  const { address } = useAccount()
-  const { notifyError } = useGlobalContext();
-  const customModalStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      overflow: "hidden",
-      maxWidth: "300px",
-      width: "90%",
-      height: "fit-content",
-      borderRadius: "20px",
-      padding: 0,
-      border: 0,
-      background: 'transparent'
-    },
-    overlay: {
-      background: '#00000080',
-      zIndex: 99999
-    }
-  };
-  
-  const { userData } = useGetUserData()
-  const { oneDayTime } = useGetSetting()
-  const isOwn = house?.userId == userData?.id
-  const [salvageAddonId, setSalvageAddonId] = useState(-1);
-  const [hasAddonId, setHasAddonId] = useState(-1);
-  const [openSalvageModal, setOpenSalvageModal] = useState(false);
-  const [isLoading, setIsLoading] = useState({ type: -1, loading: false });
+	const chainId = useChainId();
+	const { address } = useAccount()
+	const { notifyError } = useGlobalContext();
+	const customModalStyles = {
+		content: {
+			top: "50%",
+			left: "50%",
+			transform: "translate(-50%, -50%)",
+			overflow: "hidden",
+			maxWidth: "300px",
+			width: "90%",
+			height: "fit-content",
+			borderRadius: "20px",
+			padding: 0,
+			border: 0,
+			background: 'transparent'
+		},
+		overlay: {
+			background: '#00000080',
+			zIndex: 99999
+		}
+	};
 
-  const { 
-    buyAddon, 
-    handleFireplace, 
-    fertilizeGardenAction, 
-    salvageAddon, 
-    buyTreeAddonHandler 
-  } = useHandleAddons(chainId, address, house, setHouse, setIsLoading);
-  const { resource } = useGetResource()
-  const { data: landTokenAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish }
+	const { userData } = useGetUserData()
+	const { oneDayTime } = useGetSetting()
+	const isOwn = house?.userId == userData?.id
+	const [salvageAddonId, setSalvageAddonId] = useState(-1);
+	const [hasAddonId, setHasAddonId] = useState(-1);
+	const [openSalvageModal, setOpenSalvageModal] = useState(false);
+	const [isLoading, setIsLoading] = useState({ type: -1, loading: false });
+
+	const {
+		buyAddon,
+		handleFireplace,
+		fertilizeGardenAction,
+		salvageAddon,
+		buyTreeAddonHandler
+	} = useHandleAddons(chainId, address, house, setHouse, setIsLoading);
+	const { resource } = useGetResource()
+	const { data: landTokenAmount } = useBalanceOfLand({ chainId, address }) as { data: BigNumberish }
 
 
-  const buyTreeAddon = async (item: any) => {
-    setIsLoading({ type: item.id, loading: true });
+	const buyTreeAddon = async (item: any) => {
+		setIsLoading({ type: item.id, loading: true });
 
-    if (!localStorage.getItem("jwtToken-v2")) {
-      setIsLoading({ type: -1, loading: false });
-      return notifyError("Please login!");
-    }
+		if (!localStorage.getItem("jwtToken-v2")) {
+			setIsLoading({ type: -1, loading: false });
+			return notifyError("Please login!");
+		}
 
-    if (!house.isActivated) {
-      setIsLoading({ type: -1, loading: false });
-      return notifyError("Please Activate First");
-    }
+		if (!house.isActivated) {
+			setIsLoading({ type: -1, loading: false });
+			return notifyError("Please Activate First");
+		}
 
-    if (!isOwn) {
-      setIsLoading({ type: -1, loading: false });
-      return notifyError("You are not an owner of this house");
-    }
+		if (!isOwn) {
+			setIsLoading({ type: -1, loading: false });
+			return notifyError("You are not an owner of this house");
+		}
 
-    if (validateItemDate(item, oneDayTime)) {
-      setIsLoading({ type: -1, loading: false });
-      return notifyError("You've already buy this addon");
-    }
+		if (validateItemDate(item, oneDayTime)) {
+			setIsLoading({ type: -1, loading: false });
+			return notifyError("You've already buy this addon");
+		}
 
-    const amount = item.buy[1]
+		const amount = item.buy[1]
 
-    if (await validateResource(resource, item.buy.slice(2, 7))) {
-      if (amount > landTokenAmount) {
-        setIsLoading({ type: -1, loading: false });
-        return notifyError("Not enough LAND tokens");
-      } else {
-        await buyTreeAddonHandler(item);
-      }
-    } else {
-      setIsLoading({ type: -1, loading: false });
-      notifyError("Not enough resource");
-    }
-  };
+		if (await validateResource(resource, item.buy.slice(2, 7))) {
+			if (amount > landTokenAmount) {
+				setIsLoading({ type: -1, loading: false });
+				return notifyError("Not enough LAND tokens");
+			} else {
+				await buyTreeAddonHandler(item);
+			}
+		} else {
+			setIsLoading({ type: -1, loading: false });
+			notifyError("Not enough resource");
+		}
+	};
 
-  const confirmSalvageAddon = async (addonId: number, hasItemId: number) => {
-    setOpenSalvageModal(true);
-    setSalvageAddonId(addonId);
-    setHasAddonId(hasItemId)
-  };
+	const confirmSalvageAddon = async (addonId: number, hasItemId: number) => {
+		setOpenSalvageModal(true);
+		setSalvageAddonId(addonId);
+		setHasAddonId(hasItemId)
+	};
 
-  return (
+	return (
 		<div className='max-w-[1200px] px-0 my-5'>
 			{house.yieldUpgrades.length < 1 ? (
 				<></>
@@ -195,17 +195,17 @@ export default function YieldUpgrades({
 											havingItem == 1
 												? 'BURN'
 												: havingItem == 0
-												? 'BURN'
-												: 'BUY'
+													? 'BURN'
+													: 'BUY'
 										}
 										colorType={
 											!house.isActivated || house.onSale
 												? 0
 												: havingItem == 1
-												? 2
-												: havingItem == 0
-												? 2
-												: 1
+													? 2
+													: havingItem == 0
+														? 2
+														: 1
 										}
 										onPurcharse={(lumberCount: number) =>
 											handleFireplace(isOwn, yieldItem, lumberCount)
@@ -236,8 +236,8 @@ export default function YieldUpgrades({
 												? yieldItem.name == 'Garden'
 													? yieldItem.specialButtonName
 													: yieldItem.name == 'Trees'
-													? 'OWNED'
-													: 'SALVAGE'
+														? 'OWNED'
+														: 'SALVAGE'
 												: 'BUY'
 										}
 										disabled={house.onSale || !house.isActivated}
@@ -245,25 +245,25 @@ export default function YieldUpgrades({
 											!house.isActivated || house.onSale
 												? 0
 												: havingItem
-												? yieldItem.name == 'Garden'
-													? 2
-													: 3
-												: 1
+													? yieldItem.name == 'Garden'
+														? 2
+														: 3
+													: 1
 										}
 										onPurcharse={
 											havingItem
 												? yieldItem.name == 'Garden'
 													? () => fertilizeGardenAction(isOwn, yieldItem)
 													: yieldItem.name == 'Trees'
-													? () => {}
-													: () =>
+														? () => { }
+														: () =>
 															confirmSalvageAddon(
 																yieldItem.id,
 																yieldItem.hasItemId
 															)
 												: yieldItem.name == 'Trees'
-												? () => buyTreeAddon(yieldItem)
-												: () => buyAddon(isOwn, yieldItem)
+													? () => buyTreeAddon(yieldItem)
+													: () => buyAddon(isOwn, yieldItem)
 										}
 										isLoading={isLoading}
 									/>

@@ -6,7 +6,7 @@ import YieldUpgrade from "./yield-upgrade";
 import FireplaceUpgrade from "./fireplace-upgrade";
 import HireHandymanUpgrade from "./hirehandyman-upgrade";
 import { productionUpgradesData } from "../../../config/constants/game-data";
-import { 
+import {
   validateItemDate,
   getItemDuration
 } from "../../../utils/helpers/validator";
@@ -22,7 +22,7 @@ interface ProductionUpdgradeProps {
   setHouse: Function
 }
 
-export default function ProductionUpgrade ({
+export default function ProductionUpgrade({
   house,
   setHouse,
 }: ProductionUpdgradeProps) {
@@ -34,7 +34,7 @@ export default function ProductionUpgrade ({
   const [toolshedIndex, setToolshedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState({ type: -1, loading: false });
   const hasFireplace = house.productionUpgrades.filter((pItem: any) => pItem.name == "Firepit" && pItem.specialButtonName == "")[0].activeTime
-  const hasConcreteFoundation = 
+  const hasConcreteFoundation =
     validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == "Concrete Foundation" && pItem.specialButtonName == '')[0], oneDayTime) ||
     validateItemDate(house.productionUpgrades.filter((pItem: any) => pItem.name == "Concrete Foundation" && pItem.specialButtonName == 'REPAIR')[0], oneDayTime)
   const hasGenerator = house.productionUpgrades.filter((pItem: any) => pItem.name == "Generator")[0].activeTime
@@ -123,16 +123,16 @@ export default function ProductionUpgrade ({
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Firepit")[0],
               ...(
-                hasFireplace ? 
+                hasFireplace ?
                   house.productionUpgrades.filter((pItem: any) => pItem.name == "Firepit" && pItem.specialButtonName == 'BURN')[0] :
-                  house.productionUpgrades.filter((pItem: any) => pItem.name == "Firepit" && pItem.specialButtonName == '')[0] 
+                  house.productionUpgrades.filter((pItem: any) => pItem.name == "Firepit" && pItem.specialButtonName == '')[0]
               )
             }}
             colorType={!house.onSale && house.isActivated && isOwn ? (hasFireplace ? 2 : 1) : 0}
             btnTitle={hasFireplace ? "BURN" : "BUY"}
             onPurcharse={(lumber: number) =>
-              hasFireplace ? 
-                burnLumber(lumber, house.productionUpgrades.filter((pItem: any) => pItem.name == "Firepit" && pItem.specialButtonName == 'BURN')[0], oneDayTime) : 
+              hasFireplace ?
+                burnLumber(lumber, house.productionUpgrades.filter((pItem: any) => pItem.name == "Firepit" && pItem.specialButtonName == 'BURN')[0], oneDayTime) :
                 buyProductionOfUser(house.productionUpgrades.filter((pItem: any) => pItem.name == "Firepit" && pItem.specialButtonName == '')[0], oneDayTime)
             }
             disabled={house.onSale || !house.isActivated || !isOwn}
@@ -145,7 +145,7 @@ export default function ProductionUpgrade ({
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Concrete Foundation")[0],
               ...(
-                hasConcreteFoundation ? 
+                hasConcreteFoundation ?
                   house.productionUpgrades.filter((pItem: any) => pItem.name == "Concrete Foundation" && pItem.specialButtonName == 'REPAIR')[0] :
                   house.productionUpgrades.filter((pItem: any) => pItem.name == "Concrete Foundation" && pItem.specialButtonName == '')[0]
               ),
@@ -154,10 +154,10 @@ export default function ProductionUpgrade ({
             colorType={!house.onSale && house.isActivated && isOwn ? (hasConcreteFoundation ? 2 : 1) : 0}
             btnTitle={hasConcreteFoundation ? 'REPAIR' : 'BUY'}
             onPurcharse={() => repairConcreteFoundation(
-                house.productionUpgrades.filter((pItem: any) => pItem.name == "Concrete Foundation" && pItem.specialButtonName == '')[0],
-                house.productionUpgrades.filter((pItem: any) => pItem.name == "Concrete Foundation" && pItem.specialButtonName == 'REPAIR')[0],
-                oneDayTime
-              )
+              house.productionUpgrades.filter((pItem: any) => pItem.name == "Concrete Foundation" && pItem.specialButtonName == '')[0],
+              house.productionUpgrades.filter((pItem: any) => pItem.name == "Concrete Foundation" && pItem.specialButtonName == 'REPAIR')[0],
+              oneDayTime
+            )
             }
             disabled={house.onSale || !house.isActivated || !isOwn}
             type="production"
@@ -211,7 +211,7 @@ export default function ProductionUpgrade ({
                 item={item}
                 colorType={colorType}
                 btnTitle={btnTitle}
-                onPurcharse={btnTitle === "OWNED" ? () => {} : () => buyProductionItem(item, oneDayTime)}
+                onPurcharse={btnTitle === "OWNED" ? () => { } : () => buyProductionItem(item, oneDayTime)}
                 disabled={house.onSale || btnTitle === "OWNED" || !house.isActivated || !isOwn}
                 type="production"
                 isLoading={isLoading}
@@ -264,13 +264,13 @@ export default function ProductionUpgrade ({
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Generator")[0],
               ...(
-                  house.productionUpgrades.filter((pItem: any) => pItem.name == "Generator" && pItem.specialButtonName == '')[0]
+                house.productionUpgrades.filter((pItem: any) => pItem.name == "Generator" && pItem.specialButtonName == '')[0]
               ),
               type: 'Generator'
             }}
             colorType={!house.onSale && house.isActivated && isOwn ? (hasGenerator ? 3 : 1) : 0}
             btnTitle={hasGenerator ? 'OWN' : 'BUY'}
-            onPurcharse={hasGenerator ? () => {} : () => buyProductionItem({
+            onPurcharse={hasGenerator ? () => { } : () => buyProductionItem({
               ...productionUpgradesData.filter((item: any) => item.title == "Generator")[0],
               ...house.productionUpgrades.filter((pItem: any) => pItem.name == "Generator")[0],
               type: "Generator"

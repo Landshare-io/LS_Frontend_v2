@@ -45,12 +45,12 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
         ? HouseRareNft
         : HouseNft
       : product.type == 2
-      ? harvestAmount >= 500
-        ? HouseBRareNft
-        : HouseBNft
-      : harvestAmount >= 500
-      ? HouseCRareNft
-      : HouseCNft;
+        ? harvestAmount >= 500
+          ? HouseBRareNft
+          : HouseBNft
+        : harvestAmount >= 500
+          ? HouseCRareNft
+          : HouseCNft;
   };
 
   return (
@@ -96,9 +96,8 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             </Tooltip>
           </div>
           <input
-            className={`max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] text-[#000] mr-1 ${
-              theme == "dark" ? "bg-gray-600" : ""
-            }`}
+            className={`max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] text-[#000] mr-1 ${theme == "dark" ? "bg-gray-600" : ""
+              }`}
             step="1"
             min={200}
             value={nftCreditCost}
@@ -124,9 +123,8 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             </Tooltip>
           </div>
           <div
-            className={`${
-              theme == "dark" ? "#ffffff88" : "#00000088"
-            } text-[14px] font-semibold`}
+            className={`${theme == "dark" ? "#ffffff88" : "#00000088"
+              } text-[14px] font-semibold`}
           >
             {Number(harvestAmount)}
           </div>
@@ -136,9 +134,8 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             Mint Price
           </div>
           <div
-            className={`${
-              theme == "dark" ? "#ffffff88" : "#00000088"
-            } text-[14px] font-semibold`}
+            className={`${theme == "dark" ? "#ffffff88" : "#00000088"
+              } text-[14px] font-semibold`}
           >
             {`${Number(harvestAmount) / 12.5} LAND`}
           </div>

@@ -45,9 +45,9 @@ export default function HarvestCards({
   if (facilities.length < 1) return null
 
   const colors = [
-    "border-[2px] border-[#8f8f8f50] bg-[#8f8f8f50]", 
-    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f]", 
-    "border-[2px] border-[#ec9821] bg-[#ec9821]", 
+    "border-[2px] border-[#8f8f8f50] bg-[#8f8f8f50]",
+    "border-[2px] border-[#8f8f8f] bg-[#8f8f8f]",
+    "border-[2px] border-[#ec9821] bg-[#ec9821]",
     "border-[2px] border-[#00a8f3] bg-[#00a8f3]"
   ];
   const resourceActiveIcons = [
@@ -118,7 +118,7 @@ export default function HarvestCards({
     if (
       type != 4 &&
       ((facilities[type + 1]?.currentFacility?.level ?? 0) < 1) ||
-        parseFloat(userReward[type].toString()) < 0.00001
+      parseFloat(userReward[type].toString()) < 0.00001
     )
       return;
     setSelectedResource((prevState: any) => [
@@ -182,7 +182,7 @@ export default function HarvestCards({
         </div>
       </div>
       <div className="px-[5px] pb-[5px] relative">
-        <HarvestCost 
+        <HarvestCost
           color={colors[colorType]}
           btnLabel={btnTitle}
           onPurcharse={onPurcharse}

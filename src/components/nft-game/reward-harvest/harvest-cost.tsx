@@ -52,15 +52,14 @@ export default function HarvestCost({
           {item.buyReward.slice(0, 7).map((percent: number, index: number) => {
             if (Number(percent) > 0) {
               return (
-								<div key={`reduction-percent-${index}`}>
-									<span className='font-semibold text-[10px] ml-[4px] pr-[2px] text-text-secondary'>
-										Production:{' '}
-									</span>
-									<span className='text-[#323131] dark:text-white font-semibold text-[12px]'>{`${
-										percent * 100
-									}%`}</span>
-								</div>
-							);
+                <div key={`reduction-percent-${index}`}>
+                  <span className='font-semibold text-[10px] ml-[4px] pr-[2px] text-text-secondary'>
+                    Production:{' '}
+                  </span>
+                  <span className='text-[#323131] dark:text-white font-semibold text-[12px]'>{`${percent * 100
+                    }%`}</span>
+                </div>
+              );
             }
           })}
         </div>
@@ -73,23 +72,23 @@ export default function HarvestCost({
             {item.buy.slice(2, 7).map((cost: number, index: number) => {
               if (Number(cost) > 0)
                 return (
-									<div
-										key={`next-cost-${index}`}
-										className={`flex gap-[1px] items-center min-w-[20px] text-[14px] font-medium text-[#323131] dark:text-white`}
-									>
-										{colorType == 0 ? (
-											<>
-												{`${cost} `}
-												{disabledIcons[index]}
-											</>
-										) : (
-											<>
-												{`${cost} `}
-												{activeIcons[index]}
-											</>
-										)}
-									</div>
-								);
+                  <div
+                    key={`next-cost-${index}`}
+                    className={`flex gap-[1px] items-center min-w-[20px] text-[14px] font-medium text-[#323131] dark:text-white`}
+                  >
+                    {colorType == 0 ? (
+                      <>
+                        {`${cost} `}
+                        {disabledIcons[index]}
+                      </>
+                    ) : (
+                      <>
+                        {`${cost} `}
+                        {activeIcons[index]}
+                      </>
+                    )}
+                  </div>
+                );
             })}
             {item.buy.slice(2, 7).map((cost: number, index: number) => {
               if (Number(cost) <= 0)
