@@ -7,20 +7,20 @@ import HomeRwaSection from '../components/home-rwa-section';
 
 const Home: NextPage = () => {
   return (
-		<div className={`${styles.container}`}>
-			<Head>
-				<title>Landshare</title>
-				<meta
-					content='Tokenized Real Estate RWA Ecosystem'
-					name='description'
-				/>
-				<link href='/favicon.ico' rel='icon' />
-			</Head>
-			<HomeRwaSection />
-			{/* <DashboardFeautre /> */}
-			<MoreInvestment />
-		</div>
-	);
+    <div className={`${styles.container}`}>
+      <Head>
+        <title>Landshare</title>
+        <meta
+          content='Tokenized Real Estate RWA Ecosystem'
+          name='description'
+        />
+        <link href='/favicon.ico' rel='icon' />
+      </Head>
+      <HomeRwaSection />
+      {/* <DashboardFeautre /> */}
+      <MoreInvestment />
+    </div>
+  );
 };
 
 export default Home;
