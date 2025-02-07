@@ -266,11 +266,10 @@ export default function PriceGraph({
 									: recentData?.price?.toFixed(5)}
 							</span>
 							<span
-								className={`text-[14px] leading-[22px] tracking-[0.02em] ${
-									recentData.change_price >= 0
-										? 'text-[#74cc50]'
-										: 'text-[#e93838]'
-								} ${BOLD_INTER_TIGHT.className}`}
+								className={`text-[14px] leading-[22px] tracking-[0.02em] ${recentData.change_price >= 0
+									? 'text-[#74cc50]'
+									: 'text-[#e93838]'
+									} ${BOLD_INTER_TIGHT.className}`}
 							>
 								{recentData.change_price >= 0 ? '+ ' : ''}
 								{recentData.change_price.toFixed(2)}%
