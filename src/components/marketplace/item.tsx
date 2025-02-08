@@ -145,12 +145,12 @@ export default function MarketplaceItem({
         </div>
         <div className="flex justify-between items-end pr-2 pt-1 ">
           <div className="text-[#0b6c96] text-[14px] font-semibold dark:text-text-secondary">Remaining</div>
-          <div className="text-[#00000080] text-[14px] font-semibold">
+          <div className="text-[#00000080] dark:text-slate-300 text-[14px] font-semibold">
             {(Number(product.tokenHarvestLimit) + Number(product.extendedBalance) - Number(product.totalHarvestedToken)).toFixed(2)}
           </div>
         </div>
         <div className="flex px-[5px] pt-3 justify-between items-center">
-          <div className="block text-[14px] text-[#000000b3] items-end justify-center">
+          <div className="block text-[14px] text-[#000000b3] dark:text-slate-300 items-end justify-center">
             <div>
               <span className="text-[14px] font-semibold">
                 {product.salePrice}

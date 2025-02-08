@@ -96,8 +96,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             </Tooltip>
           </div>
           <input
-            className={`max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] text-[#000] mr-1 ${theme == "dark" ? "bg-gray-600" : ""
-              }`}
+            className={`max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] text-[#000] mr-1 dark:bg-gray-600 dark:text-white`}
             step="1"
             min={200}
             value={nftCreditCost}
@@ -147,8 +146,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             Number(nftCreditCost) < 400 ||
             Number(nftCreditCost) > Number(nftCredits)
           }
-          className={`w-full text-[16px] flex items-center bg-[#61cd81] justify-center mt-2 py-[5px] px-[20px] rounded-[20px] duration-400 h-[44px] disabled:bg-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
-          textClassName="text-[#fff]"
+          className={`w-full text-[16px] flex items-center bg-[#61cd81] justify-center mt-2 py-[5px] px-[20px] rounded-[20px] duration-400 h-[44px] disabled:bg-[#c2c5c3] disabled:text-text-secondary dark:disabled:bg-inherit disabled:opacity-60   ${BOLD_INTER_TIGHT.className}`}
         >
           {isLoading ? (
             <ReactLoading

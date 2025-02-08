@@ -203,11 +203,14 @@ export default function YieldUpgrade({
                 {item.name}
               </span>
             </div>
-            <div className='flex flex-col w-full h-[210px] relative'>
+            <div className='flex flex-col w-full h-[260px] relative'>
               <Image
-                className='absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] h-[180px] w-auto'
+                className='m-auto'
                 src={item.imgUrl}
                 alt={item.name}
+                width={180}
+                height={180}
+                draggable={false}
               />
               {durationDay ? (
                 item.name === 'Garden' ? (

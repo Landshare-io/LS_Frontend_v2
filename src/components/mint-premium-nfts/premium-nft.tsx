@@ -88,8 +88,7 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
             </div>
             <Button
               onClick={() => onSubmit()}
-              className={`w-full bottom-[-1px] h-[45px] text-[18px] bg-[#61cd81] font-semibold absolute rounded-[20px] ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
-              textClassName='text-[#fff]'
+              className={`w-full bottom-[-1px] h-[45px] text-[18px] bg-[#61cd81] font-semibold absolute disabled:text-text-secondary dark:disabled:bg-[#51616b]  disabled:opacity-60 rounded-[20px] ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
               disabled
             >
               {(loader == premiumNft.name) ? (
@@ -109,9 +108,20 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
           style={customModalStyles}
           isOpen={openModal}
           onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
+          className='outline-none'
+          overlayClassName='fixed inset-0 bg-black/40 flex items-center justify-center z-50 backdrop-blur-sm'
         >
-          <div className="flex min-h-100 justify-center items-center">
-            <span className="my-2 mx-3 text-[14px]">{premiumNft.infoText}</span>
+          <div className='relative bg-white dark:bg-[#2e3740] rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 p-6 max-w-xs w-full m-auto'>
+            <button
+              onClick={() => setOpenModal(false)}
+              className='absolute top-3 right-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-white transition-colors duration-200 rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700'
+              aria-label='Close'
+            >
+              ✕
+            </button>
+            <div className='text-sm text-gray-700 dark:text-gray-200 text-center leading-relaxed mt-2'>
+              <span className="my-2 mx-3 text-[14px]">{premiumNft.infoText}</span>
+            </div>
           </div>
         </ReactModal>
       )}

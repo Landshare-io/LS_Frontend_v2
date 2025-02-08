@@ -97,11 +97,14 @@ export default function HireHandymanUpgrade({
               {item.title}
             </span>
           </div>
-          <div className='flex flex-col w-full h-[210px] relative'>
+          <div className='flex flex-col w-full h-[260px] relative'>
             <Image
-              className='absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] h-[180px] w-auto'
+              className="m-auto"
               src={item.imgUrl}
               alt={item.title}
+              width={180}
+              height={180}
+              draggable={false}
             />
             {durationNode ? (
               <div className='bottom-0 flex w-full justify-between items-end px-3 py-1 absolute'>
