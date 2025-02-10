@@ -29,7 +29,6 @@ import { AUTO_VAULT_MAIN_CHAINS, MAJOR_WORK_CHAINS } from "../../config/constant
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useAppSelector } from "../../lib/hooks";
-import { selectLoading } from "../../lib/slices/app-slices/vault-loading";
 
 const breadcrumbItems = [
   {
@@ -144,9 +143,6 @@ const StakingPage: NextPage = () => {
     }
     setRewardPercent(Number(numeral(showModalApy).format('0.[00000]')))
   }, [roiInputCalculValue, isShowUsdPrice]);
-
-  const isLoading = useAppSelector(selectLoading);
-  // console.log("Loading: ", isLoading)
 
   return (
     <div>

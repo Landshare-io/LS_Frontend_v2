@@ -53,7 +53,6 @@ import smallicon from "../../../public/icons/rotate-black.svg"
 import smallicondark from "../../../public/icons/rotate-dark.svg"
 import Tooltip from "../common/tooltip";
 import 'react-loading-skeleton/dist/skeleton.css';
-import { setAutoLoading } from "../../lib/slices/app-slices/vault-loading";
 
 const AUTO_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['auto']
 
@@ -124,8 +123,6 @@ export default function AutoVault({
   const { price: tokenPriceData } = useGetLandPrice()
 
   const isVaultsLoading = isBalanceLoading || vaultBalance.isLoading || isAllownaceLoading || ccipVaultBalance.isLoading || ccipLoading;
-
-  // dispatch(setAutoLoading(false));
 
   useEffect(() => {
     (async () => {

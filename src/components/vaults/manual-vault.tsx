@@ -28,7 +28,6 @@ import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import bscIcon from "../../../public/icons/bsc.svg"
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useAppDispatch } from "../../lib/hooks";
-import { setManualLoading } from "../../lib/slices/app-slices/vault-loading";
 
 const MANUAL_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['manual']
 
@@ -79,7 +78,6 @@ export default function ManualVault({
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const { price: tokenPriceUsd } = useGetLandPrice()
   const isVaultsLoading = totalStakedLoading || userInfoLoading || pendingLandLoading
-  // dispatch(setManualLoading(false)); //We will use this line for code refactor
 
   function handlePercents(percent: number) {
     if (depositing) {
