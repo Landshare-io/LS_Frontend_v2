@@ -126,7 +126,7 @@ export default function FirepitUpgrade({
               {item.name}
             </span>
           </div>
-          <div className='flex flex-col w-full h-[260px] relative'>
+          <div className='flex flex-col h-[260px] relative'>
             <Image
               className="m-auto"
               src={item.imgUrl}

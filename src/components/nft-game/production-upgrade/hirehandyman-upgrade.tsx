@@ -97,7 +97,7 @@ export default function HireHandymanUpgrade({
               {item.title}
             </span>
           </div>
-          <div className='flex flex-col w-full h-[260px] relative'>
+          <div className='flex flex-col h-[260px] relative'>
             <Image
               className="m-auto"
               src={item.imgUrl}
