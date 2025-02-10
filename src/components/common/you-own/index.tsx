@@ -17,6 +17,7 @@ import SwitchTheme from "../switch-theme";
 import useGetResource from "../../../hooks/nft-game/axios/useGetResource";
 import useGetNftCredits from "../../../hooks/nft-game/apollo/useGetNftCredits";
 import useBalanceOf from "../../../hooks/contract/LandTokenContract/useBalanceOf";
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 export default function YouOwn(){
   const [show, setShow] = useState(false)
@@ -27,11 +28,14 @@ export default function YouOwn(){
   const { resource, maxPowerLimit } = useGetResource()
   const { nftCredits } = useGetNftCredits(address)
   const [openDrawer, setOpenDrawer]= useState(false)
+  const {
+      theme
+    } = useGlobalContext();
 
   
   return (
       <section 
-        className="bottom-[70px] mlg:bottom-0 bg-secondary duration-500 sticky z-[9] border-t-green-500 border-[1px] py-3 dark:bg-third">
+        className={`bottom-[70px] mlg:bottom-0 duration-500 sticky z-[9] border-t-green-500 border-[1px] py-3 dark:bg-third opacity-90 ${theme == 'dark' ? "bg-[##494949]" : "bg-[#bce4fa]"}`}>
           <div className="flex justify-center">
             <div className="max-w-[1200px] w-[98%] sm:w-[90%] md:w-full">
               <div className="flex flex-col md:flex-row items-center">

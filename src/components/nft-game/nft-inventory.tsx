@@ -354,8 +354,8 @@ export default function InventoryPage() {
                       <>
                         <Topbar isNftList={true} />
                         <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
-                          <span className={`text-[16px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
-                          <div className="border-b-[1px] border-[#00000050] block w-full mb-4 my-3"></div>
+                          <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
+                          <div className={`border-b-[1px] block w-full mb-4 my-3 ${theme == 'dark' ? "border-[#cbcbcb]" : "border-[#00000050]"}`}></div>
                           <div className="flex flex-col w-full pb-3">
                             <div className="flex flex-col gap-[30px] md:gap-0 md:flex-row items-center justify-between mb-5">
                               <div className="w-full my-[20px] md:w-[75%]">
