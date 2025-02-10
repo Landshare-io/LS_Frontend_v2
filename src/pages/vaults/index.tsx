@@ -28,7 +28,6 @@ import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
 import { AUTO_VAULT_MAIN_CHAINS, MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useAppSelector } from "../../lib/hooks";
 
 const breadcrumbItems = [
   {
