@@ -28,6 +28,8 @@ import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
 import { AUTO_VAULT_MAIN_CHAINS, MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useAppSelector } from "../../lib/hooks";
+import { selectLoading } from "../../lib/slices/app-slices/vault-loading";
 
 const breadcrumbItems = [
   {
@@ -46,7 +48,7 @@ const StakingPage: NextPage = () => {
   const { theme } = useGlobalContext();
   const { isConnected } = useAccount()
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
-  const { price } = useGetPrice(chainId)
+  const { price } = useGetPrice(chainId);
 
   const [selectedVault, useSelectedVault] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -142,6 +144,9 @@ const StakingPage: NextPage = () => {
     }
     setRewardPercent(Number(numeral(showModalApy).format('0.[00000]')))
   }, [roiInputCalculValue, isShowUsdPrice]);
+
+  const isLoading = useAppSelector(selectLoading);
+  // console.log("Loading: ", isLoading)
 
   return (
     <div>

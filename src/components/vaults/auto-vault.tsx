@@ -53,6 +53,7 @@ import smallicon from "../../../public/icons/rotate-black.svg"
 import smallicondark from "../../../public/icons/rotate-dark.svg"
 import Tooltip from "../common/tooltip";
 import 'react-loading-skeleton/dist/skeleton.css';
+import { setAutoLoading } from "../../lib/slices/app-slices/vault-loading";
 
 const AUTO_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['auto']
 
@@ -111,8 +112,6 @@ export default function AutoVault({
     approveVault
   } = useAutoVault(chainId, address, updateApporvalStatus)
 
-  const isVaultsLoading = false // need to update
-
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
   const [depositing, setDepositing] = useState(true)
@@ -121,6 +120,16 @@ export default function AutoVault({
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const [isDepositing, setIsDepositing] = useState(false);
   const { price: tokenPriceData } = useGetLandPrice()
+
+  const [isVaultsLoading, setIsVaultLoading] = useState(true);
+
+  useEffect(() => {
+    // dispatch(setAutoLoading(isVaultsLoading));
+    if(typeof(landBalance) === 'bigint' && typeof(vaultBalance.total) === 'bigint' && typeof(autoLandAllowance) === 'bigint' && typeof(ccipVaultBalance.total) === 'bigint' && typeof(ccipBountyReward) === 'bigint' && typeof(bountyReward) === 'bigint') {
+      setIsVaultLoading(false);
+      // dispatch(setAutoLoading(false));
+    }
+  },[landBalance, vaultBalance, autoLandAllowance, apr, apy, ccipVaultBalance, ccipBountyReward, bountyReward]);
 
   useEffect(() => {
     (async () => {

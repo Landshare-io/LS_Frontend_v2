@@ -5,6 +5,7 @@ import { apiConsumerContractSlice } from "./slices/contract-slices/APIConsumerCo
 import { firebasePropertiesRentalSlice } from "./slices/firebase-slices/properties-rental";
 import { firebasePropertyRentalSlice } from "./slices/firebase-slices/properties-rental-item";
 import { firebaseFinancialLogsSlice } from "./slices/firebase-slices/financial-logs";
+import { vaultLoadingSlice } from "./slices/app-slices/vault-loading";
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
@@ -13,7 +14,8 @@ const rootReducer = combineSlices(
   firebasePropertiesRentalSlice,
   firebasePropertyRentalSlice,
   firebaseFinancialLogsSlice,
-  APIConsumerCcipTransactionsSlice
+  APIConsumerCcipTransactionsSlice,
+  vaultLoadingSlice,
 );
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;

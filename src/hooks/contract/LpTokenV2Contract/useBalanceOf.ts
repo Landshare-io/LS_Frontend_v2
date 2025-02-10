@@ -19,11 +19,11 @@ export default function useBalanceOf({ chainId, address }: UseBalanceOfProps) {
   })
 
   if (typeof address == 'undefined') return { data: 0, refetch }
-  if (isLoading) return { data: 0, refetch }
+  if (isLoading) return { data: 0, isLoading, refetch }
   if (isError) {
     console.log('Fetching LpTokenV2Contract balanceOf error', error)
-    return { data: 0, refetch }
+    return { data: 0, isLoading, refetch }
   }
 
-  return { data, refetch }
+  return { data, isLoading, refetch }
 }

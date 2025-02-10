@@ -27,6 +27,8 @@ import viewContract from "../../../public/icons/view-contract.png";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import bscIcon from "../../../public/icons/bsc.svg"
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useAppDispatch } from "../../lib/hooks";
+import { setManualLoading } from "../../lib/slices/app-slices/vault-loading";
 
 const MANUAL_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['manual']
 
@@ -53,7 +55,8 @@ export default function ManualVault({
   } = useGlobalContext();
   const chainId = useChainId()
   const { isConnected, address } = useAccount();
-  const { switchChain } = useSwitchChain()
+  const { switchChain } = useSwitchChain();
+  const dispatch = useAppDispatch();
   
   const { data: totalStaked, isLoading: totalStakedLoading } = useTotalStaked(chainId) as { data: BigNumberish, isLoading: boolean }
   const { data: userInfo, isLoading: userInfoLoading } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
@@ -61,6 +64,7 @@ export default function ManualVault({
   const apr = useGetApr(chainId) as number
   const { data: landBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
   const { data: landAllowance } = useAllowanceOfLandTokenContract(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
+
 
   const { 
     depositVault,
@@ -75,7 +79,8 @@ export default function ManualVault({
   const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const { price: tokenPriceUsd } = useGetLandPrice()
-  const isVaultsLoading = false // totalStakedLoading || userInfoLoading || pendingLandLoading
+  const isVaultsLoading = totalStakedLoading || userInfoLoading || pendingLandLoading
+  // dispatch(setManualLoading(false)); //We will use this line for code refactor
 
   function handlePercents(percent: number) {
     if (depositing) {

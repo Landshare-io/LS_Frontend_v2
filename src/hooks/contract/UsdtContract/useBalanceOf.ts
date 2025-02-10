@@ -12,12 +12,12 @@ export default function useBalanceOf(chainId: number, address: Address | undefin
     args: [address]
   })
 
-  if (typeof address == 'undefined') return { data: 0, refetch }
+  if (typeof address == 'undefined') return { data: 0, refetch, isLoading }
   if (isLoading) return { data: 0, refetch }
   if (isError) {
     console.log('Fetching RWAContract balanceOf error', error)
-    return { data: 0, refetch }
+    return { data: 0, refetch, isLoading }
   }
 
-  return { data, refetch }
+  return { data, refetch, isLoading }
 }

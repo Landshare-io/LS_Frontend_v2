@@ -13,7 +13,7 @@ export default function useAllowance(chainId: number, address: Address | undefin
     args: [address, spender]
   })
 
-  if (typeof address == 'undefined') return { data: 0, refetch }
+  if (typeof address == 'undefined') return { data: 0, refetch, isLoading }
   if (isLoading) return {
     data: 0,
     refetch
@@ -22,9 +22,10 @@ export default function useAllowance(chainId: number, address: Address | undefin
     console.log('Fetching RWAContract allowance error', error)
     return {
       data: 0,
-      refetch
+      refetch,
+      isLoading
     }
   }
 
-  return { data, refetch }
+  return { data, refetch, isLoading }
 }
