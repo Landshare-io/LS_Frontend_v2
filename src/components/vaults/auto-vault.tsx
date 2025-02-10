@@ -79,15 +79,16 @@ export default function AutoVault({
   const { theme, notifyError } = useGlobalContext();
   const dispatch = useAppDispatch();
 
-  const { data: landBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
+  const { data: landBalance, isLoading: isBalanceLoading } = useBalanceOf({ chainId, address }) as { data: BigNumberish, isLoading: boolean }
   const vaultBalance = useAutoLandV3(chainId, address) as {
     total: BigNumberish;
     totalSharesV3: BigNumberish;
     autoLandV3: BigNumberish;
     autoReward: BigNumberish;
+    isLoading: boolean;
   }
   const minTransferAmount = useMinTransferAmount(chainId) as BigNumberish
-  const { data: autoLandAllowance, refetch: updateApporvalStatus } = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish, refetch: Function }
+  const { data: autoLandAllowance, refetch: updateApporvalStatus, isLoading: isAllownaceLoading } = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish, refetch: Function, isLoading: boolean }
 
   const ccipTransactions = useAppSelector(selectCcipTransactionCounts)
   const ccipPendingTransactions = useAppSelector(selectCcipPendingTransactions)
@@ -101,6 +102,7 @@ export default function AutoVault({
     totalSharesV3: BigNumberish;
     autoLandV3: BigNumberish;
     autoReward: BigNumberish;
+    isLoading: boolean;
   }
   const { refetch: updateLandTokenV2Balance } = useBalanceOf({ chainId, address })
   const { data: ccipBountyReward } = useCalculateHarvestCakeRewards(chainId) as { data: BigNumberish }
@@ -121,15 +123,9 @@ export default function AutoVault({
   const [isDepositing, setIsDepositing] = useState(false);
   const { price: tokenPriceData } = useGetLandPrice()
 
-  const [isVaultsLoading, setIsVaultLoading] = useState(true);
+  const isVaultsLoading = isBalanceLoading || vaultBalance.isLoading || isAllownaceLoading || ccipVaultBalance.isLoading || ccipLoading;
 
-  useEffect(() => {
-    // dispatch(setAutoLoading(isVaultsLoading));
-    if(typeof(landBalance) === 'bigint' && typeof(vaultBalance.total) === 'bigint' && typeof(autoLandAllowance) === 'bigint' && typeof(ccipVaultBalance.total) === 'bigint' && typeof(ccipBountyReward) === 'bigint' && typeof(bountyReward) === 'bigint') {
-      setIsVaultLoading(false);
-      // dispatch(setAutoLoading(false));
-    }
-  },[landBalance, vaultBalance, autoLandAllowance, apr, apy, ccipVaultBalance, ccipBountyReward, bountyReward]);
+  // dispatch(setAutoLoading(false));
 
   useEffect(() => {
     (async () => {

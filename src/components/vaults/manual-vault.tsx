@@ -65,7 +65,6 @@ export default function ManualVault({
   const { data: landBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
   const { data: landAllowance } = useAllowanceOfLandTokenContract(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish }
 
-
   const { 
     depositVault,
     withdrawVault,
@@ -177,13 +176,13 @@ export default function ManualVault({
           {isVaultsLoading ? (
             <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
               <div className="flex justify-center items-center m-auto flex-col w-full">
-                <div className="flex flex-col justify-start p-0 gap-[16px] w-full">
+                <div className="flex flex-col justify-center p-0 gap-[16px] w-full">
                   <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]">
-                    <div className="w-full h-[100px] rounded-[1000px] relative">
+                    <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
                       <Skeleton circle={true} width={90} height={90} />
                     </div>
                     <div className="flex flex-col justify-center items-start p-0 gap-[8px] w-full">
-                      <div className={`text-[18px] overflow-hidden text-ellipsis leading-[28px] w-full ${BOLD_INTER_TIGHT.className}`}>
+                      <div className={`w-full overflow-hidden text-ellipsis leading-[28px] ${BOLD_INTER_TIGHT.className}`}>
                         <Skeleton height={28} />
                       </div>
                       <div className="w-full">
