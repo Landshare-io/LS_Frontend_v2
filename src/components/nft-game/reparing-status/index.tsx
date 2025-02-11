@@ -11,7 +11,7 @@ export default function ReparingStatus({ max, now }: ReparingStatusProps) {
   const showNow = Number(numeral(Number(now)).format('0.[0]'))
 
   return (
-    <div className='progress-content-show' style={{ width: '100%' }}>
+    <div className='progress-content-show dark:text-slate-800' style={{ width: '100%' }}>
       {max > 100 ? (
         showNow > 100 ? (
           <ProgressBar min={0} max={max} now={showNow} label={`${showNow}%`} animated={true} />

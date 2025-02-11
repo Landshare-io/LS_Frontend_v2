@@ -354,8 +354,8 @@ export default function InventoryPage() {
                       <>
                         <Topbar isNftList={true} />
                         <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
-                          <span className={`text-[16px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
-                          <div className="border-b-[1px] border-[#00000050] block w-full mb-4 my-3"></div>
+                          <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
+                          <div className={`border-b-[1px] block w-full mb-4 my-3 ${theme == 'dark' ? "border-[#cbcbcb]" : "border-[#00000050]"}`}></div>
                           <div className="flex flex-col w-full pb-3">
                             <div className="flex flex-col gap-[30px] md:gap-0 md:flex-row items-center justify-between mb-5">
                               <div className="w-full my-[20px] md:w-[75%]">
@@ -570,7 +570,7 @@ export default function InventoryPage() {
                               <div
                                 className={`flex h-[40px] w-full md:w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
                               >
-                                <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
+                                <span className={`flex text-[14px] dark:text-[#dee2e6] text-[#000000b3] items-center justify-center pl-4`}>
                                   Cost:{" "}
                                   <span className={`flex items-center gap-[3px] ml-1 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
                                     {totalHarvestCost} {<ChargeIcon iconColor={theme == 'dark' ? "#cacaca" : "#4C4C4C"} />}

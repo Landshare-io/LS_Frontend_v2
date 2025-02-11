@@ -122,7 +122,7 @@ export default function FirepitUpgrade({
       <div className="bg-[#fff]">
         <div className="flex flex-col items-center bg-gradient-to-b from-[#689D77] to-[#3a9c5652]">
           <div className="bg-[#00000030] w-full flex justify-center h-[49px] py-[8px]">
-            <span className="text-[16px] text-white font-semibold">{item.name}</span>
+            <span className="text-[20px] text-white font-semibold">{item.name}</span>
           </div>
           <div className="flex flex-col w-full h-[210px] relative">
             <Image

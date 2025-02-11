@@ -84,7 +84,7 @@ export default function FireplaceUpgrade({
       <div className="bg-[#fff]">
         <div className="flex flex-col items-center bg-gradient-to-b from-[#68819D] to-[#4da3a942]">
           <div className="bg-[#00000030] w-full flex justify-center h-[49px] py-[8px]">
-            <span className="text-[16px] text-white font-semibold">{item.title}</span>
+            <span className="text-[20px] text-white font-semibold">{item.title}</span>
           </div>
           <div className="flex flex-col w-full h-[210px] relative">
             <Image
@@ -110,7 +110,7 @@ export default function FireplaceUpgrade({
             )}
           </div>
         </div>
-        <div className="bg-[#6f8e9d66] py-[13px] px-[12px]">
+        <div className="bg-[#6f8e9d66] py-[13px] px-[12px] dark:bg-[#48555b]">
           <div className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary ${colors[colorType]}`}>
             <div className="flex flex-col px-[10px]">
               <div className="flex justify-start items-center pt-[12px]">

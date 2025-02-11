@@ -208,7 +208,7 @@ export default function YieldUpgrade({
             className={`flex flex-col items-center bg-gradient-to-b ${type == 'production' ? 'from-[#68819D] to-[#4da3a942]' : 'from-[#689D77] to-[#3a9c5652]'}`}
           >
             <div className="bg-[#00000033] w-full flex justify-center h-[49px] py-[8px]">
-              <span className="text-[16px] text-white font-semibold">{item.name}</span>
+              <span className="text-[20px] text-white font-semibold">{item.name}</span>
             </div>
             <div className="flex flex-col w-full h-[210px] relative">
               <Image
@@ -326,7 +326,7 @@ export default function YieldUpgrade({
               )}
             </div>
           </div>
-          <div className="bg-[#6f8e9d66] px-[12px] py-[13px]">
+          <div className="bg-[#6f8e9d66] px-[12px] py-[13px] dark:bg-[#48555b]">
             {type == "yield" ? (
               <YieldUpgradeCost
                 color={colors[colorType]}
@@ -363,8 +363,8 @@ export default function YieldUpgrade({
         onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
         style={customModalStyles}
       >
-        <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 pt-1 text-[14px]">
+        <div className="flex min-h-full justify-center items-center dark:bg-[#3c3c3c] dark:text-white">
+          <span className="my-2 mx-3 text-[14px]">
             {descriptions[item.name] ?? ""}
           </span>
         </div>

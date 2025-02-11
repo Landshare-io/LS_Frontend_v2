@@ -645,7 +645,7 @@ export default function NftDetails({
         isOpen={durabilityModal}
         onRequestClose={() => { setDurabilityModal(!durabilityModal), document.body.classList.remove('modal-open'); }}
       >
-        <div className="flex min-h-full justify-center items-center">
+        <div className="flex min-h-full justify-center items-center dark:bg-[#3c3c3c] dark:text-white">
           <span className="my-2 mx-3 pt-1 text-[14px] font-normal">
             Durability determines the current repair status of your
             property. Your yield multiplier for a given period of time is
@@ -670,7 +670,7 @@ export default function NftDetails({
         isOpen={showHarvestConfirm}
         onRequestClose={() => { setShowHarvestConfirm(!showHarvestConfirm), document.body.classList.remove('modal-open'); }}
       >
-        <div className="max-w-[300px] p-[20px] bg-third">
+        <div className="max-w-[300px] p-[20px] bg-third dark:bg-[#3c3c3c] dark:text-white">
           <div className="text-[15px] text-center text-text-primary">
             Rewards will not be harvested due to negative NFT Credit balance. Continue withdrawal?
           </div>
@@ -695,7 +695,7 @@ export default function NftDetails({
         isOpen={showWithdrawAlert}
         onRequestClose={() => { setShowWithdrawAlert(!showWithdrawAlert), document.body.classList.remove('modal-open'); }}
       >
-        <div className="max-w-[300px] p-[20px] bg-third">
+        <div className="max-w-[300px] p-[20px] bg-third dark:bg-[#3c3c3c] dark:text-white">
           <div className="text-[15px] text-center text-text-primary">
             Withdrawing will reset all rewards. Continue?
           </div>
@@ -727,7 +727,7 @@ export default function NftDetails({
         isOpen={showOnSaleAlert}
         onRequestClose={() => { setShowOnSaleAlert(!showOnSaleAlert), document.body.classList.remove('modal-open'); }}
       >
-        <div className="max-w-[300px] p-[20px] bg-third">
+        <div className="max-w-[300px] p-[20px] bg-third dark:bg-[#3c3c3c] dark:text-white">
           <div className="text-[15px] text-center text-text-primary">
             Unharvested tokens will be sold with this house
           </div>

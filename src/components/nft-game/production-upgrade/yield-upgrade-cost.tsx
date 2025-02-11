@@ -92,7 +92,7 @@ export default function YieldUpgradeCost({
   })
 
   return (
-    <div className={`flex flex-col w-full h-[130px] rounded-[25px] !bg-[#ffffff] relative pt-[12px] ${color}`}>
+    <div className={`flex flex-col w-full h-[130px] rounded-[25px] !bg-[#ffffff] relative pt-[12px] dark:!bg-[#2e2e2e] ${color}`}>
       <div className='flex flex-col text-[14px] px-[10px]'>
         {((colorType < 2) || (btnLabel != 'SALVAGE')) ? (
           <div className='flex items-center'>

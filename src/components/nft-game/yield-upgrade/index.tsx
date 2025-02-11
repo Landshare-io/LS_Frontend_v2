@@ -119,7 +119,7 @@ export default function YieldUpgrades({
       {house.yieldUpgrades.length < 1 ? (
         <></>
       ) : (
-        <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between" style={{ rowGap: "45px" }}>
+        <div className="justify-center flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)]" style={{ rowGap: "45px" }}>
           {yieldUpdgradesData.map((item: any) => {
             let yieldItem, havingItem
             if (item.title == 'Garden') {
@@ -151,7 +151,7 @@ export default function YieldUpgrades({
               return (
                 <div
                   key={`yield-upgrade-${yieldItem.id}`}
-                  className="w-[257px] mr-[10px] sm:mr-[40px]"
+                  className="w-[257px] mr-[10px] sm:mr-[20px] sm:ml-[20px]"
                 >
                   <FirepitUpgrade
                     item={{
@@ -180,7 +180,7 @@ export default function YieldUpgrades({
               return (
                 <div
                   key={`yield-upgrade-${yieldItem.id}`}
-                  className="w-[257px] mr-[10px] sm:mr-[40px]"
+                  className="w-[257px] mr-[10px] sm:mr-[20px] sm:ml-[20px]"
                 >
                   <YieldUpgrade
                     item={{
