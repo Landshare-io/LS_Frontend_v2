@@ -2,6 +2,7 @@ import React from "react";
 import Faq from "../common/faq";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import { MdQuestionMark } from "react-icons/md";
 
 const data = {
   title: "FAQ",
@@ -78,7 +79,13 @@ export default function HouseFaqs() {
     arrowColor: theme == "dark" ? "#f1f1f1" : "#0a0a0a",
   };
   return (
-    <div className="max-w-[1200px] m-auto py-[50px] space-y-4 px-[10px]">
+    <div className="max-w-[1200px] m-auto py-[50px] space-y-2 px-[10px]">
+      <span className="w-fit h-[30px] rounded-[20px] flex gap-1 justify-center items-center font-medium text-[12px] px-2 py-1  tracking-[0.02em] text-primary-green bg-secondary  dark:text-text-fourth">
+        <div className="rounded-full bg-primary flex items-center justify-center h-full aspect-square">
+          <MdQuestionMark />
+        </div>
+        FAQs
+      </span>
       <h2
         className={`text-text-primary leading-normal text-[18px] md:text-[32px] ${BOLD_INTER_TIGHT.className}`}
       >
