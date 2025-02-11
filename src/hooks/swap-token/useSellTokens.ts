@@ -153,20 +153,22 @@ export default function useSellTokens(chainId: number, address: Address | undefi
   }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess, isUsdcApproveError])
 
   useEffect(() => {
-    if (isError) {
-      setScreenLoadingStatus("Transaction Failed.")
-    } else if (sellTx) {
-      if (sellStatusData) {
-        if (sellSuccess) {
-          rwaBalanceRefetch()
-          usdtBalanceRefetch()
-          landBalanceRefetch()
-          setScreenLoadingStatus("Transaction Complete.")
-        } else {
-          setScreenLoadingStatus("Transaction Failed.")
+    (async () => {
+      if (isError) {
+        setScreenLoadingStatus("Transaction Failed.")
+      } else if (sellTx) {
+        if (sellStatusData) {
+          if (sellSuccess) {
+            await rwaBalanceRefetch()
+            await usdtBalanceRefetch()
+            await landBalanceRefetch()
+            setScreenLoadingStatus("Transaction Complete.")
+          } else {
+            setScreenLoadingStatus("Transaction Failed.")
+          }
         }
       }
-    }
+    })()
   }, [sellTx, sellStatusData, sellSuccess, isError])
 
   const sellTokens = async () => {

@@ -79,6 +79,7 @@ export default function SwapToken() {
     token: RWA_CONTRACT_ADDRESS[chainId],
     chainId: chainId,
   }) as { data: any };
+  console.log('========balance', balance)
 
   const { data: USDCBalance } = useBalance({
     address: address,
@@ -709,9 +710,9 @@ export default function SwapToken() {
                           RWATokenAmount < 1 ||
                           RWATokenAmount === 0 ||
                           RWATokenAmount > parseFloat(balance?.formatted) ||
-                          Number(
-                            formatEther(landFeeAmount ? landFeeAmount : 0)
-                          ) > parseFloat(landBalance?.formatted) ||
+                          (chainId == bsc.id ? 
+                            (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted)) 
+                            : (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > Number(usdcAmount.toString()))) ||
                           Number(saleLimit) <
                             Number(
                               usdcAmount == 0 ? 0 : usdcAmount.toString()
@@ -727,8 +728,9 @@ export default function SwapToken() {
                         {RWATokenAmount && usdcAmount && landFeeAmount
                           ? RWATokenAmount > parseFloat(balance?.formatted)
                             ? "Insufficient RWA Balance"
-                            : Number(formatEther(landFeeAmount)) >
-                              parseFloat(landBalance?.formatted)
+                            : (chainId == bsc.id ? 
+                              Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted) 
+                              : Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > Number(usdcAmount.toString()))
                             ? "Insufficient LAND Balance"
                             : Number(saleLimit) <
                               Number(
