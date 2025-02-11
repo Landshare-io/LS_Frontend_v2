@@ -46,7 +46,7 @@ const StakingPage: NextPage = () => {
   const { theme } = useGlobalContext();
   const { isConnected } = useAccount()
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
-  const { price } = useGetPrice(chainId)
+  const { price } = useGetPrice(chainId);
 
   const [selectedVault, useSelectedVault] = useState(0);
   const [showModal, setShowModal] = useState(false);

@@ -68,7 +68,6 @@ export default function Usdtvault({
   const { isConnected, address } = useAccount()
   const chainId = useChainId()
   const { switchChain } = useSwitchChain()
-  const isVaultsLoading = false // need to check
 
   const {
     depositVault,
@@ -76,15 +75,15 @@ export default function Usdtvault({
     approveVault
   } = useUsdtVault(chainId, address)
 
-  const { data: balance } = useBalanceOfRwaLp(chainId, address) as { data: BigNumberish }
-  const { data: contractLPUSDTBalance } = useBalanceOfUsdt(chainId, RWA_LP_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
-  const { data: contractLPLSRWABalance } = useBalanceOfRwa(chainId, RWA_LP_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
-  const { data: amountLSRWALPInVault } = useBalanceOfRwaLp(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
-  const { data: userBalance } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish] }
+  const { data: balance, isLoading: isBalanceOfRwaLpLoading } = useBalanceOfRwaLp(chainId, address) as { data: BigNumberish, isLoading: boolean }
+  const { data: contractLPUSDTBalance, isLoading: isBalanceOfUsdtLoading } = useBalanceOfUsdt(chainId, RWA_LP_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
+  const { data: contractLPLSRWABalance, isLoading: isBalanceofRwaLoading } = useBalanceOfRwa(chainId, RWA_LP_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
+  const { data: amountLSRWALPInVault, isLoading: isBalanceOfRwaLpMasterLoading } = useBalanceOfRwaLp(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
+  const { data: userBalance, isLoading: isUserInfoLoading } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
   const rwaTokenPrice = useGetRwaPrice(chainId) as BigNumberish
   const LSRWALPTotalSupply = useTotalSupplyOfRwaLp(chainId) as BigNumberish
-  const { data: rewardsLSRWALP } = usePendingLand({ chainId, pendingLandId: 4, address }) as { data: BigNumberish }
-  const { data: LSRWALPAllowance } = useAllowanceOfRwaLp(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
+  const { data: rewardsLSRWALP, isLoading: isPendingLandLoading } = usePendingLand({ chainId, pendingLandId: 4, address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: LSRWALPAllowance, isLoading: isAllowanceLoading } = useAllowanceOfRwaLp(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
   const { price } = useGetPrice(chainId)
 
   const [inputValue, setInputValue] = useState("");
@@ -209,6 +208,8 @@ export default function Usdtvault({
     setIsLPVault(false)
     setIsShowUsdPrice(true);
   }
+
+  const isVaultsLoading = isBalanceOfRwaLpLoading || isBalanceOfUsdtLoading || isBalanceOfRwaLpLoading || isBalanceOfRwaLpMasterLoading || isUserInfoLoading || isPendingLandLoading || isAllowanceLoading;
 
   return (
     <div className="w-full max-w-[880px] m-auto">
