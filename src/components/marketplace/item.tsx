@@ -171,7 +171,7 @@ export default function MarketplaceItem({
               product.seller.toLowerCase() == address?.toString().toLowerCase() ||
               product.state == 1
             }
-            className={`w-[115px] h-[40px] text-[#fff] hover:text-primary-green bg-primary-green hover:bg-transparent border-[2px] border-primary-green flex items-center justify-center rounded-[24px] 
+            className={`dark:text-[#fff] w-[115px] h-[40px] text-[#fff] hover:text-primary-green bg-primary-green hover:bg-transparent border-[2px] border-primary-green flex items-center justify-center rounded-[24px] 
             ${product.seller.toLowerCase() == address?.toString().toLowerCase() ?
                 (product.state == 1
                 ? "!bg-[#8f8f8f] !border-[#8f8f8f]"

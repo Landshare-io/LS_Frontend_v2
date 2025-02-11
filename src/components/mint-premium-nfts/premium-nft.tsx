@@ -88,7 +88,7 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
             </div>
             <Button
               onClick={() => onSubmit()}
-              className={`w-full bottom-[-1px] h-[45px] text-[18px] bg-[#61cd81] font-semibold absolute rounded-[20px] ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
+              className={`border-[1px] border-[#61cd81] w-full bottom-[-1px] h-[45px] text-[18px] bg-[#61cd81] font-semibold absolute rounded-[20px] ${(loader == premiumNft.name) ? 'flex justify-center items-center' : ''}`}
               textClassName='text-[#fff]'
               disabled
             >
