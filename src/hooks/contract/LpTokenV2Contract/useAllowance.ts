@@ -14,11 +14,11 @@ export default function useAllowance(chainId: number, approver: Address | undefi
   })
 
   if (typeof approver == 'undefined' || typeof to == 'undefined') return { data: 0, refetch }
-  if (isLoading) return { data: 0, refetch }
+  if (isLoading) return { data: 0, refetch, isLoading }
   if (isError) {
     // console.log('Fetching LpTokenV2Contract allowance error', error)
-    return { data: 0, refetch }
+    return { data: 0, isLoading, refetch }
   }
 
-  return { data, refetch }
+  return { data, isLoading, refetch }
 }
