@@ -119,7 +119,7 @@ export default function YieldUpgrades({
       {house.yieldUpgrades.length < 1 ? (
         <></>
       ) : (
-        <div className="justify-center flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)]" style={{ rowGap: "45px" }}>
+        <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between !gap-y-[45px]">
           {yieldUpdgradesData.map((item: any) => {
             let yieldItem, havingItem
             if (item.title == 'Garden') {
