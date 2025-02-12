@@ -41,6 +41,7 @@ module.exports = {
         lg: "1280px",
         xl: "1440px",
         xxl: "1680px",
+        custommd: "900px",
       },
       fontFamily: {
         inter: ["var(--font-inter)"],

@@ -39,7 +39,7 @@ export default function NftMint() {
           <ReactLoading type="bars" color="#61cd81" />
         </div>
       ) : (
-        <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 text-text-primary">
+        <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 text-text-primary xl:px-[40px] xl:py-[40px] lg:px-[80px] lg:py-[30px] md:px-[40px] md:py-[30px] sm:px-[60px] sm:py-[10px]">
           {(!isConnected || !isAuthenticated) ? (
             <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
               <ConnectWallet />

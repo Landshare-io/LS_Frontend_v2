@@ -51,7 +51,7 @@ export default function ProductionFacilities() {
           </Slider>
         </div>
       )}
-      <div className="mb-5 hidden pb-[20px] md:grid md:grid-cols-[minmax(300px,max-content),minmax(300px,max-content)] justify-between gap-[50px] lg:md:grid-cols-[minmax(300px,max-content),minmax(300px,max-content),minmax(300px,max-content)]">
+      <div className="mb-5 hidden pb-[20px] md:grid md:grid-cols-[minmax(300px,max-content),minmax(300px,max-content)] justify-between gap-y-[50px] lg:md:grid-cols-[minmax(300px,max-content),minmax(300px,max-content),minmax(300px,max-content)]">
         {(facilities.length > 0) && facilities.sort((a, b) => a.sortingId - b.sortingId).map((facility, type) => (
           <div key={`facility-levels-${type}`}>
             <Facility

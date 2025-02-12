@@ -149,7 +149,7 @@ export default function NftResource() {
   return (
     <>
       <section className="bg-primary text-text-primary">
-        <div className="max-w-[1200px] px-0 m-auto flex flex-col pt-0">
+        <div className="max-w-[1200px] px-0 m-auto flex flex-col pt-0 xl:px-[40px] xl:py-[40px] lg:px-[80px] lg:py-[30px] md:px-[40px] md:py-[30px] sm:px-[60px] sm:py-[10px]">
           {(!isConnected) ? (
             <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
               <ConnectWallet />
@@ -164,9 +164,10 @@ export default function NftResource() {
               >
                 <ReactLoading type="bars" color="#61cd81" />
               </div>
-              <div
+              {/* <div
                 className={`flex pb-[20px] mlg:grid mlg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] xl:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] mb-5 ${!isPageLoading ? "grid" : "hidden"}`}
-              >
+              > */}
+              <div className="w-full flex gap-[20px] overflow-x-auto pb-[10px] mb-[70px] mlg:grid mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] my-5">
                 <ResourceCard
                   title="LAND TOKENS"
                   subTitle={`Your Balance: ${numeral(Number(formatEther(landTokenBalance.toString())))

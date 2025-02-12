@@ -58,7 +58,7 @@ export default function MarketplacePage() {
 
   return (
     <>
-      <div className="relative max-w-[1200px] m-auto pt-0">
+      <div className="relative max-w-[1200px] m-auto pt-0 xl:px-[40px] xl:py-[40px] lg:px-[80px] lg:py-[30px] md:px-[40px] md:py-[30px] sm:px-[60px] sm:py-[10px]">
         {(!isLoginLoading && !isConnected && isItemsLoading == false) ? (
           <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
             <ConnectWallet />

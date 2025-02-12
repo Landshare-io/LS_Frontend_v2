@@ -342,7 +342,7 @@ export default function InventoryPage() {
           </div>
         ) : (
           <>
-            <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px]">
+            <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px] xl:px-[40px] xl:py-[40px] lg:px-[80px] lg:py-[30px] md:px-[40px] md:py-[30px] sm:px-[60px] sm:py-[10px]">
               {(!isLoginLoading && (!isConnected || !isAuthenticated)) ? (
                 <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
                   <ConnectWallet />
@@ -603,7 +603,7 @@ export default function InventoryPage() {
                             </div>
                           </div>
                           <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Production Facilities</span>
-                          <div className="border-b-[1px] border-[#00000050] block w-full mb-4 my-3"></div>
+                          <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
                           <div className="flex flex-col w-full">
                             <ProductionFacilities />
                           </div>
