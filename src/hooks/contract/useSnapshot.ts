@@ -6,7 +6,7 @@ import {
   useAccount
 } from "wagmi";
 import { useBlockNumber } from 'wagmi'
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 
 const client = new snapshotjs.Client712("https://hub.snapshot.org");
 

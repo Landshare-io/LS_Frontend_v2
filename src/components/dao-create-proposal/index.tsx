@@ -5,7 +5,7 @@ import DaoSelectProposal from "../dao-select-proposal";
 import DaoProposalContent from "../dao-proposal-content";
 import ProposalBuilder from "./proposal-builder";
 import useSnapshot from "../../hooks/contract/useSnapshot";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import txHashBuilder from "./tx-hash-builder";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import closeIcon from "../../../public/icons/close.svg";

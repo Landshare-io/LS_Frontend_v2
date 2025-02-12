@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "./nft-game-axios";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 
 let houseState = {
   type: "",

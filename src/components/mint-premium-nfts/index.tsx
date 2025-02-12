@@ -5,7 +5,7 @@ import PremiumNft from "./premium-nft";
 import marble from "../../../public/img/marketplace-property/marble.png";
 import pool from "../../../public/img/marketplace-property/pool.png";
 import windfarm from "../../../public/img/marketplace-property/tile.png";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { getDependencyItemInstances } from "../../utils/helpers/validator";
 import useGetGameItems from "../../hooks/nft-game/axios/useGetGameItems";
 import useTotalSupply from "../../hooks/contract/PremiumNftContract/useTotalSupply";

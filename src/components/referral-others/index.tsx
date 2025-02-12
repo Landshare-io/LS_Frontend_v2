@@ -1,4 +1,4 @@
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
 import { IoCopy } from "react-icons/io5";
@@ -11,7 +11,7 @@ import { config } from "../../wagmi";
 import Button from "../common/button";
 
 export default function ReferralOthers() {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const { address } = useAccount();
   const [showCheck, setShowCheck] = useState(false);
   const [showCustomizeModal, setShowCustomizeModal] = useState<boolean>(false);

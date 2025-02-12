@@ -5,7 +5,7 @@ import { useChainId, useAccount } from "wagmi";
 import ReactLoading from "react-loading";
 import { bsc, polygon } from "viem/chains";
 import Collapse from "../common/collapse";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import ConnectWallet from "../connect-wallet";
 import Timer from "../common/timer";

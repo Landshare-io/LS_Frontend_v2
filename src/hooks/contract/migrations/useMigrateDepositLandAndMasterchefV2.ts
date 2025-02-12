@@ -7,7 +7,7 @@ import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
 import useBalanceOfLpTokenV2 from "../LpTokenV2Contract/useBalanceOf";
 import useDepositAutoVaultV3 from "../AutoVaultV3Contract/useDeposit";
 import useDepositMastchef from "../MasterchefContract/useDeposit";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 let isSuccessDepositState = false

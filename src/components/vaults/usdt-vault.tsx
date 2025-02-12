@@ -16,7 +16,7 @@ import numeral from "numeral";
 import Tooltip from "../common/tooltip";
 import Collapse from "../common/collapse";
 import ConnectWallet from "../connect-wallet";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import useUsdtVault from "../../hooks/contract/vault/useUsdtVault";
 import useBalanceOfRwaLp from "../../hooks/contract/RwaLpTokenContract/useBalanceOf";

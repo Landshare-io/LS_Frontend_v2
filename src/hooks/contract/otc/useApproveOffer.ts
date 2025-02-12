@@ -4,7 +4,7 @@ import { BigNumberish } from "ethers"
 import { bsc } from "viem/chains";
 import useApprove from "../AssetTokenContract/useApprove"
 import useApproveOfMd from "../AssetMDTokenContract/useApprove"
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { SWAPCAT_ADDRESS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments"
 
 export default function useApproveOffer(buyOffer: Function, setIsSwapping: Function) {

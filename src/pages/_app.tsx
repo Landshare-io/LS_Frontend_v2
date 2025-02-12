@@ -16,6 +16,7 @@ import LoadingStatus from "../components/common/loading-status";
 import AlertModal from "../components/common/modals/alert";
 import { config } from "../wagmi";
 import { Fuul } from "@fuul/sdk";
+import { ThemeProvider } from "next-themes"
 
 const interTight = Inter_Tight({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -37,41 +38,43 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <main className={`${interTight.variable} font-inter`}>
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={client}>
-          <RainbowKitProvider
-            modalSize="compact"
-            theme={lightTheme({
-              fontStack: "system",
-              // fonts: {
-              //   body: `'Inter Tight', sans-serif`,
-              // },
-              // colors: {
-              //   closeButtonBackground: "#61cd81",
-              //   connectButtonBackground: "#61cd81",
-              // },
-              ...lightTheme.accentColors.green,
-              accentColorForeground: "white",
-            })}
-            appInfo={{
-              appName: "Landshare",
-              learnMoreUrl: "https://learnaboutcryptowallets.example",
-            }}
-          >
-            <GlobalProvider>
-              <StoreProvider>
-                <Header />
-                <Component {...pageProps} />
-                <Footer />
-                <LoadingStatus />
-                <AlertModal />
-              </StoreProvider>
-            </GlobalProvider>
-          </RainbowKitProvider>
-        </QueryClientProvider>
-      </WagmiProvider>
-    </main>
+    <ThemeProvider attribute="class">
+      <main className={`${interTight.variable} font-inter`}>
+        <WagmiProvider config={config}>
+          <QueryClientProvider client={client}>
+            <RainbowKitProvider
+              modalSize="compact"
+              theme={lightTheme({
+                fontStack: "system",
+                // fonts: {
+                //   body: `'Inter Tight', sans-serif`,
+                // },
+                // colors: {
+                //   closeButtonBackground: "#61cd81",
+                //   connectButtonBackground: "#61cd81",
+                // },
+                ...lightTheme.accentColors.green,
+                accentColorForeground: "white",
+              })}
+              appInfo={{
+                appName: "Landshare",
+                learnMoreUrl: "https://learnaboutcryptowallets.example",
+              }}
+            >
+              <GlobalProvider>
+                <StoreProvider>
+                  <Header />
+                  <Component {...pageProps} />
+                  <Footer />
+                  <LoadingStatus />
+                  <AlertModal />
+                </StoreProvider>
+              </GlobalProvider>
+            </RainbowKitProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      </main>
+    </ThemeProvider>
   );
 }
 

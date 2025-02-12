@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useChainId, useAccount } from "wagmi";
 import ReactModal from "react-modal";
 import { BigNumberish } from "ethers";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import YieldUpgrade from "../production-upgrade/yield-upgrade";
 import FirepitUpgrade from "./firepit-upgrade";
 import {

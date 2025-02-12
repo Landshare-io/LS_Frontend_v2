@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useWaitForTransactionReceipt } from "wagmi";
 import { formatEther, BigNumberish } from "ethers";
 import { Address } from "viem";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import useDeposit from "../MasterchefContract/useDeposit";
 import useWithdraw from "../MasterchefContract/useWithdraw";
 import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";

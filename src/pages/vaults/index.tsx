@@ -13,7 +13,7 @@ import ManualVault from "../../components/vaults/manual-vault";
 import AutoVault from "../../components/vaults/auto-vault";
 import LPVault from "../../components/vaults/lp-vault";
 import Usdtvault from "../../components/vaults/usdt-vault";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import useGetPrice from "../../hooks/get-apy/useGetPrice";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import coinStack from "../../../public/icons/coin-stacked.svg"
@@ -43,7 +43,7 @@ const breadcrumbItems = [
 const VAULT_MAJOR_CHAINS = MAJOR_WORK_CHAINS['/vaults']['auto']
 
 const StakingPage: NextPage = () => {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const { isConnected } = useAccount()
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
   const { price } = useGetPrice(chainId);

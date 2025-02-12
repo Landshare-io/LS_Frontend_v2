@@ -5,7 +5,7 @@ import {
   useAccount,
   useWaitForTransactionReceipt
 } from "wagmi";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { BigNumberish } from "ethers";
 import useBalanceOf from "../LandTokenContract/useBalanceOf";
 import useApprove from "../LandTokenV1Contract/useApprove";

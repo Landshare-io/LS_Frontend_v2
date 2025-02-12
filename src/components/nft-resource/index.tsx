@@ -9,7 +9,7 @@ import backendAxios from "../../hooks/nft-game/axios/nft-game-axios";
 import { ChargeIcon, LumberIcon } from "../common/icons/nft";
 import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useSetPremiumNftSaleHandler from "../../hooks/nft-game/nft-resource/useSetPremiumNftSaleHandler";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import Topbar from "../common/topbar";
 import YouOwn from "../common/you-own";
 import ResourceCard from "./resource-card";

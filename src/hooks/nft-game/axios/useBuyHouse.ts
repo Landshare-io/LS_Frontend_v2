@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Address, parseEther } from "viem";
 import { useWaitForTransactionReceipt, useSendTransaction } from "wagmi";
 import axios from "./nft-game-axios";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import useApprove from "../../contract/LandTokenContract/useApprove";
 import useBalanceOf from "../../contract/LandTokenContract/useBalanceOf";
 import { ADMIN_WALLET_ADDRESS, PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";

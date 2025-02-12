@@ -8,7 +8,7 @@ import useBalanceOf from "../LandTokenContract/useBalanceOf";
 import useApproveLandToken from "../LandTokenContract/useApprove";
 import useBalanceOfLpTokenV2 from "../LpTokenV2Contract/useBalanceOf";
 import useApproveOfLpTokenV2 from "../LpTokenV2Contract/useApprove";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 let isSuccessApproveState = false

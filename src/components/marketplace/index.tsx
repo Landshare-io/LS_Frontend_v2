@@ -7,7 +7,7 @@ import ConnectWallet from "../connect-wallet";
 import { SelectarrowIcon } from "../common/icons/index";
 import useGetMarketplaceItems from "../../hooks/nft-game/axios/useGetMarketplaceItems";
 import useLogin from "../../hooks/nft-game/axios/useLogin";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 export default function MarketplacePage() {

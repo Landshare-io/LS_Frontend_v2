@@ -1,4 +1,4 @@
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 
 interface ToggleSwitchProps {
   isSale: boolean

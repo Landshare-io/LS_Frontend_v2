@@ -9,7 +9,7 @@ import { useAccount, useBalance, useChainId } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { TOKENS } from "../../config/constants/page-data";
 import { TOKEN_TYPE } from "../../utils/type";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import Button from "../common/button";
 import ToggleButton from "../common/toggle-button";
 import ConnectWallet from "../connect-wallet";
@@ -171,7 +171,7 @@ export default function SwapToken() {
     }
   }, [isSTAPShow]);
 
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
 
   const customModalStyles = {
     content: {

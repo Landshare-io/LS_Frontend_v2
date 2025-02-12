@@ -6,7 +6,7 @@ import useSetApprovalForAll from "../../contract/PremiumNftContract/useSetApprov
 import useIsApprovedForAll from "../../contract/PremiumNftContract/useIsApproveForAll";
 import useApprove from "../../contract/PremiumNftContract/useApprove";
 import useGetPremiumNfts from "../premium-nfts/useGetPremiumNfts";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { PREMIUM_NFT_CONTRACT_ADDRESS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useSetPremiumNftSaleHandler(chainId: number, address: Address | undefined) {

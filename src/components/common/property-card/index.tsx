@@ -6,7 +6,7 @@ import IconBathroom from "../../../../public/icons/bathroom.svg";
 import IconLocation from "../../../../public/icons/location.svg";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import useGetPropertyValues from "../../../hooks/contract/APIConsumerContract/useGetPropertyValues";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { BigNumberish, formatEther } from "ethers";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -16,7 +16,7 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({ property }: PropertyCardProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const chainId = useChainId();
   const router = useRouter();
   const {

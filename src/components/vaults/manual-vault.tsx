@@ -6,7 +6,7 @@ import Image from "next/image";
 import Collapse from "../common/collapse";
 import Tooltip from "../common/tooltip";
 import ConnectWallet from "../connect-wallet";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import useVaultBalanceManual from "../../hooks/contract/vault/useVaultBalanceManual";
 import useTotalStaked from "../../hooks/contract/MasterchefContract/useTotalStaked";

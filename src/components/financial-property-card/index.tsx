@@ -8,7 +8,7 @@ import capRate from "../../../public/icons/dollars.svg";
 import Est from "../../../public/icons/raised.svg";
 import myRwa from "../../../public/icons/coin-stacked-small.svg";
 import burnFire from "../../../public/icons/burn-fire.svg";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { StringKeyStringValueObject } from "../../utils/type";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -53,7 +53,7 @@ export default function FinancialPropertyCard({
   className,
 }: FinancialPropertyCardProps) {
   const [currentLoading, setCurrentLoading] = useState(false);
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   useEffect(() => {
     setCurrentLoading(loading);
   }, [loading]);

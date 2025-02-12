@@ -16,7 +16,7 @@ import useWithdrawAutoVaultV1 from "../AutoLandV1Contract/useWithdraw";
 import useWithdrawAutoVaultV2 from "../AutoLandV2Contract/useWithdraw";
 import useWithdrawLandTokenStakeV2 from "../LandTokenStakeV2/useWithdraw";
 import useWithdrawLandTokenStakeV3 from "../LandTokenStakeV3/useWithdraw";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 let isSuccessWithdrawState = false

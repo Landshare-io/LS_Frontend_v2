@@ -7,7 +7,7 @@ import {
 import { BigNumberish } from "ethers";
 import { bsc } from "viem/chains";
 import { Address, formatEther } from "viem";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import useDeposit from "../AutoVaultV3Contract/useDeposit";
 import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
 import useUserInfo from "../MasterchefContract/useUserInfo";

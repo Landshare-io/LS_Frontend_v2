@@ -7,7 +7,7 @@ import {
   useAccount,
   useWaitForTransactionReceipt
 } from "wagmi";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
 import useAllowanceOfLandToken from "../LandTokenContract/useAllowance";
 import useApproveLandToken from "../LandTokenContract/useApprove";

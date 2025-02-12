@@ -3,6 +3,7 @@ import ReactModal from "react-modal";
 import HarvestCards from "./harvest-cards";
 
 import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import useGetGameItems from "../../../hooks/nft-game/axios/useGetGameItems";
 import useGetItem from "../../../hooks/nft-game/axios/useGetItem";
 import useCheckHasItem from "../../../hooks/nft-game/axios/useCheckHasItem";
@@ -21,7 +22,7 @@ export default function RewardHarvest({
   selectedResource,
   setSelectedResource
 }: RewardHarvestProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const [isLoading, setIsLoading] = useState({ type: -1, loading: false });
   const { notifyError } = useGlobalContext();
   const { harvestCost } = useGetSetting();

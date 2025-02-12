@@ -12,7 +12,7 @@ import {
 } from "../../common/icons/nft";
 import Button from "../../common/button";
 import { OpenModalICon } from "../../common/icons/index";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 
 interface FireplaceUpgradeProps {
   item: any;
@@ -46,7 +46,7 @@ export default function FireplaceUpgrade({
     "border-[2px] border-[#f9c710] bg-[#f9c710] disabled:!bg-[#f9c710]",
     "border-[2px] border-[#1eceae] bg-[#1eceae] disabled:!bg-[#1eceae]",
   ];
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const activeIcons = [
     <ChargeIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#283d26"} />,
     <LumberIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#283d26"} />,
