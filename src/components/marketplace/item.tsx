@@ -12,20 +12,78 @@ import useCheckHasLandscaping from "../../hooks/nft-game/axios/useCheckHasLandsc
 import useCheckHasGarden from "../../hooks/nft-game/axios/useCheckHasGarden";
 import useGetPrice from "../../hooks/get-apy/useGetPrice";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
-import HouseNft from "../../../public/img/house/house_big.bmp";
-import HouseRareNft from "../../../public/img/house/house_rare_big.bmp";
-import HouseLandNft from "../../../public/img/house/house_land_big.bmp";
-import HouseLandRareNft from "../../../public/img/house/house_land_rare_big.bmp";
-import HouseGardenNft from "../../../public/img/house/house_garden_big.bmp";
-import HouseGardenRareNft from "../../../public/img/house/house_garden_rare_big.bmp";
-import HouseBNft from "../../../public/img/house/houseB.bmp";
-import HouseBRareNft from "../../../public/img/house/houseB_rare.bmp";
-import HouseBLandNft from "../../../public/img/house/houseB_land.bmp";
-import HouseBLandRareNft from "../../../public/img/house/houseB_land_rare.bmp";
-import HouseBGardenNft from "../../../public/img/house/houseB_garden.bmp";
-import HouseBGardenRareNft from "../../../public/img/house/houseB_garden_rare.bmp";
-import HouseCNft from "../../../public/img/house/houseC.bmp"
-import HouseCRareNft from "../../../public/img/house/houseC_rare.bmp"
+
+const HouseNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/house_big.bmp",
+  width: "520",
+  height: "520"
+};
+const HouseRareNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/house_rare_big.bmp",
+  width: "520",
+  height: "520"
+};
+const HouseLandNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/house_land_big.bmp",
+  width: "520",
+  height: "520"
+};
+const HouseLandRareNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/house_land_rare_big.bmp",
+  width: "520",
+  height: "520"
+};
+const HouseGardenNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/house_garden_big.bmp",
+  width: "520",
+  height: "520"
+};
+const HouseGardenRareNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/house_garden_rare_big.bmp",
+  width: "520",
+  height: "520"
+};
+
+const HouseBNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/houseB.bmp",
+  width: "1920",
+  height: "1920"
+};
+const HouseBRareNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/houseB_rare.bmp",
+  width: "1920",
+  height: "1920"
+};
+const HouseBLandNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/houseB_land.bmp",
+  width: "1920",
+  height: "1920"
+};
+const HouseBLandRareNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/houseB_land_rare.bmp",
+  width: "1920",
+  height: "1920"
+};
+const HouseBGardenNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/houseB_garden.bmp",
+  width: "1920",
+  height: "1920"
+};
+const HouseBGardenRareNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/houseB_garden_rare.bmp",
+  width: "1920",
+  height: "1920"
+};
+const HouseCNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/houseC.bmp",
+  width: "1920",
+  height: "1920"
+};
+const HouseCRareNft = {
+  src: "https://crtstorage.s3.us-east-1.amazonaws.com/house/houseC_rare.bmp",
+  width: "1920",
+  height: "1920"
+};
 
 interface MarketplaceItemProps {
   product: any;
@@ -45,7 +103,6 @@ export default function MarketplaceItem({
   const hasGarden = useCheckHasGarden(product.id)
   const { price } = useGetPrice(chainId)
   const { buyProduct } = useBuyHouse(chainId, product, address, setIsLoading, getProducts);
-
   useEffect(() => {
     if (price) {
       setTokenPriceUSD(numeral(Number(price)).format("0.[000]"))
@@ -113,6 +170,7 @@ export default function MarketplaceItem({
         <Image
           src={getHouseImageUrl()}
           alt="marketplace-image-house"
+          layout="intrinsic"
           className="w-full h-full"
         />
      
