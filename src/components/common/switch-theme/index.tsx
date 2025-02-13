@@ -1,4 +1,5 @@
 import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 interface SwitchThemeProps {
   className?: string
@@ -7,8 +8,14 @@ interface SwitchThemeProps {
 export default function SwitchTheme({ className }: SwitchThemeProps) {
   const { theme, setTheme } = useTheme();
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <button
+    mounted && <button
       className={`theme-switch ${theme} ${theme == 'dark' ? "bg-[#345b6f]" : "bg-[#e9c46a]"} ml-4 mt-2.5 ${className}`}
       type="button"
       aria-pressed="true"

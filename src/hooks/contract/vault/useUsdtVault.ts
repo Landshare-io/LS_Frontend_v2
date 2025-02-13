@@ -3,7 +3,7 @@ import { useWaitForTransactionReceipt } from "wagmi";
 import { BigNumberish } from "ethers";
 import { Address } from "viem";
 import { bsc } from "viem/chains";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import useDeposit from "../MasterchefContract/useDeposit";
 import useWithdraw from "../MasterchefContract/useWithdraw";
 import useBalanceOfRwaLp from "../RwaLpTokenContract/useBalanceOf";

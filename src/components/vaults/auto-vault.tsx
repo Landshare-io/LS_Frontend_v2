@@ -53,6 +53,7 @@ import smallicon from "../../../public/icons/rotate-black.svg"
 import smallicondark from "../../../public/icons/rotate-dark.svg"
 import Tooltip from "../common/tooltip";
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useGlobalContext } from "../../context/GlobalContext";
 
 const AUTO_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['auto']
 
@@ -75,7 +76,8 @@ export default function AutoVault({
 }: AutoVaultProps) {
   const chainId = useChainId();
   const { isConnected, address } = useAccount();
-  const { theme, notifyError } = useGlobalContext();
+  const { notifyError } = useGlobalContext();
+  const { theme } = useTheme();
   const dispatch = useAppDispatch();
 
   const { data: landBalance, isLoading: isBalanceLoading } = useBalanceOf({ chainId, address }) as { data: BigNumberish, isLoading: boolean }

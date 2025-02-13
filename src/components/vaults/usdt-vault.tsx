@@ -44,6 +44,7 @@ import {
   MASTERCHEF_CONTRACT_ADDRESS
 } from "../../config/constants/environments";
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useGlobalContext } from "../../context/GlobalContext";
 
 const USDT_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['usdt']
 
@@ -64,7 +65,8 @@ export default function Usdtvault({
   setIsLPVault,
   setIsShowUsdPrice
 }: UsdtVaultProps) {
-  const { theme, notifyError } = useGlobalContext();
+  const { notifyError } = useGlobalContext();
+  const { theme } = useTheme();
   const { isConnected, address } = useAccount()
   const chainId = useChainId()
   const { switchChain } = useSwitchChain()
