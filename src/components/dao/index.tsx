@@ -9,7 +9,7 @@ import Breadcrumb from "../common/breadcrumb";
 import DaoCreateProposal from "../dao-create-proposal";
 import DaoProposalsList from "../dao-proposal-list";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { 
   BOLD_INTER_TIGHT, 
   DAO_TREASURY_ADDRESS, 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import numeral from "numeral";
 import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import axios from "../axios/nft-game-axios";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import useGetResource from "../axios/useGetResource";
 import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 

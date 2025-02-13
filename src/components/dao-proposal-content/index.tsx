@@ -11,7 +11,7 @@ import ChangeLandRequirement from "./change-land-requirement";
 import ChangeQuorum from "./change-quorum";
 import CreateBounty from "./create-bounty";
 import ChangeVotingPeriod from "./change-voting-period";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 interface DaoProposalContentProps {
   setProposalValues: Function;

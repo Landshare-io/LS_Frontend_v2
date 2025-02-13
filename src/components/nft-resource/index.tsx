@@ -34,6 +34,7 @@ import resourcePower from "../../../public/icons/resource-power.png";
 import marble from "../../../public/img/marketplace-property/marble.png";
 import pool from "../../../public/img/marketplace-property/pool.png";
 import tile from "../../../public/img/marketplace-property/tile.png";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 export default function NftResource() {
   const { isConnected, address } = useAccount();
@@ -41,9 +42,9 @@ export default function NftResource() {
   const {
     notifySuccess,
     notifyError,
-    theme,
     isAuthenticated
   } = useGlobalContext();
+  const { theme } = useTheme();
 
   const { data: landTokenBalance, refetch: refetchBalance } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish, refetch: Function }
   const { premiumNfts } = useGetPremiumNfts(chainId, address)

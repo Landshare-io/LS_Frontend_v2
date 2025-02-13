@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "./nft-game-axios";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import { validateItemOneDay, getRemainingTime, getMaxItemDate } from "../../../utils/helpers/validator";
 
 let isHavingTreeState = false

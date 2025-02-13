@@ -10,7 +10,7 @@ import { Address } from "viem";
 import { BigNumberish, formatEther } from "ethers";
 import axios from "./nft-game-axios";
 import useGetUserData from "./useGetUserData";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import useGetResource from "./useGetResource";
 import useIsApprovedForAll from "../../contract/HouseNftContract/useIsApprovedForAll";
 import useSetApprovalForAll from "../../contract/HouseNftContract/useSetApprovalForAll";

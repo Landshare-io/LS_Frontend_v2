@@ -8,7 +8,7 @@ import { bsc } from "viem/chains";
 import useBalanceOf from "../LpTokenV1Contract/useBalanceOf";
 import useApprove from "../LpTokenV1Contract/useApprove";
 import useRemoveLiquidityETH from "../PCSRouterContract/useRemoveLiquidityETH";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import { 
   PROVIDERS,
   LAND_TOKEN_V1_CONTRACT_ADDRESS,

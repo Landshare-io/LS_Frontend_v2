@@ -8,6 +8,7 @@ import { SelectarrowIcon } from "../common/icons/index";
 import useGetMarketplaceItems from "../../hooks/nft-game/axios/useGetMarketplaceItems";
 import useLogin from "../../hooks/nft-game/axios/useLogin";
 import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 
 export default function MarketplacePage() {
@@ -19,9 +20,9 @@ export default function MarketplacePage() {
   } = useGetMarketplaceItems(setIsItemsLoading)
   const { checkIsAuthenticated, isLoading: isLoginLoading } = useLogin()
   const {
-    theme,
     isAuthenticated
   } = useGlobalContext();
+  const { theme } = useTheme();
   const [searchData, setSearchData] = useState({
     searchType: "all_active",
     sortType: "date",

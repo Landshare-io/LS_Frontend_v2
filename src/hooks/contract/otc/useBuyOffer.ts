@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useWaitForTransactionReceipt } from "wagmi";
 import { bsc } from "viem/chains";
 import useBuy from "../SwapCatContract/useBuy";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import { TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useBuyOffer(setIsSwapping: Function, getOfferAmounts: Function, completeRequest: Function) {

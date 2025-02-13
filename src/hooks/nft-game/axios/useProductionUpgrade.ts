@@ -7,7 +7,7 @@ import axios from "./nft-game-axios";
 import useGetResource from "./useGetResource";
 import useBalanceOfLandToken from "../../contract/LandTokenContract/useBalanceOf";
 import { validateResource, validateItemDate, validateDependency } from "../../../utils/helpers/validator";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useProductionUpgrade(house: any, setHouse: Function, address: Address | undefined, setIsLoading: Function) {

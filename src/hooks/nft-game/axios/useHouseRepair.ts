@@ -4,7 +4,7 @@ import useGetHouses from "./useGetHouses";
 import useGetResource from "./useGetResource";
 import { validateResource } from "../../../utils/helpers/validator";
 import axios from "./nft-game-axios";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 export default function useHouseRepair(setIsLoading: Function) {
   const { disconnect } = useDisconnect()

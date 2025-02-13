@@ -12,7 +12,7 @@ import {
 import useGetSetting from "./useGetSetting";
 import useGetResource from "./useGetResource";
 import useBalanceOfLand from "../../contract/LandTokenContract/useBalanceOf"
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useHandleAddons(chainId: number, address: Address | undefined, house: any, setHouse: Function, setIsLoading: Function) {

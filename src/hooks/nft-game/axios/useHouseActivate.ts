@@ -2,7 +2,7 @@ import { useDisconnect } from "wagmi";
 import axios from "./nft-game-axios";
 import useGetHouses from "./useGetHouses";
 import useGetUserData from "./useGetUserData";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 export default function useHouseActivate(setIsActivating: Function) {
   const { disconnect } = useDisconnect()
