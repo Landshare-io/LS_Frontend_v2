@@ -30,20 +30,20 @@ import useCheckHasGarden from "../../../hooks/nft-game/axios/useCheckHasGarden";
 import useCheckHasLandscaping from "../../../hooks/nft-game/axios/useCheckHasLandscaping";
 import Button from "../../common/button";
 import { useGlobalContext } from "../../../context/GlobalContext";
-import HouseNft from "../../../../public/img/house/house.bmp";
-import HouseBNft from "../../../../public/img/house/houseB.bmp";
-import HouseRareNft from "../../../../public/img/house/house_rare.bmp";
-import HouseBRareNft from "../../../../public/img/house/houseB_rare.bmp";
-import HouseLandNft from "../../../../public/img/house/house_land.png";
-import HouseBLandNft from "../../../../public/img/house/houseB_land.bmp";
-import HouseLandRareNft from "../../../../public/img/house/house_land_rare.bmp";
-import HouseBLandRareNft from "../../../../public/img/house/houseB_land_rare.bmp";
-import HouseGardenNft from "../../../../public/img/house/house_garden.bmp";
-import HouseBGardenNft from "../../../../public/img/house/houseB_garden.bmp";
-import HouseGardenRareNft from "../../../../public/img/house/house_garden_rare.bmp";
-import HouseBGardenRareNft from "../../../../public/img/house/houseB_garden_rare.bmp";
-import HouseCNft from "../../../../public/img/house/houseC.bmp"
-import HouseCRareNft from "../../../../public/img/house/houseC_rare.bmp"
+import HouseNft from "../../../../public/img/house/house(bmp).webp";
+import HouseBNft from "../../../../public/img/house/houseB.webp";
+import HouseRareNft from "../../../../public/img/house/house_rare(bmp).webp";
+import HouseBRareNft from "../../../../public/img/house/houseB_rare.webp";
+import HouseLandNft from "../../../../public/img/house/house_land.webp";
+import HouseBLandNft from "../../../../public/img/house/houseB_land.webp";
+import HouseLandRareNft from "../../../../public/img/house/house_land_rare(bmp).webp";
+import HouseBLandRareNft from "../../../../public/img/house/houseB_land_rare.webp";
+import HouseGardenNft from "../../../../public/img/house/house_garden.webp";
+import HouseBGardenNft from "../../../../public/img/house/houseB_garden.webp";
+import HouseGardenRareNft from "../../../../public/img/house/house_garden_rare(bmp).webp";
+import HouseBGardenRareNft from "../../../../public/img/house/houseB_garden_rare.webp";
+import HouseCNft from "../../../../public/img/house/houseC.webp"
+import HouseCRareNft from "../../../../public/img/house/houseC_rare.webp"
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface NftDetailsProps {
