@@ -115,7 +115,7 @@ export default function YieldUpgrades({
   };
 
   return (
-    <div className="max-w-[1200px] px-0 my-5">
+    <div className="max-w-[1200px] px-0 my-12">
       {house.yieldUpgrades.length < 1 ? (
         <></>
       ) : (

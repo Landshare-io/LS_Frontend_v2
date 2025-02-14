@@ -131,23 +131,6 @@ a {
 	margin-right: 16px;
 }
 
-.toggle-switch::before {
-	content: '';
-	position: absolute;
-	inset-inline-start: var(--spacing); /* left */
-	inset-block-start: var(--spacing); /* top */
-	border-radius: 100vh;
-	inline-size: 1.36rem; /* width */
-	block-size: 1.36rem; /* height */
-	background: #ffffff;
-	transition: inset-inline-start 0.4s ease-in-out; /* left */
-}
-
-.toggle-switch.sale::before {
-	--offset: calc(100% - 1.8rem);
-	inset-inline-start: calc(var(--spacing) + var(--offset)); /* left */
-}
-
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -181,4 +164,9 @@ a {
 
 .ReactModal__Content {
 	position: fixed;
+}
+
+.carousel .slide img {
+  height: 100% !important;
+  width: auto !important;
 }

@@ -22,7 +22,7 @@ export default function GamePremiumNfts({
   return (
     <>
       {premiumNfts.length > 0 ? (
-        <div className="flex mb-[40px] pb-[50px] flex-row overflow-x-scroll md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between w-full gap-[4rem] mlg:gap-0 my-5">
+        <div className="flex mb-[40px] pb-[50px] flex-row overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between w-full gap-[4rem] mlg:gap-0 my-5">
           {premiumNfts.map((item, index) => (
             <PremiumNft
               key={`premium-item-${index}`}

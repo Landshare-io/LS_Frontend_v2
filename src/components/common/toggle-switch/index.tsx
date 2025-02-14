@@ -9,22 +9,32 @@ interface ToggleSwitchProps {
 
 
 export default function ToggleSwitch({ isSale, className, onClick, disabled }: ToggleSwitchProps) {
-  const { theme } = useGlobalContext()
+  const { theme } = useGlobalContext();
 
   return (
-    <button
-      className={`toggle-switch flex gap-[2px] ${isSale ? 'sale' : 'off-sale'} ${isSale ? "bg-[#808080]" : "bg-[#808080]"} ml-4 ${className}`}
-      type="button"
-      aria-pressed="false"
-      onClick={() => onClick()}
-      disabled={disabled}
+    <div
+      className={`ml-4 w-[60px] h-[28px] flex items-center px-1 rounded-full cursor-pointer transition-all duration-300 border-2 border-solid
+        border-[#61cd81]`}
+      onClick={()=>onClick()}
     >
-      <span className="text-white text-[11px]">
-        ON
-      </span>
-      <span className="text-white text-[11px]">
-        OFF
-      </span>
-    </button>
+      {
+        isSale ?
+        <span className={`text-[16px] text-text-primary transition-all duration-300`}>
+          ON
+        </span> : ""
+      }
+
+      <div
+        className={`w-[20px] h-[20px] bg-[#61cd81] rounded-full shadow-md transition-all duration-300 
+          ${isSale ? "translate-x-[5px]" : "-translate-x-[2px]"}`}
+      ></div>
+      {
+        !isSale ?
+        <span className={`text-[16px] text-text-primary transition-all duration-300`}>
+          OFF
+        </span> : ""
+      }
+      
+    </div>
   )
 }
