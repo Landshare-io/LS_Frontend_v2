@@ -27,9 +27,9 @@ import {
   ADMIN_WALLET_ADDRESS,
   TRANSACTION_CONFIRMATIONS_COUNT
 } from "../../../config/constants/environments"
-import marble from "../../../../public/img/marketplace-property/marble.png";
-import pool from "../../../../public/img/marketplace-property/pool.png";
-import windfarm from "../../../../public/img/marketplace-property/tile.png";
+import marble from "../../../../public/img/marketplace-property/marble.webp";
+import pool from "../../../../public/img/marketplace-property/pool.webp";
+import windfarm from "../../../../public/img/marketplace-property/tile.webp";
 
 let premiumNftsState: any[] = []
 
