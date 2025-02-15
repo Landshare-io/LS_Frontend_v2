@@ -60,7 +60,7 @@ export default function HarvestCost({
             }
           })}
         </div>
-        <div className="border-b-[1px] border-[#00000050] w-full my-2"></div>
+        <div className="border-b-[1px] border-[#00000050] w-full my-2 dark:bg-white"></div>
       </div>
       <div className='flex items-center px-2'>
         <span className='font-semibold text-[10px] ml-[4px] pr-[2px] text-text-secondary'>Cost: </span>

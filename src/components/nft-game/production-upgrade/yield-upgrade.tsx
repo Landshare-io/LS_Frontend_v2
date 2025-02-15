@@ -203,16 +203,17 @@ export default function YieldUpgrade({
       <div
         className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[20px] md:mr-0 rounded-[20px] overflow-hidden"
       >
-        <div className="bg-[#fff]">
+        <div className="">
           <div
-            className={`flex flex-col items-center bg-gradient-to-b ${type == 'production' ? 'from-[#68819D] to-[#4da3a942]' : 'from-[#689D77] to-[#3a9c5652]'}`}
+            className={`flex flex-col items-center bg-gradient-to-b`}
+            style={type == 'production' ? {background: "linear-gradient(180deg, #689d77, #0ed14500 100%, #3a9c5652 0)"} : {background: "linear-gradient(180deg, #689d77, #0ed14500 100%, #3a9c5652 0)"}}
           >
             <div className="bg-[#00000033] w-full flex justify-center h-[49px] py-[8px]">
               <span className="text-[20px] text-white font-semibold">{item.name}</span>
             </div>
             <div className="flex flex-col w-full h-[210px] relative">
               <Image
-                className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] h-[180px] w-auto"
+                className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] !h-[180px] !w-auto"
                 src={item.imgUrl}
                 alt={item.name}
               />

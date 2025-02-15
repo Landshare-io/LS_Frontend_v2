@@ -648,7 +648,7 @@ export default function InventoryPage() {
                     Yes
                   </div>
                   <div
-                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] cursor-pointer bg-primary text-text-secondary"
+                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] cursor-pointer bg-primary text-text-secondary"
                     onClick={() => setShowHarvestConfirm(false)}
                   >
                     No
@@ -679,7 +679,7 @@ export default function InventoryPage() {
                     Yes
                   </div>
                   <div
-                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] cursor-pointer bg-primary text-text-secondary"
+                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] cursor-pointer bg-primary text-text-secondary"
                     onClick={() => {
                       setWithdrawLoading(false)
                       setShowWithdrawAlert(false)
