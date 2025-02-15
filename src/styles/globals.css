@@ -111,62 +111,74 @@ a {
 
 
 
-.toggle-switch {
-	--diameter: 2rem;
-	--spacing: 0.24rem;
-	inline-size: 3.2rem; /* width */
-	block-size: 1.84rem; /* height */
-	border: none;
-	cursor: pointer;
-	color: var(--clr-text);
-	position: relative;
-	border-radius: 100vh;
-	display: inline-flex;
-	align-items: center;
-	justify-content: space-around;
-	transition:
-		background-color 0.4s ease-in-out,
-		color 0.4s ease-in-out;
-
-	margin-right: 16px;
+.on-off-toggle {
+  display: inline-block;
+  height: 28px;
+  position: relative;
+  width: 60px;
+}
+.on-off-toggle .on-off-toggle__input {
+  height: 0;
+  opacity: 0;
+  width: 0;
+}
+.on-off-toggle .on-off-toggle__input:checked+.on-off-toggle__slider {
+  background-color: initial;
+  border: 2px solid #61cd81;
+}
+.on-off-toggle .on-off-toggle__slider.round {
+  border-radius: 34px;
+}
+.on-off-toggle .on-off-toggle__slider {
+  background-color: gray;
+  border: 2px solid gray;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+.on-off-toggle .on-off-toggle__input:checked+.on-off-toggle__slider:before {
+  background-color: #61cd81;
+  transform: translateX(30.5px);
 }
 
-::-webkit-scrollbar {
-  width: 10px;
+.on-off-toggle__slider.round:before {
+  border-radius: 50%;
+}
+.on-off-toggle .on-off-toggle__slider:before {
+  background-color: #fff;
+  bottom: 1.7px;
+  content: "";
+  height: 22px;
+  left: 2px;
+  position: absolute;
+  transition: .4s;
+  width: 22px;
+}
+.on-off-toggle .on-off-toggle__input:checked+.on-off-toggle__slider:after {
+  color: #000;
+  content: "ON";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  opacity: .7;
+  padding-left: 4px;
+  transform: translateX(30.5px);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #aaa;
-  border-radius: 5px;
+.on-off-toggle .on-off-toggle__slider:after {
+  color: #fff;
+  content: "OFF";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  opacity: .7;
+  padding-left: 26px;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 5px;
-}
-
-.slick-dots li.slick-active button:before {
-	color: var(--color-text-primary) !important;
-}
-
-.dark .slick-dots li button:before {
-	color: gray;
-}
-
-.no-scrollbar::-webkit-scrollbar {
-	display: none;
-}
-
-.no-scrollbar {
-	-ms-overflow-style: none;
-	scrollbar-width: none;
-}
-
-.ReactModal__Content {
-	position: fixed;
-}
-
-.carousel .slide img {
-  height: 100% !important;
-  width: auto !important;
+.on-off-toggle__slider.rounded-full:before {
+  border-radius: 50%;
 }
