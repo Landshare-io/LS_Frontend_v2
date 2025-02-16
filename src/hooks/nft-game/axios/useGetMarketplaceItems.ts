@@ -3,9 +3,9 @@ import { useAccount } from "wagmi";
 import axios from "./nft-game-axios";
 import useGetGameItems from "./useGetGameItems";
 import useLogin from "./useLogin";
-import marble from "../../../../public/img/marketplace-property/marble.png";
-import pool from "../../../../public/img/marketplace-property/pool.png";
-import tile from "../../../../public/img/marketplace-property/tile.png";
+import marble from "../../../../public/img/marketplace-property/marble.webp";
+import pool from "../../../../public/img/marketplace-property/pool.webp";
+import tile from "../../../../public/img/marketplace-property/tile.webp";
 
 let productsState: any[] = []
 let premiumProductsState: any[] = []

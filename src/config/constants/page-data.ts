@@ -7,9 +7,9 @@ import IconCube from "../../../public/icons/cube.svg";
 import IconRotate from "../../../public/icons/rotate.svg";
 import IconListing from "../../../public/icons/listing.svg";
 import RotateDark from "../../../public/icons/rotate-dark.svg"
-import ImageHouse1 from "../../../public/img/real-house/house-1.png";
-import ImageHouse2 from "../../../public/img/real-house/house-2.png";
-import ImageHouse3 from "../../../public/img/real-house/house-3.png";
+import ImageHouse1 from "../../../public/img/real-house/house-1.webp";
+import ImageHouse2 from "../../../public/img/real-house/house-2.webp";
+import ImageHouse3 from "../../../public/img/real-house/house-3.webp";
 import IconUSDC from "../../../public/icons/usdc.png";
 import IconBNB from "../../../public/icons/bnb.png";
 import IconBTC from "../../../public/icons/btc.png";
