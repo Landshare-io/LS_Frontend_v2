@@ -55,13 +55,13 @@ export default function ProductionUpgrade ({
 
   return (
     <div className="max-w-[1200px] px-0 my-12">
-      <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between" style={{ rowGap: "45px" }}>
-        <div className="relative flex justify-center toolshed-carousel h-full w-[auto] mr-[10px] sm:mr-[40px] ml-[10px] sm:ml-[40px]">
+      <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(300px,max-content),minmax(300px,max-content),minmax(300px,max-content),minmax(300px,max-content)] justify-between" style={{ rowGap: "45px" }}>
+        <div className="relative flex justify-center toolshed-carousel h-full w-[auto] mr-[40px] ml-[40px] sm:ml-[0px]">
           <span
             onClick={() =>
               handleToolshedSelect(toolshedIndex > 0 ? toolshedIndex - 1 : 0)
             }
-            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer left-[-5px] absolute justify-center items-center"
+            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer left-[5px] absolute justify-center items-center"
           >
             <Image src={carouselIcon} alt="Carousel prev icon" />
           </span>
@@ -113,7 +113,7 @@ export default function ProductionUpgrade ({
             onClick={() =>
               handleToolshedSelect(toolshedIndex < 3 ? toolshedIndex + 1 : 3)
             }
-            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer right-[-5px] absolute justify-center items-center rotate-180"
+            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer right-[5px] absolute justify-center items-center rotate-180"
           >
             <Image src={carouselIcon} alt="Carousel next icon" />
           </span>
