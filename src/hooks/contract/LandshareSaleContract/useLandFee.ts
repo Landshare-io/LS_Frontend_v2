@@ -14,7 +14,7 @@ export default function useLandFee(chainId: number) {
   if (isLoading) return false
   if (isError) {
     console.log('Fetching LandshareSaleContract useLandFee error', error)
-    return false
+    return 0
   }
 
   return data

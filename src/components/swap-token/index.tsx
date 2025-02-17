@@ -39,7 +39,7 @@ import IconSwipelux from "../../../public/icons/swipelux.svg";
 import IconPancakeswap from "../../../public/icons/pancakeswap.png";
 import IconGateio from "../../../public/icons/gateio.png";
 import IconMEXC from "../../../public/icons/mexclogo.png";
-import IconUSDC from "../../../public/icons/usdc.png";
+import IconPUSD from "../../../public/icons/pUSD.svg";
 import IconArrowDown from "../../../public/icons/arrow-down.svg";
 import IconArrowDownDark from "../../../public/icons/arrow-down-dark.svg";
 import IconArrowUpDown from "../../../public/icons/arrow-up-down.svg";
@@ -437,14 +437,14 @@ export default function SwapToken() {
               <div className="flex justify-between items-center gap-[5px]">
                 <div className="flex items-center gap-[5px] cursor-pointer">
                   <Image
-                    src={IconUSDC}
+                    src={IconPUSD}
                     alt="usdc"
                     className="w-[18px] h-[18px]"
                   />
                   <span
                     className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                   >
-                    USDC
+                    pUSD
                   </span>
                   <Image
                     src={theme == "dark" ? IconArrowDownDark : IconArrowDown}
@@ -478,7 +478,7 @@ export default function SwapToken() {
               </div>
               <input
                 className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
-                placeholder="00.00 USDC"
+                placeholder="00.00 pUSD"
                 readOnly
                 value={usdcAmount}
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
@@ -622,20 +622,20 @@ export default function SwapToken() {
                 <div className="flex justify-between items-center gap-[5px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
                     <Image
-                      src={IconUSDC}
+                      src={IconPUSD}
                       alt="usdc"
                       className="w-[18px] h-[18px]"
                     />
                     <span
                       className={`text-text-primary text-[14px] leading-[22px] !text-[12px] ${BOLD_INTER_TIGHT.className}`}
                     >
-                      USDC
+                      pUSD
                     </span>
                   </div>
                 </div>
                 <input
                   className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
-                  placeholder="00.00 USDC"
+                  placeholder="00.00 pUSD"
                   readOnly
                   value={
                     buyUSDCAmount == undefined || RWATokenAmount === 0

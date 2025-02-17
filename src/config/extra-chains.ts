@@ -25,6 +25,7 @@ export const plumeTestnet = defineChain({
   },
   testnet: true,
   sourceId: plumeSourceId,
+  iconUrl: "https://public.bnbstatic.com/image/pgc/202405/0b69a26e48ff996d099a08686b75ebeb.png",
 })
 
 export const plume = defineChain({
@@ -51,4 +52,5 @@ export const plume = defineChain({
       blockCreated: 83183,
     },
   },
+  iconUrl: "https://public.bnbstatic.com/image/pgc/202405/0b69a26e48ff996d099a08686b75ebeb.png",
 })

@@ -155,11 +155,18 @@ export default function ConnectWallet({
                         onClick={openChainModal}
                         className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary hover:bg-gray-200 transition-colors duration-200 mr-2"
                       >
-                        <img
+                        
+                        {
+                          chain.name?.includes("Plume") ? <img
+                            src={chain.iconUrl}
+                            alt={chain.name}
+                            className="w-full h-full"
+                          /> : <img
                           src={chain.iconUrl}
                           alt={chain.name}
                           className="w-6 h-6"
                         />
+                        }
                       </div>
                       <Button
                         onClick={openAccountModal}
