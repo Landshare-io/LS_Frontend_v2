@@ -7,6 +7,7 @@ import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
 export const IS_TEST_MODE = false
 export const AUTO_VAULT_MAIN_CHAINS = IS_TEST_MODE ? [bscTestnet, hardhat] : [bsc]
+export const PUSD_SUPPORT_CHINAS = [plumeTestnet, plume]
 export const MAJOR_WORK_CHAINS = {
   '/vaults': {
     auto: IS_TEST_MODE ? [hardhat, bscTestnet, polygonAmoy, arbitrumSepolia] : [bsc, polygon, arbitrum],
