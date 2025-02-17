@@ -79,7 +79,6 @@ export default function SwapToken() {
     token: RWA_CONTRACT_ADDRESS[chainId],
     chainId: chainId,
   }) as { data: any };
-  console.log('========balance', balance)
 
   const { data: USDCBalance } = useBalance({
     address: address,
@@ -570,7 +569,7 @@ export default function SwapToken() {
                   <span
                     className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                   >
-                    {secondaryLimit ? secondaryLimit.toString() : "Loading"}
+                    {typeof(secondaryLimit) === "bigint" ? secondaryLimit.toString() : "Loading"}
                   </span>
                 </div>
               </>
