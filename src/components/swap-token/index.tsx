@@ -774,14 +774,11 @@ export default function SwapToken() {
                         }}
                         className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green text-white"
                       >
-                        {RWATokenAmount && buyLANDAmount && usdcAmount
-                          ? Number(formatEther(buyLANDAmount.toString())) >
-                            parseFloat(landBalance?.formatted)
+                        {RWATokenAmount && usdcAmount
+                          ? Number(usdcAmount.toString()) >
+                            Number(poolBalance?.formatted)
                             ? "Insufficient LAND Balance"
-                            : Number(formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)) >
-                              parseFloat(USDCBalance?.formatted)
-                            ? "Insufficient USDC Balance"
-                            : buyOrSell
+                            : "Buy"
                           : "Enter Amount"}
                       </Button>
                     )}
