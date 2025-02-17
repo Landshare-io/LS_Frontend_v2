@@ -56,7 +56,7 @@ export default function ProductionUpgrade ({
   return (
     <div className="max-w-[1200px] px-0 my-12">
       <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between" style={{ rowGap: "45px" }}>
-        <div className="relative flex justify-center toolshed-carousel h-full w-[auto] mr-[10px] sm:mr-[40px]">
+        <div className="relative flex justify-center toolshed-carousel h-full w-[auto] mr-[10px] sm:mr-[40px] ml-[10px] sm:ml-[40px]">
           <span
             onClick={() =>
               handleToolshedSelect(toolshedIndex > 0 ? toolshedIndex - 1 : 0)
