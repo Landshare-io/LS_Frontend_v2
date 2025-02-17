@@ -180,16 +180,14 @@ export default function SwapToken() {
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "460px",
-      width: "400px !important",
+      maxWidth: "400px",
+      width: "90%",
       height: "fit-content",
       borderRadius: "20px",
-      background: theme == "dark" ? "#2E2E2E" : "#f6f7f9"
     },
     overlay: {
-      background: '#00000080',
-      zIndex: 99999
-    }
+      background: "#00000080",
+    },
   };
 
   function get_information(link: string, callback: any) {
@@ -326,7 +324,7 @@ export default function SwapToken() {
             setZeroIDModalOpen(true),
             document.body.classList.remove("modal-open");
           }}
-          style={{...customModalStyles, content: {...customModalStyles.content, padding: "0px"}}}
+          style={customModalStyles}
           contentLabel="ZeroID Modal"
           className="relative"
         >
