@@ -181,7 +181,7 @@ export default function SwapToken() {
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
       maxWidth: "460px",
-      width: "90%",
+      width: "400px !important",
       height: "fit-content",
       borderRadius: "20px",
       background: theme == "dark" ? "#2E2E2E" : "#f6f7f9"
@@ -326,7 +326,7 @@ export default function SwapToken() {
             setZeroIDModalOpen(true),
             document.body.classList.remove("modal-open");
           }}
-          style={customModalStyles}
+          style={{...customModalStyles, content: {...customModalStyles.content, padding: "0px"}}}
           contentLabel="ZeroID Modal"
           className="relative"
         >
