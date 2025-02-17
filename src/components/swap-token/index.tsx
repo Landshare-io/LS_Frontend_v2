@@ -117,7 +117,7 @@ export default function SwapToken() {
       : Date.now()
     : Date.now();
 
-  const secondaryLimit = useGetAllowedToTransfer(chainId, address);
+  const { data: secondaryLimit, isLoading: isSecondaryLimitLoading } = useGetAllowedToTransfer(chainId, address) as { data: BigNumberish, isLoading: boolean };
   const isWhitelisted = useIsWhitelistedAddressOfRwa(chainId, address);
   const landFee = useLandFee(chainId) as number;
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
@@ -571,7 +571,7 @@ export default function SwapToken() {
                   <span
                     className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                   >
-                    {secondaryLimit ? secondaryLimit.toString() : "Loading"}
+                    {isSecondaryLimitLoading ? "Loading" : secondaryLimit.toString()}
                   </span>
                 </div>
               </>
