@@ -342,7 +342,7 @@ export default function InventoryPage() {
           </div>
         ) : (
           <>
-            <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px]">
+            <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px] xl:px-[2px] px-[10px]">
               {(!isLoginLoading && (!isConnected || !isAuthenticated)) ? (
                 <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
                   <ConnectWallet />

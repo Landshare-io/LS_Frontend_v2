@@ -148,19 +148,17 @@ export default function NftResource() {
 
   return (
     <>
-      <section className="bg-primary text-primary">
-        <div className="max-w-[1200px] px-0 m-auto flex flex-col pt-0">
+      <section className="bg-primary text-text-primary">
+        <div className="max-w-[1200px] px-0 m-auto flex flex-col pt-0 xl:px-[2px] px-[10px]">
           {(!isConnected) ? (
             <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
               <ConnectWallet />
             </div>
           ) : (
             <>
-            {/* <div className="flex flex-row overflow-auto md:grid [@media(max-width:930px)]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-1 pb-5 last:m-0"></div> */}
-              
               <Topbar isNftList />
               <span className={`text-[24px] ${BOLD_INTER_TIGHT.className} px-2`}>Resources</span>
-              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-12 px-2`}></div>
+              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-12 px-2 my-3`}></div>
               <div className="flex w-full flex-col md:flex-row overflow-auto flex-wrap items-center justify-between px-2">
               
               
