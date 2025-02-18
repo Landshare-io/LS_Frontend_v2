@@ -201,7 +201,7 @@ export default function YieldUpgrade({
   return (
     <>
       <div
-        className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[20px] md:mr-0 rounded-[20px] overflow-hidden"
+        className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px] rounded-[20px] overflow-hidden"
       >
         <div className="">
           <div
