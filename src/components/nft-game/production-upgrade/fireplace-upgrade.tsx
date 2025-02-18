@@ -82,7 +82,7 @@ export default function FireplaceUpgrade({
   return (
     <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px] rounded-[20px] overflow-hidden">
       <div>
-        <div className="flex flex-col items-center" style={{ background: "linear-gradient(rgb(104, 157, 119), rgba(14, 209, 69, 0) 100%, rgba(58, 156, 86, 0.32) 0px)" }}>
+        <div className="flex flex-col items-center bg-gradient-to-b from-[#68819D] to-[#4da3a942]">
           <div className="bg-[#00000030] w-full flex justify-center h-[49px] py-[8px]">
             <span className="text-[20px] text-white font-semibold">{item.title}</span>
           </div>

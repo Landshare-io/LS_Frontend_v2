@@ -10,7 +10,7 @@ export default function MainTabs({ tabItems }: MainTabs) {
 
   return (
     <div>
-      <div className="flex justify-between border-b-[1px] border-[#dee2e6] overflow-x-auto pb-[20p]">
+      <div className="flex justify-between border-b-[1px] border-[#dee2e6] overflow-x-auto">
         {tabItems.map((tabItem, index) => (
           <button
             key={`${tabItem.id}-${index}`}

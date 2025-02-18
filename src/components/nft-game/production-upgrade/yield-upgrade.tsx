@@ -205,8 +205,8 @@ export default function YieldUpgrade({
       >
         <div className="">
           <div
-            className={`flex flex-col items-center bg-gradient-to-b`}
-            style={type == 'production' ? {background: "linear-gradient(180deg, #689d77, #0ed14500 100%, #3a9c5652 0)"} : {background: "linear-gradient(180deg, #689d77, #0ed14500 100%, #3a9c5652 0)"}}
+            className={`flex flex-col items-center bg-gradient-to-b ${type == "production" ? "bg-gradient-to-b from-[#68819D] to-[#4da3a942]": ""}`}
+            style={type != "production" ? {background: "linear-gradient(180deg, #689d77, #0ed14500 100%, #3a9c5652 0)"} : {}}
           >
             <div className="bg-[#00000033] w-full flex justify-center h-[49px] py-[8px]">
               <span className="text-[20px] text-white font-semibold">{item.name}</span>

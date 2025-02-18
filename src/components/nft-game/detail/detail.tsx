@@ -311,7 +311,7 @@ export default function NftDetails({
 
   return (
     <>
-      <div className="justify-center mt-[18px] mb-0 pb-0 md:mb-5 md:pb-4 px-2">
+      <div className="justify-center mt-[18px] mb-0 pb-0 md:mb-5 md:pb-4">
         <div className="px-0">
           <div>
             <div className="flex flex-wrap justify-between min-h-[45px] pb-2">

@@ -54,7 +54,7 @@ export default function ProductionUpgrade ({
   } = useProductionUpgrade(house, setHouse, address, setIsLoading)
 
   return (
-    <div className="max-w-[1200px] px-0 my-12">
+    <div className="max-w-[1200px] px-0 my-6">
       <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between" style={{ rowGap: "45px" }}>
         <div className="relative flex justify-center toolshed-carousel w-[257px] mr-[10px] sm:mr-[40px]">
           <span
