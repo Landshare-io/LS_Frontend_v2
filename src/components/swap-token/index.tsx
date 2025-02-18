@@ -76,29 +76,29 @@ export default function SwapToken() {
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
 
-  const { data: balance } = useBalance({
+  const { data: balance, refetch: refetchBalance } = useBalance({
     address: address,
     token: RWA_CONTRACT_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
-  const { data: USDCBalance } = useBalance({
+  const { data: USDCBalance, refetch: refetchUSDCBalance } = useBalance({
     address: address,
     token: USDC_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
-  const { data: poolBalance } = useBalance({
+  const { data: poolBalance, refetch: refetchPoolBalance  } = useBalance({
     address: RWA_POOL_CONTRACT_ADDRESS[chainId],
     token: USDC_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
-  const { data: landBalance } = useBalance({
+  const { data: landBalance, refetch: refetchLandBalance } = useBalance({
     address: address,
     token: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
   const { data: saleLimit, refetch: refetchSaleLimit } = useGetSaleLimit(
     chainId,
@@ -172,7 +172,17 @@ export default function SwapToken() {
     }
   }, [isSTAPShow]);
 
-  const { theme } = useGlobalContext();
+  const { theme, screenLoadingStatus } = useGlobalContext();
+
+  useEffect(() => {
+    if(screenLoadingStatus === "Transaction Complete.") {
+      refetchBalance();
+      refetchUSDCBalance();
+      refetchPoolBalance();
+      refetchLandBalance();
+      refetchSaleLimit();
+    }
+  }, [screenLoadingStatus]);
 
   const customModalStyles = {
     content: {
