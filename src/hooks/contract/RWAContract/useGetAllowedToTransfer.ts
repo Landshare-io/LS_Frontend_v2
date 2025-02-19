@@ -13,12 +13,12 @@ export default function useGetAllowedToTransfer(chainId: number, address: Addres
     args: [address]
   })
 
-  if (typeof address == 'undefined') return 0
-  if (isLoading) return 0
+  if (typeof address == 'undefined') return { data: 0, isLoading }
+  if (isLoading) return { data: 0, isLoading }
   if (isError) {
     console.log('Fetching LandshareSaleContract getAllowedToTransfer error', error)
-    return 0
+    return { data: 0, isLoading }
   }
 
-  return data
+  return { data, isLoading }
 }

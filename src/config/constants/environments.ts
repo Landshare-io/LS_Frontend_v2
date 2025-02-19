@@ -7,6 +7,7 @@ import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
 export const IS_TEST_MODE = false
 export const AUTO_VAULT_MAIN_CHAINS = IS_TEST_MODE ? [bscTestnet, hardhat] : [bsc]
+export const PUSD_SUPPORT_CHINAS = [plumeTestnet, plume]
 export const MAJOR_WORK_CHAINS = {
   '/vaults': {
     auto: IS_TEST_MODE ? [hardhat, bscTestnet, polygonAmoy, arbitrumSepolia] : [bsc, polygon, arbitrum],
@@ -39,6 +40,8 @@ export const PROVIDER_URLS = {
   97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
   1: 'https://mainnet.infura.io/v3/',
   11155111: 'https://rpc.sepolia.org',
+  98864: 'https://test-rpc.plumenetwork.xyz',
+  98865: 'https://rpc.plumenetwork.xyz',
   137: 'https://polygon-rpc.com/',
   80002: 'https://rpc-amoy.polygon.technology',
   42161: 'https://arb1.arbitrum.io/rpc',
@@ -52,6 +55,8 @@ export const PROVIDERS: {
   97: getDefaultProvider(PROVIDER_URLS['97']),
   1: getDefaultProvider(PROVIDER_URLS['1']),
   11155111: getDefaultProvider(PROVIDER_URLS['11155111']),
+  98864: getDefaultProvider(PROVIDER_URLS['98864']),
+  98865: getDefaultProvider(PROVIDER_URLS['98865']),
   137: getDefaultProvider(PROVIDER_URLS['137']),
   80002: getDefaultProvider(PROVIDER_URLS['80002']),
   42161: getDefaultProvider(PROVIDER_URLS['42161']),
