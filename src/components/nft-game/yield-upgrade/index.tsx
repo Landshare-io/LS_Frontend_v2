@@ -151,7 +151,7 @@ export default function YieldUpgrades({
               return (
                 <div
                   key={`yield-upgrade-${yieldItem.id}`}
-                  className="w-[257px] mr-[10px] sm:mr-[40px]"
+                  className="w-[257px] mr-[20px] sm:mr-[40px]"
                 >
                   <FirepitUpgrade
                     item={{
@@ -180,7 +180,7 @@ export default function YieldUpgrades({
               return (
                 <div
                   key={`yield-upgrade-${yieldItem.id}`}
-                  className="w-[257px] mr-[10px] sm:mr-[40px]"
+                  className="w-[257px] mr-[20px] sm:mr-[40px]"
                 >
                   <YieldUpgrade
                     item={{

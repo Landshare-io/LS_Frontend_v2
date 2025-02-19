@@ -56,7 +56,7 @@ export default function ProductionUpgrade ({
   return (
     <div className="max-w-[1200px] px-0 my-6">
       <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between" style={{ rowGap: "45px" }}>
-        <div className="relative flex justify-center toolshed-carousel w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="relative flex justify-center toolshed-carousel w-[257px] mr-[20px] sm:mr-[40px]">
           <span
             onClick={() =>
               handleToolshedSelect(toolshedIndex > 0 ? toolshedIndex - 1 : 0)
@@ -118,7 +118,7 @@ export default function ProductionUpgrade ({
             <Image src={carouselIcon} alt="Carousel next icon" />
           </span>
         </div>
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <FireplaceUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Firepit")[0],
@@ -140,7 +140,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Concrete Foundation")[0],
@@ -164,7 +164,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Harvester")[0],
@@ -205,7 +205,7 @@ export default function ProductionUpgrade ({
           return (
             <div
               key={`production-upgrade-${index}`}
-              className="w-[257px] mr-[10px] sm:mr-[40px]"
+              className="w-[257px] mr-[20px] sm:mr-[40px]"
             >
               <YieldUpgrade
                 item={item}
@@ -219,7 +219,7 @@ export default function ProductionUpgrade ({
             </div>
           );
         })}
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <HireHandymanUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Hire Handyman")[0],
@@ -259,7 +259,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Generator")[0],
