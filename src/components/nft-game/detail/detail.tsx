@@ -677,7 +677,10 @@ export default function NftDetails({
           <div className="flex mt-[20px]">
             <div
               className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
-              onClick={() => harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)}
+              onClick={() => {
+                setShowHarvestConfirm(false)
+                harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)
+              }}
             >
               Yes
             </div>
