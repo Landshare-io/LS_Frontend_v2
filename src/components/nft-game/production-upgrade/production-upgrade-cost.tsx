@@ -117,7 +117,7 @@ export default function ProductionUpgradeCost({
             </div>
           </div>
         )}
-        <div className="border-b-[1px] border-[#00000050] w-full my-2"></div>
+        <div className="border-b-[1px] border-[#00000050] w-full my-2 dark:bg-white"></div>
       </div>
       <div className='flex pb-3 items-center px-2'>
         <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>Cost: </span>
@@ -159,10 +159,10 @@ export default function ProductionUpgradeCost({
         {((isLoading.type == item.id) && isLoading.loading) ? (
           <div className='flex justify-center items-center'>
             <ReactLoading type="spin" className="me-2 mb-[4px]" width="24px" height="24px" />
-            <span className="font-semibold text-button-text-secondary">Loading</span>
+            <span className="font-semibold text-button-text-secondary text-[18px]">Loading</span>
           </div>
         ) : (
-          <span className="font-semibold text-button-text-secondary">{btnLabel}</span>
+          <span className="font-semibold text-button-text-secondary text-[18px]">{btnLabel}</span>
         )}
       </Button>
     </div>

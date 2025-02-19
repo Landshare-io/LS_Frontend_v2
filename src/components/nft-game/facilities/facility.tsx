@@ -210,7 +210,7 @@ export default function Facility({
           onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
           style={customModalStyles}
         >
-          <div className="flex min-h-full justify-center items-center">
+          <div className="flex min-h-full justify-center items-center dark:bg-[#3c3c3c] dark:text-white">
             <span className="my-2 mx-3 text-[14px]">{description}</span>
           </div>
         </ReactModal>

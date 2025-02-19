@@ -311,7 +311,7 @@ export default function NftDetails({
 
   return (
     <>
-      <div className="justify-center mt-[18px] mb-0 pb-0 md:mb-5 md:pb-4 px-2">
+      <div className="justify-center mt-[18px] mb-0 pb-0 md:mb-5 md:pb-4">
         <div className="px-0">
           <div>
             <div className="flex flex-wrap justify-between min-h-[45px] pb-2">
@@ -338,7 +338,7 @@ export default function NftDetails({
                 />
               </div>
             </div>
-            <div className="border-b-[1px] border-[#00000050]"></div>
+            <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb]"></div>
             <div className="">
               <div className="pt-[14px] pb-[21px] d-flex">
                 <h6 className="font-semibold text-[18px] mb-0 text-text-secondary">
@@ -383,7 +383,7 @@ export default function NftDetails({
                 </div>
                 <div className="flex flex-grow ml-0 lg:ml-[1.5rem]">
                   <div className="flex flex-col w-full">
-                    <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
+                    <div className="border-b-[1px] border-dashed border-[#00000080] dark:border-[#cbcbcb]"></div>
                     <div className="flex flex-col md:flex-row py-3 justify-between max-md:-mt-6">
                       <div className="text-[16px] mb-0 font-normal flex flex-nowrap items-center justify-start text-text-secondary max-md:translate-y-6">
                         Durability
@@ -410,7 +410,7 @@ export default function NftDetails({
                       house={house}
                       setHouse={setHouse}
                     />
-                    <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
+                    <div className="border-b-[1px] border-dashed border-[#00000080] dark:border-[#cbcbcb]"></div>
                     <div className="flex justify-between mt-2 py-2">
                       <span className="font-semibold text-[16px] text-text-secondary">
                         Asset Tokens Deposited:
@@ -498,7 +498,7 @@ export default function NftDetails({
                         </div>
                       </div>
                     </div>
-                    <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
+                    <div className="border-b-[1px] border-dashed border-[#00000080] dark:border-[#cbcbcb]"></div>
                     <div className="flex flex-col justify-between h-full my-3">
                       <div className="flex justify-between py-1">
                         <span className="flex text-[16px] text-black-700 items-center">
@@ -580,7 +580,7 @@ export default function NftDetails({
                   </div>
                 </div>
               </div>
-              <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
+              <div className="border-b-[1px] border-dashed border-[#00000080] dark:border-[#cbcbcb]"></div>
               <div className="flex flex-col w-full mt-5">
                 <RewardHarvest
                   selectedResource={selectedResource}

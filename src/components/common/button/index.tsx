@@ -20,11 +20,11 @@ export default function Button ({
 }: ButtonProps) {
   return (
     <button
-      className={`flex justify-center items-center disabled:cursor-not-allowed disabled:bg-[#d9dce7] ${outlined ? ' bg-transparent border-[1px] hover:text-white hover:bg-primary-green' : 'text-primary border-0' } ${className}`}
+      className={`flex justify-center items-center disabled:cursor-not-allowed disabled:bg-[#c2c5c3] ${outlined ? ' bg-transparent border-[1px] hover:text-white hover:bg-primary-green' : 'text-primary border-0' } ${className}`}
       disabled={disabled}
       onClick={onClick}
     >
-      <span className={`text-[14px] leading-[22px] font-bold ${BOLD_INTER_TIGHT.className} ${textClassName}`}>
+      <span className={`text-[16px] leading-[22px] font-bold ${BOLD_INTER_TIGHT.className} ${textClassName}`}>
         {children}
       </span>
     </button>
