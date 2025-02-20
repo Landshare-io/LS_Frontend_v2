@@ -60,7 +60,7 @@ export default function HarvestCost({
             }
           })}
         </div>
-        <div className="border-b-[1px] border-[#00000050] w-full my-2"></div>
+        <div className="border-b-[1px] border-[#00000050] w-full my-2 dark:bg-white"></div>
       </div>
       <div className='flex items-center px-2'>
         <span className='font-semibold text-[10px] ml-[4px] pr-[2px] text-text-secondary'>Cost: </span>
@@ -96,16 +96,16 @@ export default function HarvestCost({
       </div>
       <Button
         onClick={() => onPurcharse()}
-        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] text-button-text-secondary ${(btnLabel == "ACTIVE") ? 'disabled:!bg-[#00a8f3]' : ''} ${((isLoading.type > -1) && (isLoading.type != type)) ? 'disable' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
+        className={`w-full bottom-[-1px] h-[45px] text-[18px] font-semibold absolute rounded-[20px] dark:text-[#3c3c3c] text-button-text-secondary ${(btnLabel == "ACTIVE") ? 'disabled:!bg-[#00a8f3]' : ''} ${((isLoading.type > -1) && (isLoading.type != type)) ? 'disable' : color} ${((isLoading.type == type) && isLoading.loading) ? 'flex justify-center items-center' : ''}`}
         disabled={(color != "border-[2px] border-[#ec9821] bg-[#ec9821]") || (btnLabel == "ACTIVE") || ((isLoading.type == type) && isLoading.loading) || ((isLoading.type > -1) && (isLoading.type != type))}
       >
         {((isLoading.type == type) && isLoading.loading) ? (
           <div className='flex justify-center items-center'>
             <ReactLoading type="spin" className="me-2 mb-[4px]" width="24px" height="24px" />
-            <span className="font-semibold">Loading</span>
+            <span className="text-[18px] font-semibold">Loading</span>
           </div>
         ) : (
-          <span className="font-semibold">{btnLabel}</span>
+          <span className="text-[18px] font-semibold">{btnLabel}</span>
         )}
       </Button>
     </div>

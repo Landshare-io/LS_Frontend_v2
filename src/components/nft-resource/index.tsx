@@ -31,9 +31,9 @@ import sadEmojiWhite from "../../../public/icons/sad_emoji_white.png";
 import resourceLandshare from "../../../public/icons/resource-landshare.png";
 import resourceLumber from "../../../public/icons/resource-lumber.png";
 import resourcePower from "../../../public/icons/resource-power.png";
-import marble from "../../../public/img/marketplace-property/marble.png";
-import pool from "../../../public/img/marketplace-property/pool.png";
-import tile from "../../../public/img/marketplace-property/tile.png";
+import marble from "../../../public/img/marketplace-property/marble.webp";
+import pool from "../../../public/img/marketplace-property/pool.webp";
+import tile from "../../../public/img/marketplace-property/tile.webp";
 
 export default function NftResource() {
   const { isConnected, address } = useAccount();
@@ -149,7 +149,7 @@ export default function NftResource() {
   return (
     <>
       <section className="bg-primary text-text-primary">
-        <div className="max-w-[1200px] px-0 m-auto flex flex-col pt-0">
+        <div className="max-w-[1200px] px-0 m-auto flex flex-col pt-0 xl:px-[2px] px-[10px]">
           {(!isConnected) ? (
             <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
               <ConnectWallet />
@@ -157,16 +157,17 @@ export default function NftResource() {
           ) : (
             <>
               <Topbar isNftList />
-              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Resources</span>
-              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-5 mt-3`}></div>
+              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className} px-2`}>Resources</span>
+              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-12 px-2 my-3`}></div>
+              <div className="flex w-full flex-col md:flex-row overflow-auto flex-wrap items-center justify-between px-2">
+              
+              
               <div
                 className={`flex w-full min-h-[60vh] h-full items-center justify-center ${isPageLoading ? "grid" : "hidden"}`}
               >
                 <ReactLoading type="bars" color="#61cd81" />
               </div>
-              <div
-                className={`flex pb-[20px] mlg:grid mlg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] xl:grid-cols-[minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content),minmax(251px,max-content)] mb-5 ${!isPageLoading ? "grid" : "hidden"}`}
-              >
+              <div className="flex flex-row overflow-auto md:grid [@media(max-width:930px)]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-1 pb-5 last:m-0 mb-12">
                 <ResourceCard
                   title="LAND TOKENS"
                   subTitle={`Your Balance: ${numeral(Number(formatEther(landTokenBalance.toString())))
@@ -335,8 +336,10 @@ export default function NftResource() {
                 </ResourceCard>
                 {/* <TokenCard /> */}
               </div>
-              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Premium Upgrades</span>
-              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-5 mt-3`}></div>
+              
+              </div>
+              <span className={`text-[24px] ${BOLD_INTER_TIGHT.className} px-2 sm:mt-8`}>Premium Upgrades</span>
+              <div className={`h-0 border-b ${theme == 'dark' ? "border-b-[#ffffff50]" : "border-b-[#00000050]"} block w-full mb-12 mt-4 px-2`}></div>
               {premiumNfts.length > 0 ? (
                 <div className="flex pb-[20px] mlg:grid mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:justify-between mlg:gap-[4rem] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] xl:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] my-2">
                   {premiumNfts.map((item, index) => (

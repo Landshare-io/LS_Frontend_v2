@@ -201,18 +201,19 @@ export default function YieldUpgrade({
   return (
     <>
       <div
-        className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[20px] md:mr-0 rounded-[20px] overflow-hidden"
+        className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px] rounded-[20px] overflow-hidden"
       >
-        <div className="bg-[#fff]">
+        <div className="">
           <div
-            className={`flex flex-col items-center bg-gradient-to-b ${type == 'production' ? 'from-[#68819D] to-[#4da3a942]' : 'from-[#689D77] to-[#3a9c5652]'}`}
+            className={`flex flex-col items-center bg-gradient-to-b ${type == "production" ? "bg-gradient-to-b from-[#68819D] to-[#4da3a942]": ""}`}
+            style={type != "production" ? {background: "linear-gradient(180deg, #689d77, #0ed14500 100%, #3a9c5652 0)"} : {}}
           >
             <div className="bg-[#00000033] w-full flex justify-center h-[49px] py-[8px]">
-              <span className="text-[16px] text-white font-semibold">{item.name}</span>
+              <span className="text-[20px] text-white font-semibold">{item.name}</span>
             </div>
             <div className="flex flex-col w-full h-[210px] relative">
               <Image
-                className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] h-[180px] w-auto"
+                className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] !h-[180px] !w-auto"
                 src={item.imgUrl}
                 alt={item.name}
               />
@@ -226,7 +227,7 @@ export default function YieldUpgrade({
                       </div>
                       <div>
                         {message && (
-                          <Tooltip tooltipContainerClassName="absolute top-1 left-4" content={(
+                          <Tooltip tooltipContainerClassName="inline top-1 left-4" content={(
                             <>
                               Missing Dependency: <br />
                               {message}.<br />
@@ -250,7 +251,7 @@ export default function YieldUpgrade({
                   ) : (
                     <div className="px-[12px] flex w-full justify-end px-4 py-1 absolute bottom-[5px] right-[5px]">
                       {message && (
-                        <Tooltip tooltipContainerClassName="absolute top-1 left-4" content={(
+                        <Tooltip tooltipContainerClassName="inline top-1 left-4" content={(
                           <>
                             Missing Dependency: <br />
                             {message}.<br />
@@ -278,7 +279,7 @@ export default function YieldUpgrade({
                     </div>
                     <div>
                       {message && (
-                        <Tooltip tooltipContainerClassName="absolute top-1 left-4" content={(
+                        <Tooltip tooltipContainerClassName="inline top-1 left-4" content={(
                           <>
                             Missing Dependency: <br />
                             {message}.<br />
@@ -303,7 +304,7 @@ export default function YieldUpgrade({
               ) : (
                 <div className="px-[12px] bottom-0 flex w-full flex justify-end px-4 py-1 absolute">
                   {message && (
-                    <Tooltip tooltipContainerClassName="absolute top-1 left-4" content={(
+                    <Tooltip tooltipContainerClassName="inline top-1 left-4" content={(
                       <>
                         Missing Dependency: <br />
                         {message}.<br />

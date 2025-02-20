@@ -98,7 +98,7 @@ const NftPage = () => {
         </div>
       ) : (
         <>
-          <div className="relative max-w-[1200px] px-0 m-auto flex flex-col pt-0 bg-primary">
+          <div className="relative max-w-[1200px] px-0 m-auto flex flex-col pt-0 bg-primary px-2">
             {(!isLoginLoading && (!isConnected || !isAuthenticated)) ? (
               <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
                 <ConnectWallet />
@@ -112,7 +112,7 @@ const NftPage = () => {
                   getHouse={getHouse}
                 />
                 {house.name && (
-                  <div className="mainTabs-styles">
+                  <div className="mainTabs-styles mb-[30px] xl:mb-0 lg:mb-0">
                     <MainTabs tabItems={tabItems} />
                   </div>
                 )}

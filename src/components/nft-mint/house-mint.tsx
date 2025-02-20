@@ -9,12 +9,12 @@ import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import useMintHouseNft from "../../hooks/nft-game/house-nfts/useMintHouseNft";
 import useGetNftCredits from "../../hooks/nft-game/apollo/useGetNftCredits";
 import Button from "../common/button";
-import HouseNft from "../../../public/img/house/house_big.bmp";
-import HouseBNft from "../../../public/img/house/houseB.bmp";
-import HouseRareNft from "../../../public/img/house/house_rare_big.bmp";
-import HouseBRareNft from "../../../public/img/house/houseB_rare.bmp";
-import HouseCNft from "../../../public/img/house/houseC.bmp";
-import HouseCRareNft from "../../../public/img/house/houseC_rare.bmp";
+import HouseNft from "../../../public/img/house/house_big.webp";
+import HouseBNft from "../../../public/img/house/houseB.webp";
+import HouseRareNft from "../../../public/img/house/house_rare_big.webp";
+import HouseBRareNft from "../../../public/img/house/houseB_rare.webp";
+import HouseCNft from "../../../public/img/house/houseC.webp";
+import HouseCRareNft from "../../../public/img/house/houseC_rare.webp";
 import Tooltip from "../common/tooltip";
 
 interface HouseMintItemProps {

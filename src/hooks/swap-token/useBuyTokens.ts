@@ -113,22 +113,24 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
   }, [landApproveTx, landApproveStatusData, landApproveSuccess, isLandApproveError])
 
   useEffect(() => {
-    if (isError) {
-      setScreenLoadingStatus("Transaction Failed.")
-    } else if (buyTx) {
-      if (buyStatusData) {
-        if (buySuccess) {
-          usdcAllowanceRefetch()
-          landAllowanceRefetch()
-          rwaBalanceRefetch()
-          usdtBalanceRefetch()
-          landBalanceRefetch()
-          setScreenLoadingStatus("Transaction Complete.")
-        } else {
-          setScreenLoadingStatus("Transaction Failed.")
+    (async () => {
+      if (isError) {
+        setScreenLoadingStatus("Transaction Failed.")
+      } else if (buyTx) {
+        if (buyStatusData) {
+          if (buySuccess) {
+            await usdcAllowanceRefetch()
+            await landAllowanceRefetch()
+            await rwaBalanceRefetch()
+            await usdtBalanceRefetch()
+            await landBalanceRefetch()
+            setScreenLoadingStatus("Transaction Complete.")
+          } else {
+            setScreenLoadingStatus("Transaction Failed.")
+          }
         }
       }
-    }
+    })()
   }, [buyTx, buyStatusData, buySuccess, isError])
 
   const buyTokens = async (buyUSDCAmount: BigNumberish) => {

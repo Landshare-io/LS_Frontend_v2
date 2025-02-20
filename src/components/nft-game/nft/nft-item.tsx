@@ -5,20 +5,20 @@ import ReactLoading from "react-loading";
 import { useRouter } from "next/router";
 import Button from "../../common/button";
 import ReparingStatus from "../reparing-status";
-import HouseNft from "../../../../public/img/house/house_big.bmp";
-import HouseRareNft from "../../../../public/img/house/house_rare_big.bmp";
-import HouseLandNft from "../../../../public/img/house/house_land_big.bmp";
-import HouseLandRareNft from "../../../../public/img/house/house_land_rare_big.bmp";
-import HouseGardenNft from "../../../../public/img/house/house_garden_big.bmp";
-import HouseGardenRareNft from "../../../../public/img/house/house_garden_rare_big.bmp";
-import HouseBNft from "../../../../public/img/house/houseB.bmp";
-import HouseBRareNft from "../../../../public/img/house/houseB_rare.bmp";
-import HouseBLandNft from "../../../../public/img/house/houseB_land.bmp";
-import HouseBLandRareNft from "../../../../public/img/house/houseB_land_rare.bmp";
-import HouseBGardenNft from "../../../../public/img/house/houseB_garden.bmp";
-import HouseBGardenRareNft from "../../../../public/img/house/houseB_garden_rare.bmp";
-import HouseCNft from "../../../../public/img/house/houseC.bmp"
-import HouseCRareNft from "../../../../public/img/house/houseC_rare.bmp"
+import HouseNft from "../../../../public/img/house/house_big.webp";
+import HouseRareNft from "../../../../public/img/house/house_rare_big.webp";
+import HouseLandNft from "../../../../public/img/house/house_land_big.webp";
+import HouseLandRareNft from "../../../../public/img/house/house_land_rare_big.webp";
+import HouseGardenNft from "../../../../public/img/house/house_garden_big.webp";
+import HouseGardenRareNft from "../../../../public/img/house/house_garden_rare_big.webp";
+import HouseBNft from "../../../../public/img/house/houseB.webp";
+import HouseBRareNft from "../../../../public/img/house/houseB_rare.webp";
+import HouseBLandNft from "../../../../public/img/house/houseB_land.webp";
+import HouseBLandRareNft from "../../../../public/img/house/houseB_land_rare.webp";
+import HouseBGardenNft from "../../../../public/img/house/houseB_garden.webp";
+import HouseBGardenRareNft from "../../../../public/img/house/houseB_garden_rare.webp";
+import HouseCNft from "../../../../public/img/house/houseC.webp"
+import HouseCRareNft from "../../../../public/img/house/houseC_rare.webp"
 import { HammerIcon } from "../../common/icons/nft";
 import useHouseActivate from "../../../hooks/nft-game/axios/useHouseActivate";
 import useHouseRepair from "../../../hooks/nft-game/axios/useHouseRepair";

@@ -22,7 +22,7 @@ export default function GamePremiumNfts({
   return (
     <>
       {premiumNfts.length > 0 ? (
-        <div className="flex mb-[40px] pb-[50px] flex-row overflow-x-scroll md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between w-full gap-[4rem] mlg:gap-0 my-5">
+        <div className="flex mb-[40px] pb-[50px] flex-row overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] mlg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between w-full gap-[4rem] mlg:gap-0 my-12">
           {premiumNfts.map((item, index) => (
             <PremiumNft
               key={`premium-item-${index}`}
@@ -43,7 +43,7 @@ export default function GamePremiumNfts({
           </div>
         </div>
       ) : (
-        <div className="flex justify-center">
+        <div className="flex justify-center my-12">
           <div className="flex flex-col items-center min-w-[257px] h-[380px] text-center">
             <h2 className="text-[1.4rem] mt-[35%] text-text-primary">Need More Upgrades?</h2>
             <p className="text-[0.875rem] mt-[10px] text-text-secondary">Check Our Marketplace</p>

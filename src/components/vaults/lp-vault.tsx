@@ -62,15 +62,15 @@ export default function LpVault({
   const { switchChain } = useSwitchChain()
   const { theme, notifyError } = useGlobalContext();
 
-  const { data: lpTokenV2Balance } = useBalanceOfLpTokenV2({ chainId, address }) as { data: BigNumberish }
-  const { data: totalLPInVault } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
-  const { data: totalLANDinLPContract } = useBalanceOfLandToken({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
-  const { data: totalLPSupply } = useTotalSupplyOfLpTokenV2(chainId) as { data: BigNumberish }
-  const { data: totalBNBinLPContract } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
-  const { data: userInfo } = useUserInfo({ chainId, userInfoId: 1, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
-  const { data: pendingLand } = usePendingLand({ chainId, pendingLandId: 1, address }) as { data: BigNumberish, isLoading: boolean }
-  const { data: approvedLAND } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
-  const { data: allocPoints } = usePoolInfo(chainId, 1) as { data: any[] };
+  const { data: lpTokenV2Balance, isLoading : isBalanceV2Loading } = useBalanceOfLpTokenV2({ chainId, address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: totalLPInVault, isLoading: isBalanceMasterLoading } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish, isLoading: boolean }
+  const { data: totalLANDinLPContract, isLoading: isLandLoading } = useBalanceOfLandToken({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish, isLoading: boolean }
+  const { data: totalLPSupply, isLoading: isTotalSupplyLoading } = useTotalSupplyOfLpTokenV2(chainId) as { data: BigNumberish, isLoading: boolean }
+  const { data: totalBNBinLPContract, isLoading: isBalanceOfWBNBLoading } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish, isLoading: boolean }
+  const { data: userInfo, isLoading: isUserInfoLoading } = useUserInfo({ chainId, userInfoId: 1, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
+  const { data: pendingLand, isLoading: isPendingLandLoading } = usePendingLand({ chainId, pendingLandId: 1, address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: approvedLAND, isLoading: isAllowanceLoading } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
+  const { data: allocPoints, isLoading: isPoolInfoLoading } = usePoolInfo(chainId, 1) as { data: any[], isLoading: boolean };
   const { bnbPrice, coinPrice: coin, price } = useGetPrice(chainId)
   const { price: tokenPriceData } = useGetLandPrice()
 
@@ -92,7 +92,7 @@ export default function LpVault({
   const [rewardLP, setReward] = useState<BigNumberish>(0);
   const [depositBalanceLP, setDepositBalanceLP] = useState<BigNumberish>(0);
   const [usdValueLP, setUsdValueLP] = useState(0)
-  const isVaultsLoading = false
+  const isVaultsLoading = isBalanceV2Loading || isBalanceMasterLoading || isLandLoading || isTotalSupplyLoading || isBalanceOfWBNBLoading || isUserInfoLoading || isPendingLandLoading || isAllowanceLoading || isPoolInfoLoading;
 
   useEffect(() => {
     updateLPFarm();

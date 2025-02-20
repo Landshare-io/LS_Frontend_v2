@@ -46,7 +46,7 @@ const StakingPage: NextPage = () => {
   const { theme } = useGlobalContext();
   const { isConnected } = useAccount()
   const chainId = useChainId() as 56 | 137 | 42161 | 97 | 11155111 | 80002
-  const { price } = useGetPrice(chainId)
+  const { price } = useGetPrice(chainId);
 
   const [selectedVault, useSelectedVault] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -158,11 +158,7 @@ const StakingPage: NextPage = () => {
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
-      <div className="bg-primary">
-        {isConnected && !(VAULT_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) && (<div className="flex flex-col justify-center items-center text-center py-5 text-red-400 text-xl font-medium animate-[sparkling_3s_linear_infinite]">
-          {`Please switch your chain to ${VAULT_MAJOR_CHAINS.map(chain => chain.name).join(', ')}`}
-        </div>)}
-      </div>
+    
       <div className="bg-primary py-[20px] px-[20px] md:px-[40px] lg:px-[120px] pt-0 pb-20 lg:pb-40">
         <div className="flex flex-col md:justify-between items-center max-w-[1200px] m-auto gap-[12px]">
           <div className="flex items-center m-auto py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-secondary">
