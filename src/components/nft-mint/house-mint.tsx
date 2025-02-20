@@ -96,9 +96,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             </Tooltip>
           </div>
           <input
-            className={`max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] text-[#000] mr-1 ${
-              theme == "dark" ? "bg-gray-600" : ""
-            }`}
+            className='max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] dark:text-[#dee2e6] text-[#000] mr-1 dark:bg-gray-600'
             step="1"
             min={200}
             value={nftCreditCost}
@@ -124,10 +122,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             </Tooltip>
           </div>
           <div
-            className={`${
-              theme == "dark" ? "#ffffff88" : "#00000088"
-            } text-[14px] font-semibold`}
-          >
+            className='dark:text-[#ffffff88] text-[#00000088] text-[14px] font-semibold'>
             {Number(harvestAmount)}
           </div>
         </div>
@@ -136,10 +131,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             Mint Price
           </div>
           <div
-            className={`${
-              theme == "dark" ? "#ffffff88" : "#00000088"
-            } text-[14px] font-semibold`}
-          >
+            className='dark:text-[#ffffff88] text-[#00000088] text-[14px] font-semibold'>
             {`${Number(harvestAmount) / 12.5} LAND`}
           </div>
         </div>
