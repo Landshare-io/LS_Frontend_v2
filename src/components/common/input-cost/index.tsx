@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import numeral from "numeral";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 interface InputCostProps {
   width?: number;
@@ -11,7 +11,7 @@ interface InputCostProps {
 }
 
 export default function InputCost({ width, height = 0, value, changeRepairAmount, calcMaxAmount }: InputCostProps) {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const [showValue, setShowValue] = useState('0');
 
   useEffect(() => {

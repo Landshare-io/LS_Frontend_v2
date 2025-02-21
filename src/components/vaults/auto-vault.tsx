@@ -5,7 +5,7 @@ import { useChainId, useAccount } from "wagmi";
 import ReactLoading from "react-loading";
 import { bsc, polygon } from "viem/chains";
 import Collapse from "../common/collapse";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import ConnectWallet from "../connect-wallet";
 import Timer from "../common/timer";
@@ -53,7 +53,6 @@ import smallicon from "../../../public/icons/rotate-black.svg"
 import smallicondark from "../../../public/icons/rotate-dark.svg"
 import Tooltip from "../common/tooltip";
 import 'react-loading-skeleton/dist/skeleton.css';
-import { useGlobalContext } from "../../context/GlobalContext";
 
 const AUTO_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['auto']
 
@@ -76,8 +75,7 @@ export default function AutoVault({
 }: AutoVaultProps) {
   const chainId = useChainId();
   const { isConnected, address } = useAccount();
-  const { notifyError } = useGlobalContext();
-  const { theme } = useTheme();
+  const { theme, notifyError } = useGlobalContext();
   const dispatch = useAppDispatch();
 
   const { data: landBalance, isLoading: isBalanceLoading } = useBalanceOf({ chainId, address }) as { data: BigNumberish, isLoading: boolean }

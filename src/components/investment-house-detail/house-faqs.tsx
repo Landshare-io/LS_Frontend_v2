@@ -1,6 +1,6 @@
 import React from "react";
 import Faq from "../common/faq";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 const data = {
   title: "FAQ",
@@ -68,7 +68,7 @@ const data = {
 
 
 export default function HouseFaqs() {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const styles = {
     bgColor: 'light-gray',
     rowTitleTextSize: "18px",

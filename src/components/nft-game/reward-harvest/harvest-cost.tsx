@@ -7,7 +7,7 @@ import {
   ConcreteIcon,
   SteelIcon
 } from '../../common/icons/nft';
-import { useTheme } from "next-themes";
+import { useGlobalContext } from '../../../context/GlobalContext';
 import Button from '../../common/button';
 
 interface HarvestCardsProps {
@@ -29,7 +29,7 @@ export default function HarvestCost({
   isLoading,
   type
 }: HarvestCardsProps) {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const disabledIcons = [
     <ChargeIcon className="" iconColor={theme == 'dark' ? '#8fbbd1' : '#263238'} />,
     <LumberIcon className="" iconColor={theme == 'dark' ? '#8fbbd1' : '#263238'} />,

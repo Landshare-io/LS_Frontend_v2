@@ -12,7 +12,7 @@ import {
 import Badge from "../../common/badge";
 import FacilityContent from "./facility-content";
 import { OpenModalIcon } from "../../common/icons/index";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useHandleFacilities from "../../../hooks/nft-game/axios/useHandleFacilities";
 import windfarm1 from "../../../../public/img/production-facilities/windfarm1.webp";
@@ -52,7 +52,7 @@ export default function Facility({
   isBoosts = false
 }: FacilityProps) {
   const { address } = useAccount();
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const { facilities } = useGetUserData()
   const [isLoading, setIsLoading] = useState({
     type: -1, loading: false

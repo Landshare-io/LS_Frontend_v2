@@ -6,7 +6,7 @@ import ReactPaginate from "react-paginate";
 
 import Breadcrumb from "../../components/common/breadcrumb";
 import { getCcipTransactions } from "../../lib/slices/contract-slices/APIs/updateCcipTransaction";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { CCIP_CHAIN_NAME } from "../../config/constants/environments";
 import Timer from "../../components/common/timer";
@@ -28,7 +28,7 @@ const breadcrumbItems = [
 
 export default function CcipTransactions() {
   const { address } = useAccount()
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const [ccipTransactions, setCcipTransactions] = useState([])
   const [ccipTransactionsCount, setCcipTransactionsCount] = useState(0)
   const itemsPerPage = 10

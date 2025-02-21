@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReactLoading from "react-loading";
 import { BsInfoCircle } from "react-icons/bs";
 import { useAccount, useChainId } from "wagmi";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import useMintHouseNft from "../../hooks/nft-game/house-nfts/useMintHouseNft";
 import useGetNftCredits from "../../hooks/nft-game/apollo/useGetNftCredits";
@@ -24,7 +24,7 @@ interface HouseMintItemProps {
 export default function HouseMintItem({ product }: HouseMintItemProps) {
   const { address } = useAccount();
   const chainId = useChainId();
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const { nftCredits } = useGetNftCredits(address);
   const [isLoading, setIsLoading] = useState(false);
   const [harvestAmount, setHarvestAmount] = useState(Number());

@@ -1,4 +1,4 @@
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 interface IconProps {
   className?: string;
@@ -6,7 +6,7 @@ interface IconProps {
 }
 
 export const BackIcon = () => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   return (
   <svg
     className="w-[12px] h-[12px] sm:w-[16px] sm:h-[16px]"
@@ -22,7 +22,7 @@ export const BackIcon = () => {
 };
 
 export const NextIcon = () => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   return (
     <svg
       className="w-[12px] h-[12px] sm:w-[16px] sm:h-[16px] rotate-180"
@@ -39,7 +39,7 @@ export const NextIcon = () => {
 };
 
 export const ChargeIcon = ({ className, iconColor }: IconProps) => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   return (
     <svg
       className={className}
@@ -404,7 +404,7 @@ export const AddICon = () => (
   </svg>
 );
 export const EnergyIcon = ({ fill, darkFill,  height, width }: { fill: string, height?: string, width?: string, darkFill?: string}) => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   if (!darkFill) darkFill = fill
   return (
     <svg
@@ -438,7 +438,7 @@ export const EnergyIcon = ({ fill, darkFill,  height, width }: { fill: string, h
 };
 
 export const Lumber = ({ fill, darkFill,  height, width }: { fill: string, height?: string, width?: string, darkFill?: string}) => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   if (!darkFill) darkFill = fill
   return (
     <svg
@@ -535,7 +535,7 @@ export const LumberIcon = ({ className = "", iconColor = "" }) => (
 );
 
 export const Brick = ({ fill, darkFill,  height, width }: { fill: string, height?: string, width?: string, darkFill?: string}) => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   if (!darkFill) darkFill = fill
   return (
     <svg
@@ -668,7 +668,7 @@ export const BrickIcon = ({ className = "", iconColor = "" }) => {
 };
 
 export const Concrete = ({ fill, darkFill,  height, width }: { fill: string, height?: string, width?: string, darkFill?: string}) => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   if (!darkFill) darkFill = fill
   return (
     <svg width={width ? width : "31"} height={height ? height: "23"} viewBox="0 0 31 23" fill="">
@@ -764,7 +764,7 @@ export const ConcreteIcon = ({ className, iconColor = "" }: IconProps) => (
 );
 
 export const Steel = ({ fill, darkFill,  height, width }: { fill: string, height?: string, width?: string, darkFill?: string}) => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   if (!darkFill) darkFill = fill
   return (
     <svg
@@ -1424,7 +1424,7 @@ export const SteelBoosts = ({ color, opacity, className }: NftIconProps) => (
 );
 
 export const NftDurabilityIcon = () => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   return (
     <svg
       width="15"
@@ -1468,7 +1468,7 @@ export const CloseMark = ({ color = '', width = 10, height = 10 }) => (
 )
 
 export const Credit = ({ fill, darkFill,  height, width }: { fill: string, height?: string, width?: string, darkFill?: string}) => {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   if (!darkFill) darkFill = fill
   return (
     <svg width={width ? width : "23"} height={height ? height: "27"} viewBox="0 0 23 27" fill="none" xmlns="http://www.w3.org/2000/svg">

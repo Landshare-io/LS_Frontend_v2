@@ -8,7 +8,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import SwipeluxModal from "../common/modals/swipelux";
 import ApexChart from "../common/apexchart";
 import Button from "../common/button";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import ToggleButton from "../common/toggle-button";
 import IconTokenPair from "../../../public/icons/token-pair.svg";
@@ -39,7 +39,7 @@ export default function PriceGraph({
   }
 
   const router = useRouter();
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const rwaGraphData = useFetchRwa();
   const { price: landGraphData, isLoading: isLandGraphDataLoading } = useFetchLandData(dueDate.one_week, Date.now());
   const { price: landPrice, isLoading: isLandPriceDataLoading } = useGetLandPrice();

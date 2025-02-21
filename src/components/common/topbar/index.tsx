@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import goOther from "../../../../public/icons/go_other.png";
 import goOtherWhite from "../../../../public/icons/go_other_white.png";
 import { BackIcon } from "../../common/icons/nft";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface TopbarProps {
@@ -12,7 +12,7 @@ interface TopbarProps {
 }
 
 export default function Topbar({ isNftList }: TopbarProps) {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const router = useRouter()
   const pathName = router.pathname;
 
