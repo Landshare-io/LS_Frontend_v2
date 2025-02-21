@@ -11,6 +11,7 @@ import {
 import HarvestCost from "./harvest-cost";
 import landTokenStakingImg from "../../../../public/icons/land-token-staking-img.png";
 import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useGetResource from "../../../hooks/nft-game/axios/useGetResource";
 
@@ -38,9 +39,9 @@ export default function HarvestCards({
   const { facilities } = useGetUserData()
   const { userReward } = useGetResource();
   const {
-    notifyError,
-    theme
+    notifyError
   } = useGlobalContext();
+  const { theme } = useTheme();
 
   if (facilities.length < 1) return null
 

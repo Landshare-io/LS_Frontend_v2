@@ -6,11 +6,11 @@ import {
   LumberIcon,
   SteelIcon,
 } from "../../common/icons/nft";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 export default function ReparingCostList({ cost }: { cost: any }) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const icons = {
     'power': <ChargeIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#000000"} />,
     'lumber': <LumberIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#000000"} />,

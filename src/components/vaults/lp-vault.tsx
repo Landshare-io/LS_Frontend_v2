@@ -6,7 +6,7 @@ import { bsc } from "viem/chains";
 import { useChainId, useAccount, useSwitchChain } from "wagmi";
 import Collapse from "../common/collapse";
 import ConnectWallet from "../connect-wallet";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
 import useTotalSupplyOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useTotalSupply";
@@ -37,6 +37,7 @@ import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import smallicon from "../../../public/icons/bnb.png";
 import 'react-loading-skeleton/dist/skeleton.css';
 import Tooltip from "../common/tooltip";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 const LP_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['lp']
 
@@ -60,7 +61,8 @@ export default function LpVault({
   const chainId = useChainId();
   const { isConnected, address } = useAccount();
   const { switchChain } = useSwitchChain()
-  const { theme, notifyError } = useGlobalContext();
+  const { notifyError } = useGlobalContext();
+  const { theme } = useTheme();
 
   const { data: lpTokenV2Balance, isLoading : isBalanceV2Loading } = useBalanceOfLpTokenV2({ chainId, address }) as { data: BigNumberish, isLoading: boolean }
   const { data: totalLPInVault, isLoading: isBalanceMasterLoading } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish, isLoading: boolean }

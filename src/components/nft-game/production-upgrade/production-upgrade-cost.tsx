@@ -8,7 +8,7 @@ import {
   ConcreteIcon,
   SteelIcon
 } from '../../common/icons/nft';
-import { useGlobalContext } from '../../../context/GlobalContext';
+import { useTheme } from "next-themes";
 
 interface ProductionUpgradeCostProps {
   color: string
@@ -31,7 +31,7 @@ export default function ProductionUpgradeCost({
   item,
   colorType,
 }: ProductionUpgradeCostProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const disabledIcons = [
     // <ChargeIcon className="" iconColor='#00000080' />,
     <ChargeIcon className="" iconColor={theme == 'dark' ? "#cbcbcb" : "#263b28"} />,

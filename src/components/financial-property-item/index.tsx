@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -11,7 +11,7 @@ interface PropertyItemProps {
 }
 
 export default function PropertyItem({ property, isLoaded }: PropertyItemProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

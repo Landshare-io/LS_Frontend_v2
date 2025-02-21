@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Button from "../common/button";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import IllustrationMap from "../../../public/img/dashboard/illustration-map.webp";
 import IllustrationMapMobile from "../../../public/img/dashboard/illustration-map-mobile.webp";
 import IllustrcationMapDark from "../../../public/img/dashboard/Illustration_map_dark.webp";
 
 export default function MoreInvestment() {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
 
   return (
     <div className="bg-[#E6E6F2] md:py-[100px]  dark:bg-[#222222] p-0 md:px-[20px] xl:px-[120px] xl:py-[100px]">

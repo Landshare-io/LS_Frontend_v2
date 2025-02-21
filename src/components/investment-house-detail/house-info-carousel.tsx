@@ -4,7 +4,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import styles from "./investment-house-detail.module.css";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 
 interface HouseInfoCarouselComponentProps {
   houseInfo: any
@@ -12,7 +12,7 @@ interface HouseInfoCarouselComponentProps {
 }
 
 export default function HouseInfoCarouselComponent({ houseInfo, isLoading }: HouseInfoCarouselComponentProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
 
   return (
     <>
