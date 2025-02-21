@@ -1,5 +1,6 @@
 import Modal from "react-modal";
 import { MdCancel } from "react-icons/md";
+import { bsc } from "viem/chains";
 import { useAccount, useChainId } from "wagmi";
 import Button from "../../button";
 import useIsWhitelistedAddress from "../../../../hooks/contract/RWAContract/useIsWhitelistedAddress";
@@ -27,6 +28,7 @@ const customModalStyles = {
     borderRadius: "20px",
   },
   overlay: {
+    zIndex: 99999,
     background: "#00000080",
   },
 };
@@ -34,7 +36,7 @@ const customModalStyles = {
 export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZeroIDModalOpen} : KYCModalProps) {
   const { address } = useAccount();
   const chainId = useChainId();
-  const isWhitelisted = useIsWhitelistedAddress((RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
+  const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
 
   const handleclosemodal = () => {
     setKycopen(false);
@@ -77,7 +79,10 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
           </div>
           <div className="w-full mt-3">
             <a href="https://dashboard.landshare.io">
-              <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors">
+              <Button 
+                className="flex flex-col justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
+                disabled={chainId != bsc.id}
+              >
                 <p className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}>
                   Manual Verification
                 </p>

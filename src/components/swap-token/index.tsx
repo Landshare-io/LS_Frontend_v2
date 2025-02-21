@@ -59,6 +59,7 @@ const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 export default function SwapToken() {
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
+  const { data: isWhitelisted, refetch } = useIsWhitelistedAddressOfRwa(chainId, address);
 
   const [RWATokenAmount, setRWATokenAmount] = useState(0);
   const [usdcAmount, setUsdcAmount] = useState(0);
@@ -75,6 +76,12 @@ export default function SwapToken() {
   const [isSwipeluxModalOpen, setIsSwipeluxModalOpen] = useState(false);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      await refetch();
+    })()
+  }, [isZeroIDModal])
 
   const { data: balance } = useBalance({
     address: address,
@@ -118,7 +125,6 @@ export default function SwapToken() {
     : Date.now();
 
   const { data: secondaryLimit, isLoading: isSecondaryLimitLoading } = useGetAllowedToTransfer(chainId, address) as { data: BigNumberish, isLoading: boolean };
-  const isWhitelisted = useIsWhitelistedAddressOfRwa(chainId, address);
   const landFee = useLandFee(chainId) as number;
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
   const { allTokens } = useGetAllTokens();
@@ -186,6 +192,7 @@ export default function SwapToken() {
       borderRadius: "20px",
     },
     overlay: {
+      zIndex: 99999,
       background: "#00000080",
     },
   };
@@ -294,7 +301,10 @@ export default function SwapToken() {
           </div>
           <div className="w-full mt-3">
             <a href="https://dashboard.landshare.io">
-              <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors">
+              <Button 
+                className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
+                disabled={chainId != bsc.id}
+              >
                 <p
                   className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
                 >
