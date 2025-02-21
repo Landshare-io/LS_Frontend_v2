@@ -15,31 +15,31 @@ import { OpenModalIcon } from "../../common/icons/index";
 import { useTheme } from "next-themes";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useHandleFacilities from "../../../hooks/nft-game/axios/useHandleFacilities";
-import windfarm1 from "../../../../public/img/production-facilities/windfarm1.png";
-import windfarm2 from "../../../../public/img/production-facilities/windfarm2.png";
-import windfarm3 from "../../../../public/img/production-facilities/windfarm3.png";
-import windfarm4 from "../../../../public/img/production-facilities/windfarm4.png";
-import windfarm5 from "../../../../public/img/production-facilities/windfarm5.png";
+import windfarm1 from "../../../../public/img/production-facilities/windfarm1.webp";
+import windfarm2 from "../../../../public/img/production-facilities/windfarm2.webp";
+import windfarm3 from "../../../../public/img/production-facilities/windfarm3.webp";
+import windfarm4 from "../../../../public/img/production-facilities/windfarm4.webp";
+import windfarm5 from "../../../../public/img/production-facilities/windfarm5.webp";
 import brick1 from "../../../../public/img/production-facilities/brick1.png";
-import brick2 from "../../../../public/img/production-facilities/brick2.png";
-import brick3 from "../../../../public/img/production-facilities/brick3.png";
-import brick4 from "../../../../public/img/production-facilities/brick4.png";
-import brick5 from "../../../../public/img/production-facilities/brick5.png";
-import concrete1 from "../../../../public/img/production-facilities/concrete1.png";
-import concrete2 from "../../../../public/img/production-facilities/concrete2.png";
-import concrete3 from "../../../../public/img/production-facilities/concrete3.png";
-import concrete4 from "../../../../public/img/production-facilities/concrete4.png";
-import concrete5 from "../../../../public/img/production-facilities/concrete5.png";
-import lumber1 from "../../../../public/img/production-facilities/lumber1.png";
-import lumber2 from "../../../../public/img/production-facilities/lumber2.png";
-import lumber3 from "../../../../public/img/production-facilities/lumber3.png";
-import lumber4 from "../../../../public/img/production-facilities/lumber4.png";
-import lumber5 from "../../../../public/img/production-facilities/lumber5.png";
-import steel1 from "../../../../public/img/production-facilities/steel1.png";
-import steel2 from "../../../../public/img/production-facilities/steel2.png";
-import steel3 from "../../../../public/img/production-facilities/steel3.png";
-import steel4 from "../../../../public/img/production-facilities/steel4.png";
-import steel5 from "../../../../public/img/production-facilities/steel5.png";
+import brick2 from "../../../../public/img/production-facilities/brick2.webp";
+import brick3 from "../../../../public/img/production-facilities/brick3.webp";
+import brick4 from "../../../../public/img/production-facilities/brick4.webp";
+import brick5 from "../../../../public/img/production-facilities/brick5.webp";
+import concrete1 from "../../../../public/img/production-facilities/concrete1.webp";
+import concrete2 from "../../../../public/img/production-facilities/concrete2.webp";
+import concrete3 from "../../../../public/img/production-facilities/concrete3.webp";
+import concrete4 from "../../../../public/img/production-facilities/concrete4.webp";
+import concrete5 from "../../../../public/img/production-facilities/concrete5.webp";
+import lumber1 from "../../../../public/img/production-facilities/lumber1.webp";
+import lumber2 from "../../../../public/img/production-facilities/lumber2.webp";
+import lumber3 from "../../../../public/img/production-facilities/lumber3.webp";
+import lumber4 from "../../../../public/img/production-facilities/lumber4.webp";
+import lumber5 from "../../../../public/img/production-facilities/lumber5.webp";
+import steel1 from "../../../../public/img/production-facilities/steel1.webp";
+import steel2 from "../../../../public/img/production-facilities/steel2.webp";
+import steel3 from "../../../../public/img/production-facilities/steel3.webp";
+import steel4 from "../../../../public/img/production-facilities/steel4.webp";
+import steel5 from "../../../../public/img/production-facilities/steel5.webp";
 import BoostImg from "../../../../public/icons/boost.png";
 
 interface FacilityProps {
@@ -210,7 +210,7 @@ export default function Facility({
           onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
           style={customModalStyles}
         >
-          <div className="flex min-h-full justify-center items-center">
+          <div className="flex min-h-full justify-center items-center dark:bg-[#3c3c3c] dark:text-white">
             <span className="my-2 mx-3 text-[14px]">{description}</span>
           </div>
         </ReactModal>

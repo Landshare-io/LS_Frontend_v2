@@ -39,7 +39,7 @@ export default function UpgradeListTable({
   ];
 
   return (
-    <div className="max-w-[1200px] px-0 mb-5 mt-3 pb-20">
+    <div className="max-w-[1200px] px-0 mb-5 mt-3 pb-20 mt-12">
       <div className="flex flex-col-reverse justify-around duration-700">
         <div className="hidden mlg:p-[10px] mlg:flex mlg:flex-1">
           <div className="mx-[5px] my-[10px] overflow-hidden flex-1 flex flex-col justify-between">

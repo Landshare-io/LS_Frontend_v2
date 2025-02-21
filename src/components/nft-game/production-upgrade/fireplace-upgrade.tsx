@@ -81,10 +81,10 @@ export default function FireplaceUpgrade({
 
   return (
     <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px] rounded-[20px] overflow-hidden">
-      <div className="bg-[#fff]">
+      <div>
         <div className="flex flex-col items-center bg-gradient-to-b from-[#68819D] to-[#4da3a942]">
           <div className="bg-[#00000030] w-full flex justify-center h-[49px] py-[8px]">
-            <span className="text-[16px] text-white font-semibold">{item.title}</span>
+            <span className="text-[20px] text-white font-semibold">{item.title}</span>
           </div>
           <div className="flex flex-col w-full h-[210px] relative">
             <Image
@@ -131,7 +131,7 @@ export default function FireplaceUpgrade({
                   />
                 )}
               </div>
-              <div className="border-b-[1px] border-[#00000050] w-full my-[8px]"></div>
+              <div className="border-b-[1px] border-[#00000050] w-full my-[8px] dark:border-white"></div>
               <div>
                 {btnTitle === "BUY" ? (
                   <div className="flex items-center">
@@ -201,10 +201,10 @@ export default function FireplaceUpgrade({
                     width="24px"
                     height="24px"
                   />
-                  <span className="font-semibold">Loading</span>
+                  <span className="font-semibold text-[18px]">Loading</span>
                 </div>
               ) : (
-                <span className="font-semibold">{btnTitle}</span>
+                <span className="font-semibold text-[18px]">{btnTitle}</span>
               )}
             </Button>
           </div>

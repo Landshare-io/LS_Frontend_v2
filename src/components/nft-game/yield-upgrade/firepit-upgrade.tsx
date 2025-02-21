@@ -119,10 +119,10 @@ export default function FirepitUpgrade({
 
   return (
     <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[20px] md:mr-0 rounded-[20px] overflow-hidden">
-      <div className="bg-[#fff]">
-        <div className="flex flex-col items-center bg-gradient-to-b from-[#689D77] to-[#3a9c5652]">
+      <div>
+        <div className="flex flex-col items-center" style={{ background: "linear-gradient(rgb(104, 157, 119), rgba(14, 209, 69, 0) 100%, rgba(58, 156, 86, 0.32) 0px)" }}>
           <div className="bg-[#00000030] w-full flex justify-center h-[49px] py-[8px]">
-            <span className="text-[16px] text-white font-semibold">{item.name}</span>
+            <span className="text-[20px] text-white font-semibold">{item.name}</span>
           </div>
           <div className="flex flex-col w-full h-[210px] relative">
             <Image
@@ -172,7 +172,7 @@ export default function FirepitUpgrade({
         </div>
         <div className="bg-[#6f8e9d66] py-[13px] px-[12px]">
           <div
-            className={`flex flex-col w-full h-[130px] rounded-[25px] bg-[#fff] relative bg-primary pt-[12px] ${colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}`}
+            className={`flex flex-col w-full h-[130px] rounded-[25px] relative bg-primary pt-[12px] ${colors[(btnTitle != "BUY" && Number(lumberCount) == 0) ? 3 : colorType]}`}
           >
             <div className="flex flex-col px-[10px]">
               <div className="flex items-center">
@@ -210,7 +210,7 @@ export default function FirepitUpgrade({
                   )}
                 </div>
               </div>
-              <div className="border-b-[1px] border-[#00000050] w-full my-[8px]"></div>
+              <div className="border-b-[1px] border-[#00000050] w-full my-[8px] dark:border-white"></div>
               <div>
                 {btnTitle === "BUY" && (
                   <div className="flex items-center">
@@ -324,10 +324,10 @@ export default function FirepitUpgrade({
                     width="24px"
                     height="24px"
                   />
-                  <span className="font-semibold">Loading</span>
+                  <span className="font-semibold text-[18px]">Loading</span>
                 </div>
               ) : (
-                <span className="font-semibold text-button-text-secondary">
+                <span className="font-semibold text-button-text-secondary text-[18px]">
                   {Number(lumberCount) == 0 ? 'SALVAGE' : (havingItem == -1 ? 'BUY' : 'LOAD')}
                 </span>
               )}

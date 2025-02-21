@@ -343,7 +343,7 @@ export default function InventoryPage() {
           </div>
         ) : (
           <>
-            <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px]">
+            <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px] xl:px-[2px] px-[10px]">
               {(!isLoginLoading && (!isConnected || !isAuthenticated)) ? (
                 <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
                   <ConnectWallet />
@@ -355,8 +355,8 @@ export default function InventoryPage() {
                       <>
                         <Topbar isNftList={true} />
                         <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
-                          <span className={`text-[16px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
-                          <div className="border-b-[1px] border-[#00000050] block w-full mb-4 my-3"></div>
+                          <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
+                          <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
                           <div className="flex flex-col w-full pb-3">
                             <div className="flex flex-col gap-[30px] md:gap-0 md:flex-row items-center justify-between mb-5">
                               <div className="w-full my-[20px] md:w-[75%]">
@@ -420,13 +420,13 @@ export default function InventoryPage() {
                                 ) : (<div className={`text-center text-gray-500 ${BOLD_INTER_TIGHT.className}`}>No NFTs Found</div>)}
                               </div>
 
-                              <div className="w-full ml-0 md:w-[280px] md:ml-[5px]">
+                              <div className="w-full ml-0 md:w-[280px] md:ml-[5px] text-[#000000b3] dark:text-white">
                                 <div className="border-b-[1px] md:border-0 border-dashed border-[#000000] dark:border-[#cbcbcb]"></div>
                                 <div className="flex mt-2 py-2 justify-between">
-                                  <span className={`font-semibold text-[16px] ${theme == 'dark' ? "text-white-700" : "text-black-700"}`}>
+                                  <span className={`font-semibold text-[16px]`}>
                                     RWA Tokens Deposited:
                                   </span>
-                                  <span className={`font-normal text-[16px] ${theme == 'dark' ? "text-white" : "text-black"}`}>
+                                  <span className={`font-normal text-[16px]`}>
                                     {stakedBalance.toString()}{" "}
                                     {"LSRWA"}
                                   </span>
@@ -604,7 +604,7 @@ export default function InventoryPage() {
                             </div>
                           </div>
                           <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Production Facilities</span>
-                          <div className="border-b-[1px] border-[#00000050] block w-full mb-4 my-3"></div>
+                          <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
                           <div className="flex flex-col w-full">
                             <ProductionFacilities />
                           </div>
@@ -644,12 +644,15 @@ export default function InventoryPage() {
                 <div className="flex mt-[20px]">
                   <div
                     className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
-                    onClick={() => harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)}
+                    onClick={() => {
+                      setShowHarvestConfirm(false)
+                      harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)
+                    }}
                   >
                     Yes
                   </div>
                   <div
-                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] cursor-pointer bg-primary text-text-secondary"
+                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] cursor-pointer bg-primary text-text-secondary"
                     onClick={() => setShowHarvestConfirm(false)}
                   >
                     No
@@ -680,7 +683,7 @@ export default function InventoryPage() {
                     Yes
                   </div>
                   <div
-                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] cursor-pointer bg-primary text-text-secondary"
+                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] cursor-pointer bg-primary text-text-secondary"
                     onClick={() => {
                       setWithdrawLoading(false)
                       setShowWithdrawAlert(false)

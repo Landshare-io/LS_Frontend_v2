@@ -19,7 +19,7 @@ export default function useHarvest(setHarvestLoading: Function) {
       return notifyError("Select resources to harvest");
     }
 
-    if (selectedResource[4] && (landRemaining === 0 || userReward[4] > landRemaining)) {
+    if (selectedResource[4] && (landRemaining === 0)) {
       setHarvestLoading(false);
       return notifyError("No harvest allowed")
     }
@@ -30,7 +30,7 @@ export default function useHarvest(setHarvestLoading: Function) {
         const pastUserReward = userReward
 
         const { data } = await axios.post(`/user-reward/harvest`, {
-          harvestItem: [...selectedResource, selectedResource[4] ? pastUserReward[4] : 0]
+          harvestItem: [...selectedResource, selectedResource[4] ?  (pastUserReward[4] > landRemaining ? landRemaining :pastUserReward[4]) : 0]
         })
 
         const harvestMessages: any[] = []

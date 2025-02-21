@@ -2,9 +2,9 @@ import Image from "next/image";
 import Button from "../common/button";
 import { useTheme } from "next-themes";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
-import IllustrationMap from "../../../public/img/dashboard/illustration-map.png";
-import IllustrationMapMobile from "../../../public/img/dashboard/illustration-map-mobile.png";
-import IllustrcationMapDark from "../../../public/img/dashboard/Illustration_map_dark.png";
+import IllustrationMap from "../../../public/img/dashboard/illustration-map.webp";
+import IllustrationMapMobile from "../../../public/img/dashboard/illustration-map-mobile.webp";
+import IllustrcationMapDark from "../../../public/img/dashboard/Illustration_map_dark.webp";
 
 export default function MoreInvestment() {
   const { theme } = useTheme();

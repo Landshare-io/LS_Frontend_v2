@@ -90,7 +90,7 @@ export default function HireHandymanUpgrade({
 
   return (
     <div className="w-[257px] flex flex-col duration-300 hover:shadow-md mr-[10px] md:mr-[40px] rounded-[20px] overflow-hidden">
-      <div className="bg-[#fff]">
+      <div>
         <div className="flex flex-col items-center bg-gradient-to-b from-[#68819D] to-[#4da3a942]">
           <div className="bg-[#00000030] w-full flex justify-center h-[49px] py-[8px]">
             <span className="text-[16px] text-white font-semibold">{item.title}</span>
@@ -128,7 +128,7 @@ export default function HireHandymanUpgrade({
                   {houseMaxDurability}%
                 </span>
               </div>
-              <div className="border-b-[1px] border-[#00000050] w-full my-[8px]"></div>
+              <div className="border-b-[1px] border-[#00000050] w-full my-[8px] dark:border-white"></div>
               <div>
                 <div>
                   <span className="text-[#6f8e9d] text-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary">Cost: </span>
@@ -167,10 +167,10 @@ export default function HireHandymanUpgrade({
                     width="24px"
                     height="24px"
                   />
-                  <span className="font-semibold">Loading</span>
+                  <span className="font-semibold text-[18px]">Loading</span>
                 </div>
               ) : (
-                <span className="font-semibold">{btnTitle}</span>
+                <span className="font-semibold text-[18px]">{btnTitle}</span>
               )}
             </Button>
           </div>
