@@ -10,7 +10,7 @@ import {
 } from '../../common/icons/nft';
 import useGetSetting from '../../../hooks/nft-game/axios/useGetSetting';
 import { validateItemDate } from '../../../utils/helpers/validator';
-import { useGlobalContext } from '../../../context/GlobalContext';
+import { useTheme } from "next-themes";
 
 interface YieldUpgradeCostProps {
   color: string
@@ -33,7 +33,7 @@ export default function YieldUpgradeCost({
   color,
   btnLabel = '',
 }: YieldUpgradeCostProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const {
     oneDayTime
   } = useGetSetting()

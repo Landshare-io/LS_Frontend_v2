@@ -6,7 +6,7 @@ import Image from "next/image";
 import Collapse from "../common/collapse";
 import Tooltip from "../common/tooltip";
 import ConnectWallet from "../connect-wallet";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import useVaultBalanceManual from "../../hooks/contract/vault/useVaultBalanceManual";
 import useTotalStaked from "../../hooks/contract/MasterchefContract/useTotalStaked";
@@ -28,6 +28,7 @@ import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import bscIcon from "../../../public/icons/bsc.svg"
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useAppDispatch } from "../../lib/hooks";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 const MANUAL_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['manual']
 
@@ -48,10 +49,10 @@ export default function ManualVault({
   setTokenUsdPrice,
   setShowModalApy
 }: ManualVaultProps) {
-  const { 
-    theme, 
+  const {
     notifyError
   } = useGlobalContext();
+  const { theme } = useTheme();
   const chainId = useChainId()
   const { isConnected, address } = useAccount();
   const { switchChain } = useSwitchChain();

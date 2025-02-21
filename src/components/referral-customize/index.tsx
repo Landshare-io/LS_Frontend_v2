@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactModal from "react-modal";
 import { IoCloseCircle } from "react-icons/io5";
+import { useTheme } from "next-themes";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { Fuul } from "@fuul/sdk";
 import { config } from "../../wagmi";
@@ -27,7 +28,8 @@ export default function ReferralCustomizeModal({
   setTrackingprettyCode,
   address,
 }: ReferralCustomizeModalProps) {
-  const { theme, notifySuccess, notifyError } = useGlobalContext();
+  const { notifySuccess, notifyError } = useGlobalContext();
+  const { theme } = useTheme();
   const [prettyCode, setPrettyCode] = useState<string>("");
 
   const customModalStyles = {

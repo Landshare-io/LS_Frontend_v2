@@ -9,7 +9,7 @@ import backendAxios from "../../hooks/nft-game/axios/nft-game-axios";
 import { ChargeIcon, LumberIcon } from "../common/icons/nft";
 import useBalanceOfLandToken from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import useSetPremiumNftSaleHandler from "../../hooks/nft-game/nft-resource/useSetPremiumNftSaleHandler";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import Topbar from "../common/topbar";
 import YouOwn from "../common/you-own";
 import ResourceCard from "./resource-card";
@@ -31,9 +31,10 @@ import sadEmojiWhite from "../../../public/icons/sad_emoji_white.png";
 import resourceLandshare from "../../../public/icons/resource-landshare.png";
 import resourceLumber from "../../../public/icons/resource-lumber.png";
 import resourcePower from "../../../public/icons/resource-power.png";
-import marble from "../../../public/img/marketplace-property/marble.webp";
-import pool from "../../../public/img/marketplace-property/pool.webp";
-import tile from "../../../public/img/marketplace-property/tile.webp";
+import marble from "../../../public/img/marketplace-property/marble.png";
+import pool from "../../../public/img/marketplace-property/pool.png";
+import tile from "../../../public/img/marketplace-property/tile.png";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 export default function NftResource() {
   const { isConnected, address } = useAccount();
@@ -41,9 +42,9 @@ export default function NftResource() {
   const {
     notifySuccess,
     notifyError,
-    theme,
     isAuthenticated
   } = useGlobalContext();
+  const { theme } = useTheme();
 
   const { data: landTokenBalance, refetch: refetchBalance } = useBalanceOfLandToken({ chainId, address }) as { data: BigNumberish, refetch: Function }
   const { premiumNfts } = useGetPremiumNfts(chainId, address)

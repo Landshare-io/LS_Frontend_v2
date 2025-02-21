@@ -1,4 +1,4 @@
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 
 export const BackIcon = ({ className, fillColor }: { className: string, fillColor: string }) => (
   <svg
@@ -49,7 +49,7 @@ export const MonthlyExpenseIcon = ({ className = '', fillColor }: { className?: 
 );
 
 export const InfoIcon = () => {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   return (
     <svg
       width="20"
@@ -69,7 +69,7 @@ export const InfoIcon = () => {
 };
 
 export const QuestionIcon = () => {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   return (
     <svg
       width="20"
@@ -87,7 +87,7 @@ export const QuestionIcon = () => {
 };
 
 export const OpenModalIcon = ({ iconColor }: { iconColor?: string }) => {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   return (
     <svg
       width="26"
@@ -139,7 +139,7 @@ export const NextLabelIcon = () => (
 );
 
 export const OpenModalICon = ({ iconColor }: { iconColor?: string }) => {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   return (
     <svg
       width="26"

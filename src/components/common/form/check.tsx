@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGlobalContext } from '../../../context/GlobalContext';
+import { useTheme } from "next-themes";
 
 interface FormCheckProps {
   id: string;
@@ -20,7 +20,7 @@ export default function FormCheck({
   disabled = false,
   className = '',
 }: FormCheckProps) {
-  const { theme } = useGlobalContext()
+  const { theme } = useTheme()
 
   return (
     <div className={`flex items-center gap-[10px] ${className}`}>

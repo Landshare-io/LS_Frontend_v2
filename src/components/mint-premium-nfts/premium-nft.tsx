@@ -4,7 +4,7 @@ import Image from 'next/image';
 import ReactModal from 'react-modal';
 import { OpenModalIcon } from "../common/icons/index";
 import Button from '../common/button';
-import { useGlobalContext } from '../../context/GlobalContext';
+import { useTheme } from "next-themes";
 
 interface PremiumNftProps {
   amountMinted: number;
@@ -15,7 +15,7 @@ interface PremiumNftProps {
 }
 
 export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit, loader }: PremiumNftProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const [openModal, setOpenModal] = useState(false);
 
   const customModalStyles = {

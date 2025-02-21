@@ -29,6 +29,7 @@ import useHandleHouse from "../../../hooks/nft-game/axios/useHandleHouse";
 import useCheckHasGarden from "../../../hooks/nft-game/axios/useCheckHasGarden";
 import useCheckHasLandscaping from "../../../hooks/nft-game/axios/useCheckHasLandscaping";
 import Button from "../../common/button";
+import { useTheme } from "next-themes";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import HouseNft from "../../../../public/img/house/house(bmp).webp";
 import HouseBNft from "../../../../public/img/house/houseB.webp";
@@ -57,7 +58,7 @@ export default function NftDetails({
   setHouse,
   getHouse,
 }: NftDetailsProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const { notifyError } = useGlobalContext();
   const customModalStyles = {
     content: {
