@@ -8,7 +8,7 @@ import {
   SteelIcon
 } from "../../common/icons/nft"
 import Button from '../../common/button';
-import { useTheme } from "next-themes";
+import { useGlobalContext } from '../../../context/GlobalContext';
 import { BOLD_INTER_TIGHT } from '../../../config/constants/environments';
 
 interface FacilityContentProps {
@@ -32,7 +32,7 @@ export default function FacilityContent({
   nextLevelInfo,
   activated = false
 }: FacilityContentProps) {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const icons = [
     <ChargeIcon className="" iconColor={theme == 'dark' ? '#cfcbcb' : '#323131'} />,
     <LumberIcon className="" iconColor={theme == 'dark' ? '#cfcbcb' : '#323131'} />,

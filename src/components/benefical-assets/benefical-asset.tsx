@@ -4,7 +4,7 @@ import { useChainId } from "wagmi";
 import numeral from "numeral";
 import { formatEther, BigNumberish } from "ethers";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 import usePropertyValues from "../../hooks/contract/APIConsumerContract/useGetPropertyValues";
 import IconSofa from "../../../public/icons/sofa.svg";
 import IconBathroom from "../../../public/icons/bathroom.svg";
@@ -18,7 +18,7 @@ interface BeneficalAssetProps {
 }
 
 export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const chainId = useChainId();
   const { isLoading, data: propertyValue } = usePropertyValues(chainId, asset.coreLogicID) as {
     isLoading: boolean,

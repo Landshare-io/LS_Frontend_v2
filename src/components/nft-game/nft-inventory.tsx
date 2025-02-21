@@ -32,17 +32,16 @@ import useSecondaryTradingLimitOf from "../../hooks/contract/RWAContract/useSeco
 import { useGlobalContext } from "../../context/GlobalContext";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useTheme } from "next-themes";
 
 const NFT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/nft']
 
 export default function InventoryPage() {
 	const chainId = useChainId()
   const {
+		theme,
     isAuthenticated,
     notifyError,	
   } = useGlobalContext();
-  const { theme } = useTheme();
   const { isConnected, address } = useAccount();
 	const [harvestLoading, setHarvestLoading] = useState(false);
 	const [buyHouseSlotLoading, setBuyHouseSlotLoading] = useState(false)

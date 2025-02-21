@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import { useTheme } from "next-themes";
+import { useGlobalContext } from '../../context/GlobalContext'
 import ArrowDownIcon from '../../../public/icons/arrow-down.svg'
 import ArrowDownIconDark from '../../../public/icons/arrow-down-dark.svg'
 
@@ -10,7 +10,7 @@ interface SelectVaultProps {
 }
 
 export default function SelectVault({ value, setValue }: SelectVaultProps) {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   function useOutsideAlerter(ref: any) {
     React.useEffect(() => {
       function handleClickOutside(event: any) {

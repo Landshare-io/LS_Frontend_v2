@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { SquareFootageIcon } from "../common/icons";
 import { BigNumberish, formatEther } from "ethers";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 import Collapse from "../common/collapse";
 import { MonthlyExpenseIcon } from "../common/icons";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
@@ -16,7 +16,7 @@ interface HouseInfoDetailsProps {
 }
 
 export default function HouseInfoDetails({ houseInfo, isLoading, propertyValue }: HouseInfoDetailsProps) {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const [isOpen, setIsOpen] = useState(false);
 
   return (

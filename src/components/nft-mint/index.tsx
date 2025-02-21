@@ -1,7 +1,6 @@
 import ReactLoading from "react-loading";
 import { useAccount } from "wagmi";
 import { useGlobalContext } from '../../context/GlobalContext';
-import { useTheme } from "next-themes";
 import ConnectWallet from '../connect-wallet';
 import useLogin from '../../hooks/nft-game/axios/useLogin';
 import PremiumNfts from '../mint-premium-nfts';
@@ -14,9 +13,9 @@ export default function NftMint() {
   const { isConnected, address } = useAccount();
   const { isLoading: isLoginLoading } = useLogin()
   const {
-    isAuthenticated
+    isAuthenticated,
+    theme
   } = useGlobalContext()
-  const { theme } = useTheme();
 
   const houseTypes = [
     // {

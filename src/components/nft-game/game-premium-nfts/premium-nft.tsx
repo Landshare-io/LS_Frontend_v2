@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReactModal from 'react-modal';
 import { OpenModalIcon } from "../../common/icons/index";
 import Button from '../../common/button';
-import { useTheme } from "next-themes";
+import { useGlobalContext } from '../../../context/GlobalContext';
 import { returnPremiumNftRemainTime } from "../../../utils/helpers/validator";
 
 interface PremiumNftProps {
@@ -18,7 +18,7 @@ export default function PremiumNft({
   onSubmit,
   loader,
 }: PremiumNftProps) {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const [openModal, setOpenModal] = useState(false);
   const remainingTime = returnPremiumNftRemainTime(premiumNft.activeTime)
 

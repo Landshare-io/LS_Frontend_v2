@@ -18,7 +18,7 @@ import {
   validateItemDateWithDeadTime
 } from "../../../utils/helpers/validator";
 import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 interface FirepitUpgradeProps {
   item: any;
@@ -41,7 +41,7 @@ export default function FirepitUpgrade({
   isLoading,
   salvageItem
 }: FirepitUpgradeProps) {
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const { oneDayTime } = useGetSetting()
   const durationDate = getItemDurationWithDeadTime(item, oneDayTime) > 0 ? getItemDurationWithDeadTime(item, oneDayTime) : 0
   const havingItem = validateItemDateWithDeadTime(item)

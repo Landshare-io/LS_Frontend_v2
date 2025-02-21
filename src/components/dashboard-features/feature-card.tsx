@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { DASHBOARD_FEATURE } from "../../utils/type";
 import Button from "../common/button";
 
@@ -16,7 +16,7 @@ export default function FeatureCard({
   externalLink
 }: DASHBOARD_FEATURE) {
   const router = useRouter();
-  const { theme } = useTheme();
+  const { theme } = useGlobalContext();
   const navigate = () => {
     if (routeName) {
       router.push(routeName);
