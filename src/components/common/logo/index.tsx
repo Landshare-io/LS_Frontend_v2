@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from 'next/image';
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import logo from "../../../../public/logo.svg";
 import logoDark from "../../../../public/logo-dark.svg";
 
@@ -12,7 +12,7 @@ interface LogoProps {
 }
 
 export default function Logo({ logoClassName, textClassName, showLogoText }: LogoProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
 
   return (
     <Link

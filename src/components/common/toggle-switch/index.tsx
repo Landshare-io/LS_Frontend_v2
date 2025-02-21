@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 
 interface ToggleSwitchProps {
   isSale: boolean;
@@ -9,7 +8,7 @@ interface ToggleSwitchProps {
 }
 
 export default function ToggleSwitch({ isSale, className, onClick, disabled }: ToggleSwitchProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme()
 
   return (
     <>

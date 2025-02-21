@@ -16,7 +16,7 @@ import numeral from "numeral";
 import Tooltip from "../common/tooltip";
 import Collapse from "../common/collapse";
 import ConnectWallet from "../connect-wallet";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import useUsdtVault from "../../hooks/contract/vault/useUsdtVault";
 import useBalanceOfRwaLp from "../../hooks/contract/RwaLpTokenContract/useBalanceOf";
@@ -44,6 +44,7 @@ import {
   MASTERCHEF_CONTRACT_ADDRESS
 } from "../../config/constants/environments";
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useGlobalContext } from "../../context/GlobalContext";
 
 const USDT_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['usdt']
 
@@ -64,7 +65,8 @@ export default function Usdtvault({
   setIsLPVault,
   setIsShowUsdPrice
 }: UsdtVaultProps) {
-  const { theme, notifyError } = useGlobalContext();
+  const { notifyError } = useGlobalContext();
+  const { theme } = useTheme();
   const { isConnected, address } = useAccount()
   const chainId = useChainId()
   const { switchChain } = useSwitchChain()

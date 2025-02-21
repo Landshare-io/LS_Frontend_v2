@@ -4,7 +4,7 @@ import { bsc } from "viem/chains";
 import Image from "next/image";
 import ReactLoading from "react-loading";
 import { parseEther, formatEther, BigNumberish } from "ethers";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import useMigrateWithDrawLandv1 from "../../hooks/contract/migrations/useMigrateWithDrawLandV1";
 import useTokenMigrate from "../../hooks/contract/migrations/useTokenMigrate";
 import useMigrateApproveLandAndLpV2 from "../../hooks/contract/migrations/useMigrateApproveLandAndLpV2";
@@ -76,7 +76,7 @@ export default function VaultCard({
   vaultName,
   initVault
 }: VaultCardProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const { address } = useAccount()
   const wrapperRef = useRef(null);
   const [details, setDetails] = useState<number | string>(0);
