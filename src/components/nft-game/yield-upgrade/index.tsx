@@ -18,6 +18,7 @@ import useGetResource from "../../../hooks/nft-game/axios/useGetResource";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useHandleAddons from "../../../hooks/nft-game/axios/useHandleAddons";
 import useBalanceOfLand from "../../../hooks/contract/LandTokenContract/useBalanceOf"
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 interface YieldUpdgradesProps {
   house: any

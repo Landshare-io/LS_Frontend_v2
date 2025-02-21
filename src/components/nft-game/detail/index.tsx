@@ -10,7 +10,7 @@ import GamePremiumNfts from "../game-premium-nfts";
 import UpgradeListTable from "./upgrade-list-table";
 import ProductionUpgrade from "../production-upgrade";
 import YieldUpgrades from "../yield-upgrade";
-import { useTheme } from "next-themes";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import ConnectWallet from "../../connect-wallet";
 import useGetHouse from "../../../hooks/nft-game/axios/useGetHouse";
 import useLogin from "../../../hooks/nft-game/axios/useLogin";

@@ -31,9 +31,9 @@ import sadEmojiWhite from "../../../public/icons/sad_emoji_white.png";
 import resourceLandshare from "../../../public/icons/resource-landshare.png";
 import resourceLumber from "../../../public/icons/resource-lumber.png";
 import resourcePower from "../../../public/icons/resource-power.png";
-import marble from "../../../public/img/marketplace-property/marble.png";
-import pool from "../../../public/img/marketplace-property/pool.png";
-import tile from "../../../public/img/marketplace-property/tile.png";
+import marble from "../../../public/img/marketplace-property/marble.webp";
+import pool from "../../../public/img/marketplace-property/pool.webp";
+import tile from "../../../public/img/marketplace-property/tile.webp";
 import { useGlobalContext } from "../../context/GlobalContext";
 
 export default function NftResource() {

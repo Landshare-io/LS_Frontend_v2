@@ -126,7 +126,7 @@ export default function NftDetails({
   const { activate, deactivate, renameNft, setOnSale, onSaleHandler, extendHarvestLimit } = useHandleHouse(house, setHouse, setIsLoading, isOwn, onSaleLoading, setOnSaleLoading, setSaleOpen, setShowOnSaleAlert, address)
   const { hasLandscaping } = useCheckHasLandscaping(house.id)
   const { hasGarden } = useCheckHasGarden(house.id)
-  const [houseImgUrl, setHouseImgUrl] = useState("")
+  const [houseImgUrl, setHouseImgUrl] = useState<any>("")
   const [depositAmount, setDepositAmount] = useState("");
   const [isTotalYieldModalOpen, setIsTotalYieldModalOpen] = useState(false)
   const [showHarvestConfirm, setShowHarvestConfirm] = useState(false)
