@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -17,6 +17,9 @@ import {
   IoTrendingUp,
 } from "react-icons/io5";
 import { MdOutlineCandlestickChart } from "react-icons/md";
+import CarouselItem from "../common/carousel/carousel-item";
+import CarouselControl from "../common/carousel/carousel-control";
+import CommonCarousel from "../common/carousel";
 
 interface HouseInfoCarouselComponentProps {
   houseInfo: any;
@@ -30,13 +33,16 @@ export default function HouseInfoCarouselComponent({
   propertyValue,
 }: HouseInfoCarouselComponentProps) {
   const { theme } = useGlobalContext();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
   if (isLoading || houseInfo?.address == undefined) {
     return (
       <div className="max-w-[1200px] m-auto my-[10px] px-[10px]">
         <div className="">
           <div className="animate-pulse">
-            <div className="h-[30px] w-[200px] bg-gray-300 mb-2 rounded-[20px]"></div>
-            <div className="h-[32px] w-[60%] bg-gray-300"></div>
+            <div className="h-[32px] w-[60%] bg-gray-300 mb-2"></div>
+            <div className="h-[30px] w-[200px] bg-gray-300  rounded-[20px]"></div>
           </div>
 
           <div className="w-full gap-[28px] flex flex-col md:flex-row justify-between mt-4">
@@ -96,68 +102,212 @@ export default function HouseInfoCarouselComponent({
   return (
     <>
       {houseInfo?.address ? (
-        <div className="max-w-[1200px] text-text-primary flex flex-col gap-2 md:gap-8 m-auto my-[10px] px-[10px] pb-[50px] ">
-          <div className="flex flex-col gap-2">
-            <span className="w-fit h-[30px] rounded-[20px] flex gap-1 justify-center items-center font-medium text-[12px] px-2 py-1  tracking-[0.02em] text-primary-green bg-secondary  dark:text-text-fourth">
-              <div className="rounded-full bg-primary flex items-center justify-center h-full aspect-square">
-                <IoHomeOutline />
+        <>
+          <div className="max-w-[1200px] text-text-primary flex flex-col gap-2 md:gap-8 m-auto my-[10px] px-[10px] pb-[50px] ">
+            <div className="flex flex-col gap-2">
+              <h1
+                className={`${BOLD_INTER_TIGHT.className} leading-normal text-[18px] md:text-[32px] flex  items-center`}
+              >
+                <IoLocationOutline /> {houseInfo?.address}
+              </h1>
+              <span className="w-fit h-[30px] rounded-[20px] flex gap-1 justify-center items-center font-medium text-[12px] px-2 py-1  tracking-[0.02em] text-primary-green bg-secondary  dark:text-text-fourth">
+                Single Family Home
+              </span>
+            </div>
+            {/* second section */}
+            <div className="w-full md:gap-[46px] md:grid md:grid-cols-2 flex flex-col ">
+              <div className="flex flex-col items-center justify-center">
+                <div className="w-full">
+                  <Carousel className="w-full relative">
+                    {houseInfo?.pictures?.map((imgObj: any) => (
+                      <div key={imgObj}>
+                        <img className="rounded-[13px]" src={imgObj} alt="" />
+                      </div>
+                    ))}
+                  </Carousel>
+                </div>
               </div>
-              Single Family Home
-            </span>
-            <h1
-              className={`${BOLD_INTER_TIGHT.className} leading-normal text-[18px] md:text-[32px] flex  items-center`}
-            >
-              <IoLocationOutline /> {houseInfo?.address}
-            </h1>
-          </div>
-          {/* second section */}
-          <div className="w-full md:gap-[46px] md:grid md:grid-cols-[40%_56%] flex flex-col ">
-            <div className="flex flex-col items-center justify-center">
-              <div className="w-full">
-                <Carousel className="w-full relative">
-                  {houseInfo?.pictures?.map((imgObj: any) => (
-                    <div key={imgObj}>
-                      <img className="rounded-[13px]" src={imgObj} alt="" />
+              <div className="justify-between flex flex-col h-[93.5%] gap-4 md:gap-0">
+                <section className="flex flex-col gap-3">
+                  <h3
+                    className={`${BOLD_INTER_TIGHT.className} text-[16px] lg:text-[18px]`}
+                  >
+                    Property Details
+                  </h3>
+                  <div className="flex gap-[20px]">
+                    {houseInfo?.bedrooms && (
+                      <div className="flex items-center gap-[5px]">
+                        <Image src={IconSofa} className="size-4" alt="sofa" />
+                        <span className="text-[14px] leading-[22px] text-[#0A1339]/60 dark:text-text-third">
+                          {houseInfo?.bedrooms} Bedrooms
+                        </span>
+                      </div>
+                    )}
+                    {houseInfo?.bathrooms && (
+                      <div className="flex items-center gap-[5px]">
+                        <Image
+                          src={IconBathroom}
+                          className="size-4"
+                          alt="sink"
+                        />
+                        <span className="text-[14px] leading-[22px] text-[#0A1339]/60 dark:text-text-third">
+                          {houseInfo?.bathrooms} Bathrooms
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div
+                    className="flex flex-col  text-[14px] gap-3 text-[#0A1339]/60 dark:text-text-third font-normal"
+                    dangerouslySetInnerHTML={{ __html: houseInfo?.description }}
+                  ></div>
+                </section>
+                <hr className="hidden lg:block border-gray-400/30" />
+                <section className="hidden lg:flex flex-col gap-3">
+                  <h3
+                    className={`${BOLD_INTER_TIGHT.className} text-[16px] lg:text-[18px]`}
+                  >
+                    Investment Details
+                  </h3>
+                  <div className="flex justify-between  pb-4 px-1 lg:pb-0 lg:px-0  gap-8">
+                    <div className="flex flex-col  justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
+                      <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
+                        <BsBuilding className="text-primary-green" />
+                        Property Value
+                      </label>
+
+                      <span
+                        className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
+                      >
+                        ${Number(formatEther(propertyValue)).toLocaleString()}
+                      </span>
                     </div>
-                  ))}
-                </Carousel>
+                    <div className="flex flex-col  justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
+                      <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
+                        <IoTrendingUp className="text-primary-green" />
+                        Rental Yield
+                      </label>
+                      <span
+                        className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
+                      >
+                        {(
+                          ((houseInfo?.grossRent *
+                            (1 - houseInfo?.management) *
+                            12 -
+                            houseInfo?.insurance -
+                            houseInfo?.tax) /
+                            Number(formatEther(propertyValue))) *
+                          100
+                        ).toFixed(2)}
+                        %
+                      </span>
+                    </div>
+                    <div className="flex flex-col  justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
+                      <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
+                        <MdOutlineCandlestickChart className="text-primary-green" />
+                        Ann. Return
+                      </label>
+
+                      <span
+                        className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
+                      >
+                        {(
+                          ((houseInfo?.grossRent *
+                            (1 - houseInfo?.management) *
+                            12 -
+                            houseInfo?.insurance -
+                            houseInfo?.tax) /
+                            Number(formatEther(propertyValue))) *
+                            100 +
+                          houseInfo?.appreciation
+                        ).toFixed(2)}
+                        %
+                      </span>
+                    </div>
+                  </div>
+                </section>
               </div>
             </div>
-            <div className="justify-between  flex flex-col h-[93.5%] gap-4 md:gap-0">
-              <section className="flex flex-col gap-3">
-                <h3 className={`${BOLD_INTER_TIGHT.className} text-[16px] lg:text-[18px]`}>
-                  Property Details
-                </h3>
-                <div className="flex gap-[20px]">
-                  {houseInfo?.bedrooms && (
-                    <div className="flex items-center gap-[5px]">
-                      <Image src={IconSofa} className="size-4" alt="sofa" />
-                      <span className="text-[14px] leading-[22px] text-text-third">
-                        {houseInfo?.bedrooms} Bedrooms
-                      </span>
-                    </div>
-                  )}
-                  {houseInfo?.bathrooms && (
-                    <div className="flex items-center gap-[5px]">
-                      <Image src={IconBathroom} className="size-4" alt="sink" />
-                      <span className="text-[14px] leading-[22px] text-text-third">
-                        {houseInfo?.bathrooms} Bathrooms
-                      </span>
-                    </div>
-                  )}
+
+            {/* investment details middle section */}
+            <section className="hidden md:flex lg:hidden flex-col gap-3">
+              <h3 className={`${BOLD_INTER_TIGHT.className} text-[18px]`}>
+                Investment Details
+              </h3>
+              <div className="flex justify-between">
+                <div className="flex flex-col justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
+                  <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
+                    <BsBuilding className="text-primary-green" />
+                    Property Value
+                  </label>
+
+                  <span
+                    className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
+                  >
+                    ${Number(formatEther(propertyValue)).toLocaleString()}
+                  </span>
                 </div>
-                <div
-                  className="flex flex-col  text-[14px]  text-text-third"
-                  dangerouslySetInnerHTML={{ __html: houseInfo?.description }}
-                ></div>
-              </section>
-              <hr className="md:hidden lg:block border-gray-400" />
-              <section className="flex md:hidden lg:flex flex-col gap-3">
-                <h3 className={`${BOLD_INTER_TIGHT.className} text-[16px] lg:text-[18px]`}>
-                  Investment Details
-                </h3>
-                <div className="flex justify-between overflow-x-auto pb-4 px-1 lg:pb-0 lg:px-0  lg:overflow-x-visible gap-8">
-                  <div className="flex flex-col min-w-44 justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
+                <div className="flex flex-col justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
+                  <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
+                    <IoTrendingUp className="text-primary-green" />
+                    Rental Yield
+                  </label>
+                  <span
+                    className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
+                  >
+                    {(
+                      ((houseInfo?.grossRent *
+                        (1 - houseInfo?.management) *
+                        12 -
+                        houseInfo?.insurance -
+                        houseInfo?.tax) /
+                        Number(formatEther(propertyValue))) *
+                      100
+                    ).toFixed(2)}
+                    %
+                  </span>
+                </div>
+                <div className="flex flex-col justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
+                  <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
+                    <MdOutlineCandlestickChart className="text-primary-green" />
+                    Ann. Return
+                  </label>
+
+                  <span
+                    className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
+                  >
+                    {(
+                      ((houseInfo?.grossRent *
+                        (1 - houseInfo?.management) *
+                        12 -
+                        houseInfo?.insurance -
+                        houseInfo?.tax) /
+                        Number(formatEther(propertyValue))) *
+                        100 +
+                      houseInfo?.appreciation
+                    ).toFixed(2)}
+                    %
+                  </span>
+                </div>
+              </div>
+            </section>
+            {/* investment details mobile */}
+            <section className="flex flex-col gap-2 md:hidden mt-3">
+              <h3
+                className={`${BOLD_INTER_TIGHT.className} text-[16px] lg:text-[18px]`}
+              >
+                Investment Details
+              </h3>
+              <CommonCarousel
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
+                setPaused={setPaused}
+              >
+                <CarouselItem
+                  variant="allowShadow"
+                  activeIndex={activeIndex}
+                  containerClassName="w-fit"
+                >
+                  <div className="flex flex-col min-w-44 h-[160px] justify-center items-center bg-secondary py-4 px-8 rounded-2xl shadow-md">
                     <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
                       <BsBuilding className="text-primary-green" />
                       Property Value
@@ -169,7 +319,14 @@ export default function HouseInfoCarouselComponent({
                       ${Number(formatEther(propertyValue)).toLocaleString()}
                     </span>
                   </div>
-                  <div className="flex flex-col min-w-44 justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
+                </CarouselItem>
+
+                <CarouselItem
+                  variant="allowShadow"
+                  activeIndex={activeIndex}
+                  containerClassName="w-fit"
+                >
+                  <div className="flex flex-col min-w-44 h-[160px] justify-center items-center bg-secondary py-4 px-8 rounded-2xl shadow-md">
                     <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
                       <IoTrendingUp className="text-primary-green" />
                       Rental Yield
@@ -189,7 +346,14 @@ export default function HouseInfoCarouselComponent({
                       %
                     </span>
                   </div>
-                  <div className="flex flex-col min-w-44 justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
+                </CarouselItem>
+
+                <CarouselItem
+                  variant="allowShadow"
+                  activeIndex={activeIndex}
+                  containerClassName="w-fit"
+                >
+                  <div className="flex flex-col min-w-44 h-[160px] justify-center items-center bg-secondary py-4 px-8 rounded-2xl shadow-md">
                     <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
                       <MdOutlineCandlestickChart className="text-primary-green" />
                       Ann. Return
@@ -211,103 +375,56 @@ export default function HouseInfoCarouselComponent({
                       %
                     </span>
                   </div>
-                </div>
-              </section>
-            </div>
+                </CarouselItem>
+              </CommonCarousel>
+              <CarouselControl
+                paused={paused}
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
+                carouselControlClass={"max-w-[1200px] m-auto mt-[32px]"}
+                count={3}
+              />
+            </section>
           </div>
-          <div className="flex md:hidden lg:flex w-full justify-center">
+          <div className="flex flex-col items-center gap-[12px] w-full justify-center py-[14px] bg-secondary text-text-primary">
+            <Image
+              src="/icons/lsrwa-icon.svg"
+              alt="lsrwa-icon"
+              width={32}
+              height={32}
+            />
+            <p>
+              Property Value:{" "}
+              <span
+                className={` tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
+              >
+                ${Number(formatEther(propertyValue)).toLocaleString()}
+              </span>
+            </p>
+            <p>
+              LSRWA Holders Earn Up To:{" "}
+              <span className={`${BOLD_INTER_TIGHT.className}`}>
+                $
+                {numeral(
+                  (houseInfo?.grossRent -
+                    (houseInfo?.insurance +
+                      houseInfo?.tax +
+                      houseInfo?.management * houseInfo?.grossRent * 12) /
+                      12) *
+                    12
+                ).format("0,0")}
+              </span>
+            </p>
             <Link href="/rwa">
               <Button
-                className={`w-fit h-[48px] px-6 text-white rounded-[100px] bg-[#61cd81]`}
+                className={`w-fit h-[48px] px-6 text-white rounded-[100px] capitalize bg-[#61cd81]`}
                 textClassName=" text-[100%]"
               >
-                LSRWA Holders Earn Up To $
-                {numeral(
-                  (houseInfo?.grossRent -
-                    (houseInfo?.insurance +
-                      houseInfo?.tax +
-                      houseInfo?.management * houseInfo?.grossRent * 12) /
-                      12) *
-                    12
-                ).format("0,0")}
+                trade on RWA portal
               </Button>
             </Link>
           </div>
-          {/* cta middle section */}
-          <section className="hidden md:flex lg:hidden flex-col gap-3">
-            <h3 className={`${BOLD_INTER_TIGHT.className} text-[18px]`}>
-              Investment Details
-            </h3>
-            <div className="flex justify-between">
-            <div className="flex flex-col justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
-            <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
-                  <BsBuilding className="text-primary-green" />
-                  Property Value
-                </label>
-
-                <span
-                  className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
-                >
-                  ${Number(formatEther(propertyValue)).toLocaleString()}
-                </span>
-              </div>
-              <div className="flex flex-col justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
-              <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
-                  <IoTrendingUp className="text-primary-green" />
-                  Rental Yield
-                </label>
-                <span
-                  className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
-                >
-                  {(
-                    ((houseInfo?.grossRent * (1 - houseInfo?.management) * 12 -
-                      houseInfo?.insurance -
-                      houseInfo?.tax) /
-                      Number(formatEther(propertyValue))) *
-                    100
-                  ).toFixed(2)}
-                  %
-                </span>
-              </div>
-              <div className="flex flex-col justify-center bg-secondary py-4 px-8 rounded-2xl shadow-lg">
-              <label className="text-[14px] flex items-center gap-1 leading-[20px] text-center tracking-[0.02em] text-text-secondary">
-                  <MdOutlineCandlestickChart className="text-primary-green" />
-                  Ann. Return
-                </label>
-
-                <span
-                  className={`text-[18px] leading-[28px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}
-                >
-                  {(
-                    ((houseInfo?.grossRent * (1 - houseInfo?.management) * 12 -
-                      houseInfo?.insurance -
-                      houseInfo?.tax) /
-                      Number(formatEther(propertyValue))) *
-                      100 +
-                    houseInfo?.appreciation
-                  ).toFixed(2)}
-                  %
-                </span>
-              </div>
-            </div>
-            <Link href="/rwa">
-              <Button
-                className={`w-fit h-[48px] px-6 text-white rounded-[100px] bg-[#61cd81]`}
-                textClassName="hover:dark:text-[#61CD81] text-[100%]"
-              >
-                LSRWA Holders Earn Up To $
-                {numeral(
-                  (houseInfo?.grossRent -
-                    (houseInfo?.insurance +
-                      houseInfo?.tax +
-                      houseInfo?.management * houseInfo?.grossRent * 12) /
-                      12) *
-                    12
-                ).format("0,0")}
-              </Button>
-            </Link>
-          </section>
-        </div>
+        </>
       ) : null}
     </>
   );

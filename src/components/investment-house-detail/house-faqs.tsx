@@ -80,12 +80,14 @@ export default function HouseFaqs() {
   };
   return (
     <div className="max-w-[1200px] m-auto py-[50px] space-y-2 px-[10px]">
-      <span className="w-fit h-[30px] rounded-[20px] flex gap-1 justify-center items-center font-medium text-[12px] px-2 py-1  tracking-[0.02em] text-primary-green bg-secondary  dark:text-text-fourth">
-        <div className="rounded-full bg-primary flex items-center justify-center h-full aspect-square">
-          <MdQuestionMark />
+      <div className="flex items-center w-fit py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-secondary ">
+        <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-primary">
+          <MdQuestionMark className="w-[24px] h-[24px] text-[#61CD81]" />
         </div>
-        FAQs
-      </span>
+        <span className="text-[14px] capitalize leading-[22px] tracking-[0.02em] font-semibold text-text-primary">
+          FAQs
+        </span>
+      </div>
       <h2
         className={`text-text-primary leading-normal text-[18px] md:text-[32px] ${BOLD_INTER_TIGHT.className}`}
       >
