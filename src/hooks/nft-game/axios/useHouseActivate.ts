@@ -3,12 +3,14 @@ import axios from "./nft-game-axios";
 import useGetHouses from "./useGetHouses";
 import useGetUserData from "./useGetUserData";
 import { useGlobalContext } from "../../../context/GlobalContext";
+import useGetSetting from "./useGetSetting";
 
 export default function useHouseActivate(setIsActivating: Function) {
   const { disconnect } = useDisconnect()
   const { notifyError, notifySuccess } = useGlobalContext()
   const { houses, getHouses } = useGetHouses()
   const { userData, getUserData } = useGetUserData()
+  const { getLandRemaining } = useGetSetting()
 
   const activate = async (house: any) => {
     setIsActivating(true)
@@ -40,7 +42,6 @@ export default function useHouseActivate(setIsActivating: Function) {
       hTypeItems.push(6)
     }
 
-    console.log('=================', houses)
     if (houses.filter(hItem => hTypeItems.includes(hItem.type) && hItem.isActivated).length > 0) {
       setIsActivating(false)
       return notifyError("You have already activated this house type");
@@ -53,6 +54,7 @@ export default function useHouseActivate(setIsActivating: Function) {
       })
 
       await getHouses();
+      await getLandRemaining();
       await getUserData();
       setIsActivating(false)
       return notifySuccess("Activated successfully!");

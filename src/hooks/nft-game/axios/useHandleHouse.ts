@@ -18,6 +18,7 @@ import useApprove from "../../contract/HouseNftContract/useApprove";
 import useBalanceOfLand from "../../contract/LandTokenContract/useBalanceOf";
 import useGetNftCredits from "../apollo/useGetNftCredits";
 import useGetHouse from "./useGetHouse";
+import useGetSetting from "./useGetSetting";
 import { ADMIN_WALLET_ADDRESS, PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 
 export default function useHandleHouse(
@@ -47,6 +48,7 @@ export default function useHandleHouse(
   const { nftCredits, getNftCredits } = useGetNftCredits(address)
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
   const { getHouse } = useGetHouse(house.id)
+  const { getLandRemaining } = useGetSetting()
 
   const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
@@ -233,6 +235,7 @@ export default function useHandleHouse(
         ...houseData
       }))
       await getUserData();
+      await getLandRemaining();
       setIsLoading([false, false, false, false, false]);
       notifySuccess("Deactivated successfully!");
     } catch (error: any) {
@@ -271,6 +274,7 @@ export default function useHandleHouse(
         ...houseData
       }))
       await getUserData();
+      await getLandRemaining();
       setIsLoading([false, false, false, false, false]);
       notifySuccess("Activated successfully!");
     } catch (error: any) {

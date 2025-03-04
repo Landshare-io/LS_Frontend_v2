@@ -117,8 +117,7 @@ export default function NftDetails({
 	const { data: depositedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
 	const { userReward } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
-	const { minAssetAmount, withdrawStakedCost } = useGetSetting()
-  const landRemaining = house.tokenHarvestLimit + house.extendedBalance - house.tokenReward - house.totalHarvestedToken
+	const { minAssetAmount, withdrawStakedCost, landRemaining } = useGetSetting()
 	const { stake } = useStake(chainId, address, setDepositLoading)
 	const { nftCredits, totalCredits } = useGetNftCredits(address)
 	const { withdrawAssetTokenHandler } = useWithdrawAsset(chainId, address, setDepositLoading, setWithdrawLoading)

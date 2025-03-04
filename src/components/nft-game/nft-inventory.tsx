@@ -58,7 +58,7 @@ export default function InventoryPage() {
 	const { isLoading: isLoginLoading, checkIsAuthenticated } = useLogin()
 	const { userReward, getResources } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
-	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost } = useGetSetting()
+	const { buySlotCost, userActivatedSlots, setUserActivatedSlots, houseSlots, withdrawStakedCost, landRemaining } = useGetSetting()
 	const { handleBuyHouseSlots } = useHandleBuyHouseSlots(chainId, address, setUserActivatedSlots, setBuyHouseSlotLoading)
 	const { stake } = useStake(chainId, address, setDepositLoading)
 	const { nftCredits, totalCredits } = useGetNftCredits(address)
@@ -70,28 +70,6 @@ export default function InventoryPage() {
   const [showItemsModal, setShowItemsModal] = useState(false)
   const [showHarvestConfirm, setShowHarvestConfirm] = useState(false)
   const [showWithdrawAlert, setShowWithdrawAlert] = useState(false)
-  const [landRemaining, setLandRemaining] = useState(0);
-
-  useEffect(() => {
-    setLandRemaining(Number(numeral(
-      Number(
-        houseItems.filter((house: any) => house.isActivated).length > 0 ?
-          houseItems.filter((house: any) => house.isActivated).map((house: any) => house.tokenHarvestLimit).reduce((a, b) => a + b) : 0
-      ) +
-      Number(
-        houseItems.filter((house: any) => house.isActivated).length > 0 ?
-          houseItems.filter((house: any) => house.isActivated).map((house: any) => house.extendedBalance).reduce((a, b) => a + b) : 0
-      ) -
-      Number(
-        houseItems.filter((house: any) => house.isActivated).length > 0 ?
-          houseItems.filter((house: any) => house.isActivated).map((house: any) => house.tokenReward).reduce((a, b) => a + b) : 0
-      ) -
-      Number(
-        houseItems.filter((house: any) => house.isActivated).length > 0 ?
-          houseItems.filter((house: any) => house.isActivated).map((house: any) => house.totalHarvestedToken).reduce((a, b) => a + b) : 0
-      )
-    ).format("0.[0]")))
-  }, [houseItems])
 
   const getHousesList = async () => {
     setIsLoading(true);
