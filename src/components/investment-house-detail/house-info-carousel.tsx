@@ -557,7 +557,7 @@ export default function HouseInfoCarouselComponent({
                 <BsShieldFillCheck className="text-primary-green" />
                 Secured & Regulated Investment
               </p>
-              <p className="text-[10px] lg:text-[12px]">Rates updated: Today</p>
+              <p className="text-[10px] lg:text-[12px]">Rates updated: March 5th, 2025</p>
             </div>
           </div>
         </>
