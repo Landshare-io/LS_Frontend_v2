@@ -29,7 +29,7 @@ export default function HouseMap({ houseInfo }: HouseMapProps) {
                   About {houseInfo?.cityName}
                 </h2>
                 <p
-                  className="text-[#0A1339]/60 dark:text-text-third flex flex-col text-[14px] gap-[8px] leading-none lg:leading-[30px]"
+                  className="text-[#0A1339]/60 dark:text-text-third flex flex-col text-[14px] gap-[8px] lg:leading-[30px] "
                   dangerouslySetInnerHTML={{ __html: houseInfo?.aboutCity }}
                 ></p>
               </div>

@@ -513,7 +513,7 @@ export default function HouseInfoCarouselComponent({
                               12
                           ).format("0,0")}
                         </span>
-                        <span>What LSRWA Holders Earn</span>
+                        <span>Annual Earnings</span>
                       </h2>
                     </div>
                   </div>
