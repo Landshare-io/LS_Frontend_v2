@@ -183,6 +183,10 @@ export default function useHandleHouse(
   }, [transactionNonce, sendTransactionTx, sendTxData, sendTxSuccess, isSendTransactionError])
 
   const renameNft = async (value: string) => {
+    if (house.deadTime) {
+      return notifyError("House is inactive or on sale");
+    }
+
     if (value.length > 0) {
       if (value.length < 32) {
         try {
@@ -224,6 +228,10 @@ export default function useHandleHouse(
       return notifyError("You are not house owner");
     }
 
+    if (house.deadTime) {
+      return notifyError("House is inactive or on sale");
+    }
+
     try {
       const { data: houseData } = await axios.patch(`/house/${house.id}`, {
         isActivated: false,
@@ -263,6 +271,10 @@ export default function useHandleHouse(
       return notifyError("You are not house owner");
     }
 
+    if (house.deadTime) {
+      return notifyError("House is inactive or on sale");
+    }
+
     try {
       const { data: houseData } = await axios.patch(`/house/${house.id}`, {
         isActivated: true,
@@ -289,6 +301,10 @@ export default function useHandleHouse(
   };
 
   const onSaleHandler = async () => {
+    if (house.deadTime) {
+      return notifyError("House is inactive or on sale");
+    }
+
     if (house.isActivated) {
       if (isOwn) {
         if (!onSaleLoading) {
@@ -323,6 +339,10 @@ export default function useHandleHouse(
   };
 
   const setOnSale = async (price: number) => {
+    if (house.deadTime) {
+      return notifyError("House is inactive or on sale");
+    }
+
     if (house.isActivated) {
       if (isOwn) {
         setOnSaleLoading(true);
@@ -348,6 +368,10 @@ export default function useHandleHouse(
   };
 
   const setHouseToOnSale = async () => {
+    if (house.deadTime) {
+      return notifyError("House is inactive or on sale");
+    }
+
     try {
       approve(chainId, ADMIN_WALLET_ADDRESS[chainId], house.houseId);
     } catch (error: any) {
@@ -360,6 +384,10 @@ export default function useHandleHouse(
 
   const extendHarvestLimit = async (landAmount: number) => {
     try {
+      if (house.deadTime) {
+        return notifyError("House is inactive or on sale");
+      }
+
       if (landAmount > Number(formatEther(userLandAmount))) {
         return notifyError('Insufficient LAND amount')
       }

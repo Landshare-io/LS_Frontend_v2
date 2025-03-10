@@ -271,6 +271,10 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
   const attachePremiumNftHandler = async (item: any) => {
     try {
       if (!isAuthenticated || !isConnected) return;
+
+      if (house.deadTime) {
+        return notifyError("House is inactive or on sale");
+      }
   
       if (Number(landTokenBalance) >= premiumAttachPrice) {
         setLoader(item.name)
