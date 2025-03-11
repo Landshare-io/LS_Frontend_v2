@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import MarketplacePage from '../components/marketplace'
 import useLogin from '../hooks/nft-game/axios/useLogin';
 import { MAJOR_WORK_CHAINS } from "../config/constants/environments";
+import Maintenance from '../components/maintainance';
 
 const NFT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/nft']
 
@@ -17,13 +18,13 @@ const Nft: NextPage = () => {
   }, [address])
 
   return (
-    <div className='bg-primary'>
+    <div className='bg-primary min-h-screen'>
       {!(NFT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
         <div className="min-h-[600px] flex flex-col justify-center items-center text-center mt-10 text-red-400 text-xl font-medium animate-[sparkling-anim_3s_linear_infinite]">
           {`Please switch your chain to ${NFT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}
         </div>
       ) : (
-        <MarketplacePage />
+        <Maintenance />
       )}
     </div>
   )
