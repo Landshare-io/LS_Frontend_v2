@@ -10,7 +10,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useAccount } from "wagmi";
 import { BigNumberish, formatEther } from "ethers";
 import { useBalance } from "wagmi";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { IoIosArrowDown } from "react-icons/io";
 import Carousel from "../common/carousel";
 import CarouselItem from "../common/carousel/carousel-item";
@@ -55,7 +55,7 @@ import Tooltip from "../common/tooltip";
 import CloseIcon from "../../../public/icons/close.svg";
 
 export default function FinancialSummary() {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const chainId = useChainId();
   const [openMonthlyExpences, setOpenMonthlyExpences] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -106,7 +106,7 @@ export default function Footer() {
               <div className="flex w-full justify-between">
                 <Logo showLogoText logoClassName="!w-[52.3px] !h-[54.4px]" />
                 <div className="items-end">
-                  <SwitchTheme />
+                  <SwitchTheme className="!m-0" />
                 </div>
               </div>
             </div>

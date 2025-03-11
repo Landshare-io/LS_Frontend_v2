@@ -18,6 +18,7 @@ let premiumMintCapState = {
   "Pool Table": 25,
   "Marble Countertops": 25,
 }
+let landRemainingState = 0
 
 // Subscribers to update all components on state change
 const subscribers = new Set<Function>();
@@ -41,6 +42,7 @@ export default function useGetSetting() {
   const [powerPerLumber, setPowerPerLumber] = useState(powerPerLumberState);
   const [powerPerLandtoken, setPowerPerLandtoken] = useState(powerPerLandtokenState);
   const [premiumMintCap, setPremiumMintCap] = useState(premiumMintCapState);
+  const [landRemaining, setLandRemaining] = useState(0);
 
   useEffect(() => {
     // Subscribe on mount
@@ -57,6 +59,7 @@ export default function useGetSetting() {
       setPowerPerLumber(powerPerLumberState)
       setPowerPerLandtoken(powerPerLandtokenState)
       setPremiumMintCap(premiumMintCapState)
+      setLandRemaining(landRemainingState)
     };
     subscribers.add(update);
 
@@ -126,6 +129,11 @@ export default function useGetSetting() {
     notifySubscribers();  
   };
 
+  const updateLandRemaining = (newLandRemaining: number) => {
+    landRemainingState = newLandRemaining;
+    notifySubscribers();
+  }
+
   useEffect(() => {
     if (isAuthenticated) {
       getGameSetting()
@@ -149,6 +157,7 @@ export default function useGetSetting() {
       const { data: prCap } = await axios.get('/setting/porcelain-tile-cap');
       const { data: mcCap } = await axios.get('/setting/marble-counterops-cap');
       const { data: ptCap } = await axios.get('/setting/pool-table-cap');
+      const { data: landRemainingAmount } = await axios.get('/house/get-user-land-remain-amount');
 
       updateOneDayTime(data.value)
       updateHarvestCost(Number(harvestData))
@@ -166,8 +175,20 @@ export default function useGetSetting() {
         "Pool Table": ptCap,
         "Marble Countertops": mcCap,
       })
+      updateLandRemaining(landRemainingAmount)
     } catch (error: any) {
       // console.log(error.response.data.message, error)
+    }
+  }
+
+  const getLandRemaining = async () => {
+    if (!isAuthenticated) return
+    try {
+      const { data: landRemainingAmount } = await axios.get('/house/get-user-land-remain-amount');
+
+      updateLandRemaining(landRemainingAmount)
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -184,6 +205,7 @@ export default function useGetSetting() {
     powerPerLumber,
     powerPerLandtoken,
     premiumMintCap,
+    landRemaining,
     getGameSetting,
     setOneDayTime: updateOneDayTime,
     setHarvestCost: updateHarvestCost,
@@ -196,6 +218,8 @@ export default function useGetSetting() {
     setWithdrawStakedCost: updateWithdrawStakedCost,
     setPowerPerLumber: updatePowerPerLumber,
     setPowerPerLandtoken: updatePowerPerLandtoken,
-    setPremiumMintCa: updatePremiumMintCap
+    setPremiumMintCa: updatePremiumMintCap,
+    setLandRemaining: updateLandRemaining,
+    getLandRemaining
   }
 }

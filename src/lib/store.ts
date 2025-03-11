@@ -13,7 +13,7 @@ const rootReducer = combineSlices(
   firebasePropertiesRentalSlice,
   firebasePropertyRentalSlice,
   firebaseFinancialLogsSlice,
-  APIConsumerCcipTransactionsSlice
+  APIConsumerCcipTransactionsSlice,
 );
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;

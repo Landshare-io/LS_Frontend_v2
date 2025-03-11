@@ -29,21 +29,22 @@ import useHandleHouse from "../../../hooks/nft-game/axios/useHandleHouse";
 import useCheckHasGarden from "../../../hooks/nft-game/axios/useCheckHasGarden";
 import useCheckHasLandscaping from "../../../hooks/nft-game/axios/useCheckHasLandscaping";
 import Button from "../../common/button";
+import { useTheme } from "next-themes";
 import { useGlobalContext } from "../../../context/GlobalContext";
-import HouseNft from "../../../../public/img/house/house.bmp";
-import HouseBNft from "../../../../public/img/house/houseB.bmp";
-import HouseRareNft from "../../../../public/img/house/house_rare.bmp";
-import HouseBRareNft from "../../../../public/img/house/houseB_rare.bmp";
-import HouseLandNft from "../../../../public/img/house/house_land.png";
-import HouseBLandNft from "../../../../public/img/house/houseB_land.bmp";
-import HouseLandRareNft from "../../../../public/img/house/house_land_rare.bmp";
-import HouseBLandRareNft from "../../../../public/img/house/houseB_land_rare.bmp";
-import HouseGardenNft from "../../../../public/img/house/house_garden.bmp";
-import HouseBGardenNft from "../../../../public/img/house/houseB_garden.bmp";
-import HouseGardenRareNft from "../../../../public/img/house/house_garden_rare.bmp";
-import HouseBGardenRareNft from "../../../../public/img/house/houseB_garden_rare.bmp";
-import HouseCNft from "../../../../public/img/house/houseC.bmp"
-import HouseCRareNft from "../../../../public/img/house/houseC_rare.bmp"
+import HouseNft from "../../../../public/img/house/house(bmp).webp";
+import HouseBNft from "../../../../public/img/house/houseB.webp";
+import HouseRareNft from "../../../../public/img/house/house_rare(bmp).webp";
+import HouseBRareNft from "../../../../public/img/house/houseB_rare.webp";
+import HouseLandNft from "../../../../public/img/house/house_land.webp";
+import HouseBLandNft from "../../../../public/img/house/houseB_land.webp";
+import HouseLandRareNft from "../../../../public/img/house/house_land_rare(bmp).webp";
+import HouseBLandRareNft from "../../../../public/img/house/houseB_land_rare.webp";
+import HouseGardenNft from "../../../../public/img/house/house_garden.webp";
+import HouseBGardenNft from "../../../../public/img/house/houseB_garden.webp";
+import HouseGardenRareNft from "../../../../public/img/house/house_garden_rare(bmp).webp";
+import HouseBGardenRareNft from "../../../../public/img/house/houseB_garden_rare.webp";
+import HouseCNft from "../../../../public/img/house/houseC.webp"
+import HouseCRareNft from "../../../../public/img/house/houseC_rare.webp"
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface NftDetailsProps {
@@ -57,7 +58,7 @@ export default function NftDetails({
   setHouse,
   getHouse,
 }: NftDetailsProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const { notifyError } = useGlobalContext();
   const customModalStyles = {
     content: {
@@ -116,8 +117,7 @@ export default function NftDetails({
 	const { data: depositedBalance, refetch: updateDepositedBalance } = useStakedBalance(chainId, address) as { data: number, refetch: Function }
 	const { userReward } = useGetResource()
 	const { harvest } = useHarvest(setHarvestLoading)
-	const { minAssetAmount, withdrawStakedCost } = useGetSetting()
-  const landRemaining = house.tokenHarvestLimit + house.extendedBalance - house.tokenReward - house.totalHarvestedToken
+	const { minAssetAmount, withdrawStakedCost, landRemaining } = useGetSetting()
 	const { stake } = useStake(chainId, address, setDepositLoading)
 	const { nftCredits, totalCredits } = useGetNftCredits(address)
 	const { withdrawAssetTokenHandler } = useWithdrawAsset(chainId, address, setDepositLoading, setWithdrawLoading)
@@ -125,7 +125,7 @@ export default function NftDetails({
   const { activate, deactivate, renameNft, setOnSale, onSaleHandler, extendHarvestLimit } = useHandleHouse(house, setHouse, setIsLoading, isOwn, onSaleLoading, setOnSaleLoading, setSaleOpen, setShowOnSaleAlert, address)
   const { hasLandscaping } = useCheckHasLandscaping(house.id)
   const { hasGarden } = useCheckHasGarden(house.id)
-  const [houseImgUrl, setHouseImgUrl] = useState(HouseNft)
+  const [houseImgUrl, setHouseImgUrl] = useState<any>("")
   const [depositAmount, setDepositAmount] = useState("");
   const [isTotalYieldModalOpen, setIsTotalYieldModalOpen] = useState(false)
   const [showHarvestConfirm, setShowHarvestConfirm] = useState(false)
@@ -311,7 +311,7 @@ export default function NftDetails({
 
   return (
     <>
-      <div className="justify-center mt-[18px] mb-0 pb-0 md:mb-5 md:pb-4 px-2">
+      <div className="justify-center mt-[18px] mb-0 pb-0 md:mb-5 md:pb-4">
         <div className="px-0">
           <div>
             <div className="flex flex-wrap justify-between min-h-[45px] pb-2">
@@ -338,7 +338,7 @@ export default function NftDetails({
                 />
               </div>
             </div>
-            <div className="border-b-[1px] border-[#00000050]"></div>
+            <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb]"></div>
             <div className="">
               <div className="pt-[14px] pb-[21px] d-flex">
                 <h6 className="font-semibold text-[18px] mb-0 text-text-secondary">
@@ -383,7 +383,7 @@ export default function NftDetails({
                 </div>
                 <div className="flex flex-grow ml-0 lg:ml-[1.5rem]">
                   <div className="flex flex-col w-full">
-                    <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
+                    <div className="border-b-[1px] border-dashed border-[#00000080] dark:border-[#cbcbcb]"></div>
                     <div className="flex flex-col md:flex-row py-3 justify-between max-md:-mt-6">
                       <div className="text-[16px] mb-0 font-normal flex flex-nowrap items-center justify-start text-text-secondary max-md:translate-y-6">
                         Durability
@@ -410,7 +410,7 @@ export default function NftDetails({
                       house={house}
                       setHouse={setHouse}
                     />
-                    <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
+                    <div className="border-b-[1px] border-dashed border-[#00000080] dark:border-[#cbcbcb]"></div>
                     <div className="flex justify-between mt-2 py-2">
                       <span className="font-semibold text-[16px] text-text-secondary">
                         Asset Tokens Deposited:
@@ -498,7 +498,7 @@ export default function NftDetails({
                         </div>
                       </div>
                     </div>
-                    <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
+                    <div className="border-b-[1px] border-dashed border-[#00000080] dark:border-[#cbcbcb]"></div>
                     <div className="flex flex-col justify-between h-full my-3">
                       <div className="flex justify-between py-1">
                         <span className="flex text-[16px] text-black-700 items-center">
@@ -580,7 +580,7 @@ export default function NftDetails({
                   </div>
                 </div>
               </div>
-              <div className="border-b-[1px] border-dashed border-[#00000080]"></div>
+              <div className="border-b-[1px] border-dashed border-[#00000080] dark:border-[#cbcbcb]"></div>
               <div className="flex flex-col w-full mt-5">
                 <RewardHarvest
                   selectedResource={selectedResource}
@@ -677,7 +677,10 @@ export default function NftDetails({
           <div className="flex mt-[20px]">
             <div
               className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
-              onClick={() => harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)}
+              onClick={() => {
+                setShowHarvestConfirm(false)
+                harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)
+              }}
             >
               Yes
             </div>

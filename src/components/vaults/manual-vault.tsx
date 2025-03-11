@@ -6,7 +6,7 @@ import Image from "next/image";
 import Collapse from "../common/collapse";
 import Tooltip from "../common/tooltip";
 import ConnectWallet from "../connect-wallet";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import useVaultBalanceManual from "../../hooks/contract/vault/useVaultBalanceManual";
 import useTotalStaked from "../../hooks/contract/MasterchefContract/useTotalStaked";
@@ -27,6 +27,8 @@ import viewContract from "../../../public/icons/view-contract.png";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import bscIcon from "../../../public/icons/bsc.svg"
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useAppDispatch } from "../../lib/hooks";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 const MANUAL_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['manual']
 
@@ -47,13 +49,14 @@ export default function ManualVault({
   setTokenUsdPrice,
   setShowModalApy
 }: ManualVaultProps) {
-  const { 
-    theme, 
+  const {
     notifyError
   } = useGlobalContext();
+  const { theme } = useTheme();
   const chainId = useChainId()
   const { isConnected, address } = useAccount();
-  const { switchChain } = useSwitchChain()
+  const { switchChain } = useSwitchChain();
+  const dispatch = useAppDispatch();
   
   const { data: totalStaked, isLoading: totalStakedLoading } = useTotalStaked(chainId) as { data: BigNumberish, isLoading: boolean }
   const { data: userInfo, isLoading: userInfoLoading } = useUserInfo({ chainId, userInfoId: 0, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
@@ -75,7 +78,7 @@ export default function ManualVault({
   const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const { price: tokenPriceUsd } = useGetLandPrice()
-  const isVaultsLoading = false // totalStakedLoading || userInfoLoading || pendingLandLoading
+  const isVaultsLoading = totalStakedLoading || userInfoLoading || pendingLandLoading
 
   function handlePercents(percent: number) {
     if (depositing) {
@@ -172,13 +175,13 @@ export default function ManualVault({
           {isVaultsLoading ? (
             <SkeletonTheme baseColor={`${theme == 'dark' ? "#31333b" : "#dbdde0"}`} highlightColor={`${theme == 'dark' ? "#52545e" : "#f6f7f9"}`}>
               <div className="flex justify-center items-center m-auto flex-col w-full">
-                <div className="flex flex-col justify-start p-0 gap-[16px] w-full">
+                <div className="flex flex-col justify-center p-0 gap-[16px] w-full">
                   <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]">
-                    <div className="w-full h-[100px] rounded-[1000px] relative">
+                    <div className="w-[100px] h-[100px] shrink-0 rounded-[1000px] md:relative">
                       <Skeleton circle={true} width={90} height={90} />
                     </div>
                     <div className="flex flex-col justify-center items-start p-0 gap-[8px] w-full">
-                      <div className={`text-[18px] overflow-hidden text-ellipsis leading-[28px] w-full ${BOLD_INTER_TIGHT.className}`}>
+                      <div className={`w-full overflow-hidden text-ellipsis leading-[28px] ${BOLD_INTER_TIGHT.className}`}>
                         <Skeleton height={28} />
                       </div>
                       <div className="w-full">

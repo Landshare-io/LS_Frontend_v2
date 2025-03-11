@@ -5,7 +5,7 @@ import { useChainId, useAccount } from "wagmi";
 import ReactLoading from "react-loading";
 import { bsc, polygon } from "viem/chains";
 import Collapse from "../common/collapse";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import ConnectWallet from "../connect-wallet";
 import Timer from "../common/timer";
@@ -53,6 +53,7 @@ import smallicon from "../../../public/icons/rotate-black.svg"
 import smallicondark from "../../../public/icons/rotate-dark.svg"
 import Tooltip from "../common/tooltip";
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useGlobalContext } from "../../context/GlobalContext";
 
 const AUTO_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['auto']
 
@@ -75,18 +76,20 @@ export default function AutoVault({
 }: AutoVaultProps) {
   const chainId = useChainId();
   const { isConnected, address } = useAccount();
-  const { theme, notifyError } = useGlobalContext();
+  const { notifyError } = useGlobalContext();
+  const { theme } = useTheme();
   const dispatch = useAppDispatch();
 
-  const { data: landBalance } = useBalanceOf({ chainId, address }) as { data: BigNumberish }
+  const { data: landBalance, isLoading: isBalanceLoading } = useBalanceOf({ chainId, address }) as { data: BigNumberish, isLoading: boolean }
   const vaultBalance = useAutoLandV3(chainId, address) as {
     total: BigNumberish;
     totalSharesV3: BigNumberish;
     autoLandV3: BigNumberish;
     autoReward: BigNumberish;
+    isLoading: boolean;
   }
   const minTransferAmount = useMinTransferAmount(chainId) as BigNumberish
-  const { data: autoLandAllowance, refetch: updateApporvalStatus } = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish, refetch: Function }
+  const { data: autoLandAllowance, refetch: updateApporvalStatus, isLoading: isAllownaceLoading } = useAllowanceOfLandToken(chainId, address, AUTO_VAULT_V3_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish, refetch: Function, isLoading: boolean }
 
   const ccipTransactions = useAppSelector(selectCcipTransactionCounts)
   const ccipPendingTransactions = useAppSelector(selectCcipPendingTransactions)
@@ -100,6 +103,7 @@ export default function AutoVault({
     totalSharesV3: BigNumberish;
     autoLandV3: BigNumberish;
     autoReward: BigNumberish;
+    isLoading: boolean;
   }
   const { refetch: updateLandTokenV2Balance } = useBalanceOf({ chainId, address })
   const { data: ccipBountyReward } = useCalculateHarvestCakeRewards(chainId) as { data: BigNumberish }
@@ -111,8 +115,6 @@ export default function AutoVault({
     approveVault
   } = useAutoVault(chainId, address, updateApporvalStatus)
 
-  const isVaultsLoading = false // need to update
-
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
   const [depositing, setDepositing] = useState(true)
@@ -121,6 +123,8 @@ export default function AutoVault({
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const [isDepositing, setIsDepositing] = useState(false);
   const { price: tokenPriceData } = useGetLandPrice()
+
+  const isVaultsLoading = isBalanceLoading || vaultBalance.isLoading || isAllownaceLoading || ccipVaultBalance.isLoading || ccipLoading;
 
   useEffect(() => {
     (async () => {

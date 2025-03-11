@@ -7,7 +7,7 @@ import {
   ConcreteIcon,
   SteelIcon,
 } from "../../common/icons/nft";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import useGetUserGameItem from "../../../hooks/nft-game/axios/useGetUserGameItem";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import { productionUpgradesData } from "../../../config/constants/game-data";
@@ -16,7 +16,7 @@ export default function UpgradeListTable({
   house
 }: { house: any }) {
   const [selTab, setSelTab] = useState(0);
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const chainId = useChainId()
   const { address } = useAccount()
   const {
@@ -39,7 +39,7 @@ export default function UpgradeListTable({
   ];
 
   return (
-    <div className="max-w-[1200px] px-0 mb-5 mt-3 pb-20">
+    <div className="max-w-[1200px] px-0 mb-5 mt-3 pb-20 mt-12">
       <div className="flex flex-col-reverse justify-around duration-700">
         <div className="hidden mlg:p-[10px] mlg:flex mlg:flex-1">
           <div className="mx-[5px] my-[10px] overflow-hidden flex-1 flex flex-col justify-between">

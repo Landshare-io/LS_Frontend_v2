@@ -209,6 +209,11 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("You are not an owner of this house");
     }
 
+    if (house.deadTime) {
+      setIsLoading({ type: -1, loading: false });
+      return notifyError("House is inactive or on sale");
+    }
+
     if (validateItemDate(item, oneDayTime)) {
       setIsLoading({ type: -1, loading: false });
       return notifyError("You've already buy this addon");
@@ -258,6 +263,11 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
     if (!house.isActivated) {
       setIsLoading({ type: -1, loading: false });
       return notifyError("Please Activate First");
+    }
+
+    if (house.deadTime) {
+      setIsLoading({ type: -1, loading: false });
+      return notifyError("House is inactive or on sale");
     }
 
     if (validateItemDate(item, oneDayTime)) {
@@ -323,6 +333,11 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("Please Activate First");
     }
 
+    if (house.deadTime) {
+      setIsLoading({ type: -1, loading: false });
+      return notifyError("House is inactive or on sale");
+    }
+
     let cost
     if (validateItemDate(concreateItem, oneDayTime)) {
       cost = repairItem.buy.slice(2, 7)
@@ -379,6 +394,11 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("Please Activate First");
     }
 
+    if (house.deadTime) {
+      setIsLoading({ type: -1, loading: false });
+      return notifyError("House is inactive or on sale");
+    }
+
     if (validateItemDate(item, oneDayTime)) {
       setIsLoading({ type: -1, loading: false });
       return notifyError("You've already buy this addon");
@@ -428,6 +448,11 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
     if (!house.isActivated) {
       setIsLoading({ type: -1, loading: false });
       return notifyError("Please Activate First");
+    }
+
+    if (house.deadTime) {
+      setIsLoading({ type: -1, loading: false });
+      return notifyError("House is inactive or on sale");
     }
 
     if (lumber < 1) {

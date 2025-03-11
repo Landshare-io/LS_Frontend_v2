@@ -116,6 +116,11 @@ export default function useHandleAddons(chainId: number, address: Address | unde
       return notifyError("You are not an owner of this house");
     }
 
+    if (house.deadTime) {
+      setIsLoading({ type: -1, loading: false });
+      return notifyError("House is inactive or on sale");
+    }
+
     const firepitRemainDays = getItemDurationWithDeadTime(item, oneDayTime)
     if (Number(firepitRemainDays) > item.buy[10]) {
       setIsLoading({ type: -1, loading: false });
@@ -181,6 +186,11 @@ export default function useHandleAddons(chainId: number, address: Address | unde
       return notifyError("You are not an owner of this house");
     }
 
+    if (house.deadTime) {
+      setIsLoading({ type: -1, loading: false });
+      return notifyError("House is inactive or on sale");
+    }
+
     if (!validateItemDate(house.yieldUpgrades.filter((yItem: any) => yItem.name == 'Garden' && yItem.specialButtonName == '')[0], oneDayTime)) {
       setIsLoading({ type: -1, loading: false });
       return notifyError("Garden shoule be active");
@@ -236,6 +246,11 @@ export default function useHandleAddons(chainId: number, address: Address | unde
     if (!isOwn) {
       setIsLoading({ type: -1, loading: false });
       return notifyError("You are not an owner of this house");
+    }
+
+    if (house.deadTime) {
+      setIsLoading({ type: -1, loading: false });
+      return notifyError("House is inactive or on sale");
     }
 
     if (validateItemDate(item, oneDayTime)) {

@@ -4,17 +4,17 @@ import Image from "next/image";
 import ReactLoading from "react-loading";
 import { BsInfoCircle } from "react-icons/bs";
 import { useAccount, useChainId } from "wagmi";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import useMintHouseNft from "../../hooks/nft-game/house-nfts/useMintHouseNft";
 import useGetNftCredits from "../../hooks/nft-game/apollo/useGetNftCredits";
 import Button from "../common/button";
-import HouseNft from "../../../public/img/house/house_big.bmp";
-import HouseBNft from "../../../public/img/house/houseB.bmp";
-import HouseRareNft from "../../../public/img/house/house_rare_big.bmp";
-import HouseBRareNft from "../../../public/img/house/houseB_rare.bmp";
-import HouseCNft from "../../../public/img/house/houseC.bmp";
-import HouseCRareNft from "../../../public/img/house/houseC_rare.bmp";
+import HouseNft from "../../../public/img/house/house_big.webp";
+import HouseBNft from "../../../public/img/house/houseB.webp";
+import HouseRareNft from "../../../public/img/house/house_rare_big.webp";
+import HouseBRareNft from "../../../public/img/house/houseB_rare.webp";
+import HouseCNft from "../../../public/img/house/houseC.webp";
+import HouseCRareNft from "../../../public/img/house/houseC_rare.webp";
 import Tooltip from "../common/tooltip";
 
 interface HouseMintItemProps {
@@ -24,7 +24,7 @@ interface HouseMintItemProps {
 export default function HouseMintItem({ product }: HouseMintItemProps) {
   const { address } = useAccount();
   const chainId = useChainId();
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const { nftCredits } = useGetNftCredits(address);
   const [isLoading, setIsLoading] = useState(false);
   const [harvestAmount, setHarvestAmount] = useState(Number());
@@ -96,9 +96,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             </Tooltip>
           </div>
           <input
-            className={`max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] text-[#000] mr-1 ${
-              theme == "dark" ? "bg-gray-600" : ""
-            }`}
+            className='max-w-[70px] border-[1px] border-[#8d8d8d] rounded-[5px] text-right text-[0.8rem] px-[5px] dark:text-[#dee2e6] text-[#000] mr-1 dark:bg-gray-600'
             step="1"
             min={200}
             value={nftCreditCost}
@@ -124,10 +122,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             </Tooltip>
           </div>
           <div
-            className={`${
-              theme == "dark" ? "#ffffff88" : "#00000088"
-            } text-[14px] font-semibold`}
-          >
+            className='dark:text-[#ffffff88] text-[#00000088] text-[14px] font-semibold'>
             {Number(harvestAmount)}
           </div>
         </div>
@@ -136,10 +131,7 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
             Mint Price
           </div>
           <div
-            className={`${
-              theme == "dark" ? "#ffffff88" : "#00000088"
-            } text-[14px] font-semibold`}
-          >
+            className='dark:text-[#ffffff88] text-[#00000088] text-[14px] font-semibold'>
             {`${Number(harvestAmount) / 12.5} LAND`}
           </div>
         </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useChainId, useAccount } from "wagmi";
 import ReactModal from "react-modal";
 import { BigNumberish } from "ethers";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import YieldUpgrade from "../production-upgrade/yield-upgrade";
 import FirepitUpgrade from "./firepit-upgrade";
 import {
@@ -18,6 +18,7 @@ import useGetResource from "../../../hooks/nft-game/axios/useGetResource";
 import useGetUserData from "../../../hooks/nft-game/axios/useGetUserData";
 import useHandleAddons from "../../../hooks/nft-game/axios/useHandleAddons";
 import useBalanceOfLand from "../../../hooks/contract/LandTokenContract/useBalanceOf"
+import { useGlobalContext } from "../../../context/GlobalContext";
 
 interface YieldUpdgradesProps {
   house: any
@@ -115,7 +116,7 @@ export default function YieldUpgrades({
   };
 
   return (
-    <div className="max-w-[1200px] px-0 my-5">
+    <div className="max-w-[1200px] px-0 my-6">
       {house.yieldUpgrades.length < 1 ? (
         <></>
       ) : (
@@ -151,7 +152,7 @@ export default function YieldUpgrades({
               return (
                 <div
                   key={`yield-upgrade-${yieldItem.id}`}
-                  className="w-[257px] mr-[10px] sm:mr-[40px]"
+                  className="w-[257px] mr-[20px] sm:mr-[40px]"
                 >
                   <FirepitUpgrade
                     item={{
@@ -180,7 +181,7 @@ export default function YieldUpgrades({
               return (
                 <div
                   key={`yield-upgrade-${yieldItem.id}`}
-                  className="w-[257px] mr-[10px] sm:mr-[40px]"
+                  className="w-[257px] mr-[20px] sm:mr-[40px]"
                 >
                   <YieldUpgrade
                     item={{

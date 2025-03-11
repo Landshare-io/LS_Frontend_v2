@@ -54,14 +54,14 @@ export default function ProductionUpgrade ({
   } = useProductionUpgrade(house, setHouse, address, setIsLoading)
 
   return (
-    <div className="max-w-[1200px] px-0 my-5">
-      <div className="flex flex-col md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] justify-between gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)]">
-        <div className="relative flex justify-center toolshed-carousel w-[257px] mr-[10px] sm:mr-[40px]">
+    <div className="max-w-[1200px] px-0 my-6">
+      <div className="flex overflow-x-auto md:grid md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content)] md:gap-[45px] mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] lg:mlg:md:grid-cols-[minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content),minmax(257px,max-content)] justify-between" style={{ rowGap: "45px" }}>
+        <div className="relative flex justify-center toolshed-carousel w-[257px] mr-[20px] sm:mr-[40px]">
           <span
             onClick={() =>
               handleToolshedSelect(toolshedIndex > 0 ? toolshedIndex - 1 : 0)
             }
-            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer left-[-5px] absolute justify-center items-center"
+            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer left-[5px] absolute justify-center items-center"
           >
             <Image src={carouselIcon} alt="Carousel prev icon" />
           </span>
@@ -113,12 +113,12 @@ export default function ProductionUpgrade ({
             onClick={() =>
               handleToolshedSelect(toolshedIndex < 3 ? toolshedIndex + 1 : 3)
             }
-            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer right-[-5px] absolute justify-center items-center rotate-180"
+            className="flex w-[25px] h-[25px] bg-[#FFFFFF] rounded-[50%] shadow-md z-[15] top-[138px] cursor-pointer right-[5px] absolute justify-center items-center rotate-180"
           >
             <Image src={carouselIcon} alt="Carousel next icon" />
           </span>
         </div>
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <FireplaceUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Firepit")[0],
@@ -140,7 +140,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Concrete Foundation")[0],
@@ -164,7 +164,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Harvester")[0],
@@ -205,7 +205,7 @@ export default function ProductionUpgrade ({
           return (
             <div
               key={`production-upgrade-${index}`}
-              className="w-[257px] mr-[10px] sm:mr-[40px]"
+              className="w-[257px] mr-[20px] sm:mr-[40px]"
             >
               <YieldUpgrade
                 item={item}
@@ -219,7 +219,7 @@ export default function ProductionUpgrade ({
             </div>
           );
         })}
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <HireHandymanUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Hire Handyman")[0],
@@ -259,7 +259,7 @@ export default function ProductionUpgrade ({
             isLoading={isLoading}
           />
         </div>
-        <div className="w-[257px] mr-[10px] sm:mr-[40px]">
+        <div className="w-[257px] mr-[20px] sm:mr-[40px]">
           <YieldUpgrade
             item={{
               ...productionUpgradesData.filter((item: any) => item.title == "Generator")[0],

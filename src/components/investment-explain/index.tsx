@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Modal from "react-modal";
 import { useAccount, useChainId } from "wagmi";
 import { MdCancel } from "react-icons/md";
+import { bsc } from "viem/chains";
 import useIsWhitelistedAddress from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import Button from "../common/button";
@@ -18,10 +19,15 @@ const RWA_MAJOR_CHAINS = MAJOR_WORK_CHAINS["/rwa"];
 export default function InvestmentExplain() {
   const chainId = useChainId();
   const {address} = useAccount();
-  const isWhitelisted = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
+  const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
 
+  useEffect(() => {
+    (async () => {
+      await refetch();
+    })()
+  }, [isZeroIDModal])
 
   const customModalStyles = {
     content: {
@@ -35,6 +41,7 @@ export default function InvestmentExplain() {
       borderRadius: "20px",
     },
     overlay: {
+      zIndex: 99999,
       background: "#00000080",
     },
   };
@@ -223,7 +230,10 @@ export default function InvestmentExplain() {
         </div>
         <div className="w-full mt-3">
           <a href="https://dashboard.landshare.io">
-            <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors">
+            <Button 
+              className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
+              disabled={chainId != bsc.id}
+            >
               <p
                 className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
               >

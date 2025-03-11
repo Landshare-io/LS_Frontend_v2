@@ -5,7 +5,7 @@ import { bsc } from "viem/chains";
 import { BigNumberish } from "ethers";
 import type { NextPage } from "next";
 import { BackIcon } from "../../components/common/icons";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import HouseInfoCarouselComponent from "../../components/investment-house-detail/house-info-carousel";
 import HouseFaqs from "../../components/investment-house-detail/house-faqs";
 import HouseMap from "../../components/investment-house-detail/house-map";
@@ -21,7 +21,7 @@ import Head from "next/head";
 const MarketPlace: NextPage = () => {
   const router = useRouter();
   const { houseId } = router.query as { houseId: string };
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const dispatch = useAppDispatch();
   const houseInfo = useAppSelector(selectPropertyRentalData) as any;
   const isLoading = useAppSelector(selectIsLoading);

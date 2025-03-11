@@ -10,7 +10,7 @@ import {
 } from '../../common/icons/nft';
 import useGetSetting from '../../../hooks/nft-game/axios/useGetSetting';
 import { validateItemDate } from '../../../utils/helpers/validator';
-import { useGlobalContext } from '../../../context/GlobalContext';
+import { useTheme } from "next-themes";
 
 interface YieldUpgradeCostProps {
   color: string
@@ -33,7 +33,7 @@ export default function YieldUpgradeCost({
   color,
   btnLabel = '',
 }: YieldUpgradeCostProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const {
     oneDayTime
   } = useGetSetting()
@@ -92,7 +92,7 @@ export default function YieldUpgradeCost({
   })
 
   return (
-    <div className={`flex flex-col w-full h-[130px] rounded-[25px] !bg-[#ffffff] relative pt-[12px] ${color}`}>
+    <div className={`flex flex-col w-full h-[130px] rounded-[25px] !bg-[#ffffff] dark:!bg-[#2e2e2e] relative pt-[12px] ${color}`}>
       <div className='flex flex-col text-[14px] px-[10px]'>
         {((colorType < 2) || (btnLabel != 'SALVAGE')) ? (
           <div className='flex items-center'>
@@ -132,7 +132,7 @@ export default function YieldUpgradeCost({
             </div>
           </div>
         )}
-        <div className="border-b-[1px] border-[#00000050] w-full my-[8px]"></div>
+        <div className="border-b-[1px] border-[#00000050] w-full my-[8px] dark:bg-white"></div>
       </div>
       <div className='flex items-center text-[14px] px-[10px]'>
         <span className='text-[#6f8e9d] font-semibold text-[10px] ml-[4px] pr-[2px] dark:text-text-secondary'>Cost: </span>
@@ -152,10 +152,10 @@ export default function YieldUpgradeCost({
         {((isLoading.type == type) && isLoading.loading) ? (
           <div className='flex justify-center items-center'>
             <ReactLoading type="spin" className="mr-2 mb-[4px]" width="24px" height="24px" />
-            <span className="font-semibold text-button-text-secondary">Loading</span>
+            <span className="font-semibold text-button-text-secondary text-[18px]">Loading</span>
           </div>
         ) : (
-          <span className="font-semibold text-button-text-secondary">{btnLabel}</span>
+          <span className="font-semibold text-button-text-secondary text-[18px]">{btnLabel}</span>
         )}
       </Button>
     </div>

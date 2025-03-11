@@ -6,7 +6,7 @@ import { bsc } from "viem/chains";
 import { useChainId, useAccount, useSwitchChain } from "wagmi";
 import Collapse from "../common/collapse";
 import ConnectWallet from "../connect-wallet";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { abbreviateNumber } from "../../utils/helpers/convert-numbers";
 import useBalanceOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
 import useTotalSupplyOfLpTokenV2 from "../../hooks/contract/LpTokenV2Contract/useTotalSupply";
@@ -37,6 +37,7 @@ import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import smallicon from "../../../public/icons/bnb.png";
 import 'react-loading-skeleton/dist/skeleton.css';
 import Tooltip from "../common/tooltip";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 const LP_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['lp']
 
@@ -60,17 +61,18 @@ export default function LpVault({
   const chainId = useChainId();
   const { isConnected, address } = useAccount();
   const { switchChain } = useSwitchChain()
-  const { theme, notifyError } = useGlobalContext();
+  const { notifyError } = useGlobalContext();
+  const { theme } = useTheme();
 
-  const { data: lpTokenV2Balance } = useBalanceOfLpTokenV2({ chainId, address }) as { data: BigNumberish }
-  const { data: totalLPInVault } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
-  const { data: totalLANDinLPContract } = useBalanceOfLandToken({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
-  const { data: totalLPSupply } = useTotalSupplyOfLpTokenV2(chainId) as { data: BigNumberish }
-  const { data: totalBNBinLPContract } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish }
-  const { data: userInfo } = useUserInfo({ chainId, userInfoId: 1, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
-  const { data: pendingLand } = usePendingLand({ chainId, pendingLandId: 1, address }) as { data: BigNumberish, isLoading: boolean }
-  const { data: approvedLAND } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish }
-  const { data: allocPoints } = usePoolInfo(chainId, 1) as { data: any[] };
+  const { data: lpTokenV2Balance, isLoading : isBalanceV2Loading } = useBalanceOfLpTokenV2({ chainId, address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: totalLPInVault, isLoading: isBalanceMasterLoading } = useBalanceOfLpTokenV2({ chainId, address: MASTERCHEF_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish, isLoading: boolean }
+  const { data: totalLANDinLPContract, isLoading: isLandLoading } = useBalanceOfLandToken({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish, isLoading: boolean }
+  const { data: totalLPSupply, isLoading: isTotalSupplyLoading } = useTotalSupplyOfLpTokenV2(chainId) as { data: BigNumberish, isLoading: boolean }
+  const { data: totalBNBinLPContract, isLoading: isBalanceOfWBNBLoading } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] }) as { data: BigNumberish, isLoading: boolean }
+  const { data: userInfo, isLoading: isUserInfoLoading } = useUserInfo({ chainId, userInfoId: 1, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
+  const { data: pendingLand, isLoading: isPendingLandLoading } = usePendingLand({ chainId, pendingLandId: 1, address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: approvedLAND, isLoading: isAllowanceLoading } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
+  const { data: allocPoints, isLoading: isPoolInfoLoading } = usePoolInfo(chainId, 1) as { data: any[], isLoading: boolean };
   const { bnbPrice, coinPrice: coin, price } = useGetPrice(chainId)
   const { price: tokenPriceData } = useGetLandPrice()
 
@@ -92,15 +94,11 @@ export default function LpVault({
   const [rewardLP, setReward] = useState<BigNumberish>(0);
   const [depositBalanceLP, setDepositBalanceLP] = useState<BigNumberish>(0);
   const [usdValueLP, setUsdValueLP] = useState(0)
-  const isVaultsLoading = false
+  const isVaultsLoading = isBalanceV2Loading || isBalanceMasterLoading || isLandLoading || isTotalSupplyLoading || isBalanceOfWBNBLoading || isUserInfoLoading || isPendingLandLoading || isAllowanceLoading || isPoolInfoLoading;
 
   useEffect(() => {
     updateLPFarm();
-  }, [])
-
-  useEffect(() => {
-    updateLPFarm();
-  }, [totalBNBinLPContract, bnbPrice, totalLANDinLPContract, totalLPSupply, totalLPInVault, allocPoints, price]);
+  }, [totalBNBinLPContract, bnbPrice, totalLANDinLPContract, totalLPSupply, totalLPInVault, allocPoints, price, userInfo]);
 
   async function updateStatus() {
     setIsWithdrawable(

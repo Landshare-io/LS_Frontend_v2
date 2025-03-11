@@ -1,8 +1,8 @@
 import React from "react";
 import Faq from "../common/faq";
-import { useGlobalContext } from "../../context/GlobalContext";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import { MdQuestionMark } from "react-icons/md";
+import { useTheme } from "next-themes";
 
 const data = {
   title: "FAQ",
@@ -67,7 +67,7 @@ const data = {
 };
 
 export default function HouseFaqs() {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const styles = {
     bgColor: "light-gray",
     rowTitleTextSize: "18px",

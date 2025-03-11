@@ -9,10 +9,7 @@ import IconSofa from "../../../public/icons/sofa.svg";
 import { BigNumberish, formatEther } from "ethers";
 import Link from "next/link";
 import {
-  BsArrowRight,
   BsBuilding,
-  BsShield,
-  BsShieldCheck,
   BsShieldFillCheck,
 } from "react-icons/bs";
 import { IoLocationOutline, IoTrendingUp } from "react-icons/io5";
@@ -21,8 +18,8 @@ import CarouselItem from "../common/carousel/carousel-item";
 import CarouselControl from "../common/carousel/carousel-control";
 import CommonCarousel from "../common/carousel";
 import numeral from "numeral";
-import Button from "../common/button";
 import { FiArrowRight } from "react-icons/fi";
+import { useTheme } from "next-themes";
 
 interface HouseInfoCarouselComponentProps {
   houseInfo: any;
@@ -35,7 +32,7 @@ export default function HouseInfoCarouselComponent({
   isLoading,
   propertyValue,
 }: HouseInfoCarouselComponentProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [showThumbs, setShowThumbs] = useState(false);

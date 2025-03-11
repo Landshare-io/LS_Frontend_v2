@@ -5,7 +5,7 @@ import { RWA_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { Address } from "viem";
 
 export default function useIsWhitelistedAddress(chainId: number, address: Address | undefined) {
-  const { data, isError, isLoading, error } = useReadContract({
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: RWA_CONTRACT_ADDRESS[chainId],
     abi: RwaContractAbi,
     functionName: "isWhitelistedAddress",
@@ -13,12 +13,12 @@ export default function useIsWhitelistedAddress(chainId: number, address: Addres
     args: [address]
   })
 
-  if (typeof address == 'undefined') return false
-  if (isLoading) return false
+  if (typeof address == 'undefined') return { refetch, data: false }
+  if (isLoading) return { refetch, data: false }
   if (isError) {
     console.log('Fetching RWAContract isWhitelistedAddress error', error)
-    return false
+    return { refetch, data: false }
   }
 
-  return data
+  return { refetch, data }
 }

@@ -5,7 +5,7 @@ import { NextLabelIcon, PrevLabelIcon, QuestionIcon } from "../../common/icons/i
 import NftItem from "./nft-item";
 import sadEmoji from "../../../../public/icons/sad_emoji.png";
 import sadEmoji_Dark from "../../../../public/icons/no_item_dark.png";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface NftItemsProps {
@@ -15,7 +15,7 @@ interface NftItemsProps {
 
 export default function NftItems({ houseItems }: NftItemsProps) {
   const [itemOffset, setItemOffset] = useState(0);
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const handlePageClick = (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % houseItems.length;
     setItemOffset(newOffset);

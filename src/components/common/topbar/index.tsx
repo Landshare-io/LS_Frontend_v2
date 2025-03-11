@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import goOther from "../../../../public/icons/go_other.png";
 import goOtherWhite from "../../../../public/icons/go_other_white.png";
 import { BackIcon } from "../../common/icons/nft";
-import { useGlobalContext } from "../../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface TopbarProps {
@@ -12,14 +12,14 @@ interface TopbarProps {
 }
 
 export default function Topbar({ isNftList }: TopbarProps) {
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
   const router = useRouter()
   const pathName = router.pathname;
 
   return (
     <>
       <div className="w-full overflow-hidden px-2">
-        <div className="flex flex-nowrap items-center mt-[10px] mb-[30px] overflow-x-auto no-scrollbar">
+        <div className="flex flex-nowrap items-center mt-10 pb-[10px] overflow-x-auto no-scrollbar">
           <span
             className={`cursor-pointer whitespace-nowrap  mr-[20px] pr-[5px] pb-3 relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] hover:after:rounded-[10px] after:ease-in-out duration-300 ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"} ${(pathName.includes("/inventory") || (pathName.includes("/nft") && !pathName.includes("/resources")) && !pathName.includes("/mint")) &&
               `after:content-[""] after:absolute after:left-0 after:bottom-[5px] after:w-full after:h-[6px] after:!bg-[#81db9b] after:rounded-[10px] ${BOLD_INTER_TIGHT.className}`

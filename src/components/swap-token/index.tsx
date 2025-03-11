@@ -9,7 +9,7 @@ import { useAccount, useBalance, useChainId } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { TOKENS } from "../../config/constants/page-data";
 import { TOKEN_TYPE } from "../../utils/type";
-import { useGlobalContext } from "../../context/GlobalContext";
+import { useTheme } from "next-themes";
 import Button from "../common/button";
 import ToggleButton from "../common/toggle-button";
 import ConnectWallet from "../connect-wallet";
@@ -28,6 +28,7 @@ import {
   LAND_TOKEN_CONTRACT_ADDRESS,
   BOLD_INTER_TIGHT,
   MAJOR_WORK_CHAINS,
+  PUSD_SUPPORT_CHINAS,
 } from "../../config/constants/environments";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
@@ -49,6 +50,7 @@ import IconInfo from "../../../public/icons/info.svg";
 import IconInfoGray from "../../../public/icons/info-gray.svg";
 import IconClose from "../../../public/icons/close.svg";
 import IconCloseDark from "../../../public/icons/close-dark.svg";
+import pUsd from "../../../public/icons/pusd.svg";
 import "react-loading-skeleton/dist/skeleton.css";
 import Tooltip from "../common/tooltip";
 
@@ -57,6 +59,7 @@ const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 export default function SwapToken() {
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
+  const { data: isWhitelisted, refetch } = useIsWhitelistedAddressOfRwa(chainId, address);
 
   const [RWATokenAmount, setRWATokenAmount] = useState(0);
   const [usdcAmount, setUsdcAmount] = useState(0);
@@ -73,6 +76,12 @@ export default function SwapToken() {
   const [isSwipeluxModalOpen, setIsSwipeluxModalOpen] = useState(false);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      await refetch();
+    })()
+  }, [isZeroIDModal])
 
   const { data: balance } = useBalance({
     address: address,
@@ -115,8 +124,7 @@ export default function SwapToken() {
       : Date.now()
     : Date.now();
 
-  const secondaryLimit = useGetAllowedToTransfer(chainId, address);
-  const isWhitelisted = useIsWhitelistedAddressOfRwa(chainId, address);
+  const { data: secondaryLimit, isLoading: isSecondaryLimitLoading } = useGetAllowedToTransfer(chainId, address) as { data: BigNumberish, isLoading: boolean };
   const landFee = useLandFee(chainId) as number;
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
   const { allTokens } = useGetAllTokens();
@@ -170,7 +178,7 @@ export default function SwapToken() {
     }
   }, [isSTAPShow]);
 
-  const { theme } = useGlobalContext();
+  const { theme } = useTheme();
 
   const customModalStyles = {
     content: {
@@ -178,16 +186,15 @@ export default function SwapToken() {
       left: "50%",
       transform: "translate(-50%, -50%)",
       overflow: "hidden",
-      maxWidth: "460px",
+      maxWidth: "400px",
       width: "90%",
       height: "fit-content",
       borderRadius: "20px",
-      background: theme == "dark" ? "#2E2E2E" : "#f6f7f9"
     },
     overlay: {
-      background: '#00000080',
-      zIndex: 99999
-    }
+      zIndex: 99999,
+      background: "#00000080",
+    },
   };
 
   function get_information(link: string, callback: any) {
@@ -294,7 +301,10 @@ export default function SwapToken() {
           </div>
           <div className="w-full mt-3">
             <a href="https://dashboard.landshare.io">
-              <Button className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors">
+              <Button 
+                className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
+                disabled={chainId != bsc.id}
+              >
                 <p
                   className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
                 >
@@ -436,14 +446,14 @@ export default function SwapToken() {
               <div className="flex justify-between items-center gap-[5px]">
                 <div className="flex items-center gap-[5px] cursor-pointer">
                   <Image
-                    src={IconUSDC}
+                    src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? pUsd : IconUSDC}
                     alt="usdc"
-                    className="w-[18px] h-[18px]"
+                    className="w-[18px] h-[18px] rounded-full"
                   />
                   <span
                     className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                   >
-                    USDC
+                    {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? "pUSD" : "USDC"}
                   </span>
                   <Image
                     src={theme == "dark" ? IconArrowDownDark : IconArrowDown}
@@ -477,7 +487,7 @@ export default function SwapToken() {
               </div>
               <input
                 className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
-                placeholder="00.00 USDC"
+                placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? 'pUSD' : 'USDC'}`}
                 readOnly
                 value={usdcAmount}
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
@@ -569,7 +579,7 @@ export default function SwapToken() {
                   <span
                     className={`text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                   >
-                    {secondaryLimit ? secondaryLimit.toString() : "Loading"}
+                    {isSecondaryLimitLoading ? "Loading" : secondaryLimit.toString()}
                   </span>
                 </div>
               </>
@@ -621,20 +631,20 @@ export default function SwapToken() {
                 <div className="flex justify-between items-center gap-[5px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
                     <Image
-                      src={IconUSDC}
+                      src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? pUsd : IconUSDC}
                       alt="usdc"
-                      className="w-[18px] h-[18px]"
+                      className="w-[18px] h-[18px] rounded-full"
                     />
                     <span
                       className={`text-text-primary text-[14px] leading-[22px] !text-[12px] ${BOLD_INTER_TIGHT.className}`}
                     >
-                      USDC
+                      {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? "pUSD" : "USDC"}
                     </span>
                   </div>
                 </div>
                 <input
                   className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
-                  placeholder="00.00 USDC"
+                  placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? 'pUSD' : 'USDC'}`}
                   readOnly
                   value={
                     buyUSDCAmount == undefined || RWATokenAmount === 0
@@ -657,41 +667,43 @@ export default function SwapToken() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col flex-1 w-full gap-[4px] min-h-[76px]">
-                <div className="flex justify-between items-center gap-[5px]">
-                  <div className="flex items-center gap-[5px] cursor-pointer">
-                    <span
-                      className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
-                    >
-                      LAND
-                    </span>
+              {!PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) && (
+                <div className="flex flex-col flex-1 w-full gap-[4px] min-h-[76px]">
+                  <div className="flex justify-between items-center gap-[5px]">
+                    <div className="flex items-center gap-[5px] cursor-pointer">
+                      <span
+                        className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                      >
+                        LAND
+                      </span>
+                    </div>
                   </div>
+                  <input
+                    className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
+                    placeholder="00.00 LAND"
+                    readOnly
+                    value={
+                      buyLANDAmount == undefined || RWATokenAmount === 0
+                        ? ""
+                        : formatEther(buyLANDAmount.toString())
+                    }
+                  />
+                  {isConnected && (
+                    <div className="flex items-center gap-[5px] justify-end w-full">
+                      <label className="text-text-secondary text-[12px] leading-[22px]">
+                        Balance:
+                      </label>
+                      <span
+                        className={`text-text-primary text-[12px] leading-[20px] ${BOLD_INTER_TIGHT.className}`}
+                      >
+                        {landBalance === undefined
+                          ? "0"
+                          : Number(landBalance?.formatted).toFixed(3)}
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <input
-                  className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
-                  placeholder="00.00 LAND"
-                  readOnly
-                  value={
-                    buyLANDAmount == undefined || RWATokenAmount === 0
-                      ? ""
-                      : formatEther(buyLANDAmount.toString())
-                  }
-                />
-                {isConnected && (
-                  <div className="flex items-center gap-[5px] justify-end w-full">
-                    <label className="text-text-secondary text-[12px] leading-[22px]">
-                      Balance:
-                    </label>
-                    <span
-                      className={`text-text-primary text-[12px] leading-[20px] ${BOLD_INTER_TIGHT.className}`}
-                    >
-                      {landBalance === undefined
-                        ? "0"
-                        : Number(landBalance?.formatted).toFixed(3)}
-                    </span>
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </>
         )}
@@ -709,9 +721,9 @@ export default function SwapToken() {
                           RWATokenAmount < 1 ||
                           RWATokenAmount === 0 ||
                           RWATokenAmount > parseFloat(balance?.formatted) ||
-                          Number(
-                            formatEther(landFeeAmount ? landFeeAmount : 0)
-                          ) > parseFloat(landBalance?.formatted) ||
+                          (chainId == bsc.id ? 
+                            (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted)) 
+                            : (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > Number(usdcAmount.toString()))) ||
                           Number(saleLimit) <
                             Number(
                               usdcAmount == 0 ? 0 : usdcAmount.toString()
@@ -727,8 +739,9 @@ export default function SwapToken() {
                         {RWATokenAmount && usdcAmount && landFeeAmount
                           ? RWATokenAmount > parseFloat(balance?.formatted)
                             ? "Insufficient RWA Balance"
-                            : Number(formatEther(landFeeAmount)) >
-                              parseFloat(landBalance?.formatted)
+                            : (chainId == bsc.id ? 
+                              Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted) 
+                              : Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > Number(usdcAmount.toString()))
                             ? "Insufficient LAND Balance"
                             : Number(saleLimit) <
                               Number(
