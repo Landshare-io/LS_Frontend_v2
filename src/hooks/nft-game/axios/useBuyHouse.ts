@@ -15,7 +15,7 @@ export default function useBuyHouse(chainId: number, product: any, address: Addr
   
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
 
-  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+  const { isSuccess: sendTxSuccess } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
@@ -59,42 +59,32 @@ export default function useBuyHouse(chainId: number, product: any, address: Addr
           setSignNonce(0)
           notifyError(`Buy House Error`);
         } else if (sendTransactionTx) {
-          if (sendTxData) {
-            if (sendTxSuccess) {
-              const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-      
-              if (receipt.status) {
-                try {
-                  const {data} = await axios.post('/house/buy-house-with-land', {
-                    houseId: product.id,
-                    nonce: signNonce
-                  })
-                  await refetch()
-                  await getProducts({ searchType: "all" });
-                  setIsLoading(false);
-                  setSignNonce(0)
-                  notifySuccess("Buy House Success")
-                } catch (error: any) {
-                  console.log(error)
-                  setIsLoading(false);
-                  setSignNonce(0)
-                  notifyError(error.response.data.message)
-                }
-              } else {
-                setIsLoading(false);
-                setSignNonce(0)
-                notifyError(`Buy House Error`);
-              }
-            } else {
+          if (sendTxSuccess) {
+            try {
+              const {data} = await axios.post('/house/buy-house-with-land', {
+                houseId: product.id,
+                nonce: signNonce
+              })
+              await refetch()
+              await getProducts({ searchType: "all" });
               setIsLoading(false);
               setSignNonce(0)
-              notifyError(`Buy House Error`);
+              notifySuccess("Buy House Success")
+            } catch (error: any) {
+              console.log(error)
+              setIsLoading(false);
+              setSignNonce(0)
+              notifyError(error.response.data.message)
             }
+          } else {
+            setIsLoading(false);
+            setSignNonce(0)
+            notifyError(`Buy House Error`);
           }
         }
       }
     })()
-  }, [isSendTransactionError, signNonce, sendTransactionTx, sendTxData, sendTxSuccess])
+  }, [isSendTransactionError, signNonce, sendTransactionTx, sendTxSuccess])
 
   const buyProduct = () => {
     if (Number(balance) >= product.salePrice) {

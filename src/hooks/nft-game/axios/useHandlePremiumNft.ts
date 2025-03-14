@@ -56,7 +56,7 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
   const { getHouse } = useGetHouse(house.id)
 
-  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+  const { isSuccess: sendTxSuccess } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
@@ -192,49 +192,39 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
           setTransactionNonce(0)
           notifyError(`Attach ${premiumNft.name} failed`);
         } else if (sendTransactionTx) {
-          if (sendTxData) {
-            if (sendTxSuccess) {
-              const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-      
-              if (receipt.status) {
-                try {
-                  await axios.post(`/has-premium-nft/${attachStatus}`, 
-                  attachStatus == 'reattach-premium-nft-house' ? {
-                    hasItemId: premiumNft.hasItemId,
-                    houseId: house.id
-                  } : {
-                    itemId: premiumNft.id,
-                    houseId: house.id,
-                    nftId: premiumNftId,
-                    nonce: transactionNonce
-                  })
-      
-                  await refetch()
-                  await getHouse()
-                  await gettingPremiumItems();
-                  setLoader('')
-                  setTransactionNonce(0)
-                  notifySuccess(`Attach ${premiumNft.name} successfully`);
-                } catch (error: any) {
-                  console.log(error)
-                  setTransactionNonce(0)
-                  notifyError(`Attach ${premiumNft.name} failed`);
-                }
-              } else {
-                setLoader('');
-                setTransactionNonce(0)
-                notifyError(`Attach ${premiumNft.name} failed`);
-              }
-            } else {
-              setLoader('');
+          if (sendTxSuccess) {
+            try {
+              await axios.post(`/has-premium-nft/${attachStatus}`, 
+              attachStatus == 'reattach-premium-nft-house' ? {
+                hasItemId: premiumNft.hasItemId,
+                houseId: house.id
+              } : {
+                itemId: premiumNft.id,
+                houseId: house.id,
+                nftId: premiumNftId,
+                nonce: transactionNonce
+              })
+  
+              await refetch()
+              await getHouse()
+              await gettingPremiumItems();
+              setLoader('')
+              setTransactionNonce(0)
+              notifySuccess(`Attach ${premiumNft.name} successfully`);
+            } catch (error: any) {
+              console.log(error)
               setTransactionNonce(0)
               notifyError(`Attach ${premiumNft.name} failed`);
             }
+          } else {
+            setLoader('');
+            setTransactionNonce(0)
+            notifyError(`Attach ${premiumNft.name} failed`);
           }
         }
       }
     })()
-  }, [transactionNonce, sendTransactionTx, sendTxData, sendTxSuccess, isSendTransactionError])
+  }, [transactionNonce, sendTransactionTx, sendTxSuccess, isSendTransactionError])
 
   const gettingPremiumItems = async () => {
     if (!house.premiumUpgrades) return;
