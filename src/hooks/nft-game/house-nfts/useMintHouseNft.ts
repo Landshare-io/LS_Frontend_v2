@@ -15,7 +15,7 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
   const { notifyError, notifySuccess } = useGlobalContext()
   const { data: balance, refetch: refetchBalance } = useBalanceOfLandToken({ chainId, address })
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
-  const { isSuccess: sendTxSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
@@ -31,23 +31,43 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
         return notifyError(`Mint a new house Error`);
       } else if (transactionNonce) {
         if (sendTransactionTx) {
-          if (sendTxSuccess) {
-            const { data } = await axios.post('/house/add-new-house', {
-              assetAmount: ableHarvestAmount * 4,
-              nonce: transactionNonce,
-              houseType: (
-                productType == 1 ? (ableHarvestAmount >= 500 ? 2 : 1) :
-                  productType == 2 ? (ableHarvestAmount >= 500 ? 4 : 3) : (ableHarvestAmount >= 500 ? 6 : 5))
-            })
+          if (sendTxData) {
+            if (sendTxSuccess) {
+              const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+      
+              if (receipt.status) {
+                const { data } = await axios.post('/house/add-new-house', {
+                  assetAmount: ableHarvestAmount * 4,
+                  txHash: receipt.transactionHash,
+                  blockNumber: receipt.blockNumber,
+                  nonce: transactionNonce,
+                  houseType: (
+                    productType == 1 ? (ableHarvestAmount >= 500 ? 2 : 1) :
+                      productType == 2 ? (ableHarvestAmount >= 500 ? 4 : 3) : (ableHarvestAmount >= 500 ? 6 : 5))
+                })
 
-            if (data) {
-              await refetchBalance()
-              setTransactionNonce(0)
-              setIsLoading(false);
-              setAbleHarvestAmount(0)
-              setProductType(-1)
-              setNftCredits(nftCredits - ableHarvestAmount * 4)
-              return notifySuccess(`Mint a new house successfully`)
+                if (data) {
+                  await refetchBalance()
+                  setTransactionNonce(0)
+                  setIsLoading(false);
+                  setAbleHarvestAmount(0)
+                  setProductType(-1)
+                  setNftCredits(nftCredits - ableHarvestAmount * 4)
+                  return notifySuccess(`Mint a new house successfully`)
+                } else {
+                  setIsLoading(false);
+                  setTransactionNonce(0)
+                  setAbleHarvestAmount(0)
+                  setProductType(-1)
+                  return notifyError(`Mint a new house Error`);
+                }
+              } else {
+                setIsLoading(false);
+                setTransactionNonce(0)
+                setAbleHarvestAmount(0)
+                setProductType(-1)
+                return notifyError(`Mint a new house Error`);
+              }
             } else {
               setIsLoading(false);
               setTransactionNonce(0)
@@ -55,17 +75,11 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
               setProductType(-1)
               return notifyError(`Mint a new house Error`);
             }
-          } else {
-            setIsLoading(false);
-            setTransactionNonce(0)
-            setAbleHarvestAmount(0)
-            setProductType(-1)
-            return notifyError(`Mint a new house Error`);
           }
         }
       }
     })()
-  }, [transactionNonce, sendTransactionTx, sendTxSuccess, isSendTransactionError])
+  }, [transactionNonce, sendTransactionTx, sendTxData, sendTxSuccess, isSendTransactionError])
 
   const mint = async (nftCreditCost: number, harvestAmount: number, type: number) => {
     try {

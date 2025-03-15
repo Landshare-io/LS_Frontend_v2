@@ -9,7 +9,7 @@ import { PROVIDERS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/cons
 export default function useBuyPowerWithLandToken(chainId: number, refetchBalance: Function, setIsLoading: Function) {
   const { notifySuccess, notifyError, isAuthenticated } = useGlobalContext()
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
-  const { isSuccess: sendTxSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
@@ -27,26 +27,38 @@ export default function useBuyPowerWithLandToken(chainId: number, refetchBalance
           setNonce(0)
           notifyError("Buy Power Error");
         } else if (sendTransactionTx) {
-          if (sendTxSuccess) {
-            const { data } = await axios.post('/has-item/buy-power-with-land', {
-              requiredLandToken: landAmount,
-              nonce: nonce
-            })
-    
-            await refetchBalance()
-            setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
-            setIsLoading([false, false]);
-            setNonce(0)
-            notifySuccess(`Bought ${powerAmount} Power successfully!`)
-          } else {
-            setIsLoading([false, false]);
-            setNonce(0)
-            notifyError("Buy Power Error");
+          if (sendTxData) {
+            if (sendTxSuccess) {
+              const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+      
+              if (receipt.status) {
+                const { data } = await axios.post('/has-item/buy-power-with-land', {
+                  txHash: receipt.transactionHash,
+                  blockNumber: receipt.blockNumber,
+                  requiredLandToken: landAmount,
+                  nonce: nonce
+                })
+        
+                await refetchBalance()
+                setResource([data.resource.power, data.resource.lumber, data.resource.brick, data.resource.concrete, data.resource.steel])
+                setIsLoading([false, false]);
+                setNonce(0)
+                notifySuccess(`Bought ${powerAmount} Power successfully!`)
+              } else {
+                setIsLoading([false, false]);
+                setNonce(0)
+                notifyError("Buy Power Error");
+              }
+            } else {
+              setIsLoading([false, false]);
+              setNonce(0)
+              notifyError("Buy Power Error");
+            }
           }
         }
       }
     })()
-  }, [nonce, sendTransactionTx, sendTxSuccess, isSendTransactionError])
+  }, [nonce, sendTransactionTx, sendTxData, sendTxSuccess, isSendTransactionError])
 
   const buyPowerWithLandtoken = async (powerToBuy: string, powerPerLandtoken: number) => {
     try {

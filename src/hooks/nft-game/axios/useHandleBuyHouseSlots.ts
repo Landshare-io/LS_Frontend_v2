@@ -12,7 +12,7 @@ export default function useHandleBuyHouseSlots(chainId: number, address: Address
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
   const [signNonce, setSignNonce] = useState(0)
 
-  const { isSuccess: sendTxSuccess } = useWaitForTransactionReceipt({
+  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
@@ -26,27 +26,39 @@ export default function useHandleBuyHouseSlots(chainId: number, address: Address
           setBuyHouseSlotLoading(false)
           notifyError("Buy House Slot Error");
         } else if (sendTransactionTx) {
-          if (sendTxSuccess) {
-            try {
-              const { data } = await axios.post('/has-item/buy-house-slot', {
-                nonce: signNonce
-              })
-              await refetchBalance()
-              setUserActivatedSlots(data.activatedSlots)
-              setBuyHouseSlotLoading(false)
-              setSignNonce(0)
-              notifySuccess(`New house slot purchased successfully!`)
-            } catch (error: any) {
-              console.log("Buy House Slot Error: ", error.response.data.message);
-              setSignNonce(0)
-              setBuyHouseSlotLoading(false)
-              notifyError(error.response.data.message);
+          if (sendTxData) {
+            if (sendTxSuccess) {
+              try {
+                const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
+        
+                if (receipt.status) {
+                  const { data } = await axios.post('/has-item/buy-house-slot', {
+                    txHash: receipt.transactionHash,
+                    blockNumber: receipt.blockNumber,
+                    nonce: signNonce
+                  })
+                  await refetchBalance()
+                  setUserActivatedSlots(data.activatedSlots)
+                  setBuyHouseSlotLoading(false)
+                  setSignNonce(0)
+                  notifySuccess(`New house slot purchased successfully!`)
+                } else {
+                  setSignNonce(0)
+                  setBuyHouseSlotLoading(false)
+                  notifyError("Buy House Slot Error");
+                }
+              } catch (error: any) {
+                console.log("Buy House Slot Error: ", error.response.data.message);
+                setSignNonce(0)
+                setBuyHouseSlotLoading(false)
+                notifyError(error.response.data.message);
+              }
             }
           }
         }
       }
     })()
-  }, [isSendTransactionError, signNonce, sendTransactionTx, sendTxSuccess])
+  }, [isSendTransactionError, signNonce, sendTransactionTx, sendTxData, sendTxSuccess])
 
   const handleBuyHouseSlots = async () => {
     try {
