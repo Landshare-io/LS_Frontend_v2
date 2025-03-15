@@ -111,6 +111,7 @@ export default function InventoryPage() {
 
   const confirmModalStyles = {
     content: {
+      position: "fixed" as "fixed",
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
@@ -124,11 +125,15 @@ export default function InventoryPage() {
       background: 'transparent'
     },
     overlay: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
       background: '#00000080',
       zIndex: 99999
     }
   };
-
 	const calcDepositMax = async () => {
     await refetchDepositAmount()
     setDepositAmount(maxAssetTokenBalance);
