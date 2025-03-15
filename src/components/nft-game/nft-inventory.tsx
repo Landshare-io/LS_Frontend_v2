@@ -109,7 +109,7 @@ export default function InventoryPage() {
   }, [address])
 
 
-  const confirmModalStyles = {
+  const confirmModalStyles: ReactModal.Styles = {
     content: {
       position: "fixed" as "fixed",
       top: "50%",
