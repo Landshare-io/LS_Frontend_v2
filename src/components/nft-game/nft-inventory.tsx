@@ -108,6 +108,27 @@ export default function InventoryPage() {
     checkIsAuthenticated(address)
   }, [address])
 
+
+  const confirmModalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      maxWidth: "300px",
+      width: "90%",
+      height: "fit-content",
+      borderRadius: "20px",
+      padding: 0,
+      border: 0,
+      background: 'transparent'
+    },
+    overlay: {
+      background: '#00000080',
+      zIndex: 99999
+    }
+  };
+
 	const calcDepositMax = async () => {
     await refetchDepositAmount()
     setDepositAmount(maxAssetTokenBalance);
@@ -610,7 +631,7 @@ export default function InventoryPage() {
             </ReactModal>
 
             <ReactModal
-							style={customModalStyles}
+							style={confirmModalStyles}
               isOpen={showHarvestConfirm}
 							onRequestClose={() => { setShowHarvestConfirm(!showHarvestConfirm), document.body.classList.remove('modal-open'); }}
               className={`flex items-center ${theme == 'dark' ? "dark" : ""}`}
