@@ -16,7 +16,7 @@ export default function useMintPremiumNft(chainId: number, address: Address | un
   const [transactionNonce, setTransactionNonce] = useState(0)
   const { notifyError, notifySuccess } = useGlobalContext()
   const { sendTransaction, data: sendTransactionTx, isError: isSendTransactionError } = useSendTransaction()
-  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+  const { isSuccess: sendTxSuccess } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
@@ -35,38 +35,21 @@ export default function useMintPremiumNft(chainId: number, address: Address | un
           notifyError(`Mint ${premiumItem.name} Error`);
         }
         if (sendTransactionTx) {
-          if (sendTxData) {
-            if (sendTxSuccess) {
-              const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-      
-              if (receipt.status) {
-    
-                const { data } = await axios.post('/has-item/mint-premium-nft', {
-                  itemId: premiumItem.id,
-                  txHash: receipt.transactionHash,
-                  blockNumber: receipt.blockNumber,
-                  nonce: premiumItem.nonce
-                })
-    
-                if (data) {
-                  await refetchBalance()
-                  await prRefetch()
-                  await ptRefetch()
-                  await mcRefetch()
-                  setTransactionNonce(0)
-                  setLoader("");
-                  notifySuccess(`Mint ${premiumItem.name} successfully`)
-                } else {
-                  setLoader("");
-                  setTransactionNonce(0)
-                  notifyError(`Mint ${premiumItem.name} Error`);
-                }
-              } else {
-                setLoader("");
-                setTransactionNonce(0)
-                notifyError(`Mint ${premiumItem.name} Error`);
-              }
-            } else {
+          if (sendTxSuccess) {
+            try {
+              const { data } = await axios.post('/has-item/mint-premium-nft', {
+                itemId: premiumItem.id,
+                nonce: premiumItem.nonce
+              })
+  
+              await refetchBalance()
+              await prRefetch()
+              await ptRefetch()
+              await mcRefetch()
+              setTransactionNonce(0)
+              setLoader("");
+              notifySuccess(`Mint ${premiumItem.name} successfully`)
+            } catch (e) {
               setLoader("");
               setTransactionNonce(0)
               notifyError(`Mint ${premiumItem.name} Error`);
@@ -75,7 +58,7 @@ export default function useMintPremiumNft(chainId: number, address: Address | un
         }
       }
     })()
-  }, [transactionNonce, sendTransactionTx, sendTxData, sendTxSuccess, isSendTransactionError])
+  }, [transactionNonce, sendTransactionTx, sendTxSuccess, isSendTransactionError])
 
   const mint = async (item: any) => {
     setPremiumItem(item)

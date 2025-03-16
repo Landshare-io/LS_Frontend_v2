@@ -36,7 +36,7 @@ export const FIREBASE_CONNECT_CONFIG = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 export const PROVIDER_URLS = {
-  56: 'https://bsc-dataseed2.binance.org/',
+  56: 'https://binance.llamarpc.com/',
   97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
   1: 'https://mainnet.infura.io/v3/',
   11155111: 'https://rpc.sepolia.org',

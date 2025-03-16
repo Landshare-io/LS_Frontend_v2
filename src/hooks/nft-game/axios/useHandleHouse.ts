@@ -50,7 +50,7 @@ export default function useHandleHouse(
   const { getHouse } = useGetHouse(house.id)
   const { getLandRemaining } = useGetSetting()
 
-  const { isSuccess: sendTxSuccess, data: sendTxData } = useWaitForTransactionReceipt({
+  const { isSuccess: sendTxSuccess } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: sendTransactionTx,
     chainId: chainId
@@ -140,36 +140,20 @@ export default function useHandleHouse(
             setOnSaleLoading(false)
             notifyError(`Extending house harvest limit Error`);
           } else if (sendTransactionTx) {
-            if (sendTxData) {
-              if (sendTxSuccess) {
-                const receipt = await PROVIDERS[chainId].getTransactionReceipt(sendTransactionTx);
-      
-                if (receipt.status) {
-                  const { data } = await axios.post('/house/extend-house-limit', {
-                    houseId: house.id,
-                    assetAmount: extendLandAmount * 4,
-                    txHash: receipt.transactionHash,
-                    nonce: transactionNonce,
-                    blockNumber: receipt.blockNumber
-                  })
-        
-                  if (data) {
-                    await refetchLand()
-                    await getNftCredits()
-                    await getHouse()
-                    setTransactionNonce(0)
-                    setOnSaleLoading(false)
-                    notifySuccess(`Extended house harvest limit`)
-                  }
-                } else {
-                  setTransactionNonce(0)
-                  setOnSaleLoading(false)
-                  notifyError(`Extending house harvest limit Error`);
-                }
-              } else {
+            if (sendTxSuccess) {
+              const { data } = await axios.post('/house/extend-house-limit', {
+                houseId: house.id,
+                assetAmount: extendLandAmount * 4,
+                nonce: transactionNonce,
+              })
+    
+              if (data) {
+                await refetchLand()
+                await getNftCredits()
+                await getHouse()
                 setTransactionNonce(0)
                 setOnSaleLoading(false)
-                notifyError(`Extending house harvest limit Error`);
+                notifySuccess(`Extended house harvest limit`)
               }
             }
           }
@@ -180,7 +164,7 @@ export default function useHandleHouse(
         console.log(error)
       }
     })()
-  }, [transactionNonce, sendTransactionTx, sendTxData, sendTxSuccess, isSendTransactionError])
+  }, [transactionNonce, sendTransactionTx, sendTxSuccess, isSendTransactionError])
 
   const renameNft = async (value: string) => {
     if (house.deadTime) {
