@@ -78,9 +78,9 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("Please Activate First");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     if (await validateResource(resource, toolshed.buy.slice(2, 7))) {
@@ -128,9 +128,9 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("Please Activate First");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     if (!toolshed.hasItemId) {
@@ -193,9 +193,9 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("You are not an owner of this house");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     if (validateItemDate(item, oneDayTime)) {
@@ -249,9 +249,9 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("Please Activate First");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     if (validateItemDate(item, oneDayTime)) {
@@ -317,9 +317,9 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("Please Activate First");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     let cost
@@ -378,9 +378,9 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("Please Activate First");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     if (validateItemDate(item, oneDayTime)) {
@@ -434,9 +434,9 @@ export default function useProductionUpgrade(house: any, setHouse: Function, add
       return notifyError("Please Activate First");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     if (lumber < 1) {

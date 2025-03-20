@@ -97,9 +97,9 @@ export default function useHandleAddons(chainId: number, address: Address | unde
       return notifyError("You are not an owner of this house");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     const firepitRemainDays = getItemDurationWithDeadTime(item, oneDayTime)
@@ -167,9 +167,9 @@ export default function useHandleAddons(chainId: number, address: Address | unde
       return notifyError("You are not an owner of this house");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     if (!validateItemDate(house.yieldUpgrades.filter((yItem: any) => yItem.name == 'Garden' && yItem.specialButtonName == '')[0], oneDayTime)) {
@@ -229,9 +229,9 @@ export default function useHandleAddons(chainId: number, address: Address | unde
       return notifyError("You are not an owner of this house");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     if (validateItemDate(item, oneDayTime)) {
@@ -306,9 +306,9 @@ export default function useHandleAddons(chainId: number, address: Address | unde
       return notifyError("You didn't buy this addon item.");
     } 
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading({ type: -1, loading: false });
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     if (await validateResource(resource, house.yieldUpgrades.filter((yItem: any) => yItem.hasItemId == hasSalvageAddonId)[0].sell.slice(2, 7))) {

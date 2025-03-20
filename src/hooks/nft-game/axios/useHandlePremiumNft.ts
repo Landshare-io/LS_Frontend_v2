@@ -231,9 +231,9 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
     try {
       if (!isAuthenticated || !isConnected) return;
 
-      if (house.deadTime) {
+      if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
         setLoader('')
-        return notifyError("House is inactive or on sale");
+        return notifyError("Please deactivate depleted house");
       }
   
       if (Number(landTokenBalance) >= premiumAttachPrice) {

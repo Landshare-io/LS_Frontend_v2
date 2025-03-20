@@ -167,8 +167,8 @@ export default function useHandleHouse(
   }, [transactionNonce, sendTransactionTx, sendTxSuccess, isSendTransactionError])
 
   const renameNft = async (value: string) => {
-    if (house.deadTime) {
-      return notifyError("House is inactive or on sale");
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
+      return notifyError("Please deactivate depleted house");
     }
 
     if (value.length > 0) {
@@ -212,11 +212,6 @@ export default function useHandleHouse(
       return notifyError("You are not house owner");
     }
 
-    if (house.deadTime) {
-      setIsLoading([false, false, false, false, false]);
-      return notifyError("House is inactive or on sale");
-    }
-
     try {
       const { data: houseData } = await axios.patch(`/house/${house.id}`, {
         isActivated: false,
@@ -256,9 +251,9 @@ export default function useHandleHouse(
       return notifyError("You are not house owner");
     }
 
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setIsLoading([false, false, false, false, false]);
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted house");
     }
 
     try {
@@ -287,8 +282,8 @@ export default function useHandleHouse(
   };
 
   const onSaleHandler = async () => {
-    if (house.deadTime) {
-      return notifyError("House is inactive or on sale");
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
+      return notifyError("Please deactivate depleted house");
     }
 
     if (house.isActivated) {
@@ -325,8 +320,8 @@ export default function useHandleHouse(
   };
 
   const setOnSale = async (price: number) => {
-    if (house.deadTime) {
-      return notifyError("House is inactive or on sale");
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
+      return notifyError("Please deactivate depleted house");
     }
 
     if (house.isActivated) {
@@ -354,10 +349,10 @@ export default function useHandleHouse(
   };
 
   const setHouseToOnSale = async () => {
-    if (house.deadTime) {
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
       setSaleOpen(false);
       setOnSaleLoading(false);
-      return notifyError("House is inactive or on sale");
+      return notifyError("Please deactivate depleted housee");
     }
 
     try {
@@ -372,10 +367,6 @@ export default function useHandleHouse(
 
   const extendHarvestLimit = async (landAmount: number) => {
     try {
-      if (house.deadTime) {
-        return notifyError("House is inactive or on sale");
-      }
-
       if (landAmount > Number(formatEther(userLandAmount))) {
         return notifyError('Insufficient LAND amount')
       }

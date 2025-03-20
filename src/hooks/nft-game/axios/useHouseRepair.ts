@@ -17,6 +17,11 @@ export default function useHouseRepair(setIsLoading: Function) {
       return notifyError("Please Activate First");
     }
 
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
+      setIsLoading(false);
+      return notifyError("Please deactivate depleted house");
+    }
+
     if (house.lastDurability == house.maxDurability) {
       setIsLoading(false);
       return notifyInfo("You already repaired to max");
@@ -93,6 +98,11 @@ export default function useHouseRepair(setIsLoading: Function) {
   const repairWithAmount = async (house: any, setHouse: Function, setDisplayPercent: Function, repairPercent: number) => {
     if (!house.isActivated) {
       return notifyError("Please Activate First");
+    }
+
+    if (house.totalHarvestedToken == (Number(house.tokenHarvestLimit) + Number(house.extendedBalance))) {
+      setIsLoading(false);
+      return notifyError("Please deactivate depleted house");
     }
 
     if (house.lastDurability == house.maxDurability) {
