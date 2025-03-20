@@ -213,6 +213,7 @@ export default function useHandleHouse(
     }
 
     if (house.deadTime) {
+      setIsLoading([false, false, false, false, false]);
       return notifyError("House is inactive or on sale");
     }
 
@@ -256,6 +257,7 @@ export default function useHandleHouse(
     }
 
     if (house.deadTime) {
+      setIsLoading([false, false, false, false, false]);
       return notifyError("House is inactive or on sale");
     }
 
@@ -353,6 +355,8 @@ export default function useHandleHouse(
 
   const setHouseToOnSale = async () => {
     if (house.deadTime) {
+      setSaleOpen(false);
+      setOnSaleLoading(false);
       return notifyError("House is inactive or on sale");
     }
 

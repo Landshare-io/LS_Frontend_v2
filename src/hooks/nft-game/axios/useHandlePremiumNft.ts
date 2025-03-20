@@ -232,6 +232,7 @@ export default function useHandlePremiumNft(chainId: number, address: Address | 
       if (!isAuthenticated || !isConnected) return;
 
       if (house.deadTime) {
+        setLoader('')
         return notifyError("House is inactive or on sale");
       }
   
