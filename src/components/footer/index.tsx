@@ -14,6 +14,7 @@ import IconTelegram from "../../../public/icons/telegram.svg";
 import IconDiscord from "../../../public/icons/discord-icon.svg";
 import IconMailGreen from "../../../public/icons/mail-green.svg";
 import IconArrowRight from "../../../public/icons/arrow-right.svg";
+import Link from "next/link";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -152,6 +153,13 @@ export default function Footer() {
                 <Image src={IconMail} className="w-4 h-4" alt="mail" />
               </a>
             </div>
+            <Link 
+              className="w-full bg-primary-green text-primary text-center py-1 rounded-[100px] font-semibold"
+              href="https://forms.gle/mZHSeokHTBzCUsZP7" 
+              target="_blank"
+            >
+              Submit a Ticket
+            </Link>
           </div>
           <div className="w-full grid grid-cols-2 gap-y-[25px] mlg:gap-[20px] md:max-w-[600px] md:basis-[50%] md:grid-cols-4 md:justify-between grow-[2]">
             <div className="p-0 flex flex-col gap-[16px]">
