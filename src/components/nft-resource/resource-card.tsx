@@ -76,8 +76,8 @@ export default function ResourceCard({
         isOpen={openModal}
         onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
       >
-        <div className="flex min-h-fit justify-center items-center">
-          <span className="my-2 mx-3 text-[14px]">{`Gather lumber from nearby woods. Costs 15 power per Lumber and can gather 2 per day, or 3 with the Trees upgrade.`}</span>
+        <div className="flex min-h-fit justify-center items-center bg-primary">
+          <span className="my-2 mx-3 text-[14px] text-text-primary">{`Gather lumber from nearby woods. Costs 15 power per Lumber and can gather 2 per day, or 3 with the Trees upgrade.`}</span>
         </div>
       </ReactModal>
     </div>

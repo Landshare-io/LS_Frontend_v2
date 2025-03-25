@@ -364,8 +364,8 @@ export default function YieldUpgrade({
         onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
         style={customModalStyles}
       >
-        <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 pt-1 text-[14px]">
+        <div className="flex min-h-full justify-center items-center bg-primary">
+          <span className="my-2 mx-3 pt-1 text-[14px] text-text-primary">
             {descriptions[item.name] ?? ""}
           </span>
         </div>

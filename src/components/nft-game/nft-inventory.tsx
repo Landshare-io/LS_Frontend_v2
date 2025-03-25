@@ -666,7 +666,7 @@ export default function InventoryPage() {
             </ReactModal>
 
             <ReactModal
-							style={customModalStyles}
+							style={confirmModalStyles}
               isOpen={showWithdrawAlert}
 							onRequestClose={() => { setShowWithdrawAlert(!showWithdrawAlert), document.body.classList.remove('modal-open'); }}
               className={`flex items-center ${theme == 'dark' ? "dark" : ""}`}

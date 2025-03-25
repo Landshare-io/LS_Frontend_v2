@@ -224,7 +224,7 @@ export default function YieldUpgrades({
         onRequestClose={() => { setOpenSalvageModal(!openSalvageModal), document.body.classList.remove('modal-open'); }}
         style={customModalStyles}
       >
-        <div className="w-[300px] p-[20px]">
+        <div className="w-[300px] p-[20px] bg-primary">
           <div className="text-[15px] text-center">
             Warning: Salvaging will remove this upgrade. Proceed?
           </div>

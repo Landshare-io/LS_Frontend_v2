@@ -215,8 +215,8 @@ export default function FireplaceUpgrade({
         onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
         style={customModalStyles}
       >
-        <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 pt-1 text-[14px] font-normal">{`Burn lumber for power with the Firepit upgrade. Each lumber generates ${Number(item.buyReward[2])
+        <div className="flex min-h-full justify-center items-center bg-primary">
+          <span className="my-2 mx-3 pt-1 text-[14px] font-normal text-text-primary">{`Burn lumber for power with the Firepit upgrade. Each lumber generates ${Number(item.buyReward[2])
             } power.`}</span>
         </div>
       </ReactModal>

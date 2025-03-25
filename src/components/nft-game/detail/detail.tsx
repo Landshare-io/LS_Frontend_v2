@@ -645,8 +645,8 @@ export default function NftDetails({
         isOpen={durabilityModal}
         onRequestClose={() => { setDurabilityModal(!durabilityModal), document.body.classList.remove('modal-open'); }}
       >
-        <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 pt-1 text-[14px] font-normal">
+        <div className="flex min-h-full justify-center items-center bg-primary">
+          <span className="my-2 mx-3 pt-1 text-[14px] font-normal text-text-primary">
             Durability determines the current repair status of your
             property. Your yield multiplier for a given period of time is
             multiplied by your durability amount. For example, if your

@@ -110,8 +110,8 @@ export default function PremiumNft({ amountMinted, premiumNft, mintCap, onSubmit
           isOpen={openModal}
           onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
         >
-          <div className="flex min-h-100 justify-center items-center">
-            <span className="my-2 mx-3 text-[14px]">{premiumNft.infoText}</span>
+          <div className="flex min-h-100 justify-center items-center bg-primary">
+            <span className="my-2 mx-3 text-[14px] text-text-primary">{premiumNft.infoText}</span>
           </div>
         </ReactModal>
       )}

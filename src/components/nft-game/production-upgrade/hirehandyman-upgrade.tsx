@@ -181,8 +181,8 @@ export default function HireHandymanUpgrade({
         onRequestClose={() => { setOpenModal(!openModal), document.body.classList.remove('modal-open'); }}
         style={customModalStyles}
       >
-        <div className="flex min-h-full justify-center items-center">
-          <span className="my-2 mx-3 text-[14px] pt-1 font-normal">
+        <div className="flex min-h-full justify-center items-center bg-primary">
+          <span className="my-2 mx-3 text-[14px] pt-1 font-normal text-text-primary">
             The Hire Handyman consumable allows you to restore your property to
             100% every 14 days for a flat rate of 1 LAND.
           </span>
