@@ -367,10 +367,10 @@ export default function useHandleHouse(
 
   const extendHarvestLimit = async (landAmount: number) => {
     try {
-      if (landAmount > Number(formatEther(userLandAmount))) {
+      if (Number(landAmount) > Number(formatEther(userLandAmount))) {
         return notifyError('Insufficient LAND amount')
       }
-      if (nftCredits < landAmount * 4) {
+      if (Number(nftCredits) < Number(landAmount * 4)) {
         return notifyError(`Insufficient NFT Credits`);
       }
 
