@@ -30,6 +30,10 @@ export default function NftMint() {
     {
       type: 3,
       name: 'LSCH'
+    },
+    {
+      type: 4,
+      name: 'LSCH'
     }
   ]
 

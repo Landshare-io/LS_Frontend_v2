@@ -26,6 +26,8 @@ import HouseBGardenNft from "../../../public/img/house/houseB_garden.webp";
 import HouseBGardenRareNft from "../../../public/img/house/houseB_garden_rare.webp";
 import HouseCNft from "../../../public/img/house/houseC.webp"
 import HouseCRareNft from "../../../public/img/house/houseC_rare.webp"
+import HouseDNft from "../../../public/img/house/houseD.webp";
+import HouseDRareNft from "../../../public/img/house/houseD_rare.webp";
 
 interface MarketplaceItemProps {
   product: any;
@@ -60,28 +62,33 @@ export default function MarketplaceItem({
           if (hasGarden) {
             return (product.type == 1 || product.type == 2)
               ? HouseGardenRareNft
-              : (product.type == 3 || product.type == 4) ? HouseBGardenRareNft : HouseCRareNft;
+              : (product.type == 3 || product.type == 4) ? HouseBGardenRareNft : 
+              (product.type == 5 || product.type == 6) ? HouseCRareNft : HouseDRareNft;
           } else {
             return (product.type == 1 || product.type == 2)
               ? HouseLandRareNft
-              : (product.type == 3 || product.type == 4) ? HouseBLandRareNft : HouseCRareNft;
+              : (product.type == 3 || product.type == 4) ? HouseBLandRareNft :
+              (product.type == 5 || product.type == 6) ? HouseCRareNft : HouseDRareNft;
           }
         } else {
-          return (product.type == 1 || product.type == 2) ? HouseRareNft : (product.type == 3 || product.type == 4) ? HouseBRareNft : HouseCRareNft;
+          return (product.type == 1 || product.type == 2) ? HouseRareNft : (product.type == 3 || product.type == 4) ? HouseBRareNft : (product.type == 5 || product.type == 6) ? HouseCRareNft : HouseDRareNft;
         }
       } else {
         if (product.isActivated && (hasLandscaping)) {
           if (hasGarden) {
-            return (product.type == 1 || product.type == 2) ? HouseGardenNft : (product.type == 3 || product.type == 4) ? HouseBGardenNft : HouseCNft;
+            return (product.type == 1 || product.type == 2) ? HouseGardenNft : (product.type == 3 || product.type == 4) ? HouseBGardenNft :
+              (product.type == 5 || product.type == 6) ? HouseCNft : HouseDNft;
           } else {
-            return (product.type == 1 || product.type == 2) ? HouseLandNft : (product.type == 3 || product.type == 4) ? HouseBLandNft : HouseCNft;
+            return (product.type == 1 || product.type == 2) ? HouseLandNft : (product.type == 3 || product.type == 4) ? HouseBLandNft : 
+              (product.type == 5 || product.type == 6) ? HouseCNft : HouseDNft;
           }
         } else {
-          return (product.type == 1 || product.type == 2) ? HouseNft : (product.type == 3 || product.type == 4) ? HouseBNft : HouseCNft;
+          return (product.type == 1 || product.type == 2) ? HouseNft : (product.type == 3 || product.type == 4) ? HouseBNft : 
+            (product.type == 5 || product.type == 6) ? HouseCNft : HouseDNft;
         }
       }
     }
-    return (product.type == 1 || product.type == 2) ? HouseNft : (product.type == 3 || product.type == 4) ? HouseBNft : HouseCNft;
+    return (product.type == 1 || product.type == 2) ? HouseNft : (product.type == 3 || product.type == 4) ? HouseBNft : (product.type == 5 || product.type == 6) ? HouseCNft : HouseDNft;
   };
 
   const getHouseName = () => {

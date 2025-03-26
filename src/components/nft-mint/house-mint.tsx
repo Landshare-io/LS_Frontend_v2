@@ -15,6 +15,8 @@ import HouseRareNft from "../../../public/img/house/house_rare_big.webp";
 import HouseBRareNft from "../../../public/img/house/houseB_rare.webp";
 import HouseCNft from "../../../public/img/house/houseC.webp";
 import HouseCRareNft from "../../../public/img/house/houseC_rare.webp";
+import HouseDNft from "../../../public/img/house/houseD.webp";
+import HouseDRareNft from "../../../public/img/house/houseD_rare.webp";
 import Tooltip from "../common/tooltip";
 
 interface HouseMintItemProps {
@@ -41,16 +43,20 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
 
   const getHouseImageUrl = (): any => {
     return product.type == 1
-      ? harvestAmount >= 500
+      ? (harvestAmount >= 500
         ? HouseRareNft
-        : HouseNft
+        : HouseNft)
       : product.type == 2
-      ? harvestAmount >= 500
+      ? (harvestAmount >= 500
         ? HouseBRareNft
-        : HouseBNft
-      : harvestAmount >= 500
+        : HouseBNft)
+      : product.type == 3
+      ? (harvestAmount >= 500
       ? HouseCRareNft
-      : HouseCNft;
+      : HouseCNft)
+      : (harvestAmount >= 500
+        ? HouseDNft
+        : HouseDRareNft);
   };
 
   return (
