@@ -60,7 +60,7 @@ export default function MarketplacePage() {
   return (
     <>
       <section className="bg-primary text-text-primary">
-        <div className="max-w-[1200px] m-auto flex flex-col pt-0 xl:px-[2px] px-[10px]">
+        <div className="min-h-screen max-w-[1200px] m-auto flex flex-col pt-0 xl:px-[2px] px-[10px]">
           {(!isLoginLoading && !isConnected && isItemsLoading == false) ? (
             <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
               <ConnectWallet />
