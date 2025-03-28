@@ -75,13 +75,13 @@ export default function MarketplacePage() {
                   <div className="flex ms-4 sm:ms-1 items-center">
                     <label
                       htmlFor="marketplace-view"
-                      className={`inline-block whitespace-nowrap mr-1 text-[16px] ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                      className={`inline-block whitespace-nowrap mr-1 text-[16px] dark:text-[#eaf3f3] text-[#131414]`}
                     >
                       View:
                     </label>
                     <div className="relative mr-2">
                       <select
-                        className={`cursor-pointer w-full whitespace-nowrap text-ellipsis overflow-hidden py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                        className={`cursor-pointer w-full whitespace-nowrap text-ellipsis overflow-hidden py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none dark:text-[#eaf3f3] text-[#131414]`}
                         name="marketplace-view"
                         id="marketplace-view"
                         onChange={(e) => changeMarketplaceView(e.target.value)}
@@ -95,13 +95,13 @@ export default function MarketplacePage() {
                   <div className="flex ms-4 sm:ms-1 items-center">
                     <label
                       htmlFor="marketplace-sort"
-                      className={`inline-block whitespace-nowrap mr-1 text-[16px] ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                      className={`inline-block whitespace-nowrap mr-1 text-[16px] dark:text-[#eaf3f3] text-[#131414]`}
                     >
                       Sort by:
                     </label>
                     <div className="relative mr-2">
                       <select
-                        className={`cursor-pointer whitespace-nowrap text-ellipsis py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+                        className={`cursor-pointer whitespace-nowrap text-ellipsis py-[0.375rem] pl-[0.75rem] pr-[2.25rem] appearance-none bg-transparent bg-none focus-visible:outline-none dark:text-[#eaf3f3] text-[#131414]`}
                         name="marketplace-sort"
                         id="marketplace-sort"
                         onChange={(e) => changeMarketplaceSort(e.target.value)}

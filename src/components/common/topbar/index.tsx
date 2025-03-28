@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import goOther from "../../../../public/icons/go_other.png";
@@ -15,6 +16,14 @@ export default function Topbar({ isNftList }: TopbarProps) {
   const { theme } = useTheme();
   const router = useRouter()
   const pathName = router.pathname;
+
+  const [isThemeLoaded, setIsThemeLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsThemeLoaded(true);
+  }, []);
+
+  if (!isThemeLoaded) return null;
 
   return (
     <>
