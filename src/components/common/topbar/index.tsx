@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import goOther from "../../../../public/icons/go_other.png";
@@ -21,7 +22,7 @@ export default function Topbar({ isNftList }: TopbarProps) {
       <div className="w-full overflow-hidden px-2">
         <div className="flex flex-nowrap items-center mt-10 pb-[10px] overflow-x-auto no-scrollbar">
           <span
-            className={`cursor-pointer whitespace-nowrap  mr-[20px] pr-[5px] pb-3 relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] hover:after:rounded-[10px] after:ease-in-out duration-300 ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"} ${(pathName.includes("/inventory") || (pathName.includes("/nft") && !pathName.includes("/resources")) && !pathName.includes("/mint")) &&
+            className={`cursor-pointer whitespace-nowrap  mr-[20px] pr-[5px] pb-3 relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] hover:after:rounded-[10px] after:ease-in-out duration-300 dark:text-[#eaf3f3] "text-[#131414] ${(pathName.includes("/inventory") || (pathName.includes("/nft") && !pathName.includes("/resources")) && !pathName.includes("/mint")) &&
               `after:content-[""] after:absolute after:left-0 after:bottom-[5px] after:w-full after:h-[6px] after:!bg-[#81db9b] after:rounded-[10px] ${BOLD_INTER_TIGHT.className}`
               }`}
             onClick={() => router.push("/nft/inventory")}
@@ -29,33 +30,33 @@ export default function Topbar({ isNftList }: TopbarProps) {
             Property Overview
           </span>
           <span
-            className={`relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] hover:after:rounded-[10px] duration-300 pb-3  mr-[20px] pr-[5px] cursor-pointer after:ease-in-out ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"} ${pathName.includes("/marketplace") && `after:content-[""] after:absolute after:left-0 after:bottom-[5px] after:w-full after:h-[6px] after:bg-[#81db9b] after:rounded-[10px] ${BOLD_INTER_TIGHT.className}`
+            className={`relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] hover:after:rounded-[10px] duration-300 pb-3  mr-[20px] pr-[5px] cursor-pointer after:ease-in-out dark:text-[#eaf3f3] "text-[#131414] ${pathName.includes("/marketplace") && `after:content-[""] after:absolute after:left-0 after:bottom-[5px] after:w-full after:h-[6px] after:bg-[#81db9b] after:rounded-[10px] ${BOLD_INTER_TIGHT.className}`
               }`}
             onClick={() => router.push("/marketplace")}
           >
             Marketplace
           </span>
           <span
-            className={`relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] hover:after:rounded-[10px] duration-300 pb-3  mr-[20px] pr-[5px] cursor-pointer after:ease-in-out ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"} ${pathName.includes("/resources") && `after:content-[""] after:absolute after:left-0 after:bottom-[5px] after:w-full after:h-[6px] after:bg-[#81db9b] after:rounded-[10px] ${BOLD_INTER_TIGHT.className}`
+            className={`relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] hover:after:rounded-[10px] duration-300 pb-3  mr-[20px] pr-[5px] cursor-pointer after:ease-in-out dark:text-[#eaf3f3] "text-[#131414] ${pathName.includes("/resources") && `after:content-[""] after:absolute after:left-0 after:bottom-[5px] after:w-full after:h-[6px] after:bg-[#81db9b] after:rounded-[10px] ${BOLD_INTER_TIGHT.className}`
               }`}
             onClick={() => router.push("/nft/resources")}
           >
             Resources
           </span>
           <span
-            className={`cursor-pointer whitespace-nowrap  mr-[20px] pr-[5px] pb-3 relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] hover:after:rounded-[10px] duration-300 after:ease-in-out ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"} ${(pathName.includes("/mint")) &&
+            className={`cursor-pointer whitespace-nowrap  mr-[20px] pr-[5px] pb-3 relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] hover:after:rounded-[10px] duration-300 after:ease-in-out dark:text-[#eaf3f3] "text-[#131414] ${(pathName.includes("/mint")) &&
               `after:content-[""] after:absolute after:left-0 after:bottom-[5px] after:w-full after:h-[6px] after:bg-[#81db9b] after:rounded-[10px] ${BOLD_INTER_TIGHT.className}`
               }`}
             onClick={() => router.push("/nft/mint")}
           >
             Mint
           </span>
-          <span className={`whitespace-nowrap  mr-[20px] pr-[5px] relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] duration-300 hover:after:rounded-[10px] pb-3 cursor-pointer after:ease-in-out ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}>
+          <span className={`whitespace-nowrap  mr-[20px] pr-[5px] relative mr-[20px] hover:text-normal hover:after:content-[""] hover:after:absolute hover:after:left-0 hover:after:bottom-[5px] hover:after:w-full hover:after:h-[6px] hover:after:bg-[#656565] duration-300 hover:after:rounded-[10px] pb-3 cursor-pointer after:ease-in-out dark:text-[#eaf3f3] "text-[#131414]`}>
             <a
               href="https://docs.landshare.io/platform-features/nft-ecosystem"
               target="_blank"
               rel="noopener noreferrer"
-              className={`text-decoration-none flex gap-1 items-center ${theme == 'dark' ? "text-[#eaf3f3]" : "text-[#131414]"}`}
+              className={`text-decoration-none flex gap-1 items-center dark:text-[#eaf3f3] "text-[#131414]`}
             >
               <Image src={theme == 'dark' ? goOtherWhite : goOther} alt="go other" className="w-[16px] h-[16px]" />
               <span>Game Guide</span>
