@@ -5,6 +5,7 @@ import Link from "next/link";
 import Modal from "react-modal";
 import { bsc } from "viem/chains";
 import { MdOutlineHelp, MdCancel } from "react-icons/md";
+import { BsInfoCircle } from "react-icons/bs";
 import { useAccount, useBalance, useChainId } from "wagmi";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { TOKENS } from "../../config/constants/page-data";
@@ -753,7 +754,20 @@ export default function SwapToken() {
                                   ? 0
                                   : Number(usdcAmount.toString())
                               ) > Number(poolBalance?.formatted)
-                            ? "Insufficient Liquidity"
+                            ? (
+                              <Tooltip
+                                content="Fixed-price liquidity is limited and is replenished periodically. Please try again later."
+                              >
+                                {/* svg icon must be wrapped in a div */}
+                                <div className="flex gap-[8px] items-center">
+                                  <span>Insufficient Liquidity</span>
+                                  <BsInfoCircle
+                                    id="tooltip-icon"
+                                    className="w-4 h-4 cursor-pointer"
+                                  ></BsInfoCircle>
+                                </div>
+                              </Tooltip>
+                            )
                             : "Sell"
                           : "Enter Amount"}
                       </Button>
