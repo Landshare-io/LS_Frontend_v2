@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactLoading from "react-loading";
 import numeral from "numeral";
 import ReactModal from "react-modal";
@@ -50,6 +50,7 @@ export default function InventoryPage() {
 	const [withdrawLoading, setWithdrawLoading] = useState(false)
 	const [depositAmount, setDepositAmount] = useState<number | string>("");
 	const [depositedBalance, setDepositedBalance] = useState<number | string>("");
+	const intervalRef = useRef<NodeJS.Timeout>();
 
 	const { houses: houseItems, getHouses } = useGetHouses()
 	const { data: maxAssetTokenBalance, refetch: refetchDepositAmount } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
@@ -72,42 +73,54 @@ export default function InventoryPage() {
   const [showWithdrawAlert, setShowWithdrawAlert] = useState(false)
 
   const getHousesList = async () => {
-    setIsLoading(true);
-    await getHouses();
-    await getResources();
-    setTimeout(() => {
+    try {
+      setIsLoading(true);
+      await Promise.all([
+        getHouses(),
+        getResources(),
+        updateDepositedBalance()
+      ]);
+      setDepositedBalance(stakedBalance);
+      
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      intervalRef.current = setInterval(async () => {
+        await getHouses();
+      }, 60000);
+    } catch (error) {
+      console.error('Error loading houses:', error);
+      notifyError('Failed to load houses data');
+    } finally {
       setIsLoading(false);
-    }, 1500)
+    }
   }
 
   useEffect(() => {
-    (async () => {
-      if (!isConnected) return;
-      if (isLoginLoading) return;
-      if (!isAuthenticated) return;
+    if (!isConnected || !isAuthenticated || !isLoginLoading) {
+      setIsLoading(false);
+      return;
+    }
 
-      await updateDepositedBalance();
-			setDepositedBalance(stakedBalance)
+    if (isLoginLoading) {
+      setIsLoading(true);
+      return;
+    }
 
-      await getHousesList()
+    getHousesList();
 
-      const interval = setInterval(async () => {
-        await getHouses();
-      }, 60000);
-
-      return () => clearInterval(interval);
-    })()
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [isAuthenticated, isLoginLoading, isConnected]);
 
   useEffect(() => {
-    if (!isAuthenticated || !isConnected) setIsLoading(false)
-    else setIsLoading(true)
-  }, [isAuthenticated, isConnected])
-
-  useEffect(() => {
-    checkIsAuthenticated(address)
-  }, [address])
-
+    if (address) {
+      checkIsAuthenticated(address);
+    }
+  }, [address]);
 
   const confirmModalStyles: ReactModal.Styles = {
     content: {
@@ -354,7 +367,7 @@ export default function InventoryPage() {
                     <Topbar isNftList={true} />
 
                     {
-                      isLoading || isLoginLoading
+                      isLoading || isLoginLoading || !isConnected || !isAuthenticated
                       ?
                       <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
                         <ReactLoading type="bars" color="#61cd81" />
