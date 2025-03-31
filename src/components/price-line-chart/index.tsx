@@ -41,7 +41,7 @@ export default function PriceGraph({
   const router = useRouter();
   const { theme } = useTheme();
   const rwaGraphData = useFetchRwa();
-  const { price: landGraphData, isLoading: isLandGraphDataLoading } = useFetchLandData(dueDate.one_week, Date.now());
+  const { price: landGraphData, isLoading: isLandGraphDataLoading, earlyPrice, latestPrice } = useFetchLandData(dueDate.one_week, Date.now());
   const { price: landPrice, isLoading: isLandPriceDataLoading } = useGetLandPrice();
   
 
@@ -89,7 +89,7 @@ export default function PriceGraph({
           setRecentData({
             pair: "LAND / USD",
             price: landPrice,
-            change_price: (landGraphData.prices[Number(landGraphData.prices.length) - Number(1)][1] - landGraphData.prices[0][1]) / landGraphData.prices[0][1] * 100,
+            change_price: ((latestPrice) - (earlyPrice)) / earlyPrice * 100,
             date: now
           })
           setIsLoading(false);
@@ -101,11 +101,11 @@ export default function PriceGraph({
             change_price = rwaGraphData[1][1] != 0 ? (rwaGraphData[rwaGraphData.length - 1][1] - rwaGraphData[1][1]) / rwaGraphData[1][1] * 100 : 0
           } else {
             const filtered = rwaGraphData.filter((value) => Number(value[0]) > new Date(dueDate[selection]).getTime());
-            const data = [[new Date(dueDate[selection]).getTime(), rwaGraphData[rwaGraphData.length - filtered.length - 1][1]]];
+            const data = [[new Date(dueDate[selection]).getTime(), rwaGraphData[rwaGraphData.length - filtered.length - 1][1]]].concat(filtered);
             setSeries([{
-              data: data.concat(filtered)
+              data: data
             }]);
-            change_price = filtered.length > 1 ? (filtered[1][1] != 0 ? (filtered[filtered.length - 1][1] - filtered[1][1]) / filtered[1][1] * 100 : 0) : 0
+            change_price = data.length > 1 ? (data[1][1] != 0 ? (data[data.length - 1][1] - data[1][1]) / data[1][1] * 100 : 0) : 0
           }
           setRecentData({
             pair: "LSRWA / USD",

@@ -107,7 +107,7 @@ export default function MarketplaceItem({
   return (
     <div className="w-full md:max-w-[251px] rounded-[16px] overflow-hidden duration-300 transition-all ease-in hover:shadow-[0_0_17px_0_rgba(0,0,0,0.527)]">
       <div className="h-[249px] relative">
-        <div className={`bg-[#c4c4c433] text-[#fff] rounded-[16px] absolute top-0 w-full text-center p-2 ${BOLD_INTER_TIGHT.className}`}>
+        <div className={`bg-[#c4c4c433] text-[#fff] rounded-top-[16px] absolute top-0 w-full text-center p-2 ${BOLD_INTER_TIGHT.className}`}>
           {getHouseName()}
         </div>
         <Image

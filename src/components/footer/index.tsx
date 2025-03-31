@@ -155,7 +155,7 @@ export default function Footer() {
             </div>
             <Link 
               className="w-full bg-primary-green text-primary text-center py-1 rounded-[100px] font-semibold"
-              href="https://forms.gle/mZHSeokHTBzCUsZP7" 
+              href="https://landshare.atlassian.net/servicedesk/customer/portal/1" 
               target="_blank"
             >
               Submit a Ticket
