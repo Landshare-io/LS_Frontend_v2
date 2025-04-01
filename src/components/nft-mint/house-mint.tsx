@@ -55,8 +55,8 @@ export default function HouseMintItem({ product }: HouseMintItemProps) {
       ? HouseCRareNft
       : HouseCNft)
       : (harvestAmount >= 500
-        ? HouseDNft
-        : HouseDRareNft);
+        ? HouseDRareNft
+        : HouseDNft);
   };
 
   return (
