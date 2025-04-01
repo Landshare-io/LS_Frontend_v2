@@ -1,6 +1,5 @@
 import snapshotjs from "@snapshot-labs/snapshot.js";
 import { Web3Provider } from '@ethersproject/providers';
-import { Wallet } from '@ethersproject/wallet';
 import { 
   useWalletClient,
   useAccount
@@ -9,7 +8,6 @@ import { useBlockNumber } from 'wagmi'
 import { useGlobalContext } from "../../context/GlobalContext";
 
 const client = new snapshotjs.Client712("https://hub.snapshot.org");
-
 
 interface SnapshotParams {
   title: string;
@@ -22,7 +20,7 @@ type SnapshotCallback = () => void;
 
 export default function useSnapshot({ title, body, proposalJSON, proposal }: SnapshotParams) {
   const { setScreenLoadingStatus } = useGlobalContext()
-  const { data: signer } = useWalletClient();
+  const { data: walletClient } = useWalletClient();
   const { address } = useAccount()
   const account = address ?? ''
   const { data: blockNumber } = useBlockNumber()
@@ -79,9 +77,6 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
     const network = "56";
     const voters = [account];
 
-    console.log(proposal);
-    console.log(proposalJSON);
-
     function noTX(proposal: string): boolean {
       return (
         proposal === "Create Bounty" ||
@@ -97,16 +92,12 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
     let score: number = 0;
     try {
       const scores = await snapshotjs.utils.getScores(space, strategies, network, voters, Number(blockNumber));
-      console.log("Scores", scores);
-
       score = scores.reduce((sum: number, strategy: any) => {
         if (typeof strategy[account] !== "undefined") {
           sum += Number(strategy[account]);
         }
         return sum;
       }, 0);
-
-      console.log(score);
     } catch (error) {
       console.error("Error fetching scores:", error);
       if (onError) onError(error as Error);
@@ -120,8 +111,14 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
     }
 
     try {
-      const proposalSinger = signer as unknown as Web3Provider | Wallet
-      await client.proposal((proposalSinger), account, {
+      if (!walletClient || !account) {
+        throw new Error("No wallet connected");
+      }
+
+      const web3Provider = new Web3Provider(walletClient as any);
+      const signer = web3Provider.getSigner(account);
+
+      await client.proposal(signer as any, account, {
         space: "landshare.eth",
         type: "single-choice",
         title: `[${proposal}] ${title}`,
@@ -136,13 +133,12 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
       });
 
       if (onSuccess) onSuccess();
+      setScreenLoadingStatus("Transaction Complete.");
     } catch (e) {
       console.log(e);
       setScreenLoadingStatus("Transaction Failed.");
       if (onError) onError(e as Error);
     }
-
-    setScreenLoadingStatus("Transaction Complete.");
   }
 
   return {
