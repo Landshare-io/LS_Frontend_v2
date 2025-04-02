@@ -161,17 +161,23 @@ export default function SwapToken() {
           docElement.classList.add("bg-primary");
           docElement.classList.add("text-text-primary");
           docElement.classList.add("w-full");
-          var container = document.getElementById("doc") as Element;
-          container.appendChild(docElement);
-          var docContent = docElement.getElementsByClassName("doc-content");
-          docContent[0] instanceof HTMLElement && (docContent[0].style.padding = "10px", docContent[0].style.background = theme == "dark" ? "#2E2E2E" : "#f6f7f9");
-          var paragraphs = docContent[0].getElementsByTagName("p");
-          for (var i = 0; i < paragraphs.length; i++) {
-              var spans = paragraphs[i].getElementsByTagName("span");
-              for (var j = 0; j < spans.length; j++) {
-                spans[j].style.color = theme == "dark" ? "#f1f1f1" : "#0a0a0a";
-                spans[j].style.background = "transparent";
+          var container = document.getElementById("doc");
+          if (container) {
+            container.innerHTML = ''; // Clear existing content
+            container.appendChild(docElement);
+            var docContent = docElement.getElementsByClassName("doc-content");
+            if (docContent[0] instanceof HTMLElement) {
+              docContent[0].style.padding = "10px";
+              docContent[0].style.background = theme == "dark" ? "#2E2E2E" : "#f6f7f9";
+              var paragraphs = docContent[0].getElementsByTagName("p");
+              for (var i = 0; i < paragraphs.length; i++) {
+                var spans = paragraphs[i].getElementsByTagName("span");
+                for (var j = 0; j < spans.length; j++) {
+                  spans[j].style.color = theme == "dark" ? "#f1f1f1" : "#0a0a0a";
+                  spans[j].style.background = "transparent";
+                }
               }
+            }
           }
           setIsSTPALoading(false);
         }
@@ -447,14 +453,14 @@ export default function SwapToken() {
               <div className="flex justify-between items-center gap-[5px]">
                 <div className="flex items-center gap-[5px] cursor-pointer">
                   <Image
-                    src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? pUsd : IconUSDC}
+                    src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? pUsd : IconUSDC}
                     alt="usdc"
                     className="w-[18px] h-[18px] rounded-full"
                   />
                   <span
                     className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                   >
-                    {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? "pUSD" : "USDC"}
+                    {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? "pUSD" : "USDC"}
                   </span>
                   <Image
                     src={theme == "dark" ? IconArrowDownDark : IconArrowDown}
@@ -488,7 +494,7 @@ export default function SwapToken() {
               </div>
               <input
                 className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
-                placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? 'pUSD' : 'USDC'}`}
+                placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? 'pUSD' : 'USDC'}`}
                 readOnly
                 value={usdcAmount}
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
@@ -632,20 +638,20 @@ export default function SwapToken() {
                 <div className="flex justify-between items-center gap-[5px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
                     <Image
-                      src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? pUsd : IconUSDC}
+                      src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? pUsd : IconUSDC}
                       alt="usdc"
                       className="w-[18px] h-[18px] rounded-full"
                     />
                     <span
                       className={`text-text-primary text-[14px] leading-[22px] !text-[12px] ${BOLD_INTER_TIGHT.className}`}
                     >
-                      {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? "pUSD" : "USDC"}
+                      {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? "pUSD" : "USDC"}
                     </span>
                   </div>
                 </div>
                 <input
                   className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
-                  placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? 'pUSD' : 'USDC'}`}
+                  placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? 'pUSD' : 'USDC'}`}
                   readOnly
                   value={
                     buyUSDCAmount == undefined || RWATokenAmount === 0
@@ -668,7 +674,7 @@ export default function SwapToken() {
                   </div>
                 )}
               </div>
-              {!PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) && (
+              {!PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) && (
                 <div className="flex flex-col flex-1 w-full gap-[4px] min-h-[76px]">
                   <div className="flex justify-between items-center gap-[5px]">
                     <div className="flex items-center gap-[5px] cursor-pointer">
