@@ -46,92 +46,27 @@ export default function DAO() {
   const [initialLoad, setInitialLoad] = useState(true);
   const [votingPower, setVotingPower] = useState<number>(0);
   const { data: blockNumber } = useBlockNumber();
-  const { snapshot } = useSnapshot({ 
-    title: "", 
-    body: "", 
-    proposalJSON: "", 
-    proposal: "" 
+  const { calculateScore } = useSnapshot({
+    title: "",
+    body: "",
+    proposalJSON: "",
+    proposal: ""
   });
+
+  useEffect(() => {
+    const fetchScore = async () => {
+      const score = await calculateScore();
+      console.log("score index:::", score);
+      setVotingPower(score);
+    };
+    fetchScore();
+  }, [calculateScore]);
 
   useEffect(() => {
     setTimeout(() => {
       setInitialLoad(false);
     }, 1500);
   }, []);
-
-  useEffect(() => {
-    const checkVotingPower = async () => {
-      if (!address || !blockNumber) {
-        setVotingPower(0);
-        return;
-      }
-
-      const space = "landsharetest.eth";
-      const network = "56";
-      const voters = [address];
-      const strategies = [
-        {
-          name: "single-staking-autocompound-balanceof",
-          params: {
-            symbol: "LAND",
-            decimals: 18,
-            stakingPoolAddress: "0x6233FFEEf97D08Db2c763f389eebD9d738E4d4a3",
-          },
-        },
-        {
-          name: "masterchef-pool-balance",
-          params: {
-            pid: "0",
-            symbol: "LAND",
-            weight: 1,
-            tokenIndex: null,
-            chefAddress: "0x3f9458892fB114328Bc675E11e71ff10C847F93b",
-            uniPairAddress: null,
-            weightDecimals: 0,
-          },
-        },
-        {
-          name: "erc20-token-and-lp-weighted",
-          params: {
-            symbol: "LAND",
-            tokenAddress: "0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C",
-            lpTokenAddress: "0x13F80c53b837622e899E1ac0021ED3D1775CAeFA",
-          },
-        },
-        {
-          name: "masterchef-pool-balance-price",
-          params: {
-            pid: "1",
-            token0: {
-              weight: 2,
-              address: "0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C",
-              weightDecimals: 0,
-            },
-            weight: 1,
-            chefAddress: "0x3f9458892fB114328Bc675E11e71ff10C847F93b",
-            uniPairAddress: "0x13F80c53b837622e899E1ac0021ED3D1775CAeFA",
-            weightDecimals: 0,
-          },
-        },
-      ];
-
-      try {
-        const scores = await snapshotjs.utils.getScores(space, strategies, network, voters, Number(blockNumber));
-        const score = scores.reduce((sum: number, strategy: any) => {
-          if (typeof strategy[address] !== "undefined") {
-            sum += Number(strategy[address]);
-          }
-          return sum;
-        }, 0);
-        setVotingPower(score);
-      } catch (error) {
-        console.error("Error fetching voting power:", error);
-        setVotingPower(0);
-      }
-    };
-
-    checkVotingPower();
-  }, [address, blockNumber, chainId]);
 
   const { data: balanceGnosis, isLoading: isBalanceGnosisLoading } = useBalanceOf({ chainId: bsc.id, address: DAO_TREASURY_ADDRESS }) as { data: BigNumberish, isLoading: boolean }
   const balanceGnosisValue = formatEther(balanceGnosis).match(/^-?\d+(?:\.\d{0,2})?/)
@@ -149,7 +84,7 @@ export default function DAO() {
       return;
     }
 
-    if (votingPower < 100) {
+    if (votingPower < 1) {
       notifyError("Not enough voting power.");
       return;
     }
@@ -299,7 +234,7 @@ export default function DAO() {
                     View All
                   </button>
                   <button 
-                    className="text-button-text-secondary py-[5px] px-[5px] min-h-[32px] min-w-fit text-[12px] leading-[14px] bg-text-third md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
+                    className="text-button-text-secondary py-[5px] px-[5px] min-h-[32px] min-w-fit text-[12px] leading-[14px] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] bg-[#61CD81] active:bg-[#06B844]"
                     disabled={(isBalanceGnosisLoading || isBalanceMarketingLoading) || chainId != bsc.id || votingPower < 100}
                     onClick={handleClickCreateProposal}
                   >
