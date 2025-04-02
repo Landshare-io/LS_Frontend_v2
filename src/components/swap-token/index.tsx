@@ -468,16 +468,9 @@ export default function SwapToken() {
                     className="w-[18px] h-[18px]"
                   />
                 </div>
-                <div>
-                  <Image
-                    src={IconArrowUpDown}
-                    alt="arrow up down"
-                    className="w-[18px] h-[18px]"
-                  />
-                </div>
                 <div className="flex justify-between items-center gap-[5px]">
                   <label className="text-text-secondary text-[12px] leading-[22px]">
-                    Price:
+                    RWA Price:
                   </label>
                   <span
                     className={`text-text-primary text-[12px] leading-[20px] ${BOLD_INTER_TIGHT.className}`}
@@ -496,7 +489,9 @@ export default function SwapToken() {
                 className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
                 placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? 'pUSD' : 'USDC'}`}
                 readOnly
-                value={usdcAmount}
+                value={usdcAmount == 0 || RWATokenAmount === 0
+                  ? ""
+                  : Number(usdcAmount.toFixed(6))}
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
               />
             </div>
