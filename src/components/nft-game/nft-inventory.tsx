@@ -43,7 +43,7 @@ export default function InventoryPage() {
     notifyError,	
   } = useGlobalContext();
   const { theme } = useTheme();
-  const { isConnected, address } = useAccount();
+  const { isConnected, address, chainId: currentChainID } = useAccount();
 	const [harvestLoading, setHarvestLoading] = useState(false);
 	const [buyHouseSlotLoading, setBuyHouseSlotLoading] = useState(false)
 	const [depositLoading, setDepositLoading] = useState(false)
@@ -355,19 +355,19 @@ export default function InventoryPage() {
     <div className={`font-inter ${theme == 'dark' ? "dark" : ""}`}>
       <div className="bg-primary min-h-[calc(100vh-144px)]">
         <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px] xl:px-[2px] px-[10px]">
-          {(!isLoginLoading && (!isConnected || !isAuthenticated)) ? (
+          {!isConnected ? (
             <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
               <ConnectWallet />
             </div>
           ) : (
             <>
               {
-                (NFT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
+                (NFT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(currentChainID ?? 0) ? (
                   <>
                     <Topbar isNftList={true} />
 
                     {
-                      isLoading || isLoginLoading || !isConnected || !isAuthenticated
+                      (isLoading || isLoginLoading || !isAuthenticated) && isConnected
                       ?
                       <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
                         <ReactLoading type="bars" color="#61cd81" />
