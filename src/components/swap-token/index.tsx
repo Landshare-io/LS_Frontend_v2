@@ -31,6 +31,7 @@ import {
   MAJOR_WORK_CHAINS,
   PUSD_SUPPORT_CHINAS,
 } from "../../config/constants/environments";
+import { useGlobalContext } from "../../context/GlobalContext";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
 import useGetLandFee from "../../hooks/contract/LandshareSaleContract/useGetLandFee";
@@ -58,6 +59,7 @@ import Tooltip from "../common/tooltip";
 const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 export default function SwapToken() {
+  const { screenLoadingStatus } = useGlobalContext();
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
   const { data: isWhitelisted, refetch } = useIsWhitelistedAddressOfRwa(chainId, address);
@@ -84,29 +86,29 @@ export default function SwapToken() {
     })()
   }, [isZeroIDModal])
 
-  const { data: balance } = useBalance({
+  const { data: balance, refetch: refetchBalance } = useBalance({
     address: address,
     token: RWA_CONTRACT_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
-  const { data: USDCBalance } = useBalance({
+  const { data: USDCBalance, refetch: refetchUSDCBalance } = useBalance({
     address: address,
     token: USDC_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
-  const { data: poolBalance } = useBalance({
+  const { data: poolBalance, refetch: refetchPoolBalance } = useBalance({
     address: RWA_POOL_CONTRACT_ADDRESS[chainId],
     token: USDC_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
-  const { data: landBalance } = useBalance({
+  const { data: landBalance, refetch: refetchLandBalance } = useBalance({
     address: address,
     token: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
   const { data: saleLimit, refetch: refetchSaleLimit } = useGetSaleLimit(
     chainId,
@@ -146,10 +148,20 @@ export default function SwapToken() {
   ) as any;
 
   useEffect(() => {
-    setUsdcAmount(Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount);
+    setUsdcAmount(Number((Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount).toFixed(2)));
     setBuyLANDAmount(buyTokenAmount[1])
     setBuyUSDCAmount(buyTokenAmount[0])
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
+
+  useEffect(() => {
+    if(screenLoadingStatus === "Transaction Complete.") {
+      refetchBalance();
+      refetchUSDCBalance();
+      refetchPoolBalance();
+      refetchLandBalance();
+      refetchSaleLimit();
+    }
+  }, [screenLoadingStatus]);
 
   useEffect(() => {
     if (isSTAPShow) {
@@ -443,9 +455,9 @@ export default function SwapToken() {
                 type="number"
                 disabled={!isConnected}
                 onChange={(e: any) => {
-                  const regex = /^[0-9\b]/;
+                  const regex = /^\d+$/;
                   if (e.target.value === "" || regex.test(e.target.value))
-                    setRWATokenAmount(e.target.value);
+                    setRWATokenAmount(Number(e.target.value));
                 }}
               />
             </div>
@@ -491,7 +503,7 @@ export default function SwapToken() {
                 readOnly
                 value={usdcAmount == 0 || RWATokenAmount === 0
                   ? ""
-                  : Number(usdcAmount.toFixed(6))}
+                  : usdcAmount}
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
               />
             </div>
@@ -621,9 +633,9 @@ export default function SwapToken() {
                 disabled={!isConnected}
                 type="number"
                 onChange={(e: any) => {
-                  const regex = /^[0-9\b]/;
+                  const regex = /^\d+$/;
                   if (e.target.value === "" || regex.test(e.target.value))
-                    setRWATokenAmount(e.target.value);
+                    setRWATokenAmount(Number(e.target.value));
                 }}
               />
             </div>
@@ -778,7 +790,6 @@ export default function SwapToken() {
                         disabled={
                           isWhitelisted == false ||
                           RWATokenAmount === undefined ||
-                          RWATokenAmount < 1 ||
                           RWATokenAmount === 0 ||
                           Number(
                             formatEther(
@@ -797,14 +808,14 @@ export default function SwapToken() {
                         }}
                         className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green text-white"
                       >
-                        {RWATokenAmount && buyLANDAmount && usdcAmount
+                        { (chainId == bsc.id ? buyLANDAmount : true) && RWATokenAmount && usdcAmount
                           ? Number(formatEther(buyLANDAmount.toString())) >
                             parseFloat(landBalance?.formatted)
                             ? "Insufficient LAND Balance"
                             : Number(formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)) >
                               parseFloat(USDCBalance?.formatted)
                             ? "Insufficient USDC Balance"
-                            : buyOrSell
+                            : "Buy"
                           : "Enter Amount"}
                       </Button>
                     )}
