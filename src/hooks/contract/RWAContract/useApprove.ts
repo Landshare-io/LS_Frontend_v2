@@ -10,7 +10,7 @@ export default function useApprove(chainId: number) {
     data,
     isPending,
     isError,
-    writeContract
+    writeContract,
   } = useWriteContract();
 
   async function approve(approveAddress: Address, amount: number | BigNumberish) {
