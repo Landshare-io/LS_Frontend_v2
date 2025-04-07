@@ -56,6 +56,12 @@ export default function useLogin() {
 
   useEffect(() => {
     (async () => {
+      if (isSignError) {
+        updateIsLoading(false);
+        setIsAuthenticated(false);
+        return false;
+      }
+
       if (signMessageData) {
         try {
           const { data } = await axios.post(`${NFT_GAME_BACKEND_URL}/auth/login`, {
