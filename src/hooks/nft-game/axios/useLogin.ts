@@ -32,7 +32,7 @@ export default function useLogin() {
   const [isLoading, setIsLoading] = useState(true)
   const [signNonce, setSignNonce] = useState(0)
   const [showNotify, setShowNotify] = useState(false)
-  const { signMessage, data: signMessageData } = useSignMessage()
+  const { signMessage, data: signMessageData, isError: isSignError } = useSignMessage()
   const [walletAddress, setWalletAddress] = useState<Address | string | undefined>()
   const { getUserData } = useGetUserData()
 
@@ -56,6 +56,13 @@ export default function useLogin() {
 
   useEffect(() => {
     (async () => {
+      if (isSignError) {
+        updateIsLoading(false);
+        setIsAuthenticated(false);
+        if (showNotify) notifyError("You rejected to sign the message");
+        return false;
+      }
+
       if (signMessageData) {
         try {
           const { data } = await axios.post(`${NFT_GAME_BACKEND_URL}/auth/login`, {
@@ -85,7 +92,7 @@ export default function useLogin() {
         }
       }
     })()
-  }, [signMessageData])
+  }, [signMessageData, isSignError])
 
   const logout = (address: string) => {
     const jwtToken = localStorage.getItem('jwtToken-v2')

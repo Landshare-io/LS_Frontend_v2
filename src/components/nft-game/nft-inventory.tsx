@@ -43,7 +43,7 @@ export default function InventoryPage() {
     notifyError,	
   } = useGlobalContext();
   const { theme } = useTheme();
-  const { isConnected, address, chainId: currentChainID } = useAccount();
+  const { isConnected, address, chainId: currentChainID, status: wagmiStatus } = useAccount();
 	const [harvestLoading, setHarvestLoading] = useState(false);
 	const [buyHouseSlotLoading, setBuyHouseSlotLoading] = useState(false)
 	const [depositLoading, setDepositLoading] = useState(false)
@@ -97,13 +97,18 @@ export default function InventoryPage() {
   }
 
   useEffect(() => {
-    if (!isConnected || !isAuthenticated || !isLoginLoading) {
+    if (!isConnected) {
       setIsLoading(false);
       return;
     }
 
     if (isLoginLoading) {
       setIsLoading(true);
+      return;
+    }
+
+    if (!isAuthenticated) {
+      setIsLoading(false);
       return;
     }
 
@@ -355,7 +360,11 @@ export default function InventoryPage() {
     <div className={`font-inter ${theme == 'dark' ? "dark" : ""}`}>
       <div className="bg-primary min-h-[calc(100vh-144px)]">
         <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px] xl:px-[2px] px-[10px]">
-          {!isConnected ? (
+          {wagmiStatus === 'connecting' ? (
+            <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
+              <ReactLoading type="bars" color="#61cd81" />
+            </div>
+          ) : !isConnected ? (
             <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
               <ConnectWallet />
             </div>
@@ -366,13 +375,20 @@ export default function InventoryPage() {
                   <>
                     <Topbar isNftList={true} />
 
-                    {
-                      (isLoading || isLoginLoading || !isAuthenticated) && isConnected
-                      ?
+                    {isLoading || isLoginLoading || !isAuthenticated ? (
                       <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
-                        <ReactLoading type="bars" color="#61cd81" />
+                        {!isAuthenticated ? (
+                          <div className="flex flex-col items-center gap-4">
+                            <ConnectWallet 
+                              containerClassName="flex justify-center"
+                              connectButtonClassName="h-[40px] w-[159px] text-[16px] bg-[#61cd81] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400"
+                            />
+                          </div>
+                        ) : (
+                          <ReactLoading type="bars" color="#61cd81" />
+                        )}
                       </div>
-                      :
+                    ) : (
                       <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
                         <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
                         <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
@@ -578,59 +594,57 @@ export default function InventoryPage() {
                             </div>
                           </div>
                         </div>
-                        <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Harvestable resources</span>
-                        <div className="border-b-[1px] border-b-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
-                        <div className="flex flex-col w-full">
-                          <RewardHarvest
-                            setTotalHarvestCost={setTotalHarvestCost}
-                            selectedResource={selectedResource}
-                            setSelectedResource={setSelectedResource}
-                          />
-                          <div className="flex pt-5 pb-5 lg:pb-4 justify-start md:justify-end">
-                            <div
-                              className={`flex h-[40px] w-full md:w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
-                            >
-                              <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
-                                Cost:{" "}
-                                <span className={`flex items-center gap-[3px] ml-1 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                                  {totalHarvestCost} {<ChargeIcon iconColor={theme == 'dark' ? "#cacaca" : "#4C4C4C"} />}
-                                </span>
-                              </span>
-                              <Button
-                                onClick={handleHarvest}
-                                className={`h-[40px] w-[159px] text-[16px] bg-[#61cd81] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
-                                  ${harvestLoading
-                                    ? "flex justify-center items-center"
-                                    : ""
-                                  }`}
-                                disabled={harvestLoading}
-                              >
-                                {harvestLoading ? (
-                                  <div className='flex justify-center items-center'>
-                                    <ReactLoading
-                                      type="spin"
-                                      className="me-2 mb-[4px]"
-                                      width="24px"
-                                      height="24px"
-                                    />
-                                    <span className="font-semibold">Loading</span>
-                                  </div>
-                                ) : (
-                                  "Harvest"
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                        <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Production Facilities</span>
-                        <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
-                        <div className="flex flex-col w-full">
-                          <ProductionFacilities />
+                      </div>
+                    )}
+                    <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Harvestable resources</span>
+                    <div className="border-b-[1px] border-b-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
+                    <div className="flex flex-col w-full">
+                      <RewardHarvest
+                        setTotalHarvestCost={setTotalHarvestCost}
+                        selectedResource={selectedResource}
+                        setSelectedResource={setSelectedResource}
+                      />
+                      <div className="flex pt-5 pb-5 lg:pb-4 justify-start md:justify-end">
+                        <div
+                          className={`flex h-[40px] w-full md:w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
+                        >
+                          <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
+                            Cost:{" "}
+                            <span className={`flex items-center gap-[3px] ml-1 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                              {totalHarvestCost} {<ChargeIcon iconColor={theme == 'dark' ? "#cacaca" : "#4C4C4C"} />}
+                            </span>
+                          </span>
+                          <Button
+                            onClick={handleHarvest}
+                            className={`h-[40px] w-[159px] text-[16px] bg-[#61cd81] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
+                              ${harvestLoading
+                                ? "flex justify-center items-center"
+                                : ""
+                              }`}
+                            disabled={harvestLoading}
+                          >
+                            {harvestLoading ? (
+                              <div className='flex justify-center items-center'>
+                                <ReactLoading
+                                  type="spin"
+                                  className="me-2 mb-[4px]"
+                                  width="24px"
+                                  height="24px"
+                                />
+                                <span className="font-semibold">Loading</span>
+                              </div>
+                            ) : (
+                              "Harvest"
+                            )}
+                          </Button>
                         </div>
                       </div>
-                    }
-                    
-                    
+                    </div>
+                    <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Production Facilities</span>
+                    <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
+                    <div className="flex flex-col w-full">
+                      <ProductionFacilities />
+                    </div>
                   </>
                 ) : (
                   <div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling] h-[calc(100vh-25rem)]">
