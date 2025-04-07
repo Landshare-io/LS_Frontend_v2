@@ -36,7 +36,7 @@ export default function HouseMap({ houseInfo }: HouseMapProps) {
 
               <Link href="/rwa">
                 <Button
-                  className={`w-[165px] h-[44px] text-white rounded-[100px] bg-[#61cd81]`}
+                  className={`w-[185px] h-[44px] text-white rounded-[100px] bg-[#61cd81]`}
                   textClassName=" text-[100%]"
                 >
                   See More Properties

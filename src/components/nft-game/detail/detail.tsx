@@ -45,6 +45,8 @@ import HouseGardenRareNft from "../../../../public/img/house/house_garden_rare(b
 import HouseBGardenRareNft from "../../../../public/img/house/houseB_garden_rare.webp";
 import HouseCNft from "../../../../public/img/house/houseC.webp"
 import HouseCRareNft from "../../../../public/img/house/houseC_rare.webp"
+import HouseDNft from "../../../../public/img/house/houseD.webp";
+import HouseDRareNft from "../../../../public/img/house/houseD_rare.webp";
 import { BOLD_INTER_TIGHT } from "../../../config/constants/environments";
 
 interface NftDetailsProps {
@@ -263,28 +265,33 @@ export default function NftDetails({
           if (hasGarden) {
             return (house.type == 1 || house.type == 2)
               ? HouseGardenRareNft
-              : (house.type == 3 || house.type == 4) ? HouseBGardenRareNft : HouseCRareNft;
+              : (house.type == 3 || house.type == 4) ? HouseBGardenRareNft : 
+              (house.type == 5 || house.type == 6) ? HouseCRareNft : HouseDRareNft;
           } else {
             return (house.type == 1 || house.type == 2)
               ? HouseLandRareNft
-              : (house.type == 3 || house.type == 4) ? HouseBLandRareNft : HouseCRareNft;
+              : (house.type == 3 || house.type == 4) ? HouseBLandRareNft :
+              (house.type == 5 || house.type == 6) ? HouseCRareNft : HouseDRareNft;
           }
         } else {
-          return (house.type == 1 || house.type == 2) ? HouseRareNft : (house.type == 3 || house.type == 4) ? HouseBRareNft : HouseCRareNft;
+          return (house.type == 1 || house.type == 2) ? HouseRareNft : (house.type == 3 || house.type == 4) ? HouseBRareNft : (house.type == 5 || house.type == 6) ? HouseCRareNft : HouseDRareNft;
         }
       } else {
         if (house.isActivated && (hasLandscaping)) {
           if (hasGarden) {
-            return (house.type == 1 || house.type == 2) ? HouseGardenNft : (house.type == 3 || house.type == 4) ? HouseBGardenNft : HouseCNft;
+            return (house.type == 1 || house.type == 2) ? HouseGardenNft : (house.type == 3 || house.type == 4) ? HouseBGardenNft :
+              (house.type == 5 || house.type == 6) ? HouseCNft : HouseDNft;
           } else {
-            return (house.type == 1 || house.type == 2) ? HouseLandNft : (house.type == 3 || house.type == 4) ? HouseBLandNft : HouseCNft;
+            return (house.type == 1 || house.type == 2) ? HouseLandNft : (house.type == 3 || house.type == 4) ? HouseBLandNft : 
+              (house.type == 5 || house.type == 6) ? HouseCNft : HouseDNft;
           }
         } else {
-          return (house.type == 1 || house.type == 2) ? HouseNft : (house.type == 3 || house.type == 4) ? HouseBNft : HouseCNft;
+          return (house.type == 1 || house.type == 2) ? HouseNft : (house.type == 3 || house.type == 4) ? HouseBNft : 
+            (house.type == 5 || house.type == 6) ? HouseCNft : HouseDNft;
         }
       }
     }
-    return (house.type == 1 || house.type == 2) ? HouseNft : (house.type == 3 || house.type == 4) ? HouseBNft : HouseCNft;
+    return (house.type == 1 || house.type == 2) ? HouseNft : (house.type == 3 || house.type == 4) ? HouseBNft : (house.type == 5 || house.type == 6) ? HouseCNft : HouseDNft;
   };
 
   useEffect(() => {

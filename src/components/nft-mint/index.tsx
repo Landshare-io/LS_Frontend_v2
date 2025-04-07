@@ -27,9 +27,13 @@ export default function NftMint() {
     //   type: 2,
     //   name: 'LSMD'
     // },
+    // {
+    //   type: 3,
+    //   name: 'LSCH'
+    // },
     {
-      type: 3,
-      name: 'LSCH'
+      type: 4,
+      name: 'LSVA'
     }
   ]
 
