@@ -5,7 +5,6 @@ import axios from "../axios/nft-game-axios";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { 
   APOLLO_RWA_BUY_URL, 
-  APOLLO_RWA_BUY_URL_V2,
   APOLLO_RWA_URL,
   APOLLO_RWA_URL_V2
 } from "../../../config/constants/environments";
@@ -76,11 +75,6 @@ export default function useGetNftCredits(address: Address | undefined) {
       cache: new InMemoryCache(),
     });
 
-    const client1_v2 = new ApolloClient({
-      uri: APOLLO_RWA_BUY_URL_V2,
-      cache: new InMemoryCache(),
-    });
-
     const client2 = new ApolloClient({
       uri: APOLLO_RWA_URL,
       cache: new InMemoryCache(),
@@ -93,18 +87,16 @@ export default function useGetNftCredits(address: Address | undefined) {
 
     Promise.all([
       client1.query({ query: gql(query1) }),
-      client1_v2.query({ query: gql(query1) }),
       client2.query({ query: gql(query2) }),
       client2_v2.query({ query: gql(query2) }),
-    ]).then(async ([res1, res1_v2, res2, res2_v2]) => {
+    ]).then(async ([res1, res2, res2_v2]) => {
       const totalNftCreditAmount1 = res1.data.buyTokensEvents.length > 0 ? res1.data.buyTokensEvents.map((event: any) => event.amountSecurities).reduce((a: number, b: number) => Number(a) + Number(b)) : 0;
-      const totalNftCreditAmount1_v2 = res1_v2.data.buyTokensEvents.length > 0 ? res1_v2.data.buyTokensEvents.map((event: any) => event.amountSecurities).reduce((a: number, b: number) => Number(a) + Number(b)) : 0;
       const totalNftCreditAmount2 = res2.data.rwasolds.length > 0 ? res2.data.rwasolds.map((event: any) => event.amount).reduce((a: number, b: number) => Number(a) + Number(b)) : 0;
       const totalNftCreditAmount2_v2 = res2_v2.data.rwasolds.length > 0 ? res2_v2.data.rwasolds.map((event: any) => event.amount).reduce((a: number, b: number) => Number(a) + Number(b)) : 0;
       const { data: currentUser } = await axios.get('/user/get-detail');
 
       // Calculate NFTCredits
-      const nftCredits = Number(totalNftCreditAmount1) + Number(totalNftCreditAmount1_v2) - Number(totalNftCreditAmount2) - Number(totalNftCreditAmount2_v2) - Number(currentUser.spentNftCredits);
+      const nftCredits = Number(totalNftCreditAmount1) - Number(totalNftCreditAmount2) - Number(totalNftCreditAmount2_v2) - Number(currentUser.spentNftCredits);
 
       // Set the calculated NFTCredits
       setTotalCredits(totalNftCreditAmount1)
