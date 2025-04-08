@@ -95,8 +95,11 @@ export const SWIPELUX_SETTING = {
 export const NFT_GAME_BACKEND_URL = 'https://landsharenft.xyz'
 export const CCIP_BACKEND_URL = 'https://ccip.landsharenft.xyz'
 export const APOLLO_RWA_BUY_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa-buy/v0.1.0"
+export const APOLLO_RWA_BUY_URL_V2 = "https://api.studio.thegraph.com/query/108701/landshare-rwa-buy/0.2.0"
 export const APOLLO_RWA_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa/v0.1.0"
-export const LAND_PRICE_SUBGRAPH_URL = 'https://api.studio.thegraph.com/query/81176/landshare-price/v0.1.0'
+export const APOLLO_RWA_URL_V2 = "https://api.studio.thegraph.com/query/108701/landshare-rwa-sell/v0.2.0"
+export const RWA_PRICE_SUBGRAPH_URL = 'https://api.studio.thegraph.com/query/81176/landshare-price/v0.1.0'
+export const RWA_PRICE_SUBGRAPH_URL_V2 = 'https://api.studio.thegraph.com/query/108701/landshare-rwa-price/v0.2.0'
 export const LANDSHARE_COST_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=landshare&vs_currencies=usd'
 export const LANDPRICE_URL = 'https://landshare.xyz/land_pricedata/'
 export const LANDMARKET_URL = 'https://landshare.xyz/land_market'
