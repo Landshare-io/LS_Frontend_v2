@@ -103,23 +103,7 @@ export default function ConnectWallet({
             <div className={`flex ${containerClassName}`}>
               {(() => {
                 if (!mounted || authenticationStatus === "loading") {
-                  return (
-                    <Button
-                      className={`w-[165px] h-[44px] text-[#fff] rounded-[100px] bg-[#61cd81] ${interTight.className} ${connectButtonClassName ?? ''}`}
-                      textClassName="hover:dark:text-[#61CD81] text-[100%]"
-                      disabled
-                    >
-                      <div className='flex justify-center items-center'>
-                        <ReactLoading
-                          type="spin"
-                          className="me-2 mb-[4px]"
-                          width="24px"
-                          height="24px"
-                        />
-                        <span className="font-semibold">Loading</span>
-                      </div>
-                    </Button>
-                  );
+                  return null;
                 }
 
                 if (!connected) {

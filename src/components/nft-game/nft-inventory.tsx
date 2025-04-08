@@ -360,13 +360,13 @@ export default function InventoryPage() {
     <div className={`font-inter ${theme == 'dark' ? "dark" : ""}`}>
       <div className="bg-primary min-h-[calc(100vh-144px)]">
         <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px] xl:px-[2px] px-[10px]">
-          {wagmiStatus === 'connecting' ? (
+          {wagmiStatus === 'connecting' || wagmiStatus === 'reconnecting' ? (
             <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
               <ReactLoading type="bars" color="#61cd81" />
             </div>
           ) : !isConnected ? (
             <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
-              <ReactLoading type="bars" color="#61cd81" />
+              <ConnectWallet />
             </div>
           ) : (
             <>
