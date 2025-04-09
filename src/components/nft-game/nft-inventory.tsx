@@ -373,14 +373,13 @@ export default function InventoryPage() {
               {
                 (NFT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(currentChainID ?? 0) ? (
                   <>
-                    <Topbar isNftList={true} />
-
                     {isLoading || isLoginLoading || !isAuthenticated ? (
                       <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
                         <ReactLoading type="bars" color="#61cd81" />
                       </div>
                     ) : (
                       <>
+                        <Topbar isNftList={true} />
                         <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
                           <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
                           <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
