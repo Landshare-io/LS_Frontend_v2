@@ -42,6 +42,9 @@ interface Proposal {
 type SnapshotCallback = () => void;
 
 export default function useSnapshot({ title, body, proposalJSON, proposal }: SnapshotParams) {
+
+  console.log("proposalJSON:::", proposalJSON);
+  
   const { setScreenLoadingStatus } = useGlobalContext()
   const { data: walletClient } = useWalletClient();
   const { address } = useAccount()
@@ -98,6 +101,7 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
     const network = "56";
     const voters = [account];
     try {
+      if(!blockNumber) return 0;
       const scores = await snapshotjs.utils.getScores(space, strategies, network, voters, Number(blockNumber));
       if (!scores || !Array.isArray(scores)) {
         console.error("Invalid scores response:", scores);
@@ -119,7 +123,6 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
   async function snapshot(onSuccess?: SnapshotCallback, onError?: (error: Error) => void): Promise<void> {
     const startTime = Math.round(Date.now() / 1000);
     const endTime = startTime + 604800;
-    const space = "landsharetest.eth";
 
     function noTX(proposal: string): boolean {
       return (
@@ -144,9 +147,6 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
       if (!walletClient) {
         throw new Error("Wallet client not available");
       }
-      console.log("------------------------------------------");
-      console.log("proposalJSON:::", proposalJSON);
-      console.log("------------------------------------------");
       // Create the proposal data
       const proposalData = {
         space: "landshare.eth",
@@ -158,10 +158,9 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
         end: endTime,
         snapshot: Number(blockNumber),
         plugins: noTX(proposal) ? JSON.stringify({}) : proposalJSON,
-        app: "Landshare",
+        app: "snapshot",
         discussion: '',
-        labels: [''],
-        metadata: JSON.stringify({})
+        labels: []
       };
 
       // Create a Web3Provider from the wallet client
@@ -170,9 +169,7 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
       // console.log(signer);
 
       // Create the proposal using the client
-      const res = await client.proposal(web3Provider as any, account, proposalData as Proposal);
-
-      console.log("herer:::::::::", res);
+      await client.proposal(web3Provider as any, account, proposalData as Proposal);
       
       if (onSuccess) onSuccess();
       setScreenLoadingStatus("Transaction Complete.");
