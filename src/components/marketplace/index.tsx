@@ -61,13 +61,13 @@ export default function MarketplacePage() {
     <>
       <section className="bg-primary text-text-primary">
         <div className="min-h-screen max-w-[1200px] m-auto flex flex-col pt-0 xl:px-[2px] px-[10px]">
+          <Topbar isNftList={true} />
           {(!isLoginLoading && !isConnected && isItemsLoading == false) ? (
             <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
               <ConnectWallet />
             </div>
           ) : (
-            <>
-              <Topbar isNftList={true} />
+            <>    
               <div className="flex w-full flex-col md:flex-row overflow-auto flex-wrap items-center justify-between px-2">
                 <span className={`text-[24px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>House NFTs</span>
                 <div className="border-b-[1px] border-[#00000050] w-full hidden md:block my-3 dark:border-white"></div>

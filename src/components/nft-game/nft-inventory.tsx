@@ -360,6 +360,7 @@ export default function InventoryPage() {
     <div className={`font-inter ${theme == 'dark' ? "dark" : ""}`}>
       <div className="bg-primary min-h-[calc(100vh-144px)]">
         <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px] xl:px-[2px] px-[10px]">
+          <Topbar isNftList={true} />
           {wagmiStatus === 'connecting' || wagmiStatus === 'reconnecting' ? (
             <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
               <ReactLoading type="bars" color="#61cd81" />
@@ -379,7 +380,6 @@ export default function InventoryPage() {
                       </div>
                     ) : (
                       <>
-                        <Topbar isNftList={true} />
                         <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
                           <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
                           <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
