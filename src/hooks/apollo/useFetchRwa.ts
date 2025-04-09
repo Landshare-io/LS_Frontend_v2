@@ -41,7 +41,7 @@ export default function useFetchRwa() {
               parseFloat(Number(formatEther(data.value)).toFixed(6))
             ])
           });
-          res1_v2.data.valueUpdateds.filter((value: any) => Number(value.blockTimestamp) > 1702900000).sort((a: any, b: any) => {
+          res1_v2.data.valueUpdateds.filter((value: any) => Number(value.blockTimestamp) > 1743723300).sort((a: any, b: any) => {
             return Number(a.blockTimestamp) - Number(b.blockTimestamp);
           }).map((data: any) => {
             returnData.push([
