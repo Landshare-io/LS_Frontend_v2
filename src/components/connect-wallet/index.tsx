@@ -37,7 +37,7 @@ export default function ConnectWallet({
   const { checkIsAuthenticated, isLoading, logout } = useLogin()
   const { isAuthenticated } = useGlobalContext()
   const referralCode = searchParams.get('af');
-  const {isConnected, address} = useAccount();
+  const {isConnected, address, status} = useAccount();
 
   const formatAffiliateAcceptance = (date : any) => {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -73,7 +73,6 @@ export default function ConnectWallet({
         }
       }
     }
-
     fetchData();
   }, [isConnected, address, referralCode])
     
@@ -103,6 +102,10 @@ export default function ConnectWallet({
           return (
             <div className={`flex ${containerClassName}`}>
               {(() => {
+                if (!mounted || authenticationStatus === "loading") {
+                  return null;
+                }
+
                 if (!connected) {
                   return (
                     <Button

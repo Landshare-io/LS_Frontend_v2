@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactLoading from "react-loading";
 import numeral from "numeral";
 import ReactModal from "react-modal";
@@ -43,13 +43,14 @@ export default function InventoryPage() {
     notifyError,	
   } = useGlobalContext();
   const { theme } = useTheme();
-  const { isConnected, address } = useAccount();
+  const { isConnected, address, chainId: currentChainID, status: wagmiStatus } = useAccount();
 	const [harvestLoading, setHarvestLoading] = useState(false);
 	const [buyHouseSlotLoading, setBuyHouseSlotLoading] = useState(false)
 	const [depositLoading, setDepositLoading] = useState(false)
 	const [withdrawLoading, setWithdrawLoading] = useState(false)
 	const [depositAmount, setDepositAmount] = useState<number | string>("");
 	const [depositedBalance, setDepositedBalance] = useState<number | string>("");
+	const intervalRef = useRef<NodeJS.Timeout>();
 
 	const { houses: houseItems, getHouses } = useGetHouses()
 	const { data: maxAssetTokenBalance, refetch: refetchDepositAmount } = useBalanceOfAsset(chainId, address) as { data: number, refetch: Function }
@@ -72,42 +73,59 @@ export default function InventoryPage() {
   const [showWithdrawAlert, setShowWithdrawAlert] = useState(false)
 
   const getHousesList = async () => {
-    setIsLoading(true);
-    await getHouses();
-    await getResources();
-    setTimeout(() => {
+    try {
+      setIsLoading(true);
+      await Promise.all([
+        getHouses(),
+        getResources(),
+        updateDepositedBalance()
+      ]);
+      setDepositedBalance(stakedBalance);
+      
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      intervalRef.current = setInterval(async () => {
+        await getHouses();
+      }, 60000);
+    } catch (error) {
+      console.error('Error loading houses:', error);
+      notifyError('Failed to load houses data');
+    } finally {
       setIsLoading(false);
-    }, 1500)
+    }
   }
 
   useEffect(() => {
-    (async () => {
-      if (!isConnected) return;
-      if (isLoginLoading) return;
-      if (!isAuthenticated) return;
+    if (!isConnected) {
+      setIsLoading(false);
+      return;
+    }
 
-      await updateDepositedBalance();
-			setDepositedBalance(stakedBalance)
+    if (isLoginLoading) {
+      setIsLoading(true);
+      return;
+    }
 
-      await getHousesList()
+    if (!isAuthenticated) {
+      setIsLoading(false);
+      return;
+    }
 
-      const interval = setInterval(async () => {
-        await getHouses();
-      }, 60000);
+    getHousesList();
 
-      return () => clearInterval(interval);
-    })()
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [isAuthenticated, isLoginLoading, isConnected]);
 
   useEffect(() => {
-    if (!isAuthenticated || !isConnected) setIsLoading(false)
-    else setIsLoading(true)
-  }, [isAuthenticated, isConnected])
-
-  useEffect(() => {
-    checkIsAuthenticated(address)
-  }, [address])
-
+    if (address) {
+      checkIsAuthenticated(address);
+    }
+  }, [address]);
 
   const confirmModalStyles: ReactModal.Styles = {
     content: {
@@ -341,24 +359,28 @@ export default function InventoryPage() {
   return (
     <div className={`font-inter ${theme == 'dark' ? "dark" : ""}`}>
       <div className="bg-primary min-h-[calc(100vh-144px)]">
-        {isLoginLoading || isLoading ? (
-          <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
-            <ReactLoading type="bars" color="#61cd81" />
-          </div>
-        ) : (
-          <>
-            <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px] xl:px-[2px] px-[10px]">
-              {(!isLoginLoading && (!isConnected || !isAuthenticated)) ? (
-                <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
-                  <ConnectWallet />
-                </div>
-              ) : (
-                <>
-                  {
-                    (NFT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
+        <div className="relative max-w-[1200px] px-0 m-auto overflow-hidden pt-0 pb-[100px] xl:px-[2px] px-[10px]">
+          <Topbar isNftList={true} />
+          {wagmiStatus === 'connecting' || wagmiStatus === 'reconnecting' ? (
+            <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
+              <ReactLoading type="bars" color="#61cd81" />
+            </div>
+          ) : !isConnected ? (
+            <div className="text-center min-h-[60vh] flex flex-col justify-center items-center">
+              <ConnectWallet />
+            </div>
+          ) : (
+            <>
+              {
+                (NFT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(currentChainID ?? 0) ? (
+                  <>
+                    {isLoading || isLoginLoading || !isAuthenticated ? (
+                      <div className="flex w-full min-h-[60vh] h-full items-center justify-center">
+                        <ReactLoading type="bars" color="#61cd81" />
+                      </div>
+                    ) : (
                       <>
-                        <Topbar isNftList={true} />
-                        <div className="min-h-screen text-text-primary flex w-full flex-wrap items-center justify-between px-2">
+                        <div className="text-text-primary flex w-full flex-wrap items-center justify-between px-2">
                           <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Your Properties</span>
                           <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
                           <div className="flex flex-col w-full pb-3">
@@ -450,10 +472,10 @@ export default function InventoryPage() {
                                       <Button
                                         onClick={handleDeposit}
                                         className={`w-full h-[40px] py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
-                                					${((houseItems.filter((house: any) => house.isActivated).length < 1) || depositLoading) &&
-                                          	" bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
+                                          ${((houseItems.filter((house: any) => house.isActivated).length < 1) || depositLoading) &&
+                                            " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
-                                					${depositLoading
+                                          ${depositLoading
                                             ? " flex justify-center items-center"
                                             : ""
                                           }`}
@@ -480,10 +502,10 @@ export default function InventoryPage() {
                                       <Button
                                         onClick={handleWithdraw}
                                         className={`w-full h-[40px] py-2 rounded-[24px] bg-[#61cd81] text-[16px] text-button-text-secondary ${BOLD_INTER_TIGHT.className}
-                                					${((houseItems.filter((house: any) => house.isActivated).length < 1) || withdrawLoading) &&
+                                          ${((houseItems.filter((house: any) => house.isActivated).length < 1) || withdrawLoading) &&
                                           " bg-[#8f8f8f] border-[2px] border-[#8f8f8f] "
                                           }
-                                					${withdrawLoading
+                                          ${withdrawLoading
                                             ? "flex justify-center items-center"
                                             : ""
                                           }`}
@@ -563,146 +585,145 @@ export default function InventoryPage() {
                               </div>
                             </div>
                           </div>
-                          <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Harvestable resources</span>
-                          <div className="border-b-[1px] border-b-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
-                          <div className="flex flex-col w-full">
-                            <RewardHarvest
-                              setTotalHarvestCost={setTotalHarvestCost}
-                              selectedResource={selectedResource}
-                              setSelectedResource={setSelectedResource}
-                            />
-                            <div className="flex pt-5 pb-5 lg:pb-4 justify-start md:justify-end">
-                              <div
-                                className={`flex h-[40px] w-full md:w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
-                              >
-                                <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
-                                  Cost:{" "}
-                                  <span className={`flex items-center gap-[3px] ml-1 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
-                                    {totalHarvestCost} {<ChargeIcon iconColor={theme == 'dark' ? "#cacaca" : "#4C4C4C"} />}
-                                  </span>
+                        </div>
+                        <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Harvestable resources</span>
+                        <div className="border-b-[1px] border-b-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
+                        <div className="flex flex-col w-full">
+                          <RewardHarvest
+                            setTotalHarvestCost={setTotalHarvestCost}
+                            selectedResource={selectedResource}
+                            setSelectedResource={setSelectedResource}
+                          />
+                          <div className="flex pt-5 pb-5 lg:pb-4 justify-start md:justify-end">
+                            <div
+                              className={`flex h-[40px] w-full md:w-[282px] border-[1.5px] border-[#61cd81] rounded-[50px] active items-center relative`}
+                            >
+                              <span className={`flex text-[14px] ${theme == 'dark' ? "text-[#dee2e6]" : "text-[#000000b3]"} items-center justify-center pl-4`}>
+                                Cost:{" "}
+                                <span className={`flex items-center gap-[3px] ml-1 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+                                  {totalHarvestCost} {<ChargeIcon iconColor={theme == 'dark' ? "#cacaca" : "#4C4C4C"} />}
                                 </span>
-                                <Button
-                                  onClick={handleHarvest}
-                                  className={`h-[40px] w-[159px] text-[16px] bg-[#61cd81] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
-                          					${harvestLoading
-                                      ? "flex justify-center items-center"
-                                      : ""
-                                    }`}
-                                  disabled={harvestLoading}
-                                >
-                                  {harvestLoading ? (
-                                    <div className='flex justify-center items-center'>
-                                      <ReactLoading
-                                        type="spin"
-                                        className="me-2 mb-[4px]"
-                                        width="24px"
-                                        height="24px"
-                                      />
-                                      <span className="font-semibold">Loading</span>
-                                    </div>
-                                  ) : (
-                                    "Harvest"
-                                  )}
-                                </Button>
-                              </div>
+                              </span>
+                              <Button
+                                onClick={handleHarvest}
+                                className={`h-[40px] w-[159px] text-[16px] bg-[#61cd81] border-[1px] border-[#61cd81] rounded-[24px] text-[#fff] flex items-center justify-center ease duration-400 right-[-1px] absolute ${BOLD_INTER_TIGHT.className}
+                                  ${harvestLoading
+                                    ? "flex justify-center items-center"
+                                    : ""
+                                  }`}
+                                disabled={harvestLoading}
+                              >
+                                {harvestLoading ? (
+                                  <div className='flex justify-center items-center'>
+                                    <ReactLoading
+                                      type="spin"
+                                      className="me-2 mb-[4px]"
+                                      width="24px"
+                                      height="24px"
+                                    />
+                                  </div>
+                                ) : (
+                                  "Harvest"
+                                )}
+                              </Button>
                             </div>
                           </div>
-                          <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Production Facilities</span>
-                          <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
-                          <div className="flex flex-col w-full">
-                            <ProductionFacilities />
-                          </div>
+                        </div>
+                        <span className={`text-[24px] ${BOLD_INTER_TIGHT.className}`}>Production Facilities</span>
+                        <div className="border-b-[1px] border-[#00000050] dark:border-[#cbcbcb] block w-full mb-4 my-3"></div>
+                        <div className="flex flex-col w-full">
+                          <ProductionFacilities />
                         </div>
                       </>
-                    ) : (
-                      <div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling] h-[calc(100vh-25rem)]">
-                        {`Please switch your chain to ${NFT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}
-                      </div>
-                    )
-                  }
-                </>
-              )}
+                    )}
+                  </>
+                ) : (
+                  <div className="flex flex-col justify-center items-center text-center m-5 text-red-400 text-xl font-medium animate-[sparkling] h-[calc(100vh-25rem)]">
+                    {`Please switch your chain to ${NFT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}
+                  </div>
+                )
+              }
+            </>
+          )}
+        </div>
+        <ReactModal
+          style={modalStyles}
+          isOpen={showItemsModal}
+          onRequestClose={() => { setShowItemsModal(!showItemsModal), document.body.classList.remove('modal-open'); }}
+        >
+          <div className='px-3 py-7 bg-primary overflow-auto'>
+            <NftItems
+              houseItems={houseItems.filter((house: any) => !house.isActivated)}
+            />
+          </div>
+        </ReactModal>
+
+        <ReactModal
+          style={confirmModalStyles}
+          isOpen={showHarvestConfirm}
+          onRequestClose={() => { setShowHarvestConfirm(!showHarvestConfirm), document.body.classList.remove('modal-open'); }}
+          className={`flex items-center ${theme == 'dark' ? "dark" : ""}`}
+        >
+          <div className="p-[20px] max-w-[300px] bg-third">
+            <div className="text-[15px] text-center text-text-primary">
+              Rewards will not be harvested due to negative NFT Credit balance. Continue withdrawal?
             </div>
-            <ReactModal
-              style={modalStyles}
-              isOpen={showItemsModal}
-							onRequestClose={() => { setShowItemsModal(!showItemsModal), document.body.classList.remove('modal-open'); }}
-            >
-              <div className='px-3 py-7 bg-primary overflow-auto'>
-                <NftItems
-                  houseItems={houseItems.filter((house: any) => !house.isActivated)}
-                />
+            <div className="flex mt-[20px]">
+              <div
+                className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
+                onClick={() => {
+                  setShowHarvestConfirm(false)
+                  harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)
+                }}
+              >
+                Yes
               </div>
-            </ReactModal>
-
-            <ReactModal
-							style={confirmModalStyles}
-              isOpen={showHarvestConfirm}
-							onRequestClose={() => { setShowHarvestConfirm(!showHarvestConfirm), document.body.classList.remove('modal-open'); }}
-              className={`flex items-center ${theme == 'dark' ? "dark" : ""}`}
-            >
-              <div className="p-[20px] max-w-[300px] bg-third">
-                <div className="text-[15px] text-center text-text-primary">
-                  Rewards will not be harvested due to negative NFT Credit balance. Continue withdrawal?
-                </div>
-                <div className="flex mt-[20px]">
-                  <div
-                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
-                    onClick={() => {
-                      setShowHarvestConfirm(false)
-                      harvest(landRemaining, totalHarvestCost, selectedResource, setSelectedResource)
-                    }}
-                  >
-                    Yes
-                  </div>
-                  <div
-                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] cursor-pointer bg-primary text-text-secondary"
-                    onClick={() => setShowHarvestConfirm(false)}
-                  >
-                    No
-                  </div>
-                </div>
+              <div
+                className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] cursor-pointer bg-primary text-text-secondary"
+                onClick={() => setShowHarvestConfirm(false)}
+              >
+                No
               </div>
-            </ReactModal>
+            </div>
+          </div>
+        </ReactModal>
 
-            <ReactModal
-							style={confirmModalStyles}
-              isOpen={showWithdrawAlert}
-							onRequestClose={() => { setShowWithdrawAlert(!showWithdrawAlert), document.body.classList.remove('modal-open'); }}
-              className={`flex items-center ${theme == 'dark' ? "dark" : ""}`}
-            >
-              <div className="p-[20px] max-w-[300px] bg-third">
-                <div className="text-[15px] text-center text-text-primary">
-                  Withdrawing will reset all rewards. Continue? 
-                </div>
-                <div className="flex mt-[20px]">
-                  <div
-                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
-                    onClick={() => {
-                      setShowWithdrawAlert(false)
-                      setWithdrawLoading(true)
-                      withdrawAssetTokenHandler(withdrawStakedCost, depositAmount)
-                    }}
-                  >
-                    Yes
-                  </div>
-                  <div
-                    className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] cursor-pointer bg-primary text-text-secondary"
-                    onClick={() => {
-                      setWithdrawLoading(false)
-                      setShowWithdrawAlert(false)
-                    }}
-                  >
-                    No
-                  </div>
-                </div>
+        <ReactModal
+          style={confirmModalStyles}
+          isOpen={showWithdrawAlert}
+          onRequestClose={() => { setShowWithdrawAlert(!showWithdrawAlert), document.body.classList.remove('modal-open'); }}
+          className={`flex items-center ${theme == 'dark' ? "dark" : ""}`}
+        >
+          <div className="p-[20px] max-w-[300px] bg-third">
+            <div className="text-[15px] text-center text-text-primary">
+              Withdrawing will reset all rewards. Continue? 
+            </div>
+            <div className="flex mt-[20px]">
+              <div
+                className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] border-[#00a8f3] border-[1px] bg-[#00a8f3] cursor-pointer text-button-text-secondary"
+                onClick={() => {
+                  setShowWithdrawAlert(false)
+                  setWithdrawLoading(true)
+                  withdrawAssetTokenHandler(withdrawStakedCost, depositAmount)
+                }}
+              >
+                Yes
               </div>
-            </ReactModal>
+              <div
+                className="flex-1 text-center m-[5px] p-[5px] rounded-[10px] cursor-pointer bg-primary text-text-secondary"
+                onClick={() => {
+                  setWithdrawLoading(false)
+                  setShowWithdrawAlert(false)
+                }}
+              >
+                No
+              </div>
+            </div>
+          </div>
+        </ReactModal>
 
-            {isConnected && (
-              <YouOwn />
-            )}
-          </>
+        {isConnected && (
+          <YouOwn />
         )}
       </div>
     </div>
