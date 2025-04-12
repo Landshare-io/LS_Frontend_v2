@@ -1,15 +1,15 @@
 import snapshotjs from "@snapshot-labs/snapshot.js";
-import { Web3Provider } from '@ethersproject/providers';
-import { Wallet } from '@ethersproject/wallet';
+import { Web3Provider, JsonRpcSigner } from '@ethersproject/providers';
 import { 
   useWalletClient,
   useAccount
 } from "wagmi";
+import { TypedDataSigner } from '@ethersproject/abstract-signer';
 import { useBlockNumber } from 'wagmi'
 import { useGlobalContext } from "../../context/GlobalContext";
+// import { Wallet } from '@ethersproject/wallet';
 
 const client = new snapshotjs.Client712("https://hub.snapshot.org");
-
 
 interface SnapshotParams {
   title: string;
@@ -18,19 +18,41 @@ interface SnapshotParams {
   proposal: string;
 }
 
+type ProposalType = 'single-choice' | 'approval' | 'quadratic' | 'ranked-choice' | 'weighted' | 'basic';
+
+interface Proposal {
+  from?: string;
+  space: string;
+  timestamp?: number;
+  type: ProposalType;
+  title: string;
+  body: string;
+  discussion: string;
+  privacy?: string;
+  choices: string[];
+  labels?: string[];
+  start: number;
+  end: number;
+  snapshot: number;
+  plugins: string;
+  app?: string;
+  metadata?: string;
+}
+
 type SnapshotCallback = () => void;
 
 export default function useSnapshot({ title, body, proposalJSON, proposal }: SnapshotParams) {
+
+  console.log("proposalJSON:::", proposalJSON);
+  
   const { setScreenLoadingStatus } = useGlobalContext()
-  const { data: signer } = useWalletClient();
+  const { data: walletClient } = useWalletClient();
   const { address } = useAccount()
   const account = address ?? ''
   const { data: blockNumber } = useBlockNumber()
 
-  async function snapshot(onSuccess?: SnapshotCallback, onError?: (error: Error) => void): Promise<void> {
-    const startTime = Math.round(Date.now() / 1000);
-    const endTime = startTime + 604800;
-    const space = "landsharetest.eth";
+  async function calculateScore(): Promise<number> {
+    const space = "landshare.eth";
     const strategies = [
       {
         name: "single-staking-autocompound-balanceof",
@@ -78,9 +100,29 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
     ];
     const network = "56";
     const voters = [account];
+    try {
+      if(!blockNumber) return 0;
+      const scores = await snapshotjs.utils.getScores(space, strategies, network, voters, Number(blockNumber));
+      if (!scores || !Array.isArray(scores)) {
+        console.error("Invalid scores response:", scores);
+        return 0;
+      }
+      
+      return scores.reduce((sum: number, strategy: any) => {
+        if (strategy && typeof strategy[account] !== "undefined") {
+          sum += Number(strategy[account]);
+        }
+        return sum;
+      }, 0);
+    } catch (error) {
+      console.error("Error fetching scores:", error);
+      return 0;
+    }
+  }
 
-    console.log(proposal);
-    console.log(proposalJSON);
+  async function snapshot(onSuccess?: SnapshotCallback, onError?: (error: Error) => void): Promise<void> {
+    const startTime = Math.round(Date.now() / 1000);
+    const endTime = startTime + 604800;
 
     function noTX(proposal: string): boolean {
       return (
@@ -94,25 +136,7 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
 
     setScreenLoadingStatus('Transaction Pending...');
 
-    let score: number = 0;
-    try {
-      const scores = await snapshotjs.utils.getScores(space, strategies, network, voters, Number(blockNumber));
-      console.log("Scores", scores);
-
-      score = scores.reduce((sum: number, strategy: any) => {
-        if (typeof strategy[account] !== "undefined") {
-          sum += Number(strategy[account]);
-        }
-        return sum;
-      }, 0);
-
-      console.log(score);
-    } catch (error) {
-      console.error("Error fetching scores:", error);
-      if (onError) onError(error as Error);
-      return;
-    }
-
+    const score = await calculateScore();
     if (score < 100) {
       window.alert("Not enough voting power.");
       setScreenLoadingStatus("Transaction Failed.");
@@ -120,8 +144,11 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
     }
 
     try {
-      const proposalSinger = signer as unknown as Web3Provider | Wallet
-      await client.proposal((proposalSinger), account, {
+      if (!walletClient) {
+        throw new Error("Wallet client not available");
+      }
+      // Create the proposal data
+      const proposalData = {
         space: "landshare.eth",
         type: "single-choice",
         title: `[${proposal}] ${title}`,
@@ -132,20 +159,35 @@ export default function useSnapshot({ title, body, proposalJSON, proposal }: Sna
         snapshot: Number(blockNumber),
         plugins: noTX(proposal) ? JSON.stringify({}) : proposalJSON,
         app: "snapshot",
-        discussion: ''
-      });
+        discussion: '',
+        labels: []
+      };
 
+      // Create a Web3Provider from the wallet client
+      const web3Provider = new Web3Provider(walletClient as any);
+      // const signer = web3Provider.getSigner(account) as JsonRpcSigner;
+      // console.log(signer);
+
+      // Create the proposal using the client
+      await client.proposal(web3Provider as any, account, proposalData as Proposal);
+      
       if (onSuccess) onSuccess();
-    } catch (e) {
-      console.log(e);
+      setScreenLoadingStatus("Transaction Complete.");
+    } catch (e: any) {
+      console.error("Snapshot proposal error:", e);
+      console.error("Error details:", {
+        message: e.message,
+        stack: e.stack,
+        data: e.data,
+        code: e.code
+      });
       setScreenLoadingStatus("Transaction Failed.");
       if (onError) onError(e as Error);
     }
-
-    setScreenLoadingStatus("Transaction Complete.");
   }
 
   return {
     snapshot,
+    calculateScore
   };
 }
