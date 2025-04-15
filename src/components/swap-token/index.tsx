@@ -116,10 +116,10 @@ export default function SwapToken() {
   ) as { data: [BigNumberish, number, number]; refetch: Function };
   const limitDate = saleLimit
     ? new Date(
-        saleLimit[1] != undefined
-          ? Number(saleLimit[1]) * 1000
-          : Date.now() * 1000
-      )
+      saleLimit[1] != undefined
+        ? Number(saleLimit[1]) * 1000
+        : Date.now() * 1000
+    )
     : Date.now() * 1000;
   const reachedLimit = saleLimit
     ? saleLimit[2] != undefined
@@ -154,7 +154,7 @@ export default function SwapToken() {
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
 
   useEffect(() => {
-    if(screenLoadingStatus === "Transaction Complete.") {
+    if (screenLoadingStatus === "Transaction Complete.") {
       refetchBalance();
       refetchUSDCBalance();
       refetchPoolBalance();
@@ -208,6 +208,7 @@ export default function SwapToken() {
       maxWidth: "400px",
       width: "90%",
       height: "fit-content",
+      maxHeight: "90%",
       borderRadius: "20px",
     },
     overlay: {
@@ -320,7 +321,7 @@ export default function SwapToken() {
           </div>
           <div className="w-full mt-3">
             <a href="https://dashboard.landshare.io">
-              <Button 
+              <Button
                 className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
                 disabled={chainId != bsc.id}
               >
@@ -351,7 +352,7 @@ export default function SwapToken() {
           isOpen={isZeroIDModal}
           onRequestClose={() => {
             setZeroIDModalOpen(true),
-            document.body.classList.remove("modal-open");
+              document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
           contentLabel="ZeroID Modal"
@@ -370,7 +371,7 @@ export default function SwapToken() {
           isOpen={isBuyModalOpen}
           onRequestClose={() => {
             setIsBuyModalOpen(false),
-            document.body.classList.remove("modal-open");
+              document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
           contentLabel="current-apr Modal"
@@ -440,12 +441,12 @@ export default function SwapToken() {
                     {rwaPrice == undefined || isConnected === false
                       ? "0"
                       : `${parseFloat(balance?.formatted)} ($${(
-                          Number(formatEther(rwaPrice ?? 0)) *
-                          parseFloat(balance?.formatted)
-                        ).toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })})`}
+                        Number(formatEther(rwaPrice ?? 0)) *
+                        parseFloat(balance?.formatted)
+                      ).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })})`}
                   </span>
                 </div>
               </div>
@@ -491,9 +492,9 @@ export default function SwapToken() {
                     {rwaPrice == 0
                       ? "Loading..."
                       : Number(formatEther(rwaPrice ?? 0)).toLocaleString(
-                          undefined,
-                          { minimumFractionDigits: 4 }
-                        )}
+                        undefined,
+                        { minimumFractionDigits: 4 }
+                      )}
                   </span>
                 </div>
               </div>
@@ -533,13 +534,12 @@ export default function SwapToken() {
                       content={
                         reachedLimit
                           ? "Your remaining monthly USDC sale limit. To make a larger sale, please contact admin@landshare.io."
-                          : `Your remaining monthly USDC sale limit. Your limit resets on [${
-                              new Date(limitDate).getFullYear() +
-                              "/" +
-                              (new Date(limitDate).getMonth() + 1) +
-                              "/" +
-                              new Date(limitDate).getDate()
-                            }]. To make a larger sale, please contact admin@landshare.io`
+                          : `Your remaining monthly USDC sale limit. Your limit resets on [${new Date(limitDate).getFullYear() +
+                          "/" +
+                          (new Date(limitDate).getMonth() + 1) +
+                          "/" +
+                          new Date(limitDate).getDate()
+                          }]. To make a larger sale, please contact admin@landshare.io`
                       }
                     >
                       {/* svg icon must be wrapped in a div */}
@@ -553,8 +553,8 @@ export default function SwapToken() {
                   >
                     {saleLimit
                       ? `$${Number(
-                          formatEther(saleLimit[0]).toString()
-                        ).toFixed(2)}`
+                        formatEther(saleLimit[0]).toString()
+                      ).toFixed(2)}`
                       : "Loading"}
                   </span>
                 </div>
@@ -616,12 +616,12 @@ export default function SwapToken() {
                       {rwaPrice == undefined
                         ? "0"
                         : `${parseFloat(balance?.formatted)} ($${(
-                            Number(formatEther(rwaPrice ?? 0)) *
-                            parseFloat(balance?.formatted)
-                          ).toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })})`}
+                          Number(formatEther(rwaPrice ?? 0)) *
+                          parseFloat(balance?.formatted)
+                        ).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })})`}
                     </span>
                   </div>
                 )}
@@ -735,13 +735,13 @@ export default function SwapToken() {
                           RWATokenAmount < 1 ||
                           RWATokenAmount === 0 ||
                           RWATokenAmount > parseFloat(balance?.formatted) ||
-                          (chainId == bsc.id ? 
-                            (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted)) 
+                          (chainId == bsc.id ?
+                            (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted))
                             : (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > Number(usdcAmount.toString()))) ||
                           Number(saleLimit) <
-                            Number(
-                              usdcAmount == 0 ? 0 : usdcAmount.toString()
-                            ) ||
+                          Number(
+                            usdcAmount == 0 ? 0 : usdcAmount.toString()
+                          ) ||
                           Number(
                             usdcAmount == 0 ? 0 : Number(usdcAmount.toString())
                           ) > Number(poolBalance?.formatted)
@@ -753,35 +753,35 @@ export default function SwapToken() {
                         {RWATokenAmount && usdcAmount && landFeeAmount
                           ? RWATokenAmount > parseFloat(balance?.formatted)
                             ? "Insufficient RWA Balance"
-                            : (chainId == bsc.id ? 
-                              Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted) 
+                            : (chainId == bsc.id ?
+                              Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted)
                               : Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > Number(usdcAmount.toString()))
-                            ? "Insufficient LAND Balance"
-                            : Number(saleLimit) <
-                              Number(
-                                usdcAmount == 0 ? 0 : usdcAmount.toString()
-                              )
-                            ? "Insufficient Limit"
-                            : Number(
-                                usdcAmount == 0
-                                  ? 0
-                                  : Number(usdcAmount.toString())
-                              ) > Number(poolBalance?.formatted)
-                            ? (
-                              <Tooltip
-                                content="Fixed-price liquidity is limited and is replenished periodically. Please try again later."
-                              >
-                                {/* svg icon must be wrapped in a div */}
-                                <div className="flex gap-[8px] items-center">
-                                  <span>Insufficient Liquidity</span>
-                                  <BsInfoCircle
-                                    id="tooltip-icon"
-                                    className="w-4 h-4 cursor-pointer"
-                                  ></BsInfoCircle>
-                                </div>
-                              </Tooltip>
-                            )
-                            : "Sell"
+                              ? "Insufficient LAND Balance"
+                              : Number(saleLimit) <
+                                Number(
+                                  usdcAmount == 0 ? 0 : usdcAmount.toString()
+                                )
+                                ? "Insufficient Limit"
+                                : Number(
+                                  usdcAmount == 0
+                                    ? 0
+                                    : Number(usdcAmount.toString())
+                                ) > Number(poolBalance?.formatted)
+                                  ? (
+                                    <Tooltip
+                                      content="Fixed-price liquidity is limited and is replenished periodically. Please try again later."
+                                    >
+                                      {/* svg icon must be wrapped in a div */}
+                                      <div className="flex gap-[8px] items-center">
+                                        <span>Insufficient Liquidity</span>
+                                        <BsInfoCircle
+                                          id="tooltip-icon"
+                                          className="w-4 h-4 cursor-pointer"
+                                        ></BsInfoCircle>
+                                      </div>
+                                    </Tooltip>
+                                  )
+                                  : "Sell"
                           : "Enter Amount"}
                       </Button>
                     )}
@@ -808,14 +808,14 @@ export default function SwapToken() {
                         }}
                         className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green text-white"
                       >
-                        { (chainId == bsc.id ? buyLANDAmount : true) && RWATokenAmount && usdcAmount
+                        {(chainId == bsc.id ? buyLANDAmount : true) && RWATokenAmount && usdcAmount
                           ? Number(formatEther(buyLANDAmount.toString())) >
                             parseFloat(landBalance?.formatted)
                             ? "Insufficient LAND Balance"
                             : Number(formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)) >
                               parseFloat(USDCBalance?.formatted)
-                            ? "Insufficient USDC Balance"
-                            : "Buy"
+                              ? "Insufficient USDC Balance"
+                              : "Buy"
                           : "Enter Amount"}
                       </Button>
                     )}
@@ -1048,7 +1048,7 @@ export default function SwapToken() {
         style={customModalStyles}
       >
         <div className="flex w-full justify-between items-center pl-4 z-10">
-          <div className={`text-[16px] md:text-[20px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+          <div className={`text-[16px] md:text-[20px] mb-3 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
             Security Token Purchase Agreement
           </div>
           <div className="flex justify-end px-[16px] pt-[16px] pb-3">
@@ -1083,7 +1083,7 @@ export default function SwapToken() {
               </SkeletonTheme>
             )}
             <div
-              className="z-10 relative h-[300px] w-full text-text-secondary"
+              className="z-10 relative h-[250px] w-full text-text-secondary"
               id="doc"
             ></div>
           </div>
@@ -1108,7 +1108,7 @@ export default function SwapToken() {
               />
               <label
                 htmlFor="custom-checkbox"
-                className="pl-[25px] before:content-[''] before:inline-block before:absolute before:w-[20px] before:h-[20px] before:left-0 before:border before:border-gray-700 before:rounded before:bg-white before:transition before:ease-in-out peer-checked:before:bg-red-500 text-[16px] font-bold text-text-primary cursor-pointer"
+                className="relative pl-[25px] flex items-center before:content-[''] before:inline-block before:absolute before:top-[6px] before:w-[15px] before:h-[15px] before:left-0 before:border before:border-gray-700 before:rounded before:bg-white before:transition before:ease-in-out peer-checked:before:bg-green-500 text-[16px] font-bold text-text-primary cursor-pointer"
               >
                 Acknowledge and sign
               </label>
@@ -1116,7 +1116,7 @@ export default function SwapToken() {
           </div>
           <div>
             <Button
-              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px] bg-primary-green hover:bg-white"
+              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px] bg-primary-green "
               onClick={async () => {
                 setIsSTAPshow(false);
                 buyOrSell == "Buy" ? buyTokens(buyUSDCAmount) : sellTokens();
