@@ -821,7 +821,7 @@ export default function SwapToken() {
                     )}
                   </>
                 )}
-                {isWhitelisted ? (
+                {isWhitelisted && chainId == bsc.id ? (
                   <a
                     href="https://app.dsswap.io/swap"
                     target="_blank"
