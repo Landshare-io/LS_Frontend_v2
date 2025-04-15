@@ -7,8 +7,6 @@ import useAllowanceOfRwaContract from '../contract/RWAContract/useAllowance';
 import useApproveOfRwaContract from '../contract/RWAContract/useApprove';
 import useApproveOfLandContract from '../contract/LandTokenContract/useApprove';
 import useSellRwa from '../contract/LandshareBuySaleContract/useSellRwa';
-import useAllowanceOfUsdcContract from '../contract/UsdcContract/useAllowance';
-import useApproveOfUsdcContract from '../contract/UsdcContract/useApprove';
 import useBalanceOfUsdtContract from '../contract/UsdtContract/useBalanceOf';
 import useBalanceOfRwaContract from '../contract/RWAContract/useBalanceOf';
 import useBalanceOfLandContract from '../contract/LandTokenContract/useBalanceOf';
@@ -54,18 +52,13 @@ export default function useSellTokens(chainId: number, address: Address | undefi
     hash: landApproveTx,
   });
 
-  const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]) as {
-    data: BigNumberish,
-    refetch: Function
-  }
+  // const { approve: approveUsdc, data: usdcApproveTx, isError: isUsdcApproveError } = useApproveOfUsdcContract()
 
-  const { approve: approveUsdc, data: usdcApproveTx, isError: isUsdcApproveError } = useApproveOfUsdcContract()
-
-  const { isSuccess: usdcApproveSuccess, data: usdcApproveStatusData } = useWaitForTransactionReceipt({
-    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
-    hash: usdcApproveTx,
-    chainId: chainId
-  });
+  // const { isSuccess: usdcApproveSuccess, data: usdcApproveStatusData } = useWaitForTransactionReceipt({
+  //   confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
+  //   hash: usdcApproveTx,
+  //   chainId: chainId
+  // });
 
   const { sellRwa, data: sellTx, isError, error: sellRWAError } = useSellRwa(chainId)
 
@@ -90,15 +83,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
                 sellRwa(amount)
               }
             } else {
-              if (BigInt(usdcAllowance) < BigInt(landFeeAmount)) {
-                approveUsdc(
-                  chainId,
-                  LANDSHARE_SALE_CONTRACT_ADDRESS[chainId],
-                  BigInt(landFeeAmount) / BigInt("1000000000000") // divide by 1e12 to go from 18 to 6 decimals
-                );
-              } else {
-                sellRwa(amount)
-              }
+              sellRwa(amount)
             }
           } else {
             setScreenLoadingStatus("Transaction Failed.")
@@ -136,30 +121,6 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       console.log(error)
     }
   }, [ landApproveSuccess, isLandApproveError])
-
-  useEffect(() => {
-    try {
-      if (isUsdcApproveError) {
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (usdcApproveTx) {
-        if (usdcApproveStatusData) {
-          usdcAllowanceRefetch()
-          // if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
-          //   window.alert("Please approve sufficient allowance.")
-          //   setScreenLoadingStatus("Insufficient Allowance")
-          // }
-          if (usdcApproveSuccess) {
-            sellRwa(amount)
-          } else {
-            setScreenLoadingStatus("Transaction Failed.")
-          }
-        }
-      }
-    } catch (error) {
-      setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
-    }
-  }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess, isUsdcApproveError])
 
   useEffect(() => {
     (async () => {
