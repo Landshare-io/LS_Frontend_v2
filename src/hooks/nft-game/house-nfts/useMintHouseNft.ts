@@ -38,7 +38,8 @@ export default function useMintHouseNft(chainId: number, address: Address | unde
                 nonce: transactionNonce,
                 houseType: (
                   productType == 1 ? (ableHarvestAmount >= 500 ? 2 : 1) :
-                    productType == 2 ? (ableHarvestAmount >= 500 ? 4 : 3) : (ableHarvestAmount >= 500 ? 6 : 5))
+                    productType == 2 ? (ableHarvestAmount >= 500 ? 4 : 3) : 
+                      productType == 3 ? (ableHarvestAmount >= 500 ? 6 : 5) : (ableHarvestAmount >= 500 ? 8 : 7))
               })
   
               await refetchBalance()

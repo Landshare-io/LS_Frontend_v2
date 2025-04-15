@@ -4,12 +4,13 @@ import Head from "next/head";
 import Image from "next/image";
 import { BigNumberish, formatEther } from "ethers";
 import { bsc } from "viem/chains";
-import { useAccount, useChainId } from "wagmi";
+import { useAccount, useChainId, useBlockNumber } from "wagmi";
 import Breadcrumb from "../common/breadcrumb";
 import DaoCreateProposal from "../dao-create-proposal";
 import DaoProposalsList from "../dao-proposal-list";
 import useBalanceOf from "../../hooks/contract/LandTokenContract/useBalanceOf";
 import { useGlobalContext } from "../../context/GlobalContext";
+import useSnapshot from "../../hooks/contract/useSnapshot";
 import { 
   BOLD_INTER_TIGHT, 
   DAO_TREASURY_ADDRESS, 
@@ -20,6 +21,7 @@ import Logo from "../../../public/icons/dao-land.svg";
 import Telegram from "../../../public/icons/dao-telegram.svg";
 import Gnosis from "../../../public/icons/dao-safe.svg";
 import Contract from "../../../public/icons/dao-contract.svg";
+import snapshotjs from "@snapshot-labs/snapshot.js";
 
 const breadcrumbItems = [
   {
@@ -42,6 +44,23 @@ export default function DAO() {
   const [isViewAll, setIsViewAll] = useState(false);
   const [refreshCount, setRefreshCount] = useState(0);
   const [initialLoad, setInitialLoad] = useState(true);
+  const [votingPower, setVotingPower] = useState<number>(0);
+  const { data: blockNumber } = useBlockNumber();
+  const { calculateScore } = useSnapshot({
+    title: "",
+    body: "",
+    proposalJSON: "",
+    proposal: ""
+  });
+
+  useEffect(() => {
+    const fetchScore = async () => {
+      const score = await calculateScore();
+      console.log("score index:::", score);
+      setVotingPower(score);
+    };
+    fetchScore();
+  }, [calculateScore]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -57,18 +76,26 @@ export default function DAO() {
   const handleClickCreateProposal = async () => {
     if (typeof address == "undefined") {
       notifyError("Please connect your wallet.");
-    } else if (
-      !(DAO_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)
-    ) {
-      notifyError(`Please switch your chain to ${DAO_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
-    } else {
-      setIsCreating(true);
+      return;
     }
+    
+    if (!(DAO_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
+      notifyError(`Please switch your chain to ${DAO_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`);
+      return;
+    }
+
+    if (votingPower < 1) {
+      notifyError("Not enough voting power.");
+      return;
+    }
+
+    setIsCreating(true);
   };
 
   const refreshProposalList = () => {
     setRefreshCount((prevCount) => prevCount + 1);
   };
+
   return (
     <div>
       <Head>
@@ -206,8 +233,10 @@ export default function DAO() {
                   >
                     View All
                   </button>
+                  
                   <button className="text-button-text-secondary py-[8px] px-[10px] min-w-[80px] min-h-[32px] min-w-fit text-[12px] leading-[14px] bg-text-third md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
-                    disabled={(isBalanceGnosisLoading || isBalanceMarketingLoading) || chainId != bsc.id}
+                    disabled={(isBalanceGnosisLoading || isBalanceMarketingLoading) || chainId != bsc.id || votingPower < 100}
+
                     onClick={handleClickCreateProposal}
                   >
                     Create

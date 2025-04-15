@@ -94,7 +94,7 @@ export const SWIPELUX_SETTING = {
 };
 export const NFT_GAME_BACKEND_URL = 'https://landsharenft.xyz'
 export const CCIP_BACKEND_URL = 'https://ccip.landsharenft.xyz'
-export const APOLLO_RWA_BUY_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa-buy/v0.1.0"
+export const APOLLO_RWA_BUY_URL = "https://api.studio.thegraph.com/query/85450/landshare-rwa/1.01/"
 export const APOLLO_RWA_URL = "https://api.studio.thegraph.com/query/81176/landshare-rwa/v0.1.0"
 export const LAND_PRICE_SUBGRAPH_URL = 'https://api.studio.thegraph.com/query/81176/landshare-price/v0.1.0'
 export const LANDSHARE_COST_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=landshare&vs_currencies=usd'
@@ -128,7 +128,7 @@ export const PREMIUM_NFT_CONTRACT_ADDRESS: Record<string, MULTI_CHAIN_CONTRACT_T
   }
 }
 export const API_CONSUMER_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
-  56: '0x234fCeB8e266cc0843ea134f378f0157dB4d09dE' as Address,
+  56: '0x61f8c9fE835e4CA722Db3A81a2746260b0D77735' as Address,
   97: '' as Address
 }
 export const LP_TOKEN_V2_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
@@ -191,7 +191,7 @@ export const RWA_POOL_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   97: '' as Address
 }
 export const LANDSHARE_SALE_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
-  56: '0x50ba4cEaF1b1B6FF0745Cc6fA4B7B7587D9cF9C4' as Address,
+  56: '0x3e8127fe9F832b22a179eD294009357D3FDCE833' as Address,
   97: '' as Address,
   98864: '0xB247f8cfDC24c75A164d1587b6cbd46B737f180e',
   98865: '0x4166286e9ad3be3E3647389795Be3bCf5d675Fb5',

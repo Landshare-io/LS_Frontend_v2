@@ -12,7 +12,7 @@ import useApproveOfUsdcContract from '../contract/UsdcContract/useApprove';
 import useBalanceOfUsdtContract from '../contract/UsdtContract/useBalanceOf';
 import useBalanceOfRwaContract from '../contract/RWAContract/useBalanceOf';
 import useBalanceOfLandContract from '../contract/LandTokenContract/useBalanceOf';
-import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
+import useAllowanceOfLandContract from '../contract/LandTokenContract/useAllowance';
 import { 
   RWA_CONTRACT_ADDRESS, 
   LANDSHARE_SALE_CONTRACT_ADDRESS,
@@ -26,17 +26,17 @@ export default function useSellTokens(chainId: number, address: Address | undefi
   const { refetch: usdtBalanceRefetch } = useBalanceOfUsdtContract(chainId, address) as { refetch: Function };
   const { refetch: landBalanceRefetch } = useBalanceOfLandContract({chainId, address}) as { refetch: Function };
 
-  const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(chainId, address, RWA_CONTRACT_ADDRESS[chainId]) as {
+  const { data: rwaAllowance, refetch: rwaAllowanceRefetch } = useAllowanceOfRwaContract(chainId, address, LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]) as {
     data: BigNumberish,
     refetch: Function
   }
 
   const { data: landAllowance, refetch: landAllowanceRefetch } = useAllowanceOfLandContract(chainId, address, LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]) as {
     data: BigNumberish,
-    refetch: Function
+    refetch: Function 
   }
 
-  const { approve: approveRWA, data: rwaApproveTx, isError: isRwaApproveError } = useApproveOfRwaContract(chainId)
+  const { approve: approveRWA, data: rwaApproveTx, isError: isRwaApproveError, isPending: isLoadingApproveRWA } = useApproveOfRwaContract(chainId)
 
   const { isSuccess: rwaApproveSuccess, data: rwaApproveStatusData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
@@ -44,7 +44,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
     chainId: chainId
   });
 
-  const { approve: approveLand, data: landApproveTx, isError: isLandApproveError } = useApproveOfLandContract()
+  const { approve: approveLand, data: landApproveTx, isError: isLandApproveError, error: landApproveError, isPending: isLoadingApproveLAND } = useApproveOfLandContract()
 
   const { isSuccess: landApproveSuccess, data: landApproveStatusData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
@@ -64,7 +64,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
     chainId: chainId
   });
 
-  const { sellRwa, data: sellTx, isError } = useSellRwa(chainId)
+  const { sellRwa, data: sellTx, isError, error: sellRWAError } = useSellRwa(chainId)
 
   const { isSuccess: sellSuccess, data: sellStatusData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
@@ -78,8 +78,8 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       } else if (rwaApproveTx) {
         if (rwaApproveStatusData) {
           rwaAllowanceRefetch()
-
-          if (rwaApproveSuccess) {
+      
+          if (rwaApproveSuccess && !isLoadingApproveRWA && !isLoadingApproveLAND) {
             if (chainId == bsc.id) {
               if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
                 approveLand(chainId, LANDSHARE_SALE_CONTRACT_ADDRESS[chainId], landFeeAmount)
@@ -102,13 +102,14 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-  }, [rwaApproveTx, rwaApproveStatusData, rwaApproveSuccess, isRwaApproveError])
+  }, [rwaApproveSuccess, isRwaApproveError])
 
   useEffect(() => {
     try {
       if (isLandApproveError) {
         setScreenLoadingStatus("Transaction Failed.")
-      } else if (landApproveTx) {
+        console.log(landApproveError)
+      } else if (landApproveTx ) {
         if (landApproveStatusData) {
           landAllowanceRefetch()
           // if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
@@ -116,6 +117,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
           //   setScreenLoadingStatus("Insufficient Allowance")
           // }
           if (landApproveSuccess) {
+            console.log("here")
             sellRwa(amount)
           } else {
             setScreenLoadingStatus("Transaction Failed.")
@@ -126,7 +128,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
       setScreenLoadingStatus("Transaction Failed.")
       console.log(error)
     }
-  }, [landApproveTx, landApproveStatusData, landApproveSuccess, isLandApproveError])
+  }, [ landApproveSuccess, isLandApproveError])
 
   useEffect(() => {
     try {
@@ -156,6 +158,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
     (async () => {
       if (isError) {
         setScreenLoadingStatus("Transaction Failed.")
+        console.log(sellRWAError)
       } else if (sellTx) {
         if (sellStatusData) {
           if (sellSuccess) {
@@ -173,9 +176,28 @@ export default function useSellTokens(chainId: number, address: Address | undefi
 
   const sellTokens = async () => {
     try {
+      console.log("Calling allowance with:" + address);
+      landAllowanceRefetch()
+      rwaAllowanceRefetch()
+      console.log(Number(landAllowance))
+      console.log(Number(rwaAllowance))
+      console.log(BigInt(landFeeAmount))
+      console.log("Calling land allowance hook with:", {
+        chainId,
+        address,
+        spender: LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]
+      });
+     
+      setScreenLoadingStatus('Transaction Pending...')
       if (Number(rwaAllowance ?? 0) < amount) {
-        setScreenLoadingStatus('Transaction Pending...')
+        
         await approveRWA(LANDSHARE_SALE_CONTRACT_ADDRESS[chainId], amount);
+      } else {
+        if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
+          approveLand(chainId, LANDSHARE_SALE_CONTRACT_ADDRESS[chainId], landFeeAmount)
+        } else {
+          sellRwa(amount)
+        }
       }
     } catch (error) {
       console.error(error);
