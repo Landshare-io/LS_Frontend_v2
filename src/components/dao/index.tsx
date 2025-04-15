@@ -133,7 +133,7 @@ export default function DAO() {
                   DAO Treasury
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row lg:flex-col items-center gap-[40px]">
+              <div className="flex flex-col md:flex-row lg:flex-col items-center gap-[20px] md:gap-[40px] lg:gap-[25px]">
                 <div className="flex flex-row lg:flex-col items-center mb-[12px] gap-[20px] mb-md-2">
                   <div className="text-center">
                     <>
@@ -221,21 +221,22 @@ export default function DAO() {
               </div>
             </div>
             <div className="bg-secondary w-full p-[10px] pt-[25px] md:p-[40px] space-y-4 lg:space-y-0 shadow-xl rounded-[14px]">
-              <div className={`flex justify-between pb-[30px] items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
+              <div className={`flex flex-col md:flex-row justify-between gap-[15px] md:gap-[0px] md:pb-[30px] md:items-center tracking-0 leading-[30px] ${BOLD_INTER_TIGHT.className}`}>
                 <div className="text-text-primary font-bold text-[24px] leading-[36px]">
                   {isViewAll ? `All Proposals` : `Latest Proposals`}
                 </div>
                 <div className="flex gap-[15px]">
-                  <button className="text-button-text-secondary py-[5px] px-[5px] min-h-[32px] min-w-fit text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
+                  <button className="text-button-text-secondary py-[8px] px-[10px] min-h-[32px] min-w-[80px] text-[12px] leading-[14px] bg-[#61CD81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
                     onClick={() => {
                       window.open("https://vote.landshare.io");
                     }}
                   >
                     View All
                   </button>
-                  <button 
-                    className="text-button-text-secondary py-[5px] px-[5px] min-h-[32px] min-w-fit text-[12px] leading-[14px] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] bg-[#61CD81] active:bg-[#06B844]"
+                  
+                  <button className="text-button-text-secondary py-[8px] px-[10px] min-w-[80px] min-h-[32px] min-w-fit text-[12px] leading-[14px] bg-text-third md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
                     disabled={(isBalanceGnosisLoading || isBalanceMarketingLoading) || chainId != bsc.id || votingPower < 100}
+
                     onClick={handleClickCreateProposal}
                   >
                     Create
