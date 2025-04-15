@@ -31,6 +31,7 @@ import {
   MAJOR_WORK_CHAINS,
   PUSD_SUPPORT_CHINAS,
 } from "../../config/constants/environments";
+import { useGlobalContext } from "../../context/GlobalContext";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
 import useGetAllTokens from "../../hooks/axios/useGetAllTokens";
 import useGetLandFee from "../../hooks/contract/LandshareSaleContract/useGetLandFee";
@@ -58,6 +59,7 @@ import Tooltip from "../common/tooltip";
 const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 export default function SwapToken() {
+  const { screenLoadingStatus } = useGlobalContext();
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
   const { data: isWhitelisted, refetch } = useIsWhitelistedAddressOfRwa(chainId, address);
@@ -84,29 +86,29 @@ export default function SwapToken() {
     })()
   }, [isZeroIDModal])
 
-  const { data: balance } = useBalance({
+  const { data: balance, refetch: refetchBalance } = useBalance({
     address: address,
     token: RWA_CONTRACT_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
-  const { data: USDCBalance } = useBalance({
+  const { data: USDCBalance, refetch: refetchUSDCBalance } = useBalance({
     address: address,
     token: USDC_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
-  const { data: poolBalance } = useBalance({
+  const { data: poolBalance, refetch: refetchPoolBalance } = useBalance({
     address: RWA_POOL_CONTRACT_ADDRESS[chainId],
     token: USDC_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
-  const { data: landBalance } = useBalance({
+  const { data: landBalance, refetch: refetchLandBalance } = useBalance({
     address: address,
     token: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any };
+  }) as { data: any, refetch: Function };
 
   const { data: saleLimit, refetch: refetchSaleLimit } = useGetSaleLimit(
     chainId,
@@ -114,10 +116,10 @@ export default function SwapToken() {
   ) as { data: [BigNumberish, number, number]; refetch: Function };
   const limitDate = saleLimit
     ? new Date(
-        saleLimit[1] != undefined
-          ? Number(saleLimit[1]) * 1000
-          : Date.now() * 1000
-      )
+      saleLimit[1] != undefined
+        ? Number(saleLimit[1]) * 1000
+        : Date.now() * 1000
+    )
     : Date.now() * 1000;
   const reachedLimit = saleLimit
     ? saleLimit[2] != undefined
@@ -146,10 +148,20 @@ export default function SwapToken() {
   ) as any;
 
   useEffect(() => {
-    setUsdcAmount(Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount);
+    setUsdcAmount(Number((Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount).toFixed(2)));
     setBuyLANDAmount(buyTokenAmount[1])
     setBuyUSDCAmount(buyTokenAmount[0])
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
+
+  useEffect(() => {
+    if (screenLoadingStatus === "Transaction Complete.") {
+      refetchBalance();
+      refetchUSDCBalance();
+      refetchPoolBalance();
+      refetchLandBalance();
+      refetchSaleLimit();
+    }
+  }, [screenLoadingStatus]);
 
   useEffect(() => {
     if (isSTAPShow) {
@@ -161,17 +173,23 @@ export default function SwapToken() {
           docElement.classList.add("bg-primary");
           docElement.classList.add("text-text-primary");
           docElement.classList.add("w-full");
-          var container = document.getElementById("doc") as Element;
-          container.appendChild(docElement);
-          var docContent = docElement.getElementsByClassName("doc-content");
-          docContent[0] instanceof HTMLElement && (docContent[0].style.padding = "10px", docContent[0].style.background = theme == "dark" ? "#2E2E2E" : "#f6f7f9");
-          var paragraphs = docContent[0].getElementsByTagName("p");
-          for (var i = 0; i < paragraphs.length; i++) {
-              var spans = paragraphs[i].getElementsByTagName("span");
-              for (var j = 0; j < spans.length; j++) {
-                spans[j].style.color = theme == "dark" ? "#f1f1f1" : "#0a0a0a";
-                spans[j].style.background = "transparent";
+          var container = document.getElementById("doc");
+          if (container) {
+            container.innerHTML = ''; // Clear existing content
+            container.appendChild(docElement);
+            var docContent = docElement.getElementsByClassName("doc-content");
+            if (docContent[0] instanceof HTMLElement) {
+              docContent[0].style.padding = "10px";
+              docContent[0].style.background = theme == "dark" ? "#2E2E2E" : "#f6f7f9";
+              var paragraphs = docContent[0].getElementsByTagName("p");
+              for (var i = 0; i < paragraphs.length; i++) {
+                var spans = paragraphs[i].getElementsByTagName("span");
+                for (var j = 0; j < spans.length; j++) {
+                  spans[j].style.color = theme == "dark" ? "#f1f1f1" : "#0a0a0a";
+                  spans[j].style.background = "transparent";
+                }
               }
+            }
           }
           setIsSTPALoading(false);
         }
@@ -190,6 +208,7 @@ export default function SwapToken() {
       maxWidth: "400px",
       width: "90%",
       height: "fit-content",
+      maxHeight: "90%",
       borderRadius: "20px",
     },
     overlay: {
@@ -302,7 +321,7 @@ export default function SwapToken() {
           </div>
           <div className="w-full mt-3">
             <a href="https://dashboard.landshare.io">
-              <Button 
+              <Button
                 className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
                 disabled={chainId != bsc.id}
               >
@@ -333,7 +352,7 @@ export default function SwapToken() {
           isOpen={isZeroIDModal}
           onRequestClose={() => {
             setZeroIDModalOpen(true),
-            document.body.classList.remove("modal-open");
+              document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
           contentLabel="ZeroID Modal"
@@ -352,7 +371,7 @@ export default function SwapToken() {
           isOpen={isBuyModalOpen}
           onRequestClose={() => {
             setIsBuyModalOpen(false),
-            document.body.classList.remove("modal-open");
+              document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
           contentLabel="current-apr Modal"
@@ -422,12 +441,12 @@ export default function SwapToken() {
                     {rwaPrice == undefined || isConnected === false
                       ? "0"
                       : `${parseFloat(balance?.formatted)} ($${(
-                          Number(formatEther(rwaPrice ?? 0)) *
-                          parseFloat(balance?.formatted)
-                        ).toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })})`}
+                        Number(formatEther(rwaPrice ?? 0)) *
+                        parseFloat(balance?.formatted)
+                      ).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })})`}
                   </span>
                 </div>
               </div>
@@ -437,9 +456,9 @@ export default function SwapToken() {
                 type="number"
                 disabled={!isConnected}
                 onChange={(e: any) => {
-                  const regex = /^[0-9\b]/;
+                  const regex = /^\d+$/;
                   if (e.target.value === "" || regex.test(e.target.value))
-                    setRWATokenAmount(e.target.value);
+                    setRWATokenAmount(Number(e.target.value));
                 }}
               />
             </div>
@@ -447,14 +466,14 @@ export default function SwapToken() {
               <div className="flex justify-between items-center gap-[5px]">
                 <div className="flex items-center gap-[5px] cursor-pointer">
                   <Image
-                    src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? pUsd : IconUSDC}
+                    src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? pUsd : IconUSDC}
                     alt="usdc"
                     className="w-[18px] h-[18px] rounded-full"
                   />
                   <span
                     className={`text-text-primary text-[12px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                   >
-                    {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? "pUSD" : "USDC"}
+                    {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? "pUSD" : "USDC"}
                   </span>
                   <Image
                     src={theme == "dark" ? IconArrowDownDark : IconArrowDown}
@@ -462,16 +481,9 @@ export default function SwapToken() {
                     className="w-[18px] h-[18px]"
                   />
                 </div>
-                <div>
-                  <Image
-                    src={IconArrowUpDown}
-                    alt="arrow up down"
-                    className="w-[18px] h-[18px]"
-                  />
-                </div>
                 <div className="flex justify-between items-center gap-[5px]">
                   <label className="text-text-secondary text-[12px] leading-[22px]">
-                    Price:
+                    RWA Price:
                   </label>
                   <span
                     className={`text-text-primary text-[12px] leading-[20px] ${BOLD_INTER_TIGHT.className}`}
@@ -480,17 +492,19 @@ export default function SwapToken() {
                     {rwaPrice == 0
                       ? "Loading..."
                       : Number(formatEther(rwaPrice ?? 0)).toLocaleString(
-                          undefined,
-                          { minimumFractionDigits: 4 }
-                        )}
+                        undefined,
+                        { minimumFractionDigits: 4 }
+                      )}
                   </span>
                 </div>
               </div>
               <input
                 className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
-                placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? 'pUSD' : 'USDC'}`}
+                placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? 'pUSD' : 'USDC'}`}
                 readOnly
-                value={usdcAmount}
+                value={usdcAmount == 0 || RWATokenAmount === 0
+                  ? ""
+                  : usdcAmount}
                 onChange={(e: any) => setUsdcAmount(e.target.value)}
               />
             </div>
@@ -520,13 +534,12 @@ export default function SwapToken() {
                       content={
                         reachedLimit
                           ? "Your remaining monthly USDC sale limit. To make a larger sale, please contact admin@landshare.io."
-                          : `Your remaining monthly USDC sale limit. Your limit resets on [${
-                              new Date(limitDate).getFullYear() +
-                              "/" +
-                              (new Date(limitDate).getMonth() + 1) +
-                              "/" +
-                              new Date(limitDate).getDate()
-                            }]. To make a larger sale, please contact admin@landshare.io`
+                          : `Your remaining monthly USDC sale limit. Your limit resets on [${new Date(limitDate).getFullYear() +
+                          "/" +
+                          (new Date(limitDate).getMonth() + 1) +
+                          "/" +
+                          new Date(limitDate).getDate()
+                          }]. To make a larger sale, please contact admin@landshare.io`
                       }
                     >
                       {/* svg icon must be wrapped in a div */}
@@ -540,8 +553,8 @@ export default function SwapToken() {
                   >
                     {saleLimit
                       ? `$${Number(
-                          formatEther(saleLimit[0]).toString()
-                        ).toFixed(2)}`
+                        formatEther(saleLimit[0]).toString()
+                      ).toFixed(2)}`
                       : "Loading"}
                   </span>
                 </div>
@@ -603,12 +616,12 @@ export default function SwapToken() {
                       {rwaPrice == undefined
                         ? "0"
                         : `${parseFloat(balance?.formatted)} ($${(
-                            Number(formatEther(rwaPrice ?? 0)) *
-                            parseFloat(balance?.formatted)
-                          ).toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })})`}
+                          Number(formatEther(rwaPrice ?? 0)) *
+                          parseFloat(balance?.formatted)
+                        ).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })})`}
                     </span>
                   </div>
                 )}
@@ -620,9 +633,9 @@ export default function SwapToken() {
                 disabled={!isConnected}
                 type="number"
                 onChange={(e: any) => {
-                  const regex = /^[0-9\b]/;
+                  const regex = /^\d+$/;
                   if (e.target.value === "" || regex.test(e.target.value))
-                    setRWATokenAmount(e.target.value);
+                    setRWATokenAmount(Number(e.target.value));
                 }}
               />
             </div>
@@ -632,20 +645,20 @@ export default function SwapToken() {
                 <div className="flex justify-between items-center gap-[5px]">
                   <div className="flex items-center gap-[5px] cursor-pointer">
                     <Image
-                      src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? pUsd : IconUSDC}
+                      src={PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? pUsd : IconUSDC}
                       alt="usdc"
                       className="w-[18px] h-[18px] rounded-full"
                     />
                     <span
                       className={`text-text-primary text-[14px] leading-[22px] !text-[12px] ${BOLD_INTER_TIGHT.className}`}
                     >
-                      {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? "pUSD" : "USDC"}
+                      {PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? "pUSD" : "USDC"}
                     </span>
                   </div>
                 </div>
                 <input
                   className="bg-primary dark:bg-secondary text-text-primary py-[13px] px-[20px] w-full rounded-[12px]"
-                  placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) ? 'pUSD' : 'USDC'}`}
+                  placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? 'pUSD' : 'USDC'}`}
                   readOnly
                   value={
                     buyUSDCAmount == undefined || RWATokenAmount === 0
@@ -668,7 +681,7 @@ export default function SwapToken() {
                   </div>
                 )}
               </div>
-              {!PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98864 | 98865) && (
+              {!PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) && (
                 <div className="flex flex-col flex-1 w-full gap-[4px] min-h-[76px]">
                   <div className="flex justify-between items-center gap-[5px]">
                     <div className="flex items-center gap-[5px] cursor-pointer">
@@ -722,13 +735,13 @@ export default function SwapToken() {
                           RWATokenAmount < 1 ||
                           RWATokenAmount === 0 ||
                           RWATokenAmount > parseFloat(balance?.formatted) ||
-                          (chainId == bsc.id ? 
-                            (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted)) 
+                          (chainId == bsc.id ?
+                            (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted))
                             : (Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > Number(usdcAmount.toString()))) ||
                           Number(saleLimit) <
-                            Number(
-                              usdcAmount == 0 ? 0 : usdcAmount.toString()
-                            ) ||
+                          Number(
+                            usdcAmount == 0 ? 0 : usdcAmount.toString()
+                          ) ||
                           Number(
                             usdcAmount == 0 ? 0 : Number(usdcAmount.toString())
                           ) > Number(poolBalance?.formatted)
@@ -740,35 +753,35 @@ export default function SwapToken() {
                         {RWATokenAmount && usdcAmount && landFeeAmount
                           ? RWATokenAmount > parseFloat(balance?.formatted)
                             ? "Insufficient RWA Balance"
-                            : (chainId == bsc.id ? 
-                              Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted) 
+                            : (chainId == bsc.id ?
+                              Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > parseFloat(landBalance?.formatted)
                               : Number(formatEther(landFeeAmount ? landFeeAmount : 0)) > Number(usdcAmount.toString()))
-                            ? "Insufficient LAND Balance"
-                            : Number(saleLimit) <
-                              Number(
-                                usdcAmount == 0 ? 0 : usdcAmount.toString()
-                              )
-                            ? "Insufficient Limit"
-                            : Number(
-                                usdcAmount == 0
-                                  ? 0
-                                  : Number(usdcAmount.toString())
-                              ) > Number(poolBalance?.formatted)
-                            ? (
-                              <Tooltip
-                                content="Fixed-price liquidity is limited and is replenished periodically. Please try again later."
-                              >
-                                {/* svg icon must be wrapped in a div */}
-                                <div className="flex gap-[8px] items-center">
-                                  <span>Insufficient Liquidity</span>
-                                  <BsInfoCircle
-                                    id="tooltip-icon"
-                                    className="w-4 h-4 cursor-pointer"
-                                  ></BsInfoCircle>
-                                </div>
-                              </Tooltip>
-                            )
-                            : "Sell"
+                              ? "Insufficient LAND Balance"
+                              : Number(saleLimit) <
+                                Number(
+                                  usdcAmount == 0 ? 0 : usdcAmount.toString()
+                                )
+                                ? "Insufficient Limit"
+                                : Number(
+                                  usdcAmount == 0
+                                    ? 0
+                                    : Number(usdcAmount.toString())
+                                ) > Number(poolBalance?.formatted)
+                                  ? (
+                                    <Tooltip
+                                      content="Fixed-price liquidity is limited and is replenished periodically. Please try again later."
+                                    >
+                                      {/* svg icon must be wrapped in a div */}
+                                      <div className="flex gap-[8px] items-center">
+                                        <span>Insufficient Liquidity</span>
+                                        <BsInfoCircle
+                                          id="tooltip-icon"
+                                          className="w-4 h-4 cursor-pointer"
+                                        ></BsInfoCircle>
+                                      </div>
+                                    </Tooltip>
+                                  )
+                                  : "Sell"
                           : "Enter Amount"}
                       </Button>
                     )}
@@ -777,7 +790,6 @@ export default function SwapToken() {
                         disabled={
                           isWhitelisted == false ||
                           RWATokenAmount === undefined ||
-                          RWATokenAmount < 1 ||
                           RWATokenAmount === 0 ||
                           Number(
                             formatEther(
@@ -796,14 +808,14 @@ export default function SwapToken() {
                         }}
                         className="w-full mb-[16px] py-[13px] px-[24px] rounded-[100px] bg-primary-green text-white"
                       >
-                        {RWATokenAmount && buyLANDAmount && usdcAmount
+                        {(chainId == bsc.id ? buyLANDAmount : true) && RWATokenAmount && usdcAmount
                           ? Number(formatEther(buyLANDAmount.toString())) >
                             parseFloat(landBalance?.formatted)
                             ? "Insufficient LAND Balance"
                             : Number(formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)) >
                               parseFloat(USDCBalance?.formatted)
-                            ? "Insufficient USDC Balance"
-                            : buyOrSell
+                              ? "Insufficient USDC Balance"
+                              : "Buy"
                           : "Enter Amount"}
                       </Button>
                     )}
@@ -1036,7 +1048,7 @@ export default function SwapToken() {
         style={customModalStyles}
       >
         <div className="flex w-full justify-between items-center pl-4 z-10">
-          <div className={`text-[16px] md:text-[20px] text-text-primary ${BOLD_INTER_TIGHT.className}`}>
+          <div className={`text-[16px] md:text-[20px] mb-3 text-text-primary ${BOLD_INTER_TIGHT.className}`}>
             Security Token Purchase Agreement
           </div>
           <div className="flex justify-end px-[16px] pt-[16px] pb-3">
@@ -1071,7 +1083,7 @@ export default function SwapToken() {
               </SkeletonTheme>
             )}
             <div
-              className="z-10 relative h-[300px] w-full text-text-secondary"
+              className="z-10 relative h-[250px] w-full text-text-secondary"
               id="doc"
             ></div>
           </div>
@@ -1096,7 +1108,7 @@ export default function SwapToken() {
               />
               <label
                 htmlFor="custom-checkbox"
-                className="pl-[25px] before:content-[''] before:inline-block before:absolute before:w-[20px] before:h-[20px] before:left-0 before:border before:border-gray-700 before:rounded before:bg-white before:transition before:ease-in-out peer-checked:before:bg-red-500 text-[16px] font-bold text-text-primary cursor-pointer"
+                className="relative pl-[25px] flex items-center before:content-[''] before:inline-block before:absolute before:top-[6px] before:w-[15px] before:h-[15px] before:left-0 before:border before:border-gray-700 before:rounded before:bg-white before:transition before:ease-in-out peer-checked:before:bg-green-500 text-[16px] font-bold text-text-primary cursor-pointer"
               >
                 Acknowledge and sign
               </label>
@@ -1104,7 +1116,7 @@ export default function SwapToken() {
           </div>
           <div>
             <Button
-              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px] bg-primary-green hover:bg-white"
+              className="w-full flex justify-center items-center py-[13px] px-[24px] rounded-[100px] bg-primary-green "
               onClick={async () => {
                 setIsSTAPshow(false);
                 buyOrSell == "Buy" ? buyTokens(buyUSDCAmount) : sellTokens();
