@@ -19,6 +19,9 @@ import {
   TRANSACTION_CONFIRMATIONS_COUNT
 } from '../../config/constants/environments';
 import { useGlobalContext } from '../../context/GlobalContext';
+import {
+  PUSD_SUPPORT_CHINAS,
+} from "../../config/constants/environments";
 
 export default function useSellTokens(chainId: number, address: Address | undefined, landFeeAmount: BigNumberish, amount: number) {
   const { setScreenLoadingStatus } = useGlobalContext()
@@ -88,7 +91,11 @@ export default function useSellTokens(chainId: number, address: Address | undefi
               }
             } else {
               if (BigInt(usdcAllowance) < BigInt(landFeeAmount)) {
-                approveUsdc(chainId, LANDSHARE_SALE_CONTRACT_ADDRESS[chainId], landFeeAmount)
+                approveUsdc(
+                  chainId,
+                  LANDSHARE_SALE_CONTRACT_ADDRESS[chainId],
+                  BigInt(landFeeAmount) / BigInt("1000000000000") // divide by 1e12 to go from 18 to 6 decimals
+                );
               } else {
                 sellRwa(amount)
               }
@@ -176,24 +183,17 @@ export default function useSellTokens(chainId: number, address: Address | undefi
 
   const sellTokens = async () => {
     try {
-      console.log("Calling allowance with:" + address);
+   
       landAllowanceRefetch()
       rwaAllowanceRefetch()
-      console.log(Number(landAllowance))
-      console.log(Number(rwaAllowance))
-      console.log(BigInt(landFeeAmount))
-      console.log("Calling land allowance hook with:", {
-        chainId,
-        address,
-        spender: LANDSHARE_SALE_CONTRACT_ADDRESS[chainId]
-      });
+ 
      
       setScreenLoadingStatus('Transaction Pending...')
       if (Number(rwaAllowance ?? 0) < amount) {
         
         await approveRWA(LANDSHARE_SALE_CONTRACT_ADDRESS[chainId], amount);
       } else {
-        if (BigInt(landAllowance) < BigInt(landFeeAmount)) {
+        if (BigInt(landAllowance) < BigInt(landFeeAmount) && !PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866)) {
           approveLand(chainId, LANDSHARE_SALE_CONTRACT_ADDRESS[chainId], landFeeAmount)
         } else {
           sellRwa(amount)
