@@ -104,6 +104,12 @@ export default function SwapToken() {
     chainId: chainId,
   }) as { data: any, refetch: Function };
 
+  // const { data: liquidityBalance, refetch: refetchLiquidityBalance } = useBalance({
+  //   address: TREASURY_ADDRESS[chainId],
+  //   token: USDC_ADDRESS[chainId],
+  //   chainId: chainId,
+  // }) as { data: any, refetch: Function };
+
   const { data: landBalance, refetch: refetchLandBalance } = useBalance({
     address: address,
     token: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
@@ -533,13 +539,13 @@ export default function SwapToken() {
                     <Tooltip
                       content={
                         reachedLimit
-                          ? "Your remaining monthly USDC sale limit. To make a larger sale, please contact admin@landshare.io."
+                          ? "Your remaining monthly USDC sale limit. To make a larger sale, please submit a ticket at the bottom of the page."
                           : `Your remaining monthly USDC sale limit. Your limit resets on [${new Date(limitDate).getFullYear() +
                           "/" +
                           (new Date(limitDate).getMonth() + 1) +
                           "/" +
                           new Date(limitDate).getDate()
-                          }]. To make a larger sale, please contact admin@landshare.io`
+                          }]. To make a larger sale, please submit a ticket at the bottom of the page.`
                       }
                     >
                       {/* svg icon must be wrapped in a div */}
@@ -814,7 +820,7 @@ export default function SwapToken() {
                             ? "Insufficient LAND Balance"
                             : Number(formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)) >
                               parseFloat(USDCBalance?.formatted)
-                              ? "Insufficient USDC Balance"
+                              ? chainId == bsc.id ? "Insufficient USDC Balance" : "Insufficient pUSD Balance"
                               : "Buy"
                           : "Enter Amount"}
                       </Button>
