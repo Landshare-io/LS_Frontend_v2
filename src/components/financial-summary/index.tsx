@@ -65,7 +65,7 @@ export default function FinancialSummary() {
   const totalPropertyValue = useGetTotalValue(chainId) as BigNumberish;
   const bankBalance = useBankBalance(chainId) as BigNumberish;
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
-  const rwaValue = chainId == bsc.id ? useTotalSupply(chainId) as BigNumberish : 4000000;
+  const rwaValue = useTotalSupply(bsc.id) as BigNumberish;
   const totalRWATokenBalanceOfReserveWallets = useReserveRwa(
     chainId
   ) as BigNumberish;
