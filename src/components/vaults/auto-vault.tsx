@@ -479,41 +479,52 @@ export default function AutoVault({
                   <div className="flex gap-[12px] w-full flex-col md:flex-row">
 
                     {(typeof address !== 'undefined') ? (
-                      <>
+                      !(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
                         <button
                           className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                           onClick={() => {
-                            if (inputValue && Number(inputValue) > Number(0)) {
-                              if (!(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
-                              } else {
-                                depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
-                              }
-                            } else {
-                              notifyError('Please enter an amount')
-                            }
+                            notifyError(`Please switch your chain to ${AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                            // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                           }}
-                          disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable}
+                          disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                         >
-                          {
-                            inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
-                              ((AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) ? "Withdraw" : "Withdraw"
-                            )) : "Enter Amount"
-                          }
+                          Switch your network
                         </button>
-                        <button
-                          className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`} onClick={() => withdrawVault(0,0)}
-                          disabled={typeof address == 'undefined'}
-                        >
-                          Harvest
-                        </button>
-                      </>
-
+                      ) : (
+                        <>
+                          <button
+                            className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                            onClick={() => {
+                              if (inputValue && Number(inputValue) > Number(0)) {
+                                if (!(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
+                                  depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
+                                } else {
+                                  depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
+                                }
+                              } else {
+                                notifyError('Please enter an amount')
+                              }
+                            }}
+                            disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable}
+                          >
+                            {
+                              inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
+                                ((AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) ? "Withdraw" : "Withdraw"
+                              )) : "Enter Amount"
+                            }
+                          </button>
+                          <button
+                            className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`} onClick={() => withdrawVault(0,0)}
+                            disabled={typeof address == 'undefined'}
+                          >
+                            Harvest
+                          </button>
+                        </>
+                      )
                     ) : (
                       <div className="flex flex-col items-center">
                         <ConnectWallet connectButtonClassName="w-[300px]" />
                       </div>
-
                     )}
                   </div>
                   <button className={`flex flex-row items-center justify-center gap-[4px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
@@ -571,51 +582,64 @@ export default function AutoVault({
                           (
                             <ConnectWallet connectButtonClassName="w-[300px]" />
                           ) : (
-                            <>
+                            !(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (
                               <button
-                                className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[13px] md:text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className} ${isDepositing ? 'flex justify-center items-center' : ''}`}
+                                className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
                                 onClick={() => {
-                                  if (inputValue && Number(inputValue) > Number(0)) {
-                                    if (!(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
-                                      depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
-                                    } else {
-                                      depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
-                                    }
-                                  } else {
-                                    notifyError('Please enter an amount')
-                                  }
+                                  notifyError(`Please switch your chain to ${AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`)
+                                  // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                 }}
-                                style={{ width: "100%", maxWidth: "1000px" }}
-                                disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable || isDepositing}
+                                disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
                               >
-                                {
-                                  // (typeof address == 'undefined') ?
-                                  //   "Connect Wallet" :
-                                  isDepositing ? (
-                                    <div className='flex justify-center items-center'>
-                                      <ReactLoading
-                                        type="spin"
-                                        className="me-2 button-spinner"
-                                        width="24px"
-                                        height="24px"
-                                      />
-                                      <span className="upgrade-status">
-                                        Loading
-                                      </span>
-                                    </div>
-                                  ) : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
-                                    ((AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) ? "Withdraw" : "Withdraw"
-                                  )) : "Enter Amount"}
+                                Switch your network
+                              </button>
+                            ) : (
+                              <>
+                                <button
+                                  className={`flex justify-center items-center w-full py-[13px] px-[24px] text-button-text-secondary bg-[#61CD81] rounded-[100px] text-[13px] md:text-[14px] leading-[22px] ${BOLD_INTER_TIGHT.className} ${isDepositing ? 'flex justify-center items-center' : ''}`}
+                                  onClick={() => {
+                                    if (inputValue && Number(inputValue) > Number(0)) {
+                                      if (!(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) {
+                                        depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
+                                      } else {
+                                        depositing ? isApprovedLandStake ? depositHandler() : approveVault(parseEther(inputValue)) : withdrawHandler()
+                                      }
+                                    } else {
+                                      notifyError('Please enter an amount')
+                                    }
+                                  }}
+                                  style={{ width: "100%", maxWidth: "1000px" }}
+                                  disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable || isDepositing}
+                                >
+                                  {
+                                    // (typeof address == 'undefined') ?
+                                    //   "Connect Wallet" :
+                                    isDepositing ? (
+                                      <div className='flex justify-center items-center'>
+                                        <ReactLoading
+                                          type="spin"
+                                          className="me-2 button-spinner"
+                                          width="24px"
+                                          height="24px"
+                                        />
+                                        <span className="upgrade-status">
+                                          Loading
+                                        </span>
+                                      </div>
+                                    ) : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
+                                      ((AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) ? "Withdraw" : "Withdraw"
+                                    )) : "Enter Amount"}
 
-                              </button>
-                              <button
-                                className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
-                                onClick={() => clainBounty()}
-                                disabled={typeof address == 'undefined'}
-                              >
-                                {`Claim Bounty (${(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (formatEther(bountyReward).substr(0, 6)) : (formatEther(ccipBountyReward ?? 0).substr(0, 6))} LAND)`}
-                              </button>
-                            </>
+                                </button>
+                                <button
+                                  className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`}
+                                  onClick={() => clainBounty()}
+                                  disabled={typeof address == 'undefined'}
+                                >
+                                  {`Claim Bounty (${(AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? (formatEther(bountyReward).substr(0, 6)) : (formatEther(ccipBountyReward ?? 0).substr(0, 6))} LAND)`}
+                                </button>
+                              </>
+                            )
                           )
                         }
 
