@@ -822,7 +822,7 @@ export default function SwapToken() {
                   </>
                 )}
                 {isWhitelisted  ? (
-                  <a
+                  chainId == bsc.id ? <a
                     href="https://app.dsswap.io/swap"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -831,7 +831,7 @@ export default function SwapToken() {
                     <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81]">
                       Trade on DS Swap
                     </Button>
-                  </a>
+                  </a> : <></>
                 ) : (
                   <div className="bg-[#f6f8f9] p-[16px] rounded-[12px] bg-primary">
                     <div className="flex items-center gap-[10px] mb-[4px]">
