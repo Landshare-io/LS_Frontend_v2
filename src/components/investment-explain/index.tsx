@@ -108,8 +108,8 @@ export default function InvestmentExplain() {
             className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%]"
           />
           <button
-            disabled={isWhitelisted as boolean}
-            className={`w-full rounded-[100px] py-[10px] text-[16px] leading-[24px] font-bold ${isWhitelisted ? "cursor-not-allowed bg-[#d9dce7] text-[#fff]" : "cursor-pointer !text-[#000] hover:bg-slate-200 transition-all hover:-translate-y-1 bg-[#fff]"}`}
+            disabled={!isWhitelisted}
+            className={`w-full rounded-[100px] py-[10px] text-[16px] leading-[24px] font-bold ${!isWhitelisted ? "cursor-not-allowed bg-[#d9dce7] text-[#fff]" : "cursor-pointer !text-[#000] hover:bg-slate-200 transition-all hover:-translate-y-1 bg-[#fff]"}`}
             onClick={() => handlemodalkyc()}
           >
             {isWhitelisted ? "Complete" : "Verify now"}
