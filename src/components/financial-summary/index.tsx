@@ -104,8 +104,8 @@ export default function FinancialSummary() {
 
   const { data: balance } = useBalance({
     address: address,
-    token: RWA_CONTRACT_ADDRESS[bsc.id],
-    chainId: bsc.id,
+    token: RWA_CONTRACT_ADDRESS[chainId],
+    chainId: chainId,
   }) as { data: any };
 
   useEffect(() => {
