@@ -648,7 +648,7 @@ export default function AutoVault({
                   </div>
                   <div className="flex items-start p-0 gap-[8px] w-full rounded-[12px] bg-primary dark:bg-secondary mt-[24px]" style={{ marginTop: "24px" }}>
                     <div className="flex w-full flex-col items-center justify-center p-[16px]">
-                      <div className="w-8 h-8 rounded-full bg-third">
+                      <div className="flex justify-center items-center w-8 h-8 rounded-full bg-third">
                         <a href="https://docs.landshare.io/quickstart-guides/how-to-stake-landshare-token-land"><Image className="sub-container-image" src={viewContract} alt="" /></a>
                       </div>
                       <div className="flex flex-col mt-[8px] items-center text-text-primary">

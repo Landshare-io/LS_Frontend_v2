@@ -167,6 +167,10 @@ export default function PriceGraph({
         formatter: (seriesName) => seriesName.toFixed(5),
       }
     },
+    theme: {
+      mode: theme == 'dark' ? "dark" : "light",
+      
+    },
     fill: {
       type: "gradient",
       gradient: {
