@@ -24,7 +24,7 @@ const Nft: NextPage = () => {
           {`Please switch your chain to ${NFT_MAJOR_WORK_CHAIN.map(chain => chain.name).join(', ')}`}
         </div>
       ) : (
-        <Maintenance />
+        <MarketplacePage />
       )}
     </div>
   )
