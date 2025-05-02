@@ -234,9 +234,8 @@ export default function DAO() {
                     View All
                   </button>
                   
-                  <button className="text-button-text-secondary py-[8px] px-[10px] min-w-[80px] min-h-[32px] min-w-fit text-[12px] leading-[14px] bg-text-third md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
+                  <button className="text-button-text-secondary py-[8px] px-[10px] min-w-[80px] min-h-[32px] min-w-fit text-[12px] leading-[14px] bg-[#61cd81] md:min-w-[120px] md:min-h-[40px] border-0 rounded-[20px] font-normal md:text-[16px] md:leading-[24px] tracking-[0.02em] duration-500 disabled:bg-[#C2C5C3] hover:bg-[#87D99F] active:bg-[#06B844]"
                     disabled={(isBalanceGnosisLoading || isBalanceMarketingLoading) || chainId != bsc.id || votingPower < 100}
-
                     onClick={handleClickCreateProposal}
                   >
                     Create
