@@ -4,7 +4,7 @@ const plumeSourceId = 11_155_111 // sepolia
 
 export const plumeTestnet = defineChain({
   id: 98_867,
-  iconUrl: 'https://test-explorer.plumenetwork.xyz/assets/configs/network_icon.png',
+  iconUrl: 'https://test-explorer.plume.org/assets/configs/network_icon.png',
   name: 'Plume Testnet',
   nativeCurrency: {
     name: 'Plume',
@@ -13,15 +13,15 @@ export const plumeTestnet = defineChain({
   },
   rpcUrls: {
     default: {
-      http: ['https://testnet-rpc.plumenetwork.xyz'],
-      webSocket: ['wss://testnet-rpc.plumenetwork.xyz'],
+      http: ['https://testnet-rpc.plume.org'],
+      webSocket: ['wss://testnet-rpc.plume.org'],
     },
   },
   blockExplorers: {
     default: {
       name: 'Blockscout',
-      url: 'https://testnet-explorer.plumenetwork.xyz',
-      apiUrl: 'https://testnet-explorer.plumenetwork.xyz/api/v2\?',
+      url: 'https://testnet-explorer.plume.org',
+      apiUrl: 'https://testnet-explorer.plume.org/api/v2\?',
     },
   },
   testnet: true,
@@ -30,7 +30,7 @@ export const plumeTestnet = defineChain({
 
 export const plume = defineChain({
   id: 98_866,
-  iconUrl: 'https://explorer.plumenetwork.xyz/assets/configs/network_icon.png',
+  iconUrl: 'https://explorer.plume.org/assets/configs/network_icon.png',
   name: 'Plume Mainnet',
   nativeCurrency: {
     decimals: 18,
@@ -39,15 +39,15 @@ export const plume = defineChain({
   },
   rpcUrls: {
     default: { 
-      http: ['https://phoenix-rpc.plumenetwork.xyz'],
-      webSocket: ['wss://phoenix-rpc.plumenetwork.xyz'],
+      http: ['https://rpc.plume.org'],
+      webSocket: ['wss://phoenix-rpc.plume.org'],
     },
   },
   blockExplorers: {
     default: {
       name: 'Blockscout',
-      url: 'https://phoenix-explorer.plumenetwork.xyz',
-      apiUrl: 'https://phoenix-explorer.plumenetwork.xyz/api/v2',
+      url: 'https://explorer.plume.org',
+      apiUrl: 'https://explorer.plume.org/api/v2',
     },
   },
   contracts: {
