@@ -78,6 +78,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
             }
           } else {
             setScreenLoadingStatus("Transaction Failed.")
+            console.log("USDC Approval Failed")
           }
         }
       }
@@ -91,7 +92,9 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     try {
       if (isLandApproveError) {
         setScreenLoadingStatus("Transaction Failed.")
+        console.log("LAND Approve error")
       } else if (landApproveTx) {
+        console.log("LAND Approve error")
         landAllowanceRefetch()
         // if (BigInt(landAllowance) < BigInt(landAmount)) {
         //   window.alert("Please approve sufficient allowance.")
@@ -99,9 +102,12 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
         // }
 
         if (landApproveStatusData) {
+          console.log("LAND Approve error")
           if (landApproveSuccess) {
+            console.log("LAND Approve error")
             buyToken(amount, USDC_ADDRESS[chainId])
           } else {
+            console.log("LAND Approve error")
             setScreenLoadingStatus("Transaction Failed.")
           }
         }
@@ -115,6 +121,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
   useEffect(() => {
     (async () => {
       if (isError) {
+        console.log(error)
         setScreenLoadingStatus("Transaction Failed.")
       } else if (buyTx) {
         if (buyStatusData) {
@@ -139,6 +146,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
       if (Number(formatEther(BigInt(usdcAllowance))) < Number(formatEther(BigInt(buyUSDCAmount)))) {
         await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], buyUSDCAmount);
       } else {
+        console.log("Buying Token")
         buyToken(amount, USDC_ADDRESS[chainId])
       }
     } catch (error) {

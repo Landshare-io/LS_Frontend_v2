@@ -33,7 +33,7 @@ export default function useFetchRwa() {
           client_v2.query({ query: gql(pricesQuery) }),
         ]).then(async ([res1, res1_v2]) => {
           const returnData: any[] = [];
-          res1.data.valueUpdateds.filter((value: any) => Number(value.blockTimestamp) > 1702900000).sort((a: any, b: any) => {
+          res1.data.valueUpdateds.filter((value: any) => Number(value.blockTimestamp) > 1702900000 && Number(value.blockTimestamp) < 1747249648).sort((a: any, b: any) => {
             return Number(a.blockTimestamp) - Number(b.blockTimestamp);
           }).map((data: any) => {
             returnData.push([
