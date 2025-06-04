@@ -30,7 +30,7 @@ export const plumeTestnet = defineChain({
 
 export const plume = defineChain({
   id: 98_866,
-  iconUrl: 'https://img.cryptorank.io/coins/plume_network1716480863760.png',
+  iconUrl: 'https://explorer.plume.org/assets/configs/network_icon.svg',
   name: 'Plume Mainnet',
   nativeCurrency: {
     decimals: 18,
