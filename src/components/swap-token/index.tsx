@@ -104,6 +104,12 @@ export default function SwapToken() {
     chainId: chainId,
   }) as { data: any, refetch: Function };
 
+  // const { data: liquidityBalance, refetch: refetchLiquidityBalance } = useBalance({
+  //   address: TREASURY_ADDRESS[chainId],
+  //   token: USDC_ADDRESS[chainId],
+  //   chainId: chainId,
+  // }) as { data: any, refetch: Function };
+
   const { data: landBalance, refetch: refetchLandBalance } = useBalance({
     address: address,
     token: LAND_TOKEN_CONTRACT_ADDRESS[chainId],
@@ -533,13 +539,13 @@ export default function SwapToken() {
                     <Tooltip
                       content={
                         reachedLimit
-                          ? "Your remaining monthly USDC sale limit. To make a larger sale, please contact admin@landshare.io."
+                          ? "Your remaining monthly USDC sale limit. To make a larger sale, please submit a ticket at the bottom of the page."
                           : `Your remaining monthly USDC sale limit. Your limit resets on [${new Date(limitDate).getFullYear() +
                           "/" +
                           (new Date(limitDate).getMonth() + 1) +
                           "/" +
                           new Date(limitDate).getDate()
-                          }]. To make a larger sale, please contact admin@landshare.io`
+                          }]. To make a larger sale, please submit a ticket at the bottom of the page.`
                       }
                     >
                       {/* svg icon must be wrapped in a div */}
@@ -814,7 +820,7 @@ export default function SwapToken() {
                             ? "Insufficient LAND Balance"
                             : Number(formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)) >
                               parseFloat(USDCBalance?.formatted)
-                              ? "Insufficient USDC Balance"
+                              ? chainId == bsc.id ? "Insufficient USDC Balance" : "Insufficient pUSD Balance"
                               : "Buy"
                           : "Enter Amount"}
                       </Button>
@@ -822,7 +828,7 @@ export default function SwapToken() {
                   </>
                 )}
                 {isWhitelisted  ? (
-                  <a
+                  chainId == bsc.id ? <a
                     href="https://app.dsswap.io/swap"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -831,7 +837,7 @@ export default function SwapToken() {
                     <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81]">
                       Trade on DS Swap
                     </Button>
-                  </a>
+                  </a> : <></>
                 ) : (
                   <div className="bg-[#f6f8f9] p-[16px] rounded-[12px] bg-primary">
                     <div className="flex items-center gap-[10px] mb-[4px]">
