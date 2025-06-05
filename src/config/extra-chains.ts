@@ -4,7 +4,7 @@ const plumeSourceId = 11_155_111 // sepolia
 
 export const plumeTestnet = defineChain({
   id: 98_867,
-  iconUrl: 'https://test-explorer.plume.org/assets/configs/network_icon.png',
+  iconUrl: 'https://test-explorer.plumenetwork.xyz/assets/configs/network_icon.png',
   name: 'Plume Testnet',
   nativeCurrency: {
     name: 'Plume',
@@ -30,7 +30,7 @@ export const plumeTestnet = defineChain({
 
 export const plume = defineChain({
   id: 98_866,
-  iconUrl: 'https://explorer.plume.org/assets/configs/network_icon.png',
+  iconUrl: 'https://explorer.plumenetwork.xyz/assets/configs/network_icon.png',
   name: 'Plume Mainnet',
   nativeCurrency: {
     decimals: 18,
