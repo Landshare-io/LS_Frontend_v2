@@ -9,6 +9,7 @@ import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import Button from "../common/button";
 import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
 import ZeroIDWidget from "../zero-id-widget";
+import KYCWidget from "../sumsub-widget";
 import form from "../../../public/verify-steps/form.svg";
 import swapToken from "../../../public/verify-steps/swap-token.svg";
 import growthTime from "../../../public/verify-steps/growth-time.svg";
@@ -249,7 +250,7 @@ export default function InvestmentExplain() {
               <p
                 className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
               >
-                ZeroID Verification
+                Sumsub Verification
               </p>
             </Button>
             <p className="text-xs text-text-secondary text-center mt-1">Quick verification - 5 minutes or less!</p>
@@ -264,7 +265,7 @@ export default function InvestmentExplain() {
             document.body.classList.remove("modal-open");
         }}
         style={customModalStyles}
-        contentLabel="ZeroID Modal"
+        contentLabel="Sumsub Modal"
         className="relative"
       >
         <MdCancel
@@ -274,7 +275,7 @@ export default function InvestmentExplain() {
           }}
           className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
         />
-        <ZeroIDWidget />
+        <KYCWidget />
       </Modal>
     </div>
   );

@@ -6,6 +6,7 @@ import Button from "../../button";
 import useIsWhitelistedAddress from "../../../../hooks/contract/RWAContract/useIsWhitelistedAddress";
 import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAINS } from "../../../../config/constants/environments";
 import ZeroIDWidget from "../../../zero-id-widget";
+import KYCWidget from "../../../sumsub-widget";
 
 const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
@@ -93,7 +94,7 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
                 className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
               >
                 <p className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}>
-                  ZeroID Verification
+                  Sumsub Verification
                 </p>
               </Button>
             </div>
@@ -106,8 +107,8 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
             document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
-          contentLabel="ZeroID Modal"
-          className="zeroid-modal"
+          contentLabel="Sumsub Modal"
+          className="sumsub-modal"
         >
           <MdCancel
             onClick={() => {
@@ -116,7 +117,7 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
             }}
             className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
           />
-          <ZeroIDWidget />
+          <KYCWidget />
         </Modal>
     </>
   )
