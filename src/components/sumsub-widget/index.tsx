@@ -23,10 +23,18 @@ export default function KYCWidget() {
       .on('onError', (error) => {
         console.log('onError', error)
       })
-      .onMessage(async (type: string, payload) => {
-        console.log('onMessage', type, payload)
-        if (type === 'onApplicantVerified') {
-          await axios.post(`${SUMSUB_VERIFY_URL}/verdict`, { address });
+      .onMessage(async (type: string, payload: any) => {
+        try {
+          console.log('onMessage', type, type.split('.')[1], payload)
+          if (type.split('.')[1] === 'onStepCompleted' || type.split('.')[1] === 'stepCompleted') {
+            console.log('Step completed for address:', address);
+            await axios.post(`${SUMSUB_VERIFY_URL}/verdict`, { address });
+          } else if (type.split('.')[1] === 'onApplicantStatusChanged' || payload?.reviewStatus === 'completed') {
+            console.log('Step failed for address:', address);
+            await axios.post(`${SUMSUB_VERIFY_URL}/verdict`, { address, stepFailed: true });
+          }
+        } catch (e) {
+          console.log('Error in onMessage handler:', e);
         }
       })
       .build();
