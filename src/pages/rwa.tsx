@@ -14,6 +14,7 @@ import BeneficalAssets from '../components/benefical-assets';
 import InvestmentExplain from '../components/investment-explain';
 import RwaCalculator from '../components/rwa-calculator';
 import styles from '../styles/Home.module.css';
+import MoreInvestment from '../components/learn-more-future-investment';
 
 const breadcrumbItems: BREADCRUMB[] = [
   {
@@ -85,6 +86,7 @@ const RwaPage: NextPage = () => {
         </div>
         <InvestmentExplain />
       </div>
+      <MoreInvestment />
     </div>
   );
 };

@@ -22,7 +22,7 @@ export default function MoreInvestment() {
             <Image
               src={IllustrcationMapDark}
               alt="illustration map"
-              className="hidden md:block absolute w-auto bottom-0 right-0"
+             className="hidden md:block absolute w-[840px] bottom-0 right-0"
             />
           </>
         ) : (

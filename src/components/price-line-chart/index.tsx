@@ -230,8 +230,8 @@ export default function PriceGraph({
               {showBuyButton && (
                 <Button 
                   onClick={handleClick} 
-                  className="outline-none w-[100px] h-[30px] rounded-full bg-[#61cd81] hover:bg-[#87e7a4] transition ease fs-14 fw-500"
-                  textClassName="text-white"
+                  className="outline-none w-[100px] h-[30px] rounded-full bg-[#61cd81] hover:bg-[#87e7a4] transition ease fs- fw-500"
+                  textClassName="text-white text-sm"
                 >
                   {type === "rwa" ? "Buy LSRWA" : "Buy LAND"}
                 </Button>
