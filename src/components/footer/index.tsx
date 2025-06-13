@@ -251,7 +251,7 @@ export default function Footer() {
                   Pancake Swap
                 </a>
                 <a
-                  href="https://www.gate.io/trade/LAND_USDT"
+                  href="https://www.gate.io/trade/LANDSHARE_USDT"
                   target="_blank"
                   className="font-normaml text-[14px] leading-[22px]"
                 >
