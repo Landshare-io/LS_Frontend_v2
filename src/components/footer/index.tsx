@@ -161,57 +161,57 @@ export default function Footer() {
               Submit a Ticket
             </Link>
           </div>
-<div className="w-full px-4 py-12">
-  <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-12 text-sm text-text-primary text-center md:text-left">
+          <div className="w-full px-4 py-12">
+            <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-12 text-sm text-text-primary text-center md:text-left">
 
-    {/* Company */}
-    <div>
-      <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Company</h4>
-      <ul className="space-y-2">
-        <li><a href="https://landshare.io/about-us" className="hover:underline">About Us</a></li>
-        <li><a href="https://landshare.io/faq" className="hover:underline">FAQ</a></li>
-        <li><a href="https://landshare.io/blog" className="hover:underline">Blog</a></li>
-      </ul>
-    </div>
+              {/* Company */}
+              <div>
+                <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Company</h4>
+                <ul className="space-y-2">
+                  <li><a href="https://landshare.io/about-us" className="hover:underline">About Us</a></li>
+                  <li><a href="https://landshare.io/faq" className="hover:underline">FAQ</a></li>
+                  <li><a href="https://landshare.io/blog" className="hover:underline">Blog</a></li>
+                </ul>
+              </div>
 
-    {/* Useful Links */}
-    <div>
-      <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Useful Links</h4>
-      <ul className="space-y-2">
-        <li><a href="https://bscscan.com/token/0xa73164db271931cf952cbaeff9e8f5817b42fa5c" className="hover:underline">BSC Scan</a></li>
-        <li><a href="https://landshare.medium.com/landshares-2025-roadmap-7362048b3719" className="hover:underline">Roadmap</a></li>
-        <li><a href="https://track.swipelux.com/?api-key=..." className="hover:underline">Buy with Card</a></li>
-      </ul>
-    </div>
+              {/* Useful Links */}
+              <div>
+                <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Useful Links</h4>
+                <ul className="space-y-2">
+                  <li><a href="https://bscscan.com/token/0xa73164db271931cf952cbaeff9e8f5817b42fa5c" className="hover:underline">BSC Scan</a></li>
+                  <li><a href="https://landshare.medium.com/landshares-2025-roadmap-7362048b3719" className="hover:underline">Roadmap</a></li>
+                  <li><a href="https://track.swipelux.com/?api-key=..." className="hover:underline">Buy with Card</a></li>
+                </ul>
+              </div>
 
-    {/* Token Trackers */}
-    <div>
-      <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Token Trackers</h4>
-      <ul className="space-y-2">
-        <li><a href="https://www.coingecko.com/en/coins/landshare" className="hover:underline">CoinGecko</a></li>
-        <li><a href="https://www.dextools.io/app/en/bnb/pair-explorer/..." className="hover:underline">DexTools</a></li>
-        <li><a href="https://coinmarketcap.com/currencies/landshare/" className="hover:underline">CoinMarketCap</a></li>
-      </ul>
-    </div>
+              {/* Token Trackers */}
+              <div>
+                <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Token Trackers</h4>
+                <ul className="space-y-2">
+                  <li><a href="https://www.coingecko.com/en/coins/landshare" className="hover:underline">CoinGecko</a></li>
+                  <li><a href="https://www.dextools.io/app/en/bnb/pair-explorer/..." className="hover:underline">DexTools</a></li>
+                  <li><a href="https://coinmarketcap.com/currencies/landshare/" className="hover:underline">CoinMarketCap</a></li>
+                </ul>
+              </div>
 
-    {/* Exchanges */}
-    <div>
-      <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Exchanges</h4>
-      <ul className="space-y-2">
-        <li><a href="https://pancakeswap.finance/swap?outputCurrency=..." className="hover:underline" target="_blank" rel="noopener noreferrer">PancakeSwap</a></li>
-        <li><a href="https://www.gate.io/trade/LANDSHARE_USDT" className="hover:underline" target="_blank" rel="noopener noreferrer">Gate.io</a></li>
-        <li><a href="https://www.mexc.com/exchange/LANDSHARE_USDT" className="hover:underline" target="_blank" rel="noopener noreferrer">MEXC</a></li>
-        <li><a href="https://www.bitmart.com/trade/en-US?symbol=LAND_USDT" className="hover:underline" target="_blank" rel="noopener noreferrer">BitMart</a></li>
-      </ul>
-    </div>
+              {/* Exchanges */}
+              <div>
+                <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Exchanges</h4>
+                <ul className="space-y-2">
+                  <li><a href="https://pancakeswap.finance/swap?outputCurrency=..." className="hover:underline" target="_blank" rel="noopener noreferrer">PancakeSwap</a></li>
+                  <li><a href="https://www.gate.io/trade/LANDSHARE_USDT" className="hover:underline" target="_blank" rel="noopener noreferrer">Gate.io</a></li>
+                  <li><a href="https://www.mexc.com/exchange/LANDSHARE_USDT" className="hover:underline" target="_blank" rel="noopener noreferrer">MEXC</a></li>
+                  <li><a href="https://www.bitmart.com/trade/en-US?symbol=LAND_USDT" className="hover:underline" target="_blank" rel="noopener noreferrer">BitMart</a></li>
+                </ul>
+              </div>
 
-  </div>
-</div>
-
-
+            </div>
+          </div>
 
 
-          <div className="flex flex-col basis-[25%] mt-[20px] md:mt-0">
+
+
+          <div className="flex flex-col basis-[25%] mt-[20px] md:mt-0 items-center justify-center">
             <div className="w-full flex gap-[10px] mb-[8px]">
               <Image src={IconMailGreen} alt="mail green" />
               <span className="font-bold text-[16px] leading-[24px] text-text-primary">
