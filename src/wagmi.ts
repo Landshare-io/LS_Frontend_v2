@@ -36,7 +36,7 @@ export const config = getDefaultConfig({
   ],
   ssr: true,
   transports: {
-    [bsc.id]: http("https://bsc-dataseed1.binance.org/"),
+    [bsc.id]: http("https://bnb-mainnet.g.alchemy.com/v2/88_13_DKKokxF6KNwkwG4qCrVudgq2R8"),
     [polygon.id]: http(),
     [arbitrum.id]: http(),
     [plume.id]: http(),
