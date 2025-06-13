@@ -183,12 +183,7 @@ export default function FinancialSummary() {
               />
               <span className="font-medium text-[14px] leading-[22px] ml-1 text-text-secondary flex items-center">
                 Auto Redeem
-                <Link
-                  href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/auto-redeem"
-                  target="_blank"
-                >
-                  <BsLink45Deg className="w-5 h-5"></BsLink45Deg>
-                </Link>
+           
               </span>
             </div>
           </div>
@@ -259,12 +254,7 @@ export default function FinancialSummary() {
                     />
                     <span className="flex items-center font-medium text-[12px] leading-[22px] ml-1 dark:text-[#bec8f399] text-[#0a133999]">
                       <span>Auto Redeem</span>
-                      <Link
-                        href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa/auto-redeem"
-                        target="_blank"
-                      >
-                        <BsLink45Deg className="w-5 h-5"></BsLink45Deg>
-                      </Link>
+                   
                     </span>
                   </div>
                 </div>
