@@ -101,7 +101,9 @@ export default function Footer() {
   return (
     <>
       <div className="bg-third dark:bg-primary px-[20px] mlg:px-[40px] pt-[80px] border-t-2 border-primary less-padding flex justify-center">
-        <div className="max-w-[1280px] flex items-start flex-col md:items-center justify-center gap-[20px] lg:flex-row lg:gap-[40px] xxl:gap-[100px] pb-[40px]">
+    <div className="max-w-[1280px] flex flex-col md:flex-row items-start md:items-center justify-center gap-[8px] md:gap-[40px] xxl:gap-[100px] pb-[40px]">
+
+
           <div className="flex flex-col gap-[20px] basis-[25%] grow-[0.6] ">
             <div className="flex flex-row-reverse justify-between items-center gap-[20px] min-w-[260px] lg:flex-col">
               <div className="flex w-full justify-between">
@@ -210,43 +212,40 @@ export default function Footer() {
 
 
 
+<div className="flex flex-col basis-[25%] mt-[20px] md:mt-0 mx-auto md:mx-0 items-start text-left">
+  <div className="w-full flex gap-[10px] mb-[8px]">
+    <Image src={IconMailGreen} alt="mail green" />
+    <span className="font-bold text-[16px] leading-[24px] text-text-primary">
+      Our Newsletter
+    </span>
+  </div>
+  <div className="font-normal text-[14px] leading-[22px] text-text-third">
+    Get the latest info and enjoy the benefits
+  </div>
+  <form
+    className="flex items-center justify-between gap-[12px] mt-[24px] p-[6px] pl-[24px] w-full md:w-[280px] h-[44px] rounded-[50px] bg-gradient-to-r from-[#fffffff5] to-[#fffffff5] dark:from-[#222222] dark:to-[#222222] bg-[#1D4264]"
+    onSubmit={handleSubscribe}
+  >
+    <input
+      name="email"
+      type="email"
+      className="bg-transparent dark:text-white font-bold text-[14px] leading-[22px] no-underline outline-none color-[#00201C]"
+      id="email"
+      placeholder="Enter Email"
+      required
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+    />
+    <button type="submit">
+      <Image
+        src={IconArrowRight}
+        className="w-[32px] h-[32px] bg-[#66CE85] rounded-[30px]"
+        alt="arrow right"
+      />
+    </button>
+  </form>
+</div>
 
-          <div className="flex flex-col basis-[25%] mt-[20px] md:mt-0 items-center justify-center">
-            <div className="w-full flex gap-[10px] mb-[8px]">
-              <Image src={IconMailGreen} alt="mail green" />
-              <span className="font-bold text-[16px] leading-[24px] text-text-primary">
-                Our Newsletter
-              </span>
-            </div>
-            <div className="font-normal text-[14px] leading-[22px] text-text-third">
-              Get the latest info and enjoy the benefits
-            </div>
-            <form
-              className="flex items-center justify-between gap-[12px] mt-[24px] p-[6px] pl-[24px] w-full md:w-[280px] h-[44px] rounded-[50px] bg-gradient-to-r from-[#fffffff5] to-[#fffffff5] dark:from-[#222222] dark:to-[#222222] bg-[#1D4264]"
-              onSubmit={handleSubscribe}
-            >
-              <input
-                name="email"
-                type="email"
-                className="bg-transparent dark:text-white font-bold text-[14px] leading-[22px] no-underline outline-none color-[#00201C]"
-                id="email"
-                placeholder="Enter Email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button type="submit">
-                {/* Replace your image tag with the corresponding imported image */}
-                <Image
-                  src={IconArrowRight}
-                  className="w-[32px] h-[32px] bg-[#66CE85] rounded-[30px]"
-                  alt="arrow right"
-                />
-              </button>
-            </form>
-            {/* <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b28-ft" tabindex="-1" value="" /></div>
-          <div class="a-badge">Powered by <a href="https://audienceful.com/?utm_source=form" target="_blank" title="Audienceful - email marketing from the future">Audienceful</a></div> */}
-          </div>
         </div>
       </div>
       <div className="font-normal text-[14px] leading-[22px] text-center p-[20px] text-[#141414F5] dark:text-[#dbdbdbf5] bg-button-third">
