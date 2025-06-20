@@ -101,12 +101,14 @@ export default function Footer() {
   return (
     <>
       <div className="bg-third dark:bg-primary px-[20px] mlg:px-[40px] pt-[80px] border-t-2 border-primary less-padding flex justify-center">
-        <div className="max-w-[1280px] flex items-start flex-col md:items-center justify-center gap-[20px] lg:flex-row lg:gap-[40px] xxl:gap-[100px] pb-[40px]">
+    <div className="max-w-[1280px] flex flex-col md:flex-row items-start md:items-center justify-center gap-[8px] md:gap-[40px] xxl:gap-[100px] pb-[40px]">
+
+
           <div className="flex flex-col gap-[20px] basis-[25%] grow-[0.6] ">
             <div className="flex flex-row-reverse justify-between items-center gap-[20px] min-w-[260px] lg:flex-col">
               <div className="flex w-full justify-between">
                 <Logo showLogoText logoClassName="!w-[52.3px] !h-[54.4px]" />
-                <div className="items-end">
+                <div className="flex items-center">
                   <SwitchTheme className="!m-0" />
                 </div>
               </div>
@@ -153,163 +155,97 @@ export default function Footer() {
                 <Image src={IconMail} className="w-4 h-4" alt="mail" />
               </a>
             </div>
-            <Link 
+            <Link
               className="w-full bg-primary-green text-primary text-center py-1 rounded-[100px] font-semibold"
-              href="https://landshare.atlassian.net/servicedesk/customer/portal/1" 
+              href="https://landshare.atlassian.net/servicedesk/customer/portal/1"
               target="_blank"
             >
               Submit a Ticket
             </Link>
           </div>
-          <div className="w-full grid grid-cols-2 gap-y-[25px] mlg:gap-[20px] md:max-w-[600px] md:basis-[50%] md:grid-cols-4 md:justify-between grow-[2]">
-            <div className="p-0 flex flex-col gap-[16px]">
-              <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
-                Company
-              </span>
-              <div className="flex flex-col gap-[24px] text-text-primary">
-                <a
-                  href="https://landshare.io/about-us"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  About Us
-                </a>
-                <a
-                  href="https://landshare.io/faq"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  FAQ
-                </a>
-                <a
-                  href="https://landshare.io/blog"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  Blog
-                </a>
-              </div>
-            </div>
-            <div className="p-0 flex flex-col gap-[16px]">
-              <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
-                Useful Links
-              </span>
-              <div className="flex flex-col gap-[24px] text-text-primary">
-                <a
-                  href="https://bscscan.com/token/0xa73164db271931cf952cbaeff9e8f5817b42fa5c"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  BSC Scan
-                </a>
-                <a
-                  href="https://landshare.medium.com/landshares-2025-roadmap-7362048b3719"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  Roadmap
-                </a>
+          <div className="w-full px-4 py-12">
+            <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-12 text-sm text-text-primary text-center md:text-left">
 
-                <a
-                  href="https://track.swipelux.com/?api-key=1d1fe8ad-a154-4dc0-a6bd-3fe8939ba7d0"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  Buy with card
-                </a>
+              {/* Company */}
+              <div>
+                <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Company</h4>
+                <ul className="space-y-2">
+                  <li><a href="https://landshare.io/about-us" className="hover:underline">About Us</a></li>
+                  <li><a href="https://landshare.io/faq" className="hover:underline">FAQ</a></li>
+                  <li><a href="https://landshare.io/blog" className="hover:underline">Blog</a></li>
+                </ul>
               </div>
-            </div>
-            <div className="p-0 flex flex-col gap-[16px]">
-              <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
-                Token Trackers
-              </span>
-              <div className="flex flex-col gap-[24px] text-text-primary">
-                <a
-                  href="https://www.coingecko.com/en/coins/landshare"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  Coin Gecko
-                </a>
-                <a
-                  href="https://www.dextools.io/app/en/bnb/pair-explorer/0x13f80c53b837622e899e1ac0021ed3d1775caefa?t=1718065952090"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  DexTools
-                </a>
-                <a
-                  href="https://coinmarketcap.com/currencies/landshare/"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  CoinMarketCap
-                </a>
+
+              {/* Useful Links */}
+              <div>
+                <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Useful Links</h4>
+                <ul className="space-y-2">
+                  <li><a href="https://bscscan.com/token/0xa73164db271931cf952cbaeff9e8f5817b42fa5c" className="hover:underline">BSC Scan</a></li>
+                  <li><a href="https://landshare.medium.com/landshares-2025-roadmap-7362048b3719" className="hover:underline">Roadmap</a></li>
+                  <li><a href="https://track.swipelux.com/?api-key=..." className="hover:underline">Buy with Card</a></li>
+                </ul>
               </div>
-            </div>
-            <div className="p-0 flex flex-col gap-[16px]">
-              <span className="font-normal text-[14px] leading-[22px] text-[#0A133999] dark:text-[#cbcbcb]">
-                Exchanges
-              </span>
-              <div className="flex flex-col gap-[24px] text-text-primary">
-                <a
-                  href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
-                  target="_blank"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  Pancake Swap
-                </a>
-                <a
-                  href="https://www.gate.io/trade/LAND_USDT"
-                  target="_blank"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  Gate.io
-                </a>
-                <a
-                  href="https://www.mexc.com/exchange/LANDSHARE_USDT"
-                  target="_blank"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  MEXC
-                </a>
-                <a
-                  href="https://www.bitmart.com/trade/en-US?symbol=LAND_USDT"
-                  target="_blank"
-                  className="font-normaml text-[14px] leading-[22px]"
-                >
-                  BitMart
-                </a>
+
+              {/* Token Trackers */}
+              <div>
+                <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Token Trackers</h4>
+                <ul className="space-y-2">
+                  <li><a href="https://www.coingecko.com/en/coins/landshare" className="hover:underline">CoinGecko</a></li>
+                  <li><a href="https://www.dextools.io/app/en/bnb/pair-explorer/..." className="hover:underline">DexTools</a></li>
+                  <li><a href="https://coinmarketcap.com/currencies/landshare/" className="hover:underline">CoinMarketCap</a></li>
+                </ul>
               </div>
+
+              {/* Exchanges */}
+              <div>
+                <h4 className="text-[#0A133999] dark:text-[#cbcbcb] font-semibold mb-5">Exchanges</h4>
+                <ul className="space-y-2">
+                  <li><a href="https://pancakeswap.finance/swap?outputCurrency=..." className="hover:underline" target="_blank" rel="noopener noreferrer">PancakeSwap</a></li>
+                  <li><a href="https://www.gate.io/trade/LANDSHARE_USDT" className="hover:underline" target="_blank" rel="noopener noreferrer">Gate.io</a></li>
+                  <li><a href="https://www.mexc.com/exchange/LANDSHARE_USDT" className="hover:underline" target="_blank" rel="noopener noreferrer">MEXC</a></li>
+                  <li><a href="https://www.bitmart.com/trade/en-US?symbol=LAND_USDT" className="hover:underline" target="_blank" rel="noopener noreferrer">BitMart</a></li>
+                </ul>
+              </div>
+
             </div>
           </div>
-          <div className="flex flex-col basis-[25%] mt-[20px] md:mt-0">
-            <div className="w-full flex gap-[10px] mb-[8px]">
-              <Image src={IconMailGreen} alt="mail green" />
-              <span className="font-bold text-[16px] leading-[24px] text-text-primary">
-                Our News Letter
-              </span>
-            </div>
-            <div className="font-normal text-[14px] leading-[22px] text-text-third">
-              Get the latest info and enjoy the benefits
-            </div>
-            <form
-              className="flex items-center justify-between gap-[12px] mt-[24px] p-[6px] pl-[24px] w-full md:w-[280px] h-[44px] rounded-[50px] bg-gradient-to-r from-[#fffffff5] to-[#fffffff5] dark:from-[#222222] dark:to-[#222222] bg-[#1D4264]"
-              onSubmit={handleSubscribe}
-            >
-              <input
-                name="email"
-                type="email"
-                className="bg-transparent dark:text-white font-bold text-[14px] leading-[22px] no-underline outline-none color-[#00201C]"
-                id="email"
-                placeholder="Enter Email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button type="submit">
-                {/* Replace your image tag with the corresponding imported image */}
-                <Image
-                  src={IconArrowRight}
-                  className="w-[32px] h-[32px] bg-[#66CE85] rounded-[30px]"
-                  alt="arrow right"
-                />
-              </button>
-            </form>
-            {/* <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b28-ft" tabindex="-1" value="" /></div>
-          <div class="a-badge">Powered by <a href="https://audienceful.com/?utm_source=form" target="_blank" title="Audienceful - email marketing from the future">Audienceful</a></div> */}
-          </div>
+
+
+
+<div className="flex flex-col basis-[25%] mt-[20px] md:mt-0 mx-auto md:mx-0 items-start text-left">
+  <div className="w-full flex gap-[10px] mb-[8px]">
+    <Image src={IconMailGreen} alt="mail green" />
+    <span className="font-bold text-[16px] leading-[24px] text-text-primary">
+      Our Newsletter
+    </span>
+  </div>
+  <div className="font-normal text-[14px] leading-[22px] text-text-third">
+    Get the latest info and enjoy the benefits
+  </div>
+  <form
+    className="flex items-center justify-between gap-[12px] mt-[24px] p-[6px] pl-[24px] w-full md:w-[280px] h-[44px] rounded-[50px] bg-gradient-to-r from-[#fffffff5] to-[#fffffff5] dark:from-[#222222] dark:to-[#222222] bg-[#1D4264]"
+    onSubmit={handleSubscribe}
+  >
+    <input
+      name="email"
+      type="email"
+      className="bg-transparent dark:text-white font-bold text-[14px] leading-[22px] no-underline outline-none color-[#00201C]"
+      id="email"
+      placeholder="Enter Email"
+      required
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+    />
+    <button type="submit">
+      <Image
+        src={IconArrowRight}
+        className="w-[32px] h-[32px] bg-[#66CE85] rounded-[30px]"
+        alt="arrow right"
+      />
+    </button>
+  </form>
+</div>
+
         </div>
       </div>
       <div className="font-normal text-[14px] leading-[22px] text-center p-[20px] text-[#141414F5] dark:text-[#dbdbdbf5] bg-button-third">
