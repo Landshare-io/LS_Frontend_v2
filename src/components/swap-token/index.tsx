@@ -19,6 +19,7 @@ import PriceGraph from "../price-line-chart";
 import SwipeluxModal from "../common/modals/swipelux";
 import ZeroIDWidget from "../zero-id-widget";
 import useGetSaleLimit from "../../hooks/contract/LandshareSaleContract/useGetSaleLimit";
+import useGetDecimals from "../../hooks/contract/UsdtContract/useGetDecimals";
 import useGetAllowedToTransfer from "../../hooks/contract/RWAContract/useGetAllowedToTransfer";
 import useIsWhitelistedAddressOfRwa from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
 import useLandFee from "../../hooks/contract/LandshareSaleContract/useLandFee";
@@ -114,6 +115,9 @@ export default function SwapToken() {
     chainId,
     address
   ) as { data: [BigNumberish, number, number]; refetch: Function };
+
+  const { data: usdcDecimals } = useGetDecimals(chainId) as { data: number };
+
   const limitDate = saleLimit
     ? new Date(
       saleLimit[1] != undefined
@@ -553,7 +557,7 @@ export default function SwapToken() {
                   >
                     {saleLimit
                       ? `$${Number(
-                        formatEther(saleLimit[0]).toString()
+                        formatUnits(saleLimit[0], usdcDecimals).toString()
                       ).toFixed(2)}`
                       : "Loading"}
                   </span>
@@ -799,7 +803,7 @@ export default function SwapToken() {
                           Number(
                             formatUnits(
                               buyUSDCAmount ? buyUSDCAmount.toString() : 0,
-                              chainId == bsc.id ? 18 : 6
+                              usdcDecimals
                             )
                           ) > parseFloat(USDCBalance?.formatted)
                         }
@@ -812,7 +816,7 @@ export default function SwapToken() {
                           ? Number(formatEther(buyLANDAmount.toString())) >
                             parseFloat(landBalance?.formatted)
                             ? "Insufficient LAND Balance"
-                            : Number(formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)) >
+                            : Number(formatUnits(buyUSDCAmount.toString(), usdcDecimals)) >
                               parseFloat(USDCBalance?.formatted)
                               ? "Insufficient USDC Balance"
                               : "Buy"
