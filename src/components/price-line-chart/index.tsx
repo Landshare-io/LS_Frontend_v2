@@ -102,10 +102,17 @@ export default function PriceGraph({
           } else {
             const filtered = rwaGraphData.filter((value) => Number(value[0]) > new Date(dueDate[selection]).getTime());
             const data = [[new Date(dueDate[selection]).getTime(), rwaGraphData[rwaGraphData.length - filtered.length - 1][1]]].concat(filtered);
+            const result = Object.values(
+              data.reduce((acc: any, [timestamp, value]) => {
+                const date = new Date(timestamp).toISOString().split('T')[0]; // YYYY-MM-DD
+                acc[date] = [timestamp, value]; // Always keep the last one
+                return acc;
+              }, {})
+            );
             setSeries([{
-              data: data
+              data: result
             }]);
-            change_price = data.length > 1 ? (data[1][1] != 0 ? (data[data.length - 1][1] - data[1][1]) / data[1][1] * 100 : 0) : 0
+            change_price = data.length > 1 ? (data[0][1] != 0 ? (data[data.length - 1][1] - data[0][1]) / data[0][1] * 100 : 0) : 0
           }
           setRecentData({
             pair: "LSRWA / USD",
