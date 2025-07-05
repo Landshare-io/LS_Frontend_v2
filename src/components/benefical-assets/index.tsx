@@ -16,7 +16,7 @@ export default function BeneficalAssets() {
   }, [dispatch]);
 
   return (
-    <div className="flex flex-col gap-[20px] items-center  pt-[40px] xl:px-0 xl:pb-[80px] max-w-[1200px] mx-auto">
+    <div className="flex flex-col gap-[20px] items-center  pt-[20px] xl:px-0 xl:pb-[80px] max-w-[1200px] mx-auto">
       <div className="w-full flex items-start mb-0">
         <div className="flex items-center w-fit py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-primary">
           <div className="flex items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-secondary">

@@ -27,7 +27,7 @@ export default function BeneficalAsset({ asset, type }: BeneficalAssetProps) {
 
   return (
     <Link
-      className="relative cursor-pointer w-full max-w-[370px] sm:max-w-[420px]"
+      className="relative cursor-pointer w-full max-w-[360px] sm:max-w-[420px]"
       href={`/tokenized-asset/${asset?.id}`}
     >
       <SkeletonTheme
