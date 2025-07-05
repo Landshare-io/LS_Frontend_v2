@@ -34,27 +34,31 @@
 	--primary-green: #61CD81;
   }
 
-  .dark,
-  :root[class~="dark"] {
-    --color-primary: #2E2E2E;
-    --color-secondary: #3c3c3c;
-    --color-third: #494949;
-    --color-vault-input: #3c3c3c;
-    --color-input-field: #222222;
-    --color-text-primary: #f1f1f1;
-    --color-text-secondary: #cbcbcb;
-    --color-text-third: #c7c8ce;
-    --color-text-fourth: #61CD81;
-    --color-button-primary: #494949;
-    --color-button-secondary: #61CD81;
-    --color-button-third: #222222;
-    --color-button-text-primary: #f1f1f1;
-    --color-button-text-secondary: #3c3c3c;
-    --title-text-color: #f1f1f1!important;
-    --row-title-color: #f1f1f1!important;
-    --row-content-color: #f1f1f1!important;
-	--primary-green: #61CD81;
-  }
+.dark,
+:root[class~="dark"] {
+  --color-primary: #1e1e1e;               /* Background base — darker for true dark mode */
+  --color-secondary: #2a2a2a;             /* Slightly lighter than primary, for cards/containers */
+  --color-third: #383838;                 /* For borders, dividers, etc. */
+  --color-vault-input: #2a2a2a;           /* Matching input fields to secondary */
+  --color-input-field: #1a1a1a;           /* Deep black input fields for clean UI */
+
+  --color-text-primary: #f5f5f5;          /* Main white text */
+  --color-text-secondary: #cfcfcf;        /* Muted text */
+  --color-text-third: #a7a7a7;            /* Even more subtle */
+  --color-text-fourth: #61CD81;           /* Accent green (unchanged) */
+
+  --color-button-primary: #383838;        /* Primary buttons, stands out but cohesive */
+  --color-button-secondary: #61CD81;      /* Accent button (unchanged) */
+  --color-button-third: #1a1a1a;          /* For inverted buttons or subtle controls */
+  --color-button-text-primary: #f5f5f5;   /* White text for dark buttons */
+  --color-button-text-secondary: #2a2a2a; /* Dark text on green/accent */
+
+  --title-text-color: #ffffff !important;     /* Bold white titles */
+  --row-title-color: #eeeeee !important;      /* Slightly muted titles */
+  --row-content-color: #cccccc !important;    /* Dimmer content to distinguish */
+
+  --primary-green: #61CD81;               /* Accent green (unchanged) */
+}
 }
 
 html,

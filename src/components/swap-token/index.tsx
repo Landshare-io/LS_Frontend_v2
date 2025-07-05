@@ -515,7 +515,7 @@ export default function SwapToken() {
             {isConnected && (
               <>
                 <div className="text-text-primary w-full flex justify-between">
-                  <span className="font-medium text-[14px] leading-[22px]">
+                  <span className={`text-[14px] ml-[5px] leading-[22px] ${BOLD_INTER_TIGHT.className} mr-1`}>
                     {chainId == bsc.id ? 'LAND' : ''} Fee ({landFee.toString()}%)
                   </span>
                   <span
@@ -530,9 +530,9 @@ export default function SwapToken() {
                 <div className="text-text-primary w-full flex justify-between">
                   <div className="flex items-center">
                     <span
-                      className={`text-[14px] ml-[5px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                      className={`text-[14px] ml-[5px] leading-[22px] ${BOLD_INTER_TIGHT.className} mr-1`}
                     >
-                      Monthly Sale Limit
+                    Monthly Sale Limit
                     </span>
                     <Tooltip
                       content={
@@ -565,7 +565,7 @@ export default function SwapToken() {
                 <div className="text-text-primary mb-[18px] w-full flex justify-between">
                   <div className="flex items-center">
                     <span
-                      className={`text-[14px] ml-[5px] leading-[22px] ${BOLD_INTER_TIGHT.className}`}
+                      className={`text-[14px] ml-[5px] leading-[22px] ${BOLD_INTER_TIGHT.className} mr-1`}
                     >
                       Transfer Limit
                     </span>

@@ -137,6 +137,7 @@ export default function PriceGraph({
       id: "area-datetime",
       type: "area",
       height: 350,
+      background: theme === 'dark' ? '#383838' : '#ffffff',
       animations: {
         enabled: false
       },
