@@ -41,7 +41,6 @@ export default function InvestmentExplain() {
       width: "90%",
       maxHeight: "90vh",
       borderRadius: "20px",
-      padding: "20px",
     },
     overlay: {
       zIndex: 99999,
