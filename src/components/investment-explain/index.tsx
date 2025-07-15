@@ -35,10 +35,11 @@ export default function InvestmentExplain() {
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      overflow: "hidden",
+      overflowY: "auto",
+      overflowX: "hidden",
       maxWidth: "400px",
       width: "90%",
-      height: "fit-content",
+      maxHeight: "90vh",
       borderRadius: "20px",
     },
     overlay: {
