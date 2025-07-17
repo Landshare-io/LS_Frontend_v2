@@ -66,7 +66,12 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     autoLandV3: ccipAutoLandV3
   } = useCcipVaultBalance(chainId, address) as { totalSharesV3: BigNumberish, total: BigNumberish, autoLandV3: BigNumberish }
   const { autoLandV3, refetch: refetchAutoLandV3 } = useAutoLandV3(chainId, address) as { autoLandV3: BigNumberish, refetch: Function }
-  const { refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 0, address })
+  const { refetch: refetchUserInfo, data: userInfo } = useUserInfo({
+    chainId, userInfoId: 0, address,
+  }) as {
+    data: BigNumberish[];
+    refetch: () => void;
+  };
   const { refetch: refetchPendingLand } = usePendingLand({ chainId, pendingLandId: 0, address })
   const { refetch: refetchTotalSupply } = useTotalSupply(chainId)
   const { refetch: refetchBalanceOfWBNB } = useBalanceOfWBNB({ chainId, address: LP_TOKEN_V2_CONTRACT_ADDRESS[bsc.id] })
@@ -298,7 +303,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         transfer(chainId, amount, 1, 1, 750000)
       }
     } else {
-      if (rawInput == 0 || rawInput >= autoLandV3) {
+      if (rawInput == 0 || amount >= userInfo[0]) {
       
         setScreenLoadingStatus("Transaction Pending...")
         withdrawAll()

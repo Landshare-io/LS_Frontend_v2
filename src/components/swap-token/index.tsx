@@ -18,6 +18,7 @@ import FinancialSummary from "../financial-summary";
 import PriceGraph from "../price-line-chart";
 import SwipeluxModal from "../common/modals/swipelux";
 import ZeroIDWidget from "../zero-id-widget";
+import KYCWidget from "../sumsub-widget";
 import useGetSaleLimit from "../../hooks/contract/LandshareSaleContract/useGetSaleLimit";
 import useGetDecimals from "../../hooks/contract/UsdtContract/useGetDecimals";
 import useGetAllowedToTransfer from "../../hooks/contract/RWAContract/useGetAllowedToTransfer";
@@ -344,7 +345,7 @@ export default function SwapToken() {
                 <p
                   className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
                 >
-                  ZeroID Verification
+                  Sumsub Verification
                 </p>
               </Button>
               <p className="text-xs text-text-secondary text-center mt-1">Quick verification - 5 minutes or less!</p>
@@ -359,7 +360,7 @@ export default function SwapToken() {
               document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
-          contentLabel="ZeroID Modal"
+          contentLabel="Sumsub Modal"
           className="relative"
         >
           <MdCancel
@@ -369,7 +370,7 @@ export default function SwapToken() {
             }}
             className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
           />
-          <ZeroIDWidget />
+          <KYCWidget />
         </Modal>
         <Modal
           isOpen={isBuyModalOpen}

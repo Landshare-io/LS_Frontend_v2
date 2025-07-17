@@ -55,6 +55,7 @@ import Tooltip from "../common/tooltip";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useGlobalContext } from "../../context/GlobalContext";
 
+
 const AUTO_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['auto']
 
 interface AutoVaultProps {
@@ -517,7 +518,7 @@ export default function AutoVault({
                             className={`flex justify-center items-center w-full py-[13px] px-[24px] border border-[#61CD81] rounded-[100px] text-[14px] leading-[22px] tracking-[0.02em] text-text-primary disabled:bg-[#fff] disabled:border-[#c2c5c3] ${BOLD_INTER_TIGHT.className}`} onClick={() => withdrawVault(0,0)}
                             disabled={typeof address == 'undefined'}
                           >
-                            Harvest
+                            Harvest 
                           </button>
                         </>
                       )

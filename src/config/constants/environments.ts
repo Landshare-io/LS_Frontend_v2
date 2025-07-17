@@ -107,6 +107,8 @@ export const LIVE_COIN_API_KEY= '95ce49d3-3e89-475d-b61e-6638a002b1fe'
 export const ZERO_ID_WIDGET_API_KEY = '10000000-0000-0000-0000-7f9a2af16a1c'
 export const ZERO_ID_WIDGET_VERIFIER_URL = 'https://landshare-zeroid-verdict.onrender.com/verdict'
 export const ZERO_ID_WIDGET_ENV = 'zeroid'
+export const SUMSUB_VERIFY_URL = 'https://landshare-zeroid-verdict.onrender.com'
+export const SUMSUB_WIDGET_API_KEY = 'sbx:xrGwQKd2KeOUO3KlTM65zs9D.z7VqHrWPW7xTiFz7KZ86WJsQDkIJR75p';
 export const ADMIN_WALLET_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: "0x692d606069f7798fAe4FA51117dA418EFa15A2BA" as Address,
   97: "0xC0f5Ef4748BCC96D3f7270FE88DBed1396C7B8B8",
