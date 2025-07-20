@@ -14,6 +14,7 @@ import form from "../../../public/verify-steps/form.svg";
 import swapToken from "../../../public/verify-steps/swap-token.svg";
 import growthTime from "../../../public/verify-steps/growth-time.svg";
 import arrowLeft from "../../../public/icons/arrow-left.svg";
+import type { Styles } from "react-modal";
 
 const RWA_MAJOR_CHAINS = MAJOR_WORK_CHAINS["/rwa"];
 
@@ -30,23 +31,23 @@ export default function InvestmentExplain() {
     })()
   }, [isZeroIDModal])
 
-  const customModalStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      overflowY: "auto",
-      overflowX: "hidden",
-      maxWidth: "400px",
-      width: "90%",
-      maxHeight: "90vh",
-      borderRadius: "20px",
-    },
-    overlay: {
-      zIndex: 99999,
-      background: "#00000080",
-    },
-  };
+  const customModalStyles: Styles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    overflowY: "auto",
+    overflowX: "hidden",
+    maxWidth: "400px",
+    width: "90%",
+    maxHeight: "90vh",
+    borderRadius: "20px",
+  },
+  overlay: {
+    zIndex: 99999,
+    background: "#00000080",
+  },
+};
 
   const scrollToTop = () => {
     window.scrollTo({
