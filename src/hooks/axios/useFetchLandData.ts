@@ -23,81 +23,50 @@ export default function useFetchLandData(dueTimeStamp: Date, now: number) {
 
   useEffect(() => {
     (async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
-        const { data: { data: { data: { quotes: priceData } } } } = await axios.get('/api/landPriceProxy');
-        let market_caps = [];
-        let prices = [];
-        let total_volumes = [];
-        let eMarketCapT = Number(new Date(priceData[0].timestamp))
-        let eVolume24T = Number(new Date(priceData[0].timestamp))
-        let ePriceT = Number(new Date(priceData[0].timestamp))
-        let lMarketCapT = Number(new Date(priceData[0].timestamp))
-        let lVolume24T = Number(new Date(priceData[0].timestamp))
-        let lPriceT = Number(new Date(priceData[0].timestamp))
-        let eMarketCap = priceData[0].quote.USD.market_cap
-        let lMarketCap = priceData[0].quote.USD.market_cap
-        let eVolume24 = priceData[0].quote.USD.volume_24h
-        let lVolume24 = priceData[0].quote.USD.volume_24h
-        let ePrice = priceData[0].quote.USD.price
-        let lPrice = priceData[0].quote.USD.price
+        const res = await axios.get('/api/landPriceProxy');
+        const priceData = res.data?.data?.data?.quotes;
 
-        for (let i = 0; i < priceData?.length; i++) {
-          if (Math.floor(Date.parse(priceData[i].timestamp) / 1000) >= Math.floor(Number(dueTimeStamp) / 1000) && Math.floor(Date.parse(priceData[i].timestamp) / 1000) <= Math.floor(Number(now) / 1000)) {
-            let market_cap = [
-              Number(new Date(priceData[i].timestamp)), priceData[i].quote.USD.market_cap
-            ];
-            let total_volume = [
-              Number(new Date(priceData[i].timestamp)), priceData[i].quote.USD.volume_24h
-            ];
-            let price = [
-              Number(new Date(priceData[i].timestamp)), priceData[i].quote.USD.price
-            ];
+        const filtered = priceData.filter((p: any) => {
+          const ts = new Date(p.timestamp).getTime();
+          return ts >= dueTimeStamp.getTime() && ts <= now;
+        });
 
-            if (Number(new Date(priceData[i].timestamp)) < Number(eMarketCapT)) {
-              eMarketCap = priceData[i].quote.USD.market_cap
-              eMarketCapT = Number(priceData[i].timestamp)
-            }
-            if (Number(new Date(priceData[i].timestamp)) < Number(eVolume24T)) {
-              eVolume24 = priceData[i].quote.USD.volume_24h
-              eVolume24T = Number(priceData[i].timestamp)
-            }
-            if (Number(new Date(priceData[i].timestamp)) < Number(ePriceT)) {
-              ePrice = priceData[i].quote.USD.price
-              ePriceT = Number(priceData[i].timestamp)
-            }
-            if (Number(new Date(priceData[i].timestamp)) > Number(lMarketCapT)) {
-              lMarketCap = priceData[i].quote.USD.market_cap
-              lMarketCapT = Number(priceData[i].timestamp)
-            }
-            if (Number(new Date(priceData[i].timestamp)) > Number(lVolume24T)) {
-              lVolume24 = priceData[i].quote.USD.volume_24h
-              lVolume24T = Number(priceData[i].timestamp)
-            }
-            if (Number(new Date(priceData[i].timestamp)) > Number(lPriceT)) {
-              lPrice = priceData[i].quote.USD.price
-              lPriceT = Number(priceData[i].timestamp)
-            }
-            market_caps.push(market_cap);
-            prices.push(price);
-            total_volumes.push(total_volume);
-          }
+        if (filtered.length === 0) {
+          setIsLoading(false);
+          return;
         }
-        let returnData = { prices: prices, market_caps: market_caps, total_volumes: total_volumes };
-        setPrice(returnData);
-        setEarlyMarketCap(eMarketCap)
-        setEarlyVolume24(eVolume24)
-        setEarlyPrice(ePrice)
-        setLatestMarketCap(lMarketCap)
-        setLatestVolume24(lVolume24)
-        setLatestPrice(lPrice)
+
+        const first = filtered[0];
+        const last = filtered[filtered.length - 1];
+
+        const market_caps = filtered.map((p: any) => [
+          new Date(p.timestamp).getTime(), p.quote.USD.market_cap
+        ]);
+
+        const prices = filtered.map((p: any) => [
+          new Date(p.timestamp).getTime(), p.quote.USD.price
+        ]);
+
+        const total_volumes = filtered.map((p: any) => [
+          new Date(p.timestamp).getTime(), p.quote.USD.volume_24h
+        ]);
+
+        setPrice({ prices, market_caps, total_volumes });
+        setEarlyMarketCap(first.quote.USD.market_cap);
+        setEarlyVolume24(first.quote.USD.volume_24h);
+        setEarlyPrice(first.quote.USD.price);
+        setLatestMarketCap(last.quote.USD.market_cap);
+        setLatestVolume24(last.quote.USD.volume_24h);
+        setLatestPrice(last.quote.USD.price);
       } catch (e) {
         console.error("Error occurred while fetching data: ", e);
       }
-      
-      setIsLoading(false)
-    })()
-  }, [])
+
+      setIsLoading(false);
+    })();
+  }, []); 
 
   return {
     price,
@@ -108,5 +77,5 @@ export default function useFetchLandData(dueTimeStamp: Date, now: number) {
     latestMarketCap,
     latestVolume24,
     latestPrice
-  }
+  };
 }

@@ -93,6 +93,8 @@ export default function PriceGraph({
             date: now
           })
           setIsLoading(false);
+          console.log(earlyPrice)
+          console.log(latestPrice)
           break;
         case 'rwa':
           let change_price = 0
