@@ -10,7 +10,7 @@ import { Address, formatEther } from "viem";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import useDeposit from "../AutoVaultV3Contract/useDeposit";
 import useBalanceOfLandToken from "../LandTokenContract/useBalanceOf";
-import useUserInfo from "../MasterchefContract/useUserInfo";
+import useUserInfo from "../AutoVaultV3Contract/useUserInfo";
 import usePendingLand from "../MasterchefContract/usePendingLand";
 import useTotalSupply from "../LpTokenV2Contract/useTotalSupply";
 import useBalanceOfWBNB from "../WBNBTokenContract/useBalanceOf";
@@ -67,7 +67,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   } = useCcipVaultBalance(chainId, address) as { totalSharesV3: BigNumberish, total: BigNumberish, autoLandV3: BigNumberish }
   const { autoLandV3, refetch: refetchAutoLandV3 } = useAutoLandV3(chainId, address) as { autoLandV3: BigNumberish, refetch: Function }
   const { refetch: refetchUserInfo, data: userInfo } = useUserInfo({
-    chainId, userInfoId: 0, address,
+    chainId, address,
   }) as {
     data: BigNumberish[];
     refetch: () => void;
@@ -103,158 +103,128 @@ export default function useAutoVault(chainId: number, address: Address | undefin
     chainId: chainId
   });
 
-  useEffect(() => {
-    try {
-      if (isApproveError) {
-        setIsCcipDeposit(false)
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (approveLandTx) {
-        if (approveStatusData) {
-          if (approveLandSuccess && !isCcipDeposit) {
-            refetchTotalSupply()
-            refetchBalanceOfWBNB()
-            refetchUserInfo()
-            refetchPendingLand()
-            refetchBalanceOfLandToken()
-            refetchAllowance()
-            updateApporvalStatus()
-            setScreenLoadingStatus("Transaction Complete.")
-          } else if (approveLandSuccess && isCcipDeposit) {
-            setScreenLoadingStatus("Transaction in progress...")
-            setIsCcipDeposit(false)
-            transfer(chainId, depositAmount, 0, 1, 500000)
-          } else {
-            setIsCcipDeposit(false)
-            setScreenLoadingStatus("Transaction Failed.")
-          }
-        }
-      }
-    } catch (error) {
+ useEffect(() => {
+  try {
+    if (isApproveError) {
       setIsCcipDeposit(false)
       setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
-    }
-  }, [approveLandTx, approveStatusData, approveLandSuccess, isApproveError])
-
-  useEffect(() => {
-    try {
-      if (isHarvestError) {
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (harvestTx) {
-        if (harvestStatusData) {
-          if (harvestSuccess) {
-            setScreenLoadingStatus("Transaction Complete.")
-          } else {
-            setScreenLoadingStatus("Transaction Failed.")
-          }
-        }
-      }
-    } catch (error) {
-      setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
-    }
-  }, [harvestTx, harvestStatusData, harvestSuccess, isHarvestError])
-
-  useEffect(() => {
-    try {
-      if (isWithdrawAllError) {
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (withdrawAllTx) {
-        if (withdrawAllStatusData) {
-          if (withdrawAllSuccess) {
-            setScreenLoadingStatus("Transaction Complete.")
-            refetchAutoLandV3()
-          } else {
-            setScreenLoadingStatus("Transaction Failed.")
-          }
-        }
-      }
-    } catch (error) {
-      setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
-    }
-  }, [withdrawAllTx, withdrawAllStatusData, withdrawAllSuccess, isWithdrawAllError])
-
-  useEffect(() => {
-    (async () => {
-      try {
-        if (transferTx && isTransferError) {
+      console.error("Approve Error: approveLandTx failed", approveLandTx)
+    } else if (approveLandTx) {
+      if (approveStatusData) {
+        if (approveLandSuccess && !isCcipDeposit) {
+          // success handled
+        } else if (approveLandSuccess && isCcipDeposit) {
+          // success handled
+        } else {
+          setIsCcipDeposit(false)
           setScreenLoadingStatus("Transaction Failed.")
-        } else if (transferTx) {
-          if (transferStatusData) {
-            if (transferSuccess) {
-              const { data } = await axios.get(`/api/ccipMessageProxy/${transferTx}`);
-              const messageId = data.transactionHash[0].messageId
-              dispatch(updateCcipTransaction({
-                walletAddress: address,
-                status: 'PENDING',
-                action: transferAction,
-                messageId,
-                sourceChain: CCIP_CHAIN_ID[chainId],
-                destinationChain: CCIP_CHAIN_ID[AUTO_VAULT_MAIN_CHAINS[0].id]
-              }))
-              setScreenLoadingStatus(`${transferAction} Transaction Complete.`)
-            } else {
-              setScreenLoadingStatus("Transaction Failed.")
-            }
-          }
+          console.error("Approve Status Error: Unexpected approval failure", approveStatusData)
         }
-      } catch (error) {
-        setScreenLoadingStatus("Transaction Failed.")
-        console.log(error)
       }
-    })()
-  }, [transferTx, transferStatusData, transferSuccess, isTransferError])
+    }
+  } catch (error) {
+    setIsCcipDeposit(false)
+    setScreenLoadingStatus("Transaction Failed.")
+    console.error("Unexpected Approve Error:", error)
+  }
+}, [approveLandTx, approveStatusData, approveLandSuccess, isApproveError])
 
-  useEffect(() => {
+useEffect(() => {
+  try {
+    if (isHarvestError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      console.error("Harvest Error: harvestTx failed", harvestTx)
+    } else if (harvestTx) {
+      if (harvestStatusData) {
+        if (!harvestSuccess) {
+          setScreenLoadingStatus("Transaction Failed.")
+          console.error("Harvest Status Error: Unexpected harvest failure", harvestStatusData)
+        }
+      }
+    }
+  } catch (error) {
+    setScreenLoadingStatus("Transaction Failed.")
+    console.error("Unexpected Harvest Error:", error)
+  }
+}, [harvestTx, harvestStatusData, harvestSuccess, isHarvestError])
+
+useEffect(() => {
+  try {
+    if (isWithdrawAllError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      console.error("Withdraw All Error: withdrawAllTx failed", withdrawAllTx)
+    } else if (withdrawAllTx) {
+      if (withdrawAllStatusData) {
+        if (!withdrawAllSuccess) {
+          setScreenLoadingStatus("Transaction Failed.")
+          console.error("Withdraw All Status Error: Unexpected withdraw all failure", withdrawAllStatusData)
+        }
+      }
+    }
+  } catch (error) {
+    setScreenLoadingStatus("Transaction Failed.")
+    console.error("Unexpected Withdraw All Error:", error)
+  }
+}, [withdrawAllTx, withdrawAllStatusData, withdrawAllSuccess, isWithdrawAllError])
+
+useEffect(() => {
+  (async () => {
     try {
-      if (isDepositError) {
+      if (transferTx && isTransferError) {
         setScreenLoadingStatus("Transaction Failed.")
-      } else if (depositTx) {
-        if (depositStatusData) {
-          if (depositSuccess) {
-            refetchTotalSupply()
-            refetchBalanceOfWBNB()
-            refetchUserInfo()
-            refetchPendingLand()
-            refetchBalanceOfLandToken()
-            refetchAutoLandV3()
-            setScreenLoadingStatus("Transaction Complete.")
-          } else {
+        console.error("Transfer Error: transferTx failed", transferTx)
+      } else if (transferTx) {
+        if (transferStatusData) {
+          if (!transferSuccess) {
             setScreenLoadingStatus("Transaction Failed.")
+            console.error("Transfer Status Error: Unexpected transfer failure", transferStatusData)
           }
         }
       }
     } catch (error) {
       setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
+      console.error("Unexpected Transfer Error:", error)
     }
-  }, [depositTx, depositStatusData, depositSuccess, isDepositError])
+  })()
+}, [transferTx, transferStatusData, transferSuccess, isTransferError])
 
-  useEffect(() => {
-    try {
-      if (isWithdrawError) {
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (withdrawTx) {
-        if (withdrawStatusData) {
-          if (withdrawSuccess) {
-            refetchTotalSupply()
-            refetchBalanceOfWBNB()
-            refetchUserInfo()
-            refetchPendingLand()
-            refetchBalanceOfLandToken()
-            refetchAutoLandV3()
-            setScreenLoadingStatus("Transaction Complete.")
-          } else {
-            setScreenLoadingStatus("Transaction Failed.")
-          }
+useEffect(() => {
+  try {
+    if (isDepositError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      console.error("Deposit Error: depositTx failed", depositTx)
+    } else if (depositTx) {
+      if (depositStatusData) {
+        if (!depositSuccess) {
+          setScreenLoadingStatus("Transaction Failed.")
+          console.error("Deposit Status Error: Unexpected deposit failure", depositStatusData)
         }
       }
-    } catch (error) {
-      setScreenLoadingStatus("Transaction Failed.")
-      console.log(error)
     }
-  }, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawError])
+  } catch (error) {
+    setScreenLoadingStatus("Transaction Failed.")
+    console.error("Unexpected Deposit Error:", error)
+  }
+}, [depositTx, depositStatusData, depositSuccess, isDepositError])
+
+useEffect(() => {
+  try {
+    if (isWithdrawError) {
+      setScreenLoadingStatus("Transaction Failed.")
+      console.error("Withdraw Error: withdrawTx failed", withdrawTx)
+    } else if (withdrawTx) {
+      if (withdrawStatusData) {
+        if (!withdrawSuccess) {
+          setScreenLoadingStatus("Transaction Failed.")
+          console.error("Withdraw Status Error: Unexpected withdraw failure", withdrawStatusData)
+        }
+      }
+    }
+  } catch (error) {
+    setScreenLoadingStatus("Transaction Failed.")
+    console.error("Unexpected Withdraw Error:", error)
+  }
+}, [withdrawTx, withdrawStatusData, withdrawSuccess, isWithdrawError])
 
   const depositVault = (amount: BigNumberish) => {
     setDepositAmount(amount)
@@ -303,8 +273,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
         transfer(chainId, amount, 1, 1, 750000)
       }
     } else {
-      if (rawInput == 0 || amount >= userInfo[0]) {
-      
+      if (amount >= userInfo[0]) {
         setScreenLoadingStatus("Transaction Pending...")
         withdrawAll()
       } else {
