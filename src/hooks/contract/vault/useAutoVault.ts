@@ -43,18 +43,17 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   const [depositAmount, setDepositAmount] = useState<BigNumberish>(0)
   const [transferAction, setTransferAction] = useState('')
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
-  const { deposit, data: depositTx, isError: isDepositError } = useDeposit(chainId)
-  const { withdraw, data: withdrawTx, isError: isWithdrawError } = useWithdraw(chainId)
+  const { deposit, data: depositTx, isError: isDepositError, error: depositError } = useDeposit(chainId)
+  const { withdraw, data: withdrawTx, isError: isWithdrawError, error: withdrawError } = useWithdraw(chainId)
   const dispatch = useAppDispatch()
-  const { withdrawAll, data: withdrawAllTx, isError: isWithdrawAllError } = useWithdrawAll(chainId)
-  const { harvest, data: harvestTx, isError: isHarvestError } = useHarvest(chainId)
+  const { withdrawAll, data: withdrawAllTx, isError: isWithdrawAllError, error: withdrawAllError } = useWithdrawAll(chainId)
+  const { harvest, data: harvestTx, isError: isHarvestError, error: harvestError } = useHarvest(chainId)
   const { data: gasBalance } = useBalance({
     address,
     chainId
   })
   const { data: ccipAllowance, refetch: refetchAllowance } = useAllowanceOfLandToken(chainId, address, CCIP_CHAIN_SENDER_CONTRACT_ADDRESS[chainId]) as { data: BigNumberish, refetch: Function }
-  const { approve: approveLand, data: approveLandTx, isError: isApproveError } = useApproveLandToken()
-
+  const { approve: approveLand, data: approveLandTx, isError: isApproveError, error: approveError } = useApproveLandToken()
   const { isSuccess: approveLandSuccess, data: approveStatusData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: approveLandTx,
@@ -67,7 +66,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   } = useCcipVaultBalance(chainId, address) as { totalSharesV3: BigNumberish, total: BigNumberish, autoLandV3: BigNumberish }
   const { autoLandV3, refetch: refetchAutoLandV3 } = useAutoLandV3(chainId, address) as { autoLandV3: BigNumberish, refetch: Function }
   const { refetch: refetchUserInfo, data: userInfo } = useUserInfo({
-    chainId, address,
+    chainId,   address,
   }) as {
     data: BigNumberish[];
     refetch: () => void;
@@ -84,7 +83,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   });
   const { isSuccess: withdrawAllSuccess, data: withdrawAllStatusData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
-    hash: withdrawAllTx,
+    hash: withdrawAllTx,  
     chainId: chainId
   });
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
@@ -158,6 +157,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isWithdrawAllError) {
+        console.error("Withdraw all Error:", withdrawAllError)
         setScreenLoadingStatus("Transaction Failed.")
       } else if (withdrawAllTx) {
         if (withdrawAllStatusData) {
@@ -209,7 +209,8 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isDepositError) {
-        setScreenLoadingStatus("Transaction Failed.")
+          console.error("Deposit Error:", depositError)
+          setScreenLoadingStatus("Transaction Failed.")
       } else if (depositTx) {
         if (depositStatusData) {
           if (depositSuccess) {
@@ -234,6 +235,7 @@ export default function useAutoVault(chainId: number, address: Address | undefin
   useEffect(() => {
     try {
       if (isWithdrawError) {
+        console.error("Withdraw Error:", withdrawError)
         setScreenLoadingStatus("Transaction Failed.")
       } else if (withdrawTx) {
         if (withdrawStatusData) {

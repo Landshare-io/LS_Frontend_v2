@@ -10,6 +10,7 @@ export default function useWithdraw(chainId: number) {
     data,
     isPending,
     isError,
+    error,
     writeContract
   } = useWriteContract();
 
@@ -27,6 +28,7 @@ export default function useWithdraw(chainId: number) {
     withdraw,
     isPending,
     isError,
-    data
+    data,
+    error
   }
 }

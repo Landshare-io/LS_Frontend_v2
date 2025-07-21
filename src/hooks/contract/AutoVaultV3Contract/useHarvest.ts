@@ -8,6 +8,7 @@ export default function useHarvest(chainId: number) {
     data,
     isPending,
     isError,
+    error,
     writeContract
   } = useWriteContract();
 
@@ -25,6 +26,7 @@ export default function useHarvest(chainId: number) {
     harvest,
     isPending,
     isError,
-    data
+    data,
+    error
   }
 }

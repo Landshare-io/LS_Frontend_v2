@@ -9,6 +9,7 @@ export default function useDeposit(chainId: number) {
     data,
     isPending,
     isError,
+    error,
     writeContract
   } = useWriteContract();
 
@@ -26,6 +27,7 @@ export default function useDeposit(chainId: number) {
     deposit,
     isPending,
     isError,
-    data
+    data,
+    error
   }
 }
