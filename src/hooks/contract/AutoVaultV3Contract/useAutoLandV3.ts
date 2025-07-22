@@ -9,7 +9,7 @@ export default function useAutoLandV3(chainId: number, address: Address | undefi
   const { data: userInfo, refetch: refetchUserInfo, isLoading: isUserInfoLoading } = useUserInfo({ chainId, address }) as { data: BigNumberish[], refetch: Function, isLoading: boolean };
   const { data: totalShares, refetch: refetchTotalShares, isLoading: isTotalShareLoading } = useTotalShares(chainId) as { data: BigNumberish, refetch: Function, isLoading: boolean };
 
-  const autoLandV3 = totalShares ? BigInt(userInfo[0]) * BigInt(total) / BigInt(totalShares) : 0
+  const autoLandV3 = totalShares && BigInt(userInfo[0]) > BigInt(1) ? BigInt(userInfo[0]) * BigInt(total) / BigInt(totalShares) : 0
   const autoReward = totalShares ? 
     (BigInt(userInfo[0]) * BigInt(total) / BigInt(totalShares) - BigInt(userInfo[2]) > 0 ? (BigInt(userInfo[0]) * BigInt(total) / BigInt(totalShares) - BigInt(userInfo[2])) : 0) 
   : 0
