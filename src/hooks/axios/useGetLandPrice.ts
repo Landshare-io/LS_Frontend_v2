@@ -9,24 +9,28 @@ export default function useGetLandPrice() {
 
   useEffect(() => {
     (async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
-        const { data: { price: priceData } } = await axios.get('/api/landMarketProxy');
-        const { data: circulatingSupplyData } = await axios.get('https://api.landshare.io/api/test?q=circulating');
+        // Fetch price directly from landshare.xyz
+        const { data: { landshare: { usd: priceData } } } = 
+          await axios.get("https://landshare.xyz/land_market");
 
-        setPrice(Number(numeral(Number(priceData)).format('0.[000]')))
-        setCirculatingSupply(circulatingSupplyData)
+        // Fetch circulating supply from your API
+        const { data: circulatingSupplyData } = 
+          await axios.get("https://api.landshare.io/api/test?q=circulating");
+
+        setPrice(Number(numeral(Number(priceData)).format("0.[000]")));
+        setCirculatingSupply(circulatingSupplyData);
       } catch (e) {
         console.error("Error occurred while fetching data: ", e);
-        // handle the error appropriately based on your app, this is an example.
       }
-      setIsLoading(false)
-    })()
-  }, [])
+      setIsLoading(false);
+    })();
+  }, []);
 
   return {
     price,
     isLoading,
     circulatingSupply
-  }
+  };
 }
