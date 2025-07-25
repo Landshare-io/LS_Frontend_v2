@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import numeral from "numeral";
-import { LANDSHARE_COST_URL } from "../../config/constants/environments";
 
 export default function useGetLandPrice() {
   const [isLoading, setIsLoading] = useState(true);
@@ -10,26 +9,24 @@ export default function useGetLandPrice() {
   useEffect(() => {
     (async () => {
       try {
-        setIsLoading(true)
+        setIsLoading(true);
         
-        try{
-          const { data: { landshare: { usd: priceData } } } = await axios.get(LANDSHARE_COST_URL);
-          setPrice(Number(numeral(Number(priceData)).format("0.[000]")));
+        try {
+          const { data } = await axios.get("https://landshare.xyz/land_market");
+      
+          setPrice(Number(numeral(data.price).format("0.[000]")));
         } catch (e) {
           console.error("Error occurred while fetching data: ", e);
         }
   
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (err) {
-        console.log(err)
+        console.error(err);
         setPrice(1);
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
-  return {
-    price,
-    isLoading
-  }
+  return { price, isLoading };
 }
