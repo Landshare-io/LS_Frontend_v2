@@ -70,7 +70,7 @@ export default function HomeRwaHeroSection() {
               />
             </div>
             <div className="mt-[20px] justify-around w-full flex gap-2 md:hidden">
-              <Link className="w-full" href="/RWA">
+              <Link className="w-full" href="/rwa">
                 <Button
                   className="rounded-[100px] py-[13px] w-full bg-primary-green"
                   textClassName="text-[#fff]"
