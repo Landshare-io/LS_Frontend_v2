@@ -14,6 +14,8 @@ import useWBNBBalanceOf from "../../hooks/contract/WBNBTokenContract/useBalanceO
 import useLpTokenBalanceOf from "../../hooks/contract/LpTokenV2Contract/useBalanceOf";
 import useTotalSupply from "../../hooks/contract/LpTokenV2Contract/useTotalSupply";
 import useTotalStaked from "../../hooks/contract/MasterchefContract/useTotalStaked";
+import useLsrwaUsdtLpTvl from "../../hooks/vault/useLsrwaUsdtLpTvl";
+
 import useGetApy from "../../hooks/get-apy/useGetApy";
 import {
   LP_TOKEN_V2_CONTRACT_ADDRESS,
@@ -55,39 +57,54 @@ export default function StatusCard() {
   const { data: totalDeposited } = useTotalStaked(chainId) as {
     data: BigNumberish;
   };
+const lsrwaUsdtVaultUsd = useLsrwaUsdtLpTvl(chainId);
 
-  useEffect(() => {
-    dispatch(getData());
-    const totalBNBValueinLpContract =
-      Number(formatEther(totalBNBinLp)) * Number(bnbPrice);
-    const totalLANDValueinLpContract =
-      Number(formatEther(landAmountInLp ?? 0)) *
-      Number(coin) *
-      Number(bnbPrice);
-    const totalUSDValue =
-      totalBNBValueinLpContract + totalLANDValueinLpContract;
-    const percentageOfLPInVault =
-      Number(totalLpInVault) / Number(totalLpSupply);
-    const USDValueinVault = percentageOfLPInVault * totalUSDValue;
-    const totalMoneyAnnual =
-      365 * Number(allocPoints[1]) * Number(coin) * Number(bnbPrice);
-    const farmApr = (totalMoneyAnnual / USDValueinVault) * 100;
-    const vaultBalance =
-      Number(USDValueinVault) +
-      Number(formatEther(totalPropertyValue)) +
-      Number(
-        Number(coin) * Number(bnbPrice) * Number(formatEther(totalDeposited))
-      );
-    setApr(farmApr);
-    setVaultBal(vaultBalance);
-  }, [
-    totalBNBinLp,
-    landAmountInLp,
-    totalLpInVault,
-    totalLpSupply,
-    allocPoints,
-    totalDeposited,
-  ]);
+
+useEffect(() => {
+  dispatch(getData());
+
+  const totalBNBValueinLpContract =
+    Number(formatEther(totalBNBinLp)) * Number(bnbPrice);
+
+  const totalLANDValueinLpContract =
+    Number(formatEther(landAmountInLp ?? 0)) *
+    Number(coin) *
+    Number(bnbPrice);
+
+  const totalUSDValue =
+    totalBNBValueinLpContract + totalLANDValueinLpContract;
+
+  const percentageOfLPInVault =
+    Number(totalLpInVault) / Number(totalLpSupply);
+
+  const USDValueinVault = percentageOfLPInVault * totalUSDValue;
+
+  const totalMoneyAnnual =
+    365 * Number(allocPoints[1]) * Number(coin) * Number(bnbPrice);
+
+  const farmApr = (totalMoneyAnnual / USDValueinVault) * 100;
+
+const vaultBalance =
+  USDValueinVault +
+  lsrwaUsdtVaultUsd + 
+  Number(formatEther(totalPropertyValue)) +
+  Number(coin) * Number(bnbPrice) * Number(formatEther(totalDeposited));
+
+  setApr(farmApr);
+  setVaultBal(vaultBalance);
+}, [
+  totalBNBinLp,
+  landAmountInLp,
+  totalLpInVault,
+  totalLpSupply,
+  allocPoints,
+  totalDeposited,
+  totalPropertyValue,
+  bnbPrice,
+  coin,
+  lsrwaUsdtVaultUsd,  
+      
+]);
 
   return (
     <div className="bg-primary">
