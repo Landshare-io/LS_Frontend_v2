@@ -11,7 +11,6 @@ import PriceGraph from '../components/price-line-chart';
 import FinancialSummary from '../components/financial-summary';
 import SwapToken from '../components/swap-token';
 import BeneficalAssets from '../components/benefical-assets';
-import InvestmentExplain from '../components/investment-explain';
 import RwaCalculator from '../components/rwa-calculator';
 import styles from '../styles/Home.module.css';
 import MoreInvestment from '../components/learn-more-future-investment';
@@ -29,11 +28,11 @@ const breadcrumbItems: BREADCRUMB[] = [
 
 const RwaPage: NextPage = () => {
   const searchParams = useSearchParams();
-  const {address} = useAccount();
+  const { address } = useAccount();
   const referralCode = searchParams.get('af');
 
   useEffect(() => {
-    if(referralCode){
+    if (referralCode) {
       Fuul.sendPageview("rwa");
     }
   }, [referralCode]);
@@ -76,15 +75,6 @@ const RwaPage: NextPage = () => {
       </div>
       <div className="bg-primary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
         <RwaCalculator />
-      </div>
-      <div className="flex flex-col gap-[36px] md:gap-[36px] bg-secondary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
-        <div className="flex items-center w-fit md:mx-auto py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-primary">
-          <div className="flex justify-center items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-secondary">
-            <HiMiniLockOpen className="w-[18px] h-[24px] text-[#24BC48]" />
-          </div>
-          <span className="text-[14px] leading-[22px] tracking-[0.02em] capitalize font-semibold text-text-primary">Unlock your opportunity</span>
-        </div>
-        <InvestmentExplain />
       </div>
       <MoreInvestment />
     </div>
