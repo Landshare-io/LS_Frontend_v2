@@ -2,6 +2,7 @@ import StatusCard from "../status-card"
 import HomeRwaHeroSection from "./hero-section"
 import HomeRwaAssetsSummary from "./assets-summary"
 import InvestmentExplain from "../investment-explain"
+import MadeEasy from "../home-madeeasy"
 
 export default function HomeRwaSection() {
   
@@ -12,6 +13,7 @@ export default function HomeRwaSection() {
       <StatusCard />
       <HomeRwaAssetsSummary />
       <InvestmentExplain />
+      <MadeEasy />
     </div>
   )
 }
