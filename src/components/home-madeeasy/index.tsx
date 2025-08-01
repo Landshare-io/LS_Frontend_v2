@@ -5,9 +5,9 @@ import { IoIosTrendingUp } from "react-icons/io";
 
 const MadeEasy = () => {
     return (
-        <div className='flex flex-col md:flex-row bg-white w-full px-[20px] py-[40px] md:px-[46px] md:py-[80px]'>
+        <div className='flex flex-col-reverse md:flex-row bg-white w-full px-[20px] py-[40px] md:px-[46px] md:py-[80px]'>
             <div className="flex-1">
-                <div className="flex justify-end">
+                <div className="flex justify-center md:justify-end">
                     <Image
                         src="/img/dashboard/iphone.png"
                         alt="Logo"
