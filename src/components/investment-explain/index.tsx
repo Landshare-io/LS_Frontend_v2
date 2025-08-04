@@ -8,7 +8,6 @@ import useIsWhitelistedAddress from "../../hooks/contract/RWAContract/useIsWhite
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import Button from "../common/button";
 import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
-import ZeroIDWidget from "../zero-id-widget";
 import KYCWidget from "../sumsub-widget";
 import form from "../../../public/verify-steps/form.svg";
 import swapToken from "../../../public/verify-steps/swap-token.svg";
@@ -20,34 +19,39 @@ const RWA_MAJOR_CHAINS = MAJOR_WORK_CHAINS["/rwa"];
 
 export default function InvestmentExplain() {
   const chainId = useChainId();
-  const {address} = useAccount();
-  const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
+  const { address } = useAccount();
+  const { data: isWhitelisted, refetch } = useIsWhitelistedAddress(
+    (RWA_MAJOR_CHAINS.map((chain) => chain.id) as number[]).includes(chainId)
+      ? chainId
+      : 56,
+    address
+  );
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
       await refetch();
-    })()
-  }, [isZeroIDModal])
+    })();
+  }, [isZeroIDModal]);
 
   const customModalStyles: Styles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    overflowY: "auto",
-    overflowX: "hidden",
-    maxWidth: "400px",
-    width: "90%",
-    maxHeight: "90vh",
-    borderRadius: "20px",
-  },
-  overlay: {
-    zIndex: 99999,
-    background: "#00000080",
-  },
-};
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflowY: "auto",
+      overflowX: "hidden",
+      maxWidth: "400px",
+      width: "90%",
+      maxHeight: "90vh",
+      borderRadius: "20px",
+    },
+    overlay: {
+      zIndex: 99999,
+      background: "#00000080",
+    },
+  };
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -112,7 +116,11 @@ export default function InvestmentExplain() {
           />
           <button
             disabled={isWhitelisted as boolean}
-            className={`w-full rounded-[100px] py-[10px] text-[16px] leading-[24px] font-bold ${isWhitelisted ? "cursor-not-allowed bg-[#d9dce7] text-[#fff]" : "cursor-pointer !text-[#000] hover:bg-slate-200 transition-all hover:-translate-y-1 bg-[#fff]"}`}
+            className={`w-full rounded-[100px] py-[10px] text-[16px] leading-[24px] font-bold ${
+              isWhitelisted
+                ? "cursor-not-allowed bg-[#d9dce7] text-[#fff]"
+                : "cursor-pointer !text-[#000] hover:bg-slate-200 transition-all hover:-translate-y-1 bg-[#fff]"
+            }`}
             onClick={() => handlemodalkyc()}
           >
             {isWhitelisted ? "Complete" : "Verify now"}
@@ -233,7 +241,7 @@ export default function InvestmentExplain() {
         </div>
         <div className="w-full mt-3">
           <a href="https://dashboard.landshare.io">
-            <Button 
+            <Button
               className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
               disabled={chainId != bsc.id}
             >
@@ -243,12 +251,14 @@ export default function InvestmentExplain() {
                 Manual Verification
               </p>
             </Button>
-            <p className="text-xs text-text-secondary text-center mt-1">Recommended for advanced users and large investors</p>
+            <p className="text-xs text-text-secondary text-center mt-1">
+              Recommended for advanced users and large investors
+            </p>
           </a>
           <div onClick={handleLinkClick}>
             <Button
               className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
-            disabled
+              disabled
             >
               <p
                 className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
@@ -256,7 +266,9 @@ export default function InvestmentExplain() {
                 Sumsub Verification
               </p>
             </Button>
-            <p className="text-xs text-text-secondary text-center mt-1">Quick verification - 5 minutes or less!</p>
+            <p className="text-xs text-text-secondary text-center mt-1">
+              Quick verification - 5 minutes or less!
+            </p>
           </div>
         </div>
       </Modal>
