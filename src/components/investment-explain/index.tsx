@@ -15,6 +15,8 @@ import growthTime from "../../../public/verify-steps/growth-time.svg";
 import arrowLeft from "../../../public/icons/arrow-left.svg";
 import type { Styles } from "react-modal";
 import { HiMiniLockOpen } from "react-icons/hi2";
+import { useTheme } from "next-themes";
+import { useMemo } from "react";
 
 const RWA_MAJOR_CHAINS = MAJOR_WORK_CHAINS["/rwa"];
 
@@ -24,14 +26,13 @@ export default function InvestmentExplain() {
   const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
+  const { theme } = useTheme();
 
-  useEffect(() => {
-    (async () => {
-      await refetch();
-    })()
-  }, [isZeroIDModal])
+  const bgColor = useMemo(() => {
+    return theme == "dark" ? "#383838" : "white";
+  }, [theme])
 
-  const customModalStyles: Styles = {
+  const [modalStyle, setModalStyle] = useState<any>({
     content: {
       top: "50%",
       left: "50%",
@@ -41,13 +42,64 @@ export default function InvestmentExplain() {
       maxWidth: "400px",
       width: "90%",
       maxHeight: "90vh",
+      background: bgColor,
       borderRadius: "20px",
     },
     overlay: {
       zIndex: 99999,
       background: "#00000080",
     },
-  };
+  })
+
+  console.log('bgColor => ', bgColor)
+
+  useEffect(() => {
+    (async () => {
+      await refetch();
+    })()
+  }, [isZeroIDModal])
+
+
+  useEffect(() => {
+    const customModalStyles: Styles = {
+      content: {
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        overflowY: "auto",
+        overflowX: "hidden",
+        maxWidth: "400px",
+        width: "90%",
+        maxHeight: "90vh",
+        background: bgColor,
+        borderRadius: "20px",
+      },
+      overlay: {
+        zIndex: 99999,
+        background: "#00000080",
+      },
+    };
+    setModalStyle(customModalStyles)
+  }, [theme])
+
+  // const customModalStyles: Styles = {
+  //   content: {
+  //     top: "50%",
+  //     left: "50%",
+  //     transform: "translate(-50%, -50%)",
+  //     overflowY: "auto",
+  //     overflowX: "hidden",
+  //     maxWidth: "400px",
+  //     width: "90%",
+  //     maxHeight: "90vh",
+  //     background: bgColor,
+  //     borderRadius: "20px",
+  //   },
+  //   overlay: {
+  //     zIndex: 99999,
+  //     background: "#00000080",
+  //   },
+  // };
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -96,7 +148,7 @@ export default function InvestmentExplain() {
         </div>
         <div className="flex flex-col items-center mlg:flex-row w-full gap-[10px]">
           {/* Step 1 */}
-          <div className="flex flex-col shrink-0 grow-0 w-full md:w-[270px] h-[354px] items-center justify-between p-[20px] bg-gradient-to-b from-[#61CD81] to-[#2B9F49] rounded-[24px] overflow-hidden relative">
+          <div className="flex flex-col shrink-0 grow-0 w-full md:w-[270px] h-[354px] items-center justify-between p-[20px] bg-gradient-to-b dark:bg-third  from-[#61CD81] to-[#2B9F49] rounded-[24px] overflow-hidden relative">
             <div className="flex justify-center gap-[7px]">
               <div className="flex justify-center items-center border border-[#fff] w-[21px] h-[21px] rounded-full">
                 <span
@@ -219,7 +271,7 @@ export default function InvestmentExplain() {
           onRequestClose={() => {
             setKycopen(false), document.body.classList.remove("modal-open");
           }}
-          style={customModalStyles}
+          style={modalStyle}
           contentLabel="Modal"
         >
           <MdCancel
@@ -274,7 +326,7 @@ export default function InvestmentExplain() {
             setZeroIDModalOpen(true),
               document.body.classList.remove("modal-open");
           }}
-          style={customModalStyles}
+          style={modalStyle}
           contentLabel="Sumsub Modal"
           className="relative"
         >
