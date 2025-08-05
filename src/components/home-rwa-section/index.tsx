@@ -13,7 +13,7 @@ export default function HomeRwaSection() {
       <StatusCard />
       <HomeRwaAssetsSummary />
       <InvestmentExplain />
-      <MadeEasy />
+      {/* <MadeEasy /> */}
     </div>
   )
 }
