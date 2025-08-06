@@ -37,7 +37,7 @@ export default function InvestmentExplain() {
     left: "50%",
     transform: "translate(-50%, -50%)",
     overflowY: "auto",
-    overflowX: "hidden",
+    overflowX: "auto",
     maxWidth: "400px",
     width: "90%",
     maxHeight: "90vh",
