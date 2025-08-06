@@ -6,7 +6,7 @@ import Button from "../common/button";
 function LsrwaMadeEasy() {
   return (
     <div className="flex flex-col gap-[40px]  items-center p-0 mlg:px-[20px] xl:px-0 xl:pb-[80px] max-w-[1200px] m-auto">
-      <div className="flex lg:flex-row [@media(min-width:820px)_and_(max-width:1024px)]:flex-row lg:gap-20 gap-6 lg:justify-around flex-col justify-center items-center">
+      <div className="flex [@media(min-width:820px)]:flex-row lg:gap-20 gap-6 lg:justify-around flex-col justify-center items-center">
         <section className="flex justify-center">
           <Image
             src="/img/rwa-mockup/lsrwa-express-iphone-mockup.png"
