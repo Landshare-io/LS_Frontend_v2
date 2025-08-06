@@ -19,7 +19,7 @@ export default function MobileNavbar() {
   const { pathname } = router;
 
   return (
-    <div className="shadow-[0_-2px_10px_rgba(74,81,107,0.1)] bg-secondary px-[20px] py-[16px] fixed bottom-0 left-0 z-[9] flex w-full flex-col gap-[10px] mlg:hidden">
+    <div className="shadow-[0_-2px_10px_rgba(74,81,107,0.1)] bg-secondary px-[20px] py-[16px] fixed bottom-0 left-0 z-[1000] flex w-full flex-col gap-[10px] mlg:hidden">
       <div className="flex justify-around">
         <div
           className="flex flex-col items-center gap-[5px] cursor-pointer"
