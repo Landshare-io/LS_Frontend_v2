@@ -87,9 +87,6 @@ const RwaPage: NextPage = () => {
         </div>
         <InvestmentExplain />
       </div>
-      <div className="bg-primary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
-        <LsrwaMadeEasy />
-      </div>
       <MoreInvestment />
     </div>
   );
