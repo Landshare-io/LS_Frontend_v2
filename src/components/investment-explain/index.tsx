@@ -36,22 +36,22 @@ export default function InvestmentExplain() {
   }, [isZeroIDModal]);
 
   const customModalStyles: Styles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      overflowY: "auto",
-      overflowX: "hidden",
-      maxWidth: "400px",
-      width: "90%",
-      maxHeight: "90vh",
-      borderRadius: "20px",
-    },
-    overlay: {
-      zIndex: 99999,
-      background: "#00000080",
-    },
-  };
+  content: {
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    overflowY: "auto",
+    overflowX: "auto",
+    maxWidth: "400px",
+    width: "90%",
+    maxHeight: "90vh",
+    borderRadius: "20px",
+  },
+  overlay: {
+    zIndex: 99999,
+    background: "#00000080",
+  },
+};
 
   const scrollToTop = () => {
     window.scrollTo({
