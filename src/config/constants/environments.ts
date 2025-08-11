@@ -5,7 +5,7 @@ import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
 import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
-export const IS_TEST_MODE = false
+export const IS_TEST_MODE = true
 export const AUTO_VAULT_MAIN_CHAINS = IS_TEST_MODE ? [bscTestnet, hardhat] : [bsc]
 export const PUSD_SUPPORT_CHINAS = [plumeTestnet, plume]
 export const MAJOR_WORK_CHAINS = {
@@ -39,7 +39,7 @@ export const PROVIDER_URLS = {
   56: 'https://binance.llamarpc.com/',
   97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
   1: 'https://mainnet.infura.io/v3/',
-  11155111: 'https://rpc.sepolia.org',
+  11155111: 'https://sepolia.infura.io/v3/28daf59330ba470b95ba3285561a6ed4',
   98867: 'https://testnet-rpc.plume.org',
   98866: 'https://rpc.plume.org',
   137: 'https://polygon-rpc.com/',
@@ -161,7 +161,8 @@ export const RWA_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   97: '' as Address,
   98867: '0xaa23194C841336918E1C6D34c8B415c061007a6d',
   98866: '0x29C4708A1eEee2187914A04159D0C213F72aDaf9',
-  31337: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+  31337: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+  11155111 : '0x2d725a49175c77A44538EBcEFE09cB7AB82D6794'
   // 31337: '0x99dBE4AEa58E518C50a1c04aE9b48C9F6354612f' // : Local nft game
 }
 export const RWA_LP_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
