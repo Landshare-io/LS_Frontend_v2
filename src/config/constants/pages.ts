@@ -22,8 +22,8 @@ export const PAGES: PAGE[] = [
   //   path: "/migration",
   // },
   {
-    name: "Referral",
-    path: "/referral",
+    name: "Portal",
+    path: "/portal",
   },
   {
     name: "Swap",
@@ -39,6 +39,4 @@ export const PAGES: PAGE[] = [
   },
 ];
 
-export const NOT_VISIBLE_FOOTER_PAGES = [
-  '/nft', '/marketplace'
-];
+export const NOT_VISIBLE_FOOTER_PAGES = ["/nft", "/marketplace"];

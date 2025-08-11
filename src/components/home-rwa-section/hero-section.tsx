@@ -11,11 +11,9 @@ import ImageHero1 from "../../../public/img/dashboard/rwa-hero-image-1.svg";
 import ImageHero1_Dark from "../../../public/img/dashboard/rwa-hero-image-1-dark.svg";
 import ImageHero2 from "../../../public/img/dashboard/rwa-hero-image-2.svg";
 import ImageHero2_Dark from "../../../public/img/dashboard/rwa-hero-image-2-dark.svg";
-
 export default function HomeRwaHeroSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-
   return (
     <div className="pt-[40px] pb-[20px] px-[20px] md:pt-[80px] md:pb-[40px] md:px-[40px] lg:pt-[70px] lg:px-0 lg:pb-0">
       <Carousel
@@ -78,7 +76,6 @@ export default function HomeRwaHeroSection() {
                   Buy Now
                 </Button>
               </Link>
-
               <a
                 className="w-full"
                 href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa"

@@ -4,11 +4,11 @@ import Breadcrumb from "../components/common/breadcrumb";
 import { BREADCRUMB } from "../utils/type";
 import styles from "../styles/Home.module.css";
 import GrowthEarning from "../components/referral-growth-earn";
-import ReferralOverview from "../components/referral-overview";
-import ReferralOthers from "../components/referral-others";
-import ReferralEarning from "../components/referral-earning";
-import ReferralLeaderBoard from "../components/referral-leaderboard";
-import ReferralParticipate from "../components/referral-participate";
+import LspOverView from "../components/lsp-overview";
+import LspSummary from "../components/lsp-summary";
+import LspLeaderBoard from "../components/lsp-leaderboard";
+import LspCampaignTasks from "../components/lsp-campaign-tasks";
+import LspRecentActivity from "../components/lsp-recent-activity";
 
 const breadcrumbItems: BREADCRUMB[] = [
   {
@@ -16,8 +16,8 @@ const breadcrumbItems: BREADCRUMB[] = [
     url: "/",
   },
   {
-    name: "Referral Page",
-    url: "/RWA",
+    name: "Landshare Portal Page",
+    url: "/referral",
   },
 ];
 
@@ -25,7 +25,7 @@ const Referral: NextPage = () => {
   return (
     <div className={`${styles.container}`}>
       <Head>
-        <title>Landshare - Referral</title>
+        <title>Landshare Portal Page</title>
         <meta content="Refer & Earn" name="description" />
         <link href="/favicon.ico" rel="icon" />
       </Head>
@@ -40,30 +40,22 @@ const Referral: NextPage = () => {
 
           <div className="my-6">
             <p className="font-bold text-[28px] leading-[22px] text-text-primary">
-              Referrals
+              Landshare Portal
             </p>
           </div>
-          <div className="w-full grid lg:grid-cols-[53%_47%] grid-cols-1 gap-[20px]">
-            <div className="flex flex-col gap-[20px] ">
-              <ReferralOverview />
-
-              <ReferralOthers />
+          <div className="flex flex-col gap-8">
+            <div className="w-full grid lg:grid-cols-[62%_35%] grid-cols-1 gap-[32px]">
+              <div className="flex flex-col gap-[32px]">
+                <LspOverView />
+                <LspSummary />
+              </div>
+              <div>
+                <LspLeaderBoard />
+              </div>
             </div>
-            <div>
-              <ReferralEarning />
-            </div>
+            <LspCampaignTasks />
+            <LspRecentActivity />
           </div>
-
-          <ReferralLeaderBoard />
-
-          {/* <p
-            id="how-to-participate"
-            className="mt-12 mb-6 text-text-primary font-bold text-2xl"
-          >
-            How To Participate
-          </p>
-
-          <ReferralParticipate /> */}
         </div>
       </div>
     </div>
