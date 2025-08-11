@@ -11,18 +11,22 @@ import ImageHero1 from "../../../public/img/dashboard/rwa-hero-image-1.svg";
 import ImageHero1_Dark from "../../../public/img/dashboard/rwa-hero-image-1-dark.svg";
 import ImageHero2 from "../../../public/img/dashboard/rwa-hero-image-2.svg";
 import ImageHero2_Dark from "../../../public/img/dashboard/rwa-hero-image-2-dark.svg";
+import LsrwaMadeEasy from "../lsrwa-made-easy/LsrwaMadeEasy";
 
 export default function HomeRwaHeroSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
   return (
-    <div className="pt-[40px] pb-[20px] px-[20px] md:pt-[80px] md:pb-[40px] md:px-[40px] lg:pt-[70px] lg:px-0 lg:pb-0">
+    <div className="pt-[40px] pb-[20px] px-[20px] md:pt-[20px] md:pb-[40px] md:px-[40px] lg:pt-[30px] lg:px-0 lg:pb-0">
       <Carousel
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}
         setPaused={setPaused}
       >
+        <CarouselItem activeIndex={activeIndex}>
+          <LsrwaMadeEasy />
+        </CarouselItem>
         <CarouselItem activeIndex={activeIndex}>
           <div className="flex flex-col md:flex-row items-start md:justify-between md:items-center max-w-[1200px] m-auto ">
             <div className="flex flex-col justify-end w-full whitespace-normal max-w-fit md:max-w-[560px]">
@@ -46,7 +50,7 @@ export default function HomeRwaHeroSection() {
                     Buy Now
                   </Button>
                 </Link>
-                <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa">
+                <Link href="https://docs.landshare.io/platform-features/lsrwa-express">
                   <Button
                     className="px-[24px] py-[13px] rounded-[100px] border-primary-green hover:bg-primary-green"
                     textClassName="dark:text-[#fff]"
@@ -163,8 +167,8 @@ export default function HomeRwaHeroSection() {
         paused={paused}
         activeIndex={activeIndex}
         setActiveIndex={setActiveIndex}
-        carouselControlClass={"max-w-[1200px] m-auto mt-[32px]"}
-        count={2}
+        carouselControlClass={"max-w-[1200px] m-auto "}
+        count={3}
       />
     </div>
   );
