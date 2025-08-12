@@ -15,6 +15,7 @@ import swapToken from "../../../public/verify-steps/swap-token.svg";
 import growthTime from "../../../public/verify-steps/growth-time.svg";
 import arrowLeft from "../../../public/icons/arrow-left.svg";
 import type { Styles } from "react-modal";
+import { useTheme } from "next-themes";
 
 const RWA_MAJOR_CHAINS = MAJOR_WORK_CHAINS["/rwa"];
 
@@ -24,6 +25,8 @@ export default function InvestmentExplain() {
   const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
+
+  const { theme } = useTheme()
 
   useEffect(() => {
     (async () => {
@@ -40,8 +43,12 @@ export default function InvestmentExplain() {
     overflowX: "auto",
     maxWidth: "400px",
     width: "90%",
+    background: theme == 'dark' ? '#222222' : '#fff',
     maxHeight: "90vh",
+    height: "fit-content",
+    padding: "30px",
     borderRadius: "20px",
+    border: theme == 'dark' ? '' : '1px solid #cccccc',
   },
   overlay: {
     zIndex: 99999,
@@ -221,7 +228,7 @@ export default function InvestmentExplain() {
         />
         <div className="w-full">
           <h5
-            className={`text-center text-[1.5rem] leading-[1.334] text-center ${BOLD_INTER_TIGHT.className}`}
+            className={`text-center text-[1.5rem] leading-[1.334] ${BOLD_INTER_TIGHT.className}`}
           >
             KYC Verification
           </h5>

@@ -10,11 +10,8 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/re
 
 export default function DepositForm() {
   const {
-    address,
     isConnected,
-    disconnect,
     balance,
-    symbol,
   } = useWallet();
   const [amount, setAmount] = useState<number>(0);
   const [status, setStatus] = useState("");
