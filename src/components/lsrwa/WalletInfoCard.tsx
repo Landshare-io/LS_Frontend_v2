@@ -83,16 +83,10 @@ export default function WalletInfoCard() {
         <label htmlFor="">+123$</label>
         <label htmlFor="">(10.53%)</label>
       </div>
-      <div className='mt-6 flex justify-center items-center h-[133px] w-full px-2 border border-solid border-transparent rounded-[15px]'
-        style={{
-          background: 'linear-gradient(90.37deg, rgba(255, 255, 255, 0.24) 0.16%, rgba(255, 255, 255, 0.12) 99.92%)',
-          // borderWidth: '1px',
-          // borderImageSource: 'linear-gradient(90.61deg, rgba(255, 255, 255, 0.3) 1.27%, rgba(255, 255, 255, 0.3) 100%)',
-          // borderImageSlice: '1',
-          // borderRadius: '15px'
-        }}>
-        <div className='flex justify-between md:w-[400px] w-full'>
-          <button type='button' className="flex flex-col items-center group" onClick={handleDepositClick}>
+      <div className='mt-6 flex justify-center items-center md:h-[133px] w-full md:px-2 border border-solid border-transparent rounded-[15px] md:bg-lsrwaCard'
+      >
+        <div className='flex flex-col md:flex-row justify-between md:w-[400px] w-full  gap-2 md:gap-0'>
+          <button type='button' className="flex flex-row-reverse justify-between p-[10px] w-full rounded-[15px] border-[1px] border-solid border-[#ffffff4d]  bg-lsrwaCard md:justify-center md:p-0 md:w-fit md:bg-none md:border-0 md:flex-col items-center group" onClick={handleDepositClick}>
             <div className="w-[64px] h-[64px] rounded-full bg-green flex items-center justify-center transition-colors duration-300 group-hover:bg-[#131B3F] overflow-hidden">
               <Image
                 src="/icons/plus.png"
@@ -104,7 +98,7 @@ export default function WalletInfoCard() {
             </div>
             <span className="font-medium text-white">Deposit</span>
           </button>
-          <button className="flex flex-col items-center group" onClick={handleWithdrawClick}>
+          <button className="flex flex-row-reverse justify-between p-[10px] w-full rounded-[15px] border-[1px] border-solid border-[#ffffff4d]  bg-lsrwaCard md:justify-center md:p-0 md:w-fit md:bg-none md:border-0 md:flex-col items-center group" onClick={handleWithdrawClick}>
             <div className="w-[64px] h-[64px] rounded-full bg-green flex items-center justify-center transition-colors duration-300 group-hover:bg-[#131B3F] overflow-hidden">
               <Image
                 src="/icons/down.png"
@@ -116,7 +110,7 @@ export default function WalletInfoCard() {
             </div>
             <span className="font-medium text-white">Withdraw</span>
           </button>
-          <button className="flex flex-col items-center group" onClick={handleSwapClick}>
+          <button className="flex flex-row-reverse justify-between p-[10px] w-full rounded-[15px] border-[1px] border-solid border-[#ffffff4d]  bg-lsrwaCard md:justify-center md:p-0 md:w-fit md:bg-none md:border-0 md:flex-col items-center group" onClick={handleSwapClick}>
             <div className="w-[64px] h-[64px] rounded-full bg-green flex items-center justify-center transition-colors duration-300 group-hover:bg-[#131B3F] overflow-hidden">
               <Image
                 src="/icons/swap.png"
@@ -159,7 +153,7 @@ export default function WalletInfoCard() {
               transition
               className="relative transform overflow-hidden  rounded-3xl bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95"
             >
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div className="bg-secondary px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className='flex justify-end w-full' onClick={() => setOpen(false)}>
                   <Image
                     src="/icons/close.svg"

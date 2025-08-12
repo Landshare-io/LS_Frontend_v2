@@ -38,7 +38,7 @@ export default function RequestHistory() {
   }
 
   return (
-    <div className={clsx('bg-white shadow-[1px_3px_4px_1px_rgba(0,0,0,0.12)] p-[24px] text-center h-full', isConnected ? 'rounded-[16px]' : 'rounded-[70px]')}>
+    <div className={clsx('shadow-[1px_3px_4px_1px_rgba(0,0,0,0.12)] p-0 md:p-[24px] text-center h-full', isConnected ? 'rounded-[16px]' : 'rounded-[70px]')}>
       {loading ? (
         <p>Loading...</p>
       ) : requests.length === 0 && isConnected ? (

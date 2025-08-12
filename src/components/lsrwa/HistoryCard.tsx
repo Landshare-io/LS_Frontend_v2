@@ -62,24 +62,24 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
   };
 
   return (
-    <div className="flex gap-2 items-center group">
-      <div className="mt-6 flex items-center w-full justify-between bg-[#F6F8F9] rounded-[12px] py-[8px] px-[12px]">
-        <div className="flex items-center gap-10">
-          <div className={clsx('w-[116px] border border-solid rounded-[100px] px-[21px] py-[2px]', !isWithdraw ? 'border-[#61CD81] bg-[#E6F7EB] text-[#239942]' : 'border-[#E151414D] bg-[#E1514129] text-[#E15141]')}>
+    <div className="flex gap-2 items-center group bg-secondary rounded-[12px] mt-[10px]">
+      <div className="mt-1 flex items-center w-full justify-between py-[8px] px-[12px]">
+        <div className="flex items-center gap-3 md:gap-10">
+          <div className={clsx('w-[80px] md:w-[116px] border border-solid rounded-[100px] px-[5px] md:px-[21px] py-[5px]', !isWithdraw ? 'border-[#61CD81] bg-third text-[#239942]' : 'border-[#E151414D] bg-[#E1514129] text-[#E15141]')}>
             <p className="text-base leading-[22px] font-medium">{!isWithdraw ? 'Deposit' : 'Withdraw'}</p>
           </div>
-          <div>
-            <p className="text-base leading-[19px] font-bold text-black">Request id {id}</p>
+          <div >
+            <p className="text-text-secondary font-semibold">Request id {id}</p>
             <p className="text-base leading-[30px] text-gray">{format(new Date(timestamp * 1000), 'MMMM d, yyyy')}</p>
           </div>
         </div>
         <div className="flex flex-col">
-          <div className={clsx('rounded-[100px] px-[12px] py-[2px]', !processed ? 'bg-[#E0710333] text-[#E07103]' : 'bg-[#E6F7EB] text-[#239942]')}>
+          <div className={clsx('rounded-[100px] px-[12px] py-[2px]', !processed ? 'bg-[#E0710333] text-[#E07103]' : 'bg-third text-[#239942]')}>
             <p className="flex gap-1 text-base leading-[14px] font-medium">
               {!processed && <Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />}
               {!processed ? 'Pending' : 'Completed'}</p>
           </div>
-          <p className="mt-2 text-right text-[18px] font-bold leading-[22px] text-black">${formatNumber(amount)}</p>
+          <p className="mt-2 text-right text-[18px] text-text-secondary font-semibold">${formatNumber(amount)}</p>
 
         </div>
       </div>
