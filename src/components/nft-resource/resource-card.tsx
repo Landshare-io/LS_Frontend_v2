@@ -1,26 +1,9 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 import { InfoIcon } from "../common/icons/index";
 import styles from "./resource-card.module.css"
-
-const customModalStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    overflow: "hidden",
-    maxWidth: "400px",
-    width: "fit-content",
-    height: "fit-content",
-    borderRadius: "20px",
-    padding: 0,
-    border: 0
-  },
-  overlay: {
-    background: '#00000080'
-  }
-};
 
 interface ResourceCardProps {
   children?: React.ReactNode;
@@ -42,7 +25,29 @@ export default function ResourceCard({
   cost,
   cardClassName
 }: ResourceCardProps) {
+  const { theme } = useTheme();
   const [openModal, setOpenModal] = useState(false);
+
+  const customModalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      maxWidth: "400px",
+      width: "fit-content",
+      height: "fit-content",
+      borderRadius: "20px",
+      padding: 0,
+      border: 0,
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
+    },
+    overlay: {
+      background: '#00000080'
+    }
+  };
+
+
   return (
     <div className="flex flex-col duration-300 hover:shadow-lg animate-[fadeIn] w-[251px] rounded-[10px] overflow-hidden m-[20px]">
       <div className={`flex flex-col h-[251px] ${cardClassName}`}>

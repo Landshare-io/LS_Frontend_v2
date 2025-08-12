@@ -33,6 +33,9 @@ export default function ReferralCustomizeModal({
   const [prettyCode, setPrettyCode] = useState<string>("");
 
   const customModalStyles = {
+    content: {
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
+    },
     overlay: {
       background: "#00000080",
     },

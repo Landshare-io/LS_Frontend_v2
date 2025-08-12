@@ -74,7 +74,7 @@ export default function RewardHarvest({
       borderRadius: "20px",
       padding: 0,
       border: 0,
-      background: 'transparent'
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
     },
     overlay: {
       background: '#00000080',
