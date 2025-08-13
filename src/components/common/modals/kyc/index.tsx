@@ -1,4 +1,5 @@
 import Modal from "react-modal";
+import { useTheme } from "next-themes";
 import { MdCancel } from "react-icons/md";
 import { bsc } from "viem/chains";
 import { useAccount, useChainId } from "wagmi";
@@ -17,31 +18,33 @@ interface KYCModalProps {
   setZeroIDModalOpen : ( isZeroIDModal : boolean) => void
 }
 
-const customModalStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    overflow: "auto",
-    maxWidth: "400px",
-    width: "90%",
-    height: "fit-content",
-    borderRadius: "20px",
-  },
-  overlay: {
-    zIndex: 99999,
-    background: "#00000080",
-  },
-};
-
 export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZeroIDModalOpen} : KYCModalProps) {
   const { address } = useAccount();
   const chainId = useChainId();
+  const { theme } = useTheme();
   const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
+
+  const customModalStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "auto",
+      maxWidth: "400px",
+      width: "90%",
+      height: "fit-content",
+      borderRadius: "20px",
+      border: 0,
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
+    },
+    overlay: {
+      zIndex: 99999,
+      background: "#00000080",
+    },
+  };
 
   const handleclosemodal = () => {
     setKycopen(false);
-    document.body.style.overflow = "auto";
   }
 
   const handleLinkClick = (event: any) => {
@@ -49,7 +52,6 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
     event.preventDefault(); // Prevent the default link behavior
     setKycopen(false);
     setZeroIDModalOpen(true);
-    document.body.style.overflow = "hidden";
   };
 
   return(
@@ -64,7 +66,7 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
         >
           <MdCancel
             onClick={handleclosemodal}
-            className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
+            className="float-right text-[#000] dark:text-[#fff] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
           />
           <div className="w-full">
             <h5
@@ -73,7 +75,7 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
               KYC Verification
             </h5>
             <p
-              className={`text-[16px] pt-[10px] leading-[28px] text-center tracking-[2%] ${BOLD_INTER_TIGHT.className} !font-normal`}
+              className={`text-[#000000CC] dark:text-[#fff] text-[16px] pt-[10px] leading-[28px] text-center tracking-[2%] ${BOLD_INTER_TIGHT.className} !font-normal`}
             >
               Complete the KYC process to access RWA Tokens
             </p>
@@ -114,9 +116,8 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
           <MdCancel
             onClick={() => {
               setZeroIDModalOpen(false);
-              document.body.style.overflow = "auto";
             }}
-            className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
+            className="float-right text-[#000] dark:text-[#fff] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
           />
           <KYCWidget />
         </Modal>

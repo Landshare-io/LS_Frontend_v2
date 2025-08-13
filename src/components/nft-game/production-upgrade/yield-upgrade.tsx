@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 import YieldUpgradeCost from "./yield-upgrade-cost";
 import ProductionUpgradeCost from "./production-upgrade-cost";
 import { OpenModalICon } from "../../common/icons/index";
@@ -28,6 +29,7 @@ export default function YieldUpgrade({
   disabled = false,
   isLoading
 }: YieldUpgradeProps) {
+  const { theme } = useTheme();
   const [openModal, setOpenModal] = useState(false);
   const { oneDayTime } = useGetSetting()
   const descriptions: Record<string, string> = {
@@ -128,7 +130,8 @@ export default function YieldUpgrade({
       height: "fit-content",
       borderRadius: "20px",
       padding: 0,
-      border: 0
+      border: 0,
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
     },
     overlay: {
       background: '#00000080'

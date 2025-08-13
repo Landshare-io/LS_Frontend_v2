@@ -4,6 +4,7 @@ import Modal from "react-modal";
 import { useAccount, useChainId } from "wagmi";
 import { MdCancel } from "react-icons/md";
 import { bsc } from "viem/chains";
+import { useTheme } from "next-themes";
 import useIsWhitelistedAddress from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import Button from "../common/button";
@@ -19,6 +20,7 @@ import type { Styles } from "react-modal";
 const RWA_MAJOR_CHAINS = MAJOR_WORK_CHAINS["/rwa"];
 
 export default function InvestmentExplain() {
+  const { theme } = useTheme();
   const chainId = useChainId();
   const {address} = useAccount();
   const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
@@ -32,22 +34,24 @@ export default function InvestmentExplain() {
   }, [isZeroIDModal])
 
   const customModalStyles: Styles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    overflowY: "auto",
-    overflowX: "auto",
-    maxWidth: "400px",
-    width: "90%",
-    maxHeight: "90vh",
-    borderRadius: "20px",
-  },
-  overlay: {
-    zIndex: 99999,
-    background: "#00000080",
-  },
-};
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflowY: "auto",
+      overflowX: "auto",
+      maxWidth: "400px",
+      width: "90%",
+      maxHeight: "90vh",
+      borderRadius: "20px",
+      border: 0,
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
+    },
+    overlay: {
+      zIndex: 99999,
+      background: "#00000080",
+    },
+  };
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -58,18 +62,15 @@ export default function InvestmentExplain() {
 
   async function handlemodalkyc() {
     setKycopen(true);
-    document.body.style.overflow = "hidden";
   }
   function handleclosemodal() {
     setKycopen(false);
-    document.body.style.overflow = "auto";
   }
 
   const handleLinkClick = (event: any) => {
     event.preventDefault(); // Prevent the default link behavior
     setKycopen(false);
     setZeroIDModalOpen(true);
-    document.body.style.overflow = "hidden";
   };
 
   return (
@@ -217,7 +218,7 @@ export default function InvestmentExplain() {
       >
         <MdCancel
           onClick={handleclosemodal}
-          className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
+          className="float-right text-[#000] dark:text-[#fff] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
         />
         <div className="w-full">
           <h5
@@ -226,7 +227,7 @@ export default function InvestmentExplain() {
             KYC Verification
           </h5>
           <p
-            className={`text-[16px] pt-[10px] leading-[28px] text-center tracking-[2%] ${BOLD_INTER_TIGHT.className} !font-normal`}
+            className={`text-[#000000CC] dark:text-[#fff] text-[16px] pt-[10px] leading-[28px] text-center tracking-[2%] ${BOLD_INTER_TIGHT.className} !font-normal`}
           >
             Complete the KYC process to access RWA Tokens
           </p>
@@ -274,9 +275,8 @@ export default function InvestmentExplain() {
         <MdCancel
           onClick={() => {
             setZeroIDModalOpen(false);
-            document.body.style.overflow = "auto";
           }}
-          className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
+          className="float-right text-[#000] dark:text-[#fff] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
         />
         <KYCWidget />
       </Modal>

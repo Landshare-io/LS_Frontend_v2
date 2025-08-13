@@ -3,6 +3,7 @@ import numeral from "numeral";
 import Image from "next/image";
 import Slider from "react-slick";
 import ReactModal from "react-modal";
+import { useTheme } from "next-themes";
 import { yieldUpdgradesData } from "../../../../config/constants/game-data";
 import { 
   validateDependency,
@@ -27,6 +28,7 @@ export default function TotalYieldMultiModal({
   modalShow,
   setModalShow
 }: TotalYieldMultiModalProps) {
+  const { theme } = useTheme();
   const { oneDayTime } = useGetSetting();
   let addonItems = []
   const customModalStyles = {
@@ -40,7 +42,8 @@ export default function TotalYieldMultiModal({
       height: "fit-content",
       borderRadius: "20px",
       padding: 0,
-      border: 0
+      border: 0,
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
     },
     overlay: {
       background: '#00000080'

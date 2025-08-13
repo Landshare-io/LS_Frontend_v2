@@ -29,6 +29,7 @@ export default function YieldUpgrades({
   house,
   setHouse
 }: YieldUpdgradesProps) {
+  const { theme } = useTheme();
   const chainId = useChainId();
   const { address } = useAccount()
   const { notifyError } = useGlobalContext();
@@ -44,7 +45,8 @@ export default function YieldUpgrades({
       borderRadius: "20px",
       padding: 0,
       border: 0,
-      background: 'transparent'
+      background: 'transparent',
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
     },
     overlay: {
       background: '#00000080',
