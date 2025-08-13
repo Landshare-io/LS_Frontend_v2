@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useWaitForTransactionReceipt } from 'wagmi';
 import { Address } from 'viem';
 import { formatEther, parseUnits } from 'viem';
@@ -56,6 +56,27 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: buyTx,
   });
+
+  const proceededUsdcRef = useRef(false)
+const proceededLandRef = useRef(false)
+
+async function waitForAllowance(
+  refetchFn: () => Promise<{ data: unknown } | any>,
+  needed: bigint,
+  label: string,
+  timeoutMs = 20_000,
+  intervalMs = 800
+) {
+  const deadline = Date.now() + timeoutMs
+  while (true) {
+    const res = await refetchFn()
+    // wagmi read hooks usually return { data }, coerce safely:
+    const current = BigInt((res?.data ?? 0).toString())
+    if (current >= needed) return
+    if (Date.now() > deadline) throw new Error("allowance still below required")
+    await new Promise(r => setTimeout(r, intervalMs))
+  }
+}
 
   useEffect(() => {
     try {
@@ -149,7 +170,14 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
       setScreenLoadingStatus("Transaction Pending...")
       if (Number(formatEther(BigInt(usdcAllowance))) < Number(formatEther(BigInt(buyUSDCAmount)))) {
         await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], buyUSDCAmount);
-      } else {
+      } else if (Number(formatEther(BigInt(landAllowance))) < Number(formatEther(BigInt(landAmount)))) { 
+        approveLand(
+                chainId,
+                LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
+                (BigInt(landAmount) * BigInt(101)) / BigInt(100)
+              )
+      }
+      else {
         console.log("Buying Token")
         buyToken(amount, USDC_ADDRESS[chainId])
       }
