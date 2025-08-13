@@ -12,8 +12,8 @@ import useBalanceOfRwaContract from '../contract/RWAContract/useBalanceOf';
 import useBalanceOfUsdtContract from '../contract/UsdtContract/useBalanceOf';
 import useBalanceOfLandContract from '../contract/LandTokenContract/useBalanceOf';
 import useAllowanceOfLandContract from '../contract/LpTokenV2Contract/useAllowance';
-import { 
-  LANDSHARE_BUY_SALE_CONTRACT_ADDRESS, 
+import {
+  LANDSHARE_BUY_SALE_CONTRACT_ADDRESS,
   USDC_ADDRESS,
   TRANSACTION_CONFIRMATIONS_COUNT
 } from '../../config/constants/environments';
@@ -23,7 +23,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
   const { setScreenLoadingStatus } = useGlobalContext()
   const { refetch: rwaBalanceRefetch } = useBalanceOfRwaContract(chainId, address) as { refetch: Function };
   const { refetch: usdtBalanceRefetch } = useBalanceOfUsdtContract(chainId, address) as { refetch: Function };
-  const { refetch: landBalanceRefetch } = useBalanceOfLandContract({chainId, address}) as { refetch: Function };
+  const { refetch: landBalanceRefetch } = useBalanceOfLandContract({ chainId, address }) as { refetch: Function };
 
   const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]) as {
     data: BigNumberish,
@@ -71,7 +71,11 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
         if (usdcApproveStatusData) {
           if (usdcApproveSuccess) {
             if (BigInt(landAmount) > BigInt(0)) {
-              approveLand(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], landAmount)
+              approveLand(
+                chainId,
+                LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
+                (BigInt(landAmount) * BigInt(101)) / BigInt(100)
+              )
               landAllowanceRefetch()
             } else {
               buyToken(amount, USDC_ADDRESS[chainId])
