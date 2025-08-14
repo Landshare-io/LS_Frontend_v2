@@ -13,12 +13,8 @@ export default function RequestHistory() {
 
   const { fetchRequests } = useRequests();
   const { address, isConnected } = useAccount();
-
-
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
-
-
   useEffect(() => {
     if (!isConnected || !address) return;
     fetchRequest();
@@ -34,7 +30,6 @@ export default function RequestHistory() {
       setRequests(data)
     }
     setLoading(false)
-
   }
 
   return (
@@ -48,9 +43,6 @@ export default function RequestHistory() {
           <HistoryCard fetchRequests={fetchRequest} key={history.requestId} isWithdraw={history.isWithdraw} timestamp={history.timestamp} id={history.requestId} amount={history.amount} processed={history.processed} executed={history.executed} />
         ))
       }
-      {/* <div className="mt-8 justify-items-center">
-      <WalletConnectButton />
-      </div> */}
     </div>
   );
 }

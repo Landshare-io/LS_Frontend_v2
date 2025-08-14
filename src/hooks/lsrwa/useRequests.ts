@@ -31,7 +31,7 @@ export function useRequests() {
   }
 
   async function processRequests(signer : any) {
-    const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_SEPOLIA_RPC);
+    const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
       const vault = new ethers.Contract(VAULT_ADDRESS, vaultAbi, signer);
       const usdc = new ethers.Contract((process.env.NEXT_PUBLIC_USDC_ADDRESS as any), usdcAbi, provider);
       const poolUSDC = await usdc.balanceOf(VAULT_ADDRESS);
@@ -107,11 +107,6 @@ export function useRequests() {
         const [borrowList, borrowerList] = await vault.getUnpaidBorrowList(borrowers, pending);
         for (let i = 0; i < borrowList.length; i++) {
           const [amount, repaid, approved] = borrowList[i];
-          // const collateral = await vault.collateralDeposits(borrowerList[i]);
-          // console.log('collateral', collateral);
-          
-          // if(formatUnits(collateral, 18) * parseFloat(process.env.NEXT_PUBLIC_TOKEN_PRICE || '1') > formatUnits(amount, parseInt(process.env.NEXT_PUBLIC_USDC_DECIMALS || '6'))) {
-          // }
           if(liquidityRemaining > amount) {
             liquidityRemaining -= amount;
             unpaidBorrowers.push(borrowerList[i]);

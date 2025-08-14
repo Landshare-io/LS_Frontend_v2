@@ -1,22 +1,27 @@
 import { ethers, parseUnits, formatUnits } from "ethers";
-import { useWallet } from "@/hooks/lsrwa/useWallet";
 import vaultAbi from '@/abis/Vault.json';
 import usdcAbi from "@/abis/ERC20.json";
-import {formatNumber} from '@/utils/helpers/format-numbers'
+import { formatNumber } from '@/utils/helpers/format-numbers'
+import useGetRwaPrice from "../contract/APIConsumerContract/useGetRwaPrice";
+import { useChainId } from "wagmi";
+import { BigNumberish, formatEther } from "ethers";
 
-const VAULT_ADDRESS : any = process.env.NEXT_PUBLIC_VAULT_ADDRESS;
+
+const VAULT_ADDRESS: any = process.env.NEXT_PUBLIC_VAULT_ADDRESS;
 
 export function usePerformance() {
+  const chainId = useChainId()
+  const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
 
-  const fetchTotalValue = async (signer : any) => {
-    
+  const fetchTotalValue = async (signer: any) => {
+
     const vault = new ethers.Contract(VAULT_ADDRESS, vaultAbi, signer);
 
-    let users : any = [];
+    let users: any = [];
     const depsoitEvents = await vault.queryFilter("DepositApproved", 0, "latest");
-    
+
     for (const event of depsoitEvents) {
-      const { requestId, user, amount } = (event as any).args;
+      const { user } = (event as any).args;
       if (!users.includes(user)) {
         users.push(user);
       }
@@ -27,14 +32,14 @@ export function usePerformance() {
   }
 
   const collateralValue = async () => {
-    
-    const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_SEPOLIA_RPC);
+    const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
     const token = new ethers.Contract(process.env.NEXT_PUBLIC_TOKEN_ADDRESS as any, usdcAbi, provider);
     let poolToken = await token.balanceOf(VAULT_ADDRESS);
     poolToken = formatUnits(poolToken, 18);
-    const tokenPrice = parseFloat(process.env.NEXT_PUBLIC_TOKEN_PRICE || '1');
 
-    return formatNumber(poolToken*tokenPrice);
+    const tokenPrice = parseFloat(Number(formatEther(rwaPrice ?? 0)).toString() || '1');
+
+    return formatNumber(poolToken * tokenPrice);
   }
 
   return {

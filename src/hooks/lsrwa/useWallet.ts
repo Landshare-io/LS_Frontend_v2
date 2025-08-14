@@ -1,7 +1,7 @@
 // hooks/useWallet.ts
 
 import { useAccount, useBalance, useDisconnect } from 'wagmi';
-import { formatUnits, ethers } from 'ethers';
+import { formatUnits } from 'ethers';
 import { formatNumber } from '@/utils/helpers/format-numbers';
 import type { Address } from "viem";
 

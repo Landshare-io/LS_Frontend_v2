@@ -6,7 +6,7 @@ import { useWallet } from "@/hooks/lsrwa/useWallet";
 import vaultAbi from "@/abis/Vault.json";
 import erc20Abi from "@/abis/ERC20.json";
 import { connectWallet } from "@/utils/wallet";
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import { DialogTitle } from '@headlessui/react'
 
 export default function DepositForm() {
   const {
@@ -53,7 +53,6 @@ export default function DepositForm() {
       }
     }
   };
-
 
   const handleOnChange = (e: any) => {
     setAmount(e.target.value)

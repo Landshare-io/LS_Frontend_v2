@@ -15,22 +15,20 @@ export default function WalletInfoCard() {
     isConnected,
     disconnect,
     balance,
-    symbol,
   } = useWallet();
 
   const [isVisible, setIsVisible] = useState(false);
   const [open, setOpen] = useState(false)
-  const [amount, setAmount] = useState(0)
   const router = useRouter();
 
   const handleDepositClick = () => {
     setOpen(true)
   };
   const handleWithdrawClick = () => {
-    router.push('/withdraw');
+    // router.push('/withdraw');
   };
   const handleSwapClick = () => {
-    router.push('/swap');
+    // router.push('/swap');
   };
   const handleDisplayClick = () => {
     setIsVisible(!isVisible);

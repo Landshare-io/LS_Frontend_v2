@@ -2,19 +2,14 @@
 
 import { useState } from "react";
 import { ethers } from "ethers";
-import { useWallet } from "@/hooks/lsrwa/useWallet";
 import vaultAbi from "@/abis/Vault.json";
-import erc20Abi from "@/abis/ERC20.json";
 import { connectWallet } from "@/utils/wallet";
+import { useAccount } from "wagmi";
 
 export default function WithdrawForm() {
   const {
-    address,
     isConnected,
-    disconnect,
-    balance,
-    symbol,
-  } = useWallet();
+  } = useAccount();
   const [amount, setAmount] = useState("");
   const [status, setStatus] = useState("");
 

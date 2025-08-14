@@ -5,27 +5,32 @@ import { connectWallet } from "@/utils/wallet";
 import { useDepositorAccount } from '@/hooks/lsrwa/useDepositorAccount'
 import { usePerformance } from '@/hooks/lsrwa/usePerformance'
 import Progressbar from "./Progressbar"
+import { useAccount } from 'wagmi';
+
 
 export default function AccountCard() {
   const { rewardAPR, isLoading } = useDepositorAccount()
   const { fetchTotalValue, collateralValue } = usePerformance()
+
+  const { isConnected } = useAccount()
 
   const [totalValue, setTotalValue] = useState('0')
   const [collateral, setCollateral] = useState('0')
 
   useEffect(() => {
     const fetchValues = async () => {
-      const walletConnection = await connectWallet();
-      if (walletConnection !== null) {
-        const { signer } = walletConnection;
-        const total = await fetchTotalValue(signer);
-        const col = await collateralValue();
-        setTotalValue(total)
-        setCollateral(col)
-      } else {
-        console.error('Failed to connect wallet: Connection is null');
+      if (isConnected) {
+        const walletConnection = await connectWallet();
+        if (walletConnection !== null) {
+          const { signer } = walletConnection;
+          const total = await fetchTotalValue(signer);
+          const col = await collateralValue();
+          setTotalValue(total)
+          setCollateral(col)
+        } else {
+          console.error('Failed to connect wallet: Connection is null');
+        }
       }
-
     }
 
     fetchValues()

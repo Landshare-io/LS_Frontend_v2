@@ -6,7 +6,7 @@ import { format, formatDuration, intervalToDuration } from 'date-fns';
 import vaultAbi from '@/abis/Vault.json';
 
 const AVERAGE_BLOCK_TIME_MS = (process.env.NEXT_PUBLIC_BLOCK_TIME as any) * 1000;
-const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_SEPOLIA_RPC);
+const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
 const vaultAddress: any = process.env.NEXT_PUBLIC_VAULT_ADDRESS;
 
 export default function EpochProgressBar({ refresh = false }) {

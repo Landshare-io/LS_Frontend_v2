@@ -1,22 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useWallet } from '@/hooks/lsrwa/useWallet';
-import { Connector, useConnect } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
 
-export default function WalletConnectButton(style  : any) {
+export default function WalletConnectButton(style: any) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const {
-    address,
     isConnected,
-    disconnect,
-    balance,
-    symbol,
-  } = useWallet();
+  } = useAccount();
 
   const { connectors, isPending, connect } = useConnect()
 

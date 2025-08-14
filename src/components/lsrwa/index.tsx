@@ -4,20 +4,14 @@ import WalletInfoCard from "./WalletInfoCard";
 import AccountCard from "./AccountCard";
 import PerformanceCard from "./PerformanceCard";
 import EpochInfoCard from "./EpochInfoCard";
-import Image from 'next/image';
-
-import { useWallet } from '@/hooks/lsrwa/useWallet';
 import clsx from "clsx";
 import { IoIosTrendingUp } from "react-icons/io";
+import { useAccount } from "wagmi";
 
 export default function Rwa() {
     const {
-        address,
         isConnected,
-        disconnect,
-        balance,
-        symbol,
-    } = useWallet();
+    } = useAccount();
     return (
         <main className="px-[10px] md:px-[66px] xl:px-[120px] py-10 md:py-[20px]">
             <div className="flex items-center gap-[10px] p-[8px] pr-[30px]  bg-secondary rounded-[50px] w-max">
