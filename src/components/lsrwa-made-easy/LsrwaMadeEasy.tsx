@@ -15,11 +15,6 @@ function LsrwaMadeEasy() {
         <h1
           className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] my-[12px] ${BOLD_INTER_TIGHT.className}`}
         >
-          LSRWA Express
-        </h1>
-        <h1
-          className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] my-[12px] ${BOLD_INTER_TIGHT.className}`}
-        >
           Buying LSRWA Made Easy
         </h1>
         <p className="line-clamp-4 mb-6 md:text-[16px] md:leading-[24px] md:tracking-[2%] lg:mb-[40px] lg:text-[18px] lg:leading-[28px] lg:tracking-[0.36px] text-[#535457] dark:text-[#a9abaf]">
