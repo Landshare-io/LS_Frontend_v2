@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useAccount, useChainId, useReadContracts, useWriteContract } from 'wagmi';
 import vaultAbi from '@/abis/Vault.json';
 import { formatUnits } from 'ethers';
-import { formatNumber } from '@/utils/helpers/format-numbers'
 import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
+import numeral from "numeral";
 
 export function useDepositorAccount() {
   const [compounding, setCompounding] = useState(false);
@@ -85,9 +85,9 @@ export function useDepositorAccount() {
     }
   }
 
-  const deposited = formatNumber(formatUnits((data as any)?.[0][0] ?? "0", 6));
+  const deposited = numeral(Number(formatUnits((data as any)?.[0][0] ?? "0", 6))).format("0.[000]");
   const autoCompound = (data as any)?.[0][1] ?? false;
-  const reward = formatNumber(formatUnits((data as any)?.[1] ?? "0", 6));
+  const reward = Number(numeral(Number(formatUnits((data as any)?.[1] ?? "0", 6))).format("0.[000]"));
   const rewardAPR = Number((data as any)?.[2] ?? "0") * 0.01;
 
   return {

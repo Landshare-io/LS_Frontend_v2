@@ -1,7 +1,7 @@
 import { ethers, formatUnits } from "ethers";
 import vaultAbi from '@/abis/Vault.json';
 import usdcAbi from "@/abis/ERC20.json";
-import { formatNumber } from '@/utils/helpers/format-numbers'
+import numeral from "numeral";
 import useGetRwaPrice from "../contract/APIConsumerContract/useGetRwaPrice";
 import { useChainId, useWalletClient } from "wagmi";
 import { BigNumberish, formatEther } from "ethers";
@@ -31,7 +31,7 @@ export function usePerformance() {
     }
 
     const totalValue = await vault.totalDepositValue(users);
-    return formatNumber(formatUnits(totalValue, 6));
+    return numeral(Number(formatUnits(totalValue, 6))).format("0.[000]");
   }
 
   const collateralValue = async () => {
@@ -44,7 +44,7 @@ export function usePerformance() {
 
       const tokenPrice = parseFloat(Number(formatEther(rwaPrice ?? 0)).toString() || '1');
 
-      return formatNumber(poolToken * tokenPrice);
+      return numeral(Number(poolToken * tokenPrice)).format("0.[000]");
     }
   }
 

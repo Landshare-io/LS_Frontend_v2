@@ -2,7 +2,7 @@
 
 import { useDepositorAccount } from '@/hooks/lsrwa/useDepositorAccount';
 import ToggleSwitchButton from "./ToggleSwitchButton";
-import { formatNumber } from '@/utils/helpers/format-numbers'
+import numeral from "numeral";
 
 export default function AccountCard() {
 
@@ -46,7 +46,7 @@ export default function AccountCard() {
         <div className='text-center'>
           <div>
             <p className='text-text-secondary font-semibold'>Available Yield</p>
-            <p className='text-[24px] font-bold leading-[30px]'>$ {isLoading ? 0 : formatNumber(reward)}</p>
+            <p className='text-[24px] font-bold leading-[30px]'>$ {isLoading ? 0 : numeral(reward).format("0.[00]").toString()}</p>
             <p className='text-text-secondary font-medium text-[11px]'>Total earnings To date</p>
           </div>
           {reward > 0 &&

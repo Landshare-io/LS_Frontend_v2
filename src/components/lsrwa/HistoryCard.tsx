@@ -7,9 +7,9 @@ import Image from 'next/image';
 import { ethers } from "ethers";
 import { connectWallet } from "@/utils/wallet";
 import vaultAbi from "@/abis/Vault.json";
-import { formatNumber } from "@/utils/helpers/format-numbers";
 import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 import { useChainId } from 'wagmi';
+import numeral from "numeral";
 
 
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed }: any) {
@@ -80,7 +80,7 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
               {!processed && <Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />}
               {!processed ? 'Pending' : 'Completed'}</p>
           </div>
-          <p className="mt-2 text-right text-[18px] text-text-secondary font-semibold">${formatNumber(amount)}</p>
+          <p className="mt-2 text-right text-[18px] text-text-secondary font-semibold">${numeral(Number(amount)).format("0.[000]")}</p>
 
         </div>
       </div>
