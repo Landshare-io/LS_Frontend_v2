@@ -6,7 +6,6 @@ import { useWallet } from "@/hooks/lsrwa/useWallet";
 import vaultAbi from "@/abis/Vault.json";
 import erc20Abi from "@/abis/ERC20.json";
 import { connectWallet } from "@/utils/wallet";
-import { DialogTitle } from '@headlessui/react'
 import { useChainId } from "wagmi";
 import { USDC_ADDRESS } from "@/config/constants/environments";
 import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
@@ -70,9 +69,9 @@ export default function DepositForm() {
   return (
     <div className="sm:flex sm:items-start">
       <div className="text-center sm:text-left">
-        <DialogTitle as="h3" className="text-base font-bold text-text-primary text-[20px]">
+        <div className="text-base font-bold text-text-primary text-[20px]">
           Deposit USDC to invest in income-generating real estate
-        </DialogTitle>
+        </div>
         <div className="mt-[18px]">
           <p className="text-sm text-text-secondary text-[12px] font-semibold">
             Set Amount

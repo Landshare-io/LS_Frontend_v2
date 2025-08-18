@@ -4,10 +4,27 @@ import { useState } from 'react';
 import { useWallet } from '@/hooks/lsrwa/useWallet';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import DepositForm from './DepositForm';
 import ConnectWallet from '../connect-wallet';
+import Modal from "react-modal";
 
+const customModalStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    overflow: "auto",
+    maxWidth: "600px",
+    width: "fit-content",
+    height: "fit-content",
+    borderRadius: "20px",
+    padding: 0,
+  },
+  overlay: {
+    zIndex: 99999,
+    background: "#00000080",
+  },
+};
 
 export default function WalletInfoCard() {
   const {
@@ -143,30 +160,21 @@ export default function WalletInfoCard() {
           </div>
         </div>
       )}
-      <Dialog open={open} onClose={setOpen} className="relative z-10">
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-
-            <DialogPanel
-              transition
-              className="relative transform overflow-hidden  rounded-3xl bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95"
-            >
-              <div className="bg-secondary px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className='flex justify-end w-full' onClick={() => setOpen(false)}>
-                  <Image
-                    src="/icons/close.svg"
-                    alt="close Modal"
-                    width={12}
-                    height={12}
-                    priority
-                  />
-                </div>
-                <DepositForm />
-              </div>
-            </DialogPanel>
+      <Modal isOpen={open} onRequestClose={() => setOpen(false)} style={customModalStyles}
+        contentLabel="Modal">
+        <div className="bg-secondary px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div className='flex justify-end w-full' onClick={() => setOpen(false)}>
+            <Image
+              src="/icons/close.svg"
+              alt="close Modal"
+              width={12}
+              height={12}
+              priority
+            />
           </div>
+          <DepositForm />
         </div>
-      </Dialog>
+      </Modal>
 
     </div>
   );
