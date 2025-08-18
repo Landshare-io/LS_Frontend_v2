@@ -1,18 +1,21 @@
-import { ethers, parseUnits, formatUnits } from "ethers";
+import { ethers, formatUnits } from "ethers";
 import vaultAbi from '@/abis/Vault.json';
 import usdcAbi from "@/abis/ERC20.json";
 import { formatNumber } from '@/utils/helpers/format-numbers'
 import useGetRwaPrice from "../contract/APIConsumerContract/useGetRwaPrice";
-import { useChainId } from "wagmi";
+import { useChainId, useWalletClient } from "wagmi";
 import { BigNumberish, formatEther } from "ethers";
-
-
-const VAULT_ADDRESS: any = process.env.NEXT_PUBLIC_VAULT_ADDRESS;
+import { LSRWA_VAULT_ADDRESS, RWA_CONTRACT_ADDRESS } from "@/config/constants/environments";
+import { Address } from "viem";
+import { Web3Provider } from '@ethersproject/providers';
 
 export function usePerformance() {
+  const { data: walletClient } = useWalletClient();
+
   const chainId = useChainId()
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
 
+  const VAULT_ADDRESS: Address = LSRWA_VAULT_ADDRESS[chainId];
   const fetchTotalValue = async (signer: any) => {
 
     const vault = new ethers.Contract(VAULT_ADDRESS, vaultAbi, signer);
@@ -28,18 +31,21 @@ export function usePerformance() {
     }
 
     const totalValue = await vault.totalDepositValue(users);
-    return formatNumber(formatUnits(totalValue, parseInt(process.env.NEXT_PUBLIC_USDC_DECIMALS || '6')));
+    return formatNumber(formatUnits(totalValue, 6));
   }
 
   const collateralValue = async () => {
-    const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
-    const token = new ethers.Contract(process.env.NEXT_PUBLIC_TOKEN_ADDRESS as any, usdcAbi, provider);
-    let poolToken = await token.balanceOf(VAULT_ADDRESS);
-    poolToken = formatUnits(poolToken, 18);
+    if (walletClient) {
+      const provider = new Web3Provider(walletClient as any);
 
-    const tokenPrice = parseFloat(Number(formatEther(rwaPrice ?? 0)).toString() || '1');
+      const token = new ethers.Contract(RWA_CONTRACT_ADDRESS[chainId], usdcAbi, provider as unknown as ethers.Signer);
+      let poolToken = await token.balanceOf(VAULT_ADDRESS);
+      poolToken = formatUnits(poolToken, 18);
 
-    return formatNumber(poolToken * tokenPrice);
+      const tokenPrice = parseFloat(Number(formatEther(rwaPrice ?? 0)).toString() || '1');
+
+      return formatNumber(poolToken * tokenPrice);
+    }
   }
 
   return {

@@ -4,12 +4,14 @@ import { useState } from "react";
 import { ethers } from "ethers";
 import vaultAbi from "@/abis/Vault.json";
 import { connectWallet } from "@/utils/wallet";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
+import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 
 export default function WithdrawForm() {
   const {
     isConnected,
   } = useAccount();
+  const chainId = useChainId();
   const [amount, setAmount] = useState("");
   const [status, setStatus] = useState("");
 
@@ -20,9 +22,9 @@ export default function WithdrawForm() {
         const { signer } = walletConnection;
         if (!isConnected) return alert("Wallet not connected");
 
-        const vault = new ethers.Contract((process.env.NEXT_PUBLIC_VAULT_ADDRESS as any), vaultAbi, signer);
+        const vault = new ethers.Contract(LSRWA_VAULT_ADDRESS[chainId], vaultAbi, signer);
 
-        const parsedAmount = ethers.parseUnits(amount, parseInt((process.env.NEXT_PUBLIC_USDC_DECIMALS as any))); // USDC uses 6 decimals
+        const parsedAmount = ethers.parseUnits(amount, 6); // USDC uses 6 decimals
 
         setStatus("Requesting withdraw...");
         const withdrawTx = await vault.requestWithdraw(parsedAmount);

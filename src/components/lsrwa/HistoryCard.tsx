@@ -5,16 +5,17 @@ import clsx from "clsx";
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { ethers } from "ethers";
-
 import { connectWallet } from "@/utils/wallet";
 import vaultAbi from "@/abis/Vault.json";
 import { formatNumber } from "@/utils/helpers/format-numbers";
+import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
+import { useChainId } from 'wagmi';
 
 
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed }: any) {
   const [cancelling, setCancelling] = useState(false);
   const [receiving, setReceiving] = useState(false);
-
+  const chainId = useChainId()
 
   const cancelDeposit = async () => {
     if (cancelling) return;
@@ -25,7 +26,7 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
         if (!signer) return alert("Connect wallet first");
         setCancelling(true);
 
-        const vault = new ethers.Contract((process.env.NEXT_PUBLIC_VAULT_ADDRESS as any), vaultAbi, signer);
+        const vault = new ethers.Contract(LSRWA_VAULT_ADDRESS[chainId], vaultAbi, signer);
         const tx = await vault.cancelDepositRequest(BigInt(id));
         await tx.wait();
 
@@ -47,7 +48,7 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
         if (!signer) return alert("Connect wallet first");
         setReceiving(true);
 
-        const vault = new ethers.Contract((process.env.NEXT_PUBLIC_VAULT_ADDRESS as any), vaultAbi, signer);
+        const vault = new ethers.Contract(LSRWA_VAULT_ADDRESS[chainId], vaultAbi, signer);
         const tx = await vault.executeWithdraw(BigInt(id));
         await tx.wait();
         setReceiving(false);

@@ -7,6 +7,9 @@ import vaultAbi from "@/abis/Vault.json";
 import erc20Abi from "@/abis/ERC20.json";
 import { connectWallet } from "@/utils/wallet";
 import { DialogTitle } from '@headlessui/react'
+import { useChainId } from "wagmi";
+import { USDC_ADDRESS } from "@/config/constants/environments";
+import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 
 export default function DepositForm() {
   const {
@@ -15,6 +18,7 @@ export default function DepositForm() {
   } = useWallet();
   const [amount, setAmount] = useState<number>(0);
   const [status, setStatus] = useState("");
+  const chainId = useChainId()
 
   const handleDeposit = async () => {
     const walletConnection = await connectWallet();
@@ -23,24 +27,25 @@ export default function DepositForm() {
       if (amount > balance || amount === 0 || !amount) return
       try {
         if (!isConnected) return alert("Wallet not connected");
-        const usdc = new ethers.Contract((process.env.NEXT_PUBLIC_USDC_ADDRESS as any), erc20Abi, signer);
-        const vault = new ethers.Contract((process.env.NEXT_PUBLIC_VAULT_ADDRESS as any), vaultAbi, signer);
+        const usdc = new ethers.Contract(USDC_ADDRESS[chainId], erc20Abi, signer);
+        const vault = new ethers.Contract(LSRWA_VAULT_ADDRESS[chainId], vaultAbi, signer);
 
-        const parsedAmount = ethers.parseUnits(amount.toString(), parseInt((process.env.NEXT_PUBLIC_USDC_DECIMALS as any))); // USDC uses 6 decimals
+        const parsedAmount = ethers.parseUnits(amount.toString(), 6); // USDC uses 6 decimals
 
         setStatus("Checking allowance...");
         const owner = await signer.getAddress();
-        const allowance = await usdc.allowance(owner, process.env.NEXT_PUBLIC_VAULT_ADDRESS);
+        const allowance = await usdc.allowance(owner, LSRWA_VAULT_ADDRESS[chainId]);
 
         if (allowance < parsedAmount) {
+          console.log('approve started')
           setStatus("Approving USDC...");
-          const approveTx = await usdc.approve(process.env.NEXT_PUBLIC_VAULT_ADDRESS, parsedAmount);
+          const approveTx = await usdc.approve(LSRWA_VAULT_ADDRESS[chainId], parsedAmount);
           await approveTx.wait();
         }
-
         setStatus("Requesting deposit...");
         const depositTx = await vault.requestDeposit(parsedAmount);
         await depositTx.wait();
+        console.log('depositTx => ', depositTx)
 
         setStatus("Requested deposit!");
         setTimeout(() => {

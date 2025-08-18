@@ -4,11 +4,15 @@ import { useAccount, useBalance, useDisconnect } from 'wagmi';
 import { formatUnits } from 'ethers';
 import { formatNumber } from '@/utils/helpers/format-numbers';
 import type { Address } from "viem";
+import { useChainId } from "wagmi";
+import { RWA_CONTRACT_ADDRESS, USDC_ADDRESS } from "@/config/constants/environments";
+import { LSRWA_ADMIN_ADDRESS } from "@/config/constants/environments";
 
 export function useWallet() {
 
-  const { address, isConnected, connector, status, chainId } = useAccount();
+  const { address, isConnected, connector, status } = useAccount();
   const { disconnect } = useDisconnect();
+  const chainId = useChainId()
 
   const {
     data: usdcBalance,
@@ -16,8 +20,8 @@ export function useWallet() {
     refetch: refetchUSDCBalance,
   } = useBalance({
     address: address,
-    token: process.env.NEXT_PUBLIC_USDC_ADDRESS as Address,
-    chainId: chainId
+    token: USDC_ADDRESS[chainId],
+    chainId: chainId,
   }) as { data: any, isPending: any, refetch: any };
 
   const {
@@ -26,13 +30,11 @@ export function useWallet() {
     refetch: refetchTokenBalance,
   } = useBalance({
     address: address,
-    token: process.env.NEXT_PUBLIC_TOKEN_ADDRESS as Address,
+    token: RWA_CONTRACT_ADDRESS[chainId],
     chainId: chainId
   }) as { data: any, isPending: any, refetch: any };
 
-  const decimals = parseInt(process.env.NEXT_PUBLIC_USDC_DECIMALS || '6');
-
-  const isAdminConnected = isConnected && address == process.env.NEXT_PUBLIC_ADMIN_ADDRESS
+  const isAdminConnected = isConnected && address == LSRWA_ADMIN_ADDRESS[chainId]
   return {
     isAdminConnected,
     address,
@@ -40,7 +42,7 @@ export function useWallet() {
     status,
     connector,
     disconnect,
-    balance: usdcBalance?.value ? formatNumber(formatUnits(usdcBalance.value, decimals)) : '0.0',
+    balance: usdcBalance?.value ? formatNumber(formatUnits(usdcBalance.value, 6)) : '0.0',
     symbol: usdcBalance?.symbol ?? '',
     tokenBalance: !isTokenBalanceLoading ? formatNumber(formatUnits((tokenBalance as any).value, 18)) : '0.0',
     // symbol: balanceData?.symbol ?? '',

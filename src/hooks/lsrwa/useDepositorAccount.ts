@@ -1,18 +1,18 @@
 
 import { useState } from "react";
-import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
+import { useAccount, useChainId, useReadContracts, useWriteContract } from 'wagmi';
 import vaultAbi from '@/abis/Vault.json';
 import { formatUnits } from 'ethers';
-import {formatNumber} from '@/utils/helpers/format-numbers'
-
-const decimals = parseInt(process.env.NEXT_PUBLIC_USDC_DECIMALS || '6');
-const VAULT_ADDRESS = process.env.NEXT_PUBLIC_VAULT_ADDRESS;
+import { formatNumber } from '@/utils/helpers/format-numbers'
+import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 
 export function useDepositorAccount() {
   const [compounding, setCompounding] = useState(false);
   const [harvesting, setHarvesting] = useState(false);
   const { address } = useAccount();
   const { writeContractAsync } = useWriteContract();
+  const chainId = useChainId()
+  const VAULT_ADDRESS = LSRWA_VAULT_ADDRESS[chainId];
 
   const { data, isLoading, refetch, error } = useReadContracts({
     contracts: [
@@ -23,13 +23,13 @@ export function useDepositorAccount() {
         args: [address],
       },
       {
-        address:  (VAULT_ADDRESS as any),
+        address: (VAULT_ADDRESS as any),
         abi: vaultAbi,
         functionName: 'calculateHarvest',
         args: [address],
       },
       {
-        address:  (VAULT_ADDRESS as any),
+        address: (VAULT_ADDRESS as any),
         abi: vaultAbi,
         functionName: 'rewardAPR',
       },
@@ -40,11 +40,11 @@ export function useDepositorAccount() {
     },
   });
 
-  const setAutoCompound = async (status : any) => {
-    
+  const setAutoCompound = async (status: any) => {
+
     try {
       await writeContractAsync({
-        address:  (VAULT_ADDRESS as any),
+        address: (VAULT_ADDRESS as any),
         abi: vaultAbi,
         functionName: 'setAutoCompound',
         args: [status],
@@ -58,7 +58,7 @@ export function useDepositorAccount() {
     setCompounding(true);
     try {
       await writeContractAsync({
-        address:  (VAULT_ADDRESS as any),
+        address: (VAULT_ADDRESS as any),
         abi: vaultAbi,
         functionName: 'compound',
       });
@@ -73,7 +73,7 @@ export function useDepositorAccount() {
     setHarvesting(true);
     try {
       await writeContractAsync({
-        address:  (VAULT_ADDRESS as any),
+        address: (VAULT_ADDRESS as any),
         abi: vaultAbi,
         functionName: 'harvest',
       });
@@ -85,10 +85,10 @@ export function useDepositorAccount() {
     }
   }
 
-  const deposited = formatNumber(formatUnits((data as any)?.[0][0] ?? "0", decimals)) ;
-  const autoCompound = (data as any)?.[0][1] ?? false ;
-  const reward = formatNumber(formatUnits((data as any)?.[1] ?? "0", decimals)) ;
-  const rewardAPR = Number((data as any)?.[2] ?? "0") * 0.01 ;
+  const deposited = formatNumber(formatUnits((data as any)?.[0][0] ?? "0", 6));
+  const autoCompound = (data as any)?.[0][1] ?? false;
+  const reward = formatNumber(formatUnits((data as any)?.[1] ?? "0", 6));
+  const rewardAPR = Number((data as any)?.[2] ?? "0") * 0.01;
 
   return {
     deposited,

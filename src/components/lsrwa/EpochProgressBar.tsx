@@ -4,54 +4,83 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { format, formatDuration, intervalToDuration } from 'date-fns';
 import vaultAbi from '@/abis/Vault.json';
+import { useAccount, useChainId, useWalletClient } from 'wagmi';
+import type { Address } from "viem";
+import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
+import { Web3Provider } from '@ethersproject/providers';
 
-const AVERAGE_BLOCK_TIME_MS = (process.env.NEXT_PUBLIC_BLOCK_TIME as any) * 1000;
-const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
-const vaultAddress: any = process.env.NEXT_PUBLIC_VAULT_ADDRESS;
+const AVERAGE_BLOCK_TIME_MS = 15 * 1000;
+
 
 export default function EpochProgressBar({ refresh = false }) {
+  const { data: walletClient } = useWalletClient();
+
+
   const [progress, setProgress] = useState(0);
   const [timeLeftMs, setTimeLeftMs] = useState(0);
   const [startTimeMs, setStartTimeMs] = useState(0);
   const [endTimestampMs, setEndTimestampMs] = useState(0);
+  const chainId = useChainId()
+  const vaultAddress: Address = LSRWA_VAULT_ADDRESS[chainId];
+
+  const { isConnected } = useAccount();
+  const displayTime = (durationMs: number) => {
+    const now = Date.now();
+
+    const timeLeft = Math.max(0, endTimestampMs - now);
+
+    const progressPercent = Math.min(100, ((durationMs - timeLeft) / durationMs) * 100);
+
+    setTimeLeftMs(timeLeft);
+    setProgress(progressPercent);
+  }
 
   useEffect(() => {
     let interval: any;
 
     async function getEpochBlocks() {
-      const vault = new ethers.Contract(vaultAddress, vaultAbi, provider);
-      const epochDuration = Number(await vault.epochDuration());
-      const startBlock = await vault.epochStart();
 
-      const durationMs = epochDuration * AVERAGE_BLOCK_TIME_MS;
+      if (walletClient) {
 
-      const block: any = await provider.getBlock(startBlock);
-      const startTimestampMs = Number(block.timestamp) * 1000;
-      setStartTimeMs(startTimestampMs);
+        const provider = new Web3Provider(walletClient as any);
 
-      const endTimestampMs = startTimestampMs + durationMs;
-      setEndTimestampMs(endTimestampMs)
-      displayTime()
-      function displayTime() {
-        const now = Date.now();
+        const vault = new ethers.Contract(vaultAddress, vaultAbi, provider as unknown as ethers.Signer);
 
-        const timeLeft = Math.max(0, endTimestampMs - now);
+        const epochDuration = Number(await vault.epochDuration());
+        const startBlock = await vault.epochStart();
 
-        const progressPercent = Math.min(100, ((durationMs - timeLeft) / durationMs) * 100);
+        const durationMs = epochDuration * AVERAGE_BLOCK_TIME_MS;
+        // const block: any = await provider.getBlock(startBlock);
 
-        setTimeLeftMs(timeLeft);
-        setProgress(progressPercent);
+        // Request account access if needed
+        await provider.send("eth_requestAccounts", []);
+
+        // Fetch the current block number
+        const blockNumber = await provider.getBlockNumber();
+
+        // Get block details using the block number
+        const block = await provider.getBlock(startBlock == 0 ? blockNumber : startBlock);
+
+        
+        const startTimestampMs = Number(block.timestamp) * 1000;
+        setStartTimeMs(startTimestampMs);
+
+        const endTimestampMs = startTimestampMs + durationMs;
+        setEndTimestampMs(endTimestampMs)
+        displayTime(durationMs)
+
+
+        interval = setInterval(() => {
+          displayTime(durationMs);
+        }, 60000);
       }
-
-      interval = setInterval(() => {
-        displayTime();
-      }, 60000);
+    }
+    if (isConnected) {
+      getEpochBlocks();
+      return () => clearInterval(interval);
     }
 
-    getEpochBlocks();
-
-    return () => clearInterval(interval);
-  }, [refresh]);
+  }, [refresh, walletClient]);
 
   const formattedTimeLeft = formatDuration(
     intervalToDuration({ start: 0, end: timeLeftMs }),
@@ -73,7 +102,7 @@ export default function EpochProgressBar({ refresh = false }) {
       <p className='text-[24px] font-bold leading-[30px]'>Epoch Information</p>
       <div className='mt-[10px] flex flex-col md:flex-row md:justify-between'>
         <div>
-          <p className='text-text-secondary font-medium leading-[20px] md:w-[600px]'>At LSRWA Express, we operate in weekly epochs that process deposits, withdrawals, and borrowing in an orderly cycle. This ensures fairness and liquidity availability for everyone,</p>
+          <p className='text-text-secondary font-medium leading-[20px] md:w-[600px]'>A  hs that process deposits, withdrawals, and borrowing in an orderly cycle. This ensures fairness and liquidity availability for everyone,</p>
         </div>
         <div className='flex gap-5 w-full justify-evenly md:justify-start mt-[10px] md:mt-0 md:w-fit'>
           <div className='text-center'>

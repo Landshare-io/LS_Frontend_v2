@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useWallet } from '@/hooks/lsrwa/useWallet';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import WalletConnectButton from './WalletConnectButton';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import DepositForm from './DepositForm';
+import ConnectWallet from '../connect-wallet';
 
 
 export default function WalletInfoCard() {
@@ -138,7 +138,7 @@ export default function WalletInfoCard() {
               To unlock, connect your wallet
             </div>
             <div className='mt-[14px]'>
-              <WalletConnectButton class="bg-white py-[19px] px-[79px] font-bold text-[14px] !text-black" />
+              <ConnectWallet connectButtonClassName="flex gap-4 w-[257px] h-[60px] bg-green text-white rounded-[100px] bg-white font-bold text-[14px] !text-black " />
             </div>
           </div>
         </div>
