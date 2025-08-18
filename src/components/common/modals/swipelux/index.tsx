@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Modal from "react-modal";
+import { useTheme } from "next-themes";
 import Button from "../../button";
 import { SWIPELUX_SETTING } from "../../../../config/constants/environments";
 import IconSwipelux from "../../../../../public/icons/swipelux.svg";
@@ -23,26 +24,28 @@ interface SwipeluxModalProps {
   setIsOpen: Function;
 }
 
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    overflow: "hidden",
-    maxWidth: "400px",
-    width: "90%",
-    height: "fit-content"
-  },
-  overlay: {
-    background: '#00000080'
-  }
-};
-
 export default function SwipeluxModal({
   isOpen,
   setIsOpen
 }: SwipeluxModalProps) {
+  const { theme } = useTheme();
   const [isWidgetCreated, setIsWidgetCreated] = useState(false);
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      overflow: "hidden",
+      maxWidth: "400px",
+      width: "90%",
+      height: "fit-content",
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
+    },
+    overlay: {
+      background: '#00000080'
+    }
+  };
 
   useEffect(() => {
     if (isOpen && !isWidgetCreated) {

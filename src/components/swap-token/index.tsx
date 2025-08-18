@@ -215,6 +215,8 @@ export default function SwapToken() {
       height: "fit-content",
       maxHeight: "90%",
       borderRadius: "20px",
+      border: 0,
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
     },
     overlay: {
       zIndex: 99999,
@@ -235,18 +237,15 @@ export default function SwapToken() {
 
   async function handlemodalkyc() {
     setKycopen(true);
-    document.body.style.overflow = "hidden";
   }
   function handleclosemodal() {
     setKycopen(false);
-    document.body.style.overflow = "auto";
   }
 
   const handleLinkClick = (event: any) => {
     event.preventDefault(); // Prevent the default link behavior
     setKycopen(false);
     setZeroIDModalOpen(true);
-    document.body.style.overflow = "hidden";
   };
 
   return (
@@ -310,7 +309,7 @@ export default function SwapToken() {
         >
           <MdCancel
             onClick={handleclosemodal}
-            className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
+            className="float-right text-[#000] dark:text-[#fff] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
           />
           <div className="w-full">
             <h5
@@ -319,7 +318,7 @@ export default function SwapToken() {
               KYC Verification
             </h5>
             <p
-              className='text-[#000000CC] text-[16px] pt-[10px] leading-[28px] text-center tracking-[2%] font-inter font-semibold'
+              className='text-[#000000CC] dark:text-[#fff] text-[16px] pt-[10px] leading-[28px] text-center tracking-[2%] font-inter font-semibold'
             >
               Complete the KYC process to access RWA Tokens
             </p>
@@ -341,7 +340,7 @@ export default function SwapToken() {
             <div onClick={handleLinkClick}>
               <Button
                 className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
-              disabled
+        
               >
                 <p
                   className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
@@ -357,7 +356,7 @@ export default function SwapToken() {
         <Modal
           isOpen={isZeroIDModal}
           onRequestClose={() => {
-            setZeroIDModalOpen(true),
+            setZeroIDModalOpen((prev) => !prev),
               document.body.classList.remove("modal-open");
           }}
           style={customModalStyles}
@@ -367,9 +366,8 @@ export default function SwapToken() {
           <MdCancel
             onClick={() => {
               setZeroIDModalOpen(false);
-              document.body.style.overflow = "auto";
             }}
-            className="float-right text-[#000] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
+            className="float-right text-[#000] dark:text-[#fff] cursor-pointer absolute right-[20px] top-[15px] hover:text-gray"
           />
           <KYCWidget />
         </Modal>

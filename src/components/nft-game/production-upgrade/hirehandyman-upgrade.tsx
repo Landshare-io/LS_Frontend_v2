@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactLoading from "react-loading";
 import ReactModal from "react-modal";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 import Button from "../../common/button";
 import { OpenModalICon } from "../../common/icons/index";
 import useGetSetting from "../../../hooks/nft-game/axios/useGetSetting";
@@ -31,6 +32,7 @@ export default function HireHandymanUpgrade({
   houseMaxDurability = 100,
   isLoading,
 }: HireHandymanUpgradeProps) {
+  const { theme } = useTheme();
   const { oneDayTime } = useGetSetting();
   const [openModal, setOpenModal] = useState(false);
   const colors = [
@@ -53,7 +55,8 @@ export default function HireHandymanUpgrade({
       height: "fit-content",
       borderRadius: "20px",
       padding: 0,
-      border: 0
+      border: 0,
+      backgroundColor: theme == "dark" ? "#31333b" : "#f6f7f9",
     },
     overlay: {
       background: '#00000080'
