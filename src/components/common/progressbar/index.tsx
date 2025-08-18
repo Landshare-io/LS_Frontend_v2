@@ -24,7 +24,7 @@ export default function ProgressBar({
   return (
     <div className="w-full rounded-[6px] overflow-hidden h-6 relative h-[24px] border-[2px] border-[#d0d0d0] border-solid">
       <div
-        className={`bg-[#0b6c96] h-full transition-all duration-300 ease-in flex items-center justify-center`}
+        className={`bg-[#0b6c96] h-full transition-all duration-300 ease-in flex items-center justify-center ${color}`}
         style={{ width: `${progress}%` }}
       >
         {progress > 0 ? (
