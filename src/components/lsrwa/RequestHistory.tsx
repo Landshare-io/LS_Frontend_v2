@@ -3,33 +3,40 @@
 import { useEffect, useState } from 'react';
 import clsx from "clsx";
 import HistoryCard from "./HistoryCard";
-import { useRequests } from '@/hooks/lsrwa/useRequests';
-import { connectWallet } from "@/utils/wallet";
-
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
+import useGetRequest from '@/hooks/contract/LSRWA/useGetRequest';
+import { Address } from 'viem';
+import { formatUnits } from "ethers";
 
 
 export default function RequestHistory() {
 
-  const { fetchRequests } = useRequests();
   const { address, isConnected } = useAccount();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
+  const chainId = useChainId()
+  const { data: getReqeustData, refetch } = useGetRequest(chainId, 0, false, 1, 10, address, false, address as Address);
+
   useEffect(() => {
-    if (!isConnected || !address) return;
-    fetchRequest();
-  }, [address, isConnected]);
+    fetchRequest()
+  }, [getReqeustData])
 
   const fetchRequest = async () => {
-    setLoading(true);
-
-    const walletConnection = await connectWallet();
-    if (walletConnection) {
-      const { signer } = walletConnection;
-      const { data, total } = await fetchRequests(signer, 0, false, 1, 10, address, false);
-      setRequests(data)
+    await refetch()
+    if (getReqeustData) {
+      const [data, ids, total]: any = getReqeustData;
+      let requests = [];
+      requests = data.map((item: any, index: number) => ({
+        requestId: parseInt(ids[index]),
+        user: item['user'],
+        amount: formatUnits(item['amount'], 6),
+        timestamp: parseInt(item['timestamp']),
+        isWithdraw: item['isWithdraw'],
+        processed: item['processed'],
+        executed: item['executed']
+      }));
+      setRequests(requests)
     }
-    setLoading(false)
   }
 
   return (

@@ -1,41 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import vaultAbi from "@/abis/Vault.json";
-import { connectWallet } from "@/utils/wallet";
-import { useAccount, useChainId } from "wagmi";
-import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
+import { useAccount, useChainId, useWaitForTransactionReceipt } from "wagmi";
+import useRequestWithdraw from "@/hooks/contract/LSRWA/useRequestWithdraw";
+import { TRANSACTION_CONFIRMATIONS_COUNT } from "@/config/constants/environments";
 
 export default function WithdrawForm() {
-  const {
-    isConnected,
-  } = useAccount();
+
   const chainId = useChainId();
   const [amount, setAmount] = useState("");
   const [status, setStatus] = useState("");
 
-  const handleWithdraw = async () => {
-    try {
-      const walletConnection = await connectWallet();
-      if (walletConnection !== null) {
-        const { signer } = walletConnection;
-        if (!isConnected) return alert("Wallet not connected");
+  const {
+    requestWithdraw: requestWithdrawVault,
+    isPending: isPendingRequestWithdraw,
+    isError: isErrorRequestWithdraw,
+    error: errorRequestWithdraw,
+    data: dataRequestWithdrawTx
+  } = useRequestWithdraw(chainId);
 
-        const vault = new ethers.Contract(LSRWA_VAULT_ADDRESS[chainId], vaultAbi, signer);
+  const { isSuccess: requestWithdrawSuccess, data: requestWithdrawStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
+    hash: dataRequestWithdrawTx,
+    chainId: chainId
+  });
 
-        const parsedAmount = ethers.parseUnits(amount, 6); // USDC uses 6 decimals
-
-        setStatus("Requesting withdraw...");
-        const withdrawTx = await vault.requestWithdraw(parsedAmount);
-        await withdrawTx.wait();
-
-        setStatus("Requested withdraw!");
-      }
-    } catch (error : any) {
-      console.error(error);
-      setStatus("Error: " + (error?.reason || error?.message));
+  useEffect(() => {
+    if (requestWithdrawSuccess) {
+      setStatus("Requested withdraw!");
     }
+  }, [requestWithdrawSuccess])
+
+  const handleWithdraw = async () => {
+    setStatus("Requesting withdraw...");
+    const parsedAmount = ethers.parseUnits(amount, 6); // USDC uses 6 decimals
+    requestWithdrawVault(parsedAmount)
   };
 
   return (

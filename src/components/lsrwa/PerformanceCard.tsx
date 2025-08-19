@@ -1,40 +1,42 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { connectWallet } from "@/utils/wallet";
 import { useDepositorAccount } from '@/hooks/lsrwa/useDepositorAccount'
-import { usePerformance } from '@/hooks/lsrwa/usePerformance'
 import Progressbar from "./Progressbar"
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
+import usefetchTotalValue from '@/hooks/contract/LSRWA/usefetchTotalValue';
+import { Address } from 'viem';
+import numeral from 'numeral';
+import { formatUnits, formatEther, BigNumberish } from 'ethers';
+import useBalanceOf from "@/hooks/contract/RWAContract/useBalanceOf";
+import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
+import useGetRwaPrice from "@/hooks/contract/APIConsumerContract/useGetRwaPrice";
 
 
 export default function AccountCard() {
   const { rewardAPR, isLoading } = useDepositorAccount()
-  const { fetchTotalValue, collateralValue } = usePerformance()
-
-  const { isConnected } = useAccount()
+  const { address } = useAccount()
+  const chainId = useChainId();
+  const { data: totalDepositValue, refetch } = usefetchTotalValue(chainId, [(address as Address)]);
 
   const [totalValue, setTotalValue] = useState('0')
   const [collateral, setCollateral] = useState('0')
+  const { data: balanceOfRWA, isLoading: isLoadingOfRWA, refetch: refetchBalanceOfRWA } = useBalanceOf(chainId, LSRWA_VAULT_ADDRESS[chainId])
+  const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
 
   useEffect(() => {
-    const fetchValues = async () => {
-      if (isConnected) {
-        const walletConnection = await connectWallet();
-        if (walletConnection !== null) {
-          const { signer } = walletConnection;
-          const total = await fetchTotalValue(signer);
-          const col = await collateralValue();
-          setTotalValue(total)
-          setCollateral(col)
-        } else {
-          console.error('Failed to connect wallet: Connection is null');
-        }
-      }
+    if (totalDepositValue != null) {
+      setTotalValue(numeral(Number(formatUnits(totalDepositValue as any, 6))).format("0.[000]"))
     }
+  }, [totalDepositValue])
 
-    fetchValues()
-  }, [])
+  useEffect(() => {
+    if (balanceOfRWA != null && rwaPrice != null) {
+      const _pooltoken = formatUnits((balanceOfRWA as any), 18);
+      const tokenPrice = parseFloat(Number(formatEther(rwaPrice ?? 0)).toString() || '1');
+      setCollateral(numeral(Number(_pooltoken) * Number(tokenPrice)).format("0.[000]"))
+    }
+  }, [balanceOfRWA, rwaPrice])
 
   return (
     <div className="flex flex-col justify-between w-full h-[175px] border-green bg-secondary rounded-[11px] shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] p-[14px]">

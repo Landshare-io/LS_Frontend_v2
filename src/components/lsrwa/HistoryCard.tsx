@@ -1,64 +1,77 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from "clsx";
 import { format } from 'date-fns';
 import Image from 'next/image';
-import { ethers } from "ethers";
-import { connectWallet } from "@/utils/wallet";
-import vaultAbi from "@/abis/Vault.json";
-import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
-import { useChainId } from 'wagmi';
+import { TRANSACTION_CONFIRMATIONS_COUNT } from "@/config/constants/environments";
+import { useChainId, useWaitForTransactionReceipt } from 'wagmi';
 import numeral from "numeral";
+import useCancelDeposit from '@/hooks/contract/LSRWA/useCancelDeposit';
+import useExcuteWithdraw from '@/hooks/contract/LSRWA/useExecuteWithdraw';
 
 
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed }: any) {
   const [cancelling, setCancelling] = useState(false);
   const [receiving, setReceiving] = useState(false);
   const chainId = useChainId()
+  const {
+    cancelDeposit: excuteCancelDeposit,
+    isPending: isPendingVault,
+    isError: isErrorVault,
+    error: errorValut,
+    data: dataVaultTx
+  } = useCancelDeposit(chainId);
+
+  const {
+    executeWithdraw: executeWithdrawVault,
+    isPending: isPendingExecuteWithdraw,
+    isError: isErrorExecuteWithdraw,
+    error: errorExecuteWithdraw,
+    data: dataExecuteWithdrawTx
+  } = useExcuteWithdraw(chainId);
+
+  const { isSuccess: cancelDepositSuccess, data: cancelDepositStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
+    hash: dataVaultTx,
+    chainId: chainId
+  });
+
+  const { isSuccess: executeWithdrawSuccess, data: executeWithdrawStatusData } = useWaitForTransactionReceipt({
+    confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
+    hash: dataExecuteWithdrawTx,
+    chainId: chainId
+  });
+
+  useEffect(() => {
+    if (cancelDepositSuccess) {
+      fetchRequests();
+      setCancelling(false);
+    }
+  }, [cancelDepositSuccess])
+
+  useEffect(() => {
+    if (executeWithdrawSuccess) {
+      fetchRequests();
+      setReceiving(false);
+    }
+  }, [executeWithdrawSuccess])
 
   const cancelDeposit = async () => {
-    if (cancelling) return;
-    const walletConnection = await connectWallet();
-    if (walletConnection) {
-      const { signer } = walletConnection;
-      try {
-        if (!signer) return alert("Connect wallet first");
-        setCancelling(true);
-
-        const vault = new ethers.Contract(LSRWA_VAULT_ADDRESS[chainId], vaultAbi, signer);
-        const tx = await vault.cancelDepositRequest(BigInt(id));
-        await tx.wait();
-
-        setCancelling(false);
-        fetchRequests();
-      } catch (err: any) {
-        setCancelling(false);
-        alert('Failed deposit cancel:' + (err?.reason || err?.message));
-      }
+    if (isErrorVault) {
+      console.log('errorValut => ', errorValut)
+    } else {
+      setCancelling(true);
+      excuteCancelDeposit(BigInt(id))
     }
   }
 
   const executeWithdraw = async () => {
-    if (receiving) return;
-    try {
-      const walletConnection = await connectWallet();
-      if (walletConnection) {
-        const { signer } = walletConnection;
-        if (!signer) return alert("Connect wallet first");
-        setReceiving(true);
-
-        const vault = new ethers.Contract(LSRWA_VAULT_ADDRESS[chainId], vaultAbi, signer);
-        const tx = await vault.executeWithdraw(BigInt(id));
-        await tx.wait();
-        setReceiving(false);
-        alert("Withdraw executed!");
-        fetchRequests();
-      }
-    } catch (err: any) {
-      console.error(err);
-      setReceiving(false);
-      alert("Error: " + (err?.reason || err?.message));
+    if (isErrorExecuteWithdraw) {
+      console.log('errorValut => ', errorExecuteWithdraw)
+    } else {
+      setReceiving(true);
+      executeWithdrawVault(BigInt(id));
     }
   };
 
