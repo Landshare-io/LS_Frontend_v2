@@ -8,7 +8,7 @@ import clsx from "clsx";
 import { IoIosTrendingUp } from "react-icons/io";
 import { useAccount } from "wagmi";
 
-export default function Rwa() {
+export default function RwaEpoch() {
     const {
         isConnected,
     } = useAccount();
