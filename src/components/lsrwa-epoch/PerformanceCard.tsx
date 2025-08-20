@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useDepositorAccount } from '@/hooks/lsrwa/useDepositorAccount'
+import { useDepositorAccount } from '@/hooks/lsrwa-epoch/useDepositorAccount'
 import { useAccount, useChainId } from 'wagmi';
 import usefetchTotalValue from '@/hooks/contract/LSRWAEpoch/usefetchTotalValue';
 import { Address } from 'viem';

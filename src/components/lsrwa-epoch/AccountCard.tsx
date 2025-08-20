@@ -1,6 +1,6 @@
 'use client';
 
-import { useDepositorAccount } from '@/hooks/lsrwa/useDepositorAccount';
+import { useDepositorAccount } from '@/hooks/lsrwa-epoch/useDepositorAccount';
 import ToggleSwitchButton from "./ToggleSwitchButton";
 import numeral from "numeral";
 

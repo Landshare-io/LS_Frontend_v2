@@ -15,7 +15,7 @@ import InvestmentExplain from '../components/investment-explain';
 import RwaCalculator from '../components/rwa-calculator';
 import styles from '../styles/Home.module.css';
 import MoreInvestment from '../components/learn-more-future-investment';
-import Rwa from '../components/lsrwa';
+import Rwa from '../components/lsrwa-epoch';
 
 const breadcrumbItems: BREADCRUMB[] = [
   {
