@@ -2,25 +2,39 @@
 
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { useWallet } from "@/hooks/lsrwa/useWallet";
-import { useAccount, useChainId, useWaitForTransactionReceipt } from "wagmi";
+import { useBalance, useAccount, useChainId, useWaitForTransactionReceipt } from "wagmi";
 import { TRANSACTION_CONFIRMATIONS_COUNT } from "@/config/constants/environments";
 import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 import { BigNumberish } from 'ethers';
 import useApproveOfUsdcContract from '@/hooks/contract/UsdcContract/useApprove';
 import useAllowanceOfUsdcContract from '@/hooks/contract/UsdcContract/useAllowance';
 import useRequestDeposit from "@/hooks/contract/LSRWAEpoch/useRequestDeposit";
+import { RWA_CONTRACT_ADDRESS, USDC_ADDRESS } from "@/config/constants/environments";
+import numeral from "numeral";
+import { formatUnits } from 'ethers';
 
 export default function DepositForm() {
-  const {
-    isConnected,
-    balance,
-  } = useWallet();
+
   const [amount, setAmount] = useState<number>(0);
   const { address } = useAccount();
-
+  const [balance, setBalance] = useState(0)
   const [status, setStatus] = useState("");
   const chainId = useChainId()
+
+  const {
+    data: usdcBalance,
+  } = useBalance({
+    address: address,
+    token: USDC_ADDRESS[chainId],
+    chainId: chainId,
+  }) as { data: any, isPending: any, refetch: any };
+
+  useEffect(() => {
+    if (usdcBalance) {
+      setBalance(Number(usdcBalance?.value ? numeral(formatUnits(usdcBalance.value, 6)).format("0.[000]") : '0.0'));
+    }
+  }, [usdcBalance])
+
   const { approve: approveUsdc, data: usdcApproveTx, isError: isUsdcApproveError, isPending: usdcApprovePending } = useApproveOfUsdcContract()
   const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LSRWA_VAULT_ADDRESS[chainId]) as {
     data: BigNumberish,

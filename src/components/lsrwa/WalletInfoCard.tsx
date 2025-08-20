@@ -1,12 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { useWallet } from '@/hooks/lsrwa/useWallet';
+import { useEffect, useState } from 'react';
+import { useBalance, useAccount, useChainId, useDisconnect } from "wagmi";
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import DepositForm from './DepositForm';
 import ConnectWallet from '../connect-wallet';
 import Modal from "react-modal";
+import { USDC_ADDRESS } from "@/config/constants/environments";
+import numeral from "numeral";
+import { formatUnits } from 'ethers';
 
 const customModalStyles = {
   content: {
@@ -27,16 +30,30 @@ const customModalStyles = {
 };
 
 export default function WalletInfoCard() {
+
+  const { disconnect } = useDisconnect();
+  const { address, isConnected } = useAccount();
+
+  const chainId = useChainId()
+
   const {
-    address,
-    isConnected,
-    disconnect,
-    balance,
-  } = useWallet();
+    data: usdcBalance,
+  } = useBalance({
+    address: address,
+    token: USDC_ADDRESS[chainId],
+    chainId: chainId,
+  }) as { data: any, isPending: any, refetch: any };
 
   const [isVisible, setIsVisible] = useState(false);
   const [open, setOpen] = useState(false)
+  const [balance, setBalance] = useState(0)
   const router = useRouter();
+
+  useEffect(() => {
+    if (usdcBalance) {
+      setBalance(Number(usdcBalance?.value ? numeral(formatUnits(usdcBalance.value, 6)).format("0.[000]") : '0.0'));
+    }
+  }, [usdcBalance])
 
   const handleDepositClick = () => {
     setOpen(true)
