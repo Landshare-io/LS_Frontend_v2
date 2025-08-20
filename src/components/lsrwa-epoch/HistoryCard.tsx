@@ -10,14 +10,12 @@ import numeral from "numeral";
 import useCancelDeposit from '@/hooks/contract/LSRWAEpoch/useCancelDeposit';
 import useExcuteWithdraw from '@/hooks/contract/LSRWAEpoch/useExecuteWithdraw';
 
-
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed }: any) {
   const [cancelling, setCancelling] = useState(false);
   const [receiving, setReceiving] = useState(false);
   const chainId = useChainId()
   const {
     cancelDeposit: excuteCancelDeposit,
-    isPending: isPendingVault,
     isError: isErrorVault,
     error: errorValut,
     data: dataVaultTx
@@ -25,19 +23,18 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
 
   const {
     executeWithdraw: executeWithdrawVault,
-    isPending: isPendingExecuteWithdraw,
     isError: isErrorExecuteWithdraw,
     error: errorExecuteWithdraw,
     data: dataExecuteWithdrawTx
   } = useExcuteWithdraw(chainId);
 
-  const { isSuccess: cancelDepositSuccess, data: cancelDepositStatusData } = useWaitForTransactionReceipt({
+  const { isSuccess: cancelDepositSuccess } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: dataVaultTx,
     chainId: chainId
   });
 
-  const { isSuccess: executeWithdrawSuccess, data: executeWithdrawStatusData } = useWaitForTransactionReceipt({
+  const { isSuccess: executeWithdrawSuccess } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: dataExecuteWithdrawTx,
     chainId: chainId

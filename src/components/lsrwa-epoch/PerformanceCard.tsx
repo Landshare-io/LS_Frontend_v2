@@ -12,39 +12,38 @@ import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 import useGetRwaPrice from "@/hooks/contract/APIConsumerContract/useGetRwaPrice";
 import ProgressBar from '../common/progressbar';
 
-
 export default function AccountCard() {
   const { rewardAPR, isLoading } = useDepositorAccount()
   const { address } = useAccount()
   const chainId = useChainId();
-  const { data: totalDepositValue, refetch } = usefetchTotalValue(chainId, [(address as Address)]);
+  const { data: totalDepositValue } = usefetchTotalValue(chainId, [(address as Address)]);
 
   const [totalValue, setTotalValue] = useState('0')
   const [collateral, setCollateral] = useState('0')
   const [ratio, setRatio] = useState(0)
-  const { data: balanceOfRWA, isLoading: isLoadingOfRWA, refetch: refetchBalanceOfRWA } = useBalanceOf(chainId, LSRWA_VAULT_ADDRESS[chainId])
+  const { data: balanceOfRWA } = useBalanceOf(chainId, LSRWA_VAULT_ADDRESS[chainId])
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
 
   useEffect(() => {
     if (totalDepositValue != null) {
       setTotalValue(numeral(Number(formatUnits(totalDepositValue as any, 6))).format("0.[000]"))
     }
-    const _pooltoken = formatUnits((balanceOfRWA as any), 18);
-    if (Number(_pooltoken) != 0) {
-      const _ratio = Number(totalValue) * 100 / Number(_pooltoken);
-      setRatio(_ratio);
+    const poolToken = formatUnits((balanceOfRWA as any), 0);
+    if (Number(poolToken) != 0) {
+      const ratioTemp = Number(totalValue) * 100 / Number(poolToken);
+      setRatio(ratioTemp);
     }
   }, [totalDepositValue])
 
   useEffect(() => {
     if (balanceOfRWA != null && rwaPrice != null) {
-      const _pooltoken = formatUnits((balanceOfRWA as any), 18);
+      const poolToken = formatUnits((balanceOfRWA as any), 0);
       const tokenPrice = parseFloat(Number(formatEther(rwaPrice ?? 0)).toString() || '1');
-      setCollateral(numeral(Number(_pooltoken) * Number(tokenPrice)).format("0.[000]"))
+      setCollateral(numeral(Number(poolToken) * Number(tokenPrice)).format("0.[000]"))
 
-      if (Number(_pooltoken) != 0) {
-        const _ratio = Number(totalValue) * 100 / Number(_pooltoken);
-        setRatio(_ratio);
+      if (Number(poolToken) != 0) {
+        const ratioTemp = Number(totalValue) * 100 / Number(poolToken);
+        setRatio(ratioTemp);
       }
 
     }

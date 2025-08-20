@@ -9,7 +9,7 @@ import { BigNumberish } from 'ethers';
 import useApproveOfUsdcContract from '@/hooks/contract/UsdcContract/useApprove';
 import useAllowanceOfUsdcContract from '@/hooks/contract/UsdcContract/useAllowance';
 import useRequestDeposit from "@/hooks/contract/LSRWAEpoch/useRequestDeposit";
-import { RWA_CONTRACT_ADDRESS, USDC_ADDRESS } from "@/config/constants/environments";
+import { USDC_ADDRESS } from "@/config/constants/environments";
 import numeral from "numeral";
 import { formatUnits } from 'ethers';
 
@@ -35,7 +35,7 @@ export default function DepositForm() {
     }
   }, [usdcBalance])
 
-  const { approve: approveUsdc, data: usdcApproveTx, isError: isUsdcApproveError, isPending: usdcApprovePending } = useApproveOfUsdcContract()
+  const { approve: approveUsdc, data: usdcApproveTx, isError: isUsdcApproveError } = useApproveOfUsdcContract()
   const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LSRWA_VAULT_ADDRESS[chainId]) as {
     data: BigNumberish,
     refetch: Function
@@ -54,7 +54,7 @@ export default function DepositForm() {
     data: dataVaultTx
   } = useRequestDeposit(chainId);
 
-  const { isSuccess: usdcDepositSuccess, data: usdcDepositStatusData } = useWaitForTransactionReceipt({
+  const { isSuccess: usdcDepositSuccess } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: dataVaultTx,
     chainId: chainId
@@ -65,9 +65,13 @@ export default function DepositForm() {
     try {
       const parsedAmount = ethers.parseUnits(amount.toString(), 6); // USDC uses 6 decimals
       setStatus("Checking allowance...");
-      if (ethers.parseUnits(usdcAllowance.toString()) < parsedAmount) {
+      if (ethers.parseUnits(usdcAllowance.toString(), 6) < parsedAmount) {
         setStatus("Approving USDC...");
         await approveUsdc(chainId, LSRWA_VAULT_ADDRESS[chainId], parsedAmount);
+      } else {
+        setStatus("Requesting deposit...")
+        const parsedAmount = ethers.parseUnits(amount.toString(), 6);
+        await requestDeposit(parsedAmount)
       }
 
     } catch (error: any) {

@@ -16,7 +16,6 @@ const AVERAGE_BLOCK_TIME_MS = 15 * 1000;
 export default function EpochInfoCard({ refresh = false }) {
   const { data: walletClient } = useWalletClient();
 
-
   const [progress, setProgress] = useState(0);
   const [timeLeftMs, setTimeLeftMs] = useState(0);
   const [startTimeMs, setStartTimeMs] = useState(0);
@@ -51,7 +50,6 @@ export default function EpochInfoCard({ refresh = false }) {
         const startBlock = await vault.epochStart();
 
         const durationMs = epochDuration * AVERAGE_BLOCK_TIME_MS;
-        // const block: any = await provider.getBlock(startBlock);
 
         // Request account access if needed
         await provider.send("eth_requestAccounts", []);
@@ -118,7 +116,6 @@ export default function EpochInfoCard({ refresh = false }) {
       </div>
       
       <div className='lg:flex justify-between gap-2 w-full mt-4 items-center whitespace-nowrap'>
-
         <ProgressBar now={progress} min={0} max={100} color={`!bg-green-500`}/>
         <div className='text-center'>
           <p className='font-bold text-center'>{formattedTimeLeft}</p>

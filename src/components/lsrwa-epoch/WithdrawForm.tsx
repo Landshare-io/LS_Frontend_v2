@@ -14,13 +14,10 @@ export default function WithdrawForm() {
 
   const {
     requestWithdraw: requestWithdrawVault,
-    isPending: isPendingRequestWithdraw,
-    isError: isErrorRequestWithdraw,
-    error: errorRequestWithdraw,
     data: dataRequestWithdrawTx
   } = useRequestWithdraw(chainId);
 
-  const { isSuccess: requestWithdrawSuccess, data: requestWithdrawStatusData } = useWaitForTransactionReceipt({
+  const { isSuccess: requestWithdrawSuccess } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: dataRequestWithdrawTx,
     chainId: chainId
