@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useDepositorAccount } from '@/hooks/lsrwa/useDepositorAccount'
-import Progressbar from "./Progressbar"
 import { useAccount, useChainId } from 'wagmi';
 import usefetchTotalValue from '@/hooks/contract/LSRWA/usefetchTotalValue';
 import { Address } from 'viem';
@@ -11,6 +10,7 @@ import { formatUnits, formatEther, BigNumberish } from 'ethers';
 import useBalanceOf from "@/hooks/contract/RWAContract/useBalanceOf";
 import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 import useGetRwaPrice from "@/hooks/contract/APIConsumerContract/useGetRwaPrice";
+import ProgressBar from '../common/progressbar';
 
 
 export default function AccountCard() {
@@ -21,12 +21,18 @@ export default function AccountCard() {
 
   const [totalValue, setTotalValue] = useState('0')
   const [collateral, setCollateral] = useState('0')
+  const [ratio, setRatio] = useState(0)
   const { data: balanceOfRWA, isLoading: isLoadingOfRWA, refetch: refetchBalanceOfRWA } = useBalanceOf(chainId, LSRWA_VAULT_ADDRESS[chainId])
   const rwaPrice = useGetRwaPrice(chainId) as BigNumberish;
 
   useEffect(() => {
     if (totalDepositValue != null) {
       setTotalValue(numeral(Number(formatUnits(totalDepositValue as any, 6))).format("0.[000]"))
+    }
+    const _pooltoken = formatUnits((balanceOfRWA as any), 18);
+    if (Number(_pooltoken) != 0) {
+      const _ratio = Number(totalValue) * 100 / Number(_pooltoken);
+      setRatio(_ratio);
     }
   }, [totalDepositValue])
 
@@ -35,6 +41,12 @@ export default function AccountCard() {
       const _pooltoken = formatUnits((balanceOfRWA as any), 18);
       const tokenPrice = parseFloat(Number(formatEther(rwaPrice ?? 0)).toString() || '1');
       setCollateral(numeral(Number(_pooltoken) * Number(tokenPrice)).format("0.[000]"))
+
+      if (Number(_pooltoken) != 0) {
+        const _ratio = Number(totalValue) * 100 / Number(_pooltoken);
+        setRatio(_ratio);
+      }
+
     }
   }, [balanceOfRWA, rwaPrice])
 
@@ -54,7 +66,7 @@ export default function AccountCard() {
         </div>
       </div>
       <div className='w-full'>
-        <Progressbar progress={67} height={9} />
+        <ProgressBar now={ratio} min={0} max={100} color={`!bg-green-500`} />
         <p className='mt-[5px] text-center font-medium leading-[20px]'>Vault Capacity: ${collateral}</p>
       </div>
     </div>
