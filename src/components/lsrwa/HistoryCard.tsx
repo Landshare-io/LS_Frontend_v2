@@ -7,8 +7,8 @@ import Image from 'next/image';
 import { TRANSACTION_CONFIRMATIONS_COUNT } from "@/config/constants/environments";
 import { useChainId, useWaitForTransactionReceipt } from 'wagmi';
 import numeral from "numeral";
-import useCancelDeposit from '@/hooks/contract/LSRWA/useCancelDeposit';
-import useExcuteWithdraw from '@/hooks/contract/LSRWA/useExecuteWithdraw';
+import useCancelDeposit from '@/hooks/contract/LSRWAEpoch/useCancelDeposit';
+import useExcuteWithdraw from '@/hooks/contract/LSRWAEpoch/useExecuteWithdraw';
 
 
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed }: any) {

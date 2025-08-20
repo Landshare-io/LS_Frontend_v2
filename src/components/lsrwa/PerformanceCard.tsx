@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useDepositorAccount } from '@/hooks/lsrwa/useDepositorAccount'
 import { useAccount, useChainId } from 'wagmi';
-import usefetchTotalValue from '@/hooks/contract/LSRWA/usefetchTotalValue';
+import usefetchTotalValue from '@/hooks/contract/LSRWAEpoch/usefetchTotalValue';
 import { Address } from 'viem';
 import numeral from 'numeral';
 import { formatUnits, formatEther, BigNumberish } from 'ethers';

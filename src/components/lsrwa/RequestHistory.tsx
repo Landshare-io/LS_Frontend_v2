@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import clsx from "clsx";
 import HistoryCard from "./HistoryCard";
 import { useAccount, useChainId } from 'wagmi';
-import useGetRequest from '@/hooks/contract/LSRWA/useGetRequest';
+import useGetRequest from '@/hooks/contract/LSRWAEpoch/useGetRequest';
 import { Address } from 'viem';
 import { formatUnits } from "ethers";
 

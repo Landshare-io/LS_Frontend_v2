@@ -9,7 +9,7 @@ import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 import { BigNumberish } from 'ethers';
 import useApproveOfUsdcContract from '@/hooks/contract/UsdcContract/useApprove';
 import useAllowanceOfUsdcContract from '@/hooks/contract/UsdcContract/useAllowance';
-import useRequestDeposit from "@/hooks/contract/LSRWA/useRequestDeposit";
+import useRequestDeposit from "@/hooks/contract/LSRWAEpoch/useRequestDeposit";
 
 export default function DepositForm() {
   const {

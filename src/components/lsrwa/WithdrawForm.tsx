@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { useAccount, useChainId, useWaitForTransactionReceipt } from "wagmi";
-import useRequestWithdraw from "@/hooks/contract/LSRWA/useRequestWithdraw";
+import useRequestWithdraw from "@/hooks/contract/LSRWAEpoch/useRequestWithdraw";
 import { TRANSACTION_CONFIRMATIONS_COUNT } from "@/config/constants/environments";
 
 export default function WithdrawForm() {
