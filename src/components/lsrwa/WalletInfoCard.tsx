@@ -104,17 +104,6 @@ export default function WalletInfoCard() {
       </div>
       <p className='text-[14px] leading-[22px] mt-6'>Your Balance</p>
       <p className='text-[46px] leading-[56px]'>{isConnected ? balance : 0}</p>
-      <div className=' flex  w-max gap-1 items-center bg-[#61CD81] px-[9px] py-[3px] rounded-full text-white'>
-        <Image
-          src="/icons/invest_hand.png"
-          alt="contract"
-          width={14}
-          height={14}
-          priority
-        />
-        <label htmlFor="">+123$</label>
-        <label htmlFor="">(10.53%)</label>
-      </div>
       <div className='mt-6 flex justify-center items-center md:h-[133px] w-full md:px-2 border border-solid border-transparent rounded-[15px] md:bg-linearGradientCard'
       >
         <div className='flex flex-col md:flex-row justify-between md:w-[400px] w-full  gap-2 md:gap-0'>
