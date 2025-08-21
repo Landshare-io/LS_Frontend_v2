@@ -9,6 +9,7 @@ import { useChainId, useWaitForTransactionReceipt } from 'wagmi';
 import numeral from "numeral";
 import useCancelDeposit from '@/hooks/contract/LSRWAEpoch/useCancelDeposit';
 import useExcuteWithdraw from '@/hooks/contract/LSRWAEpoch/useExecuteWithdraw';
+import { IoIosCheckmark } from "react-icons/io";
 
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed }: any) {
   const [cancelling, setCancelling] = useState(false);
@@ -86,8 +87,8 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
         </div>
         <div className="flex flex-col">
           <div className={clsx('rounded-[100px] px-[12px] py-[2px]', !processed ? 'bg-[#E0710333] text-[#E07103]' : 'bg-third text-[#239942]')}>
-            <p className="flex gap-1 text-base leading-[14px] font-medium">
-              {!processed && <Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />}
+            <p className="flex gap-1 text-base leading-[14px] font-medium items-center px-[12px] py-[6px]">
+              {!processed ? (<Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />) : (<IoIosCheckmark size={25}/>)}
               {!processed ? 'Pending' : 'Completed'}</p>
           </div>
           <p className="mt-2 text-right text-[18px] text-text-secondary font-semibold">${numeral(Number(amount)).format("0.[000]")}</p>
