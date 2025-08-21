@@ -129,8 +129,8 @@ export default function DepositForm() {
   return (
     <div className="sm:flex sm:items-start">
       <div className="text-center sm:text-left">
-        <div className="text-base font-bold text-text-primary text-[20px]">
-          Deposit USDC to invest in income-generating real estate
+        <div className="font-bold text-text-primary text-[20px] text-center">
+          Deposit USDC to invest in <br/>income-generating real estate
         </div>
         <div className="mt-[18px]">
           <p className="text-sm text-text-secondary text-[12px] font-semibold">
