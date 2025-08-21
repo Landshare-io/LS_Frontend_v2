@@ -18,13 +18,13 @@ export default function ReparingCost({ cost, className }: RepairingCostProps) {
       </div>
       <div className="flex md:hidden">
         <Dropdown>
-          <Dropdown.Toggle onClick={() => {}}>
+          <Dropdown.Toggle extraStyle={''} onClick={() => {}}>
             <div className="flex items-center">
               <span className="pr-1">{numeral(cost["power"]).format('0.[00]')}</span><ChargeIcon />
             </div>
           </Dropdown.Toggle>
 
-          <Dropdown.Menu>
+          <Dropdown.Menu extraStyle={''}>
             <div className="flex flex-col px-3 text-text-primary">
               <ReparingCostList cost={cost} />
             </div>
