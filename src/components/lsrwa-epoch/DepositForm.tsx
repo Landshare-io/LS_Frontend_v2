@@ -127,7 +127,7 @@ export default function DepositForm() {
   }
 
   return (
-    <div className="sm:flex sm:items-start">
+    <div className="sm:flex sm:items-start pb-[31px]">
       <div className="text-center sm:text-left">
         <div className="font-bold text-text-primary text-[20px] text-center">
           Deposit USDC to invest in <br/>income-generating real estate
@@ -139,14 +139,14 @@ export default function DepositForm() {
         </div>
         <div className="mt-[7px]">
           <div className='flex flex-col md:flex-row items-center'>
-            <input type="number" className='bg-transparent focus:outline-none w-full md:w-[200px] px-[18px] py-[23px] text-[18px]' value={amount} onChange={handleOnChange} />
-            <button className='border-[1px] border-[#61CD81] w-full md:w-fit px-[23px] py-[7px] rounded-full bg-secondary text-[#61CD81]' onClick={() => setAmountByPercent(0.25)}>25%</button>
-            <button className='mt-[9px] md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-full md:w-fit px-[23px] py-[7px] rounded-full bg-secondary text-[#61CD81]' onClick={() => setAmountByPercent(0.5)}>50%</button>
-            <button className='mt-[9px] md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-full md:w-fit px-[23px] py-[7px] rounded-full bg-secondary text-[#61CD81]' onClick={() => setAmountByPercent(1)}>100%</button>
+            <input type="number" className='bg-transparent focus:outline-none w-full md:w-[200px] px-[18px] py-[23px] text-[18px] font-semibold' value={amount} onChange={handleOnChange} />
+            <button className='border-[1px] border-[#61CD81] w-full md:w-fit px-[23px] py-[7px] rounded-full bg-[#E0F1E5] text-[#61CD81] font-bold text-[14px]' onClick={() => setAmountByPercent(0.25)}>25%</button>
+            <button className='mt-[9px] md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-full md:w-fit px-[23px] py-[7px] rounded-full bg-[#E0F1E5] text-[#61CD81] text-[14px] font-bold' onClick={() => setAmountByPercent(0.5)}>50%</button>
+            <button className='mt-[9px] md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-full md:w-fit px-[23px] py-[7px] rounded-full bg-[#E0F1E5] text-[#61CD81] text-[14px] font-bold' onClick={() => setAmountByPercent(1)}>100%</button>
           </div>
         </div>
         <div className="mt-2">
-          {status.length === 0 && (<button className={`w-full rounded-full py-[14px] text-white ${amount === 0 || !amount ? 'bg-[#9D9D9D]' : (amount > balance ? 'bg-[#E15141]' : 'bg-[#61CD81]')}`} onClick={handleDeposit}>{amount === 0 || !amount ? 'Enter Amount' : (amount > balance ? 'Insufficient Balance' : 'Deposit')}</button>)}
+          {status.length === 0 && (<button className={`w-full rounded-full py-[14px] text-white font-bold ${amount === 0 || !amount ? 'bg-[#9D9D9D]' : (amount > balance ? 'bg-[#E15141]' : 'bg-[#61CD81]')}`} onClick={handleDeposit}>{amount === 0 || !amount ? 'Enter Amount' : (amount > balance ? 'Insufficient Balance' : 'Deposit')}</button>)}
           {status.length > 0 && (<button className={`w-full rounded-full py-[14px] text-white bg-[#415ee1]`} >{status}</button>)}
         </div>
       </div>
