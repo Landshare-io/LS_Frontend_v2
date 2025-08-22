@@ -70,7 +70,7 @@ export default function WalletInfoCard() {
   };
 
   return (
-    <div className="relative bg-[#51BF70] rounded-[20px] p-[24px] text-white">
+    <div className="relative bg-[#51BF70] rounded-[20px] p-[20px] md:p-[24px] text-white">
       <div className="relative w-full">
         <div className='flex justify-end w-full'>
           {isConnected && (
@@ -79,15 +79,16 @@ export default function WalletInfoCard() {
                 <div
                   onClick={handleDisplayClick}
                   className="flex gap-2 items-center bg-[#61CD81] px-[4px] p-[5px] rounded-full text-white text-base font-medium  cursor-pointer">
-                  <Image
-                    src="/icons/contract.png"
-                    alt="contract"
-                    width={24}
-                    height={24}
-                    priority
-                  />
-                  {isConnected && (<p>{(address as any).slice(0, 6)}...{(address as any).slice(-4)}</p>)}
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-3 fill-white inline ml-3" viewBox="0 0 24 24">
+                  <div className='border rounded-full border-[#24BC48CC]'>
+                    <Image
+                      src="/icons/contract.png"
+                      alt="contract"
+                      width={24}
+                      height={24}
+                      priority
+                    /></div>
+                  {isConnected && (<p className='text-[12px] md:text-[16px] font-medium'>{(address as any).slice(0, 6)}...{(address as any).slice(-4)}</p>)}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-[18px] fill-white inline ml-3 mr-1" viewBox="0 0 24 24">
                     <path fillRule="evenodd"
                       d="M11.99997 18.1669a2.38 2.38 0 0 1-1.68266-.69733l-9.52-9.52a2.38 2.38 0 1 1 3.36532-3.36532l7.83734 7.83734 7.83734-7.83734a2.38 2.38 0 1 1 3.36532 3.36532l-9.52 9.52a2.38 2.38 0 0 1-1.68266.69734z"
                       clipRule="evenodd" data-original="#000000" />
@@ -130,9 +131,9 @@ export default function WalletInfoCard() {
           </div>}
         </div>
       </div>
-      <p className='text-[14px] leading-[22px] mt-[13px] font-normal'>Your Balance</p>
-      <p className='text-[46px] leading-[56px] font-bold'>{isConnected ? '$' + balance.toLocaleString() : 0}</p>
-      <div className='mt-[55px] flex justify-center items-center md:h-[133px] w-full md:px-2 border border-solid border-transparent rounded-[15px] md:bg-linearGradientCard'
+      <p className='text-[12px] md:text-[14px] leading-[22px] mt-[13px] font-normal'>Your Balance</p>
+      <p className='text-[40px] md:text-[46px] leading-[56px] font-bold'>{isConnected ? '$' + balance.toLocaleString() : 0}</p>
+      <div className='mt-[45px] md:mt-[55px] flex justify-center items-center md:h-[133px] w-full md:px-2 border border-solid border-transparent rounded-[15px] md:bg-linearGradientCard'
       >
         <div className='flex flex-col md:flex-row justify-between md:w-[400px] w-full  gap-2 md:gap-0'>
           <button type='button' className="flex flex-row-reverse justify-between p-[10px] w-full rounded-[15px] border-[1px] border-solid border-[#ffffff4d]  bg-linearGradientCard md:justify-center md:p-0 md:w-fit md:bg-none md:border-0 md:flex-col items-center group" onClick={handleDepositClick}>
@@ -185,11 +186,11 @@ export default function WalletInfoCard() {
                 priority
               />
             </div>
-            <div className='text-white text-[14px] mt-[6px] font-bold'>
+            <div className='text-white text-[16px] md:text-[14px] mt-[6px] font-bold'>
               To unlock, connect your wallet
             </div>
             <div className='mt-[14px]'>
-              <ConnectWallet connectButtonClassName="flex gap-4 w-[265px] h-[60px] bg-green text-white rounded-[100px] bg-white font-semibold text-[14px] !text-black"/>
+              <ConnectWallet connectButtonClassName="flex gap-4 w-[265px] h-[60px] bg-green text-white rounded-[100px] bg-white font-semibold text-[14px] !text-black" />
             </div>
           </div>
         </div>

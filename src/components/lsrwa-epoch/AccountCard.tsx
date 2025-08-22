@@ -31,11 +31,11 @@ export default function AccountCard() {
   return (
     <div className="flex flex-col justify-between w-full h-[175px] border-green bg-secondary rounded-[11px] shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] p-[14px]">
       <div className='flex justify-between w-full'>
-        <p className='text-[20px] text-text-primary font-bold leading-[22px]'>Account<br />Details</p>
+        <p className='text-[16px] w-[157px] md:w-[100px] md:text-[20px] text-text-primary font-bold leading-[22px]'>Account Details</p>
         <div className='flex flex-col justify-end items-end text-right'>
           <ToggleSwitchButton checked={autoCompound} disable={isLoading} handleAutoCompoundClick={handleAutoCompoundClick} />
           <div className='flex items-center justify-center gap-1'>
-            <p className='text-[12px] font-normal leading-[22px]'>Auto-compound
+            <p className='text-[11px] md:text-[12px] font-normal leading-[22px]'>Auto-compound
             </p>
             <IoIosInformationCircleOutline color='#239942' size={12} />
           </div>

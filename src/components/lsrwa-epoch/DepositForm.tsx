@@ -133,16 +133,18 @@ export default function DepositForm() {
           Deposit USDC to invest in <br />income-generating real estate
         </div>
         <div className="mt-[18px]">
-          <p className="text-sm text-text-secondary text-[12px] font-semibold">
+          <p className="text-sm text-text-secondary text-[14px] md:text-[12px] font-semibold text-start">
             Set Amount
           </p>
         </div>
         <div className="mt-[7px]">
           <div className='flex flex-col md:flex-row items-center'>
             <input type="number" className={`bg-transparent focus:outline-none w-full h-[58px] md:w-[200px] px-[18px] py-[23px] text-[18px] font-semibold rounded-full ${amount > balance ? 'bg-[#F3DDDC]' : 'bg-secondary'}`} value={amount} onChange={handleOnChange} />
-            <button className='flex items-center justify-center border-[1px] border-[#61CD81] md:mt-0 md:ml-[15px] w-[76.55px] h-[31.12px] rounded-full bg-[#E0F1E5] text-[#61CD81] font-bold text-[14px]' onClick={() => setAmountByPercent(0.25)}>25%</button>
-            <button className='flex items-center justify-center mt-[9px] md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-[76.55px] h-[31.12px] rounded-full bg-[#E0F1E5] text-[#61CD81] text-[14px] font-bold' onClick={() => setAmountByPercent(0.5)}>50%</button>
-            <button className='flex items-center justify-center mt-[9px] md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-[76.55px] h-[31.12px] py-[7px] rounded-full bg-[#E0F1E5] text-[#61CD81] text-[14px] font-bold' onClick={() => setAmountByPercent(1)}>100%</button>
+            <div className="flex w-[350px] md:w-fit justify-between">
+              <button className='flex items-center justify-center border-[1px] border-[#61CD81] md:mt-0 md:ml-[15px] w-[96px] h-[35px] md:w-[76.55px] md:h-[31.12px] rounded-full bg-[#E0F1E5] text-[#61CD81] font-bold text-[14px]' onClick={() => setAmountByPercent(0.25)}>25%</button>
+              <button className='flex items-center justify-center md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-[96px] h-[35px] md:w-[76.55px] md:h-[31.12px] rounded-full bg-[#E0F1E5] text-[#61CD81] text-[14px] font-bold' onClick={() => setAmountByPercent(0.5)}>50%</button>
+              <button className='flex items-center justify-center md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-[96px] h-[35px] md:w-[76.55px] md:h-[31.12px] py-[7px] rounded-full bg-[#E0F1E5] text-[#61CD81] text-[14px] font-bold' onClick={() => setAmountByPercent(1)}>100%</button>
+            </div>
           </div>
         </div>
         <div className="mt-[23px]">

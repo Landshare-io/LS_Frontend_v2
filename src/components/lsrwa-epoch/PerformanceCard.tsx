@@ -51,7 +51,7 @@ export default function AccountCard() {
 
   return (
     <div className="flex flex-col justify-between w-full h-[175px] border-green bg-secondary rounded-[11px] shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] p-[14px]">
-      <p className='text-[20px] text-text-primary font-bold leading-[22px]'>Performance Metrics</p>
+      <p className='text-[16px] md:text-[20px] text-text-primary font-bold leading-[22px]'>Performance Metrics</p>
       <div className='flex gap-1 h-[69px]'>
         <div className='flex flex-col items-center justify-center w-full h-full rounded-[6px]'>
           <p className='text-text-third font-medium text-[12px]'>Total Value Locked</p>
@@ -66,7 +66,7 @@ export default function AccountCard() {
       </div>
       <div className='w-full'>
         <ProgressBar now={ratio} min={0} max={100} containerClass={`!border-none !bg-[#DEF1E6] h-[9px]`} color={`!bg-green-500`} />
-        <p className='mt-[5px] text-start font-medium leading-[20px] text-text-secondary text-[12px]'>Vault Capacity: ${totalValue} / ${collateral} ({ratio}% filled)</p>
+        <p className='mt-[5px] text-start font-medium leading-[20px] text-text-secondary text-[11px] md:text-[12px]'>Vault Capacity: ${totalValue} / ${collateral} ({ratio}% filled)</p>
       </div>
     </div>
   )
