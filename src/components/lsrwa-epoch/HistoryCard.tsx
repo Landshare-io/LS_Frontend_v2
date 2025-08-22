@@ -81,14 +81,14 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
             <p className="text-base leading-[22px] font-medium">{!isWithdraw ? 'Deposit' : 'Withdraw'}</p>
           </div>
           <div >
-            <p className="text-text-secondary font-semibold">Request id {id}</p>
-            <p className="text-base leading-[30px] text-gray">{format(new Date(timestamp * 1000), 'MMMM d, yyyy')}</p>
+            <p className="text-[12px] font-bold">Request id {id}</p>
+            <p className="text-[12px] text-text-secondary leading-[30px] font-normal">{format(new Date(timestamp * 1000), 'MMMM d, yyyy')}</p>
           </div>
         </div>
         <div className="flex flex-col">
           <div className={clsx('rounded-[100px] px-[12px] py-[2px]', !processed ? 'bg-[#E0710333] text-[#E07103]' : 'bg-third text-[#239942]')}>
-            <p className="flex gap-1 text-base leading-[14px] font-medium items-center px-[12px] py-[6px]">
-              {!processed ? (<Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />) : (<IoIosCheckmark size={25}/>)}
+            <p className="flex gap-1 text-[10px] leading-[14px] font-medium items-center px-[12px] py-[6px]">
+              {!processed ? (<Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />) : (<IoIosCheckmark size={25} />)}
               {!processed ? 'Pending' : 'Completed'}</p>
           </div>
           <p className="mt-2 text-right text-[18px] text-text-secondary font-semibold">${numeral(Number(amount)).format("0.[000]")}</p>
@@ -97,7 +97,7 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
       </div>
       {
         !isWithdraw && !processed &&
-        <button className="mt-6 hidden flex-col items-center space-y-2 hover:opacity-80 transition disabled:opacity-50  group-hover:flex"
+        <button className="hidden flex-col items-center space-y-2 hover:opacity-80 transition disabled:opacity-50  group-hover:flex"
           disabled={cancelling}
           onClick={cancelDeposit}>
           <Image
@@ -106,11 +106,11 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
             width={20} height={20}
             className="rounded-full object-cover"
           />
-          <span className="text-[12px] text-gray">{cancelling ? 'Canceling' : 'Cancel'}</span>
+          <span className="text-[12px] font-normal text-text-secondary">{cancelling ? 'Canceling' : 'Cancel'}</span>
         </button>
       }
       {
-        isWithdraw && processed && !executed && <button className="mt-6 flex flex-col items-center space-y-2 hover:opacity-80 transition disabled:opacity-50 bg-green-300 text-white py-1 px-2 rounded-full"
+        isWithdraw && processed && !executed && <button className="flex flex-col items-center space-y-2 hover:opacity-80 transition disabled:opacity-50 bg-green-300 text-white py-1 px-2 rounded-full"
           disabled={receiving}
           onClick={executeWithdraw}>{receiving ? 'Receiving' : 'Receive'}</button>
       }

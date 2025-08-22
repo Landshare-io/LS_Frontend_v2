@@ -60,7 +60,6 @@ export default function EpochInfoCard({ refresh = false }) {
         // Get block details using the block number
         const block = await provider.getBlock(startBlock == 0 ? blockNumber : startBlock);
 
-        
         const startTimestampMs = Number(block.timestamp) * 1000;
         setStartTimeMs(startTimestampMs);
 

@@ -20,8 +20,8 @@ export default function RwaEpoch() {
             </div>
             <div className="mt-4 md:mt-8">
                 <p className="text-text-primary font-bold text-[32px] md:text-[40px] lg:text-[56px]">LSRWA Express</p>
-                <p className="pt-[8px] text-text-secondary text-sm lg:text-center">Simply deposit USDC and earn real-world, asset-backed yield—no need to manually handle $LSRWA tokens.</p>
-                <p className="text-sm text-[#61CD81] hover:text-[#4ea869] font-medium">Learn more</p>
+                <p className="pt-[8px] text-text-secondary text-sm lg:text-start text-[14px] font-normal">Simply deposit USDC and earn real-world, asset-backed yield—<br/>no need to manually handle $LSRWA tokens.</p>
+                {/* <p className="text-sm text-[#61CD81] hover:text-[#4ea869] font-medium">Learn more</p> */}
             </div>
             <div className={clsx('mt-8 gap-10', isConnected ? 'grid grid-cols-5' : '')}>
                 <div className="col-span-5 xl:col-span-3">
