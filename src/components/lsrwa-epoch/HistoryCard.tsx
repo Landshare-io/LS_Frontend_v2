@@ -77,8 +77,8 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
     <div className="flex gap-2 items-center group bg-secondary rounded-[12px] mt-[10px]">
       <div className="mt-1 flex items-center w-full justify-between py-[8px] px-[12px]">
         <div className="flex items-center gap-3 md:gap-10">
-          <div className={clsx('w-[80px] md:w-[116px] border border-solid rounded-[100px] px-[5px] md:px-[21px] py-[5px]', !isWithdraw ? 'border-[#61CD81] bg-third text-[#239942]' : 'border-[#E151414D] bg-[#E1514129] text-[#E15141]')}>
-            <p className="text-base leading-[22px] font-medium">{!isWithdraw ? 'Deposit' : 'Withdraw'}</p>
+          <div className={clsx('w-[86px] md:w-[86px] h-[30px] flex items-center justify-center border border-solid rounded-[100px] px-[5px]', !isWithdraw ? 'border-[#61CD81] bg-[#61CD8129] text-[#239942]' : 'border-[#E151414D] bg-[#F3DDDC] text-[#E15141]')}>
+            <p className="text-[12px] leading-[22px] font-medium">{!isWithdraw ? 'Deposit' : 'Withdraw'}</p>
           </div>
           <div >
             <p className="text-[12px] font-bold">Request id {id}</p>
@@ -91,7 +91,7 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
               {!processed ? (<Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />) : (<IoIosCheckmark size={25} />)}
               {!processed ? 'Pending' : 'Completed'}</p>
           </div>
-          <p className="mt-2 text-right text-[18px] text-text-secondary font-semibold">${numeral(Number(amount)).format("0.[000]")}</p>
+          <p className="mt-2 text-right text-[16px] text-text-primary font-bold">${numeral(Number(amount).toLocaleString()).format("0.[000]")}</p>
 
         </div>
       </div>
