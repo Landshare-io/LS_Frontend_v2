@@ -13,7 +13,7 @@ export default function RwaEpoch() {
         isConnected,
     } = useAccount();
     return (
-        <main className="px-[10px] md:px-[66px] xl:px-[120px] py-10 md:py-[20px]">
+        <main className="px-[10px] md:px-0 py-10 md:py-[20px] md:w-[1200px] md:m-auto">
             <div className="flex items-center gap-[10px] p-[8px] pr-[30px]  bg-secondary rounded-[50px] w-max">
                 <IoIosTrendingUp className="w-[24px] h-[24px] text-[#24BC48]" />
                 <p className="text-[12px] md:text-[14px] leading-[22px] tracking-[0.02em] capitalize font-semibold text-text-primary">Effortless, Real-World Yield</p>
