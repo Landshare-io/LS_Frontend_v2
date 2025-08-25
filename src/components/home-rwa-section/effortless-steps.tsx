@@ -81,7 +81,7 @@ function EffortlessStepsSection() {
     document.body.style.overflow = "hidden";
   };
   return (
-    <div className="pt-[160px] pb-[128px] px-[120px] flex flex-col justify-center items-center gap-8">
+    <div className="pt-[160px] pb-[128px] lg:px-[120px] px-[10px] md:px-[40px] flex flex-col justify-center items-center gap-8">
       <Modal
         isOpen={iskycmodal}
         onRequestClose={() => {
