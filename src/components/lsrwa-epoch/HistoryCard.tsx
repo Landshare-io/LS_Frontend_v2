@@ -74,7 +74,7 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
   };
 
   return (
-    <div className="flex gap-2 items-center group bg-secondary rounded-[12px] mt-[10px]">
+    <div className="flex gap-2 items-center group bg-secondary rounded-[12px] mt-[2px] md:mt-[7px]">
       <div className="mt-1 flex items-center w-full justify-between py-[8px] px-[12px]">
         <div className="flex items-center gap-3 md:gap-10">
           <div className={clsx('w-fit md:w-[86px] h-[30px] flex items-center justify-center border border-solid rounded-[100px] px-[9.5px] md:px-[5px]', !isWithdraw ? 'border-[#61CD81] bg-[#61CD8129] text-[#239942]' : 'border-[#E151414D] bg-[#F3DDDC] text-[#E15141]')}>
