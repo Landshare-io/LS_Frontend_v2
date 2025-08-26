@@ -30,11 +30,11 @@ const breadcrumbItems: BREADCRUMB[] = [
 
 const RwaPage: NextPage = () => {
   const searchParams = useSearchParams();
-  const {address} = useAccount();
+  const { address } = useAccount();
   const referralCode = searchParams.get('af');
 
   useEffect(() => {
-    if(referralCode){
+    if (referralCode) {
       Fuul.sendPageview("rwa");
     }
   }, [referralCode]);
@@ -87,7 +87,9 @@ const RwaPage: NextPage = () => {
         </div>
         <InvestmentExplain />
       </div>
-      <RwaEpoch />
+      <div className="bg-primary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
+        <RwaEpoch />
+      </div>
       <MoreInvestment />
     </div>
   );

@@ -96,27 +96,27 @@ export default function EpochInfoCard({ refresh = false }) {
     : 'Loading...';
 
   return (
-    <div className="bg-secondary rounded-[20px] flex flex-col justify-between w-full py-[25px] px-[20px] md:py-[30px] md:pl-[35px] md:pr-[23px]">
-      <p className='text-[20px] md:text-[24px] font-bold leading-[30px] text-text-primary'>Epoch Information</p>
-      <div className='mt-[10px] flex flex-col md:flex-row md:justify-between'>
+    <div className="bg-secondary rounded-[20px] flex flex-col justify-between w-full py-[25px] px-[20px] xl:py-[30px] xl:pl-[35px] xl:pr-[23px]">
+      <p className='text-[20px] xl:text-[24px] font-bold leading-[30px] text-text-primary'>Epoch Information</p>
+      <div className='mt-[10px] flex flex-col xl:flex-row xl:justify-between'>
         <div>
-          <p className='text-text-secondary font-medium leading-[20px] md:w-[545px] text-[14px]'>At LSRWA Express, we operate in weekly epochs that process deposits, withdrawals, and borrowing in an orderly cycle. This ensures fairness and liquidity availability for everyone.</p>
+          <p className='text-text-secondary font-medium leading-[20px] xl:w-[545px] text-[14px]'>At LSRWA Express, we operate in weekly epochs that process deposits, withdrawals, and borrowing in an orderly cycle. This ensures fairness and liquidity availability for everyone.</p>
         </div>
-        <div className='flex gap-[10px] w-full justify-evenly md:justify-start mt-[22px] md:mt-[-50px] md:w-fit'>
-          <div className='text-center bg-primary rounded-[10px] h-[77px] items-center flex flex-col justify-center px-[13px] py-[18px] w-[149px] md:w-[133px]'>
+        <div className='flex gap-[10px] w-full justify-evenly xl:justify-start mt-[22px] xl:mt-[-50px] xl:w-fit'>
+          <div className='text-center bg-primary rounded-[10px] h-[77px] items-center flex flex-col justify-center px-[13px] py-[18px] w-[149px] xl:w-[133px]'>
             <p className='font-bold text-center text-[16px] text-text-primary'>{formattedStartDate}</p>
             <p className='font-medium  text-[16px] text-text-secondary text-center'>Start Date</p>
           </div>
-          <div className='text-center bg-primary rounded-[10px] h-[77px] items-center flex flex-col justify-center px-[13px] py-[18px] w-[149px] md:w-[133px]'>
+          <div className='text-center bg-primary rounded-[10px] h-[77px] items-center flex flex-col justify-center px-[13px] py-[18px] w-[149px] xl:w-[133px]'>
             <p className='font-bold text-center text-[16px] text-text-primary'>{formattedStartTime} UTC</p>
             <p className='font-medium  text-[16px] text-text-secondary text-center'>Start Time</p>
           </div>
         </div>
       </div>
 
-      <div className='flex flex-col-reverse md:flex-row justify-between gap-[16px] md:gap-[20px]  w-full mt-[33px] md:mt-[8.5px] items-center whitespace-nowrap'>
+      <div className='flex flex-col-reverse xl:flex-row justify-between gap-[16px] xl:gap-[20px]  w-full mt-[33px] xl:mt-[8.5px] items-center whitespace-nowrap'>
         <ProgressBar now={progress} min={0} max={100} containerClass={`!border-none !bg-[#DEF1E6] h-[24px] !rounded-[90px]`} color={`!bg-green-500 !rounded-[90px]`} />
-        <div className='flex flex-col items-start text-start w-full md:w-fit md:text-center'>
+        <div className='flex flex-col items-start text-start w-full xl:w-fit xl:text-center'>
           <p className='font-medium text-text-secondary text-center text-[12px]'>Expected Next Epoch In</p>
           <p className='font-bold text-center text-text-primary text-[16px]'>{formattedTimeLeft}</p>
         </div>
