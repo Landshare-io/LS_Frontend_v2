@@ -86,7 +86,7 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
           </div>
         </div>
         <div className="flex flex-col">
-          <div className={clsx('rounded-[100px] mt-[-27px] mr-[-21px] md:mr-[-12px] ', !processed ? 'bg-[#F9E3CD] text-[#E07103]' : 'bg-primary text-[#239942]')}>
+          <div className={clsx('rounded-[100px] mt-[-27px] mr-[-22px] md:mr-[-12px] ', !processed ? 'bg-[#F9E3CD] text-[#E07103]' : 'bg-primary text-[#239942]')}>
             <p className="flex gap-1 text-[10px] leading-[14px] font-medium items-center px-[12px] py-[6px]">
               {!processed ? (<Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />) : (<IoMdCheckmark  size={12} />)}
               {!processed ? 'Pending' : 'Completed'}</p>

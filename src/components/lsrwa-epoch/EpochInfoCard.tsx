@@ -96,7 +96,7 @@ export default function EpochInfoCard({ refresh = false }) {
     : 'Loading...';
 
   return (
-    <div className="bg-secondary rounded-[20px] flex flex-col justify-between w-full py-[30px] pl-[35px] pr-[23px]">
+    <div className="bg-secondary rounded-[20px] flex flex-col justify-between w-full py-[25px] px-[20px] md:py-[30px] md:pl-[35px] md:pr-[23px]">
       <p className='text-[20px] md:text-[24px] font-bold leading-[30px] text-text-primary'>Epoch Information</p>
       <div className='mt-[10px] flex flex-col md:flex-row md:justify-between'>
         <div>
@@ -114,11 +114,11 @@ export default function EpochInfoCard({ refresh = false }) {
         </div>
       </div>
 
-      <div className='flex flex-col-reverse md:flex-row justify-between gap-2 w-full mt-[51px] md:mt-[8.5px] items-center whitespace-nowrap'>
+      <div className='flex flex-col-reverse md:flex-row justify-between gap-[16px] md:gap-[20px]  w-full mt-[51px] md:mt-[8.5px] items-center whitespace-nowrap'>
         <ProgressBar now={progress} min={0} max={100} containerClass={`!border-none !bg-[#DEF1E6] h-[24px] !rounded-[90px]`} color={`!bg-green-500 !rounded-[90px]`} />
         <div className='flex flex-col items-start text-start w-full md:w-fit md:text-center'>
           <p className='font-medium text-text-secondary text-center text-[12px]'>Expected Next Epoch In</p>
-          <p className='font-bold text-center text-text-primary text-[12px]'>{formattedTimeLeft}</p>
+          <p className='font-bold text-center text-text-primary text-[16px]'>{formattedTimeLeft}</p>
         </div>
       </div>
     </div>
