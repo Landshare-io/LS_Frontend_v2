@@ -30,7 +30,7 @@ export default function AccountCard() {
   };
 
   return (
-    <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-secondary rounded-[20px] p-[20px] md:py-[27px] md:pl-[35px] md:pr-[17px]">
+    <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-third rounded-[20px] p-[20px] md:py-[27px] md:pl-[35px] md:pr-[17px]">
       <div className='flex justify-between w-full'>
         <p className='text-[16px] w-[157px] md:w-[100px] md:text-[20px] text-text-primary font-bold leading-[22px]'>Account Details</p>
         <div className='flex flex-col justify-end items-end text-right'>
@@ -51,15 +51,14 @@ export default function AccountCard() {
           </div>
         </div>
       </div>
-      <div className='flex justify-between w-full items-center'>
-        <div className='text-center py-[8px] px-[15px]'>
+      <div className='flex justify-center w-full items-center gap-[10px] md:gap-[13px]'>
+        <div className='text-center py-[8px] px-[15px] bg-primary rounded-[6px] w-[150px] md:w-[141px]'>
           <p className='text-text-secondary font-semibold text-[12px]'>Current Balance</p>
           <p className='text-[20px] font-bold leading-[30px]'>$ {isLoading ? 0 : deposited}</p>
           <p className='text-text-third font-normal text-[11px]'>Currently Deposited</p>
-
         </div>
-        <div className='text-center py-[8px] px-[12px]'>
-          <div>
+        <div className='text-center'>
+          <div className='text-center py-[8px] px-[12px] bg-primary rounded-[6px] w-[150px] md:w-[141px]'>
             <p className='text-text-secondary font-semibold text-[12px]'>Available Yield</p>
             <p className='text-[20px] font-bold leading-[30px]'>$ {isLoading ? 0 : numeral(reward).format("0.[00]").toString()}</p>
             <p className='text-text-third font-normal text-[11px]'>Total earnings To date</p>

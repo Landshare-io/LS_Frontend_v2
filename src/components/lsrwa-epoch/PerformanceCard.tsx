@@ -50,21 +50,21 @@ export default function AccountCard() {
   }, [balanceOfRWA, rwaPrice])
 
   return (
-    <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-secondary rounded-[20px] p-[20px] md:py-[27px] md:px-[35px]">
+    <div className="flex flex-col justify-between md:gap-[12px] w-full h-[206px] md:h-[210px] border-green bg-third rounded-[20px] py-[25px] px-[20px] md:py-[27px] md:px-[35px]">
       <p className='text-[16px] md:text-[20px] text-text-primary font-bold leading-[22px]'>Performance Metrics</p>
-      <div className='flex gap-1 h-[69px]'>
-        <div className='flex flex-col items-center justify-center w-full h-full rounded-[6px]'>
+      <div className='flex mt-[13px] md:mt-0 gap-[16px] md:gap-[14px] h-[69px]'>
+        <div className='flex flex-col items-center justify-center w-full h-[73px] rounded-[6px] bg-primary'>
           <p className='text-text-third font-medium text-[12px]'>Total Value Locked</p>
 
           <p className='text-center font-bold text-[20px] leading-[30px]'>${totalValue}</p>
 
         </div>
-        <div className='flex flex-col items-center justify-center w-full h-full rounded-[6px]'>
+        <div className='flex flex-col items-center justify-center w-full h-[73px] rounded-[6px] bg-primary'>
           <p className='text-text-third font-medium text-[12px]'>Current APR</p>
           <p className='text-center font-bold text-[20px] leading-[30px]'>{isLoading ? '0' : rewardAPR}%</p>
         </div>
       </div>
-      <div className='w-full'>
+      <div className='w-full mt-[16px] md:mt-0'>
         <ProgressBar now={ratio} min={0} max={100} containerClass={`!border-none !bg-[#DEF1E6] h-[9px]`} color={`!bg-green-500`} />
         <p className='mt-[5px] text-start font-medium leading-[20px] text-text-secondary text-[11px] md:text-[12px]'>Vault Capacity: ${totalValue} / ${collateral} ({ratio}% filled)</p>
       </div>

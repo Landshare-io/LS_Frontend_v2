@@ -102,19 +102,19 @@ export default function EpochInfoCard({ refresh = false }) {
         <div>
           <p className='text-text-secondary font-medium leading-[20px] md:w-[545px] text-[14px]'>At LSRWA Express, we operate in weekly epochs that process deposits, withdrawals, and borrowing in an orderly cycle. This ensures fairness and liquidity availability for everyone.</p>
         </div>
-        <div className='flex gap-5 w-full justify-evenly md:justify-start mt-[40px] md:mt-[-35px] md:w-fit'>
-          <div className='text-center'>
+        <div className='flex gap-[10px] w-full justify-evenly md:justify-start mt-[22px] md:mt-[-50px] md:w-fit'>
+          <div className='text-center bg-primary rounded-[10px] h-[77px] items-center flex flex-col justify-center px-[13px] py-[18px] w-[149px] md:w-[133px]'>
             <p className='font-bold text-center text-[16px] text-text-primary'>{formattedStartDate}</p>
             <p className='font-medium  text-[16px] text-text-secondary text-center'>Start Date</p>
           </div>
-          <div className='text-center'>
+          <div className='text-center bg-primary rounded-[10px] h-[77px] items-center flex flex-col justify-center px-[13px] py-[18px] w-[149px] md:w-[133px]'>
             <p className='font-bold text-center text-[16px] text-text-primary'>{formattedStartTime} UTC</p>
             <p className='font-medium  text-[16px] text-text-secondary text-center'>Start Time</p>
           </div>
         </div>
       </div>
 
-      <div className='flex flex-col-reverse md:flex-row justify-between gap-[16px] md:gap-[20px]  w-full mt-[51px] md:mt-[8.5px] items-center whitespace-nowrap'>
+      <div className='flex flex-col-reverse md:flex-row justify-between gap-[16px] md:gap-[20px]  w-full mt-[33px] md:mt-[8.5px] items-center whitespace-nowrap'>
         <ProgressBar now={progress} min={0} max={100} containerClass={`!border-none !bg-[#DEF1E6] h-[24px] !rounded-[90px]`} color={`!bg-green-500 !rounded-[90px]`} />
         <div className='flex flex-col items-start text-start w-full md:w-fit md:text-center'>
           <p className='font-medium text-text-secondary text-center text-[12px]'>Expected Next Epoch In</p>

@@ -9,11 +9,13 @@ import { useChainId, useWaitForTransactionReceipt } from 'wagmi';
 import numeral from "numeral";
 import useCancelDeposit from '@/hooks/contract/LSRWAEpoch/useCancelDeposit';
 import useExcuteWithdraw from '@/hooks/contract/LSRWAEpoch/useExecuteWithdraw';
-import { IoMdCheckmark  } from "react-icons/io";
+import { IoMdCheckmark } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed }: any) {
   const [cancelling, setCancelling] = useState(false);
   const [receiving, setReceiving] = useState(false);
+  const [requestStatus, setRequestStatus] = useState(0); // 0 : pending, 1 : completed, 2 : cancel
   const chainId = useChainId()
   const {
     cancelDeposit: excuteCancelDeposit,
@@ -73,9 +75,30 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
     }
   };
 
+  const statusHandle = () => {
+
+  }
+
+  useEffect(() => {
+    if (processed == true && executed == true && isWithdraw == false) {
+      setRequestStatus(2);
+    } else {
+      if (processed == false) {
+        setRequestStatus(0);
+      }
+      if (processed == true) {
+        setRequestStatus(1);
+      }
+    }
+
+    console.log(id, ' processed => ', processed)
+    console.log(id, ' executed => ', executed)
+    console.log(id, ' isWithdraw => ', isWithdraw)
+  }, [processed, executed, isWithdraw])
+
   return (
     <div className="flex gap-2 items-center group  rounded-[12px] mt-[12px] md:mt-[17px]">
-      <div className="bg-third flex items-center w-[calc(100%-9px)] md:w-full justify-between py-[15px] px-[13px]  md:px-[16px] rounded-[10px]">
+      <div className="bg-primary flex items-center w-[calc(100%-9px)] md:w-full justify-between py-[15px] px-[13px]  md:px-[16px] rounded-[10px]">
         <div className="flex items-center gap-[16px] md:gap-[32px]">
           <div className={clsx('w-fit md:w-[86px] h-[30px] flex items-center justify-center border border-solid rounded-[100px] px-[9.5px] md:px-[5px]', !isWithdraw ? 'border-[#61CD81] bg-[#61CD8129] text-[#239942]' : 'border-[#E151414D] bg-[#F3DDDC] text-[#E15141]')}>
             <p className="text-[12px] leading-[22px] font-medium">{!isWithdraw ? 'Deposit' : 'Withdraw'}</p>
@@ -86,10 +109,10 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
           </div>
         </div>
         <div className="flex flex-col">
-          <div className={clsx('rounded-[100px] mt-[-27px] mr-[-22px] md:mr-[-12px] ', !processed ? 'bg-[#F9E3CD] text-[#E07103]' : 'bg-primary text-[#239942]')}>
+          <div className={clsx('rounded-[100px] mt-[-27px] mr-[-22px] md:mr-[-12px] ', requestStatus === 0 ? 'bg-[#F9E3CD] text-[#E07103]' : (requestStatus === 1 ? 'bg-secondary text-[#239942]' : 'bg-[#E15141] text-white'))}>
             <p className="flex gap-1 text-[10px] leading-[14px] font-medium items-center px-[12px] py-[6px]">
-              {!processed ? (<Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />) : (<IoMdCheckmark  size={12} />)}
-              {!processed ? 'Pending' : 'Completed'}</p>
+              {requestStatus === 0 ? (<Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />) : (requestStatus === 1 ? <IoMdCheckmark size={12} /> : <IoMdClose size={12} />)}
+              {requestStatus === 0 ? 'Pending' : (requestStatus === 1 ? 'Completed' : 'Cancelled')}</p>
           </div>
           <p className="mt-2 text-right text-[16px] text-text-primary font-bold">${numeral(Number(amount).toLocaleString()).format("0.[000]")}</p>
 
