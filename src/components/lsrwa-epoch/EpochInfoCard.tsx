@@ -96,13 +96,13 @@ export default function EpochInfoCard({ refresh = false }) {
     : 'Loading...';
 
   return (
-    <div className="flex flex-col justify-between w-full shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] p-[14px]">
+    <div className="bg-secondary rounded-[20px] flex flex-col justify-between w-full shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] py-[30px] pl-[35px] pr-[23px]">
       <p className='text-[20px] md:text-[24px] font-bold leading-[30px] text-text-primary'>Epoch Information</p>
       <div className='mt-[10px] flex flex-col md:flex-row md:justify-between'>
         <div>
-          <p className='text-text-secondary font-medium leading-[20px] md:w-[600px] text-[14px]'>At LSRWA Express, we operate in weekly epochs that process deposits, withdrawals, and borrowing in an orderly cycle. This ensures fairness and liquidity availability for everyone.</p>
+          <p className='text-text-secondary font-medium leading-[20px] md:w-[545px] text-[14px]'>At LSRWA Express, we operate in weekly epochs that process deposits, withdrawals, and borrowing in an orderly cycle. This ensures fairness and liquidity availability for everyone.</p>
         </div>
-        <div className='flex gap-5 w-full justify-evenly md:justify-start mt-[40px] md:mt-0 md:w-fit'>
+        <div className='flex gap-5 w-full justify-evenly md:justify-start mt-[40px] md:mt-[-35px] md:w-fit'>
           <div className='text-center'>
             <p className='font-bold text-center text-[16px] text-text-primary'>{formattedStartDate}</p>
             <p className='font-medium  text-[16px] text-text-secondary text-center'>Start Date</p>
@@ -114,7 +114,7 @@ export default function EpochInfoCard({ refresh = false }) {
         </div>
       </div>
 
-      <div className='flex flex-col-reverse md:flex-row justify-between gap-2 w-full mt-4 items-center whitespace-nowrap'>
+      <div className='flex flex-col-reverse md:flex-row justify-between gap-2 w-full mt-[51px] md:mt-[8.5px] items-center whitespace-nowrap'>
         <ProgressBar now={progress} min={0} max={100} containerClass={`!border-none !bg-[#DEF1E6] h-[24px] !rounded-[90px]`} color={`!bg-green-500 !rounded-[90px]`} />
         <div className='flex flex-col items-start text-start w-full md:w-fit md:text-center'>
           <p className='font-medium text-text-secondary text-center text-[12px]'>Expected Next Epoch In</p>

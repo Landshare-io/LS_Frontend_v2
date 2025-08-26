@@ -39,7 +39,7 @@ export default function RequestHistory() {
   }
 
   return (
-    <div className={clsx('shadow-[1px_3px_4px_1px_rgba(0,0,0,0.12)] p-0 md:p-[24px] text-center h-full', isConnected ? 'rounded-[16px]' : 'rounded-[70px]')}>
+    <div className={clsx('rounded-[20px] shadow-[1px_3px_4px_1px_rgba(0,0,0,0.12)] px-[20px] py-[25px] md:pl-[36px] md:pr-[22px] md:py-[31px] text-center h-full', isConnected ? 'rounded-[16px]' : 'rounded-[70px]')}>
       <p className='text-text-primary font-bold text-[20px] md:text-[24px] lg:text-[24px] text-start mb-[15px] md:mb-[11px]'>Previous Requests</p>
       {loading ? (
         <p>Loading...</p>

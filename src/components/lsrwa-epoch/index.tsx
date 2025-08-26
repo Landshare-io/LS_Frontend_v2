@@ -32,7 +32,7 @@ export default function RwaEpoch() {
                     </div>
                 </div>
                 {isConnected && (
-                    <div className="col-span-5 xl:col-span-2 lg:h-[565px] overflow-hidden mt-[45px] md:mt-0">
+                    <div className="col-span-5 xl:col-span-2 lg:h-[565px] overflow-hidden mt-[40px] md:mt-0">
                         <RequestHistory />
                     </div>
                 )}

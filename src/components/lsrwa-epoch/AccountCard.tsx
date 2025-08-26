@@ -4,6 +4,7 @@ import { useDepositorAccount } from '@/hooks/lsrwa-epoch/useDepositorAccount';
 import ToggleSwitchButton from "./ToggleSwitchButton";
 import numeral from "numeral";
 import { IoIosInformationCircleOutline } from "react-icons/io";
+import Tooltip from '../common/tooltip';
 
 export default function AccountCard() {
 
@@ -29,7 +30,7 @@ export default function AccountCard() {
   };
 
   return (
-    <div className="flex flex-col justify-between w-full h-[175px] border-green bg-secondary rounded-[11px] shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] p-[14px]">
+    <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-secondary rounded-[11px] shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] p-[20px] md:py-[27px] md:pl-[35px] md:pr-[17px]">
       <div className='flex justify-between w-full'>
         <p className='text-[16px] w-[157px] md:w-[100px] md:text-[20px] text-text-primary font-bold leading-[22px]'>Account Details</p>
         <div className='flex flex-col justify-end items-end text-right'>
@@ -37,18 +38,27 @@ export default function AccountCard() {
           <div className='flex items-center justify-center gap-1'>
             <p className='text-[11px] md:text-[12px] font-normal leading-[22px]'>Auto-compound
             </p>
-            <IoIosInformationCircleOutline color='#239942' size={12} />
+            <Tooltip
+              content="Toggling this feature on will result in the automatic deposit of yields each epoch."
+              position='bottom'
+            >
+              {/* svg icon must be wrapped in a div */}
+              <div>
+                <IoIosInformationCircleOutline color='#239942' size={12} />
+              </div>
+            </Tooltip>
+
           </div>
         </div>
       </div>
       <div className='flex justify-between w-full items-center'>
-        <div className='text-center'>
+        <div className='text-center py-[8px] px-[15px]'>
           <p className='text-text-secondary font-semibold text-[12px]'>Current Balance</p>
           <p className='text-[20px] font-bold leading-[30px]'>$ {isLoading ? 0 : deposited}</p>
           <p className='text-text-third font-normal text-[11px]'>Currently Deposited</p>
 
         </div>
-        <div className='text-center'>
+        <div className='text-center py-[8px] px-[12px]'>
           <div>
             <p className='text-text-secondary font-semibold text-[12px]'>Available Yield</p>
             <p className='text-[20px] font-bold leading-[30px]'>$ {isLoading ? 0 : numeral(reward).format("0.[00]").toString()}</p>
