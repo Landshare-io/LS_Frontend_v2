@@ -138,8 +138,8 @@ export default function WalletInfoCard() {
         </div>
       </div>
       <p className='text-[12px] md:text-[14px] leading-[22px] mt-[13px] font-normal'>Your Balance</p>
-      <p className='text-[40px] md:text-[46px] leading-[56px] font-bold'>{isConnected ? '$' + balance.toLocaleString() : 0}</p>
-      <div className='mt-[45px] md:mt-[55px] flex justify-center items-center md:h-[133px] w-full md:px-2 border border-solid border-transparent rounded-[15px] md:bg-linearGradientCard'
+      <p className='text-[40px] md:text-[46px] leading-[56px] font-bold mt-[12px]'>{isConnected ? '$' + balance.toLocaleString() : 0}</p>
+      <div className='mt-[45px] md:mt-[55px] flex justify-center items-center md:h-[133px] w-full md:px-2 border border-solid border-transparent md:border-[#ffffff42] rounded-[15px] md:bg-linearGradientCard'
       >
         <div className='flex flex-col md:flex-row justify-between md:w-[400px] w-full  gap-2 md:gap-0'>
           <button type='button' className="flex flex-row-reverse justify-between p-[10px] w-full rounded-[15px] border-[1px] border-solid border-[#ffffff4d]  bg-linearGradientCard md:justify-center md:p-0 md:w-fit md:bg-none md:border-0 md:flex-col items-center group" onClick={handleDepositClick}>
