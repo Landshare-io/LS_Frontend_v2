@@ -50,7 +50,7 @@ export default function AccountCard() {
   }, [balanceOfRWA, rwaPrice])
 
   return (
-    <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-secondary rounded-[11px] shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] p-[20px] md:py-[27px] md:px-[35px]">
+    <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-secondary rounded-[20px] p-[20px] md:py-[27px] md:px-[35px]">
       <p className='text-[16px] md:text-[20px] text-text-primary font-bold leading-[22px]'>Performance Metrics</p>
       <div className='flex gap-1 h-[69px]'>
         <div className='flex flex-col items-center justify-center w-full h-full rounded-[6px]'>

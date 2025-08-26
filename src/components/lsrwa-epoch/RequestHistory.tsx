@@ -39,17 +39,19 @@ export default function RequestHistory() {
   }
 
   return (
-    <div className={clsx('rounded-[20px] shadow-[1px_3px_4px_1px_rgba(0,0,0,0.12)] px-[20px] py-[25px] md:pl-[36px] md:pr-[22px] md:py-[31px] text-center h-full', isConnected ? 'rounded-[16px]' : 'rounded-[70px]')}>
+    <div className={clsx('bg-secondary rounded-[20px] px-[20px] py-[25px] md:pl-[36px] md:pr-[22px] md:py-[31px] text-center h-[595px] rounded-[20px]')}>
       <p className='text-text-primary font-bold text-[20px] md:text-[24px] lg:text-[24px] text-start mb-[15px] md:mb-[11px]'>Previous Requests</p>
-      {loading ? (
-        <p>Loading...</p>
-      ) : requests.length === 0 && isConnected ? (
-        <p>No active requests found.</p>
-      ) :
-        requests.map((history: any) => (
-          <HistoryCard fetchRequests={fetchRequest} key={history.requestId} isWithdraw={history.isWithdraw} timestamp={history.timestamp} id={history.requestId} amount={history.amount} processed={history.processed} executed={history.executed} />
-        ))
-      }
+      <div className='h-[485px] overflow-y-scroll'>
+        {loading ? (
+          <p>Loading...</p>
+        ) : requests.length === 0 && isConnected ? (
+          <p>No active requests found.</p>
+        ) :
+          requests.map((history: any) => (
+            <HistoryCard fetchRequests={fetchRequest} key={history.requestId} isWithdraw={history.isWithdraw} timestamp={history.timestamp} id={history.requestId} amount={history.amount} processed={history.processed} executed={history.executed} />
+          ))
+        }
+      </div>
     </div>
   );
 }

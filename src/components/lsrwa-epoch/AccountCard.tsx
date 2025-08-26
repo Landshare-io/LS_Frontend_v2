@@ -30,7 +30,7 @@ export default function AccountCard() {
   };
 
   return (
-    <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-secondary rounded-[11px] shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] p-[20px] md:py-[27px] md:pl-[35px] md:pr-[17px]">
+    <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-secondary rounded-[20px] p-[20px] md:py-[27px] md:pl-[35px] md:pr-[17px]">
       <div className='flex justify-between w-full'>
         <p className='text-[16px] w-[157px] md:w-[100px] md:text-[20px] text-text-primary font-bold leading-[22px]'>Account Details</p>
         <div className='flex flex-col justify-end items-end text-right'>

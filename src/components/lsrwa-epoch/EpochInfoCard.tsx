@@ -96,7 +96,7 @@ export default function EpochInfoCard({ refresh = false }) {
     : 'Loading...';
 
   return (
-    <div className="bg-secondary rounded-[20px] flex flex-col justify-between w-full shadow-[1px_3px_4px_0px_rgba(0,0,0,0.15)] py-[30px] pl-[35px] pr-[23px]">
+    <div className="bg-secondary rounded-[20px] flex flex-col justify-between w-full py-[30px] pl-[35px] pr-[23px]">
       <p className='text-[20px] md:text-[24px] font-bold leading-[30px] text-text-primary'>Epoch Information</p>
       <div className='mt-[10px] flex flex-col md:flex-row md:justify-between'>
         <div>

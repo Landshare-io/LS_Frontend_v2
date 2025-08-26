@@ -9,7 +9,7 @@ import { useChainId, useWaitForTransactionReceipt } from 'wagmi';
 import numeral from "numeral";
 import useCancelDeposit from '@/hooks/contract/LSRWAEpoch/useCancelDeposit';
 import useExcuteWithdraw from '@/hooks/contract/LSRWAEpoch/useExecuteWithdraw';
-import { IoIosCheckmark } from "react-icons/io";
+import { IoMdCheckmark  } from "react-icons/io";
 
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed }: any) {
   const [cancelling, setCancelling] = useState(false);
@@ -75,20 +75,20 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
 
   return (
     <div className="flex gap-2 items-center group  rounded-[12px] mt-[12px] md:mt-[17px]">
-      <div className="bg-third flex items-center w-[calc(100%-9px)] md:w-full justify-between py-[8px] px-[12px] rounded-[10px]">
+      <div className="bg-third flex items-center w-[calc(100%-9px)] md:w-full justify-between py-[15px] px-[13px]  md:px-[16px] rounded-[10px]">
         <div className="flex items-center gap-[16px] md:gap-[32px]">
           <div className={clsx('w-fit md:w-[86px] h-[30px] flex items-center justify-center border border-solid rounded-[100px] px-[9.5px] md:px-[5px]', !isWithdraw ? 'border-[#61CD81] bg-[#61CD8129] text-[#239942]' : 'border-[#E151414D] bg-[#F3DDDC] text-[#E15141]')}>
             <p className="text-[12px] leading-[22px] font-medium">{!isWithdraw ? 'Deposit' : 'Withdraw'}</p>
           </div>
           <div >
             <p className="text-[12px] font-bold">Request id {id}</p>
-            <p className="text-[12px] text-text-secondary leading-[30px] font-normal">{format(new Date(timestamp * 1000), 'MMMM d, yyyy')}</p>
+            <p className="text-[12px] text-text-secondary leading-[18px] font-normal">{format(new Date(timestamp * 1000), 'MMMM d, yyyy')}</p>
           </div>
         </div>
         <div className="flex flex-col">
-          <div className={clsx('rounded-[100px] mt-[-27px] mr-[-21px] md:mr-[-12px] ', !processed ? 'bg-[#F9E3CD] text-[#E07103]' : 'bg-secondary text-[#239942]')}>
+          <div className={clsx('rounded-[100px] mt-[-27px] mr-[-21px] md:mr-[-12px] ', !processed ? 'bg-[#F9E3CD] text-[#E07103]' : 'bg-primary text-[#239942]')}>
             <p className="flex gap-1 text-[10px] leading-[14px] font-medium items-center px-[12px] py-[6px]">
-              {!processed ? (<Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />) : (<IoIosCheckmark size={12} />)}
+              {!processed ? (<Image src="/icons/clock.svg" alt="Plus Icon" width={12} height={12} />) : (<IoMdCheckmark  size={12} />)}
               {!processed ? 'Pending' : 'Completed'}</p>
           </div>
           <p className="mt-2 text-right text-[16px] text-text-primary font-bold">${numeral(Number(amount).toLocaleString()).format("0.[000]")}</p>
