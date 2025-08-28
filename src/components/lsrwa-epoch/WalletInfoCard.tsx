@@ -13,6 +13,8 @@ import { formatUnits } from 'ethers';
 import Dropdown from '../common/dropdown';
 import { IoIosArrowDown } from "react-icons/io";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { IoMdClose } from "react-icons/io";
+
 
 const customModalStyles = {
   content: {
@@ -203,15 +205,9 @@ export default function WalletInfoCard() {
       )}
       <Modal isOpen={open} onRequestClose={() => setOpen(false)} style={customModalStyles}
         contentLabel="Modal">
-        <div className="bg-secondary px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-          <div className='flex justify-end w-full' onClick={() => setOpen(false)}>
-            <Image
-              src="/icons/close.svg"
-              alt="close Modal"
-              width={12}
-              height={12}
-              priority
-            />
+        <div className="bg-secondary pt-[31px] pb-[26px] px-[20px] md:px-[35px] md:py-[31px] w-[350px] md:w-[543px] relative">
+          <div className='absolute top-[19px] right-[17.29px]' onClick={() => setOpen(false)}>
+            <IoMdClose size={`12px`}/>
           </div>
           <DepositForm />
         </div>

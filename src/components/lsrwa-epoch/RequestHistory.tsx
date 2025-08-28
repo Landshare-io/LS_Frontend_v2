@@ -39,9 +39,9 @@ export default function RequestHistory() {
   }
 
   return (
-    <div className={clsx('bg-third px-[20px] pr-[8px] py-[25px] md:pl-[36px] md:pr-[22px] md:py-[31px] text-center md:h-[606px] rounded-[20px] ', requests.length > 6 ? 'h-[606px]' : '')}>
-      <p className='text-text-primary font-bold text-[20px] md:text-[24px] lg:text-[24px] text-start mb-[15px] md:mb-[11px]'>Previous Requests</p>
-      <div className={`h-[497px] ${requests.length > 6 ? 'overflow-y-scroll' : ''}`}>
+    <div className={clsx('bg-third px-[20px] pr-[8px] py-[25px] xl:pl-[36px] xl:pr-[22px] xl:py-[31px] text-center xl:h-[606px] rounded-[20px] ', requests.length > 6 ? 'h-[606px]' : '')}>
+      <p className='text-text-primary font-bold text-[20px] xl:text-[24px] lg:text-[24px] text-start mb-[15px] xl:mb-[11px]'>Previous Requests</p>
+      <div className={`${requests.length > 6 ? 'h-[497px] overflow-y-scroll' : ''}`}>
         {loading ? (
           <p>Loading...</p>
         ) : requests.length === 0 && isConnected ? (
