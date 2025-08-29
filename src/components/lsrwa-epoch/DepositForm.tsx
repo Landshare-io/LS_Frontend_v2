@@ -144,7 +144,7 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
         </div>
         <div className="mt-[7px]">
           <div className='flex flex-col md:flex-row items-center'>
-            <input type="number" className={`focus:outline-none w-full h-[58px] md:w-[200px] px-[18px] py-[23px] text-[18px] font-semibold rounded-full ${amount > balance ? 'bg-[#F3DDDC]' : 'bg-primary'}`} value={amount} onChange={handleOnChange} />
+            <input type="number" className={`focus:outline-none w-full h-[58px] md:w-[207px] px-[18px] py-[23px] text-[18px] font-semibold rounded-full ${amount > balance ? 'bg-[#F3DDDC]' : 'bg-primary'}`} value={amount} onChange={handleOnChange} />
             <div className="flex w-full md:w-fit justify-between mt-[18.06px] md:mt-0">
               <button className='flex items-center justify-center border-[1px] border-[#61CD81] md:mt-0 md:ml-[15px] w-[96px] h-[35px] md:w-[76.55px] md:h-[31.12px] rounded-full bg-[#E0F1E5] text-[#61CD81] font-bold text-[14px]' onClick={() => setAmountByPercent(0.25)}>25%</button>
               <button className='flex items-center justify-center md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-[96px] h-[35px] md:w-[76.55px] md:h-[31.12px] rounded-full bg-[#E0F1E5] text-[#61CD81] text-[14px] font-bold' onClick={() => setAmountByPercent(0.5)}>50%</button>
@@ -153,8 +153,8 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
           </div>
         </div>
         <div className="mt-[30.94px] md:mt-[23px]">
-          {status.length === 0 && (<button className={`w-full h-[60px] rounded-full py-[14px] text-white font-bold text-[14px] ${amount === 0 || !amount ? 'bg-[#9D9D9D]' : (amount > balance ? 'bg-[#E15141]' : 'bg-[#61CD81]')}`} onClick={handleDeposit}>{amount === 0 || !amount ? 'Enter Amount' : (amount > balance ? 'Insufficient Balance' : 'Deposit')}</button>)}
-          {status.length > 0 && (<button className={`w-full h-[60px] rounded-full py-[14px] text-white bg-[#61CD81]`} >{status}</button>)}
+          {status.length === 0 && (<button className={`w-full h-[60px] xl:h-[50px] rounded-full py-[14px] text-white font-bold text-[14px] ${amount === 0 || !amount ? 'bg-[#9D9D9D]' : (amount > balance ? 'bg-[#E15141]' : 'bg-[#61CD81]')}`} onClick={handleDeposit}>{amount === 0 || !amount ? 'Enter Amount' : (amount > balance ? 'Insufficient Balance' : 'Deposit')}</button>)}
+          {status.length > 0 && (<button className={`w-full h-[60px] xl:h-[50px] rounded-full py-[14px] text-white bg-[#61CD81]`} >{status}</button>)}
         </div>
       </div>
     </div>

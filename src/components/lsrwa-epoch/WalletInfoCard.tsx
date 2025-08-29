@@ -48,11 +48,12 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
 
   const {
     data: usdcBalance,
+    refetch : refetchBalance
   } = useBalance({
     address: address,
     token: USDC_ADDRESS[chainId],
     chainId: chainId,
-  }) as { data: any, isPending: any, refetch: any };
+  });
 
   const [isVisible, setIsVisible] = useState(false);
   const [open, setOpen] = useState(false)
@@ -78,6 +79,10 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
   const handleDisplayClick = () => {
     setIsVisible(!isVisible);
   };
+
+  useEffect(() => {
+    refetchBalance()
+  }, [fetchHistoryData])
 
   return (
     <div className="relative bg-[#51BF70] rounded-[20px] p-[20px] md:p-[24px] text-white">

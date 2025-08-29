@@ -12,7 +12,7 @@ import useExcuteWithdraw from '@/hooks/contract/LSRWAEpoch/useExecuteWithdraw';
 import { IoMdCheckmark } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 
-export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed }: any) {
+export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed, fetchHistoryData, setFetchHistoryData }: any) {
   const [cancelling, setCancelling] = useState(false);
   const [receiving, setReceiving] = useState(false);
   const [requestStatus, setRequestStatus] = useState(0); // 0 : pending, 1 : completed, 2 : cancel
@@ -47,6 +47,8 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
     if (cancelDepositSuccess) {
       fetchRequests();
       setCancelling(false);
+      setFetchHistoryData(!fetchHistoryData)
+
     }
   }, [cancelDepositSuccess])
 
@@ -74,10 +76,6 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
       executeWithdrawVault(BigInt(id));
     }
   };
-
-  const statusHandle = () => {
-
-  }
 
   useEffect(() => {
     if (processed == true && executed == true && isWithdraw == false) {

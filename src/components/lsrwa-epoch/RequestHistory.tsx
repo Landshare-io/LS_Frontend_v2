@@ -44,7 +44,6 @@ export default function RequestHistory({ fetchHistoryData, setFetchHistoryData }
     }
   }
 
-
   useEffect(() => {
      fetchRequest()
   }, [fetchHistoryData])
@@ -59,7 +58,7 @@ export default function RequestHistory({ fetchHistoryData, setFetchHistoryData }
           <p>No active requests found.</p>
         ) :
           requests.map((history: any) => (
-            <HistoryCard fetchRequests={fetchRequest} key={history.requestId} isWithdraw={history.isWithdraw} timestamp={history.timestamp} id={history.requestId} amount={history.amount} processed={history.processed} executed={history.executed} />
+            <HistoryCard fetchRequests={fetchRequest}  fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData} key={history.requestId} isWithdraw={history.isWithdraw} timestamp={history.timestamp} id={history.requestId} amount={history.amount} processed={history.processed} executed={history.executed} />
           ))
         }
       </div>
