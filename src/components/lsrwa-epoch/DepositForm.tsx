@@ -154,7 +154,7 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
         </div>
         <div className="mt-[30.94px] md:mt-[23px]">
           {status.length === 0 && (<button className={`w-full h-[60px] rounded-full py-[14px] text-white font-bold text-[14px] ${amount === 0 || !amount ? 'bg-[#9D9D9D]' : (amount > balance ? 'bg-[#E15141]' : 'bg-[#61CD81]')}`} onClick={handleDeposit}>{amount === 0 || !amount ? 'Enter Amount' : (amount > balance ? 'Insufficient Balance' : 'Deposit')}</button>)}
-          {status.length > 0 && (<button className={`w-full h-[60px] rounded-full py-[14px] text-white bg-[#415ee1]`} >{status}</button>)}
+          {status.length > 0 && (<button className={`w-full h-[60px] rounded-full py-[14px] text-white bg-[#61CD81]`} >{status}</button>)}
         </div>
       </div>
     </div>
