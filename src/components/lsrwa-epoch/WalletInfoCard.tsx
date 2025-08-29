@@ -34,7 +34,12 @@ const customModalStyles = {
   },
 };
 
-export default function WalletInfoCard() {
+interface WalletInfoProps {
+  fetchHistoryData: boolean,
+  setFetchHistoryData: any
+}
+
+export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }: WalletInfoProps) {
 
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
@@ -207,9 +212,9 @@ export default function WalletInfoCard() {
         contentLabel="Modal">
         <div className="bg-secondary pt-[31px] pb-[26px] px-[20px] md:px-[35px] md:py-[31px] w-[350px] md:w-[543px] relative">
           <div className='absolute top-[19px] right-[17.29px]' onClick={() => setOpen(false)}>
-            <IoMdClose size={`12px`}/>
+            <IoMdClose size={`12px`} />
           </div>
-          <DepositForm />
+          <DepositForm setOpen={setOpen}  fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData}/>
         </div>
       </Modal>
 

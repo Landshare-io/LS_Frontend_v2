@@ -91,9 +91,6 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
       }
     }
 
-    console.log(id, ' processed => ', processed)
-    console.log(id, ' executed => ', executed)
-    console.log(id, ' isWithdraw => ', isWithdraw)
   }, [processed, executed, isWithdraw])
 
   return (

@@ -7,11 +7,16 @@ import EpochInfoCard from "./EpochInfoCard";
 import clsx from "clsx";
 import { IoIosTrendingUp } from "react-icons/io";
 import { useAccount } from "wagmi";
+import { useState } from "react";
+
 
 export default function RwaEpoch() {
     const {
         isConnected,
     } = useAccount();
+
+    const [fetchHistoryData, setFetchHistoryData] = useState(false)
+
     return (
         <div className="px-[10px] xl:px-0 xl:w-[1200px] xl:m-auto mt-[43px]">
             <div className="w-full flex items-start mb-0">
@@ -31,7 +36,7 @@ export default function RwaEpoch() {
             </div>
             <div className={clsx('mt-[40px] md:mt-[54px] xl:gap-[20px]', isConnected ? 'grid grid-cols-5' : '')}>
                 <div className="col-span-5 xl:col-span-3">
-                    <WalletInfoCard />
+                    <WalletInfoCard fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData}/>
                     <div className="mt-[20px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-[10px] md:gap-[19px]">
                         <AccountCard />
                         <PerformanceCard />
@@ -39,7 +44,7 @@ export default function RwaEpoch() {
                 </div>
                 {isConnected && (
                     <div className="col-span-5 xl:col-span-2 xl:h-[565px] mt-[40px] xl:mt-0">
-                        <RequestHistory />
+                        <RequestHistory fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData}/>
                     </div>
                 )}
             </div>

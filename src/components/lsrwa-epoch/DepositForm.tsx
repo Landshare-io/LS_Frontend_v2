@@ -13,7 +13,13 @@ import { USDC_ADDRESS } from "@/config/constants/environments";
 import numeral from "numeral";
 import { formatUnits } from 'ethers';
 
-export default function DepositForm() {
+interface DepositFormProps {
+  setOpen: any,
+  fetchHistoryData: boolean,
+  setFetchHistoryData: any
+}
+
+export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistoryData }: DepositFormProps) {
 
   const [amount, setAmount] = useState<number>(0);
   const { address } = useAccount();
@@ -96,9 +102,8 @@ export default function DepositForm() {
   useEffect(() => {
     if (usdcDepositSuccess) {
       setStatus("Requested deposit!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000)
+      setOpen(false);
+      setFetchHistoryData(!fetchHistoryData)
     }
   }, [usdcDepositSuccess])
 
@@ -139,7 +144,7 @@ export default function DepositForm() {
         </div>
         <div className="mt-[7px]">
           <div className='flex flex-col md:flex-row items-center'>
-            <input type="number" className={`focus:outline-none w-full h-[58px] md:w-[200px] px-[18px] py-[23px] text-[18px] font-semibold rounded-full ${amount > balance ? 'bg-[#F3DDDC]' : 'bg-third'}`} value={amount} onChange={handleOnChange} />
+            <input type="number" className={`focus:outline-none w-full h-[58px] md:w-[200px] px-[18px] py-[23px] text-[18px] font-semibold rounded-full ${amount > balance ? 'bg-[#F3DDDC]' : 'bg-primary'}`} value={amount} onChange={handleOnChange} />
             <div className="flex w-full md:w-fit justify-between mt-[18.06px] md:mt-0">
               <button className='flex items-center justify-center border-[1px] border-[#61CD81] md:mt-0 md:ml-[15px] w-[96px] h-[35px] md:w-[76.55px] md:h-[31.12px] rounded-full bg-[#E0F1E5] text-[#61CD81] font-bold text-[14px]' onClick={() => setAmountByPercent(0.25)}>25%</button>
               <button className='flex items-center justify-center md:mt-0 md:ml-[9px] border-[1px] border-[#61CD81] w-[96px] h-[35px] md:w-[76.55px] md:h-[31.12px] rounded-full bg-[#E0F1E5] text-[#61CD81] text-[14px] font-bold' onClick={() => setAmountByPercent(0.5)}>50%</button>

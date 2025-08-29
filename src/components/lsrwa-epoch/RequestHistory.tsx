@@ -8,7 +8,13 @@ import useGetRequest from '@/hooks/contract/LSRWAEpoch/useGetRequest';
 import { Address } from 'viem';
 import { formatUnits } from "ethers";
 
-export default function RequestHistory() {
+interface RequestHistoryProps {
+  fetchHistoryData: boolean,
+  setFetchHistoryData: any
+}
+
+
+export default function RequestHistory({ fetchHistoryData, setFetchHistoryData }: RequestHistoryProps) {
 
   const { address, isConnected } = useAccount();
   const [requests, setRequests] = useState([]);
@@ -37,6 +43,11 @@ export default function RequestHistory() {
       setRequests(requests)
     }
   }
+
+
+  useEffect(() => {
+     fetchRequest()
+  }, [fetchHistoryData])
 
   return (
     <div className={clsx('bg-third px-[20px] pr-[8px] py-[25px] xl:pl-[36px] xl:pr-[22px] xl:py-[31px] text-center xl:h-[606px] rounded-[20px] ', requests.length > 6 ? 'h-[606px]' : '')}>
