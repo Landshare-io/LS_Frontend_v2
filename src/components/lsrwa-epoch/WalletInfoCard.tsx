@@ -213,7 +213,7 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
           </div>
         </div>
       )}
-      <Modal isOpen={open} onRequestClose={() => setOpen(false)} style={customModalStyles}
+      <Modal isOpen={open} onRequestClose={() => setOpen(false)} shouldCloseOnOverlayClick={false} style={customModalStyles}
         contentLabel="Modal">
         <div className="bg-secondary pt-[31px] pb-[26px] px-[20px] md:px-[35px] md:py-[31px] w-[350px] md:w-[543px] relative">
           <div className='absolute top-[19px] right-[17.29px]' onClick={() => setOpen(false)}>

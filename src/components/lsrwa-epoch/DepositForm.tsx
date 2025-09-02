@@ -12,6 +12,8 @@ import useRequestDeposit from "@/hooks/contract/LSRWAEpoch/useRequestDeposit";
 import { USDC_ADDRESS } from "@/config/constants/environments";
 import numeral from "numeral";
 import { formatUnits } from 'ethers';
+import { useGlobalContext } from "@/context/GlobalContext";
+
 
 interface DepositFormProps {
   setOpen: any,
@@ -26,6 +28,7 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
   const [balance, setBalance] = useState(0)
   const [status, setStatus] = useState("");
   const chainId = useChainId()
+  const { notifyError } = useGlobalContext();
 
   const {
     data: usdcBalance,
@@ -71,7 +74,8 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
     try {
       const parsedAmount = ethers.parseUnits(amount.toString(), 6); // USDC uses 6 decimals
       setStatus("Checking allowance...");
-      if (ethers.parseUnits(usdcAllowance.toString(), 6) < parsedAmount) {
+
+      if (ethers.parseUnits(usdcAllowance.toString(), 0) < parsedAmount) {
         setStatus("Approving USDC...");
         await approveUsdc(chainId, LSRWA_VAULT_ADDRESS[chainId], parsedAmount);
       } else {
@@ -81,16 +85,23 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
       }
 
     } catch (error: any) {
-      console.error(error);
-      setStatus("Error: " + (error?.reason || error?.message));
+      notifyError("Transaction Failed.")
+      setOpen(false);
     }
   };
 
+  useEffect(() => {
+    if (isErrorVault) {
+      notifyError("Transaction Failed.")
+      setOpen(false);
+    }
+  }, [isErrorVault])
+
   const handleRequestDeposit = async () => {
     if (isErrorVault) {
-      console.log('errorValut => ', errorValut)
+      notifyError("Transaction Failed.")
+      setOpen(false);
     } else {
-      console.log('isPendingVault => ', isPendingVault)
       if (!isPendingVault) {
         setStatus("Requesting deposit...")
         const parsedAmount = ethers.parseUnits(amount.toString(), 6);
@@ -110,7 +121,8 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
   useEffect(() => {
     try {
       if (isUsdcApproveError) {
-        console.log('Approve Error : => ', isUsdcApproveError)
+        notifyError("Transaction Failed.")
+        setOpen(false);
       } else if (usdcApproveTx) {
         if (usdcApproveStatusData) {
           if (usdcApproveSuccess) {
@@ -119,7 +131,8 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
         }
       }
     } catch (error) {
-      console.log(error)
+      notifyError("Transaction Failed.")
+      setOpen(false);
     }
   }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess, isUsdcApproveError])
 
