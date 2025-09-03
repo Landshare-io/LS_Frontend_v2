@@ -5,6 +5,8 @@ import ToggleSwitchButton from "./ToggleSwitchButton";
 import numeral from "numeral";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import Tooltip from '../common/tooltip';
+import { useAccount } from 'wagmi';
+import { useEffect } from 'react';
 
 export default function AccountCard() {
 
@@ -17,10 +19,14 @@ export default function AccountCard() {
     compounding,
     harvestReward,
     harvesting,
+    refetch,
     isLoading } = useDepositorAccount();
+
+  const { isConnected } = useAccount()
 
   const handleAutoCompoundClick = () => {
     setAutoCompound(!autoCompound);
+    refetch()
   };
   const handleHarvest = () => {
     harvestReward();
@@ -29,12 +35,17 @@ export default function AccountCard() {
     compound();
   };
 
+  useEffect(() => {
+    refetch()
+  }, [autoCompound])
+
   return (
     <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-third rounded-[20px] p-[20px] md:py-[27px] md:pl-[35px] md:pr-[17px]">
       <div className='flex justify-between w-full'>
         <p className='text-[16px] w-[157px] md:w-[100px] md:text-[20px] text-text-primary font-bold leading-[22px]'>Account Details</p>
         <div className='flex flex-col justify-end items-end text-right'>
-          <ToggleSwitchButton checked={autoCompound} disable={isLoading} handleAutoCompoundClick={handleAutoCompoundClick} />
+          { isConnected === false && (<ToggleSwitchButton disable={true}/>) }
+          { isConnected === true && (<ToggleSwitchButton checked={autoCompound} disable={isLoading} handleAutoCompoundClick={handleAutoCompoundClick} />)}
           <div className='flex items-center justify-center gap-1'>
             <p className='text-[11px] md:text-[12px] font-normal leading-[22px]'>Auto-compound
             </p>

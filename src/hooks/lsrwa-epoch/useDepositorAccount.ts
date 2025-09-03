@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount, useChainId, useReadContracts, useWriteContract } from 'wagmi';
 import vaultAbi from '@/abis/Vault.json';
 import { formatUnits } from 'ethers';
@@ -9,6 +9,7 @@ import numeral from "numeral";
 export function useDepositorAccount() {
   const [compounding, setCompounding] = useState(false);
   const [harvesting, setHarvesting] = useState(false);
+  const [autoCompoundValue, setAutoCompoundValue] = useState(false)
   const { address } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const chainId = useChainId()
@@ -49,9 +50,11 @@ export function useDepositorAccount() {
         functionName: 'setAutoCompound',
         args: [status],
       });
+      setAutoCompoundValue(status)
     } catch (err) {
       console.error('Update failed:', err);
     } finally {
+      refetch();
     }
   }
   const compound = async () => {
@@ -62,11 +65,11 @@ export function useDepositorAccount() {
         abi: vaultAbi,
         functionName: 'compound',
       });
-      refetch();
     } catch (err) {
       console.error('Update failed:', err);
     } finally {
       setCompounding(false);
+
     }
   }
   const harvestReward = async () => {
@@ -85,8 +88,13 @@ export function useDepositorAccount() {
     }
   }
 
+  useEffect(() => {
+    setAutoCompoundValue((data as any)?.[0][1] ?? false);
+
+  }, [data])
+
   const deposited = numeral(Number(formatUnits((data as any)?.[0][0] ?? "0", 6))).format("0.[000]");
-  const autoCompound = (data as any)?.[0][1] ?? false;
+
   const reward = Number(numeral(Number(formatUnits((data as any)?.[1] ?? "0", 6))).format("0.[000]"));
   const rewardAPR = Number((data as any)?.[2] ?? "0") * 0.01;
 
@@ -94,7 +102,7 @@ export function useDepositorAccount() {
     deposited,
     reward,
     rewardAPR,
-    autoCompound,
+    autoCompound: autoCompoundValue,
     setAutoCompound,
     compound,
     compounding,
@@ -102,5 +110,6 @@ export function useDepositorAccount() {
     harvesting,
     isLoading,
     error,
+    refetch
   };
 }

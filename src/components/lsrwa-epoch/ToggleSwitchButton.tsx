@@ -7,9 +7,8 @@ export default function ToggleSwitchButton({checked, disable, handleAutoCompound
     setIsChecked(checked);
   }, [checked])
 
-  const handleToggle = () => {
-    setIsChecked(prev => !prev);
-    handleAutoCompoundClick();
+  const handleToggle = async () => {
+    await handleAutoCompoundClick();
   };
 
   return (
