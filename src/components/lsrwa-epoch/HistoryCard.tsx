@@ -11,12 +11,16 @@ import useCancelDeposit from '@/hooks/contract/LSRWAEpoch/useCancelDeposit';
 import useExcuteWithdraw from '@/hooks/contract/LSRWAEpoch/useExecuteWithdraw';
 import { IoMdCheckmark } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
+import { useGlobalContext } from "@/context/GlobalContext";
+
 
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed, fetchHistoryData, setFetchHistoryData }: any) {
   const [cancelling, setCancelling] = useState(false);
   const [receiving, setReceiving] = useState(false);
   const [requestStatus, setRequestStatus] = useState(0); // 0 : pending, 1 : completed, 2 : cancel
   const chainId = useChainId()
+  const { notifyError } = useGlobalContext();
+
   const {
     cancelDeposit: excuteCancelDeposit,
     isError: isErrorVault,
@@ -60,22 +64,27 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
   }, [executeWithdrawSuccess])
 
   const cancelDeposit = async () => {
-    if (isErrorVault) {
-      console.log('errorValut => ', errorValut)
-    } else {
-      setCancelling(true);
-      excuteCancelDeposit(BigInt(id))
-    }
+    setCancelling(true);
+    excuteCancelDeposit(BigInt(id))
   }
 
   const executeWithdraw = async () => {
     if (isErrorExecuteWithdraw) {
       console.log('errorValut => ', errorExecuteWithdraw)
+      notifyError("Transaction Failed.")
     } else {
       setReceiving(true);
       executeWithdrawVault(BigInt(id));
     }
   };
+
+  useEffect(() => {
+    if (isErrorVault) {
+      notifyError("Transaction Failed.")
+      setCancelling(false);
+    }
+  }, [isErrorVault])
+
 
   useEffect(() => {
     if (processed == true && executed == true && isWithdraw == false) {
