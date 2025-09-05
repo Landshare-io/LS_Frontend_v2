@@ -48,7 +48,7 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
 
   const {
     data: usdcBalance,
-    refetch : refetchBalance
+    refetch: refetchBalance
   } = useBalance({
     address: address,
     token: USDC_ADDRESS[chainId],
@@ -92,32 +92,32 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
             <Dropdown>
               <Dropdown.Toggle className={'!p-0 !rounded-full !border-none !bg-transparent'} onClick={() => { }}>
                 <div
-                  onClick={handleDisplayClick}
                   className="flex gap-2 items-center bg-[#61CD81] px-[4px] p-[5px] rounded-full text-white text-base font-medium  cursor-pointer">
                   <div className='border rounded-full border-[#24BC48CC]'>
                     <ConnectButton.Custom>
                       {({
                         chain,
+                        openChainModal
                       }) => {
                         return (
-                          <>
+                          <div onClick={openChainModal}>
                             {chain && (<img
                               src={`${chain.iconUrl}`}
                               alt={`${chain.name}`}
                               width={24}
                               height={24}
                             />)}
-                          </>
+                          </div>
                         )
                       }
                       }
                     </ConnectButton.Custom>
                   </div>
-                  {isConnected && (<p className='text-[12px] md:text-[16px] font-medium'>{(address as any).slice(0, 6)}...{(address as any).slice(-4)}</p>)}
-                  <IoIosArrowDown size={24} />
+                  {isConnected && (<p className='text-[12px] md:text-[16px] font-medium' onClick={handleDisplayClick}>{(address as any).slice(0, 6)}...{(address as any).slice(-4)}</p>)}
+                  <IoIosArrowDown size={24} onClick={handleDisplayClick} />
                 </div>
-
               </Dropdown.Toggle>
+
 
               <Dropdown.Menu className='w-full !mt-0'>
                 <div className="{` w-full [box-shadow:0_8px_19px_-7px_rgba(6,81,237,0.2)] bg-white z-[2] min-w-full divide-y divide-gray-300 max-h-96 overflow-auto`}" onClick={() => disconnect()}>
@@ -219,7 +219,7 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
           <div className='absolute top-[19px] right-[17.29px]' onClick={() => setOpen(false)}>
             <IoMdClose size={`12px`} />
           </div>
-          <DepositForm setOpen={setOpen}  fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData}/>
+          <DepositForm setOpen={setOpen} fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData} />
         </div>
       </Modal>
 
