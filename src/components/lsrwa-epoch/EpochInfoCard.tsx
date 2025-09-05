@@ -9,9 +9,11 @@ import type { Address } from "viem";
 import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 import { Web3Provider } from '@ethersproject/providers';
 import ProgressBar from '../common/progressbar';
+import { useGlobalContext } from "@/context/GlobalContext";
+import { MAJOR_WORK_CHAINS } from '@/config/constants/environments';
 
 const AVERAGE_BLOCK_TIME_MS = 15 * 1000;
-
+const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 export default function EpochInfoCard({ refresh = false }) {
   const { data: walletClient } = useWalletClient();
@@ -21,6 +23,9 @@ export default function EpochInfoCard({ refresh = false }) {
   const [startTimeMs, setStartTimeMs] = useState(0);
   const [endTimestampMs, setEndTimestampMs] = useState(0);
   const chainId = useChainId()
+  const { notifyError } = useGlobalContext();
+  const [supportChainStatus, setSupportChainStatus] = useState(true);
+
   const vaultAddress: Address = LSRWA_VAULT_ADDRESS[chainId];
 
   const { isConnected } = useAccount();
@@ -36,11 +41,16 @@ export default function EpochInfoCard({ refresh = false }) {
   }
 
   useEffect(() => {
+    const chainStatus = (RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? true : false;
+    setSupportChainStatus(chainStatus)
+  }, [chainId])
+
+  useEffect(() => {
     let interval: any;
 
     async function getEpochBlocks() {
 
-      if (walletClient) {
+      if (walletClient && supportChainStatus) {
 
         const provider = new Web3Provider(walletClient as any);
 
@@ -104,11 +114,11 @@ export default function EpochInfoCard({ refresh = false }) {
         </div>
         <div className='flex gap-[10px] w-full justify-evenly xl:justify-start mt-[22px] xl:mt-[-50px] xl:w-fit'>
           <div className='text-center bg-primary rounded-[10px] h-[77px] items-center flex flex-col justify-center px-[13px] py-[18px] w-[149px] xl:w-[133px]'>
-            <p className='font-bold text-center text-[16px] text-text-primary'>{formattedStartDate}</p>
+            {supportChainStatus ? (<p className='font-bold text-center text-[16px] text-text-primary'>{formattedStartDate}</p>) : (<p className='font-bold text-center text-[16px] text-text-primary'>Not supported chain</p>)}
             <p className='font-medium  text-[16px] text-text-secondary text-center'>Start Date</p>
           </div>
           <div className='text-center bg-primary rounded-[10px] h-[77px] items-center flex flex-col justify-center px-[13px] py-[18px] w-[149px] xl:w-[133px]'>
-            <p className='font-bold text-center text-[16px] text-text-primary'>{formattedStartTime} UTC</p>
+            {supportChainStatus ? (<p className='font-bold text-center text-[16px] text-text-primary'>{formattedStartTime} UTC</p>) : (<p className='font-bold text-center text-[16px] text-text-primary'>Not supported chain</p>)}
             <p className='font-medium  text-[16px] text-text-secondary text-center'>Start Time</p>
           </div>
         </div>
