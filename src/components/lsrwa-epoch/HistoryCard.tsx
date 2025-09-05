@@ -12,6 +12,9 @@ import useExcuteWithdraw from '@/hooks/contract/LSRWAEpoch/useExecuteWithdraw';
 import { IoMdCheckmark } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 import { useGlobalContext } from "@/context/GlobalContext";
+import { MAJOR_WORK_CHAINS } from '@/config/constants/environments';
+
+const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 
 export default function HistoryCard({ isWithdraw, id, timestamp, amount, processed, fetchRequests, executed, fetchHistoryData, setFetchHistoryData }: any) {
@@ -19,6 +22,8 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
   const [receiving, setReceiving] = useState(false);
   const [requestStatus, setRequestStatus] = useState(0); // 0 : pending, 1 : completed, 2 : cancel
   const chainId = useChainId()
+  const [supportChainStatus, setSupportChainStatus] = useState(true);
+
   const { notifyError } = useGlobalContext();
 
   const {
@@ -48,6 +53,11 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
   });
 
   useEffect(() => {
+    const chainStatus = (RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? true : false;
+    setSupportChainStatus(chainStatus)
+  }, [chainId])
+
+  useEffect(() => {
     if (cancelDepositSuccess) {
       fetchRequests();
       setCancelling(false);
@@ -64,6 +74,12 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
   }, [executeWithdrawSuccess])
 
   const cancelDeposit = async () => {
+
+    if (supportChainStatus === false) {
+      notifyError("Not supported Chain")
+      return;
+    }
+
     setCancelling(true);
     excuteCancelDeposit(BigInt(id))
   }

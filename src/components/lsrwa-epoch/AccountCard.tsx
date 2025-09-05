@@ -5,10 +5,17 @@ import ToggleSwitchButton from "./ToggleSwitchButton";
 import numeral from "numeral";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import Tooltip from '../common/tooltip';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 import { useEffect, useState } from 'react';
+import { useGlobalContext } from "@/context/GlobalContext";
+import { MAJOR_WORK_CHAINS } from '@/config/constants/environments';
+
+const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 export default function AccountCard() {
+  const { notifyError } = useGlobalContext();
+  const [supportChainStatus, setSupportChainStatus] = useState(true);
+  const chainId = useChainId()
 
   const {
     deposited,
@@ -20,15 +27,24 @@ export default function AccountCard() {
     harvestReward,
     harvesting,
     refetch,
+    writeContractData,
+    writeContractIsError,
     isLoading } = useDepositorAccount();
 
   const { isConnected } = useAccount()
   const [clicked, setClicked] = useState(false)
 
   const handleAutoCompoundClick = async () => {
+
+    if (supportChainStatus === false) {
+      notifyError("Not supported Chain")
+      return;
+    }
+
     setClicked(true)
     await setAutoCompound(!autoCompound);
     setClicked(false)
+
     refetch()
 
   };
@@ -39,9 +55,28 @@ export default function AccountCard() {
     compound();
   };
 
+
+  useEffect(() => {
+    const chainStatus = (RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? true : false;
+    setSupportChainStatus(chainStatus)
+  }, [chainId])
+
   useEffect(() => {
     refetch()
   }, [autoCompound])
+
+  useEffect(() => {
+    if (writeContractData) {
+      setClicked(false)
+    }
+  }, [writeContractData])
+
+  useEffect(() => {
+    if (writeContractIsError) {
+      setClicked(false)
+      notifyError("Transaction Failed.")
+    }
+  }, [writeContractIsError])
 
   return (
     <div className="flex flex-col justify-between w-full h-[179px] md:h-[210px] border-green bg-third rounded-[20px] p-[20px] md:py-[27px] md:pl-[35px] md:pr-[17px]">
@@ -50,7 +85,7 @@ export default function AccountCard() {
         <div className='flex flex-col justify-end items-end text-right'>
           {isConnected === false && (<ToggleSwitchButton disable={true} />)}
           {isConnected === true && clicked === false && (<ToggleSwitchButton checked={autoCompound} disable={isLoading} handleAutoCompoundClick={handleAutoCompoundClick} />)}
-          {isConnected === true && clicked === true && (<ToggleSwitchButton checked={autoCompound} disable={isLoading} handleAutoCompoundClick={() => console.log('processing')}/>)}
+          {isConnected === true && clicked === true && (<ToggleSwitchButton checked={autoCompound} disable={isLoading} handleAutoCompoundClick={() => console.log('processing')} />)}
           <div className='flex items-center justify-center gap-1'>
             <p className='text-[11px] md:text-[12px] font-normal leading-[22px]'>Auto-compound
             </p>

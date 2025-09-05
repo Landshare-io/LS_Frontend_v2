@@ -1,5 +1,5 @@
 import { getDefaultProvider } from "ethers";
-import { arbitrum, bsc, bscTestnet, hardhat, polygon, polygonAmoy, arbitrumSepolia } from "wagmi/chains";
+import { arbitrum, bsc, bscTestnet, hardhat, polygon, polygonAmoy, arbitrumSepolia, sepolia } from "wagmi/chains";
 import { plume, plumeTestnet } from "../extra-chains";
 import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
@@ -17,7 +17,7 @@ export const MAJOR_WORK_CHAINS = {
   },
   '/nft': IS_TEST_MODE ? [hardhat] : [bsc],
   '/marketplace': IS_TEST_MODE ? [hardhat] : [bsc],
-  '/rwa': IS_TEST_MODE ? [hardhat, plumeTestnet] : [bsc, plume],
+  '/rwa': IS_TEST_MODE ? [hardhat, plumeTestnet, sepolia] : [bsc, plume],
   '/dao': IS_TEST_MODE ? [hardhat] : [bsc],
   '/migration': IS_TEST_MODE ? [hardhat] : [bsc]
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { useBalance, useAccount, useChainId, useWaitForTransactionReceipt } from "wagmi";
-import { TRANSACTION_CONFIRMATIONS_COUNT } from "@/config/constants/environments";
+import { MAJOR_WORK_CHAINS, TRANSACTION_CONFIRMATIONS_COUNT } from "@/config/constants/environments";
 import { LSRWA_VAULT_ADDRESS } from "@/config/constants/environments";
 import { BigNumberish } from 'ethers';
 import useApproveOfUsdcContract from '@/hooks/contract/UsdcContract/useApprove';
@@ -13,6 +13,8 @@ import { USDC_ADDRESS } from "@/config/constants/environments";
 import numeral from "numeral";
 import { formatUnits } from 'ethers';
 import { useGlobalContext } from "@/context/GlobalContext";
+
+const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 
 interface DepositFormProps {
@@ -28,6 +30,7 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
   const [balance, setBalance] = useState(0)
   const [status, setStatus] = useState("");
   const chainId = useChainId()
+  const [supportChainStatus, setSupportChainStatus] = useState(true);
   const { notifyError } = useGlobalContext();
 
   const {
@@ -111,6 +114,11 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
   }
 
   useEffect(() => {
+    const chainStatus = (RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? true : false;
+    setSupportChainStatus(chainStatus)
+  }, [chainId])
+
+  useEffect(() => {
     if (usdcDepositSuccess) {
       setStatus("Requested deposit!");
       setOpen(false);
@@ -165,10 +173,19 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
             </div>
           </div>
         </div>
-        <div className="mt-[30.94px] md:mt-[23px]">
-          {status.length === 0 && (<button className={`w-full h-[60px] xl:h-[50px] rounded-full py-[14px] text-white font-bold text-[14px] ${amount === 0 || !amount ? 'bg-[#9D9D9D]' : (amount > balance ? 'bg-[#E15141]' : 'bg-[#61CD81]')}`} onClick={handleDeposit}>{amount === 0 || !amount ? 'Enter Amount' : (amount > balance ? 'Insufficient Balance' : 'Deposit')}</button>)}
-          {status.length > 0 && (<button className={`w-full h-[60px] xl:h-[50px] rounded-full py-[14px] text-white bg-[#61CD81]`} >{status}</button>)}
-        </div>
+        {
+          supportChainStatus ? (
+            <div className="mt-[30.94px] md:mt-[23px]">
+              {status.length === 0 && (<button className={`w-full h-[60px] xl:h-[50px] rounded-full py-[14px] text-white font-bold text-[14px] ${amount === 0 || !amount ? 'bg-[#9D9D9D]' : (amount > balance ? 'bg-[#E15141]' : 'bg-[#61CD81]')}`} onClick={handleDeposit}>{amount === 0 || !amount ? 'Enter Amount' : (amount > balance ? 'Insufficient Balance' : 'Deposit')}</button>)}
+              {status.length > 0 && (<button className={`w-full h-[60px] xl:h-[50px] rounded-full py-[14px] text-white bg-[#61CD81]`} >{status}</button>)}
+            </div>
+          ) : (
+            <div className="mt-[30.94px] md:mt-[23px]">
+              {status.length === 0 && (<button className={`w-full h-[60px] xl:h-[50px] rounded-full py-[14px] text-white font-bold text-[14px] bg-[#E15141]`}>Not supported Chain</button>)}
+            </div>
+          )}
+
+
       </div>
     </div>
   );

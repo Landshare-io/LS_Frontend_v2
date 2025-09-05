@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 
 export default function ToggleSwitchButton({checked, disable, handleAutoCompoundClick} : any) {
-  const [isChecked, setIsChecked] = useState(false);
-
-  useEffect(() => {
-    setIsChecked(checked);
-  }, [checked])
 
   const handleToggle = async () => {
     await handleAutoCompoundClick();
@@ -17,7 +12,7 @@ export default function ToggleSwitchButton({checked, disable, handleAutoCompound
         <input
           type="checkbox"
           className="sr-only peer"
-          checked={isChecked}
+          checked={checked}
           disabled={disable}
           onChange={handleToggle}
         />

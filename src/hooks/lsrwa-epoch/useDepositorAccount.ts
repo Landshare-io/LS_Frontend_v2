@@ -11,7 +11,11 @@ export function useDepositorAccount() {
   const [harvesting, setHarvesting] = useState(false);
   const [autoCompoundValue, setAutoCompoundValue] = useState(false)
   const { address } = useAccount();
-  const { writeContractAsync } = useWriteContract();
+  const { data: writeContractData,
+    isPending: writeContractIsPending,
+    isError: writeContractIsError,
+    error: writeContractError,
+    writeContractAsync } = useWriteContract();
   const chainId = useChainId()
   const VAULT_ADDRESS = LSRWA_VAULT_ADDRESS[chainId];
 
@@ -110,6 +114,10 @@ export function useDepositorAccount() {
     harvesting,
     isLoading,
     error,
+    writeContractData,
+    writeContractIsError,
+    writeContractIsPending,
+    writeContractError,
     refetch
   };
 }
