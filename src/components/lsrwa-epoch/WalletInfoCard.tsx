@@ -14,7 +14,7 @@ import Dropdown from '../common/dropdown';
 import { IoIosArrowDown } from "react-icons/io";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { IoMdClose } from "react-icons/io";
-
+import { useGlobalContext } from "@/context/GlobalContext";
 
 const customModalStyles = {
   content: {
@@ -43,6 +43,7 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
 
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
+  const { notifyError, notifyInfo } = useGlobalContext();
 
   const chainId = useChainId()
 
@@ -71,10 +72,10 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
     setOpen(true)
   };
   const handleWithdrawClick = () => {
-    // router.push('/withdraw');
+    notifyInfo("No Request.")
   };
   const handleSwapClick = () => {
-    // router.push('/swap');
+    notifyInfo("No Request.")
   };
   const handleDisplayClick = () => {
     setIsVisible(!isVisible);
