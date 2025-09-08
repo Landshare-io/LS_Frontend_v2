@@ -43,7 +43,7 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
 
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
-  const { notifyError, notifyInfo } = useGlobalContext();
+  const { notifyError } = useGlobalContext();
 
   const chainId = useChainId()
 
@@ -72,10 +72,10 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
     setOpen(true)
   };
   const handleWithdrawClick = () => {
-    notifyInfo("No Request.")
+    notifyError("No Request.")
   };
   const handleSwapClick = () => {
-    notifyInfo("No Request.")
+    notifyError("No Request.")
   };
   const handleDisplayClick = () => {
     setIsVisible(!isVisible);
