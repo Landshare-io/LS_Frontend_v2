@@ -76,7 +76,7 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
   const cancelDeposit = async () => {
 
     if (supportChainStatus === false) {
-      notifyError("Not supported Chain")
+      notifyError("Please switch your chain to Hardhat, Binance Smart Chain Testnet, Polygon Amoy, Arbitrum Sepolia")
       return;
     }
 

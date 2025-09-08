@@ -37,7 +37,7 @@ export default function AccountCard() {
   const handleAutoCompoundClick = async () => {
 
     if (supportChainStatus === false) {
-      notifyError("Not supported Chain")
+      notifyError("Please switch your chain to Hardhat, Binance Smart Chain Testnet, Polygon Amoy, Arbitrum Sepolia")
       return;
     }
 

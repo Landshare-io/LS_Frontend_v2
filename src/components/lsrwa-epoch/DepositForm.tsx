@@ -58,6 +58,11 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
     chainId: chainId
   });
 
+  const switchNetwork = () => {
+    notifyError("Please switch your chain to Hardhat, Binance Smart Chain Testnet, Polygon Amoy, Arbitrum Sepolia")
+  }
+
+
   const {
     requestDeposit,
     isPending: isPendingVault,
@@ -181,7 +186,7 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
             </div>
           ) : (
             <div className="mt-[30.94px] md:mt-[23px]">
-              {status.length === 0 && (<button className={`w-full h-[60px] xl:h-[50px] rounded-full py-[14px] text-white font-bold text-[14px] bg-[#E15141]`}>Not supported Chain</button>)}
+              {status.length === 0 && (<button className={`w-full h-[60px] xl:h-[50px] rounded-full py-[14px] text-white font-bold text-[14px] bg-[#61CD81]`} onClick={switchNetwork}>Switch your network</button>)}
             </div>
           )}
 
