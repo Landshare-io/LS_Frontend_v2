@@ -20,10 +20,12 @@ const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 interface DepositFormProps {
   setOpen: any,
   fetchHistoryData: boolean,
-  setFetchHistoryData: any
+  setFetchHistoryData: any,
+  isLoading: boolean,
+  setIsLoading: any
 }
 
-export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistoryData }: DepositFormProps) {
+export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistoryData, isLoading, setIsLoading }: DepositFormProps) {
 
   const [amount, setAmount] = useState<number>(0);
   const { address } = useAccount();
@@ -62,7 +64,6 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
     notifyError("Please switch your chain to Hardhat, Binance Smart Chain Testnet, Polygon Amoy, Arbitrum Sepolia")
   }
 
-
   const {
     requestDeposit,
     isPending: isPendingVault,
@@ -80,6 +81,7 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
   const handleDeposit = async () => {
     if (amount > balance || amount === 0 || !amount) return
     try {
+      setIsLoading(true);
       const parsedAmount = ethers.parseUnits(amount.toString(), 6); // USDC uses 6 decimals
       setStatus("Checking allowance...");
 
@@ -95,6 +97,7 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
     } catch (error: any) {
       notifyError("Transaction Failed.")
       setOpen(false);
+      setIsLoading(false)
     }
   };
 
@@ -102,6 +105,8 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
     if (isErrorVault) {
       notifyError("Transaction Failed.")
       setOpen(false);
+      setIsLoading(false)
+
     }
   }, [isErrorVault])
 
@@ -109,6 +114,8 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
     if (isErrorVault) {
       notifyError("Transaction Failed.")
       setOpen(false);
+      setIsLoading(false)
+
     } else {
       if (!isPendingVault) {
         setStatus("Requesting deposit...")
@@ -126,7 +133,10 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
   useEffect(() => {
     if (usdcDepositSuccess) {
       setStatus("Requested deposit!");
-      setOpen(false);
+      setTimeout(() => {
+        setOpen(false);
+        setIsLoading(false)
+      }, 500)
       setFetchHistoryData(!fetchHistoryData)
     }
   }, [usdcDepositSuccess])
@@ -136,6 +146,7 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
       if (isUsdcApproveError) {
         notifyError("Transaction Failed.")
         setOpen(false);
+        setIsLoading(false)
       } else if (usdcApproveTx) {
         if (usdcApproveStatusData) {
           if (usdcApproveSuccess) {
@@ -146,6 +157,8 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
     } catch (error) {
       notifyError("Transaction Failed.")
       setOpen(false);
+      setIsLoading(false)
+
     }
   }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess, isUsdcApproveError])
 
@@ -154,6 +167,7 @@ export default function DepositForm({ setOpen, fetchHistoryData, setFetchHistory
   }
 
   const setAmountByPercent = (percent: number) => {
+    if (isLoading) return
     setAmount(balance * percent)
   }
 

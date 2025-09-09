@@ -7,7 +7,7 @@ import Image from 'next/image';
 import DepositForm from './DepositForm';
 import ConnectWallet from '../connect-wallet';
 import Modal from "react-modal";
-import { USDC_ADDRESS } from "@/config/constants/environments";
+import { MAJOR_WORK_CHAINS, USDC_ADDRESS } from "@/config/constants/environments";
 import numeral from "numeral";
 import { formatUnits } from 'ethers';
 import Dropdown from '../common/dropdown';
@@ -15,6 +15,9 @@ import { IoIosArrowDown } from "react-icons/io";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { IoMdClose } from "react-icons/io";
 import { useGlobalContext } from "@/context/GlobalContext";
+
+
+const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 const customModalStyles = {
   content: {
@@ -39,13 +42,15 @@ interface WalletInfoProps {
   setFetchHistoryData: any
 }
 
+
 export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }: WalletInfoProps) {
 
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
   const { notifyError } = useGlobalContext();
-
+  const [isLoading, setIsLoading] = useState(false)
   const chainId = useChainId()
+  const [supportChainStatus, setSupportChainStatus] = useState(true);
 
   const {
     data: usdcBalance,
@@ -63,6 +68,11 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
   // const router = useRouter();
 
   useEffect(() => {
+    const chainStatus = (RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? true : false;
+    setSupportChainStatus(chainStatus)
+  }, [chainId])
+
+  useEffect(() => {
     if (usdcBalance) {
       setBalance(Number(usdcBalance?.value ? numeral(formatUnits(usdcBalance.value, 6)).format("0.[000]") : '0.0'));
     }
@@ -72,9 +82,17 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
     setOpen(true)
   };
   const handleWithdrawClick = () => {
+    if (!supportChainStatus) {
+      notifyError("Please switch your chain to Hardhat, Binance Smart Chain Testnet, Polygon Amoy, Arbitrum Sepolia")
+      return;
+    }
     notifyError("No Request.")
   };
   const handleSwapClick = () => {
+    if (!supportChainStatus) {
+      notifyError("Please switch your chain to Hardhat, Binance Smart Chain Testnet, Polygon Amoy, Arbitrum Sepolia")
+      return;
+    }
     notifyError("No Request.")
   };
   const handleDisplayClick = () => {
@@ -85,55 +103,64 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
     refetchBalance()
   }, [fetchHistoryData])
 
+
+  const handleModalClose = () => {
+    if (isLoading) { return }
+    setOpen(false)
+  }
+
   return (
     <div className="relative bg-[#51BF70] rounded-[20px] p-[20px] md:p-[24px] text-white">
       <div className="relative w-full">
         <div className='flex justify-end w-full'>
           {isConnected && (
-            <Dropdown>
-              <Dropdown.Toggle className={'!p-0 !rounded-full !border-none !bg-transparent'} onClick={() => { }}>
-                <div
-                  className="flex gap-2 items-center bg-[#61CD81] px-[4px] p-[5px] rounded-full text-white text-base font-medium  cursor-pointer">
-                  <div className='border rounded-full border-[#24BC48CC]'>
-                    <ConnectButton.Custom>
-                      {({
-                        chain,
-                        openChainModal
-                      }) => {
-                        return (
-                          <div onClick={openChainModal}>
-                            {chain && (<img
-                              src={`${chain.iconUrl}`}
-                              alt={`${chain.name}`}
-                              width={24}
-                              height={24}
-                            />)}
-                          </div>
-                        )
-                      }
-                      }
-                    </ConnectButton.Custom>
+            <div className="flex items-center bg-[#61CD81] p-[5px] rounded-full text-white text-base font-medium  cursor-pointer">
+              <ConnectButton.Custom>
+                {({
+                  chain,
+                  openChainModal
+                }) => {
+                  return (
+                    <div onClick={openChainModal}>
+                      {chain && (<img
+                        src={`${chain.iconUrl}`}
+                        alt={`${chain.name}`}
+                        width={24}
+                        height={24}
+                      />)}
+                    </div>
+                  )
+                }
+                }
+              </ConnectButton.Custom>
+              <Dropdown>
+                <Dropdown.Toggle className={'!p-0 !rounded-full !border-none !flex !shadow-none !bg-transparent'} onClick={() => { }}>
+                  <div
+                    className="flex gap-2 items-center rounded-full text-white text-base font-medium  cursor-pointer">
+                    <div className='rounded-full'>
+
+                    </div>
+                    {isConnected && (<p className='text-[12px] md:text-[16px] font-medium' onClick={handleDisplayClick}>{(address as any).slice(0, 6)}...{(address as any).slice(-4)}</p>)}
+                    <IoIosArrowDown size={24} onClick={handleDisplayClick} />
                   </div>
-                  {isConnected && (<p className='text-[12px] md:text-[16px] font-medium' onClick={handleDisplayClick}>{(address as any).slice(0, 6)}...{(address as any).slice(-4)}</p>)}
-                  <IoIosArrowDown size={24} onClick={handleDisplayClick} />
-                </div>
-              </Dropdown.Toggle>
+                </Dropdown.Toggle>
 
 
-              <Dropdown.Menu className='w-full !mt-0'>
-                <div className="{` w-full [box-shadow:0_8px_19px_-7px_rgba(6,81,237,0.2)] bg-white z-[2] min-w-full divide-y divide-gray-300 max-h-96 overflow-auto`}" onClick={() => disconnect()}>
-                  <div className="dropdown-item py-2.5 px-5 flex items-center hover:bg-slate-100 text-slate-900 text-sm cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-4 h-4 mr-3"
-                      viewBox="0 0 6.35 6.35">
-                      <path
-                        d="M3.172.53a.265.266 0 0 0-.262.268v2.127a.265.266 0 0 0 .53 0V.798A.265.266 0 0 0 3.172.53zm1.544.532a.265.266 0 0 0-.026 0 .265.266 0 0 0-.147.47c.459.391.749.973.749 1.626 0 1.18-.944 2.131-2.116 2.131A2.12 2.12 0 0 1 1.06 3.16c0-.65.286-1.228.74-1.62a.265.266 0 1 0-.344-.404A2.667 2.667 0 0 0 .53 3.158a2.66 2.66 0 0 0 2.647 2.663 2.657 2.657 0 0 0 2.645-2.663c0-.812-.363-1.542-.936-2.03a.265.266 0 0 0-.17-.066z"
-                        data-original="#000000"></path>
-                    </svg>
-                    Disconnect
+                <Dropdown.Menu className='w-[calc(100%_+_25px)] !mt-1'>
+                  <div className="{` w-full bg-white z-[2] min-w-full divide-y divide-gray-300 max-h-96 overflow-auto`}" onClick={() => disconnect()}>
+                    <div className="dropdown-item py-2.5 px-5 flex items-center hover:bg-slate-100 text-slate-900 text-sm cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-4 h-4 mr-3"
+                        viewBox="0 0 6.35 6.35">
+                        <path
+                          d="M3.172.53a.265.266 0 0 0-.262.268v2.127a.265.266 0 0 0 .53 0V.798A.265.266 0 0 0 3.172.53zm1.544.532a.265.266 0 0 0-.026 0 .265.266 0 0 0-.147.47c.459.391.749.973.749 1.626 0 1.18-.944 2.131-2.116 2.131A2.12 2.12 0 0 1 1.06 3.16c0-.65.286-1.228.74-1.62a.265.266 0 1 0-.344-.404A2.667 2.667 0 0 0 .53 3.158a2.66 2.66 0 0 0 2.647 2.663 2.657 2.657 0 0 0 2.645-2.663c0-.812-.363-1.542-.936-2.03a.265.266 0 0 0-.17-.066z"
+                          data-original="#000000"></path>
+                      </svg>
+                      Disconnect
+                    </div>
                   </div>
-                </div>
-              </Dropdown.Menu>
-            </Dropdown>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
           )}
           {!isConnected && <div
             onClick={handleDisplayClick}
@@ -217,10 +244,10 @@ export default function WalletInfoCard({ fetchHistoryData, setFetchHistoryData }
       <Modal isOpen={open} onRequestClose={() => setOpen(false)} shouldCloseOnOverlayClick={false} style={customModalStyles}
         contentLabel="Modal">
         <div className="bg-secondary pt-[31px] pb-[26px] px-[20px] md:px-[35px] md:py-[31px] w-[350px] md:w-[543px] relative">
-          <div className='absolute top-[19px] right-[17.29px]' onClick={() => setOpen(false)}>
+          <div className='absolute top-[19px] right-[17.29px]' onClick={handleModalClose}>
             <IoMdClose size={`12px`} />
           </div>
-          <DepositForm setOpen={setOpen} fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData} />
+          <DepositForm setOpen={setOpen} isLoading={isLoading} setIsLoading={setIsLoading} fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData} />
         </div>
       </Modal>
 

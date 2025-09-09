@@ -140,7 +140,7 @@ export default function HistoryCard({ isWithdraw, id, timestamp, amount, process
       </div>
       {
         !isWithdraw && !processed &&
-        <button className="hidden flex-col items-center space-y-2 hover:opacity-80 transition disabled:opacity-50  group-hover:flex"
+        <button className={`${cancelling ? 'flex' : 'hidden'} flex-col items-center space-y-2 hover:opacity-80 transition disabled:opacity-50  group-hover:flex`}
           disabled={cancelling}
           onClick={cancelDeposit}>
           <Image

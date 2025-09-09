@@ -5,8 +5,11 @@ import clsx from "clsx";
 import HistoryCard from "./HistoryCard";
 import { useAccount, useChainId } from 'wagmi';
 import useGetRequest from '@/hooks/contract/LSRWAEpoch/useGetRequest';
+import { MAJOR_WORK_CHAINS } from "@/config/constants/environments";
 import { Address } from 'viem';
 import { formatUnits } from "ethers";
+
+const RWA_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/rwa']
 
 interface RequestHistoryProps {
   fetchHistoryData: boolean,
@@ -20,6 +23,8 @@ export default function RequestHistory({ fetchHistoryData, setFetchHistoryData }
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const chainId = useChainId()
+  const [supportChainStatus, setSupportChainStatus] = useState(true);
+
   const { data: getReqeustData, refetch } = useGetRequest(chainId, 0, false, 1, 10, address, false, address as Address);
 
   useEffect(() => {
@@ -45,20 +50,35 @@ export default function RequestHistory({ fetchHistoryData, setFetchHistoryData }
   }
 
   useEffect(() => {
-     fetchRequest()
+    const chainStatus = (RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? true : false;
+    setSupportChainStatus(chainStatus)
+    console.log('chainStatus => ', chainStatus)
+  }, [chainId])
+
+  useEffect(() => {
+    if (supportChainStatus) {
+      fetchRequest()
+    } else {
+      setRequests([])
+    }
+  }, [chainId])
+
+
+  useEffect(() => {
+    fetchRequest()
   }, [fetchHistoryData])
 
   return (
-    <div className={clsx('bg-third px-[20px] pr-[8px] py-[25px] xl:pl-[36px] xl:pr-[22px] xl:py-[31px] text-center xl:h-[606px] rounded-[20px] ', requests.length > 6 ? 'h-[606px]' : '')}>
+    <div className={clsx('bg-third px-[20px] pr-[8px] py-[25px] xl:pl-[36px] xl:pr-[22px] xl:py-[31px] text-center xl:h-[603px] rounded-[20px] ', requests.length > 6 ? 'h-[606px]' : '')}>
       <p className='text-text-primary font-bold text-[20px] xl:text-[24px] lg:text-[24px] text-start mb-[15px] xl:mb-[11px]'>Previous Requests</p>
       <div className={`${requests.length > 6 ? 'h-[497px] overflow-y-scroll' : ''}`}>
         {loading ? (
           <p>Loading...</p>
-        ) : requests.length === 0 && isConnected ? (
+        ) : (requests.length === 0 && isConnected) || supportChainStatus === false ? (
           <p>No active requests found.</p>
         ) :
           requests.map((history: any) => (
-            <HistoryCard fetchRequests={fetchRequest}  fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData} key={history.requestId} isWithdraw={history.isWithdraw} timestamp={history.timestamp} id={history.requestId} amount={history.amount} processed={history.processed} executed={history.executed} />
+            <HistoryCard fetchRequests={fetchRequest} fetchHistoryData={fetchHistoryData} setFetchHistoryData={setFetchHistoryData} key={history.requestId} isWithdraw={history.isWithdraw} timestamp={history.timestamp} id={history.requestId} amount={history.amount} processed={history.processed} executed={history.executed} />
           ))
         }
       </div>
