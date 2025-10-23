@@ -44,7 +44,7 @@ export default function DaoProposalContent({
   const { notifyError } = useGlobalContext();
 
   // Hardcoded because it won't be changed, which is from totalAllocPoint of MasterChef contract
-  const totalAllocPoint = 3000;
+  const totalAllocPoint = 12000;
 
   const handlNext = () => {
     switch (proposal) {
