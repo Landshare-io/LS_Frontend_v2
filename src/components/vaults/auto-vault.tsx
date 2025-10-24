@@ -610,7 +610,7 @@ export default function AutoVault({
                                     }
                                   }}
                                   style={{ width: "100%", maxWidth: "1000px" }}
-                                  disabled={depositing}
+                                  disabled={(typeof address == 'undefined') || depositing && !isDepositable || !depositing && !isWithdrawable || isDepositing || chainId !== bsc.id}
                                 >
                                   {isDepositing ? (
                                     <div className='flex justify-center items-center'>
@@ -622,7 +622,7 @@ export default function AutoVault({
                                       />
                                       <span className="upgrade-status">Loading</span>
                                     </div>
-                                  ) : inputValue && Number(inputValue) > Number(0) ? (depositing ? ("Deposits Disabled") /*(!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve"))*/ : (
+                                  ) : inputValue && Number(inputValue) > Number(0) ? (depositing ? (chainId !== bsc.id) ?  ("Deposits Disabled") : (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : (
                                     ((AUTO_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId)) ? "Withdraw" : "Withdraw"
                                   )) : "Enter Amount"}
                                 </button>
