@@ -1,130 +1,66 @@
+# **Landshare**
 
-# LandShare DAPP v2
+A platform for **on-chain real estate investment and real yield generation**, built on **BNB Smart Chain (BSC)** and compatible with other EVM networks.
 
-This project is a decentralized application (dApp) built with Next.js, RainbowKit, WAGMI, and styled using TailwindCSS.
+Landshare enables users to invest in **tokenized, cash-flowing U.S. real estate**, earn real yield from rental income, and boost returns through a full **DeFi Suite** powered by the **LAND** utility token.
 
-## Table of Contents
+---
 
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Scripts](#scripts)
-- [Configuration](#configuration)
-- [Adding Custom Hooks](#adding-custom-hooks)
-- [Context Management](#context-management)
-- [Styling](#styling)
-- [Learn More](#learn-more)
+## **Technology Stack**
 
-## Project Structure
+- **Blockchain:** BNB Smart Chain + EVM-compatible networks
+- **Smart Contracts:** Solidity ^0.x.x
+- **Frontend:** React + wagmi + ethers.js
+- **Development:** Hardhat, OpenZeppelin libraries
 
-```plaintext
-root
-│
-├───src
-│   │
-│   ├───abis                        # ABI file(s) for smart contracts
-│   │   ├───LandToken.json
-│   │   ├───LandTokenV2.json
-│   │   └───...
-│   │
-│   ├───components
-│   │   ├───common                  # Shared/common components like buttons, modal, etc.
-│   │   ├───layout                  # Layout components (e.g., Header, Footer)
-│   │   └───dapp                    # Specific components for interacting with the dApp
-│   │
-│   ├───config
-│   │   ├───wagmi.ts                # Configuration for WAGMI client
-│   │   ├───ccip.ts                 # Configuration for CCIP environment
-│   │   └───contractAddresses.ts    # Configuration for contract addresses
-│   │
-│   ├───context
-│   │   ├───GlobalContext.tsx       # Context for managing global state
-│   │   └───...
-│   │
-│   ├───hooks
-│   │   ├───ccip
-│   │   │   ├───useApproveLS.ts     # Approve LS CCIP custom hook
-│   │   │   └───...
-│   │   ├───common
-│   │       └───...
-│   │
-│   ├───pages
-│   │   ├───_app.tsx                # Custom App component
-│   │   ├───index.tsx               # Homepage
-│   │   └───[...other-pages]        # Other pages
-│   │       └───index.tsx 
-│   │
-│   ├───public                      # Public assets like images, icons, etc.
-│   │
-│   ├───styles                      # Global styles, CSS modules, etc.
-│   │   ├───[page].module.css       # Custom page css
-│   │   └───globals.css             # Global stylesheet
-│   │
-│   └───utils
-│       ├───helpers                 # Helper functions
-│       │   ├───axios.ts            # API helper
-│       │   └───...
-│       └───types.ts                # TypeScript type definitions
-│
-├───.env                        # Environment variables (e.g., API keys, network URLs)
-└───.gitignore                  # Git ignore file
+---
 
-```
+## **Supported Networks**
 
-## Installation
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/.git
-cd 
-```
+| Network | Chain ID |
+| --- | --- |
+| **BNB Smart Chain Mainnet** | 56 |
+| **BNB Smart Chain Testnet** | 97 |
+| **Ethereum Mainnet** | 1 |
 
-2. Install dependencies:
-```bash
-npm install
-```
-3. Set up environment variables:
-Create a .env file at the root of the project and add our environment variables:
-```bash
-NEXT_PUBLIC_INFURA_ID=your-infura-id
-NEXT_PUBLIC_ALCHEMY_ID=your-alchemy-id
-NEXT_PUBLIC_DEFAULT_CHAIN_ID=1
-```
+*(Additional EVM networks may be added in future versions.)*
 
-## Usage
-1. Run the development server:
-```bash
-npm run dev
-```
+---
 
-2. Open the app:
-Open http://localhost:3000 in your browser to view the app.
+## **Contract Addresses**
 
-## Scripts
-- `npm run dev`: Runs the development server.
-- `npm run build`: Builds the application for production.
-- `npm run start`: Runs the production build.
-
-## Configuration
-- WAGMI
-The WAGMI client is configured in src/config/wagmi.ts. This file sets up the connectors (e.g., MetaMask, WalletConnect) and providers (e.g., Infura, Alchemy).
-
-## Adding Custom Hooks
-Custom hooks are located in the src/hooks/ directory. To create a new hook:
-
-1. Create a new file in the src/hooks/ directory, e.g., useYourHook.ts.
-2. Write your hook using the React useState, useEffect, or other necessary hooks.
-3. Export your hook in src/hooks/index.ts for easier import elsewhere in the app.
-
-## Styling
-This project uses TailwindCSS for styling. Global styles can be added to src/styles/globals.css, and you can use Tailwind’s utility classes in your components.
+| Network | Staking Contract | LAND Token | RWA Token ($LSRWA) | Additional Contracts (Vaults / Router / Governance) |
+| --- | --- | --- | --- | --- |
+| **BNB Mainnet** | `0x3f9458892fB114328Bc675E11e71ff10C847F93b` | `0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C` | `0x475eD67Bfc62B41c048b81310337c1D75D45aADd` | Governance: `0x28454a7Ec0eD4b3aAAA350a1D87304355643107f` |
 
 
+---
 
-## Learn More
+## **Features**
 
-To learn more about this stack, take a look at the following resources:
+### **✔ Tokenized Real Estate (LSRWA)**
 
-- [RainbowKit Documentation](https://rainbowkit.com) - Learn how to customize your wallet connection flow.
-- [wagmi Documentation](https://wagmi.sh) - Learn how to interact with Ethereum.
-- [Next.js Documentation](https://nextjs.org/docs) - Learn how to build a Next.js application.
-- [TailwindCSS Documentation](https://tailwindcss.com/docs/installation) - Learn how to use Tailwind CSS.
+Invest in fractionalized U.S. rental properties fully on-chain with real yield from real-world income streams.
+
+### **✔ Real Yield Distribution**
+
+Holders earn yield backed by property income and performance, delivered through automated, transparent smart contracts.
+
+### **✔ LAND Utility Token & DeFi Suite**
+
+Amplify returns through:
+
+- LAND staking
+- Liquidity pools
+- Yield multipliers
+- NFT utility integrations
+
+### **✔ Secure & Fully On-Chain Infrastructure**
+
+- OpenZeppelin-based contracts
+- Timelocks and admin protections
+- Pause and upgrade control for critical operations
+
+### **✔ Multi-Network Compatibility**
+
+Optimized for BSC with planned support for additional EVM chains to expand reach and liquidity.
