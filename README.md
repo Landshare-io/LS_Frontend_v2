@@ -9,7 +9,7 @@ Landshare enables users to invest in **tokenized, cash-flowing U.S. real estate*
 ## **Technology Stack**
 
 - **Blockchain:** BNB Smart Chain + EVM-compatible networks
-- **Smart Contracts:** Solidity ^0.x.x
+- **Smart Contracts:** Solidity 
 - **Frontend:** React + wagmi + ethers.js
 - **Development:** Hardhat, OpenZeppelin libraries
 
@@ -20,8 +20,6 @@ Landshare enables users to invest in **tokenized, cash-flowing U.S. real estate*
 | Network | Chain ID |
 | --- | --- |
 | **BNB Smart Chain Mainnet** | 56 |
-| **BNB Smart Chain Testnet** | 97 |
-| **Ethereum Mainnet** | 1 |
 
 *(Additional EVM networks may be added in future versions.)*
 
