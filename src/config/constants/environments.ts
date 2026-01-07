@@ -1,11 +1,11 @@
 import { getDefaultProvider } from "ethers";
-import { arbitrum, bsc, bscTestnet, hardhat, polygon, polygonAmoy, arbitrumSepolia } from "wagmi/chains";
+import { arbitrum, bsc, bscTestnet, hardhat, polygon, polygonAmoy, arbitrumSepolia, sepolia } from "wagmi/chains";
 import { plume, plumeTestnet } from "../extra-chains";
 import type { Address } from "viem";
 import { Inter_Tight } from "next/font/google";
 import { MULTI_CHAIN_CONTRACT_TYPE } from "../../utils/type";
 
-export const IS_TEST_MODE = false
+export const IS_TEST_MODE = true
 export const AUTO_VAULT_MAIN_CHAINS = IS_TEST_MODE ? [bscTestnet, hardhat] : [bsc]
 export const PUSD_SUPPORT_CHINAS = [plumeTestnet, plume]
 export const MAJOR_WORK_CHAINS = {
@@ -17,7 +17,7 @@ export const MAJOR_WORK_CHAINS = {
   },
   '/nft': IS_TEST_MODE ? [hardhat] : [bsc],
   '/marketplace': IS_TEST_MODE ? [hardhat] : [bsc],
-  '/rwa': IS_TEST_MODE ? [hardhat, plumeTestnet] : [bsc, plume],
+  '/rwa': IS_TEST_MODE ? [hardhat, plumeTestnet, sepolia] : [bsc, plume],
   '/dao': IS_TEST_MODE ? [hardhat] : [bsc],
   '/migration': IS_TEST_MODE ? [hardhat] : [bsc]
 }
@@ -39,7 +39,7 @@ export const PROVIDER_URLS = {
   56: 'https://binance.llamarpc.com/',
   97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
   1: 'https://mainnet.infura.io/v3/',
-  11155111: 'https://rpc.sepolia.org',
+  11155111: 'https://sepolia.infura.io/v3/28daf59330ba470b95ba3285561a6ed4',
   98867: 'https://testnet-rpc.plume.org',
   98866: 'https://rpc.plume.org',
   137: 'https://polygon-rpc.com/',
@@ -161,7 +161,8 @@ export const RWA_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   97: '' as Address,
   98867: '0xaa23194C841336918E1C6D34c8B415c061007a6d',
   98866: '0x29C4708A1eEee2187914A04159D0C213F72aDaf9',
-  31337: '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+  31337: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+  11155111: '0xE575BF05313BDDC2BDBcbDfe2D31A91d6376F7af'
   // 31337: '0x99dBE4AEa58E518C50a1c04aE9b48C9F6354612f' // : Local nft game
 }
 export const RWA_LP_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
@@ -180,8 +181,20 @@ export const USDC_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   97: '' as Address,
   98867: '0xec782d0E64aD4b9c0fEC47512C6a06990Dc5A2BA',
   98866: '0xdddD73F5Df1F0DC31373357beAC77545dC5A6f3F',
-  31337: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
+  31337: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+  11155111: '0x4db0b343a57735ca5e103527d8417c95f91994b0' as Address,
 }
+
+export const LSRWA_ADMIN_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
+  56: '',
+  11155111: '0x5D3984b09a51EEc8697AADc8428C39E6e4a69bB7',
+}
+
+export const LSRWA_VAULT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
+  56: '',
+  11155111: '0x8e0F2Fb61f0F3dC1c75b354887952CB722b861E3',
+}
+
 export const USDT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   56: '0x55d398326f99059fF775485246999027B3197955',
   97: '' as Address,

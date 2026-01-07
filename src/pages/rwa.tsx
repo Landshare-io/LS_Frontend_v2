@@ -15,6 +15,7 @@ import InvestmentExplain from '../components/investment-explain';
 import RwaCalculator from '../components/rwa-calculator';
 import styles from '../styles/Home.module.css';
 import MoreInvestment from '../components/learn-more-future-investment';
+import RwaEpoch from '../components/lsrwa-epoch';
 
 const breadcrumbItems: BREADCRUMB[] = [
   {
@@ -29,11 +30,11 @@ const breadcrumbItems: BREADCRUMB[] = [
 
 const RwaPage: NextPage = () => {
   const searchParams = useSearchParams();
-  const {address} = useAccount();
+  const { address } = useAccount();
   const referralCode = searchParams.get('af');
 
   useEffect(() => {
-    if(referralCode){
+    if (referralCode) {
       Fuul.sendPageview("rwa");
     }
   }, [referralCode]);
@@ -85,6 +86,9 @@ const RwaPage: NextPage = () => {
           <span className="text-[14px] leading-[22px] tracking-[0.02em] capitalize font-semibold text-text-primary">Unlock your opportunity</span>
         </div>
         <InvestmentExplain />
+      </div>
+      <div className="bg-primary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
+        <RwaEpoch />
       </div>
       <MoreInvestment />
     </div>

@@ -42,7 +42,7 @@ export const config = getDefaultConfig({
     [plume.id]: http(),
     ...(IS_TEST_MODE ? {
       [bscTestnet.id]: http(), 
-      [sepolia.id]: http(), 
+      [sepolia.id]: http("https://sepolia.infura.io/v3/28daf59330ba470b95ba3285561a6ed4"), 
       [polygonAmoy.id]: http(),
       [plumeTestnet.id]: http(), 
       [hardhat.id]: http()
