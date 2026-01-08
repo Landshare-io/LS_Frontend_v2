@@ -22,7 +22,7 @@ import KYCWidget from "../sumsub-widget";
 import useGetSaleLimit from "../../hooks/contract/LandshareSaleContract/useGetSaleLimit";
 import useGetDecimals from "../../hooks/contract/UsdtContract/useGetDecimals";
 import useGetAllowedToTransfer from "../../hooks/contract/RWAContract/useGetAllowedToTransfer";
-import useIsWhitelistedAddressOfRwa from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
+import useIsWhitelisted from "../../hooks/contract/WhitelistContract/useIsWhitelisted";
 import useLandFee from "../../hooks/contract/LandshareSaleContract/useLandFee";
 import {
   RWA_CONTRACT_ADDRESS,
@@ -64,7 +64,7 @@ export default function SwapToken() {
   const { screenLoadingStatus } = useGlobalContext();
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
-  const { data: isWhitelisted, refetch } = useIsWhitelistedAddressOfRwa(chainId, address);
+  const { data: isWhitelisted, refetch } = useIsWhitelisted(chainId, address);
 
   const [RWATokenAmount, setRWATokenAmount] = useState(0);
   const [usdcAmount, setUsdcAmount] = useState(0);

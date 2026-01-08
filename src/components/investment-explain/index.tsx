@@ -5,7 +5,7 @@ import { useAccount, useChainId } from "wagmi";
 import { MdCancel } from "react-icons/md";
 import { bsc } from "viem/chains";
 import { useTheme } from "next-themes";
-import useIsWhitelistedAddress from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
+import useIsWhitelisted from "../../hooks/contract/WhitelistContract/useIsWhitelisted";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import Button from "../common/button";
 import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
@@ -23,7 +23,7 @@ export default function InvestmentExplain() {
   const { theme } = useTheme();
   const chainId = useChainId();
   const {address} = useAccount();
-  const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
+  const { data: isWhitelisted, refetch } = useIsWhitelisted((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
 

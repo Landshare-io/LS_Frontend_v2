@@ -4,7 +4,7 @@ import { MdCancel } from "react-icons/md";
 import { bsc } from "viem/chains";
 import { useAccount, useChainId } from "wagmi";
 import Button from "../../button";
-import useIsWhitelistedAddress from "../../../../hooks/contract/RWAContract/useIsWhitelistedAddress";
+import useIsWhitelisted from "../../../../hooks/contract/WhitelistContract/useIsWhitelisted";
 import { BOLD_INTER_TIGHT, MAJOR_WORK_CHAINS } from "../../../../config/constants/environments";
 import ZeroIDWidget from "../../../zero-id-widget";
 import KYCWidget from "../../../sumsub-widget";
@@ -22,7 +22,7 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
   const { address } = useAccount();
   const chainId = useChainId();
   const { theme } = useTheme();
-  const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
+  const { data: isWhitelisted, refetch } = useIsWhitelisted((RWA_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
 
   const customModalStyles = {
     content: {

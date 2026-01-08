@@ -4,7 +4,7 @@ import { useAccount, useChainId } from "wagmi";
 import snsWebSdk from '@sumsub/websdk';
 import { SUMSUB_VERIFY_URL } from '../../config/constants/environments';
 import { useGlobalContext } from "../../context/GlobalContext";
-import useIsWhitelistedAddressOfRwa from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
+import useIsWhitelisted from "../../hooks/contract/WhitelistContract/useIsWhitelisted";
 
 const axiosInstance = axios.create();
 const recentRequests = new Map<string, number>();
@@ -45,7 +45,7 @@ export default function KYCWidget() {
   const { notifyError, notifySuccess } = useGlobalContext();
   const { address } = useAccount();
   const chainId = useChainId();
-  const { data: isWhitelisted, refetch } = useIsWhitelistedAddressOfRwa(chainId, address);
+  const { data: isWhitelisted, refetch } = useIsWhitelisted(chainId, address);
 
   async function getNewAccessToken() {
     try {
