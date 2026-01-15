@@ -81,23 +81,13 @@ export default function KYCModal({iskycmodal, setKycopen, isZeroIDModal, setZero
             </p>
           </div>
           <div className="w-full mt-3">
-            <a href="https://dashboard.landshare.io">
-              <Button 
-                className="flex flex-col justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
-                disabled={chainId != bsc.id}
-              >
-                <p className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}>
-                  Manual Verification
-                </p>
-              </Button>
-            </a>
             <div onClick={handleLinkClick}>
               <Button
-                className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
+                className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-[#0ed145] text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
           
               >
                 <p className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}>
-                  Sumsub Verification
+                  Verify Now
                 </p>
               </Button>
             </div>
