@@ -86,7 +86,7 @@ async function debugSellTransaction() {
     console.log('7. Treasury USDC Allowance to Sale Contract:', treasuryUsdcAllowance.toString());
 
     // 8. Try to simulate the transaction
-    const amountToSell = 1n; // Selling 1 RWA token
+    const amountToSell = BigInt(1); // Selling 1 RWA token
     console.log('\n8. Simulating sellRWA with amount:', amountToSell.toString());
     
     try {

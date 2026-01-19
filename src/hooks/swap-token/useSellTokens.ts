@@ -220,7 +220,7 @@ export default function useSellTokens(chainId: number, address: Address | undefi
           } else if (BigInt(landAllowance ?? 0) < landNeeded) {
             console.error('\n❌ FAILING TOKEN: LAND');
             console.error(`LAND allowance (${landAllowance?.toString()}) < needed (${landNeeded.toString()})`);
-          } else if (treasuryUsdcAllowance === 0n || treasuryUsdcAllowance === undefined) {
+          } else if (treasuryUsdcAllowance === BigInt(0) || treasuryUsdcAllowance === undefined) {
             console.error('\n❌ FAILING TOKEN: USDC (TREASURY)');
             console.error('⚠️ Treasury wallet has NOT approved the sale contract to spend USDC!');
             console.error(`Treasury USDC allowance: ${treasuryUsdcAllowance?.toString() ?? '0'}`);

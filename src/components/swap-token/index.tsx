@@ -146,9 +146,10 @@ export default function SwapToken() {
     buyLANDAmount,
     RWATokenAmount
   );
+  // Only call buyTokenView when in Buy mode and amount is >= 1
   const buyTokenAmount = useBuyTokenView(
     chainId,
-    RWATokenAmount,
+    buyOrSell === "Buy" && RWATokenAmount >= 1 ? RWATokenAmount : 0,
     USDC_ADDRESS[chainId]
   ) as any;
 
