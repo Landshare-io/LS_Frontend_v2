@@ -154,8 +154,10 @@ export default function SwapToken() {
 
   useEffect(() => {
     setUsdcAmount(Number((Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount).toFixed(2)));
-    setBuyLANDAmount(buyTokenAmount[1])
-    setBuyUSDCAmount(buyTokenAmount[0])
+    if (Array.isArray(buyTokenAmount) && buyTokenAmount.length >= 2) {
+      setBuyLANDAmount(buyTokenAmount[1])
+      setBuyUSDCAmount(buyTokenAmount[0])
+    }
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
 
   useEffect(() => {
