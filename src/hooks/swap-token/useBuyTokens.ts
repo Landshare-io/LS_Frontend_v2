@@ -88,86 +88,94 @@ async function waitForAllowance(
 }
 
   useEffect(() => {
-    try {
-      if (isUsdcApproveError) {
-        console.error('=== USDC Approve Error ===');
-        console.error('USDC approval failed');
-        console.error('Error object:', usdcApproveError);
-        console.error('Error message:', usdcApproveError?.message);
-        console.error('Error name:', usdcApproveError?.name);
-        if (usdcApproveError && typeof usdcApproveError === 'object') {
-          console.error('Full USDC approve error:', JSON.stringify(usdcApproveError, Object.getOwnPropertyNames(usdcApproveError), 2));
-        }
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (usdcApproveTx) {
-        console.log('USDC approval transaction submitted:', usdcApproveTx);
-        usdcAllowanceRefetch()
+    (async () => {
+      try {
+        if (isUsdcApproveError) {
+          console.error('=== USDC Approve Error ===');
+          console.error('USDC approval failed');
+          console.error('Error object:', usdcApproveError);
+          console.error('Error message:', usdcApproveError?.message);
+          console.error('Error name:', usdcApproveError?.name);
+          if (usdcApproveError && typeof usdcApproveError === 'object') {
+            console.error('Full USDC approve error:', JSON.stringify(usdcApproveError, Object.getOwnPropertyNames(usdcApproveError), 2));
+          }
+          setScreenLoadingStatus("Transaction Failed.")
+        } else if (usdcApproveTx && !proceededUsdcRef.current) {
+          console.log('USDC approval transaction submitted:', usdcApproveTx);
 
-        if (usdcApproveStatusData) {
-          console.log('USDC approval status data received:', usdcApproveStatusData);
-          if (usdcApproveSuccess) {
-            console.log('USDC approval successful');
+          if (usdcApproveStatusData && usdcApproveSuccess) {
+            proceededUsdcRef.current = true
+            console.log('USDC approval confirmed on chain');
+            
+            // Wait for allowance to update on chain
+            try {
+              await waitForAllowance(usdcAllowanceRefetch, BigInt(amount), 'USDC')
+              console.log('USDC allowance updated successfully');
+            } catch (err) {
+              console.error('USDC allowance did not update in time:', err);
+            }
+
             if (BigInt(landAmount) > BigInt(0)) {
               console.log('Proceeding to LAND approval. LAND amount needed:', landAmount.toString());
-              approveLand(
+              await approveLand(
                 chainId,
                 LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
                 (BigInt(landAmount) * BigInt(101)) / BigInt(100)
               )
-              landAllowanceRefetch()
             } else {
               console.log('No LAND fee required, proceeding directly to buy');
               console.log('Buying RWA amount:', amount, 'using USDC:', USDC_ADDRESS[chainId]);
-              buyToken(amount, USDC_ADDRESS[chainId])
+              await buyToken(amount, USDC_ADDRESS[chainId])
             }
-          } else {
-            console.error('USDC approval transaction did not succeed');
-            console.error('Status data:', usdcApproveStatusData);
-            setScreenLoadingStatus("Transaction Failed.")
           }
         }
+      } catch (error) {
+        console.error('=== Error in USDC approval flow ===');
+        console.error('Error details:', error);
+        setScreenLoadingStatus("Transaction Failed.")
       }
-    } catch (error) {
-      console.error('=== Error in USDC approval flow ===');
-      console.error('Error details:', error);
-      setScreenLoadingStatus("Transaction Failed.")
-    }
+    })()
   }, [usdcApproveTx, usdcApproveStatusData, usdcApproveSuccess, isUsdcApproveError])
 
   useEffect(() => {
-    try {
-      if (isLandApproveError) {
-        console.error('=== LAND Approve Error ===');
-        console.error('LAND approval failed');
-        console.error('Error object:', landApproveError);
-        console.error('Error message:', landApproveError?.message);
-        console.error('Error name:', landApproveError?.name);
-        if (landApproveError && typeof landApproveError === 'object') {
-          console.error('Full LAND approve error:', JSON.stringify(landApproveError, Object.getOwnPropertyNames(landApproveError), 2));
-        }
-        setScreenLoadingStatus("Transaction Failed.")
-      } else if (landApproveTx) {
-        console.log('LAND approval transaction submitted:', landApproveTx);
-        landAllowanceRefetch()
+    (async () => {
+      try {
+        if (isLandApproveError) {
+          console.error('=== LAND Approve Error ===');
+          console.error('LAND approval failed');
+          console.error('Error object:', landApproveError);
+          console.error('Error message:', landApproveError?.message);
+          console.error('Error name:', landApproveError?.name);
+          if (landApproveError && typeof landApproveError === 'object') {
+            console.error('Full LAND approve error:', JSON.stringify(landApproveError, Object.getOwnPropertyNames(landApproveError), 2));
+          }
+          setScreenLoadingStatus("Transaction Failed.")
+        } else if (landApproveTx && !proceededLandRef.current) {
+          console.log('LAND approval transaction submitted:', landApproveTx);
 
-        if (landApproveStatusData) {
-          console.log('LAND approval status data received:', landApproveStatusData);
-          if (landApproveSuccess) {
-            console.log('LAND approval successful, proceeding to buy');
+          if (landApproveStatusData && landApproveSuccess) {
+            proceededLandRef.current = true
+            console.log('LAND approval confirmed on chain');
+            
+            // Wait for allowance to update on chain
+            try {
+              await waitForAllowance(landAllowanceRefetch, BigInt(landAmount), 'LAND')
+              console.log('LAND allowance updated successfully');
+            } catch (err) {
+              console.error('LAND allowance did not update in time:', err);
+            }
+
+            console.log('Proceeding to buy');
             console.log('Buying RWA amount:', amount, 'using USDC:', USDC_ADDRESS[chainId]);
-            buyToken(amount, USDC_ADDRESS[chainId])
-          } else {
-            console.error('LAND approval transaction did not succeed');
-            console.error('Status data:', landApproveStatusData);
-            setScreenLoadingStatus("Transaction Failed.")
+            await buyToken(amount, USDC_ADDRESS[chainId])
           }
         }
+      } catch (error) {
+        console.error('=== Error in LAND approval flow ===');
+        console.error('Error details:', error);
+        setScreenLoadingStatus("Transaction Failed.")
       }
-    } catch (error) {
-      console.error('=== Error in LAND approval flow ===');
-      console.error('Error details:', error);
-      setScreenLoadingStatus("Transaction Failed.")
-    }
+    })()
   }, [landApproveTx, landApproveStatusData, landApproveSuccess, isLandApproveError])
 
   useEffect(() => {
@@ -277,9 +285,13 @@ async function waitForAllowance(
       console.log('LAND fee amount:', landAmount.toString());
       console.log('Chain ID:', chainId);
       
-      usdcAllowanceRefetch()
-      landAllowanceRefetch()
-      usdcBalanceRefetch()
+      // Reset the refs
+      proceededUsdcRef.current = false
+      proceededLandRef.current = false
+      
+      await usdcAllowanceRefetch()
+      await landAllowanceRefetch()
+      await usdcBalanceRefetch()
       
       console.log('Current USDC Balance:', usdcBalance?.toString() ?? '0');
       console.log('Current USDC Allowance:', usdcAllowance?.toString() ?? '0');
@@ -296,22 +308,33 @@ async function waitForAllowance(
       }
       
       // Check if we need to approve USDC
-      if (Number(formatEther(BigInt(usdcAllowance ?? 0))) < Number(formatEther(BigInt(buyUSDCAmount)))) {
+      const usdcAllowanceBigInt = BigInt(usdcAllowance ?? 0)
+      const buyUSDCAmountBigInt = BigInt(buyUSDCAmount)
+      
+      if (usdcAllowanceBigInt < buyUSDCAmountBigInt) {
         console.log('USDC allowance insufficient, requesting approval...');
-        console.log('Approving USDC amount:', buyUSDCAmount.toString());
-        await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], buyUSDCAmount);
-      } else if (Number(formatEther(BigInt(landAllowance ?? 0))) < Number(formatEther(BigInt(landAmount))) && BigInt(landAmount) > BigInt(0)) { 
-        console.log('LAND allowance insufficient, requesting approval...');
-        console.log('Approving LAND with 1% buffer:', ((BigInt(landAmount) * BigInt(101)) / BigInt(100)).toString());
-        approveLand(
-          chainId,
-          LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
-          (BigInt(landAmount) * BigInt(101)) / BigInt(100)
-        )
+        console.log('Current allowance:', usdcAllowanceBigInt.toString());
+        console.log('Approving USDC amount:', buyUSDCAmountBigInt.toString());
+        await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], buyUSDCAmountBigInt);
       } else {
-        console.log('All allowances sufficient, proceeding to buy...');
-        console.log('Calling buyToken with amount:', amount, 'USDC address:', USDC_ADDRESS[chainId]);
-        buyToken(amount, USDC_ADDRESS[chainId])
+        // Check if we need to approve LAND
+        const landAllowanceBigInt = BigInt(landAllowance ?? 0)
+        const landAmountBigInt = BigInt(landAmount)
+        
+        if (landAmountBigInt > BigInt(0) && landAllowanceBigInt < landAmountBigInt) {
+          console.log('LAND allowance insufficient, requesting approval...');
+          console.log('Current allowance:', landAllowanceBigInt.toString());
+          console.log('Approving LAND with 1% buffer:', ((landAmountBigInt * BigInt(101)) / BigInt(100)).toString());
+          await approveLand(
+            chainId,
+            LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
+            (landAmountBigInt * BigInt(101)) / BigInt(100)
+          )
+        } else {
+          console.log('All allowances sufficient, proceeding to buy...');
+          console.log('Calling buyToken with amount:', amount, 'USDC address:', USDC_ADDRESS[chainId]);
+          await buyToken(amount, USDC_ADDRESS[chainId])
+        }
       }
     } catch (error) {
       console.error('=== Error in buyTokens function ===');

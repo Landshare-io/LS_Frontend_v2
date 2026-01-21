@@ -151,13 +151,18 @@ export default function SwapToken() {
     chainId,
     buyOrSell === "Buy" && RWATokenAmount >= 1 ? RWATokenAmount : 0,
     USDC_ADDRESS[chainId]
-  ) as any;
+  );
 
   useEffect(() => {
     setUsdcAmount(Number((Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount).toFixed(2)));
-    if (Array.isArray(buyTokenAmount) && buyTokenAmount.length >= 2) {
-      setBuyLANDAmount(buyTokenAmount[1])
-      setBuyUSDCAmount(buyTokenAmount[0])
+    
+    // Handle the new object structure from useBuyTokenView
+    if (buyTokenAmount && typeof buyTokenAmount === 'object') {
+      const landAmount = buyTokenAmount.amountOfLAND || BigInt(0);
+      const usdcAmount = buyTokenAmount.amountOfStableCoin || BigInt(0);
+      
+      setBuyLANDAmount(landAmount);
+      setBuyUSDCAmount(usdcAmount);
     }
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
 

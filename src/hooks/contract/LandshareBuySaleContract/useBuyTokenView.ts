@@ -1,47 +1,59 @@
 import { useReadContract } from "wagmi";
 import { bsc } from "viem/chains";
-import LandshareBuySaleAbi from "../../../abis/LandshareBuySale.json"
+import LandshareBuySaleArtifact from "../../../abis/LandshareBuySale.json"
 import { LANDSHARE_BUY_SALE_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { BigNumberish } from "ethers";
-import { Address } from "viem";
+import { Address, parseEther } from "viem";
+
+const LandshareBuySaleAbi = LandshareBuySaleArtifact.abi;
 
 export default function useBuyTokenView(chainId: number, amountOfSecurities: number | BigNumberish, stableCoinAddress: Address) {
   // Skip the contract call if amountOfSecurities is 0 or invalid
-  // Also skip if amount is less than 1 (minimum threshold to avoid contract reverts)
   const shouldSkip = typeof LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId] == "undefined" 
     || typeof stableCoinAddress == "undefined" 
     || !amountOfSecurities 
-    || Number(amountOfSecurities) === 0
-    || Number(amountOfSecurities) < 1;
+    || Number(amountOfSecurities) <= 0;
 
-  const { data, isError, isLoading, error } = useReadContract({
+  // Convert the amount to wei (18 decimals) for the contract call
+  const amountInWei = shouldSkip ? BigInt(0) : parseEther(amountOfSecurities.toString());
+
+  const { data, isError, isLoading, error, refetch } = useReadContract({
     address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
     abi: LandshareBuySaleAbi,
     functionName: "buyTokenView",
     chainId: chainId,
-    args: [amountOfSecurities, stableCoinAddress],
+    args: [amountInWei, stableCoinAddress],
     query: {
       enabled: !shouldSkip,
-      retry: false,
-      staleTime: 5000,
+      retry: 3,
+      retryDelay: 1000,
+      staleTime: 3000,
+      refetchInterval: 10000, // Refetch every 10 seconds for updated prices
     }
   })
 
-  if (shouldSkip) return [0, 0]
-  if (isLoading) return [0, 0]
-  // {
-  //   amountOfStableCoin: 0,
-  //   amountOfLAND: 0
-  // }
+  if (shouldSkip) {
+    return { amountOfStableCoin: BigInt(0), amountOfLAND: BigInt(0), amountOfSecurities: BigInt(0) }
+  }
+  
+  if (isLoading) {
+    return { amountOfStableCoin: BigInt(0), amountOfLAND: BigInt(0), amountOfSecurities: BigInt(0) }
+  }
+  
   if (isError) {
-    // Silently return default values instead of logging error for better UX
-    // console.log('Fetching LandshareBuySaleContract buyTokenView error', error)
-    return [0, 0]
-    // {
-    //   amountOfStableCoin: 0,
-    //   amountOfLAND: 0
-    // }
+    // Silently handle errors - price oracle might not be configured yet
+    return { amountOfStableCoin: BigInt(0), amountOfLAND: BigInt(0), amountOfSecurities: BigInt(0) }
   }
 
-  return data
+  // The contract returns [amountOfStableCoin, amountOfLAND, amountOfSecurities_]
+  if (Array.isArray(data) && data.length === 3) {
+    return {
+      amountOfStableCoin: data[0],
+      amountOfLAND: data[1],
+      amountOfSecurities: data[2]
+    }
+  }
+
+  // Fallback
+  return { amountOfStableCoin: BigInt(0), amountOfLAND: BigInt(0), amountOfSecurities: BigInt(0) }
 }
