@@ -244,7 +244,8 @@ async function waitForAllowance(
         }
         
         if (buyError && typeof buyError === 'object') {
-          console.error('Full buy error:', JSON.stringify(buyError, Object.getOwnPropertyNames(buyError), 2));
+          console.error('Full buy error:', JSON.stringify(buyError, (key, value) => 
+            typeof value === 'bigint' ? value.toString() : value, 2));
         }
         console.error('Transaction hash:', buyTx);
         console.error('Amount attempted:', amount);
