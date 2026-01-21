@@ -244,25 +244,17 @@ async function waitForAllowance(
         console.error('USDC address used:', USDC_ADDRESS[chainId]);
         
         setScreenLoadingStatus("Transaction Failed.")
-      } else if (buyTx) {
+      } else if (buyTx && buySuccess) {
         console.log('Buy transaction hash:', buyTx);
-        if (buyStatusData) {
-          console.log('Transaction status data received:', buyStatusData);
-          if (buySuccess) {
-            console.log('Buy transaction successful! Refetching balances...');
-            await usdcAllowanceRefetch()
-            await usdcBalanceRefetch()
-            await landAllowanceRefetch()
-            await rwaBalanceRefetch()
-            await usdtBalanceRefetch()
-            await landBalanceRefetch()
-            setScreenLoadingStatus("Transaction Complete.")
-          } else {
-            console.error('Transaction did not succeed');
-            console.error('Status data:', buyStatusData);
-            setScreenLoadingStatus("Transaction Failed.")
-          }
-        }
+        console.log('Transaction status data received:', buyStatusData);
+        console.log('Buy transaction successful! Refetching balances...');
+        await usdcAllowanceRefetch()
+        await usdcBalanceRefetch()
+        await landAllowanceRefetch()
+        await rwaBalanceRefetch()
+        await usdtBalanceRefetch()
+        await landBalanceRefetch()
+        setScreenLoadingStatus("Transaction Complete.")
       }
     })()
   }, [buyTx, buyStatusData, buySuccess, isError])
