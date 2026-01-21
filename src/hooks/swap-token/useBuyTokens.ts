@@ -115,7 +115,7 @@ async function waitForAllowance(
               )
             } else {
               console.log('No LAND fee required, proceeding directly to buy');
-              console.log('Buying RWA amount:', amount, 'using USDC:', USDC_ADDRESS[chainId]);
+              console.log('Buying RWA amount (0 decimals):', amount, 'using USDC:', USDC_ADDRESS[chainId]);
               await buyToken(amount, USDC_ADDRESS[chainId])
             }
           }
@@ -157,11 +157,8 @@ async function waitForAllowance(
             }
 
             console.log('Proceeding to buy');
-            console.log('Buying RWA amount:', amount, 'using USDC:', USDC_ADDRESS[chainId]);
-            // Convert amount to wei for contract call
-            const amountInWei = parseUnits(amount.toString(), 18);
-            console.log('RWA amount in wei:', amountInWei.toString());
-            await buyToken(amountInWei, USDC_ADDRESS[chainId])
+            console.log('Buying RWA amount (0 decimals):', amount, 'using USDC:', USDC_ADDRESS[chainId]);
+            await buyToken(amount, USDC_ADDRESS[chainId])
           }
         }
       } catch (error) {
@@ -331,7 +328,7 @@ async function waitForAllowance(
           )
         } else {
           console.log('All allowances sufficient, proceeding to buy...');
-          console.log('Calling buyToken with amount:', amount, 'USDC address:', USDC_ADDRESS[chainId]);
+          console.log('Calling buyToken with RWA amount (0 decimals):', amount, 'USDC address:', USDC_ADDRESS[chainId]);
           await buyToken(amount, USDC_ADDRESS[chainId])
         }
       }
