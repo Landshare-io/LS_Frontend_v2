@@ -289,7 +289,7 @@ export default function SwapToken() {
             onClick={() => {
               setBuyOrSell("Buy");
               setRWATokenAmount(0);
-              setBuyLANDAmount(0);
+              setBuyLANDAmount(BigInt(0));
               setBuyUSDCAmount(BigInt(0));
             }}
             className="w-full h-[40px]"
