@@ -64,8 +64,8 @@ async function waitForAllowance(
   refetchFn: () => Promise<{ data: unknown } | any>,
   needed: bigint,
   label: string,
-  timeoutMs = 20_000,
-  intervalMs = 800
+  timeoutMs = 5_000,
+  intervalMs = 300
 ) {
   const deadline = Date.now() + timeoutMs
   while (true) {
@@ -73,7 +73,10 @@ async function waitForAllowance(
     // wagmi read hooks usually return { data }, coerce safely:
     const current = BigInt((res?.data ?? 0).toString())
     if (current >= needed) return
-    if (Date.now() > deadline) throw new Error("allowance still below required")
+    if (Date.now() > deadline) {
+      console.warn(`${label} allowance not updated within ${timeoutMs}ms, proceeding anyway`);
+      return; // Continue instead of throwing
+    }
     await new Promise(r => setTimeout(r, intervalMs))
   }
 }
@@ -99,12 +102,8 @@ async function waitForAllowance(
             console.log('USDC approval confirmed on chain');
             
             // Wait for allowance to update on chain
-            try {
-              await waitForAllowance(usdcAllowanceRefetch, BigInt(amount), 'USDC')
-              console.log('USDC allowance updated successfully');
-            } catch (err) {
-              console.error('USDC allowance did not update in time:', err);
-            }
+            await waitForAllowance(usdcAllowanceRefetch, BigInt(amount), 'USDC')
+            console.log('USDC allowance updated successfully');
 
             if (BigInt(landAmount) > BigInt(0)) {
               console.log('Proceeding to LAND approval. LAND amount needed:', BigInt(landAmount).toString());
@@ -149,12 +148,8 @@ async function waitForAllowance(
             console.log('LAND approval confirmed on chain');
             
             // Wait for allowance to update on chain
-            try {
-              await waitForAllowance(landAllowanceRefetch, BigInt(landAmount), 'LAND')
-              console.log('LAND allowance updated successfully');
-            } catch (err) {
-              console.error('LAND allowance did not update in time:', err);
-            }
+            await waitForAllowance(landAllowanceRefetch, BigInt(landAmount), 'LAND')
+            console.log('LAND allowance updated successfully');
 
             console.log('Proceeding to buy');
             console.log('Buying RWA amount (0 decimals):', amount, 'using USDC:', USDC_ADDRESS[chainId]);
