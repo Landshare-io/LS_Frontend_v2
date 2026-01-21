@@ -14,8 +14,8 @@ export default function useBuyTokenView(chainId: number, amountOfSecurities: num
     || !amountOfSecurities 
     || Number(amountOfSecurities) <= 0;
 
-  // Convert the amount to wei (18 decimals) for the contract call
-  const amountInWei = shouldSkip ? BigInt(0) : parseEther(amountOfSecurities.toString());
+  // Convert the amount - LSRWA has 0 decimals, so no conversion needed
+  const amountInWei = shouldSkip ? BigInt(0) : BigInt(Math.floor(Number(amountOfSecurities)));
 
   const { data, isError, isLoading, error, refetch } = useReadContract({
     address: LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],

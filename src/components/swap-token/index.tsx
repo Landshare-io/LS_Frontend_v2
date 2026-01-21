@@ -70,8 +70,8 @@ export default function SwapToken() {
   const [usdcAmount, setUsdcAmount] = useState(0);
   const [isGraphShow, setIsGraphShow] = useState(false);
   const [isFinancialSummaryShow, setIsFinancialSummaryShow] = useState(false);
-  const [buyUSDCAmount, setBuyUSDCAmount] = useState(0);
-  const [buyLANDAmount, setBuyLANDAmount] = useState(0);
+  const [buyUSDCAmount, setBuyUSDCAmount] = useState<bigint>(BigInt(0));
+  const [buyLANDAmount, setBuyLANDAmount] = useState<bigint>(BigInt(0));
   const [isSTAPShow, setIsSTAPshow] = useState(false);
   const [signAgreement, setSignAgreement] = useState(false);
   const [isShowTokenSelector, setIsShowTokenSelector] = useState(false);
@@ -290,7 +290,7 @@ export default function SwapToken() {
               setBuyOrSell("Buy");
               setRWATokenAmount(0);
               setBuyLANDAmount(0);
-              setBuyUSDCAmount(0);
+              setBuyUSDCAmount(BigInt(0));
             }}
             className="w-full h-[40px]"
           >
@@ -676,9 +676,9 @@ export default function SwapToken() {
                   placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? 'pUSD' : 'USDC'}`}
                   readOnly
                   value={
-                    buyUSDCAmount == undefined || RWATokenAmount === 0
+                    buyUSDCAmount === BigInt(0) || RWATokenAmount === 0
                       ? ""
-                      : formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)
+                      : formatUnits(buyUSDCAmount, chainId == bsc.id ? 18 : 6)
                   }
                 />
                 {isConnected && (
@@ -712,9 +712,9 @@ export default function SwapToken() {
                     placeholder="00.00 LAND"
                     readOnly
                     value={
-                      buyLANDAmount == undefined || RWATokenAmount === 0
+                      buyLANDAmount === BigInt(0) || RWATokenAmount === 0
                         ? ""
-                        : formatEther(buyLANDAmount.toString())
+                        : formatEther(buyLANDAmount)
                     }
                   />
                   {isConnected && (
