@@ -158,7 +158,10 @@ async function waitForAllowance(
 
             console.log('Proceeding to buy');
             console.log('Buying RWA amount:', amount, 'using USDC:', USDC_ADDRESS[chainId]);
-            await buyToken(amount, USDC_ADDRESS[chainId])
+            // Convert amount to wei for contract call
+            const amountInWei = parseUnits(amount.toString(), 18);
+            console.log('RWA amount in wei:', amountInWei.toString());
+            await buyToken(amountInWei, USDC_ADDRESS[chainId])
           }
         }
       } catch (error) {

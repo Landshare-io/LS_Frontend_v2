@@ -161,8 +161,11 @@ export default function SwapToken() {
       const landAmount = buyTokenAmount.amountOfLAND || BigInt(0);
       const usdcAmount = buyTokenAmount.amountOfStableCoin || BigInt(0);
       
-      setBuyLANDAmount(landAmount);
-      setBuyUSDCAmount(usdcAmount);
+      // Only update if we actually got valid amounts back (not zeros)
+      if (landAmount > BigInt(0) || usdcAmount > BigInt(0)) {
+        setBuyLANDAmount(landAmount);
+        setBuyUSDCAmount(usdcAmount);
+      }
     }
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
 
