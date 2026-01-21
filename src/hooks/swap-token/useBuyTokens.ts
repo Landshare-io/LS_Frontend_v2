@@ -27,17 +27,11 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
   const { setScreenLoadingStatus } = useGlobalContext()
   const { refetch: rwaBalanceRefetch } = useBalanceOfRwaContract(chainId, address) as { refetch: Function };
   const { refetch: usdtBalanceRefetch } = useBalanceOfUsdtContract(chainId, address) as { refetch: Function };
-  const { refetch: landBalanceRefetch } = useBalanceOfLandContract({ chainId, address }) as { refetch: Function };
+  const { refetch: landBalanceRefetch } = useBalanceOfLandContract({ chainId, address });
   
-  const { data: usdcBalance, refetch: usdcBalanceRefetch } = useBalanceOfUsdcContract(chainId, address) as {
-    data: BigNumberish,
-    refetch: Function
-  };
+  const { data: usdcBalance, refetch: usdcBalanceRefetch } = useBalanceOfUsdcContract(chainId, address);
 
-  const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]) as {
-    data: BigNumberish,
-    refetch: Function
-  }
+  const { data: usdcAllowance, refetch: usdcAllowanceRefetch } = useAllowanceOfUsdcContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]);
 
   const { approve: approveUsdc, data: usdcApproveTx, isError: isUsdcApproveError, error: usdcApproveError } = useApproveOfUsdcContract()
 
@@ -47,10 +41,7 @@ export default function useBuyTokens(chainId: number, address: Address | undefin
     chainId: chainId
   });
 
-  const { data: landAllowance, refetch: landAllowanceRefetch } = useAllowanceOfLandContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]) as {
-    data: BigNumberish,
-    refetch: Function
-  }
+  const { data: landAllowance, refetch: landAllowanceRefetch } = useAllowanceOfLandContract(chainId, address, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId]);
 
   const { approve: approveLand, data: landApproveTx, isError: isLandApproveError, error: landApproveError } = useApproveOfLandContract()
 
@@ -116,7 +107,7 @@ async function waitForAllowance(
             }
 
             if (BigInt(landAmount) > BigInt(0)) {
-              console.log('Proceeding to LAND approval. LAND amount needed:', landAmount.toString());
+              console.log('Proceeding to LAND approval. LAND amount needed:', BigInt(landAmount).toString());
               await approveLand(
                 chainId,
                 LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId],
@@ -202,20 +193,23 @@ async function waitForAllowance(
           console.error('User USDC → Buy Contract:', usdcAllowance?.toString() ?? '0');
           console.error('User LAND → Buy Contract:', landAllowance?.toString() ?? '0');
           console.error('Amount trying to buy (RWA):', amount);
-          console.error('LAND fee required:', landAmount.toString());
+          console.error('LAND fee required:', BigInt(landAmount).toString());
           
           // Identify the failing token based on allowances and balances
           const usdcNeeded = BigInt(amount);
           const landNeeded = BigInt(landAmount);
+          const usdcBalanceBigInt = BigInt(usdcBalance?.toString() ?? '0');
+          const usdcAllowanceBigInt = BigInt(usdcAllowance?.toString() ?? '0');
+          const landAllowanceBigInt = BigInt(landAllowance?.toString() ?? '0');
           
-          if (BigInt(usdcBalance ?? 0) < usdcNeeded) {
+          if (usdcBalanceBigInt < usdcNeeded) {
             console.error('\n❌ FAILING: USDC BALANCE');
             console.error(`USDC balance (${usdcBalance?.toString()}) < needed (${usdcNeeded.toString()})`);
             console.error('⚠️ User does not have enough USDC to complete the purchase!');
-          } else if (BigInt(usdcAllowance ?? 0) < usdcNeeded) {
+          } else if (usdcAllowanceBigInt < usdcNeeded) {
             console.error('\n❌ FAILING TOKEN: USDC ALLOWANCE');
             console.error(`USDC allowance (${usdcAllowance?.toString()}) < needed (${usdcNeeded.toString()})`);
-          } else if (BigInt(landAllowance ?? 0) < landNeeded && landNeeded > BigInt(0)) {
+          } else if (landAllowanceBigInt < landNeeded && landNeeded > BigInt(0)) {
             console.error('\n❌ FAILING TOKEN: LAND ALLOWANCE');
             console.error(`LAND allowance (${landAllowance?.toString()}) < needed (${landNeeded.toString()})`);
           } else {
@@ -282,7 +276,7 @@ async function waitForAllowance(
       console.log('=== Starting Buy Tokens Process ===');
       console.log('USDC amount to spend:', buyUSDCAmount.toString());
       console.log('RWA amount to receive:', amount);
-      console.log('LAND fee amount:', landAmount.toString());
+      console.log('LAND fee amount:', BigInt(landAmount).toString());
       console.log('Chain ID:', chainId);
       
       // Reset the refs
@@ -300,7 +294,8 @@ async function waitForAllowance(
       setScreenLoadingStatus("Transaction Pending...")
       
       // Check USDC balance first
-      if (BigInt(usdcBalance ?? 0) < BigInt(buyUSDCAmount)) {
+      const usdcBalanceBigInt = BigInt(usdcBalance?.toString() ?? '0');
+      if (usdcBalanceBigInt < BigInt(buyUSDCAmount)) {
         console.error('❌ Insufficient USDC balance!');
         console.error('Balance:', usdcBalance?.toString(), 'Needed:', buyUSDCAmount.toString());
         setScreenLoadingStatus("Insufficient USDC Balance")
@@ -308,7 +303,7 @@ async function waitForAllowance(
       }
       
       // Check if we need to approve USDC
-      const usdcAllowanceBigInt = BigInt(usdcAllowance ?? 0)
+      const usdcAllowanceBigInt = BigInt(usdcAllowance?.toString() ?? '0')
       const buyUSDCAmountBigInt = BigInt(buyUSDCAmount)
       
       if (usdcAllowanceBigInt < buyUSDCAmountBigInt) {
@@ -318,7 +313,7 @@ async function waitForAllowance(
         await approveUsdc(chainId, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS[chainId], buyUSDCAmountBigInt);
       } else {
         // Check if we need to approve LAND
-        const landAllowanceBigInt = BigInt(landAllowance ?? 0)
+        const landAllowanceBigInt = BigInt(landAllowance?.toString() ?? '0')
         const landAmountBigInt = BigInt(landAmount)
         
         if (landAmountBigInt > BigInt(0) && landAllowanceBigInt < landAmountBigInt) {
