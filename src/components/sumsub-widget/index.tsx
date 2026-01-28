@@ -7,39 +7,6 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import useIsWhitelisted from "../../hooks/contract/WhitelistContract/useIsWhitelisted";
 
 const axiosInstance = axios.create();
-const recentRequests = new Map<string, number>();
-const TTL = 60 * 1000; // 1 minute
-
-function getRequestKey(config: any) {
-  const method = config.method.toUpperCase();
-  const url = config.url;
-  return `${method}:${url}`;
-}
-
-axiosInstance.interceptors.request.use(config => {
-  const key = getRequestKey(config);
-  const now = Date.now();
-
-  if (recentRequests.has(key) && now - recentRequests.get(key)! < TTL) {
-    console.warn(`Duplicate request blocked within 1 min: ${key}`);
-
-    // 👇 Don't actually send the request — return a fake success response
-    config.adapter = () => {
-      return Promise.resolve({
-        data: null,
-        status: 204,
-        statusText: 'Duplicate Skipped',
-        headers: {},
-        config,
-      });
-    };
-
-    return config;
-  }
-
-  recentRequests.set(key, now);
-  return config;
-});
 
 export default function KYCWidget() {
   const { notifyError, notifySuccess } = useGlobalContext();
@@ -83,30 +50,50 @@ export default function KYCWidget() {
             return;
           }
 
-          let res;
-          if (event === 'onStepCompleted' || event === 'stepCompleted') {
-            res = await axiosInstance.post(`${SUMSUB_VERIFY_URL}/verdict`, { address });
-            await refetch();
-          } else if (event === 'onApplicantStatusChanged' || payload?.reviewStatus === 'completed') {
-            res = await axiosInstance.post(`${SUMSUB_VERIFY_URL}/verdict`, { address, stepFailed: true });
-            await refetch();
-          }
-
-          if (res) {
-            await refetch();
-            if (res.data.verdict == false) {
-              notifyError('You are under 18 or located in a restricted region.');
-            } else if (res.data?.message == true) {
-              notifySuccess('KYC completed successfully!');
+          // Process KYC completion events
+          if (event === 'onStepCompleted' || event === 'stepCompleted' || 
+              event === 'onApplicantStatusChanged' || payload?.reviewStatus === 'completed') {
+            
+            // Call verdict endpoint (now secured with Sumsub API verification)
+            try {
+              const response = await axiosInstance.post(`${SUMSUB_VERIFY_URL}/verdict`, { address });
+              
+              if (response.data.verified) {
+                await refetch();
+                notifySuccess('KYC completed successfully!');
+              } else {
+                notifyError(response.data.error || 'KYC verification failed.');
+              }
+            } catch (error: any) {
+              console.error('Verdict error:', error);
+              
+              if (error.response?.status === 429) {
+                notifyError('Too many requests. Please wait a moment and try again.');
+              } else if (error.response?.status === 403) {
+                notifyError(error.response?.data?.error || 'KYC not approved or you are not eligible.');
+              } else {
+                // Start polling as fallback
+                let pollAttempts = 0;
+                const maxPollAttempts = 10;
+                
+                const pollInterval = setInterval(async () => {
+                  pollAttempts++;
+                  const result = await refetch();
+                  
+                  if (result.data === true) {
+                    clearInterval(pollInterval);
+                    notifySuccess('KYC completed successfully!');
+                  } else if (pollAttempts >= maxPollAttempts) {
+                    clearInterval(pollInterval);
+                    notifyError('KYC verification is processing. Please check back in a few minutes.');
+                  }
+                }, 6000);
+              }
             }
           }
         } catch (error: any) {
-          await refetch();
-          if (error.status == 500) {
-            notifySuccess('KYC completed successfully!');
-          } else if (error.status == 400) {
-            notifyError('Error updating KYC status. Please try again.');
-          }
+          console.error('KYC widget error:', error);
+          notifyError('Error checking KYC status. Please try again later.');
         }
       })
       .build()
