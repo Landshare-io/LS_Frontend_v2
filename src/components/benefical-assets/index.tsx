@@ -1,12 +1,10 @@
 import { useEffect } from "react";
-import Link from "next/link";
 import {
   getData,
   selectPropertiesRentalData,
 } from "../../lib/slices/firebase-slices/properties-rental";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import BeneficalAsset from "./benefical-asset";
-import Button from "../common/button";
 import { IoIosHome, IoIosInformationCircleOutline } from "react-icons/io";
 
 export default function BeneficalAssets() {
@@ -65,22 +63,6 @@ export default function BeneficalAssets() {
             type="Rental Property"
           />
         ))}
-        
-        {/* New Assets Coming Soon Card */}
-        <div className="w-full sm:col-span-2 lg:col-span-2 rounded-[12px] flex flex-col justify-center items-center p-[40px] lg:p-[60px] bg-gradient-to-b from-[#FFFFFF] via-[#FFFFFF] to-[#D4F4DD] dark:from-[#1a1f1a] dark:via-[#1a1f1a] dark:to-[#1a3d24] border-[1px] border-[#E5E7EB] dark:border-[#374151]">
-          <h2 className="text-[32px] text-center mb-[24px] leading-[1.51] tracking-[0%]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-            <span className="font-bold text-[#000000] dark:text-white">New Assets</span>
-            <span className="font-normal text-[#000000] dark:text-white"> Coming Soon</span>
-          </h2>
-          <p className="text-[16px] lg:text-[18px] text-[#6B7280] dark:text-gray-400 text-center max-w-[700px] mb-[40px] leading-[1.6] font-normal">
-            Landshare v2 enables an Index-Style Expansion for LSRWA token. Rather than strictly onboarding assets from scratch, we can now integrate already-tokenized, compliant assets from reputable partners.
-          </p>
-          <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa">
-            <Button className="bg-transparent border-2 border-[#19A544] hover:bg-[#19A544] text-[#19A544] hover:text-white px-[36px] py-[14px] rounded-[100px] transition-all duration-200 text-[16px] font-semibold">
-              Learn more about V2
-            </Button>
-          </Link>
-        </div>
       </div>
     </div>
   );
