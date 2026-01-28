@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAccount, useChainId } from "wagmi";
 import snsWebSdk from '@sumsub/websdk';
@@ -13,6 +13,9 @@ export default function KYCWidget() {
   const { address } = useAccount();
   const chainId = useChainId();
   const { data: isWhitelisted, refetch } = useIsWhitelisted(chainId, address);
+  
+  // Track if verdict has been called to prevent duplicates
+  const verdictCalledRef = useRef(false);
 
   async function getNewAccessToken() {
     try {
@@ -50,9 +53,17 @@ export default function KYCWidget() {
             return;
           }
 
-          // Process KYC completion events
+          // Process KYC completion events (with deduplication)
           if (event === 'onStepCompleted' || event === 'stepCompleted' || 
               event === 'onApplicantStatusChanged' || payload?.reviewStatus === 'completed') {
+            
+            // Prevent multiple simultaneous calls
+            if (verdictCalledRef.current) {
+              console.log('Verdict already called, skipping duplicate');
+              return;
+            }
+            
+            verdictCalledRef.current = true;
             
             // Call verdict endpoint (now secured with Sumsub API verification)
             try {
@@ -68,7 +79,23 @@ export default function KYCWidget() {
               console.error('Verdict error:', error);
               
               if (error.response?.status === 429) {
-                notifyError('Too many requests. Please wait a moment and try again.');
+                // Rate limited - start polling instead
+                console.log('Rate limited, starting polling for whitelist status');
+                let pollAttempts = 0;
+                const maxPollAttempts = 10;
+                
+                const pollInterval = setInterval(async () => {
+                  pollAttempts++;
+                  const result = await refetch();
+                  
+                  if (result.data === true) {
+                    clearInterval(pollInterval);
+                    notifySuccess('KYC completed successfully!');
+                  } else if (pollAttempts >= maxPollAttempts) {
+                    clearInterval(pollInterval);
+                    notifyError('KYC verification is processing. Please check back in a few minutes.');
+                  }
+                }, 6000);
               } else if (error.response?.status === 403) {
                 notifyError(error.response?.data?.error || 'KYC not approved or you are not eligible.');
               } else {
