@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-02-16T04:42:22.129Z",
+  "contracts": {
+    "rwaContract": "0x475eD67Bfc62B41c048b81310337c1D75D45aADd",
+    "assetStakeContract": "0x018E809663341771002c7dfd9B5ac36DF6044dB7"
+  },
+  "balances": [
+    {
+      "address": "0x3a21cF11E9c94471773EA51c99B11D379b9Ea6D1",
+      "lsrwaBalance": "3350",
+      "lsrwaBalanceFormatted": "3350",
+      "stakedBalance": "0",
+      "stakedBalanceFormatted": "0",
+      "totalBalance": "3350",
+      "totalBalanceFormatted": "3350"
+    },
+    {
+      "address": "0xA9Ef14d7815820e727616E3207b4d0C2C4C07148",
+      "lsrwaBalance": "2831",
+      "lsrwaBalanceFormatted": "2831",
+      "stakedBalance": "0",
+      "stakedBalanceFormatted": "0",
+      "totalBalance": "2831",
+      "totalBalanceFormatted": "2831"
+    },
+    {
+      "address": "0x9a0f05a910fae32142F0F47538869d5e85BE0aEc",
+      "lsrwaBalance": "131",
+      "lsrwaBalanceFormatted": "131",
+      "stakedBalance": "12500",
+      "stakedBalanceFormatted": "12500",
+      "totalBalance": "12631",
+      "totalBalanceFormatted": "12631"
+    }
+  ],
+  "totals": {
+    "totalLSRWA": "6312",
+    "totalStaked": "12500",
+    "totalCombined": "18812"
+  }
+}

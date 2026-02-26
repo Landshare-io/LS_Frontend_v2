@@ -3,15 +3,18 @@ import Image from "next/image";
 import {
   useAccount,
   useChainId,
-  useSwitchChain
+  useSwitchChain,
+  useReadContract
 } from "wagmi";
 import { bsc } from "viem/chains";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import {
   BigNumberish,
   formatEther,
+  formatUnits,
   parseEther
 } from "ethers";
+import type { Address } from "viem";
 import numeral from "numeral";
 import Tooltip from "../common/tooltip";
 import Collapse from "../common/collapse";
@@ -24,10 +27,12 @@ import useBalanceOfUsdt from "../../hooks/contract/UsdtContract/useBalanceOf";
 import useBalanceOfRwa from "../../hooks/contract/RWAContract/useBalanceOf";
 import useUserInfo from "../../hooks/contract/MasterchefContract/useUserInfo";
 import useGetRwaPrice from "../../hooks/contract/APIConsumerContract/useGetRwaPrice";
-import useTotalSupplyOfRwaLp from "../../hooks/contract/RwaLpTokenContract/useTotalSupply";
 import usePendingLand from "../../hooks/contract/MasterchefContract/usePendingLand";
 import useAllowanceOfRwaLp from "../../hooks/contract/RwaLpTokenContract/useAllowance";
+import usePoolInfo from "../../hooks/contract/MasterchefContract/usePoolInfo";
+import useGetDecimals from "../../hooks/contract/UsdtContract/useGetDecimals";
 import useGetPrice from "../../hooks/get-apy/useGetPrice";
+import PancakeRouterAbi from "../../abis/PancakeRouter.json";
 import Union from "../../../public/blue-logo.svg";
 import UnionDark from "../../../public/blue-logo.svg";
 import down from "../../../public/icons/down.svg";
@@ -40,13 +45,41 @@ import book from "../../../public/icons/book.svg";
 import {
   MAJOR_WORK_CHAINS,
   BOLD_INTER_TIGHT,
+  RWA_CONTRACT_ADDRESS,
   RWA_LP_CONTRACT_ADDRESS,
-  MASTERCHEF_CONTRACT_ADDRESS
+  RWA_LP_PANCAKESWAP_POOL_ADDRESS,
+  MASTERCHEF_CONTRACT_ADDRESS,
+  PSC_ROUTER_CONTRACT_ADDRESS,
+  USDT_ADDRESS
 } from "../../config/constants/environments";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useGlobalContext } from "../../context/GlobalContext";
 
 const USDT_VAULT_MAJOR_WORK_CHAIN = MAJOR_WORK_CHAINS['/vaults']['usdt']
+const HARDCODED_LSRWA_PRICE_USD = 1
+const ERC20_ABI = [
+  {
+    inputs: [],
+    name: "totalSupply",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "balanceOf",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "decimals",
+    outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+    stateMutability: "view",
+    type: "function"
+  }
+] as const
 
 interface UsdtVaultProps {
   title: string
@@ -55,6 +88,10 @@ interface UsdtVaultProps {
   setShowModalApy: Function
   setIsLPVault: Function
   setIsShowUsdPrice: Function
+  poolId?: number
+  isInactive?: boolean
+  lpContractAddress?: string
+  isSteerVault?: boolean
 }
 
 export default function Usdtvault({
@@ -63,7 +100,11 @@ export default function Usdtvault({
   setShowModal,
   setShowModalApy,
   setIsLPVault,
-  setIsShowUsdPrice
+  setIsShowUsdPrice,
+  poolId = 4,
+  isInactive = false,
+  lpContractAddress,
+  isSteerVault = false
 }: UsdtVaultProps) {
   const { notifyError } = useGlobalContext();
   const { theme } = useTheme();
@@ -71,57 +112,210 @@ export default function Usdtvault({
   const chainId = useChainId()
   const { switchChain } = useSwitchChain()
 
+  // Use provided LP contract address or fall back to default DS Swap address
+  const effectiveLpAddress = (lpContractAddress || RWA_LP_CONTRACT_ADDRESS[bsc.id]) as Address
+
   const {
     depositVault,
     withdrawVault,
     approveVault
-  } = useUsdtVault(chainId, address)
+  } = useUsdtVault(chainId, address, poolId, effectiveLpAddress)
 
-  const { data: balance, isLoading: isBalanceOfRwaLpLoading } = useBalanceOfRwaLp(chainId, address) as { data: BigNumberish, isLoading: boolean }
-  const { data: contractLPUSDTBalance, isLoading: isBalanceOfUsdtLoading } = useBalanceOfUsdt(chainId, RWA_LP_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
-  const { data: contractLPLSRWABalance, isLoading: isBalanceofRwaLoading } = useBalanceOfRwa(chainId, RWA_LP_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
-  const { data: amountLSRWALPInVault, isLoading: isBalanceOfRwaLpMasterLoading } = useBalanceOfRwaLp(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
-  const { data: userBalance, isLoading: isUserInfoLoading } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
+  const { data: balance, isLoading: isBalanceOfRwaLpLoading } = useBalanceOfRwaLp(chainId, address, effectiveLpAddress) as { data: BigNumberish, isLoading: boolean }
+  const { data: contractLPUSDTBalance, isLoading: isBalanceOfUsdtLoading } = useBalanceOfUsdt(chainId, effectiveLpAddress) as { data: BigNumberish, isLoading: boolean }
+  const { data: contractLPLSRWABalance, isLoading: isBalanceofRwaLoading } = useBalanceOfRwa(chainId, effectiveLpAddress) as { data: BigNumberish, isLoading: boolean }
+  const { data: pancakePoolUSDTBalance, isLoading: isPancakePoolUsdtLoading } = useBalanceOfUsdt(chainId, RWA_LP_PANCAKESWAP_POOL_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
+  const { data: pancakePoolLSRWABalance, isLoading: isPancakePoolLsrwaLoading } = useBalanceOfRwa(chainId, RWA_LP_PANCAKESWAP_POOL_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
+  const { data: userBalance, isLoading: isUserInfoLoading } = useUserInfo({ chainId, userInfoId: poolId, address }) as { data: [BigNumberish, BigNumberish], isLoading: boolean }
   const rwaTokenPrice = useGetRwaPrice(chainId) as BigNumberish
-  const LSRWALPTotalSupply = useTotalSupplyOfRwaLp(chainId) as BigNumberish
-  const { data: rewardsLSRWALP, isLoading: isPendingLandLoading } = usePendingLand({ chainId, pendingLandId: 4, address }) as { data: BigNumberish, isLoading: boolean }
-  const { data: LSRWALPAllowance, isLoading: isAllowanceLoading } = useAllowanceOfRwaLp(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { data: BigNumberish, isLoading: boolean }
+  const { data: steerLpTotalSupplyRaw, isLoading: isSteerLpTotalSupplyLoading } = useReadContract({
+    address: effectiveLpAddress,
+    abi: ERC20_ABI,
+    functionName: "totalSupply",
+    chainId: bsc.id
+  }) as { data: bigint | undefined, isLoading: boolean }
+  const { data: steerLpDecimalsRaw, isLoading: isSteerLpDecimalsLoading } = useReadContract({
+    address: effectiveLpAddress,
+    abi: ERC20_ABI,
+    functionName: "decimals",
+    chainId: bsc.id
+  }) as { data: number | bigint | undefined, isLoading: boolean }
+  const { data: amountLSRWALPInVaultRaw, isLoading: isBalanceOfRwaLpMasterLoading } = useReadContract({
+    address: effectiveLpAddress,
+    abi: ERC20_ABI,
+    functionName: "balanceOf",
+    args: [MASTERCHEF_CONTRACT_ADDRESS[bsc.id]],
+    chainId: bsc.id
+  }) as { data: bigint | undefined, isLoading: boolean }
+  const { data: rewardsLSRWALP, isLoading: isPendingLandLoading } = usePendingLand({ chainId, pendingLandId: poolId, address }) as { data: BigNumberish, isLoading: boolean }
+  const { data: LSRWALPAllowance, isLoading: isAllowanceLoading } = useAllowanceOfRwaLp(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id], effectiveLpAddress) as { data: BigNumberish, isLoading: boolean }
+  const { data: allocPoints, isLoading: isPoolInfoLoading } = usePoolInfo(chainId, poolId) as { data: any[], isLoading: boolean }
+  const { data: usdtDecimals } = useGetDecimals(chainId) as { data: number | bigint }
+  const { data: rwaDecimalsRaw, isLoading: isRwaDecimalsLoading } = useReadContract({
+    address: RWA_CONTRACT_ADDRESS[chainId],
+    abi: ERC20_ABI,
+    functionName: "decimals",
+    chainId
+  }) as { data: number | bigint | undefined, isLoading: boolean }
+  const rwaTokenDecimals = Number(rwaDecimalsRaw ?? 18)
+  const oneLsrwaRaw = 10n ** BigInt(rwaTokenDecimals)
+  const { data: routerAmountsOutRawDirect } = useReadContract({
+    address: isSteerVault ? PSC_ROUTER_CONTRACT_ADDRESS : undefined,
+    abi: PancakeRouterAbi,
+    functionName: "getAmountsOut",
+    args: [oneLsrwaRaw, [RWA_CONTRACT_ADDRESS[bsc.id], USDT_ADDRESS[bsc.id]]],
+    chainId: bsc.id
+  }) as { data: readonly bigint[] | undefined }
   const { price } = useGetPrice(chainId)
 
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
-  const [depositing, setDepositing] = useState(true)
+  const [depositing, setDepositing] = useState(!isInactive)
   const [isWithdrawable, setIsWithdrawable] = useState(true);
   const [isDepositable, setIsDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const [TVL, setTVL] = useState(" —")
   const [APY, setAPY] = useState(" —")
   const [LSRWALPValue, setLSRWALPValue] = useState(0)
+  const LAND_REWARDS_PER_DAY = 200
 
-  function calculateTVL() {
-    if (contractLPUSDTBalance && contractLPLSRWABalance && rwaTokenPrice) {
-      const totalValueInLP = BigInt(contractLPUSDTBalance) + (BigInt(contractLPLSRWABalance) * BigInt(rwaTokenPrice))
-
-      const percentageLPInVault = BigInt(amountLSRWALPInVault) * BigInt(totalValueInLP) / BigInt(LSRWALPTotalSupply)
-      setTVL(formatEther(percentageLPInVault))
-      setLSRWALPValue(Number(BigInt(totalValueInLP) / BigInt(LSRWALPTotalSupply)))
+  function toEtherNumber(value: BigNumberish | undefined) {
+    try {
+      return Number(formatEther(value ?? 0))
+    } catch {
+      return 0
     }
   }
 
-  function calculateAPRLSRWA() {
-    if (TVL !== " —") {
-      const apr = 54750 * Number(price) / Number(TVL) * 100
-      setAPY(apr.toString())
+  function toUnitsNumber(value: BigNumberish | undefined, decimals: number) {
+    try {
+      return Number(formatUnits(value ?? 0, decimals))
+    } catch {
+      return 0
     }
+  }
+
+  function normalizeRwaPriceUsd(value: BigNumberish | undefined) {
+    const as18 = toUnitsNumber(value, 18)
+    if (as18 >= 0.05 && as18 <= 10000) return as18
+
+    const as8 = toUnitsNumber(value, 8)
+    if (as8 >= 0.05 && as8 <= 10000) return as8
+
+    const as6 = toUnitsNumber(value, 6)
+    if (as6 >= 0.05 && as6 <= 10000) return as6
+
+    return as18
+  }
+
+  function calculateTVL() {
+    const steerLpDecimals = Number(steerLpDecimalsRaw ?? 18)
+    const totalSupply = toUnitsNumber(steerLpTotalSupplyRaw, steerLpDecimals)
+    const depositedSupply = toUnitsNumber(amountLSRWALPInVaultRaw, steerLpDecimals)
+    const depositedPercentage = totalSupply > 0 ? depositedSupply / totalSupply : 0
+    const lsrwaApiPriceUsd = normalizeRwaPriceUsd(rwaTokenPrice)
+    const usdtTokenDecimals = Number(usdtDecimals ?? 18)
+    const routerDirectLast = routerAmountsOutRawDirect?.[routerAmountsOutRawDirect.length - 1]
+    const lsrwaRouterPriceUsdDirect = routerDirectLast
+      ? toUnitsNumber(routerDirectLast, usdtTokenDecimals)
+      : 0
+    const lsrwaRouterPriceUsd = lsrwaRouterPriceUsdDirect > 0 ? lsrwaRouterPriceUsdDirect : 0
+
+    let underlyingVaultUsd = 0
+
+    if (isSteerVault) {
+      const lsrwaAmount = toUnitsNumber(pancakePoolLSRWABalance, rwaTokenDecimals)
+      const usdtAmount = toUnitsNumber(pancakePoolUSDTBalance, usdtTokenDecimals)
+      const poolRatioPriceUsd = lsrwaAmount > 0 ? usdtAmount / lsrwaAmount : 0
+      const lsrwaPriceUsd = HARDCODED_LSRWA_PRICE_USD
+
+      underlyingVaultUsd = usdtAmount + (lsrwaAmount * lsrwaPriceUsd)
+
+      const debugPayload = {
+        effectiveLpAddress,
+        pancakePoolAddress: RWA_LP_PANCAKESWAP_POOL_ADDRESS[bsc.id],
+        steerLpDecimals,
+        steerLpTotalSupplyRaw: (steerLpTotalSupplyRaw ?? 0n).toString(),
+        steerLpDepositedRaw: (amountLSRWALPInVaultRaw ?? 0n).toString(),
+        steerLpTotalSupply: totalSupply,
+        steerLpDeposited: depositedSupply,
+        depositedPercentage,
+        usdtDecimals: usdtTokenDecimals,
+        rwaDecimals: rwaTokenDecimals,
+        pancakeUsdtRaw: (pancakePoolUSDTBalance ?? 0n).toString(),
+        pancakeLsrwaRaw: (pancakePoolLSRWABalance ?? 0n).toString(),
+        pancakeUsdt: usdtAmount,
+        pancakeLsrwa: lsrwaAmount,
+        routerAmountInRaw: oneLsrwaRaw.toString(),
+        routerAmountsOutRawDirect: routerAmountsOutRawDirect ? routerAmountsOutRawDirect.map((v) => v.toString()) : [],
+        lsrwaPriceSource: "HARDCODED_$1_TEMP",
+        lsrwaRouterPriceUsdDirect,
+        lsrwaRouterPriceUsd,
+        lsrwaPoolRatioPriceUsd: poolRatioPriceUsd,
+        lsrwaPriceUsd,
+        rwaTokenPriceRaw: (rwaTokenPrice ?? 0).toString(),
+        rwaApiPriceFallback: lsrwaApiPriceUsd,
+        underlyingVaultUsd,
+        depositedUsdValue: depositedPercentage * underlyingVaultUsd,
+        steerLpUnitUsdValue: totalSupply > 0 ? underlyingVaultUsd / totalSupply : 0,
+        formula: "(depositedSupply/totalSupply) * (pancakeUsdt + pancakeLsrwa*lsrwaPriceUsd)"
+      }
+
+      console.group("[Vault Debug] LSRWA-USDT Pancake TVL")
+      console.table(debugPayload)
+      console.log("Raw debug payload", debugPayload)
+      console.groupEnd()
+    } else {
+      const usdtAmount = toUnitsNumber(contractLPUSDTBalance, usdtTokenDecimals)
+      const lsrwaAmount = toUnitsNumber(contractLPLSRWABalance, rwaTokenDecimals)
+
+      underlyingVaultUsd = usdtAmount + (lsrwaAmount * HARDCODED_LSRWA_PRICE_USD)
+    }
+
+    const depositedUsdValue = depositedPercentage * underlyingVaultUsd
+    const lpUnitUsdValue = totalSupply > 0 ? underlyingVaultUsd / totalSupply : 0
+
+    setTVL(depositedUsdValue > 0 ? depositedUsdValue.toString() : "0")
+    setLSRWALPValue(lpUnitUsdValue)
+  }
+
+  function calculateAPRLSRWA() {
+    if (TVL === " —") return
+
+    const tvlUsd = Number(TVL)
+    if (!tvlUsd || tvlUsd <= 0) {
+      setAPY("0")
+      return
+    }
+
+    const annualRewardsUsd = isSteerVault
+      ? LAND_REWARDS_PER_DAY * Number(price) * 365
+      : 365 * Number(allocPoints?.[1] ?? 0) * Number(price)
+
+    const apr = (annualRewardsUsd / tvlUsd) * 100
+    setAPY(Number.isFinite(apr) ? apr.toString() : "0")
   }
 
   useEffect(() => {
     calculateTVL()
-  }, [contractLPLSRWABalance])
+  }, [
+    isSteerVault,
+    pancakePoolUSDTBalance,
+    pancakePoolLSRWABalance,
+    contractLPUSDTBalance,
+    contractLPLSRWABalance,
+    rwaTokenPrice,
+    routerAmountsOutRawDirect,
+    usdtDecimals,
+    rwaDecimalsRaw,
+    steerLpDecimalsRaw,
+    steerLpTotalSupplyRaw,
+    amountLSRWALPInVaultRaw
+  ])
 
   useEffect(() => {
     calculateAPRLSRWA()
-  }, [TVL, price])
+  }, [TVL, price, allocPoints])
 
   function handlePercents(percent: number) {
     if (depositing) {
@@ -211,7 +405,7 @@ export default function Usdtvault({
     setIsShowUsdPrice(true);
   }
 
-  const isVaultsLoading = isBalanceOfRwaLpLoading || isBalanceOfUsdtLoading || isBalanceOfRwaLpLoading || isBalanceOfRwaLpMasterLoading || isUserInfoLoading || isPendingLandLoading || isAllowanceLoading;
+  const isVaultsLoading = isBalanceOfRwaLpLoading || isBalanceOfUsdtLoading || isBalanceofRwaLoading || isPancakePoolUsdtLoading || isPancakePoolLsrwaLoading || isBalanceOfRwaLpMasterLoading || isSteerLpTotalSupplyLoading || isSteerLpDecimalsLoading || isRwaDecimalsLoading || isUserInfoLoading || isPendingLandLoading || isAllowanceLoading || isPoolInfoLoading;
 
   return (
     <div className="w-full max-w-[880px] m-auto">
@@ -279,6 +473,11 @@ export default function Usdtvault({
                     <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                       <div className={`cursor-pointer w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                         {title}
+                        {isInactive && (
+                          <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#9d9fa81f] text-[#9d9fa8] ${BOLD_INTER_TIGHT.className}`}>
+                            Inactive
+                          </div>
+                        )}
                         <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                           <Image src={details ? up : down} alt="" />
                         </button>
@@ -323,7 +522,7 @@ export default function Usdtvault({
                     <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
                       <span className="text-[12px] text-[#9d9fa8] md:text-[14px] leading-[22px]">Deposit</span>
                       <div className="d-flex align-items-center">
-                        <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{userBalance ? Number(userBalance[0]) > 0 ? Number(formatEther(userBalance[0])).toExponential(2) : 0.0 : "0.0"} </span>
+                        <span className={`text-[13px] md:text-[14px] leading-[22px] tracking-[0.02em] text-text-primary ${BOLD_INTER_TIGHT.className}`}>{userBalance ? Number(userBalance[0]) > 0 ? numeral(Number(formatEther(userBalance[0]))).format('0,0.[000000]') : "0.0" : "0.0"} </span>
                       </div>
                     </div>
                     <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
@@ -337,8 +536,8 @@ export default function Usdtvault({
                 <div className="block md:hidden">
                   <div className="flex w-full mt-[20px]">
                     <div
-                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
-                      onClick={() => setDepositing(true)}
+                      className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] ${isInactive ? 'text-[#9d9fa8] cursor-not-allowed' : 'text-[#0A1339] dark:text-[#cacaca] cursor-pointer'} ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                      onClick={() => !isInactive && setDepositing(true)}
                     >
                       Deposit
                     </div>
@@ -396,10 +595,10 @@ export default function Usdtvault({
                                 // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                               }
                             }}
-                            disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
+                            disabled={(isInactive && depositing) || (depositing && !isDepositable) || (!depositing && !isWithdrawable)}
                           >
                             {
-                              !(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch your network' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                              !(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch your network' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (isInactive ? "Deposits Disabled" : !isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                             }
                           </button>
 
@@ -427,8 +626,8 @@ export default function Usdtvault({
                     <div className="hidden md:block">
                       <div className="flex w-full mt-[20px]">
                         <div
-                          className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] text-[#0A1339] dark:text-[#cacaca] cursor-pointer ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
-                          onClick={() => setDepositing(true)}
+                          className={`w-full font-medium text-[14px] leading-[22px] tracking-[0.02em] text-[14px] leading-[22px] py-[12px] px-[16px] text-center normal-case border-b-[1px] border-[#E6E7EB] ${isInactive ? 'text-[#9d9fa8] cursor-not-allowed' : 'text-[#0A1339] dark:text-[#cacaca] cursor-pointer'} ${depositing ? 'text-[#61CD81] !border-[#61CD81]' : ''}`}
+                          onClick={() => !isInactive && setDepositing(true)}
                         >
                           Deposit
                         </div>
@@ -485,10 +684,10 @@ export default function Usdtvault({
                                     // switchChain({ chainId: MAJOR_WORK_CHAIN.id })
                                   }
                                 }}
-                                disabled={depositing && !isDepositable || !depositing && !isWithdrawable}
+                                disabled={(isInactive && depositing) || (depositing && !isDepositable) || (!depositing && !isWithdrawable)}
                               >
                                 {
-                                  !(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch your network' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (!isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
+                                  !(USDT_VAULT_MAJOR_WORK_CHAIN.map(chain => chain.id) as number[]).includes(chainId) ? 'Switch your network' : inputValue && Number(inputValue) > Number(0) ? (depositing ? (isInactive ? "Deposits Disabled" : !isDepositable ? "Insufficient Balance" : (isApprovedLandStake ? "Deposit" : "Approve")) : "Withdraw") : "Enter Amount"
                                 }
                               </button>
 

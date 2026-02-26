@@ -12,17 +12,17 @@ import useUserInfo from "../MasterchefContract/useUserInfo";
 import { MASTERCHEF_CONTRACT_ADDRESS, TRANSACTION_CONFIRMATIONS_COUNT } from "../../../config/constants/environments";
 import useAllowance from "../RwaLpTokenContract/useAllowance";
 
-export default function useUsdtVault(chainId: number, address: Address | undefined) {
+export default function useUsdtVault(chainId: number, address: Address | undefined, poolId: number = 4, lpContractAddress?: Address) {
   const { setScreenLoadingStatus, notifyError } = useGlobalContext()
   const { deposit, data: depositTx, isError: isDepositError } = useDeposit(chainId)
   const { withdraw, data: withdrawTx, isError: isWithdrawError } = useWithdraw(chainId)
   const { approve, data: approveTx, isError: isApproveError } = useApprove()
-  const { data: rwaLpTokenBalance, refetch: refetchrwaLpTokenBalance } = useBalanceOfRwaLp(chainId, address) as {
+  const { data: rwaLpTokenBalance, refetch: refetchrwaLpTokenBalance } = useBalanceOfRwaLp(chainId, address, lpContractAddress) as {
     data: BigNumberish,
     refetch: Function
   }
-  const { refetch: refetchLSRWALPAllowance } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id]) as { refetch: Function }
-  const { data: vaultBalanceLsRwa, refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: 4, address }) as { data: [BigNumberish, BigNumberish], refetch: Function }
+  const { refetch: refetchLSRWALPAllowance } = useAllowance(chainId, address, MASTERCHEF_CONTRACT_ADDRESS[bsc.id], lpContractAddress) as { refetch: Function }
+  const { data: vaultBalanceLsRwa, refetch: refetchUserInfo } = useUserInfo({ chainId, userInfoId: poolId, address }) as { data: [BigNumberish, BigNumberish], refetch: Function }
   const { isSuccess: depositSuccess, data: depositStatusData } = useWaitForTransactionReceipt({
     confirmations: TRANSACTION_CONFIRMATIONS_COUNT,
     hash: depositTx,
@@ -108,7 +108,7 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
     }
 
     setScreenLoadingStatus("Transaction Pending...")
-    deposit(4, amount)
+    deposit(poolId, amount)
   }
 
   const withdrawVault = (amount: BigNumberish) => {
@@ -122,12 +122,12 @@ export default function useUsdtVault(chainId: number, address: Address | undefin
     }
 
     setScreenLoadingStatus("Withdraw Transaction Pending...")
-    withdraw(4, amount)
+    withdraw(poolId, amount)
   }
 
   const approveVault = (amount: BigNumberish) => {
     setScreenLoadingStatus("Transaction Pending...")
-    approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id], amount)
+    approve(chainId, MASTERCHEF_CONTRACT_ADDRESS[bsc.id], amount, lpContractAddress)
   }
 
   return {

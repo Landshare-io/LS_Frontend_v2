@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 import { useAccount, useChainId } from "wagmi";
 import snsWebSdk from '@sumsub/websdk';
@@ -7,15 +7,50 @@ import { useGlobalContext } from "../../context/GlobalContext";
 import useIsWhitelisted from "../../hooks/contract/WhitelistContract/useIsWhitelisted";
 
 const axiosInstance = axios.create();
+const recentRequests = new Map<string, number>();
+const TTL = 60 * 1000; // 1 minute
+
+function getRequestKey(config: any) {
+  const method = config.method.toUpperCase();
+  const url = config.url;
+  return `${method}:${url}`;
+}
+
+axiosInstance.interceptors.request.use(config => {
+  const key = getRequestKey(config);
+  const now = Date.now();
+
+  // Allow verdict endpoint to always go through as it's critical for KYC status updates
+  if (config.url?.includes('/verdict')) {
+    return config;
+  }
+
+  if (recentRequests.has(key) && now - recentRequests.get(key)! < TTL) {
+    console.warn(`Duplicate request blocked within 1 min: ${key}`);
+
+    // 👇 Don't actually send the request — return a fake success response
+    config.adapter = () => {
+      return Promise.resolve({
+        data: null,
+        status: 204,
+        statusText: 'Duplicate Skipped',
+        headers: {},
+        config,
+      });
+    };
+
+    return config;
+  }
+
+  recentRequests.set(key, now);
+  return config;
+});
 
 export default function KYCWidget() {
   const { notifyError, notifySuccess } = useGlobalContext();
   const { address } = useAccount();
   const chainId = useChainId();
   const { data: isWhitelisted, refetch } = useIsWhitelisted(chainId, address);
-  
-  // Track if verdict has been called to prevent duplicates
-  const verdictCalledRef = useRef(false);
 
   async function getNewAccessToken() {
     try {
@@ -53,74 +88,30 @@ export default function KYCWidget() {
             return;
           }
 
-          // Process KYC completion events (with deduplication)
-          if (event === 'onStepCompleted' || event === 'stepCompleted' || 
-              event === 'onApplicantStatusChanged' || payload?.reviewStatus === 'completed') {
-            
-            // Prevent multiple simultaneous calls
-            if (verdictCalledRef.current) {
-              console.log('Verdict already called, skipping duplicate');
-              return;
-            }
-            
-            verdictCalledRef.current = true;
-            
-            // Call verdict endpoint (now secured with Sumsub API verification)
-            try {
-              const response = await axiosInstance.post(`${SUMSUB_VERIFY_URL}/verdict`, { address });
-              
-              if (response.data.verified) {
-                await refetch();
-                notifySuccess('KYC completed successfully!');
-              } else {
-                notifyError(response.data.error || 'KYC verification failed.');
-              }
-            } catch (error: any) {
-              console.error('Verdict error:', error);
-              
-              if (error.response?.status === 429) {
-                // Rate limited - start polling instead
-                console.log('Rate limited, starting polling for whitelist status');
-                let pollAttempts = 0;
-                const maxPollAttempts = 10;
-                
-                const pollInterval = setInterval(async () => {
-                  pollAttempts++;
-                  const result = await refetch();
-                  
-                  if (result.data === true) {
-                    clearInterval(pollInterval);
-                    notifySuccess('KYC completed successfully!');
-                  } else if (pollAttempts >= maxPollAttempts) {
-                    clearInterval(pollInterval);
-                    notifyError('KYC verification is processing. Please check back in a few minutes.');
-                  }
-                }, 6000);
-              } else if (error.response?.status === 403) {
-                notifyError(error.response?.data?.error || 'KYC not approved or you are not eligible.');
-              } else {
-                // Start polling as fallback
-                let pollAttempts = 0;
-                const maxPollAttempts = 10;
-                
-                const pollInterval = setInterval(async () => {
-                  pollAttempts++;
-                  const result = await refetch();
-                  
-                  if (result.data === true) {
-                    clearInterval(pollInterval);
-                    notifySuccess('KYC completed successfully!');
-                  } else if (pollAttempts >= maxPollAttempts) {
-                    clearInterval(pollInterval);
-                    notifyError('KYC verification is processing. Please check back in a few minutes.');
-                  }
-                }, 6000);
-              }
+          let res;
+          if (event === 'onStepCompleted' || event === 'stepCompleted') {
+            res = await axiosInstance.post(`${SUMSUB_VERIFY_URL}/verdict`, { address });
+            await refetch();
+          } else if (event === 'onApplicantStatusChanged' || payload?.reviewStatus === 'completed') {
+            res = await axiosInstance.post(`${SUMSUB_VERIFY_URL}/verdict`, { address, stepFailed: true });
+            await refetch();
+          }
+
+          if (res) {
+            await refetch();
+            if (res.data.verdict == false) {
+              notifyError('You are under 18 or located in a restricted region.');
+            } else if (res.data?.message == true) {
+              notifySuccess('KYC completed successfully!');
             }
           }
         } catch (error: any) {
-          console.error('KYC widget error:', error);
-          notifyError('Error checking KYC status. Please try again later.');
+          await refetch();
+          if (error.status == 500) {
+            notifySuccess('KYC completed successfully!');
+          } else if (error.status == 400) {
+            notifyError('Error updating KYC status. Please try again.');
+          }
         }
       })
       .build()

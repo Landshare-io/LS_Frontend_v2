@@ -89,9 +89,6 @@ export const LAND_TOKEN_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   421614: '0xA8C0c11bf64AF62CDCA6f93D3769B88BdD7cb93D',
   31337: '0x2B0d36FACD61B71CC05ab8F3D2355ec3631C0dd5'
 }
-export const SWIPELUX_SETTING = {
-  apiKey: '1d1fe8ad-a154-4dc0-a6bd-3fe8939ba7d0'
-};
 export const NFT_GAME_BACKEND_URL = 'https://landsharenft.xyz'
 export const CCIP_BACKEND_URL = 'https://ccip.landsharenft.xyz'
 export const APOLLO_RWA_BUY_URL = "https://api.studio.thegraph.com/query/85450/landshare-rwa/1.01"
@@ -165,7 +162,15 @@ export const RWA_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
   // 31337: '0x99dBE4AEa58E518C50a1c04aE9b48C9F6354612f' // : Local nft game
 }
 export const RWA_LP_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
-  56: '0x89bad177367736C186F7b41a9fba7b23474A1b35' as Address,
+  56: '0x89bad177367736C186F7b41a9fba7b23474A1b35' as Address, // DS Swap
+  97: '' as Address
+}
+export const RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
+  56: '0xd90c101112995c465DFdbc2AE0f3BEAeD997F642' as Address, // Steer Vault (actual PCS pool: 0xdeFfc590035203Da9E4dd102cFe4BBc07e53bf57)
+  97: '' as Address
+}
+export const RWA_LP_PANCAKESWAP_POOL_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {
+  56: '0xdeFfc590035203Da9E4dd102cFe4BBc07e53bf57' as Address,
   97: '' as Address
 }
 export const AUTO_REDEEM_CONTRACT_ADDRESS: MULTI_CHAIN_CONTRACT_TYPE = {

@@ -182,7 +182,6 @@ export default function Footer() {
                 <ul className="space-y-2">
                   <li><a href="https://bscscan.com/token/0xa73164db271931cf952cbaeff9e8f5817b42fa5c" className="hover:underline">BSC Scan</a></li>
                   <li><a href="https://landshare.medium.com/landshares-2025-roadmap-7362048b3719" className="hover:underline">Roadmap</a></li>
-                  <li><a href="https://track.swipelux.com/?api-key=..." className="hover:underline">Buy with Card</a></li>
                 </ul>
               </div>
 

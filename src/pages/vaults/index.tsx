@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Head from 'next/head';
 import type { NextPage } from 'next';
 import { useChainId, useAccount } from "wagmi"
+import { bsc } from "viem/chains";
 import numeral from "numeral"
 import Image from "next/image";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
@@ -15,7 +16,7 @@ import LPVault from "../../components/vaults/lp-vault";
 import Usdtvault from "../../components/vaults/usdt-vault";
 import { useTheme } from "next-themes";
 import useGetPrice from "../../hooks/get-apy/useGetPrice";
-import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
+import { BOLD_INTER_TIGHT, RWA_LP_CONTRACT_ADDRESS, RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS } from "../../config/constants/environments";
 import coinStack from "../../../public/icons/coin-stacked.svg"
 import tabIcon3 from "../../../public/icons/tab-icon3.svg"
 import tabIcon4 from "../../../public/icons/tether.svg"
@@ -112,7 +113,12 @@ const StakingPage: NextPage = () => {
     {
       index: 3,
       icon: tabIcon4,
-      label: 'LSRWA-USDT LP ',
+      label: 'LSRWA-USDT LP (Pancakeswap)',
+    },
+    {
+      index: 4,
+      icon: tabIcon4,
+      label: 'LSRWA-USDT LP (DS Swap)',
     },
  
   ];
@@ -219,14 +225,29 @@ const StakingPage: NextPage = () => {
                     setTokenUsdPrice={setTokenUsdPrice}
                     setIsLPVault={setIsLPVault}
                     setIsShowUsdPrice={setIsShowUsdPrice}
-                  /> :
+                  /> : selectedVault === 3 ?
                   <Usdtvault
-                    title={"LSRWA-USDT LP"}
+                    title={"LSRWA-USDT LP (Pancakeswap)"}
                     setShowModal={setShowModal}
                     setShowModalApy={setShowModalApy}
                     setTokenUsdPrice={setTokenUsdPrice}
                     setIsLPVault={setIsLPVault}
                     setIsShowUsdPrice={setIsShowUsdPrice}
+                    poolId={5}
+                    isInactive={false}
+                    lpContractAddress={RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS[bsc.id]}
+                    isSteerVault={true}
+                  /> :
+                  <Usdtvault
+                    title={"LSRWA-USDT LP (DS Swap)"}
+                    setShowModal={setShowModal}
+                    setShowModalApy={setShowModalApy}
+                    setTokenUsdPrice={setTokenUsdPrice}
+                    setIsLPVault={setIsLPVault}
+                    setIsShowUsdPrice={setIsShowUsdPrice}
+                    poolId={4}
+                    isInactive={true}
+                    lpContractAddress={RWA_LP_CONTRACT_ADDRESS[bsc.id]}
                   />
             )}
           </div>
@@ -281,12 +302,27 @@ const StakingPage: NextPage = () => {
                   setIsShowUsdPrice={setIsShowUsdPrice}
                 />
                 <Usdtvault
-                  title={"LSRWA-USDT LP"}
+                  title={"LSRWA-USDT LP (Pancakeswap)"}
                   setShowModal={setShowModal}
                   setShowModalApy={setShowModalApy}
                   setTokenUsdPrice={setTokenUsdPrice}
                   setIsLPVault={setIsLPVault}
                   setIsShowUsdPrice={setIsShowUsdPrice}
+                  poolId={5}
+                  isInactive={false}
+                  lpContractAddress={RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS[bsc.id]}
+                  isSteerVault={true}
+                />
+                <Usdtvault
+                  title={"LSRWA-USDT LP (DS Swap)"}
+                  setShowModal={setShowModal}
+                  setShowModalApy={setShowModalApy}
+                  setTokenUsdPrice={setTokenUsdPrice}
+                  setIsLPVault={setIsLPVault}
+                  setIsShowUsdPrice={setIsShowUsdPrice}
+                  poolId={4}
+                  isInactive={true}
+                  lpContractAddress={RWA_LP_CONTRACT_ADDRESS[bsc.id]}
                 />
               </>
             )}
@@ -326,7 +362,7 @@ const StakingPage: NextPage = () => {
                 </div>
                 <div className="light-text nowrap">
                   {isShowUsdPrice ?
-                    isShowUsdPrice ? Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1)).toExponential(2) : numeral(Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1))).format('0.00') :
+                    numeral(Number(Number(roiInputCalculValue) / (tokenUsdPrice ?? 1))).format('0,0.[00000000]') :
                     numeral(Number(roiInputCalculValue) * tokenUsdPrice).format('0.00')
                   } {isShowUsdPrice ? isLPVault ? 'LAND-BNB LP' : isShowUsdPrice ? 'LSRWA-USDT LP' : 'LAND' : 'USD'}
                 </div>

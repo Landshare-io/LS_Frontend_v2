@@ -4,9 +4,9 @@ import RwaLpContractAbi from "../../../abis/RwaLpContract.json";
 import { RWA_LP_CONTRACT_ADDRESS } from "../../../config/constants/environments";
 import { Address } from "viem";
 
-export default function useAllowance(chainId: number, address: Address | undefined, spender: Address | undefined) {
+export default function useAllowance(chainId: number, address: Address | undefined, spender: Address | undefined, lpContractAddress?: Address) {
   const { data, isError, isLoading, error, refetch } = useReadContract({
-    address: RWA_LP_CONTRACT_ADDRESS[bsc.id],
+    address: lpContractAddress || RWA_LP_CONTRACT_ADDRESS[bsc.id],
     abi: RwaLpContractAbi,
     functionName: "allowance",
     chainId: bsc.id,
