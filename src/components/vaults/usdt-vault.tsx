@@ -42,6 +42,7 @@ import viewContract from "../../../public/icons/view-contract.png";
 import up from "../../../public/icons/arrow-up.svg";
 import smallicon from "../../../public/icons/tether.svg"
 import bscIcon from "../../../public/icons/bsc.svg";
+import pancakeSwapIcon from "../../../public/icons/pancakeswap-cake-logo.svg";
 import book from "../../../public/icons/book.svg";
 import {
   MAJOR_WORK_CHAINS,
@@ -93,6 +94,7 @@ interface UsdtVaultProps {
   isInactive?: boolean
   lpContractAddress?: string
   isSteerVault?: boolean
+  isFeatured?: boolean
 }
 
 export default function Usdtvault({
@@ -105,7 +107,8 @@ export default function Usdtvault({
   poolId = 4,
   isInactive = false,
   lpContractAddress,
-  isSteerVault = false
+  isSteerVault = false,
+  isFeatured = false
 }: UsdtVaultProps) {
   const { notifyError } = useGlobalContext();
   const { theme } = useTheme();
@@ -168,7 +171,9 @@ export default function Usdtvault({
     chainId: bsc.id
   }) as { data: readonly bigint[] | undefined }
   const { price } = useGetPrice(chainId)
-  const mobileTitle = title.replace(" (DS Swap)", "")
+  const mobileTitle = title
+    .replace(" (DS Swap)", "")
+    .replace(" (Pancakeswap)", "")
 
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
@@ -467,13 +472,14 @@ export default function Usdtvault({
                       <Image src={details ? up : down} alt="" />
                     </button>
                   </div>
-                  <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                    <div className="size-[90px] shrink-0 rounded-[1000px] relative">
-                      <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px] size-fit absolute left-0 top-0" alt="token pair" />
-                      <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-white" alt="" />
-                    </div>
-                    <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
-                      <div className={`cursor-pointer w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
+                  <div className="flex items-center py-[6px] justify-between h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
+                    <div className="flex items-center gap-[16px] min-w-0">
+                      <div className="size-[90px] shrink-0 rounded-[1000px] relative">
+                        <Image src={theme == 'dark' ? UnionDark : Union} className="border-primary border-[6px] rounded-[1000px] size-fit absolute left-0 top-0" alt="token pair" />
+                        <Image src={smallicon} className="border-primary border-[6px] rounded-[1000px] w-[40px] h-[40px] absolute right-0 bottom-0 bg-white" alt="" />
+                      </div>
+                      <div className="flex flex-col justify-center items-start p-0 gap-[8px] min-w-0">
+                        <div className={`cursor-pointer w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
                         <span className="md:hidden">{mobileTitle}</span>
                         <span className="hidden md:inline">{title}</span>
                         {isInactive && (
@@ -484,17 +490,28 @@ export default function Usdtvault({
                         <button className={`hidden md:flex flex-row items-center justify-center gap-[4px] text-[14px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                           <Image src={details ? up : down} alt="" />
                         </button>
-                      </div>
-                      <div className="p-0 flex items-center">
-                        <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
-                          <Image src={book} alt="book" className="book" />
-                          <span>Manual</span>
                         </div>
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
-                          <Image src={bscIcon} className="w-8 h-8" alt="" />
+                        <div className="p-0 flex items-center">
+                          <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
+                            <Image src={book} alt="book" className="book" />
+                            <span>Manual</span>
+                          </div>
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
+                            <Image src={bscIcon} className="w-8 h-8" alt="" />
+                          </div>
+                          {isSteerVault && (
+                            <div className="hidden md:flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
+                              <Image src={pancakeSwapIcon} className="w-[32px] h-[32px] p-[6px]" alt="PancakeSwap" />
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
+                    {isFeatured && (
+                      <div className={`hidden md:flex self-start mt-[2px] items-center justify-center py-[5px] px-[14px] rounded-[1000px] text-[13px] leading-[20px] border border-[#61CD81] bg-[#61CD811f] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`}>
+                        Featured
+                      </div>
+                    )}
                   </div>
                   <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                     <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">

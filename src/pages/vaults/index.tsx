@@ -98,38 +98,39 @@ const StakingPage: NextPage = () => {
   const vaults = [
     {
       index: 0,
-      icon: tabBook,
-      label: 'LAND Token Staking',
+      icon: tabIcon4,
+      label: 'LSRWA-USDT LP',
+      isFeatured: true,
     },
     {
       index: 1,
-      icon: rotateBlue,
-      label: 'Auto LAND Staking',
+      icon: tabBook,
+      label: 'LAND Token Staking',
+      isFeatured: false,
     },
     {
       index: 2,
-      icon: tabIcon3,
-      label: 'LAND-BNB LP ',
+      icon: rotateBlue,
+      label: 'Auto LAND Staking',
+      isFeatured: false,
     },
     {
       index: 3,
-      icon: tabIcon4,
-      label: 'LSRWA-USDT LP (Pancakeswap)',
+      icon: tabIcon3,
+      label: 'LAND-BNB LP ',
+      isFeatured: false,
     },
     {
       index: 4,
       icon: tabIcon4,
       label: 'LSRWA-USDT LP (DS Swap)',
+      isFeatured: false,
     },
  
   ];
 
   useEffect(() => {
-    if (!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) {
-      useSelectedVault(1)
-    } else {
-      useSelectedVault(0)
-    }
+    useSelectedVault(0)
   }, [chainId])
 
   useEffect(() => {
@@ -182,26 +183,6 @@ const StakingPage: NextPage = () => {
         </div>
         <div className="flex flex-col items-start md:justify-between md:items-center max-w-[1200px] m-auto w-full gap-[24px] mt-[32px] xl:gap-[32px]">
           <div className="relative flex mlg:hidden justify-between p-0 h-[132px] w-full gap-[20px] mb-[20px]">
-            <button
-              type="button"
-              aria-label="Previous vault"
-              onClick={() => mobileVaultSliderRef.current?.slickPrev()}
-              className="absolute left-[6px] top-1/2 -translate-y-1/2 z-10 w-[20px] h-[20px] rounded-full bg-secondary text-text-primary flex items-center justify-center"
-            >
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6.5 1.5L3 5L6.5 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              aria-label="Next vault"
-              onClick={() => mobileVaultSliderRef.current?.slickNext()}
-              className="absolute right-[6px] top-1/2 -translate-y-1/2 z-10 w-[20px] h-[20px] rounded-full bg-secondary text-text-primary flex items-center justify-center"
-            >
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3.5 1.5L7 5L3.5 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
             <Slider ref={mobileVaultSliderRef} {...sliderSettings} centerPadding="10px" className="w-full">
               {vaults.map((vault) => (
                 <div key={vault.index} className="px-[5px] bg-transparent">
@@ -215,6 +196,9 @@ const StakingPage: NextPage = () => {
                       <Image src={vault.icon} className="w-full h-full" alt="" />
                     </div>
                     <span>{vault.label}</span>
+                    {vault.isFeatured && (
+                      <span className="py-[2px] px-[8px] rounded-[999px] text-[9px] leading-[12px] border border-[#61CD81] text-[#61CD81]">Featured</span>
+                    )}
                   </button>
                 </div>
               ))}
@@ -222,6 +206,20 @@ const StakingPage: NextPage = () => {
           </div>
           <div className="flex mlg:hidden w-full">
             {(selectedVault === 0 ?
+              <Usdtvault
+                title={"LSRWA-USDT LP"}
+                setShowModal={setShowModal}
+                setShowModalApy={setShowModalApy}
+                setTokenUsdPrice={setTokenUsdPrice}
+                setIsLPVault={setIsLPVault}
+                setIsShowUsdPrice={setIsShowUsdPrice}
+                poolId={5}
+                isInactive={false}
+                lpContractAddress={RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS[bsc.id]}
+                isSteerVault={true}
+                isFeatured={true}
+              /> :
+              selectedVault === 1 ?
               <ManualVault
                 title="LAND Token Staking"
                 setShowModal={setShowModal}
@@ -230,7 +228,7 @@ const StakingPage: NextPage = () => {
                 setTokenUsdPrice={setTokenUsdPrice}
                 setShowModalApy={setShowModalApy}
               /> :
-              selectedVault === 1 ?
+              selectedVault === 2 ?
                 <AutoVault
                   title={"Auto LAND Staking"}
                   setShowModal={setShowModal}
@@ -238,17 +236,28 @@ const StakingPage: NextPage = () => {
                   setTokenUsdPrice={setTokenUsdPrice}
                   setIsLPVault={setIsLPVault}
                   setIsShowUsdPrice={setIsShowUsdPrice}
-                /> : selectedVault === 2 ?
-                  <LPVault
-                    title={"LAND-BNB LP"}
-                    setShowModal={setShowModal}
-                    setShowModalApy={setShowModalApy}
-                    setTokenUsdPrice={setTokenUsdPrice}
-                    setIsLPVault={setIsLPVault}
-                    setIsShowUsdPrice={setIsShowUsdPrice}
-                  /> : selectedVault === 3 ?
+                /> : selectedVault === 3 ?
+                <LPVault
+                  title={"LAND-BNB LP"}
+                  setShowModal={setShowModal}
+                  setShowModalApy={setShowModalApy}
+                  setTokenUsdPrice={setTokenUsdPrice}
+                  setIsLPVault={setIsLPVault}
+                  setIsShowUsdPrice={setIsShowUsdPrice}
+                /> : selectedVault === 4 ?
+                <Usdtvault
+                  title={"LSRWA-USDT LP (DS Swap)"}
+                  setShowModal={setShowModal}
+                  setShowModalApy={setShowModalApy}
+                  setTokenUsdPrice={setTokenUsdPrice}
+                  setIsLPVault={setIsLPVault}
+                  setIsShowUsdPrice={setIsShowUsdPrice}
+                  poolId={4}
+                  isInactive={true}
+                  lpContractAddress={RWA_LP_CONTRACT_ADDRESS[bsc.id]}
+                /> :
                   <Usdtvault
-                    title={"LSRWA-USDT LP (Pancakeswap)"}
+                    title={"LSRWA-USDT LP"}
                     setShowModal={setShowModal}
                     setShowModalApy={setShowModalApy}
                     setTokenUsdPrice={setTokenUsdPrice}
@@ -258,22 +267,25 @@ const StakingPage: NextPage = () => {
                     isInactive={false}
                     lpContractAddress={RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS[bsc.id]}
                     isSteerVault={true}
-                  /> :
-                  <Usdtvault
-                    title={"LSRWA-USDT LP (DS Swap)"}
-                    setShowModal={setShowModal}
-                    setShowModalApy={setShowModalApy}
-                    setTokenUsdPrice={setTokenUsdPrice}
-                    setIsLPVault={setIsLPVault}
-                    setIsShowUsdPrice={setIsShowUsdPrice}
-                    poolId={4}
-                    isInactive={true}
-                    lpContractAddress={RWA_LP_CONTRACT_ADDRESS[bsc.id]}
+                    isFeatured={true}
                   />
             )}
           </div>
           <div className="hidden mlg:flex mlg:flex-col gap-[32px] w-full">
             {(<>
+                <Usdtvault
+                  title={"LSRWA-USDT LP"}
+                  setShowModal={setShowModal}
+                  setShowModalApy={setShowModalApy}
+                  setTokenUsdPrice={setTokenUsdPrice}
+                  setIsLPVault={setIsLPVault}
+                  setIsShowUsdPrice={setIsShowUsdPrice}
+                  poolId={5}
+                  isInactive={false}
+                  lpContractAddress={RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS[bsc.id]}
+                  isSteerVault={true}
+                  isFeatured={true}
+                />
                 {(!(VAULT_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) ? (
                   <>
                     <ManualVault
@@ -321,18 +333,6 @@ const StakingPage: NextPage = () => {
                   setTokenUsdPrice={setTokenUsdPrice}
                   setIsLPVault={setIsLPVault}
                   setIsShowUsdPrice={setIsShowUsdPrice}
-                />
-                <Usdtvault
-                  title={"LSRWA-USDT LP (Pancakeswap)"}
-                  setShowModal={setShowModal}
-                  setShowModalApy={setShowModalApy}
-                  setTokenUsdPrice={setTokenUsdPrice}
-                  setIsLPVault={setIsLPVault}
-                  setIsShowUsdPrice={setIsShowUsdPrice}
-                  poolId={5}
-                  isInactive={false}
-                  lpContractAddress={RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS[bsc.id]}
-                  isSteerVault={true}
                 />
                 <Usdtvault
                   title={"LSRWA-USDT LP (DS Swap)"}
