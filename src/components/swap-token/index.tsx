@@ -16,13 +16,12 @@ import ToggleButton from "../common/toggle-button";
 import ConnectWallet from "../connect-wallet";
 import FinancialSummary from "../financial-summary";
 import PriceGraph from "../price-line-chart";
-import SwipeluxModal from "../common/modals/swipelux";
 import ZeroIDWidget from "../zero-id-widget";
 import KYCWidget from "../sumsub-widget";
 import useGetSaleLimit from "../../hooks/contract/LandshareSaleContract/useGetSaleLimit";
 import useGetDecimals from "../../hooks/contract/UsdtContract/useGetDecimals";
 import useGetAllowedToTransfer from "../../hooks/contract/RWAContract/useGetAllowedToTransfer";
-import useIsWhitelistedAddressOfRwa from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
+import useIsWhitelisted from "../../hooks/contract/WhitelistContract/useIsWhitelisted";
 import useLandFee from "../../hooks/contract/LandshareSaleContract/useLandFee";
 import {
   RWA_CONTRACT_ADDRESS,
@@ -40,7 +39,6 @@ import useGetLandFee from "../../hooks/contract/LandshareSaleContract/useGetLand
 import useBuyTokenView from "../../hooks/contract/LandshareBuySaleContract/useBuyTokenView";
 import useSellTokens from "../../hooks/swap-token/useSellTokens";
 import useBuyTokens from "../../hooks/swap-token/useBuyTokens";
-import IconSwipelux from "../../../public/icons/swipelux.svg";
 import IconPancakeswap from "../../../public/icons/pancakeswap.png";
 import IconGateio from "../../../public/icons/gateio.png";
 import IconMEXC from "../../../public/icons/mexclogo.png";
@@ -64,23 +62,23 @@ export default function SwapToken() {
   const { screenLoadingStatus } = useGlobalContext();
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
-  const { data: isWhitelisted, refetch } = useIsWhitelistedAddressOfRwa(chainId, address);
+  const { data: isWhitelisted, refetch } = useIsWhitelisted(chainId, address);
 
   const [RWATokenAmount, setRWATokenAmount] = useState(0);
   const [usdcAmount, setUsdcAmount] = useState(0);
   const [isGraphShow, setIsGraphShow] = useState(false);
   const [isFinancialSummaryShow, setIsFinancialSummaryShow] = useState(false);
-  const [buyUSDCAmount, setBuyUSDCAmount] = useState(0);
-  const [buyLANDAmount, setBuyLANDAmount] = useState(0);
+  const [buyUSDCAmount, setBuyUSDCAmount] = useState<bigint>(BigInt(0));
+  const [buyLANDAmount, setBuyLANDAmount] = useState<bigint>(BigInt(0));
   const [isSTAPShow, setIsSTAPshow] = useState(false);
   const [signAgreement, setSignAgreement] = useState(false);
   const [isShowTokenSelector, setIsShowTokenSelector] = useState(false);
   const [buyOrSell, setBuyOrSell] = useState("Buy");
   const [isSTPALoding, setIsSTPALoading] = useState(true);
   const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
-  const [isSwipeluxModalOpen, setIsSwipeluxModalOpen] = useState(false);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
+  const isIdentityVerificationTemporarilyDisabled = true;
 
   useEffect(() => {
     (async () => {
@@ -146,16 +144,27 @@ export default function SwapToken() {
     buyLANDAmount,
     RWATokenAmount
   );
+  // Only call buyTokenView when in Buy mode and amount is >= 1
   const buyTokenAmount = useBuyTokenView(
     chainId,
-    RWATokenAmount,
+    buyOrSell === "Buy" && RWATokenAmount >= 1 ? RWATokenAmount : 0,
     USDC_ADDRESS[chainId]
-  ) as any;
+  );
 
   useEffect(() => {
     setUsdcAmount(Number((Number(formatEther(rwaPrice ?? 0)) * RWATokenAmount).toFixed(2)));
-    setBuyLANDAmount(buyTokenAmount[1])
-    setBuyUSDCAmount(buyTokenAmount[0])
+    
+    // Handle the new object structure from useBuyTokenView
+    if (buyTokenAmount && typeof buyTokenAmount === 'object') {
+      const landAmount = buyTokenAmount.amountOfLAND || BigInt(0);
+      const usdcAmount = buyTokenAmount.amountOfStableCoin || BigInt(0);
+      
+      // Only update if we actually got valid amounts back (not zeros)
+      if (landAmount > BigInt(0) || usdcAmount > BigInt(0)) {
+        setBuyLANDAmount(landAmount);
+        setBuyUSDCAmount(usdcAmount);
+      }
+    }
   }, [rwaPrice, RWATokenAmount, buyTokenAmount]);
 
   useEffect(() => {
@@ -278,8 +287,8 @@ export default function SwapToken() {
             onClick={() => {
               setBuyOrSell("Buy");
               setRWATokenAmount(0);
-              setBuyLANDAmount(0);
-              setBuyUSDCAmount(0);
+              setBuyLANDAmount(BigInt(0));
+              setBuyUSDCAmount(BigInt(0));
             }}
             className="w-full h-[40px]"
           >
@@ -324,10 +333,10 @@ export default function SwapToken() {
             </p>
           </div>
           <div className="w-full mt-3">
-            <a href="https://dashboard.landshare.io">
+            <div>
               <Button
-                className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
-                disabled={chainId != bsc.id}
+                className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative disabled:bg-[#c2c5c3] disabled:cursor-not-allowed"
+                disabled={true}
               >
                 <p
                   className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
@@ -335,12 +344,12 @@ export default function SwapToken() {
                   Manual Verification
                 </p>
               </Button>
-              <p className="text-xs text-text-secondary text-center mt-1">Recommended for advanced users and large investors</p>
-            </a>
-            <div onClick={handleLinkClick}>
+              <p className="text-xs text-text-secondary text-center mt-1">Temporarily disabled</p>
+            </div>
+            <div>
               <Button
                 className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"
-        
+                disabled={isIdentityVerificationTemporarilyDisabled}
               >
                 <p
                   className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
@@ -348,7 +357,7 @@ export default function SwapToken() {
                   Sumsub Verification
                 </p>
               </Button>
-              <p className="text-xs text-text-secondary text-center mt-1">Quick verification - 5 minutes or less!</p>
+              <p className="text-xs text-text-secondary text-center mt-1">Identity verification is temporarily disabled</p>
             </div>
           </div>
         </Modal>
@@ -381,20 +390,6 @@ export default function SwapToken() {
           contentLabel="current-apr Modal"
         >
           <div className="w-full overflow-y-auto h-[460px]">
-            <Button
-              onClick={() => {
-                setIsBuyModalOpen(false)
-                setIsSwipeluxModalOpen(true)
-              }}
-              className="h-[115px] flex flex-col justify-center items-center w-full pb-[20px] border-b relative hover:bg-gray-300 transition-colors"
-              textClassName="flex flex-col justify-center items-center"
-            >
-              <Image src={IconSwipelux} alt="" className="w-[40px]" />
-              <div className="text-[24px] font-bold">Swipelux</div>
-              <div className="text-[16px] text-[#b6b0b0]">
-                Credit or Debit Card
-              </div>
-            </Button>
             <Link
               href="https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C"
               target="_blank"
@@ -665,9 +660,9 @@ export default function SwapToken() {
                   placeholder={`00.00 ${PUSD_SUPPORT_CHINAS.map(c => c.id).includes(chainId as 98867 | 98866) ? 'pUSD' : 'USDC'}`}
                   readOnly
                   value={
-                    buyUSDCAmount == undefined || RWATokenAmount === 0
+                    buyUSDCAmount === BigInt(0) || RWATokenAmount === 0
                       ? ""
-                      : formatUnits(buyUSDCAmount.toString(), chainId == bsc.id ? 18 : 6)
+                      : formatUnits(buyUSDCAmount, chainId == bsc.id ? 18 : 6)
                   }
                 />
                 {isConnected && (
@@ -701,9 +696,9 @@ export default function SwapToken() {
                     placeholder="00.00 LAND"
                     readOnly
                     value={
-                      buyLANDAmount == undefined || RWATokenAmount === 0
+                      buyLANDAmount === BigInt(0) || RWATokenAmount === 0
                         ? ""
-                        : formatEther(buyLANDAmount.toString())
+                        : formatEther(buyLANDAmount)
                     }
                   />
                   {isConnected && (
@@ -826,16 +821,15 @@ export default function SwapToken() {
                   </>
                 )}
                 {isWhitelisted  ? (
-                  <a
-                    href="https://app.dsswap.io/swap"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-decoration-none"
-                  >
-                    <Button outlined className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81]">
-                      Trade on DS Swap
+                  <div>
+                    <Button 
+                      disabled={true}
+                      outlined 
+                      className="w-full py-[13px] px-[24px] rounded-[100px] border-[#61cd81] disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Trade on PCS
                     </Button>
-                  </a>
+                  </div>
                 ) : (
                   <div className="bg-[#f6f8f9] p-[16px] rounded-[12px] bg-primary">
                     <div className="flex items-center gap-[10px] mb-[4px]">
@@ -855,12 +849,13 @@ export default function SwapToken() {
                       Tokens
                     </span>
                     <Button
-                      onClick={handlemodalkyc}
+                      disabled={isIdentityVerificationTemporarilyDisabled}
                       textClassName="text-[#fff]"
-                      className="w-full mt-[14px] py-[13px] bg-primary-green px-[24px] rounded-[100px]"
+                      className="w-full mt-[14px] py-[13px] bg-primary-green px-[24px] rounded-[100px] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Verify Now
                     </Button>
+                    <p className="text-xs text-text-secondary text-center mt-2">Identity verification is temporarily disabled</p>
                   </div>
                 )}
                 <div className="flex flex-col items-center gap-[18px] w-full">
@@ -1132,10 +1127,6 @@ export default function SwapToken() {
           </div>
         </div>
       </Modal>
-      <SwipeluxModal
-        isOpen={isSwipeluxModalOpen}
-        setIsOpen={setIsSwipeluxModalOpen}
-      />
     </div>
   );
 }

@@ -45,8 +45,6 @@ import calc from "../../../public/icons/calculator.svg";
 import viewContract from "../../../public/icons/view-contract.png";
 import up from "../../../public/icons/arrow-up.svg";
 import bscIcon from "../../../public/icons/bsc.svg";
-import polygonIcon from "../../../public/icons/polygon.svg";
-import arbitrumIcon from "../../../public/icons/arbitrum.svg";
 import pcsBunny from "../../../public/icons/pancakeswap-cake-logo.svg"
 import quickSwap from "../../../public/icons/quickswap-logo.svg"
 import smallicon from "../../../public/icons/rotate-black.svg"
@@ -314,12 +312,6 @@ export default function AutoVault({
                     <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                       <Image src={bscIcon} className="w-8 h-8" alt="" />
                     </div>
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
-                      <Image src={polygonIcon} className="w-8 h-8" alt="" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
-                      <Image src={arbitrumIcon} className="w-8 h-8" alt="" />
-                    </div>
                   </div>
                   {((!(AUTO_VAULT_MAIN_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) && (ccipTransactions > 0)) && (isConnected) && (
                     <a className="ml-auto mr-0 font-bold text-primary-700" href="/vaults/ccip-transactions">
@@ -349,12 +341,6 @@ export default function AutoVault({
                       </div>
                       <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                         <Image src={bscIcon} className="w-8 h-8" alt="" />
-                      </div>
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
-                        <Image src={polygonIcon} className="w-8 h-8" alt="" />
-                      </div>
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
-                        <Image src={arbitrumIcon} className="w-8 h-8" alt="" />
                       </div>
                     </div>
                   </div>

@@ -5,7 +5,7 @@ import { useAccount, useChainId } from "wagmi";
 import { MdCancel } from "react-icons/md";
 import { bsc } from "viem/chains";
 import { useTheme } from "next-themes";
-import useIsWhitelistedAddress from "../../hooks/contract/RWAContract/useIsWhitelistedAddress";
+import useIsWhitelisted from "../../hooks/contract/WhitelistContract/useIsWhitelisted";
 import { BOLD_INTER_TIGHT } from "../../config/constants/environments";
 import Button from "../common/button";
 import { MAJOR_WORK_CHAINS } from "../../config/constants/environments";
@@ -23,7 +23,7 @@ export default function InvestmentExplain() {
   const { theme } = useTheme();
   const chainId = useChainId();
   const {address} = useAccount();
-  const { data: isWhitelisted, refetch } = useIsWhitelistedAddress((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
+  const { data: isWhitelisted, refetch } = useIsWhitelisted((RWA_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId) ? chainId : 56, address);
   const [iskycmodal, setKycopen] = useState(false);
   const [isZeroIDModal, setZeroIDModalOpen] = useState(false);
 
@@ -233,10 +233,10 @@ export default function InvestmentExplain() {
           </p>
         </div>
         <div className="w-full mt-3">
-          <a href="https://dashboard.landshare.io">
+          <div>
             <Button 
-              className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors"
-              disabled={chainId != bsc.id}
+              className="flex flex-col justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative disabled:bg-[#c2c5c3] disabled:cursor-not-allowed"
+              disabled={true}
             >
               <p
                 className={`text-[16px] leading-[28px] tracking-[2%] ${BOLD_INTER_TIGHT.className}`}
@@ -244,8 +244,8 @@ export default function InvestmentExplain() {
                 Manual Verification
               </p>
             </Button>
-            <p className="text-xs text-text-secondary text-center mt-1">Recommended for advanced users and large investors</p>
-          </a>
+            <p className="text-xs text-text-secondary text-center mt-1">Temporarily disabled</p>
+          </div>
           <div onClick={handleLinkClick}>
             <Button
               className="flex flex-col disabled:bg-[#c2c5c3] justify-center items-center w-full pb-[10px] bg-primary-green text-[#fff] rounded-[20px] pt-[10px] border-b relative hover:bg-green-600 transition-colors mt-4"

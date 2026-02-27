@@ -257,6 +257,9 @@ export default function LpVault({
                       <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                         <Image src={bscIcon} className="w-8 h-8" alt="bsc-icon" />
                       </div>
+                      <div className="hidden md:flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
+                        <Image src={pcsBunny} className="w-[32px] h-[32px] p-[6px]" alt="pancakeswap-icon" />
+                      </div>
                     </div>
                     <button className={`flex flex-row items-center justify-center gap-[4px] text-[14px] m-auto text-[14px] leading-[22px] tracking-[0.02em] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
                       <Image src={details ? up : down} alt="direction" />
@@ -284,6 +287,9 @@ export default function LpVault({
                         </div>
                         <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
                           <Image src={bscIcon} className="w-8 h-8" alt="bsc-icon" />
+                        </div>
+                        <div className="hidden md:flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
+                          <Image src={pcsBunny} className="w-[32px] h-[32px] p-[6px]" alt="pancakeswap-icon" />
                         </div>
                       </div>
                     </div>

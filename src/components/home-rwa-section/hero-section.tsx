@@ -28,31 +28,29 @@ export default function HomeRwaHeroSection() {
             <div className="flex flex-col justify-end w-full whitespace-normal max-w-fit md:max-w-[560px]">
               <FeatureBadge
                 icon="/icons/cube.svg"
-                text="The Future of Investment"
+                text="The Future of Real Estate is Liquid"
               />
               <h1
                 className={`text-text-primary text-[40px] leading-[50px] md:text-[54px] md:leading-[68px] my-[12px] ${BOLD_INTER_TIGHT.className}`}
               >
-                RWA Token is Now Live
+                Invest in Property Without the Barriers
               </h1>
               <p className="line-clamp-4 mb-6 md:text-[16px] md:leading-[24px] md:tracking-[2%] lg:mb-[40px] lg:text-[18px] lg:leading-[28px] lg:tracking-[0.36px] text-[#535457] dark:text-[#a9abaf]">
-                The Landshare RWA Token Main Sale is now live! Our new
-                tokenization model offers a simple and secure way to gain
-                exposure to real estate directly on-chain.
+                Access diversified, income‑producing real estate in a few clicks. Landshare v2 transforms RWAs into instantly tradable, yield‑bearing tokens backed by real assets and governed on‑chain.
               </p>
               <div className="hidden md:flex gap-[16px]">
-                <Link href="https://dashboard.landshare.io">
+                <Link href="https://app.landshare.io/rwa">
                   <Button className="bg-primary-green text-[#fff] px-[24px] py-[13px] rounded-[100px]">
-                    Buy Now
+                    Start Investing
                   </Button>
                 </Link>
-                <Link href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa">
+                <Link href="https://app.landshare.io/rwa">
                   <Button
                     className="px-[24px] py-[13px] rounded-[100px] border-primary-green hover:bg-primary-green"
                     textClassName="dark:text-[#fff]"
                     outlined
                   >
-                    Learn More
+                    Explore Our Assets
                   </Button>
                 </Link>
               </div>
@@ -70,27 +68,27 @@ export default function HomeRwaHeroSection() {
               />
             </div>
             <div className="mt-[20px] justify-around w-full flex gap-2 md:hidden">
-              <Link className="w-full" href="/rwa">
+              <Link className="w-full" href="https://app.landshare.io/rwa">
                 <Button
                   className="rounded-[100px] py-[13px] w-full bg-primary-green"
                   textClassName="text-[#fff]"
                 >
-                  Buy Now
+                  Start Investing
                 </Button>
               </Link>
 
-              <a
+              <Link
                 className="w-full"
-                href="https://docs.landshare.io/platform-features/landshare-rwa-token-lsrwa"
+                href="https://app.landshare.io/rwa"
               >
                 <Button
                   className="rounded-[100px] py-[13px] w-full border-primary-green hover:bg-primary-green hover:text-white"
                   textClassName="dark:text-[#fff]"
                   outlined
                 >
-                  Learn More
+                  Explore Our Assets
                 </Button>
-              </a>
+              </Link>
             </div>
           </div>
         </CarouselItem>

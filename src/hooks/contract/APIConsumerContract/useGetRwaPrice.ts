@@ -2,8 +2,10 @@ import { useReadContract } from "wagmi";
 import { parseUnits } from "ethers";
 import { bsc } from "viem/chains";
 import APIConsumerAbi from "../../../abis/APIConsumer.json";
-import LandshareBuySaleAbi from "../../../abis/LandshareBuySale.json"
+import LandshareBuySaleArtifact from "../../../abis/LandshareBuySale.json"
 import { API_CONSUMER_CONTRACT_ADDRESS, LANDSHARE_BUY_SALE_CONTRACT_ADDRESS } from "../../../config/constants/environments";
+
+const LandshareBuySaleAbi = LandshareBuySaleArtifact.abi;
 
 export default function useGetRwaPrice(chainId: number) {
   const { data, isError, isLoading, error } = useReadContract({

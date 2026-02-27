@@ -13,9 +13,9 @@ export default function useApprove() {
     writeContract
   } = useWriteContract();
 
-  async function approve(chainId: number, approveAddress: Address, amount: number | BigNumberish) {
+  async function approve(chainId: number, approveAddress: Address, amount: number | BigNumberish, lpContractAddress?: Address) {
     await writeContract({
-      address: RWA_LP_CONTRACT_ADDRESS[bsc.id],
+      address: lpContractAddress || RWA_LP_CONTRACT_ADDRESS[bsc.id],
       abi: RwaLpContractAbi,
       functionName: "approve",
       chainId: bsc.id,

@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import numeral from "numeral";
 import { ApexOptions } from "apexcharts";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import SwipeluxModal from "../common/modals/swipelux";
 import ApexChart from "../common/apexchart";
 import Button from "../common/button";
 import { useTheme } from "next-themes";
@@ -55,7 +54,6 @@ export default function PriceGraph({
     },
   ]);
   const [recentData, setRecentData] = useState({ pair: "", price: 0, change_price: 0, date: Date.now() });
-  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
 
 
   const handleClick = () => {
@@ -63,8 +61,7 @@ export default function PriceGraph({
       router.push("/rwa");
       window.scrollTo(0, 0);
     } else if (type === "land") {
-      setIsBuyModalOpen(true);
-      document.body.classList.add('modal-open');
+      window.open("https://pancakeswap.finance/swap?outputCurrency=0xA73164DB271931CF952cBaEfF9E8F5817b42fA5C", "_blank");
     }
   };
   // function that takes every n point in the prices array to reduce the number of points so the graph becomes clear
@@ -200,10 +197,6 @@ export default function PriceGraph({
 
   return (
     <div className={`rounded-[12px] overflow-visible p-[14px] md:w-full md:rounded-[16px] lg:rounded-[10px] lg:p-[18px] bg-third ${containerClassName}`}>
-      <SwipeluxModal 
-        isOpen={isBuyModalOpen}
-        setIsOpen={setIsBuyModalOpen}
-      />
       <div className="flex items-center gap-[5px] mb-[16.42px] justify-between">
         <div className="flex flex-row items-center gap-1">
           <Image src={IconTokenPair} alt="token pair" className="h-[24px] w-[24px]" />

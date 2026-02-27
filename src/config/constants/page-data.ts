@@ -32,14 +32,6 @@ export const FEATURES: DASHBOARD_FEATURE[] = [
     routeName: "/rwa"
   },
   {
-    icon: IconDashboard,
-    darkIcon: IconDashboard,
-    title: "Dashboard",
-    description:
-      "Complete KYC and manage your personal identity information",
-    externalLink: "https://dashboard.landshare.io"
-  },
-  {
     icon: IconCube,
     darkIcon: IconCube,
     title: "NFTs",
