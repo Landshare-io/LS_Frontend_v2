@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Head from 'next/head';
 import type { NextPage } from 'next';
 import { useChainId, useAccount } from "wagmi"
@@ -61,6 +61,7 @@ const StakingPage: NextPage = () => {
   const [isShowUsdPrice, setIsShowUsdPrice] = useState(false)
   const [rewardPercent, setRewardPercent] = useState(0)
   const [isLPVault, setIsLPVault] = useState(false)
+  const mobileVaultSliderRef = useRef<Slider | null>(null)
 
   const customModalStyles = {
     content: {
@@ -180,8 +181,28 @@ const StakingPage: NextPage = () => {
           </p>
         </div>
         <div className="flex flex-col items-start md:justify-between md:items-center max-w-[1200px] m-auto w-full gap-[24px] mt-[32px] xl:gap-[32px]">
-          <div className="flex mlg:hidden justify-between p-0 h-[132px] w-full gap-[20px] mb-[20px]">
-            <Slider {...sliderSettings} centerPadding="10px" className="w-full">
+          <div className="relative flex mlg:hidden justify-between p-0 h-[132px] w-full gap-[20px] mb-[20px]">
+            <button
+              type="button"
+              aria-label="Previous vault"
+              onClick={() => mobileVaultSliderRef.current?.slickPrev()}
+              className="absolute left-[6px] top-1/2 -translate-y-1/2 z-10 w-[20px] h-[20px] rounded-full bg-secondary text-text-primary flex items-center justify-center"
+            >
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.5 1.5L3 5L6.5 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Next vault"
+              onClick={() => mobileVaultSliderRef.current?.slickNext()}
+              className="absolute right-[6px] top-1/2 -translate-y-1/2 z-10 w-[20px] h-[20px] rounded-full bg-secondary text-text-primary flex items-center justify-center"
+            >
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.5 1.5L7 5L3.5 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <Slider ref={mobileVaultSliderRef} {...sliderSettings} centerPadding="10px" className="w-full">
               {vaults.map((vault) => (
                 <div key={vault.index} className="px-[5px] bg-transparent">
                   <button

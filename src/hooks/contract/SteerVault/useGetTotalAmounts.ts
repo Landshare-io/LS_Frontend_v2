@@ -11,11 +11,11 @@ export default function useGetTotalAmounts(vaultAddress: Address | undefined) {
     chainId: bsc.id
   })
 
-  if (!vaultAddress) return { data: [0n, 0n] as readonly [bigint, bigint], isLoading: false }
-  if (isLoading) return { data: [0n, 0n] as readonly [bigint, bigint], isLoading }
+  if (!vaultAddress) return { data: [BigInt(0), BigInt(0)] as readonly [bigint, bigint], isLoading: false }
+  if (isLoading) return { data: [BigInt(0), BigInt(0)] as readonly [bigint, bigint], isLoading }
   if (isError) {
     console.log('Fetching SteerVault getTotalAmounts error', error)
-    return { data: [0n, 0n] as readonly [bigint, bigint], isLoading }
+    return { data: [BigInt(0), BigInt(0)] as readonly [bigint, bigint], isLoading }
   }
 
   return { data: data as readonly [bigint, bigint], isLoading }

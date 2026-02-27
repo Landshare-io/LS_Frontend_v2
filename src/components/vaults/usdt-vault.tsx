@@ -12,7 +12,8 @@ import {
   BigNumberish,
   formatEther,
   formatUnits,
-  parseEther
+  parseEther,
+  parseUnits
 } from "ethers";
 import type { Address } from "viem";
 import numeral from "numeral";
@@ -158,7 +159,7 @@ export default function Usdtvault({
     chainId
   }) as { data: number | bigint | undefined, isLoading: boolean }
   const rwaTokenDecimals = Number(rwaDecimalsRaw ?? 18)
-  const oneLsrwaRaw = 10n ** BigInt(rwaTokenDecimals)
+  const oneLsrwaRaw = parseUnits("1", rwaTokenDecimals)
   const { data: routerAmountsOutRawDirect } = useReadContract({
     address: isSteerVault ? PSC_ROUTER_CONTRACT_ADDRESS : undefined,
     abi: PancakeRouterAbi,
@@ -167,6 +168,7 @@ export default function Usdtvault({
     chainId: bsc.id
   }) as { data: readonly bigint[] | undefined }
   const { price } = useGetPrice(chainId)
+  const mobileTitle = title.replace(" (DS Swap)", "")
 
   const [inputValue, setInputValue] = useState("");
   const [details, setDetails] = useState(false)
@@ -235,15 +237,15 @@ export default function Usdtvault({
         effectiveLpAddress,
         pancakePoolAddress: RWA_LP_PANCAKESWAP_POOL_ADDRESS[bsc.id],
         steerLpDecimals,
-        steerLpTotalSupplyRaw: (steerLpTotalSupplyRaw ?? 0n).toString(),
-        steerLpDepositedRaw: (amountLSRWALPInVaultRaw ?? 0n).toString(),
+        steerLpTotalSupplyRaw: (steerLpTotalSupplyRaw ?? BigInt(0)).toString(),
+        steerLpDepositedRaw: (amountLSRWALPInVaultRaw ?? BigInt(0)).toString(),
         steerLpTotalSupply: totalSupply,
         steerLpDeposited: depositedSupply,
         depositedPercentage,
         usdtDecimals: usdtTokenDecimals,
         rwaDecimals: rwaTokenDecimals,
-        pancakeUsdtRaw: (pancakePoolUSDTBalance ?? 0n).toString(),
-        pancakeLsrwaRaw: (pancakePoolLSRWABalance ?? 0n).toString(),
+        pancakeUsdtRaw: (pancakePoolUSDTBalance ?? BigInt(0)).toString(),
+        pancakeLsrwaRaw: (pancakePoolLSRWABalance ?? BigInt(0)).toString(),
         pancakeUsdt: usdtAmount,
         pancakeLsrwa: lsrwaAmount,
         routerAmountInRaw: oneLsrwaRaw.toString(),
@@ -472,7 +474,8 @@ export default function Usdtvault({
                     </div>
                     <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
                       <div className={`cursor-pointer w-full overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
-                        {title}
+                        <span className="md:hidden">{mobileTitle}</span>
+                        <span className="hidden md:inline">{title}</span>
                         {isInactive && (
                           <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#9d9fa81f] text-[#9d9fa8] ${BOLD_INTER_TIGHT.className}`}>
                             Inactive
@@ -731,24 +734,24 @@ export default function Usdtvault({
                       </div>
                       <div className="flex w-full flex-col items-center justify-center p-[16px]">
                         <div className="w-8 h-8 rounded-full bg-third">
-                          <a href="https://app.landshare.io/rwa" target="_blank" rel="noopener noreferrer"><Image className="w-[32px] h-[32px] p-[6px]" src={theme == 'dark' ? UnionDark : Union} alt="" /></a>
+                          <a href="https://app.steer.finance/vault/0xd90c101112995c465DFdbc2AE0f3BEAeD997F642" target="_blank" rel="noopener noreferrer"><Image className="w-[32px] h-[32px] p-[6px]" src={theme == 'dark' ? UnionDark : Union} alt="" /></a>
                         </div>
                         <div className="flex flex-col mt-[8px] items-center text-text-primary">
                           <span>
                             <a
-                              href="https://app.landshare.io/rwa"
+                              href="https://app.steer.finance/vault/0xd90c101112995c465DFdbc2AE0f3BEAeD997F642"
                               target="_blank"
                               rel="noopener noreferrer"
                               className={`${BOLD_INTER_TIGHT.className} text-[14px] leading-[22px] tracking-[0.28px]`}
                             >
-                              Get LSRWA Token
+                              Get LSRWA-USDT LP
                             </a>
                           </span>
                           <a
                             className={`${BOLD_INTER_TIGHT.className} text-[12px] leading-[20px] tracking-[0.24px] text-[#61CD81]`}
-                            href="https://app.landshare.io/rwa" target="_blank" rel="noopener noreferrer"
+                            href="https://app.steer.finance/vault/0xd90c101112995c465DFdbc2AE0f3BEAeD997F642" target="_blank" rel="noopener noreferrer"
                           >
-                            RWA Portal
+                            Steer Protocol
                           </a>
                         </div>
                       </div>
