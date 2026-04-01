@@ -53,6 +53,21 @@ const DEFAULTS = {
 
 const TRANSFER_FUNDS_FUNCTION = 'function transferFunds(address _from, address _to, uint256 _amount)';
 const ERC20_TRANSFER_FUNCTION = 'function transfer(address to, uint256 amount) returns (bool)';
+const BIGINT_ZERO = BigInt(0);
+const BIGINT_ONE = BigInt(1);
+const BIGINT_TWO = BigInt(2);
+const BIGINT_TEN = BigInt(10);
+const BIGINT_NEGATIVE_ONE = BigInt(-1);
+
+function pow10(exponent: number): bigint {
+  let result = BIGINT_ONE;
+
+  for (let index = 0; index < exponent; index += 1) {
+    result *= BIGINT_TEN;
+  }
+
+  return result;
+}
 
 function printUsage(): void {
   console.log('Usage: tsx scripts/generate-monthly-basis-gnosis-tx.ts --last-price <value> --current-price <value> [--addresses <a,b,c> | --addresses-file <file>] [--safe-address <address>] [--output <file>] [--rpc-url <url>] [--chain-id <id>] [--rwa-contract <address>] [--stake-contract <address>] [--usdc-contract <address>]');
@@ -139,7 +154,7 @@ function parseDecimal(input: string): { signedInt: bigint; scale: number } {
   const [whole, fraction = ''] = unsigned.split('.');
   const normalizedWhole = whole.replace(/^0+(?=\d)/, '') || '0';
   const digits = `${normalizedWhole}${fraction}`.replace(/^0+(?=\d)/, '') || '0';
-  const signedInt = BigInt(digits) * (negative ? -1n : 1n);
+  const signedInt = BigInt(digits) * (negative ? BIGINT_NEGATIVE_ONE : BIGINT_ONE);
 
   return { signedInt, scale: fraction.length };
 }
@@ -148,8 +163,8 @@ function subtractDecimals(a: string, b: string): { signedInt: bigint; scale: num
   const da = parseDecimal(a);
   const db = parseDecimal(b);
   const scale = Math.max(da.scale, db.scale);
-  const factorA = 10n ** BigInt(scale - da.scale);
-  const factorB = 10n ** BigInt(scale - db.scale);
+  const factorA = pow10(scale - da.scale);
+  const factorB = pow10(scale - db.scale);
   return {
     signedInt: da.signedInt * factorA - db.signedInt * factorB,
     scale
@@ -162,30 +177,30 @@ function multiplyAndScaleRoundHalfUp(
   multiplier: bigint,
   outputScale: number
 ): bigint {
-  const numerator = valueInt * multiplier * (10n ** BigInt(outputScale));
-  const denominator = 10n ** BigInt(valueScale);
+  const numerator = valueInt * multiplier * pow10(outputScale);
+  const denominator = pow10(valueScale);
 
-  if (denominator === 1n) {
+  if (denominator === BIGINT_ONE) {
     return numerator;
   }
 
-  if (numerator >= 0n) {
-    return (numerator + (denominator / 2n)) / denominator;
+  if (numerator >= BIGINT_ZERO) {
+    return (numerator + (denominator / BIGINT_TWO)) / denominator;
   }
 
-  return -((-numerator + (denominator / 2n)) / denominator);
+  return -((-numerator + (denominator / BIGINT_TWO)) / denominator);
 }
 
 function divideFloor(numerator: bigint, denominator: bigint): bigint {
-  if (denominator <= 0n) {
+  if (denominator <= BIGINT_ZERO) {
     throw new Error('Denominator must be greater than zero.');
   }
 
-  if (numerator >= 0n) {
+  if (numerator >= BIGINT_ZERO) {
     return numerator / denominator;
   }
 
-  return -((-numerator + denominator - 1n) / denominator);
+  return -((-numerator + denominator - BIGINT_ONE) / denominator);
 }
 
 function uniqueAddresses(addresses: string[]): string[] {
@@ -272,7 +287,7 @@ function buildGnosisTransactions(
   const txs: GnosisTransaction[] = [];
 
   for (const entry of entries) {
-    if (entry.tokensToSell <= 0n || entry.usdcAmountUnits <= 0n) {
+    if (entry.tokensToSell <= BIGINT_ZERO || entry.usdcAmountUnits <= BIGINT_ZERO) {
       continue;
     }
 
@@ -351,12 +366,12 @@ async function main(): Promise<void> {
   }
 
   const delta = subtractDecimals(currentPrice, lastPrice);
-  if (delta.signedInt <= 0n) {
+  if (delta.signedInt <= BIGINT_ZERO) {
     throw new Error(`Price change must be positive. currentPrice (${currentPrice}) - lastPrice (${lastPrice}) = ${delta.signedInt.toString()} / 10^${delta.scale}`);
   }
 
   const currentParsed = parseDecimal(currentPrice);
-  if (currentParsed.signedInt <= 0n) {
+  if (currentParsed.signedInt <= BIGINT_ZERO) {
     throw new Error('Current price must be greater than zero.');
   }
 
@@ -394,8 +409,8 @@ async function main(): Promise<void> {
       usdcDecimals
     );
 
-    const sellNumerator = row.total * delta.signedInt * (10n ** BigInt(currentParsed.scale));
-    const sellDenominator = (10n ** BigInt(delta.scale)) * currentParsed.signedInt;
+    const sellNumerator = row.total * delta.signedInt * pow10(currentParsed.scale);
+    const sellDenominator = pow10(delta.scale) * currentParsed.signedInt;
     const tokensToSell = divideFloor(sellNumerator, sellDenominator);
 
     const usdcAmountUnits = multiplyAndScaleRoundHalfUp(
@@ -418,7 +433,7 @@ async function main(): Promise<void> {
     };
   });
 
-  const payableEntries = entries.filter((x) => x.tokensToSell > 0n && x.usdcAmountUnits > 0n);
+  const payableEntries = entries.filter((x) => x.tokensToSell > BIGINT_ZERO && x.usdcAmountUnits > BIGINT_ZERO);
   if (payableEntries.length === 0) {
     throw new Error('No payable entries found (all tokens-to-sell or calculated USDC amounts were 0).');
   }
@@ -430,8 +445,8 @@ async function main(): Promise<void> {
     usdcContractAddress
   );
 
-  let totalLSRWA = 0n;
-  let totalUSDCUnits = 0n;
+  let totalLSRWA = BIGINT_ZERO;
+  let totalUSDCUnits = BIGINT_ZERO;
 
   console.log('Per-wallet scan and payout');
   console.log('---------------------------');
@@ -499,7 +514,7 @@ async function main(): Promise<void> {
       gainUsdcFormatted: entry.gainAmountFormatted,
       usdcUnits: entry.usdcAmountUnits.toString(),
       usdcFormatted: entry.usdcAmountFormatted,
-      includedInBatch: entry.tokensToSell > 0n && entry.usdcAmountUnits > 0n
+      includedInBatch: entry.tokensToSell > BIGINT_ZERO && entry.usdcAmountUnits > BIGINT_ZERO
     }))
   };
 

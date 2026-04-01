@@ -7,6 +7,7 @@ import { MASTERCHEF_CONTRACT_ADDRESS } from "../../config/constants/environments
 const SECONDS_PER_YEAR = 31_536_000
 const BLOCK_TIME_SECONDS = 0.45
 const BLOCKS_PER_YEAR = Math.floor(SECONDS_PER_YEAR / BLOCK_TIME_SECONDS)
+const BIGINT_ZERO = BigInt(0)
 
 export default function useGetApr(chainId: number) {
   const { data, isError, isLoading, error } = useReadContracts({
@@ -57,7 +58,7 @@ export default function useGetApr(chainId: number) {
   const totalAllocPoint = BigInt(data?.[3]?.result ?? 0)
   const totalStaked = BigInt(data?.[4]?.result ?? 0)
 
-  if (totalAllocPoint === 0n || totalStaked === 0n) return "0.00"
+  if (totalAllocPoint === BIGINT_ZERO || totalStaked === BIGINT_ZERO) return "0.00"
 
   // annualEmissionPool = landPerBlock * bonusMultiplier * blocksPerYear * allocPoint / totalAllocPoint
   const annualEmissionPool = (landPerBlock * bonusMultiplier * BigInt(BLOCKS_PER_YEAR) * allocPoint) / totalAllocPoint

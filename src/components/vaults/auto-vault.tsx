@@ -134,7 +134,7 @@ export default function AutoVault({
       return
     }
 
-    const accountType = walletClient?.account?.type
+    const accountType = String(walletClient?.account?.type ?? '').toLowerCase()
     const connectorId = connector?.id?.toLowerCase() ?? ''
     const isExplicitSmartWallet = accountType === 'smart' || connectorId === 'safe'
 
