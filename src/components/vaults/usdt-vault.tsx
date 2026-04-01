@@ -44,6 +44,7 @@ import smallicon from "../../../public/icons/tether.svg"
 import bscIcon from "../../../public/icons/bsc.svg";
 import pancakeSwapIcon from "../../../public/icons/pancakeswap-cake-logo.svg";
 import book from "../../../public/icons/book.svg";
+import tabBook from "../../../public/icons/tab-book.svg";
 import {
   MAJOR_WORK_CHAINS,
   BOLD_INTER_TIGHT,
@@ -493,7 +494,7 @@ export default function Usdtvault({
                         </div>
                         <div className="p-0 flex items-center">
                           <div className={`flex items-center justify-center py-[3px] px-[12px] gap-[4px] rounded-[1000px] text-[12px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
-                            <Image src={book} alt="book" className="book" />
+                            <Image src={tabBook} alt="manual" className="w-[14px] h-[14px]" />
                             <span>Manual</span>
                           </div>
                           <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">

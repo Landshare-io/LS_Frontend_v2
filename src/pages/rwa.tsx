@@ -50,12 +50,12 @@ const RwaPage: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <div className="bg-primary pb-[25px] px-[20px] lg:px-[120px]">
+      <div className="bg-primary pb-[16px] px-[20px] lg:px-[120px]">
         <div className="max-w-[1200px] m-auto">
           <Breadcrumb items={breadcrumbItems} />
         </div>
       </div>
-      <div className="bg-primary pb-[60px] px-[10px] md:pb-[80px] md:px-[40px] lg:px-[120px]">
+      <div className="bg-primary pb-[40px] px-[10px] md:pb-[60px] md:px-[40px] lg:px-[120px]">
         <div className="flex flex-col-reverse lg:flex-row max-w-[1200px] m-auto justify-between gap-[20px]">
           <div className="flex flex-col w-full gap-[24px]">
             <div className="hidden md:block">
@@ -71,13 +71,13 @@ const RwaPage: NextPage = () => {
           <SwapToken />
         </div>
       </div>
-      <div className="bg-secondary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[40px]">
+      <div className="bg-secondary py-[40px] px-[10px] md:py-[60px] md:px-[40px] lg:px-[120px] lg:py-[40px]">
         <BeneficalAssets />
       </div>
-      <div className="bg-primary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
+      <div className="bg-primary py-[40px] px-[10px] md:py-[60px] md:px-[40px] lg:px-[120px] lg:py-[60px]">
         <RwaCalculator />
       </div>
-      <div className="flex flex-col gap-[36px] md:gap-[36px] bg-secondary py-[60px] px-[10px] md:py-[80px] md:px-[40px] lg:px-[120px] lg:py-[80px]">
+      <div className="flex flex-col gap-[24px] md:gap-[24px] bg-secondary py-[40px] px-[10px] md:py-[60px] md:px-[40px] lg:px-[120px] lg:py-[60px]">
         <div className="flex items-center w-fit md:mx-auto py-[6px] pr-[15px] pl-[6px] gap-[8px] h-[44px] rounded-[50px] text-[14px] font-medium leading-[22px] bg-primary">
           <div className="flex justify-center items-start p-[4px] w-[32px] h-[32px] rounded-[30px] bg-secondary">
             <HiMiniLockOpen className="w-[18px] h-[24px] text-[#24BC48]" />

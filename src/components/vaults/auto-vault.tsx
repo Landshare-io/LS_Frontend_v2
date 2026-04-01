@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { BigNumberish, formatEther, parseEther } from "ethers";
-import { useChainId, useAccount } from "wagmi";
+import { useChainId, useAccount, useWalletClient } from "wagmi";
 import ReactLoading from "react-loading";
 import { bsc, polygon } from "viem/chains";
 import Collapse from "../common/collapse";
@@ -74,7 +74,7 @@ export default function AutoVault({
   setTokenUsdPrice
 }: AutoVaultProps) {
   const chainId = useChainId();
-  const { isConnected, address } = useAccount();
+  const { isConnected, address, connector } = useAccount();
   const { notifyError } = useGlobalContext();
   const { theme } = useTheme();
   const dispatch = useAppDispatch();
@@ -121,9 +121,25 @@ export default function AutoVault({
   const [isDepositable, SetDepositable] = useState(true);
   const [isApprovedLandStake, setIsApprovedLandStake] = useState(true);
   const [isDepositing, setIsDepositing] = useState(false);
+  const [isSmartContractWallet, setIsSmartContractWallet] = useState(false);
   const { price: tokenPriceData } = useGetLandPrice()
+  const { data: walletClient } = useWalletClient({ chainId })
 
   const isVaultsLoading = isBalanceLoading || vaultBalance.isLoading || isAllownaceLoading || ccipVaultBalance.isLoading || ccipLoading;
+
+  // Only flag explicit smart-account connectors/types to avoid false positives on EOAs.
+  useEffect(() => {
+    if (!isConnected || !address) {
+      setIsSmartContractWallet(false)
+      return
+    }
+
+    const accountType = walletClient?.account?.type
+    const connectorId = connector?.id?.toLowerCase() ?? ''
+    const isExplicitSmartWallet = accountType === 'smart' || connectorId === 'safe'
+
+    setIsSmartContractWallet(isExplicitSmartWallet)
+  }, [isConnected, address, walletClient?.account?.type, connector?.id])
 
   useEffect(() => {
     (async () => {
@@ -437,6 +453,14 @@ export default function AutoVault({
                   </div>
                 </div>
                 <div className="flex flex-col justify-center pt-[12px] pb-[24px]">
+                  {isSmartContractWallet && (
+                    <div className="mb-[12px] p-[12px] rounded-[12px] border border-[#FF5454] dark:border-[#ff6b6b] bg-[#ff54541f] dark:bg-[#ff54541a]">
+                      <p className="text-[12px] leading-[18px] text-[#FF5454] dark:text-[#ff6b6b]">
+                        <strong>⚠️ MetaMask Smart Accounts Not Supported</strong><br/>
+                        Smart accounts are disabled. Please use Standard wallet account, the Manual Vault, or another wallet instead.
+                      </p>
+                    </div>
+                  )}
                   <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
                   <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
                     <input className="w-full bg-vault-input rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"
@@ -538,6 +562,14 @@ export default function AutoVault({
                       </div>
                     </div>
                     <div className="flex flex-col justify-center pt-[12px] pb-[24px]">
+                      {isSmartContractWallet && (
+                        <div className="mb-[12px] p-[12px] rounded-[12px] border border-[#FF5454] dark:border-[#ff6b6b] bg-[#ff54541f] dark:bg-[#ff54541a]">
+                          <p className="text-[12px] leading-[18px] text-[#FF5454] dark:text-[#ff6b6b]">
+                            <strong>⚠️ MetaMask Smart Accounts Not Supported</strong><br/>
+                            Smart accounts are disabled. Please use Standard wallet account, the Manual Vault, or another wallet instead.
+                          </p>
+                        </div>
+                      )}
                       <span className="text-[12px] leading-[20px] tracking-[0.24px] text-[#9d9fa8] dark:text-[#cacaca]">Set Amount</span>
                       <div className="flex flex-col md:flex-row gap-[12px] items-start p-0">
                         <input className="w-full bg-vault-input rounded-[12px] text-[14px] font-medium outline-0 tracking-[0.02em] leading-[22px] py-[13px] px-[16px] placeholder:text-[#cbcbcb] text-button-text-primary" placeholder="0.00 LAND" type="text"

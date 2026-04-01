@@ -21,6 +21,7 @@ import coinStack from "../../../public/icons/coin-stacked.svg"
 import tabIcon3 from "../../../public/icons/tab-icon3.svg"
 import tabIcon4 from "../../../public/icons/tether.svg"
 import tabBook from "../../../public/icons/tab-book.svg"
+import Union from "../../../public/green-logo.svg"
 import rotateBlue from "../../../public/icons/rotate-blue.svg";
 import CloseIcon from "../../../public/icons/close.svg";
 import CloseIconDark from "../../../public/icons/close-dark.svg";
@@ -98,14 +99,14 @@ const StakingPage: NextPage = () => {
   const vaults = [
     {
       index: 0,
-      icon: tabIcon4,
-      label: 'LSRWA-USDT LP',
+      icon: Union,
+      label: 'LAND Token Staking',
       isFeatured: true,
     },
     {
       index: 1,
-      icon: tabBook,
-      label: 'LAND Token Staking',
+      icon: tabIcon4,
+      label: 'LSRWA-USDT LP',
       isFeatured: false,
     },
     {
@@ -162,7 +163,7 @@ const StakingPage: NextPage = () => {
         />
         <link href="/favicon.ico" rel="icon" />
       </Head>
-      <div className="bg-primary pt-[41px] pb-[25px] px-[20px] lg:px-[0px]">
+      <div className="bg-primary pb-[25px] px-[20px] lg:px-[0px]">
         <div className="max-w-[1200px] m-auto">
           <Breadcrumb items={breadcrumbItems} />
         </div>
@@ -192,8 +193,8 @@ const StakingPage: NextPage = () => {
                       `bg-secondary flex flex-col justify-center items-center leading-[16px] py-[12px] px-[8px] gap-[4px] h-[112px] rounded-[12px] text-[10px] text-[#9d9fa8] w-full tracking-[0.02em] ${BOLD_INTER_TIGHT.className}`}
                     onClick={() => handleClick(vault.index)}
                   >
-                    <div className="w-7 h-7 p-[1px] bg-primary rounded-full">
-                      <Image src={vault.icon} className="w-full h-full" alt="" />
+                    <div className="w-7 h-7 rounded-full overflow-hidden">
+                      <Image src={vault.icon} className="w-full h-full object-cover" alt="" />
                     </div>
                     <span>{vault.label}</span>
                     {vault.isFeatured && (
@@ -206,6 +207,16 @@ const StakingPage: NextPage = () => {
           </div>
           <div className="flex mlg:hidden w-full">
             {(selectedVault === 0 ?
+              <ManualVault
+                title="LAND Token Staking"
+                setShowModal={setShowModal}
+                setIsLPVault={setIsLPVault}
+                setIsShowUsdPrice={setIsShowUsdPrice}
+                setTokenUsdPrice={setTokenUsdPrice}
+                setShowModalApy={setShowModalApy}
+                isFeatured={true}
+              /> :
+              selectedVault === 1 ?
               <Usdtvault
                 title={"LSRWA-USDT LP"}
                 setShowModal={setShowModal}
@@ -217,16 +228,7 @@ const StakingPage: NextPage = () => {
                 isInactive={false}
                 lpContractAddress={RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS[bsc.id]}
                 isSteerVault={true}
-                isFeatured={true}
-              /> :
-              selectedVault === 1 ?
-              <ManualVault
-                title="LAND Token Staking"
-                setShowModal={setShowModal}
-                setIsLPVault={setIsLPVault}
-                setIsShowUsdPrice={setIsShowUsdPrice}
-                setTokenUsdPrice={setTokenUsdPrice}
-                setShowModalApy={setShowModalApy}
+                isFeatured={false}
               /> :
               selectedVault === 2 ?
                 <AutoVault
@@ -267,12 +269,21 @@ const StakingPage: NextPage = () => {
                     isInactive={false}
                     lpContractAddress={RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS[bsc.id]}
                     isSteerVault={true}
-                    isFeatured={true}
+                    isFeatured={false}
                   />
             )}
           </div>
           <div className="hidden mlg:flex mlg:flex-col gap-[32px] w-full">
             {(<>
+                <ManualVault
+                  title="LAND Token Staking"
+                  setShowModal={setShowModal}
+                  setIsLPVault={setIsLPVault}
+                  setIsShowUsdPrice={setIsShowUsdPrice}
+                  setShowModalApy={setShowModalApy}
+                  setTokenUsdPrice={setTokenUsdPrice}
+                  isFeatured={true}
+                />
                 <Usdtvault
                   title={"LSRWA-USDT LP"}
                   setShowModal={setShowModal}
@@ -284,18 +295,10 @@ const StakingPage: NextPage = () => {
                   isInactive={false}
                   lpContractAddress={RWA_LP_PANCAKESWAP_CONTRACT_ADDRESS[bsc.id]}
                   isSteerVault={true}
-                  isFeatured={true}
+                  isFeatured={false}
                 />
                 {(!(VAULT_MAJOR_CHAINS.map(chain => chain.id) as number[]).includes(chainId)) ? (
                   <>
-                    <ManualVault
-                      title="LAND Token Staking"
-                      setShowModal={setShowModal}
-                      setIsLPVault={setIsLPVault}
-                      setIsShowUsdPrice={setIsShowUsdPrice}
-                      setShowModalApy={setShowModalApy}
-                      setTokenUsdPrice={setTokenUsdPrice}
-                    />
                     <AutoVault
                       title={"Auto LAND Staking"}
                       setShowModal={setShowModal}
@@ -314,14 +317,6 @@ const StakingPage: NextPage = () => {
                       setTokenUsdPrice={setTokenUsdPrice}
                       setIsLPVault={setIsLPVault}
                       setIsShowUsdPrice={setIsShowUsdPrice}
-                    />
-                    <ManualVault
-                      title="LAND Token Staking"
-                      setShowModal={setShowModal}
-                      setIsLPVault={setIsLPVault}
-                      setIsShowUsdPrice={setIsShowUsdPrice}
-                      setShowModalApy={setShowModalApy}
-                      setTokenUsdPrice={setTokenUsdPrice}
                     />
                   </>
                 )}

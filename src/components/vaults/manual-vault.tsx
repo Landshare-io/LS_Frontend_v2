@@ -20,6 +20,7 @@ import { BOLD_INTER_TIGHT, MASTERCHEF_CONTRACT_ADDRESS, MAJOR_WORK_CHAINS } from
 import Union from "../../../public/green-logo.svg";
 import UnionDark from "../../../public/green-logo.svg";
 import book from "../../../public/icons/book.svg";
+import tabBook from "../../../public/icons/tab-book.svg";
 import down from "../../../public/icons/down.svg";
 import up from "../../../public/icons/arrow-up.svg";
 import calc from "../../../public/icons/calculator.svg";
@@ -39,6 +40,7 @@ interface ManualVaultProps {
   setIsShowUsdPrice: Function
   setTokenUsdPrice: Function
   setShowModalApy: Function
+  isFeatured?: boolean
 }
 
 export default function ManualVault({
@@ -47,7 +49,8 @@ export default function ManualVault({
   setIsLPVault,
   setIsShowUsdPrice,
   setTokenUsdPrice,
-  setShowModalApy
+  setShowModalApy,
+  isFeatured = false
 }: ManualVaultProps) {
   const {
     notifyError
@@ -227,27 +230,34 @@ export default function ManualVault({
                     <Image src={details ? up : down} className="w-[20px] h-[20px]" alt="details" />
                   </button>
                 </div>
-                <div className="flex items-center py-[6px] justify-start h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
-                  <div className="size-[90px] rounded-[1000px] relative border-primary border-[6px]">
-                    <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
-                  </div>
-                  <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
-                    <div className={`cursor-pointer text-[16px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
-                      {title}
-                      <button className={`hidden md:flex items-center justify-center gap-[4px] text-[14px] leading-[22px] tracking-[0.28px] text-[#61CD81] shrink-0 mt-2 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
-                        <Image src={details ? up : down} alt="detail" />
-                      </button>
+                <div className="flex items-center py-[6px] justify-between h-[100px] gap-[16px]" onClick={() => setDetails(!details)}>
+                  <div className="flex items-center gap-[16px] min-w-0">
+                    <div className="size-[90px] rounded-[1000px] relative border-primary border-[6px]">
+                      <Image src={theme == 'dark' ? UnionDark : Union} alt="token pair" />
                     </div>
-                    <div className="flex items-center p-0">
-                      <div className={`flex items-center justify-center py-[3px] px-[12px] text-[12px] gap-[4px] rounded-[1000px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
-                        <Image src={book} alt="book" className="book mr-2" />
-                        <span>Manual</span>
+                    <div className="flex flex-col justify-center items-start p-0 gap-[8px]">
+                      <div className={`cursor-pointer text-[16px] overflow-hidden text-ellipsis leading-[28px] text-text-primary flex flex-row whitespace-nowrap items-center gap-2 ${BOLD_INTER_TIGHT.className}`}>
+                        {title}
+                        <button className={`hidden md:flex items-center justify-center gap-[4px] text-[14px] leading-[22px] tracking-[0.28px] text-[#61CD81] shrink-0 mt-2 ${BOLD_INTER_TIGHT.className}`} onClick={() => setDetails(!details)}>
+                          <Image src={details ? up : down} alt="detail" />
+                        </button>
                       </div>
-                      <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
-                        <Image src={bscIcon} className="w-8 h-8" alt="" />
+                      <div className="flex items-center p-0">
+                        <div className={`flex items-center justify-center py-[3px] px-[12px] text-[12px] gap-[4px] rounded-[1000px] leading-[20px] bg-[#ff54541f] text-[#FF5454] max-w-[87px] mr-2 ${BOLD_INTER_TIGHT.className}`}>
+                          <Image src={book} alt="book" className="book mr-2" />
+                          <span>Manual</span>
+                        </div>
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-primary transition-colors duration-200 mr-2">
+                          <Image src={bscIcon} className="w-8 h-8" alt="" />
+                        </div>
                       </div>
                     </div>
                   </div>
+                  {isFeatured && (
+                    <div className={`hidden md:flex self-start mt-[2px] items-center justify-center py-[5px] px-[14px] rounded-[1000px] text-[13px] leading-[20px] border border-[#61CD81] bg-[#61CD811f] text-[#61CD81] shrink-0 ${BOLD_INTER_TIGHT.className}`}>
+                      Featured
+                    </div>
+                  )}
                 </div>
                 <div className="grid grid-cols-2 gap-[12px] md:flex md:items-center md:justify-between p-0">
                   <div className="flex justify-between items-center py-[12px] px-[16px] w-full rounded-[12px] bg-vault-input">
