@@ -222,7 +222,7 @@ export default function InvestmentExplain() {
         />
         <div className="w-full">
           <h5
-            className={`text-center text-[1.5rem] leading-[1.334] text-center ${BOLD_INTER_TIGHT.className}`}
+            className={`text-center text-[1.5rem] leading-[1.334] ${BOLD_INTER_TIGHT.className}`}
           >
             KYC Verification
           </h5>

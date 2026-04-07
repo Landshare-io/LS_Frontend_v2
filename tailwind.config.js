@@ -15,6 +15,8 @@ module.exports = {
           transparent 75%,
           transparent
         )`,
+        linearGradientCard : `linear-gradient(90.37deg, rgba(255, 255, 255, 0.24) 0.16%, rgba(255, 255, 255, 0.12) 99.92%)
+        `
       },
       colors: {
         primary: "var(--color-primary)",

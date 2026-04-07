@@ -8,6 +8,7 @@ interface ProgressBar {
   striped?: boolean;
   animated?: boolean;
   color?: string;
+  containerClass?: string;
 }
 
 export default function ProgressBar({
@@ -18,13 +19,14 @@ export default function ProgressBar({
   striped = false,
   animated = false,
   color = "bg-blue-500",
+  containerClass = ""
 }: ProgressBar) {
   const progress = Math.min(100, Math.max(0, ((now - min) / (max - min)) * 100));
 
   return (
-    <div className="w-full rounded-[6px] overflow-hidden h-6 relative h-[24px] border-[2px] border-[#d0d0d0] border-solid">
+    <div className={`w-full rounded-[6px] overflow-hidden relative h-[24px] border-[2px] border-[#d0d0d0] border-solid ${containerClass}`}>
       <div
-        className={`bg-[#0b6c96] h-full transition-all duration-300 ease-in flex items-center justify-center`}
+        className={`bg-[#0b6c96] h-full transition-all duration-300 ease-in flex items-center justify-center ${color}`}
         style={{ width: `${progress}%` }}
       >
         {progress > 0 ? (
@@ -33,7 +35,7 @@ export default function ProgressBar({
           </span>
         ) : ""}
       </div>
-      
+
     </div>
   );
 };
